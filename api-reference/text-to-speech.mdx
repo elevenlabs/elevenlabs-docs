@@ -1,0 +1,47 @@
+---
+title: "Text to Speech"
+openapi: "POST /v1/text-to-speech/{voice_id}"
+---
+
+<RequestExample>
+
+```Bash Curl
+curl -X 'POST' \
+  'https://api.elevenlabs.io/v1/text-to-speech/<voice-id>' \
+  --header 'accept: audio/mpeg' \
+  --header 'xi-api-key: <xi-api-key>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "text": "string",
+  "voice_settings": {
+    "stability": 0,
+    "similarity_boost": 0
+  }
+}'
+```
+
+```Python Python
+import requests
+
+url = "https://api.elevenlabs.io/v1/text-to-speech/<voice-id>"
+
+headers = {
+  "Accept": "audio/mpeg",
+  "Content-Type": "application/json",
+  "xi-api-key": "<xi-api-key>"
+}
+
+data = {
+  "text": "string",
+  "voice_settings": {
+    "stability": 0,
+    "similarity_boost": 0
+  }
+}
+
+response = requests.post(url, json=data, headers=headers)
+
+print(response.text)
+```
+
+</RequestExample>
