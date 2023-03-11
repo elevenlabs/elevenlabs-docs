@@ -23,6 +23,7 @@ curl -X 'POST' \
 ```Python Python
 import requests
 
+CHUNK_SIZE = 1024
 url = "https://api.elevenlabs.io/v1/text-to-speech/<voice-id>"
 
 headers = {
@@ -32,16 +33,17 @@ headers = {
 }
 
 data = {
-  "text": "string",
+  "text": "Some very long text to be read by the voice",
   "voice_settings": {
     "stability": 0,
     "similarity_boost": 0
   }
 }
 
-response = requests.post(url, json=data, headers=headers)
-
-print(response.text)
+with open('output.mp3', 'wb') as f:
+    for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+        if chunk:
+            f.write(chunk)
 ```
 
 </RequestExample>
