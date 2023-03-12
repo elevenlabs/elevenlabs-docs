@@ -17,7 +17,27 @@ curl -X 'POST' \
 ```
 
 ```Python Python
+import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
+url = "https://api.elevenlabs.io/v1/voices/<voice-id>/edit"
+
+data = MultipartEncoder(
+  fields = {
+    "name": "Voice New Name",
+    "labels": '{"accent": "British"}',
+    "files": ("Sample2", open("<path-to-file>", 'rb'), "audio/mpeg"),
+  }
+)
+
+headers = {
+  "Accept": "audio/mpeg",
+  "xi-api-key": "<xi-api-key>",
+  "Content-Type": data.content_type
+}
+
+response = requests.post(url, headers=headers, data=data)
+print(response.text)
 ```
 
 </RequestExample>
