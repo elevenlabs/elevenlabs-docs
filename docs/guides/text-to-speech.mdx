@@ -1,0 +1,38 @@
+---
+title: "Text to Speech tutorial"
+description: "Learn how to generate speech from text"
+---
+
+The Text-To-Speech (TTS) endpoint transforms text into speech for a given voice. 
+It provides a simple but powerful interface to our models.
+The input consists of text, voice and voice settings.
+Optionally you can specify model and language.
+The model will generate an audio version of that text with the given voice and settings
+using specified model and language.
+
+We have created a small set of premade voices which everyone can use and try our models on.
+In order to get those voices you can `GET /v1/voices` without API key as described in
+[Get Voices](api-reference/voices) endpoint documentation. If you provide API key, the 
+will return both premade voices and voices created by you. This endpoint is important as it returns
+voice ID for each voice. You will need it for querying of TTS endpoint.
+
+Now that you know how to get all voices that can be used to generate text let's take a look
+on how to create a new one. First you need to get samples for the voice you want to create.
+There is no need for long samples. Their quality is more imporant. Typically it's enough
+to have combined length shorter than a minute. Once you have samples ready, come up with a name,
+labels describing the voice (accent, gender, tone etc.) and create it as described in
+[Add Voice](api-reference/voices-add) endpoint documentation. In case you wanna do some edits
+to the samples, labels or the name of the voice you can do so with `POST /v1/voices/{voice_id}/edit`
+endpoint. Find more information [here](api-reference/voices-edit).
+
+Once you have your voice ready get it's ID from [voices endpoint](api-reference/voices) and you are
+ready to query our TTS endpoint. First you need to decide whether you want streaming response or not.
+In general we recommend streaming unless your client doesn't support it. In the second step you need
+to create voice settings. At the beginning we recommend providing [default voice settings](api-reference/voices-settings-default)
+and then you can start playing with them in order to get desired expressivity and similarity.
+In the third optional step you can spefify model and language that will be used for speech generation.
+You can get list of available models by `GET /v1/user` as described [here](api-reference/user) and 
+reading `subscription.available_models` field of the response. Each model has a list of available languages.
+Select `model_id` and language `iso_code` you want and you can finally query selected TTS endpoint.
+You can find documentation for streaming endpoint [here](api-reference/text-to-speech-stream) and for
+normal one [here](api-reference/text-to-speech).
