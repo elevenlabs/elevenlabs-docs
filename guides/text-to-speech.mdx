@@ -70,7 +70,6 @@ headers = {
 }
 
 response = requests.post(add_voice_url, headers=headers, data=data)
-print(response.json())
 voice_id = response.json()["voice_id"]
 
 tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
