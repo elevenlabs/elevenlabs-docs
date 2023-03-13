@@ -36,3 +36,59 @@ reading `subscription.available_models` field of the response. Each model has a 
 Select `model_id` and language `iso_code` you want and you can finally query selected TTS endpoint.
 You can find documentation for streaming endpoint [here](api-reference/text-to-speech-stream) and for
 normal one [here](api-reference/text-to-speech).
+
+Here is `python` example implementing our guide. Get your [XI API Key](authentication/01-xi-api-key) first:
+```python
+import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+# voice settings
+STABILITY = 0
+SIMILARITY_BOOST = 0
+
+# streaming chunk size
+CHUNK_SIZE = 1024
+
+XI_API_KEY = "<xi-api-key>"
+VOICE_SAMPLE_PATH = "<path-to-file>"
+OUTPUT_PATH = "<path-to-file>"
+
+add_voice_url = "https://api.elevenlabs.io/v1/voices/add"
+
+data = MultipartEncoder(
+  fields = {
+    "name": "Voice Name",
+    "labels": '{"accent": "American", "gender": "Female"}',
+    "files": ("Sample", open(VOICE_SAMPLE_PATH, 'rb'), "audio/mpeg"),
+  }
+)
+
+headers = {
+  "Accept": "audio/mpeg",
+  "xi-api-key": XI_API_KEY,
+  "Content-Type": data.content_type
+}
+
+response = requests.post(add_voice_url, headers=headers, data=data)
+print(response.json())
+voice_id = response.json()["voice_id"]
+
+tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
+
+headers["Content-Type"] = "application/json"
+
+data = {
+  "text": "Some very long text to be read by the voice",
+  "voice_settings": {
+    "stability": STABILITY,
+    "similarity_boost": SIMILARITY_BOOST
+  }
+}
+
+response = requests.post(tts_url, json=data, headers=headers, stream=True)
+
+with open(OUTPUT_PATH, 'wb') as f:
+    for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+        if chunk:
+            f.write(chunk)
+```
