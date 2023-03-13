@@ -34,7 +34,13 @@ Select `model_id` and language `iso_code` and you can then query the selected TT
 You can find the streaming endpoint documentation [here](api-reference/text-to-speech-stream)
 and the regular endpoint documentation [here](api-reference/text-to-speech).
 
-Here is a `python` example implementing our guide. Get your [XI API Key](authentication/01-xi-api-key) first:
+We store each audio you generate together with other metadata in your personal history.
+You can retrieve all your history items via [/v1/history](api-reference/history) endpoint.
+We also provide endpoints for [retrieving audio](api-reference/history-audio),
+[deletion](api-reference/history-delete) and [download of history items](api-reference/history-download).
+
+Here is a `python` example implementing our guide. Get your [XI API Key](authentication/01-xi-api-key) first
+and try it out!
 ```python
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
@@ -87,4 +93,16 @@ with open(OUTPUT_PATH, 'wb') as f:
     for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
         if chunk:
             f.write(chunk)
+
+# Retrieve history. It should contain generated sample.
+history_url = "https://api.elevenlabs.io/v1/history"
+
+headers = {
+  "Accept": "application/json",
+  "xi-api-key": XI_API_KEY
+}
+
+response = requests.get(history_url, headers=headers)
+
+print(response.text)
 ```
