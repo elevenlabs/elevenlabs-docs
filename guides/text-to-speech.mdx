@@ -7,7 +7,7 @@ The Text-To-Speech (TTS) endpoint transforms text into speech in a given voice.
 The input consists of text, voice and voice settings with an option to specify model and language.
 
 We have created a set of pre-made, ‘default’ voices which everyone can use. To get those voices use
-`GET /v1/voices` without the API key as described in the [Get Voices](api-reference/voices)
+`GET /v1/voices` without the API key as described in the [Get Voices](/api-reference/voices)
 endpoint documentation. If you provide the API key, endpoint will return both the premade voices
 and the voices you added. This endpoint is important as it returns a voice ID for each voice.
 You will need this ID to query the TTS endpoint.
@@ -17,27 +17,27 @@ First, you need to get samples for the voice you want to add. Since no model tra
 there is no need to provide long samples - if they have a combined length of ≈1 min this is enough.
 Their quality plays the biggest role. Once you have the samples ready, choose a name,
 labels describing the voice (accent, gender, tone etc.) and create it as described in 
-[Add Voice](api-reference/voices-add) endpoint documentation. If you want to edit the samples,
+[Add Voice](/api-reference/voices-add) endpoint documentation. If you want to edit the samples,
 labels or the name of the voice, you can do this with the `POST /v1/voices/{voice_id}/edit`
-endpoint. Find more information, see [here](api-reference/voices-edit).
+endpoint. Find more information, see [here](/api-reference/voices-edit).
 
-Once you have your voice ready, get its ID from the [voices endpoint](api-reference/voices),
+Once you have your voice ready, get its ID from the [voices endpoint](/api-reference/voices),
 and you’re ready to query our TTS endpoint. First you need to decide whether you want to use
 the streaming response or not. In general, we recommend streaming unless your client doesn’t
 support it. Second, you need to choose your voice settings. We recommend using
-[default voice settings](api-reference/voices-settings-default) before experimenting with
+[default voice settings](/api-reference/voices-settings-default) before experimenting with
 the expressivity and similarity settings. In the third optional step you can specify the model
 and the language used for speech generation. You can get the list of available models with
-`GET /v1/user` and by following the instructions [here](api-reference/user) and reading the
+`GET /v1/user` and by following the instructions [here](/api-reference/user) and reading the
 `subscription.available_models` response field. Each model has a list of supported languages.
 Select `model_id` and language `iso_code` and you can then query the selected TTS endpoint.
-You can find the streaming endpoint documentation [here](api-reference/text-to-speech-stream)
-and the regular endpoint documentation [here](api-reference/text-to-speech).
+You can find the streaming endpoint documentation [here](/api-reference/text-to-speech-stream)
+and the regular endpoint documentation [here](/api-reference/text-to-speech).
 
 We store each audio you generate together with other metadata in your personal history.
-You can retrieve all your history items via [/v1/history](api-reference/history) endpoint.
-We also provide endpoints for [retrieving audio](api-reference/history-audio),
-[deletion](api-reference/history-delete) and [download of history items](api-reference/history-download).
+You can retrieve all your history items via [/v1/history](/api-reference/history) endpoint.
+We also provide endpoints for [retrieving audio](/api-reference/history-audio),
+[deletion](/api-reference/history-delete) and [download of history items](/api-reference/history-download).
 
 Here is a `python` example implementing our guide. Get your [XI API Key](authentication/01-xi-api-key) first
 and try it out!
