@@ -43,7 +43,6 @@ Here is a `python` example implementing our guide. Get your [XI API Key](authent
 and try it out!
 ```python
 import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 # voice settings
 STABILITY = 0
@@ -58,21 +57,22 @@ OUTPUT_PATH = "<path-to-file>"
 
 add_voice_url = "https://api.elevenlabs.io/v1/voices/add"
 
-data = MultipartEncoder(
-  fields = {
-    "name": "Voice Name",
-    "labels": '{"accent": "American", "gender": "Female"}',
-    "files": ("Sample", open(VOICE_SAMPLE_PATH, 'rb'), "audio/mpeg"),
-  }
-)
-
 headers = {
-  "Accept": "audio/mpeg",
-  "xi-api-key": XI_API_KEY,
-  "Content-Type": data.content_type
+  "Accept": "application/json,
+  "xi-api-key": XI_API_KEY
 }
 
-response = requests.post(add_voice_url, headers=headers, data=data)
+data = {
+    'name': 'Voice name',
+    'labels': '{"accent": "American", "gender": "Female"}'
+}
+
+files = [
+    ('files', ('sample1.mp3', open('sample1.mp3', 'rb'), 'audio/mpeg')),
+    ('files', ('sample2.mp3', open('sample2.mp3', 'rb'), 'audio/mpeg'))
+]
+
+response = requests.post(url, headers=headers, data=data, files=files)
 voice_id = response.json()["voice_id"]
 
 tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
