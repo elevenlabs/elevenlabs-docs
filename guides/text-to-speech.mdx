@@ -58,7 +58,7 @@ OUTPUT_PATH = "<path-to-file>"
 add_voice_url = "https://api.elevenlabs.io/v1/voices/add"
 
 headers = {
-  "Accept": "application/json,
+  "Accept": "application/json",
   "xi-api-key": XI_API_KEY
 }
 
@@ -72,7 +72,7 @@ files = [
     ('files', ('sample2.mp3', open('sample2.mp3', 'rb'), 'audio/mpeg'))
 ]
 
-response = requests.post(url, headers=headers, data=data, files=files)
+response = requests.post(add_voice_url, headers=headers, data=data, files=files)
 voice_id = response.json()["voice_id"]
 
 tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
