@@ -8,12 +8,13 @@ openapi: "POST /v1/voices/{voice_id}/edit"
 ```Bash Curl
 curl -X 'POST' \
   'https://api.elevenlabs.io/v1/voices/<voice-id>/edit' \
-  -H 'accept: application/json' \
-  -H 'xi-api-key: <xi-api-key>' \
-  -H 'Content-Type: multipart/form-data' \
-  -F 'name=New Name' \
-  -F 'files=@sample.mp3;type=audio/mpeg' \
-  -F 'labels={"accent":"American"}'
+  --header 'accept: application/json' \
+  --header 'xi-api-key: <xi-api-key>' \
+  --header 'Content-Type: multipart/form-data' \
+  --form 'name=New Name' \
+  --form 'files=@sample.mp3;type=audio/mpeg' \
+  --form 'description=Voice Description' \
+  --form 'labels={"accent":"American"}'
 ```
 
 ```Python Python
@@ -28,7 +29,8 @@ headers = {
 
 data = {
     'name': 'Voice New name',
-    'labels': '{"accent": "British"}'
+    'labels': '{"accent": "British"}',
+    'description': 'Voice description'
 }
 
 files = [
