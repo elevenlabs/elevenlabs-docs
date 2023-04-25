@@ -40,6 +40,7 @@ data = {
   }
 }
 
+response = requests.post(url, json=data, headers=headers)
 with open('output.mp3', 'wb') as f:
     for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
         if chunk:
