@@ -13,6 +13,7 @@ curl -X 'POST' \
   --header 'Content-Type: application/json' \
   --data '{
     "text": "string",
+    "model_id": "eleven_monolingual_v1",
     "voice_settings": {
       "stability": 0,
       "similarity_boost": 0
@@ -33,7 +34,8 @@ headers = {
 }
 
 data = {
-  "text": "Some very long text to be read by the voice",
+  "text": "Hi! My name is Bella, nice to meet you!",
+  "model_id": "eleven_monolingual_v1",
   "voice_settings": {
     "stability": 0,
     "similarity_boost": 0
@@ -46,6 +48,19 @@ with open('output.mp3', 'wb') as f:
     for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
         if chunk:
             f.write(chunk)
+```
+
+```Python Client
+from elevenlabs import generate, play
+
+audio = generate(
+    text="Hi! My name is Bella, nice to meet you!",
+    voice="Bella",
+    model='eleven_monolingual_v1',
+    stream=True
+)
+
+play(audio)
 ```
 
 </RequestExample>
