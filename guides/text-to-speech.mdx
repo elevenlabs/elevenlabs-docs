@@ -27,10 +27,8 @@ the streaming response or not. In general, we recommend streaming unless your cl
 support it. Second, you need to choose your voice settings. We recommend using
 [default voice settings](/api-reference/voices-settings-default) before experimenting with
 the expressivity and similarity settings. In the third optional step you can specify the model
-and the language used for speech generation. You can get the list of available models with
-`GET /v1/user` and by following the instructions [here](/api-reference/user) and reading the
-`subscription.available_models` response field. Each model has a list of supported languages.
-Select `model_id` and language `iso_code` and you can then query the selected TTS endpoint.
+to be used for speech generation. You can get a full list of available models
+by querying [models](/api-reference/models-get) endpoint.
 You can find the streaming endpoint documentation [here](/api-reference/text-to-speech-stream)
 and the regular endpoint documentation [here](/api-reference/text-to-speech).
 
@@ -86,6 +84,7 @@ headers["Content-Type"] = "application/json"
 
 data = {
   "text": "Some very long text to be read by the voice",
+  "model_id": "eleven_monolingual_v1",
   "voice_settings": {
     "stability": stability,
     "similarity_boost": similarity_boost
@@ -110,4 +109,25 @@ headers = {
 response = requests.get(history_url, headers=headers)
 
 print(response.text)
+```
+
+You can achieve the very same result using our `python` library:
+```python
+from elevenlabs import clone, generate, play, set_api_key
+from elevenlabs.api import History
+
+set_api_key("<YOUR_API_KEY>")
+
+voice = clone(
+    name="Voice Name",
+    description="An old American male voice with a slight hoarseness in his throat. Perfect for news.",
+    files=["./sample1.mp3", "./sample2.mp3"],
+)
+
+audio = generate(text="Some very long text to be read by the voice", voice=voice)
+
+play(audio)
+
+history = History.from_api()
+print(history)
 ```
