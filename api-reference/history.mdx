@@ -15,16 +15,24 @@ curl -X 'GET' \
 ```Python Python
 import requests
 
-url = "https://api.elevenlabs.io/v1/history"
+# How many history items to fetch with each request
+page_size = 200
+
+url = f"https://api.elevenlabs.io/v1/history?page_size={page_size}"
 
 headers = {
   "Accept": "application/json",
   "xi-api-key": "<xi-api-key>"
 }
 
-response = requests.get(url, headers=headers)
+# Get the 200 most recently created history items
+response = requests.get(url, headers=headers).json()
+print(response)
 
-print(response.text)
+# If you want more you have to paginate
+while response["has_more"]:
+    response = requests.get(f"{url}&start_after_history_item_id={response['last_history_item_id']}", headers=headers).json()
+    print(response)
 ```
 
 ```Python Client
