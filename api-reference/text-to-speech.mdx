@@ -61,4 +61,36 @@ audio = generate(
 play(audio)
 ```
 
+```Javascript Javascript
+async function Text_To_Speech() {
+    let container = await fetch('https://api.elevenlabs.io/v1/text-to-speech/<voice-id>', {
+        method: 'POST',
+        headers: {
+            'accept': 'audio/mpeg',
+            'xi-api-key': '<xi-api-key>',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "text": "Hi! My name is Bella, nice to meet you!",
+            "model_id": "eleven_monolingual_v1"
+        })
+
+    });
+    //The below is used to generate the Audio. It will work with native javascript, but might fail with node.js
+    let reader = container.body.getReader();
+    let chunks = [];
+    while (true) {
+        let { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+    }
+    let blob = new Blob(chunks, { type: 'audio/mpeg' });
+    let url = window.URL.createObjectURL(blob);
+    window.audio = new Audio();
+    window.audio.src = url;
+    window.audio.play();
+}
+await Text_To_Speech()
+```
+
 </RequestExample>

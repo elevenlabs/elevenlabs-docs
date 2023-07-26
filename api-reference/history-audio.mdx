@@ -27,4 +27,18 @@ response = requests.get(url, headers=headers)
 print(response.text)
 ```
 
+```Javascript Javascript
+async function Get_AudioFromHistoryItem() {
+    return fetch('https://api.elevenlabs.io/v1/history/<history-item-id>/audio', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        }
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Get_AudioFromHistoryItem()
+console.log(response)
+```
+
 </RequestExample>

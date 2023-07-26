@@ -27,4 +27,19 @@ response = requests.delete(url, headers=headers)
 print(response.text)
 ```
 
+```Javascript Javascript
+async function Delete_AudioSample() {
+    return fetch('https://api.elevenlabs.io/v1/voices/<voice-id>/samples/<sample-id>', {
+        method: 'DELETE',
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        }
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Delete_AudioSample()
+console.log(response)
+
+```
 </RequestExample>

@@ -27,4 +27,18 @@ response = requests.get(url, headers=headers)
 print(response.text)
 ```
 
+```Javascript Javascript
+async function Get_AudioFromSample() {
+    return fetch('https://api.elevenlabs.io/v1/voices/<voice-id>/samples/<sample-id>/audio', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        }
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Get_AudioFromSample()
+console.log(response)
+```
+
 </RequestExample>

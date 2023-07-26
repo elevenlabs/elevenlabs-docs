@@ -27,4 +27,17 @@ response = requests.get(url, headers=headers)
 print(response.text)
 ```
 
+```Javascript Javascript
+async function Get_VoiceSettings() {
+    return fetch('https://api.elevenlabs.io/v1/voices/<voice-id>/settings', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        }
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Get_VoiceSettings()
+console.log(response)
+```
 </RequestExample>

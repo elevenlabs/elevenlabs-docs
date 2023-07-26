@@ -33,4 +33,18 @@ from elevenlabs import voices
 print(voices())
 ```
 
+```Javascript Javascript
+async function Get_Voices() {
+    return fetch('https://api.elevenlabs.io/v1/voices', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        }
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Get_Voices()
+console.log(response.voices)
+```
+
 </RequestExample>
