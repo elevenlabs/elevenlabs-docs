@@ -27,4 +27,18 @@ response = requests.get(url, headers=headers)
 print(response.text)
 ```
 
+```Javascript Javascript
+async function Get_User_Subscription() {
+    return fetch('https://api.elevenlabs.io/v1/user/subscription', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': api_key
+        }
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+response = await Get_User_Subscription()
+console.log(response)
+
+```
+
 </RequestExample>
