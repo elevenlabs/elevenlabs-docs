@@ -40,4 +40,23 @@ response = requests.post(url, json=data, headers=headers)
 print(response.text)
 ```
 
+```Javascript javascript
+async function Download_HistoryItem() {
+    return fetch('https://api.elevenlabs.io/v1/history/download', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        },
+        body: JSON.stringify({
+            "history_item_ids": [
+                "<history-item-id>"
+              ]
+        })
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Download_HistoryItem()
+console.log(response)
+```
+
 </RequestExample>

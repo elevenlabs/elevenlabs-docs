@@ -38,4 +38,22 @@ response = requests.post(url, json=data, headers=headers)
 print(response.text)
 ```
 
+```Javascript javascript
+async function Edit_Voice_Settings() {
+    return fetch('"https://api.elevenlabs.io/v1/voices/<voice-id>/settings/edit', {
+        headers: {
+            'accept': 'application/json',
+            'xi-api-key': '<xi-api-key>'
+        },
+        body: JSON.stringify({
+            "stability": 0.5,
+            "similarity_boost": 0.5
+        })
+    }).then(response => response.text()).then(text => JSON.parse(text))
+}
+
+response = await Edit_Voice_Settings()
+console.log(response)
+```
+
 </RequestExample>
