@@ -3,16 +3,11 @@ title: "Text to Speech Websockets"
 icon: "comments"
 ---
 
-This endpoint provides real-time text-to-speech conversion using WebSockets. Clients can send a text message and receive audio data in real-time.
+This API provides real-time text-to-speech conversion using WebSockets. Clients can send a text message and receive audio data in real-time.
 
-#### WSS Endpoint:
-
-`/v1/text-to-speech/{voice_id}/stream-input`
-
-<ParamField query="model_type" type="string" default="eleven_monolingual_v1">
-  The ElevenLabs model to use for text-to-speech.
-</ParamField>
-
+<Note>
+Endpoint: `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_type={model}`
+</Note>
 
 # Protocol
 
@@ -70,6 +65,10 @@ In order to initialize the connection, the client should send a BOS message. The
 <ParamField body="authorization" type="string">
     Authorization bearer token. Should be provided only in the first message if not present in the header.
 </ParamField>
+
+<Note>
+Only one of Authorization or XI API Key should be provided.
+</Note>
 
 
 ## Streaming input text
