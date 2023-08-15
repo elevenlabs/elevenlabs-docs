@@ -5,7 +5,9 @@ icon: "comments"
 
 This endpoint provides real-time text-to-speech conversion using WebSockets. Clients can send a text message and receive audio data in real-time.
 
-WSS Endpoint: `/v1/text-to-speech/{voice_id}/stream-input`
+#### WSS Endpoint:
+
+`/v1/text-to-speech/{voice_id}/stream-input`
 
 <ParamField query="model_type" type="string" default="eleven_monolingual_v1">
   The ElevenLabs model to use for text-to-speech.
@@ -54,8 +56,8 @@ In order to initialize the connection, the client should send a BOS message. The
   <Expandable title="properties">
 
     <ParamField body="chunk_length_schedule" type="array">
-      Determines how text is chunked for processing. Default: [120, 160, 250, 290].
-      Each item should be in the range [50, 500].
+      - Determines how text is chunked for processing. Default: [120, 160, 250, 290].
+      - Each item should be in the range [50, 500].
     </ParamField>
 
   </Expandable>
@@ -86,8 +88,8 @@ After the connection is initialized, the client can send messages with text inpu
 <ParamField body="text" type="string" required>
   The input text for conversion to speech.
   <Expandable title="notes">
-    <p>The text must always end with a space.</p>
-    <p>For the end of the sequence, send an empty string.</p>
+    - The text must always end with a space.
+    - For the end of the sequence, send an empty string.
   </Expandable>
 </ParamField>
 
@@ -119,9 +121,13 @@ The server will always respond with a message containing the following fields:
 
 ```json Response message
 {
-    "audio": string,
-    "is_final": bool,
-    "normalized_alignment": string
+    "audio": "Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==",
+    "is_final": false,
+    "normalized_alignment": {
+        "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
+        "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+        "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
+    }
 }
 ```
 
@@ -135,6 +141,20 @@ The server will always respond with a message containing the following fields:
 
 <ResponseField name="normalized_alignment" type="string" optional="true">
   Alignment information for the generated audio given the normalized input text sequence.
+  <Expandable title="properties">
+
+  <ParamField body="char_start_times_ms" type="array">
+    A list of starting times (in milliseconds) for each character in the normalized text as it corresponds to the audio. For instance, the character 'H' starts at time 0 ms in the audio.
+  </ParamField>
+
+  <ParamField body="chars_durations_ms" type="array">
+    A list providing the duration (in milliseconds) for each character's pronunciation in the audio. For instance, the character 'H' has a pronunciation duration of 3 ms.
+  </ParamField>
+
+  <ParamField body="chars" type="array">
+    The list of characters in the normalized text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
+  </ParamField>
+  </Expandable>
 </ResponseField>
 
 
