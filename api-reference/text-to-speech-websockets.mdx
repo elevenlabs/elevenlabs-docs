@@ -102,7 +102,7 @@ The server will always respond with a message containing the following fields:
 {
     "audio": "Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==",
     "is_final": false,
-    "alignment": {
+    "normalized_alignment": {
         "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
         "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
         "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
@@ -118,8 +118,8 @@ The server will always respond with a message containing the following fields:
   Indicates if the generation is complete. If set to `True`, `audio` will be null.
 </ResponseField>
 
-<ResponseField name="alignment" type="string" optional="true">
-  Alignment information for the generated audio given the input text sequence.
+<ResponseField name="normalized_alignment" type="string" optional="true">
+  Alignment information for the generated audio given the input normalized text sequence.
   <Expandable title="properties">
 
   <ParamField body="char_start_times_ms" type="array">
