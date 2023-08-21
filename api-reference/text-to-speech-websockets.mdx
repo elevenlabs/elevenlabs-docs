@@ -13,29 +13,31 @@ Endpoint: `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?mod
 
 The WebSocket API uses a bidirectional protocol that encodes all messages as JSON objects.
 
-## Initializing the connection
+## Streaming input text
 
-In order to initialize the connection, the client should send a BOS message. The BOS message should contain the following fields:
-
-
-```json Beginning of Sequence (BOS) message
+The client can send messages with text input to the server. The messages can contain the following fields:
+```json
 {
-    "text": " ",
-    "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": true
-    },
-    "generation_config": {
-        "chunk_length_schedule": [120, 160, 250, 290]
-    },
+  "text": "This is a sample text ",
+  "voice_settings": {
+    "stability": 0.8,
+    "similarity_boost": true
+  },
+  "generation_config": {
+    "chunk_length_schedule": [120, 160, 250, 290]
+  },
+  "xi_api_key": "<XI API Key>",
+  "authorization": "Bearer <Authorization Token>"
 }
+
 ```
 
 <ParamField body="text" type="string" required>
-    Should always be a single space string `" "`.
+    Should always end with a single space string `" "`. In the first message, the text should be a space `" "`.
 </ParamField>
 
 <ParamField body="voice_settings" type="object" >
+  Should only be provided in the first message
   <Expandable title="properties">
       <ParamField body="stability" type="number" >
         Defines the stability for voice settings
@@ -47,7 +49,12 @@ In order to initialize the connection, the client should send a BOS message. The
   </Expandable>
 </ParamField>
 
+<ParamField body="try_trigger_generation" type="boolean" required>
+    If we should try to trigger the generation.
+</ParamField>
+
 <ParamField body="generation_config" type="object">
+   Should only be provided in the first message
   <Expandable title="properties">
 
     <ParamField body="chunk_length_schedule" type="array">
@@ -63,53 +70,26 @@ In order to initialize the connection, the client should send a BOS message. The
 </ParamField>
 
 <ParamField body="authorization" type="string">
-    Authorization bearer token. Should be provided only in the first message if not present in the header.
+    Authorization bearer token. Should be provided only in the first message if not present in the header and the XI API Key is not provided.
 </ParamField>
 
 <Note>
-Only one of Authorization or XI API Key should be provided.
+For best latency we recommend streaming word-by-word, this way we will start generating as soon as we reach the predefined number of un-generated characters.
 </Note>
 
+##  End of input
 
-## Streaming input text
-
-After the connection is initialized, the client can send messages with text input to the server. The messages should contain the following fields:
-
-
-```json Input message
-{
-    "text": "Hello world ",
-    "try_trigger_generation": true,
-}
-```
-
-
-<ParamField body="text" type="string" required>
-  The input text for conversion to speech.
-  <Expandable title="notes">
-    - The text must always end with a space.
-    - For the end of the sequence, send an empty string.
-  </Expandable>
-</ParamField>
-
-<ParamField body="try_trigger_generation" type="boolean">
-  If set to True, it will try to run the generation. The generation will not run if the accumulated text is less than 50 characters. If set to False, the generation will be triggered according to the chunk schedule.
-</ParamField>
-
-
-## Closing the connection
-
-In order to close the connection, the client should send a EOS message. The EOS message should contain the following fields:
+In order to close the connection, the client should send a EOS message. The EOS message should always be an empty string:
 
 
 ```json End of Sequence (EOS) message
 {
-    "text": " "
+    "text": ""
 }
 ```
 
 <ParamField body="text" type="string" required>
-    Should always be a single space string `" "`.
+    Should always be an empty string `""`.
 </ParamField>
 
 
@@ -122,7 +102,7 @@ The server will always respond with a message containing the following fields:
 {
     "audio": "Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==",
     "is_final": false,
-    "normalized_alignment": {
+    "alignment": {
         "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
         "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
         "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
@@ -138,8 +118,8 @@ The server will always respond with a message containing the following fields:
   Indicates if the generation is complete. If set to `True`, `audio` will be null.
 </ResponseField>
 
-<ResponseField name="normalized_alignment" type="string" optional="true">
-  Alignment information for the generated audio given the normalized input text sequence.
+<ResponseField name="alignment" type="string" optional="true">
+  Alignment information for the generated audio given the input text sequence.
   <Expandable title="properties">
 
   <ParamField body="char_start_times_ms" type="array">
