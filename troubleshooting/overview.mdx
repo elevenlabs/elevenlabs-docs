@@ -4,6 +4,52 @@ description: "Important considerations for ElevenLabs' beta voice generation, in
 ---
 
 
+AI is a highly advanced field of technology and can, at times, be unpredictable as the output is up to the discretion of the AI. We have tried to minimize the unpredictability as much as possible and keep adding features and improvements that make it more predictable and controllable. However, there are still many things you need to be mindful of, and this applies to all generative AI.
+
+In this section, we will go through some of the issues we've encountered and what has been reported by users. Just because they are mentioned here doesn't mean that you will experience these issues, and in many cases, there are things you can do to prevent them from happening.
+
+## Multilingual v2
+
+The multilingual v2 model was a huge leap forward in predictability and consistency compared to the experimental multilingual v1 model. We hope to achieve a similar improvement once we release our next iteration of the models. The multilingual v1 model suffered from a lot of issues and was never released outside of its experimental phase. You can read more about those issues below, but the multilingual v2 model seems to have solved most of them. 
+
+However, there are still a few issues that we have observed and heard reports of from our users.
+
+### Inconsistency
+
+We've heard reports where users say that there is inconsistency between generations, so takes don't always fit together perfectly. This is something we are aware of and are working on resolving. However, it is a lot less prominent in the multilingual v2 model compared to the other models, and it seems to be less of an issue with Projects, as it is a bit more advanced than Speech Synthesis when it comes to long-form content as it was specifically made for that.
+
+The current suggestion to resolve this would be to try cloning the voice again with different samples if you encounter a lot of variability. We recommend that you read the cloning guide in the documentation, which states that you should use around 1 to 2 minutes of audio. This audio should be very consistent if you want the output to be consistent; more audio than that can make the AI too variable which can cause inconsistency between generations.
+
+If you clone a voice properly, one that is consistent throughout, of high quality, properly recorded without background noise or multiple speakers, and if you follow the guidelines, you should be able to get a very good and consistent clone. It might require a bit experimenting if you don't get it right the first time.
+
+### Language Switching
+
+This is probably the most common issue encountered by users, and it's that the AI can sometimes switch languages or accents throughout a single generation, especially if that generation is longer in length. This is also something we're working on fixing, hopefully with the next iteration, as there's not too much you can do right now. Using a proper clone paired with Projects should again help mitigate most of this.
+
+The most important thing to remember is that if you are using a pre-made or generated voice, is that they are all in English and might have an English accent meaning that they may not have the proper pronunciation and might be more prone to switching languages. The best approach would be to clone a voice speaking the language you want the AI to speak with the accent you want. This will provide the most context to the AI to understand how to perform a passage and should minimize language switching.
+
+### Corrupt Speech
+
+This is a very rare issue, but some users haven't encountered it. It seems to be a bit arbitrary when this happens, but sometimes the AI produces speech that is wrapped, sounding very muffled and strange. It sounds like it has some sort of effect on it. Unfortunately, we do not have any suggestions for it as we have not been able to replicate the issue or find any cause for it. If this happens, the best course of action is to just regenerate the section, and it should resolve itself, as it is very rare.
+
+## Projects
+
+One of the world's most advanced workflows for creating long-form content using AI. Even despite its high complexity, there are very few issues with projects, and in general, it works fantastically well if you use a proper voice paired with the appropriate model.
+
+### Import Function
+
+The import function will do its best to try and import the file you give it to the website. However, since there are so many variables related to websites and how a book can be formatted, including the presence of images, you should always double-check to ensure that everything is imported correctly.
+
+One such issue you might encounter is when importing a book where each chapter starts with an image as the first letter. This can be very confusing for the AI, as it will not be able to extrapolate the letter. Therefore, you will have to add that letter to each chapter.
+
+If something is imported as a single long paragraph instead of being split where a new line break starts, something is wrong, and it might not work properly. It should follow the same structure as the original book. If that doesn't work, you can try copying and pasting. If that also doesn't work, there might be something wrong with how the text is presented, and this book might not work without first converting it to another format or rewriting it fully. This is very unusual, but it's essential to keep in mind.
+
+### Glitches between paragraphs
+
+On the rare occasions, you might encounter certain forms of glitches or become out of breath between paragraphs, which you might not experience with speech synthesis, as they operate on different principles. Generally, this issue is not extremely disruptive and is relatively rare, but we are actively working on resolving it. At the moment, there is no straightforward solution to completely avoid this problem. If you do happen to encounter an issue like this, we recommend regenerating the last paragraph. These issues tend to occur at the end of certain paragraphs rather than at the beginning. So, if you hear a problem between two paragraphs, it's usually the preceding paragraph that is the cause of the issue.
+
+## Multilingual v1 (experimental)
+
 During generation, the audio may change in tone, quality, introduce noise, and distort, and the voice may transition from male to female or start whispering, and more. The prominence of these issues largely depends on the model and voice used. Currently, the monolingual model handles longer generations better, but we are continuously working on both models to improve this in the future.
 
 We are aware that the voices have a tendency to degrade during longer audio generations, and our team is working hard to develop the technology to improve upon this. As stated above, this issue is more prominent in the experimental multilingual model.
