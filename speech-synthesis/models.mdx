@@ -3,8 +3,36 @@ title: "Models"
 description: "Comparison of our AI Models."
 ---
 
-As of May 2023, the ElevenLabs has two models: `monolingual` and `multilingual`. The monolingual model was the first model released by ElevenLabs; it was trained on an English dataset. In contrast, the multilingual model has been trained on a dataset that includes a plethora of other languages, including French, German, Hindi, Italian, Polish, Portuguese, and Spanish. 
 
-The v1 of the multilingual model is still in its experimental stage - there are still [bugs and refinements](/../troubleshooting) that need to be addressed. Nonetheless, for many tasks, it works perfectly well already. Keep in mind that introducing multiple languages also introduces more complexities and potential issues. One of the main things to be mindful of when using the multilingual model is to keep the generations short. Try and keep the text chunks below 800 characters if possible as some of the problems tend to get amplified the longer the generations are.
+As of September 2023, ElevenLabs offers three [text to speech](https://elevenlabs.io/text-to-speech) models: `English v1`, `multilingual v1 (experimental)`, and `multilingual v2`. Each model is slightly different and has its own strengths and weaknesses. In general, we recommend avoiding the use of the experimental multilingual v1 model as it mostly has weaknesses and is only intended for experimental purposes. Since the release of multilingual v2, the multilingual v1 has been surpassed in almost every aspect; v2 is more accurate, more natural, covers more languages, is more stable, and more.
 
-Regarding the multilingual model, it's worth noting that, just like with the English voices, the AI will try to preserve the accent of the original voice. This applies even when an English voice speaks other languages, and you might hear a slight English accent. All the current pre-made voices are English, and to get the most authentic experience, it appears that cloning voices that speak the language you intend to use the AI for is the best choice. Doing so will ensure that there are minimal foreign accents.
+If you want to find more detailed specifications about which languages each model offers, you can find all that information in our help article [here](https://help.elevenlabs.io/hc/en-us/articles/17883183930129-What-models-do-you-offer-and-what-is-the-difference-between-them-).
+
+
+## Multilingual v2
+
+This model has good stability, great language diversity, and fantastic accuracy in cloning voices and accents. Its speed is rather remarkable considering its size as it supports 28 languages, but it is slower than English v1.
+
+There are a few important things worth noting. Since the model is highly accurate, it will strive to clone everything present in the original samples with even greater precision than other models. This really underscores the importance of using proper, high-quality samples with the performance, accent, and tone of voice you want the AI to clone.
+
+We've heard certain issues appearing when users use samples of poor quality, where there is excessive noise, very low rumble, or even very sharp esses. In such cases, the AI might begin to deteriorate, as it attempts to mimic these problems, which might confuse it.
+
+We would recommend using less samples of higher quality with the performance and voice you want, rather than more samples with a lot of variance across quality and performance.
+
+It is worth noting that the AI will try to preserve the accent of the original voice. So, if you use a pre-made, voice designed voice, or voice cloned speaking English, you might hear a slight English accent or the wrong pronunciation in other languages. Cloning voices speaking the language you intend to use the AI for is the best choice and will give the best results.
+
+There have been reports of "language switching", particularly between languages that share similarities in text but may have distinct pronunciations or accents. This is when the AI gets confused and don't have enough context and switches language in the middle of generation. We are actively working on this issue, and it appears to be less present when using a well-cloned voice that was originally cloned on someone speaking the correct language with the correct accent.
+
+
+## English v1
+
+Our very first model, English v1, set the foundation for what's to come. This model was created specifically for English and is the smallest and fastest model we offer, trained on a focused, English-only dataset. As our oldest model, it has undergone extensive optimization to ensure reliable performance. However, it is also the most limited and generally the least accurate.
+
+This model is also more rigid in its performance and is great for audio books, but less suitable for general conversational speech.
+
+
+## Multilingual v1
+
+The v1 of the multilingual model is still in its experimental stage - there are still [bugs and refinements](https://docs.elevenlabs.io/troubleshooting) that need to be addressed. One of the main things to be mindful of when using the multilingual model is to keep the generations short. Try to keep the text chunks below 800 characters if possible, as some of the problems tend to get amplified the longer the generations are.
+
+This model has been surpassed by the multilingual v2 model in almost every regard.
