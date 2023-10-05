@@ -4,7 +4,7 @@ description: "Effective techniques to guide ElevenLabs AI in adding pauses, conv
 ---
 
 
-Pause
+## Pause
 
 There are a few ways to introduce a pause or break and influence the rhythm and cadence of the speaker. The most consistent way is programmatically using the syntax `<break time="1.5s" />`. This will create an exact and natural pause in the speech. It is not just added silence between words, but the AI has an actual understanding of this syntax and will add a natural pause.
 
@@ -31,6 +31,26 @@ Ellipsis `...` can <u>sometimes</u> also work to add a pause between words but u
 
 ```
 I... yeah, I guess so..."
+```
+
+## Pronunciation 
+
+<u>This feature is currently only supported by the 'Eleven English V1' model</u>.
+
+In certain instances, you may want the model to pronounce a word, name, or phrase in a specific way. Pronunciation can be specified using standardised pronunciation alphabets. Currently we support the International Phonetic Alphabet (IPA) and the CMU Arpabet. Pronunciations are specified by wrapping words using the Speech Synthesis Markup Language (SSML) phoneme tag.
+
+To use this feature, you need to wrap the desired word or phrase in the `<phoneme alphabet="ipa" ph="your-IPA-Pronunciation-here">word</phoneme>` tag for IPA, or `<phoneme alphabet="cmu-arpabet" ph="your-CMU-pronunciation-here">word</phoneme>` tag for CMU Arpabet. Replace `"your-IPA-Pronunciation-here"` or `"your-CMU-pronunciation-here"` with the desired IPA or CMU Arpabet pronunciation.
+
+An example for IPA:
+
+```
+<phoneme alphabet="ipa" ph="ˈæktʃuəli">actually</phoneme>
+```
+
+An example for CMU Arpabet:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="AE K CH UW AH L IY">actually</phoneme>
 ```
 
 
