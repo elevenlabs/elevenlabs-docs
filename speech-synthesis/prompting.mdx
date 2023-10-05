@@ -33,6 +33,7 @@ Ellipsis `...` can <u>sometimes</u> also work to add a pause between words but u
 I... yeah, I guess so..."
 ```
 
+
 ## Pronunciation 
 
 <u>This feature is currently only supported by the 'Eleven English V1' model</u>.
@@ -52,6 +53,32 @@ An example for CMU Arpabet:
 ```
 <phoneme alphabet="cmu-arpabet" ph="AE K CH UW AH L IY">actually</phoneme>
 ```
+
+English is a lexical stress language, which means that within multi-syllable words, some syllables are emphasized more than others. The relative salience of each syllable is crucial for proper pronunciation and meaning distinctions. So, it is very important to remember to include the lexical stress when writing both IPA and ARPAbet as otherwise, the outcome might not be optimal.
+
+Take the word "talon", for example.
+
+Incorrect:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE L AH N">talon</phoneme>
+```
+
+Correct:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE1 L AH0 N">talon</phoneme>
+```
+
+The first example might switch between putting the primary emphasis on AE and AH, while the second example will always be pronounced reliably with the emphasis on AE and no stress on AH.
+
+If you write it as:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE0 L AH1 N">talon</phoneme>
+```
+
+It will always put emphasis on AH instead of AE.
 
 
 ## Emotion
