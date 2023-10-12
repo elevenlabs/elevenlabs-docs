@@ -33,9 +33,10 @@ Ellipsis `...` can <u>sometimes</u> also work to add a pause between words but u
 I... yeah, I guess so..."
 ```
 
+
 ## Pronunciation 
 
-<u>This feature is currently only supported by the 'Eleven English V1' model</u>.
+<u>This feature is currently only supported by the "Eleven English V1" model</u>.
 
 In certain instances, you may want the model to pronounce a word, name, or phrase in a specific way. Pronunciation can be specified using standardised pronunciation alphabets. Currently we support the International Phonetic Alphabet (IPA) and the CMU Arpabet. Pronunciations are specified by wrapping words using the Speech Synthesis Markup Language (SSML) phoneme tag.
 
@@ -52,6 +53,34 @@ An example for CMU Arpabet:
 ```
 <phoneme alphabet="cmu-arpabet" ph="AE K CH UW AH L IY">actually</phoneme>
 ```
+
+It is important to note that this only works per word. Meaning that if you, for example, have a name with a first and last name that you want to be pronounced a certain way, you will have to create the pronunciation for each word individually.
+
+English is a lexical stress language, which means that within multi-syllable words, some syllables are emphasized more than others. The relative salience of each syllable is crucial for proper pronunciation and meaning distinctions. So, it is very important to remember to include the lexical stress when writing both IPA and ARPAbet as otherwise, the outcome might not be optimal.
+
+Take the word "talon", for example.
+
+Incorrect:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE L AH N">talon</phoneme>
+```
+
+Correct:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE1 L AH0 N">talon</phoneme>
+```
+
+The first example might switch between putting the primary emphasis on AE and AH, while the second example will always be pronounced reliably with the emphasis on AE and no stress on AH.
+
+If you write it as:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE0 L AH1 N">talon</phoneme>
+```
+
+It will always put emphasis on AH instead of AE.
 
 
 ## Emotion
