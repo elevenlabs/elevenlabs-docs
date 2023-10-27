@@ -16,15 +16,26 @@ However, there are still a few issues that we have observed and heard reports of
 
 ### Inconsistency
 
-We've heard reports where users say that there is inconsistency between generations, so takes don't always fit together perfectly. This is something we are aware of and are working on resolving. However, it is a lot less prominent in the multilingual v2 model compared to the other models, and it seems to be less of an issue with Projects, as it is a bit more advanced than Speech Synthesis when it comes to long-form content as it was specifically made for that.
+We've heard reports where users say that there is inconsistency between generations, so takes don't always fit together perfectly. This is something we are aware of and are working on resolving. However, it is a lot less prominent in the multilingual v2 model compared to the other models, and it seems to be even less of an issue with Projects, as it is a bit more advanced than Speech Synthesis when it comes to long-form content as it was specifically made for that.
 
-The current suggestion to resolve this would be to try cloning the voice again with different samples if you encounter a lot of variability. We recommend that you read the cloning guide in the documentation, which states that you should use around 1 to 2 minutes of audio. This audio should be very consistent if you want the output to be consistent; more audio than that can make the AI too variable which can cause inconsistency between generations.
+The current suggestion to resolve this would be to try using a cloned voice or, if you are already cloning the voice, try cloning the voice again with different samples if you encounter a lot of variability. We recommend that you read the [cloning guide in the documentation](https://docs.elevenlabs.io/voicelab/instant-voice-cloning) as it goes through a lot of best practices.
+
+In general, for consistency, you should use around 1 to 2 minutes of audio. This audio should be very consistent across all aspects such as tonality, performance, accent, quality, and so on, if you want the output to be consistent. Using more audio than that can make the AI too variable, which can cause inconsistency between generations.
 
 If you clone a voice properly, one that is consistent throughout, of high quality, properly recorded without background noise or multiple speakers, and if you follow the guidelines, you should be able to get a very good and consistent clone. It might require a bit experimenting if you don't get it right the first time.
 
+### Mispronunciation
+
+The multilingual v2 model does have a fairly rare issues where the AI mispronounces certain words, even in English. So far, the trigger seems somewhat arbitrary, but it appears to be voice and text-dependent. It seems to happen more often with certain voices and text than others, especially if you use words that appear in other languages as well.
+
+The best way to deal with this is to use the [Projects](https://docs.elevenlabs.io/projects/overview) feature, which seems to minimize the issue as it is more prevalent across longer sections of text when using Speech Synthesis. It will not completely remove the issue, but it will hopefully help both avoid it and make it easier to just regenerate the specific section affected without redoing the whole text.
+
+As with the above issue of [inconsistency](https://docs.elevenlabs.io/troubleshooting/overview#inconsistency), this issue also seems to be minimized by using a probably cloned voice, cloned in the languages you want the AI to speak.
+
 ### Language Switching
 
-This is probably the most common issue encountered by users, and it's that the AI can sometimes switch languages or accents throughout a single generation, especially if that generation is longer in length. This is also something we're working on fixing, hopefully with the next iteration, as there's not too much you can do right now. Using a proper clone paired with Projects should again help mitigate most of this.
+The AI can sometimes switch languages or accents throughout a single generation, especially if that generation is longer in length - very similar to the [mispronunciation](https://docs.elevenlabs.io/troubleshooting/overview#mispronunciation) issue above. This is also something we're working on fixing, hopefully with the next iteration, as there's not too much you can do right now. Using a [proper clone](https://docs.elevenlabs.io/voicelab/instant-voice-cloning) paired with [Projects](https://docs.elevenlabs.io/projects/overview)
+should again help mitigate most of this.
 
 The most important thing to remember is that if you are using a pre-made or generated voice, is that they are all in English and might have an English accent meaning that they may not have the proper pronunciation and might be more prone to switching languages. The best approach would be to clone a voice speaking the language you want the AI to speak with the accent you want. This will provide the most context to the AI to understand how to perform a passage and should minimize language switching.
 
@@ -48,7 +59,7 @@ If something is imported as a single long paragraph instead of being split where
 
 On the rare occasions, you might encounter certain forms of glitches or become out of breath between paragraphs, which you might not experience with speech synthesis, as they operate on different principles. Generally, this issue is not extremely disruptive and is relatively rare, but we are actively working on resolving it. At the moment, there is no straightforward solution to completely avoid this problem. If you do happen to encounter an issue like this, we recommend regenerating the last paragraph. These issues tend to occur at the end of certain paragraphs rather than at the beginning. So, if you hear a problem between two paragraphs, it's usually the preceding paragraph that is the cause of the issue.
 
-## Multilingual v1 (experimental)
+## Multilingual v1
 
 During generation, the audio may change in tone, quality, introduce noise, and distort, and the voice may transition from male to female or start whispering, and more. The prominence of these issues largely depends on the model and voice used. Currently, the monolingual model handles longer generations better, but we are continuously working on both models to improve this in the future.
 
@@ -59,21 +70,20 @@ To help mitigate these problems, we recommend breaking down the text into shorte
 There are a few other factors that could contribute to these issues, and we'd like to highlight some of the key ones:
  
 ### How long is the text chunk?
+
 The voices do have a tendency to degrade over time. The experimental multilingual model tends to degrade quicker than the monolingual model. The team is currently working hard on finding solutions to these problems.
 
-### Monolingual or Multilingual?
-Monolingual is more stable but only officially supports English.
-Multilingual is still experimental and can have a few extra quirks that are being worked on.
-
 ### Pre-made, voice-designed voices, or cloned voices?
-Some of the pre-made voices have a tendency to start whispering during longer generations.
-Similar problems have been observed in the voice-designed voices as well, but it is dependent on the voice itself.
-If you're using cloned voices, the quality of the samples used is very important to the final output. Noise and other artefacts tend to be amplified during long generations.
+
+Some of the pre-made voices have a tendency to start whispering during longer generations when using the multilingual v1 model. Similar problems have been observed in the voice-designed voices as well, but it is dependent on the voice itself. If you're using cloned voices, the quality of the samples used is very important to the final output. Noise and other artifacts tend to be amplified during long generations.
 
 ### What settings are you using?
-Both stability and similarity can change how the voice acts as well as how prominent the artefacts are. Hoovering over the `!` next to each side of the sliders will reveal some more information.
-The multilingual model may also mispronounce certain numbers and symbols. For instance, 1, 2, 3 might be pronounced as "one," "two," "three." Therefore, if you need them to be pronounced in another language, it is recommended to write them out.
 
+Both stability and similarity can change how the voice acts as well as how prominent the artifacts are. Hovering over the `!` next to each side of the sliders will reveal some more information. The multilingual model may also mispronounce certain numbers and symbols. For instance, 1, 2, 3 might be pronounced as "one," "two," "three." Therefore, if you need them to be pronounced in another language, it is recommended to write them out.
+
+We acknowledge that these solutions are temporary measures and may not address all concerns perfectly. However, we believe they can be beneficial in specific situations.
+
+Our team is also actively developing new technology to facilitate extremely long generations. One such update is called "projects" and will be released soon.
 We acknowledge that these solutions are temporary measures and may not address all concerns perfectly. However, we believe they can be beneficial in specific situations.
 
 Our team is also actively developing new technology to facilitate extremely long generations. One such update is called "projects" and will be released soon.
