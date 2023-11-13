@@ -172,9 +172,9 @@ export default AudioComponent;
 
 For more details on working with our API, including additional endpoints, refer to our [official documentation](https://api.elevenlabs.io/docs#/).
 
-## Leveraging ElevenLabs' AudioStream React Component
+## Leveraging ElevenLabs' AudioBuilder React Component
 
-Want to take it one step further? Beyond our API, we also offer a reusable React component called `AudioStream` to facilitate text-to-speech conversion directly within your React app.
+Want to take it one step further? Beyond our API, we also offer a reusable React component called `AudioBuilder` to facilitate text-to-speech conversion directly within your React app.
 
 This component requires the following props:
 
@@ -192,13 +192,13 @@ interface VoiceSettings {
 }
 ```
 
-### Using AudioStream React Component
+### Using AudioBuilder React Component
 
-Integrating `AudioStream` into your React application is a straightforward process:
+Integrating `AudioBuilder` into your React application is a straightforward process:
 
 1. Create a react project using `vite` by running `npm create vite@latest` in your terminal and follow along the instructions.
 2. Open the project in your favorite code editor and install axios by running `npm install axios` in your terminal.
-3. Create a component in your `src` directory called `AudioStream.tsx` and copy the following code into it, this is our implementation of the `AudioStream` component in it's most basic form:
+3. Create a component in your `src` directory called `AudioBuilder.tsx` and copy the following code into it, this is our implementation of the `AudioBuilder` component in it's most basic form:
 
 ```tsx
 import React from 'react';
@@ -209,14 +209,14 @@ interface VoiceSettings {
   similarity_boost: number;
 }
 
-interface AudioStreamProps {
+interface AudioBuilderProps {
   voiceId: string;
   text: string;
   apiKey: string;
   voiceSettings?: VoiceSettings;
 }
 
-const AudioStream: React.FC<AudioStreamProps> = ({
+const AudioBuilder: React.FC<AudioBuilderProps> = ({
   voiceId,
   text,
   apiKey,
@@ -229,7 +229,7 @@ const AudioStream: React.FC<AudioStreamProps> = ({
   const [error, setError] = React.useState('');
 
   // Asynchronous function to fetch audio data and update state variables
-  const convertAndStream = async () => {
+  const convertAndPlay = async () => {
     setLoading(true);
     setError('');
 
@@ -276,6 +276,167 @@ const AudioStream: React.FC<AudioStreamProps> = ({
           <source src={sourceUrl} type='audio/mpeg' />
         </audio>
       )}
+      <button type='button' onClick={convertAndPlay} disabled={loading}>
+        Convert and Play
+      </button>
+      {error && <p>{error}</p>}
+    </div>
+  );
+};
+
+export default AudioBuilder;
+```
+
+4. Import the component: Import `AudioBuilder` from its source file: `import AudioBuilder from './AudioBuilder';` in your `App.tsx` file like so:
+
+```tsx
+import React from 'react';
+import AudioBuilder from './AudioBuilder';
+
+const voiceSettings = {
+  stability: 0,
+  similarity_boost: 0,
+};
+
+const App = () => {
+  return (
+    <div>
+      <AudioBuilder
+        voiceId='304fx0Tcm4TlvDq8ikWAM'
+        text='The following is an example text to test the AudioBuilder component.'
+        apiKey='your-api-key'
+        voiceSettings={voiceSettings}
+      />
+    </div>
+  );
+};
+```
+
+Just replace `voiceId`, text, `apiKey`, and `voiceSettings` with the specific settings corresponding to how you’d like to use the API.
+
+5. Here’s another example of using this reusable component:
+
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import SpeechBuilderComponent from './SpeechBuilderComponent';
+
+const voiceSettingsId = '304fx0Tcm4TlvDq8ikWAM';
+const sampleText =
+  'The following is an example text to test the SpeechBuilderComponent component.';
+const apiAccessKey = 'your-api-key';
+
+const audioQualitySettings = {
+  stability: 0,
+  similarity_boost: 0,
+};
+
+ReactDOM.render(
+  <React.StrictMode>
+    <SpeechBuilderComponent
+      voiceId={voiceSettingsId}
+      text={sampleText}
+      apiKey={apiAccessKey}
+      voiceSettings={audioQualitySettings}
+    />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+
+Please note that the above `SpeechBuilderComponent` is the same as `AudioBuilder` component. We have just renamed it for the sake of providing more options for naming your component.
+
+Once incorporated, the component will render an audio element with a "Convert and Play" button. Just click this button to activate the text-to-speech conversion — your generated audio should play immediately.
+
+You can also extend this reusable `AudioBuilder` component to add more features to it. Here are a few ideas to get you started:
+
+- Add a loading indicator to the button.
+- Use React Query to streamline the API call.
+- Add a dropdown to select the voiceIds.
+- Add a dropdown to select the voiceSettings.
+- Using Tailwind CSS or any other UI component library to style the component.
+
+These are just a few of the many ways you can customize the `AudioBuilder` component to suit your needs. The possibilities are endless!
+
+## Leveraging ElevenLabs' AudioBuilder React Component
+
+While the above `AudioBuilder` components leverages our `text-to-speech` API, you can also use the `text-to-speech` stream API to stream the audio data directly to the browser.
+
+This component requires the same props as that of the `AudioBuilder` component, with the only additional prop being `optimize_streaming_latency` which is an `integer` value that defaults to `0`. You can read more about this API in our [official documentation](https://elevenlabs.io/docs/api-reference/text-to-speech-stream).
+
+### Using AudioStream React Component
+
+- Follow the steps mentioned in the `AudioBuilder` section to setup your React project and install the `axios` package.
+- Create a component in your `src` directory called `AudioStream.tsx` and copy the following code into it, this is our implementation of the `AudioStream` component in it's most basic form:
+
+```tsx
+import React from 'react';
+import axios from 'axios';
+
+interface VoiceSettings {
+  stability: number;
+  similarity_boost: number;
+}
+
+interface AudioStreamProps {
+  voiceId: string;
+  text: string;
+  apiKey: string;
+  voiceSettings?: VoiceSettings;
+}
+
+const AudioStream: React.FC<AudioStreamProps> = ({
+  voiceId,
+  text,
+  apiKey,
+  voiceSettings,
+}) => {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+
+  // Asynchronous function to fetch audio data and update state variables
+  const convertAndStream = async () => {
+    setLoading(true);
+    setError('');
+
+    const baseUrl = 'https://api.elevenlabs.io/v1/text-to-speech';
+    const headers = {
+      'Content-Type': 'application/json',
+      'xi-api-key': apiKey,
+    };
+
+    const body = {
+      text,
+      voice_settings: voiceSettings,
+    };
+
+    try {
+      const response = await axios.post(`${baseUrl}/${voiceId}/stream`, body, {
+        headers,
+        responseType: 'blob',
+      });
+
+      if (response.status === 200) {
+        /**
+         * The response.data is a Blob object which looks like this:
+         * Blob {size: 123456, type: "audio/mpeg"}
+         */
+
+        const audioUrl = URL.createObjectURL(response.data);
+        const audio = new Audio(audioUrl);
+        audio.play();
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
       <button type='button' onClick={convertAndStream} disabled={loading}>
         Convert and Stream
       </button>
@@ -287,7 +448,7 @@ const AudioStream: React.FC<AudioStreamProps> = ({
 export default AudioStream;
 ```
 
-4. Import the component: Import `AudioStream` from its source file: `import AudioStream from './AudioStream';` in your `App.tsx` file like so:
+Once implemented you can use the `AudioStream` component in your `App.tsx` file like so:
 
 ```tsx
 import React from 'react';
@@ -312,57 +473,13 @@ const App = () => {
 };
 ```
 
-Just replace `voiceId`, text, `apiKey`, and `voiceSettings` with the specific settings corresponding to how you’d like to use the API.
-
-5. Here’s another example of using this reusable component:
-
-```tsx
-import React from 'react';
-import ReactDOM from 'react-dom';
-import SpeechStreamComponent from './SpeechStreamComponent';
-
-const voiceSettingsId = '304fx0Tcm4TlvDq8ikWAM';
-const sampleText =
-  'The following is an example text to test the AudioStream component.';
-const apiAccessKey = 'your-api-key';
-
-const audioQualitySettings = {
-  stability: 0,
-  similarity_boost: 0,
-};
-
-ReactDOM.render(
-  <React.StrictMode>
-    <SpeechStreamComponent
-      voiceId={voiceSettingsId}
-      text={sampleText}
-      apiKey={apiAccessKey}
-      voiceSettings={audioQualitySettings}
-    />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-```
-
-Please note that the above `SpeechStreamComponent` is the same as `AudioStream` component. We have just renamed it for the sake of providing more options for naming your component.
-
-Once incorporated, the component will render an audio element with a "Convert and Stream" button. Just click this button to activate the text-to-speech conversion — your generated audio should play immediately.
-
-You can also extend this reusable `AudioStream` component to add more features to it. Here are a few ideas to get you started:
-
-- Add a loading indicator to the button.
-- Use React Query to streamline the API call.
-- Add a dropdown to select the voiceIds.
-- Add a dropdown to select the voiceSettings.
-- Using Tailwind CSS or any other UI component library to style the component.
-
-These are just a few of the many ways you can customize the `AudioStream` component to suit your needs. The possibilities are endless!
+You can also play with the `text-to-speech` stream API on the [ElevenLabs API Playground](https://api.elevenlabs.io/docs).
 
 ## Wrapping Up
 
 At ElevenLabs, we offer an unprecedented opportunity to integrate highly natural and customizable speech synthesis into your React applications.
 
-Whether for creating authentic voiceovers, multilingual customer service, or interactive educational modules, the ElevenLabs API and our accompanying AudioStream React component offer a robust solution to meet your text-to-speech needs.
+Whether for creating authentic voiceovers, multilingual customer service, or interactive educational modules, the ElevenLabs API and our accompanying AudioBuilder React component offer a robust solution to meet your text-to-speech needs.
 
 Take the first step by signing up today and explore the authentic, real human speech capabilities that await. The possibilities are bounded only by the limits of your imagination!
 
