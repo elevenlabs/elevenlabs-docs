@@ -383,6 +383,7 @@ interface AudioStreamProps {
   text: string;
   apiKey: string;
   voiceSettings?: VoiceSettings;
+  optimize_streaming_latency?: 0 | 1 | 2 | 3 | 4;
 }
 
 const AudioStream: React.FC<AudioStreamProps> = ({
@@ -390,6 +391,7 @@ const AudioStream: React.FC<AudioStreamProps> = ({
   text,
   apiKey,
   voiceSettings,
+  optimize_streaming_latency = 0,
 }) => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -411,10 +413,16 @@ const AudioStream: React.FC<AudioStreamProps> = ({
     };
 
     try {
-      const response = await axios.post(`${baseUrl}/${voiceId}/stream`, body, {
-        headers,
-        responseType: 'blob',
-      });
+      const response = await axios.post(
+        `${baseUrl}/${voiceId}/stream?
+        optimize_streaming_latency=${optimize_streaming_latency}
+      `,
+        body,
+        {
+          headers,
+          responseType: 'blob',
+        }
+      );
 
       if (response.status === 200) {
         /**
