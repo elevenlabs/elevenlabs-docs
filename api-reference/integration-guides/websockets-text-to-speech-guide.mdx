@@ -83,7 +83,7 @@ To send text to be synthesized, we construct a message with the input text.
 
 ```python
 await websocket.send(json.dumps(
-    {"text": "Hello world", "try_trigger_generation": True}
+    {"text": "Hello world ", "try_trigger_generation": True}
 ))
 ```
 
@@ -290,8 +290,8 @@ For continuous timecodes, use the ElevenLabs streaming endpoints. You provide th
 
 Trade Offs:
 
-- WebSockets has lower latency but discontinuous timecodes.
-- Streaming has higher latency but accurate timecodes.
+- WebSockets generally has lower latency but discontinuous timecodes, although some buffering is needed.
+- Streaming has higher latency but you get back a continuous audio stream.
 - Choose based on your specific latency needs.
 
 With these building blocks, you can build interactive voice apps that leverage multiple AI APIs and provide real-time text to speech that is optimized at each part of the pipeline.
