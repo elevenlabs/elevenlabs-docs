@@ -1,13 +1,13 @@
 ---
-title: "Text to Speech"
-openapi: "POST /v1/text-to-speech/{voice_id}"
+title: "Text to Speech Stream"
+openapi: "POST /v1/text-to-speech/{voice_id}/stream"
 ---
 
 <RequestExample>
 
 ```Bash Curl
 curl -X 'POST' \
-  'https://api.elevenlabs.io/v1/text-to-speech/<voice-id>' \
+  'https://api.elevenlabs.io/v1/text-to-speech/<voice-id>/stream' \
   --header 'accept: audio/mpeg' \
   --header 'xi-api-key: <xi-api-key>' \
   --header 'Content-Type: application/json' \
@@ -25,7 +25,7 @@ curl -X 'POST' \
 import requests
 
 CHUNK_SIZE = 1024
-url = "https://api.elevenlabs.io/v1/text-to-speech/<voice-id>"
+url = "https://api.elevenlabs.io/v1/text-to-speech/<voice-id>/stream"
 
 headers = {
   "Accept": "audio/mpeg",
@@ -42,7 +42,8 @@ data = {
   }
 }
 
-response = requests.post(url, json=data, headers=headers)
+response = requests.post(url, json=data, headers=headers, stream=True)
+
 with open('output.mp3', 'wb') as f:
     for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
         if chunk:
@@ -55,7 +56,8 @@ from elevenlabs import generate, play
 audio = generate(
     text="Hi! My name is Bella, nice to meet you!",
     voice="Bella",
-    model='eleven_monolingual_v1'
+    model='eleven_monolingual_v1',
+    stream=True
 )
 
 play(audio)
