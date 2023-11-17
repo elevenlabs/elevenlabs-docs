@@ -16,4 +16,15 @@ jobs:
 
       - name: Generate Mintlify
         run: |
-          npx @mintlify/scraping@latest openapi-file openapi.json
+          cd api-reference
+          npx @mintlify/scraping@latest openapi-file ../openapi.json
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          add-paths: '*'
+          title: 'Backend Updates'
+          body: Automated documentation updates from backend
+          branch: auto-updater
+          base: main
+  
