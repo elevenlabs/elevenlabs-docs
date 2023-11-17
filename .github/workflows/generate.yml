@@ -1,0 +1,19 @@
+name: Build and Deploy
+
+on:
+    workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Pull OpenAPI file 
+        run: |
+          curl https://api.elevenlabs.io/openapi.json -o openapi.json
+
+      - name: Generate Mintlify
+        run: |
+          npx @mintlify/scraping@latest openapi-file openapi.json
