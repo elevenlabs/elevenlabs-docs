@@ -51,8 +51,9 @@ with open('output.mp3', 'wb') as f:
 ```
 
 ```Python Client
-from elevenlabs import generate, play
+from elevenlabs import generate, stream, play 
 
+# Provide the audio as generator of byte data using TTS.generate_stream
 audio = generate(
     text="Hi! My name is Bella, nice to meet you!",
     voice="Bella",
@@ -60,7 +61,20 @@ audio = generate(
     stream=True
 )
 
-play(audio)
+# Stream the audio directly 
+stream(audio)
+
+
+# Play the stream of the audio by iterating over each chunk
+for i,chunk in enumerate(audio):
+    play(chunk)
+
+
+# Saving the audio for later 
+with open('output.mp3', 'wb') as f:
+    for i,chunk in enumerate(audio):
+        if chunk: f.write(chunk) 
+
 ```
 
 </RequestExample>
