@@ -1,0 +1,32 @@
+name: Build and Deploy
+
+on:
+    workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Pull OpenAPI file 
+        run: |
+          curl https://api.elevenlabs.io/openapi.json -o openapi.json
+
+      - name: Generate Mintlify
+        run: |
+          cd api-reference
+          npx @mintlify/scraping@latest openapi-file ../openapi.json
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          add-paths: |
+            openapi.json
+            api-reference/*
+          title: 'Backend Updates'
+          body: Automated documentation updates from backend
+          branch: auto-updater
+          base: main
+  
