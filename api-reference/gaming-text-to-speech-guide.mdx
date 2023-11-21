@@ -1,0 +1,214 @@
+---
+title: "Game Dev Guide"
+icon: "gamepad"
+description: "A game developer’s guide to integrating TTS technology – from choosing the right TTS provider and API to exploring real-world use cases."
+---
+
+If you’ve played [Skyrim](https://www.rockpapershotgun.com/skyrim-modders-are-getting-creative-with-this-ai-text-to-speech-tool), you probably saw and heard the power that realistic dialogues can bring to a game back in 2021 (a couple of years feels like a lifetime in our new AI-powered age!). 
+
+It felt kind of magical – being able to turn text into engaging and fairly realistic conversations.
+
+The good news is – the technology has moved on even further in recent years. 2023 was a particularly eventful year in AI voice generation. Voices are getting even more lifelike and there are powerful APIs that make it faster and easier than ever to integrate text-to-speech (TTS) capabilities into a game.
+
+But you may have questions – how do you integrate TTS seamlessly into the game engine? Will the latency be low enough to provide a good real-time gaming experience? How do you handle text input and TTS output without crashing the game? 
+
+In this guide, we’ll cover all these questions and more, so read on!
+
+
+## The Evolution of Text-to-Speech for Gaming
+
+If you go back a decade or so, TTS technology wasn’t quite so realistic. The available voices were only good for portraying robots. 
+
+Fast-forward to today and the mechanical voices are a thing of the past. Generative AI techniques, machine learning, and advanced speech synthesis techniques have enabled nuanced, emotive voices that are much more lifelike. 
+
+Modern TTS systems means that game characters can now respond with vocal expressiveness that really brings them to life. Coupled with generative AI chatbots like ChatGPT, the possibility of convincingly accurate real-time interactions is now achievable.
+
+
+## Choosing A Text-to-Speech Provider
+
+The first step to integrating TTS technology into your app is to find a reliable provider. 
+
+There are a number of choices available. You can choose to go for one of the big name providers – AWS Polly, Google Cloud Text-to-Speech, or IBM Watson, for example. 
+
+However, the most powerful solutions are coming from the smaller independent text-to-speech providers, such as Voicery and ElevenLabs. These providers are at the cutting-edge of the technology and as they are smaller and leaner, can offer more affordable, scalable, and powerful APIs.
+
+When you're on the lookout for a TTS provider, you need to know exactly what they offer. It's not just about lifelike voices but also the variety of voices, languages supported, ease of integration, and latency.
+
+For instance, ElevenLabs doesn’t just provide high-quality voice output. They also excel in voice cloning, which means you can create unique character voices that fit your game’s narrative. 
+
+Their robust API ensures seamless integration into your game engine too, paving the way for real-time, low-latency voice output and an unforgettable gaming experience.
+
+
+## Integrating TTS into Game Engines
+
+Unity, Unreal, GameMaker, etc - Various engines offer different levels of support and ease for TTS integration. Depending on which game engine you’ve used, it may impact the integration.
+
+
+### How To Set Up ElevenLabs with Unity
+
+Unity provides a flexible game engine to integrate text-to-speech into. Here is an overview of how to get started with the ElevenLabs API:
+
+1. **Get API Credentials**
+
+Sign up on ElevenLabs to get your free API key. This will be passed with API requests for authentication.
+
+2. **Make a TTS Request**
+
+Make a request to Elevanlabs API:
+```csharp
+IEnumerator GetVoiceRequest(string textToVoice)
+{
+    var postData = new TextToVoiceRequestModel
+    {
+        text = textToVoice,
+        model_id = "eleven_monolingual_v1"
+    };
+
+    ...
+
+    var url = $"https://api.elevenlabs.io/v1/text-to-speech/{voiceID}";
+
+    var request = UnityWebRequest.PostWwwForm(url, json);
+
+    var downloadHandler = new DownloadHandlerAudioClip(url, AudioType.MPEG);
+
+    request.uploadHandler = uploadHandler;
+    request.downloadHandler = downloadHandler;
+    request.SetRequestHeader("Content-Type", "application/json");
+    request.SetRequestHeader("xi-api-key", yourAPIKey);
+    request.SetRequestHeader("Accept", "audio/mpeg");
+
+    ...
+```
+
+3. **Handle the Response**
+
+The Generate method returns audio data which can be handled:
+
+C#
+
+```csharp
+    yield return request.SendWebRequest();
+
+    if (request.result != UnityWebRequest.Result.Success)
+    {
+        Debug.LogError("Error downloading audio: " + request.error.ToString());
+        yield break;
+    }
+
+    AudioClip audioClip = downloadHandler.audioClip;
+    audioSource.PlayOneShot(audioClip);
+    request.Dispose();
+}
+```
+
+This plays the generated speech immediately.
+
+With just a few lines of code, you can now integrate ElevenLabs' optimized voices into your Unity games.
+
+### How To Set Up ElevenLabs with Unreal
+
+Unreal Engine provides a robust framework for integrating text-to-speech into games. Follow these steps to get started with ElevenLabs:
+
+1. **Install the ElevenLabs Plugin**
+
+The ElevenLabs Unreal Plugin handles all API calls and text processing. Install it into your Project's Plugins folder.
+
+2. **Get API Credentials**
+
+Sign up on ElevenLabs to get your free API key for authentication.
+
+3. **Make a TTS Request**
+
+Reference the plugin and call the GenerateSpeech node:
+
+```
+TextToGenerate -> GenerateSpeech (APIKey)
+```
+
+4. **Convert Response to Audio**
+
+The node returns speech data to convert into an in-game sound:
+
+```
+GenerateSpeech -> Get Sound Wave From Speech -> Play Sound Wave
+```
+
+This handles text-to-speech generation and audio playback.
+
+5. **Integrate Into Gameplay**
+
+Trigger TTS dynamically from game events, NPC interactions, etc. The plugin optimizes requests and streaming.
+
+With ElevenLabs' performant voices integrated directly into Blueprints, you can elevate game vocal interactions to the next level.
+
+### How To Set Up ElevenLabs with GameMaker
+
+GameMaker Studio provides a simple framework for adding text-to-speech through the ElevenLabs API.
+
+1. **Import the ElevenLabs GMS Extension**
+
+The ElevenLabs GMS extension wraps the API for easy use in GameMaker. Import it into your project.
+
+2. **Get API Credentials**
+
+Sign up on ElevenLabs to get your free API key for authentication.
+
+3. **Make a TTS Function Call**
+
+Reference the extension and call the elevenlabs_generate_speech() function:
+
+
+```
+text = "Welcome player!";  <br>audio = elevenlabs_generate_speech(text, apikey);
+```
+
+4. **Play the Audio**
+
+This function returns generated audio data to play:
+
+```
+audio_play_sound(audio, 0, false);
+```
+
+5. **Trigger TTS During Gameplay**
+
+Call the speech function anywhere TTS is needed - NPCs, cutscenes, etc.
+
+That covers the basics of setting up ElevenLabs voices in GameMaker! The extension abstracts the technical details - just integrate the TTS calls into your game events.
+
+### Key Integration Considerations
+
+- Latency - Aim for minimal delay (ideally less than 250 ms) to maintain game flow..
+- Voice Quality - Choosing more lifelike voices will enhance game realism.
+- Ease of Integration - Simplified integration saves both time and resources.
+- Cost - Budget-friendly options can be ideal for indie developers.
+
+## Text-to-Speech Use Cases In Gaming
+
+### Dynamic Narrative Commentary Tracks
+
+Dynamic narrative commentary can really add to player immersion. Take the EA Sports' FIFA series for instance, where TTS technology delivers a lively commentary that ebbs and flows with the game's dynamics, making every tackle, red card, and goal on the pitch feel more real.
+
+### Natural Dialogues Between NPCs
+
+The fantasy world of Skyrim is brought to life not just by its visuals but also its Radiant AI system. Since being integrated with TTS, it provides natural dialogues between NPCs. This brings an enhanced sense of realism. Every interaction feels more organic and responsive to the player’s actions.
+
+### Customizable Virtual Assistants
+
+Starship Commander takes a leap into the future with its virtual AI assistant powered by TTS technology, just like HAL in 2001 Space Odyssey! It's not just about following pre-set dialogues, but engaging in personal interactions that feel very human-like.
+
+### Accessibility Features Like Text Readers
+
+The Last of Us Part II showcases accessibility with its text-to-speech feature. Visually impaired players are able to hear the rich narrative unfold, making it a much more inclusive adventure.
+
+### Interactive Toys and Educational Games
+
+Educational games can use TTS to facilitate language learning. The blend of playful interaction with educational content can create a fun environment conducive to learning. Just make sure to use an API that covers a wide variety of languages. For example, ElevenLabs offers more than 25 different languages and counting.
+
+
+## Next Steps
+
+If you want to include natural, lifelike voices in your game, then your best bet is ElevenLabs. With a fully-documented and easy-to-integrate API, as well as the most realistic voices and voice cloning available, ElevenLabs is the perfect choice for in-game text-to-speech.
+
+Try our API for free today. [Sign up here.](https://elevenlabs.io/sign-up)
