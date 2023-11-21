@@ -1,5 +1,7 @@
 # Mintlify Starter Kit
 
+Used to create our [text to speech API](https://elevenlabs.io/docs/api-reference/text-to-speech) documentation.
+
 Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
 
 - Guide pages
