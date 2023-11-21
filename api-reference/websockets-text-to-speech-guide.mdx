@@ -1,0 +1,302 @@
+---
+title: 'Text-to-Speech WebSockets Guide for Apps and Chatbots'
+icon: 'comments'
+description: 'Discover how to build voice apps with real-time text-to-speech conversion by streaming text and audio over websockets and optimize for low latency.'
+---
+
+Real-time text to speech is essential for building interactive voice applications. Text to speech websockets enable real-time synthesis by minimizing the latency between text input and audio output.
+
+In this guide, we’ll walk through integrating text to speech websockets into a chatbot using the ElevenLabs text to speech websockets API. We’ll specifically focus on achieving low latency text to speech conversion.
+
+## Overview
+
+Here's what we will cover in this guide.
+
+- Connecting to the ElevenLabs text to speech websockets API
+- Streaming text input for real-time text to speech
+- Handling incremental audio responses
+- Integrating with ChatGPT and other AI text generators
+- Optimizing for ultra low latency text to speech
+
+## Prerequisites
+
+Before we start, you'll need the following:
+
+- An ElevenLabs API key - [Sign up](https://elevenlabs.io/sign-up) and get a key
+- Python 3.7+ installed on your machine
+- `pip install websockets` to add the websockets package
+- `pip install openai` to add the OpenAI API package
+- Basic knowledge of Python, AsyncIO and Websockets.
+- An OpenAI API key - [Sign up](https://openai.com/) and get a key
+
+## Integrating with basic text input
+
+### Setup
+
+Let's start by importing the required packages:
+
+```python
+import asyncio
+import websockets
+import json
+```
+
+We'll also define our ElevenLabs API key and the voice ID we want to use.
+
+```python
+ELEVENLABS_API_KEY = '<your elevenlabs key>'
+VOICE_ID = '21m00Tcm4TlvDq8ikWAM'
+```
+
+### Connecting to the Websocket
+
+To open a connection, we'll connect to the ElevenLabs text to speech websockets API to achieve real-time text to speech. First we need to create a websocket URI with the voice ID.
+
+```python
+uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/
+stream-input?model_id=eleven_monolingual_v1"
+```
+
+Then we can open a connection to the websocket.
+
+```python
+async with websockets.connect(uri) as websocket:
+    // connect websocket
+```
+
+Inside the context, we'll initialize the text-to-speech connection by sending the first message.
+
+```python
+await websocket.send(json.dumps({
+   "text": " ",
+   "voice_settings": {
+       "stability": 0.5, "similarity_boost": True
+   },
+   "xi_api_key": ELEVENLABS_API_KEY
+}))
+```
+
+This message preps the API with a voice profile and your API key.
+
+### Streaming Input Text
+
+To send text to be synthesized, we construct a message with the input text.
+
+```python
+await websocket.send(json.dumps(
+    {"text": "Hello world ", "try_trigger_generation": True}
+))
+```
+
+The `try_trigger_generation` flag tells the API to start processing the text.
+
+We can also send text incrementally for real-time text to speech by chunking.
+
+```python
+text = "This is a long sentence split into chunks"
+
+for chunk in text.split():
+   msg = {"text": chunk + " "}
+   await websocket.send(json.dumps({
+       "text": msg, "try_trigger_generation": True}
+   ))
+```
+
+This allows us to stream text from other sources, like an AI assistant API.
+
+### Handling Audio Responses
+
+The API will send back messages with the synthesized audio or metadata. We need to listen for these responses.
+
+```python
+while True:
+   try:
+       message = await websocket.recv()
+       data = json.loads(message)
+       if data.get("audio"):
+          yield base64.b64decode(data["audio"])
+       elif data.get("isFinal"):
+          break
+   except websockets.exceptions.ConnectionClosed:
+       print("Connection closed")
+       break
+```
+
+The `audio` field contains base64 encoded audio chunks. We can decode and play them as they arrive to hear real-time streamed text to speech speech.
+
+### Play sound
+
+You can use various libraries to play the audio. Here's an example using the `mpv` library.
+You can find the installation instructions [here](https://mpv.io/installation/).
+
+This will allow us to play the audio as it arrives.
+
+```python
+mpv_process = subprocess.Popen(
+   ["mpv", "--no-cache", "--no-terminal", "--", "fd://0"],
+   stdin=subprocess.PIPE,
+   stdout=subprocess.DEVNULL,
+   stderr=subprocess.DEVNULL,
+)
+```
+
+Next, we create a subprocess that allows us to launch mpv player on the device.
+
+```python
+async for chunk in audio_stream:
+   if chunk:
+       mpv_process.stdin.write(chunk)
+       mpv_process.stdin.flush()
+
+
+if mpv_process.stdin:
+   mpv_process.stdin.close()
+mpv_process.wait()
+```
+
+This Python script uses asynchronous execution to feed audio data piece by piece to an external processor. It continuously monitors for available data, forwards any it finds for processing, and then seals off the data stream once there is no more data. After the last chunk has been dispatched, it awaits the processor's final output.
+
+## Integrating with ChatGPT
+
+### Integrating Text Generation APIs
+
+Let's tie it all together and build a chatbot that uses the OpenAI API and streams the response with TTS websockets.
+
+We'll use `ChatCompletion` from the OpenAI API to get text from ChatGPT incrementally.
+
+```python
+async def get_chat_response(prompt):
+  response = await openai.ChatCompletion.create(
+   model="gpt-3.5-turbo",
+   messages=[{"role": "user", "content": prompt}]
+  )
+
+  while True:
+    for chunk in response.choices:
+      content = chunk.text
+      yield content
+
+```
+
+This generator yields sentences as they are produced by the model.
+
+We can pass it to the websocket input stream.
+
+```python
+async def stream_response(text):
+  async for chunk in text:
+    msg = {"text": chunk}
+    await websocket.send(json.dumps(msg))
+
+prompt = "Hello, how are you today?"
+
+chat_gen = get_chat_response(prompt)
+await stream_response(chat_gen)
+
+```
+
+### Send Query to ChatGPT
+
+To maintain continuity in a conversation with ChatGPT, you need to preserve the entire history of prompts and the AI's responses.
+
+The function `get_chat_response` is designed to collect responses from ChatGPT. The function initiates the conversation with the model and links each of ChatGPT's responses to build up a coherent history.
+
+We also employ a `generated_content` function to store all user inputs and the corresponding AI responses. This historical record provides context for new queries, allowing ChatGPT to give responses that consider the entire conversation history.
+
+```python
+async def get_chat_response(prompt):
+   response = await openai.ChatCompletion.create(
+       model="gpt-3.5-turbo",
+       messages=[{"role": "user", "content": prompt}]
+)
+  generated_content = ""
+
+
+  while True:
+    for chunk in response.choices:
+       content = chunk.text
+       generated_content += content
+       yield content
+
+  return generated_content
+```
+
+Next, we create the `main` function, we continuously prompt the user for input. If the user decides to exit the conversation by typing 'quit,' the loop breaks, and the program ends. Otherwise, the user's input and ChatGPT's generated content are added to the accumulated conversation history. This means that ChatGPT ‘remembers’ previous answers, improving contextual relevance and consistency.
+
+```python
+async def main():
+   full_history = ''
+   while True:
+       user_input = input("Enter a prompt or type 'quit' to stop:")
+
+       if user_input == "quit":
+           break
+
+       generated_content = await get_chat_response(full_history + user_input)
+
+       local_history = user_input + "\n"
+       local_history += generated_content + "\n"
+
+       full_history += local_history
+```
+
+### Working With Different LLMs
+
+The ChatGPT integration above is one way to set up chatbot text to speech from an LLM API. You can adapt it to other models, as shown below.
+
+#### OpenAI API - Use ChatCompletion with different models like GPT-3.5 Turbo
+
+```python
+
+response = await openai.ChatCompletion.create(
+  model="gpt-3.5-turbo",
+  messages=[...]
+)
+```
+
+#### Anthropic - Use Conversation.stream()
+
+```python
+async for msg in Conversation.stream(model="claude"):
+  // get text
+```
+
+#### Cohere - Stream with paginated cohere.chat() calls
+
+```python
+page = cohere.chat(model="medium", prompt="Hello")
+while True:
+  for msg in page.messages:
+    yield msg.content
+  page = page.next()
+```
+
+The key is to incrementally yield text chunks as they are produced.
+
+## Writing Latency Sensitive Code
+
+Latency is critical for real-time voice apps. Here are some tips to achieve low latency text to speech.
+
+- Send text in small chunks like words or sentences rather than big blocks. This allows synthesis to start earlier.
+- Use a production-optimized model like gpt-3.5-turbo rather than text-davinci-003 to minimize LLM response time.
+- Increase temperature closer to 1 for quicker LLM responses.
+- Disable unnecessary latency optimizations in ElevenLabs like text normalization.
+- Profile your end-to-end latency and optimize bottlenecks.
+
+## Timecodes on WebSockets vs Streaming
+
+With WebSockets, audio is generated incrementally so timecodes reset for each chunk.
+
+For continuous timecodes, use the ElevenLabs streaming endpoints. You provide the full text upfront and get back a continuous audio stream.
+
+Trade Offs:
+
+- The WebSockets API provides timecodes, but it could result in sightly higher latency as some buffering is needed
+- HTTP Streaming has lower overall latency but does not provide timecodes and input needs to be sent upfront
+- Choose based on your specific latency needs.
+
+With these building blocks, you can build interactive voice apps that leverage multiple AI APIs and provide real-time text to speech that is optimized at each part of the pipeline.
+
+The text to speech websocket architecture minimizes latency between text generation and speech output.
+
+For more detailed documentation, please visit the [text-to-speech websockets docs](https://docs.elevenlabs.io/api-reference/text-to-speech-websockets)
