@@ -1,23 +1,26 @@
 ---
-title: "Websockets"
-icon: "comments"
+title: 'Websockets'
+icon: 'comments'
 ---
 
 This API provides real-time [text-to-speech](https://elevenlabs.io/text-to-speech) conversion using WebSockets. Clients can send a text message and receive audio data in real-time.
 
 <Note>
-Endpoint: `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id={model}`
+  Endpoint: `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}
+  /stream-input?model_id={model}`
 </Note>
 
 # When to use
 
 The Text-to-Speech Websockets API is designed to generate audio from partial text input while ensuring consistency throughout the generated audio. Although highly flexible, the Websockets API isn't a one-size-fits-all solution. It's well-suited for scenarios where:
-* Word-to-audio alignment information is required.
-* The input text is being streamed or generated in chunks.
+
+- Word-to-audio alignment information is required.
+- The input text is being streamed or generated in chunks.
 
 However, it may not be the best choice when:
-* The entire input text is available upfront. Given that the generations are partial, some buffering is involved, which could potentially result in slightly higher latency compared to a standard HTTP request.
-* You want to quickly experiment or prototype. Working with Websockets can be harder and more complex than using a standard HTTP API, which might slow down rapid development and testing.
+
+- The entire input text is available upfront. Given that the generations are partial, some buffering is involved, which could potentially result in slightly higher latency compared to a standard HTTP request.
+- You want to quickly experiment or prototype. Working with Websockets can be harder and more complex than using a standard HTTP API, which might slow down rapid development and testing.
 
 For a practical demonstration in a real world application, refer to the [Example of voice streaming using ElevenLabs and ChatGPT](#example-of-voice-streaming-using-elevenlabs-and-chatgpt) section.
 
@@ -28,6 +31,7 @@ The WebSocket API uses a bidirectional protocol that encodes all messages as JSO
 ## Streaming input text
 
 The client can send messages with text input to the server. The messages can contain the following fields:
+
 ```json
 {
   "text": "This is a sample text ",
@@ -41,11 +45,11 @@ The client can send messages with text input to the server. The messages can con
   "xi_api_key": "<XI API Key>",
   "authorization": "Bearer <Authorization Token>"
 }
-
 ```
 
-<ParamField body="text" type="string" required>
-    Should always end with a single space string `" "`. In the first message, the text should be a space `" "`.
+<ParamField body='text' type='string' required>
+  Should always end with a single space string `" "`. In the first message, the
+  text should be a space `" "`.
 </ParamField>
 
 <ParamField body="voice_settings" type="object" >
@@ -66,11 +70,12 @@ The client can send messages with text input to the server. The messages can con
       <ParamField body="use_speaker_boost" type="boolean">
         Defines the use speaker boost for voice settings. This parameter is available on V2+ models.
       </ParamField>
+
   </Expandable>
 </ParamField>
 
-<ParamField body="try_trigger_generation" type="boolean" required>
-    If we should try to trigger the generation.
+<ParamField body='try_trigger_generation' type='boolean' required>
+  If we should try to trigger the generation.
 </ParamField>
 
 <ParamField body="generation_config" type="object">
@@ -85,34 +90,35 @@ The client can send messages with text input to the server. The messages can con
   </Expandable>
 </ParamField>
 
-<ParamField body="xi_api_key" type="string">
-    Provide the XI API Key in the first message if it's not in the header. See [Authentication](/api-reference/quick-start/authentication) for more details.
+<ParamField body='xi_api_key' type='string'>
+  Provide the XI API Key in the first message if it's not in the header. See
+  [Authentication](/api-reference/quick-start/authentication) for more details.
 </ParamField>
 
-<ParamField body="authorization" type="string">
-    Authorization bearer token. Should be provided only in the first message if not present in the header and the XI API Key is not provided.
+<ParamField body='authorization' type='string'>
+  Authorization bearer token. Should be provided only in the first message if
+  not present in the header and the XI API Key is not provided.
 </ParamField>
 
 <Note>
-For best latency we recommend streaming word-by-word, this way we will start generating as soon as we reach the predefined number of un-generated characters.
+  For best latency we recommend streaming word-by-word, this way we will start
+  generating as soon as we reach the predefined number of un-generated
+  characters.
 </Note>
 
-##  End of input
+## End of input
 
 In order to close the connection, the client should send a EOS message. The EOS message should always be an empty string:
 
-
 ```json End of Sequence (EOS) message
 {
-    "text": ""
+  "text": ""
 }
 ```
 
-<ParamField body="text" type="string" required>
-    Should always be an empty string `""`.
+<ParamField body='text' type='string' required>
+  Should always be an empty string `""`.
 </ParamField>
-
-
 
 ## Streaming output audio
 
@@ -130,25 +136,34 @@ The server will always respond with a message containing the following fields:
 }
 ```
 
-<ResponseField name="audio" type="string" optional="true">
+<ResponseField name='audio' type='string' optional='true'>
   A generated partial MP3 audio chunk encoded as a base64 string.
 </ResponseField>
 
-<ResponseField name="isFinal" type="boolean" optional="true">
-  Indicates if the generation is complete. If set to `True`, `audio` will be null.
+<ResponseField name='isFinal' type='boolean' optional='true'>
+  Indicates if the generation is complete. If set to `True`, `audio` will be
+  null.
 </ResponseField>
 
 <ResponseField name="normalizedAlignment" type="string" optional="true">
   Alignment information for the generated audio given the input normalized text sequence.
   <Expandable title="properties">
 
-  <ParamField body="char_start_times_ms" type="array">
-    A list of starting times (in milliseconds) for each character in the normalized text as it corresponds to the audio. For instance, the character 'H' starts at time 0 ms in the audio.
-  </ParamField>
+{' '}
 
-  <ParamField body="chars_durations_ms" type="array">
-    A list providing the duration (in milliseconds) for each character's pronunciation in the audio. For instance, the character 'H' has a pronunciation duration of 3 ms.
-  </ParamField>
+<ParamField body='char_start_times_ms' type='array'>
+  A list of starting times (in milliseconds) for each character in the
+  normalized text as it corresponds to the audio. For instance, the character
+  'H' starts at time 0 ms in the audio.
+</ParamField>
+
+{' '}
+
+<ParamField body='chars_durations_ms' type='array'>
+  A list providing the duration (in milliseconds) for each character's
+  pronunciation in the audio. For instance, the character 'H' has a
+  pronunciation duration of 3 ms.
+</ParamField>
 
   <ParamField body="chars" type="array">
     The list of characters in the normalized text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
@@ -156,11 +171,11 @@ The server will always respond with a message containing the following fields:
   </Expandable>
 </ResponseField>
 
-
 ## Path parameters
 
-<ParamField path="voice_id" type="string">
-    Voice ID to be used, you can use [Get Voices](/api-reference/voices) to list all the available voices.
+<ParamField path='voice_id' type='string'>
+  Voice ID to be used, you can use [Get Voices](/api-reference/voices) to list
+  all the available voices.
 </ParamField>
 
 ## Query parameters
@@ -183,6 +198,7 @@ The server will always respond with a message containing the following fields:
 | 4 | max latency optimizations, but also with text normalizer turned off for even more latency savings (best latency, but can mispronounce eg numbers and dates). |
 
 Defaults to `0`
+
 </ParamField>
 <ParamField query="output_format" type="string">
     Output format of the generated audio. Must be one of:
@@ -196,7 +212,109 @@ Defaults to `0`
 | ulaw_8000 | μ-law format (mulaw) with 8kHz sample rate. (Note that this format is commonly used for Twilio audio inputs.) |
 
 Defaults to `mp3_44100`
+
 </ParamField>
+
+## How to use query params
+
+Below is a code sample showing how the websockets uri looks when using query params like `optimize_streaming_latency` and `output_format`
+Let's say we want to use `2` as our `optimize_streaming_latency` and `mp3_44100_64` as our `output_format` then the uri would look like this:
+
+```python
+uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream-input?model_id=eleven_monolingual_v1&optimize_streaming_latency=2&output_format=mp3_44100_64"
+```
+
+Note: The `output_format` should be accessible in the free tier, in case you're using the free tier. For more info you can read the section on `output_format` [here](https://elevenlabs.io/docs/api-reference/streaming)
+
+## Code sample using `optimize_streaming_latency` and `output_format`
+
+```python
+import asyncio
+import shutil
+import websockets
+import json
+import base64
+import subprocess
+
+ELEVENLABS_API_KEY = '<YOUR API KEY>'
+VOICE_ID = '21m00Tcm4TlvDq8ikWAM'
+OPTIMIZE_STREAMING_LATENCY = 2
+OUTPUT_FORMAT = 'mp3_44100_64'
+
+def is_installed(lib_name):
+    return shutil.which(lib_name) is not None
+
+async def stream(audio_stream):
+    if not is_installed("mpv"):
+        raise ValueError(
+            "mpv not found, necessary to stream audio. "
+            "Install instructions: https://mpv.io/installation/"
+        )
+
+    mpv_process = subprocess.Popen(
+        ["mpv", "--no-cache", "--no-terminal", "--", "fd://0"],
+        stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+
+    print("Started streaming audio")
+    async for chunk in audio_stream:
+        if chunk:
+            mpv_process.stdin.write(chunk)
+            mpv_process.stdin.flush()
+
+    if mpv_process.stdin:
+        mpv_process.stdin.close()
+    mpv_process.wait()
+
+async def text_to_speech():
+  uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream-input?model_id=eleven_monolingual_v1&optimize_streaming_latency={OPTIMIZE_STREAMING_LATENCY}&output_format={OUTPUT_FORMAT}"
+
+  async with websockets.connect(uri) as websocket:
+
+    # Initialize the connection
+    await websocket.send(json.dumps({
+        "text": " ",
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": True
+        },
+        "xi_api_key": ELEVENLABS_API_KEY
+        }))
+
+    text = "This is a new text to speech test. "
+
+    for chunk in text.split():
+      msg = {
+        "text": chunk + " ",
+        "try_trigger_generation": True
+      }
+      await websocket.send(json.dumps(msg))
+
+    # Send EOS message with an empty string instead of a single space
+    # as mentioned in the documentation
+    eos_message = {
+        "text": ""
+    }
+    await websocket.send(json.dumps(eos_message))
+
+    # Added a loop to handle server responses and decode the audio data
+    while True:
+        try:
+            message = await websocket.recv()
+            data = json.loads(message)
+            if data.get("audio"):
+                yield base64.b64decode(data["audio"])
+
+            elif data.get("isFinal"):
+                break
+        except websockets.exceptions.ConnectionClosed:
+            print("Connection closed")
+            break
+
+asyncio.get_event_loop().run_until_complete(stream(text_to_speech()))
+```
+
+You can also follow our integration guide on building real-time text-to-speech applications using websockets [here](/api-reference/websockets-text-to-speech-guide)
 
 # Example of voice streaming using ElevenLabs and ChatGPT
 
@@ -393,75 +511,77 @@ asyncio.get_event_loop().run_until_complete(text_to_speech("voice_id_here"))
 ```
 
 ```javascript Javascript websockets
-const voiceId = "voice_id_here"; // replace with your voice_id
+const voiceId = 'voice_id_here'; // replace with your voice_id
 const model = 'eleven_monolingual_v1';
 const wsUrl = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}`;
 const socket = new WebSocket(wsUrl);
 
 // 2. Initialize the connection by sending the BOS message
 socket.onopen = function (event) {
-    const bosMessage = {
-        "text": " ",
-        "voice_settings": {
-            "stability": 0.5,
-            "similarity_boost": true
-        },
-        "xi_api_key": "api_key_here", // replace with your API key
-    };
+  const bosMessage = {
+    text: ' ',
+    voice_settings: {
+      stability: 0.5,
+      similarity_boost: true,
+    },
+    xi_api_key: 'api_key_here', // replace with your API key
+  };
 
-    socket.send(JSON.stringify(bosMessage));
+  socket.send(JSON.stringify(bosMessage));
 
-    // 3. Send the input text message ("Hello World")
-    const textMessage = {
-        "text": "Hello World ",
-        "try_trigger_generation": true,
-    };
+  // 3. Send the input text message ("Hello World")
+  const textMessage = {
+    text: 'Hello World ',
+    try_trigger_generation: true,
+  };
 
-    socket.send(JSON.stringify(textMessage));
+  socket.send(JSON.stringify(textMessage));
 
-    // 4. Send the EOS message with an empty string
-    const eosMessage = {
-        "text": ""
-    };
+  // 4. Send the EOS message with an empty string
+  const eosMessage = {
+    text: '',
+  };
 
-    socket.send(JSON.stringify(eosMessage));
+  socket.send(JSON.stringify(eosMessage));
 };
 
 // 5. Handle server responses
 socket.onmessage = function (event) {
-    const response = JSON.parse(event.data);
+  const response = JSON.parse(event.data);
 
-    console.log("Server response:", response);
+  console.log('Server response:', response);
 
-    if (response.audio) {
-        // decode and handle the audio data (e.g., play it)
-        const audioChunk = atob(response.audio);  // decode base64
-        console.log("Received audio chunk");
-    } else {
-        console.log("No audio data in the response");
-    }
+  if (response.audio) {
+    // decode and handle the audio data (e.g., play it)
+    const audioChunk = atob(response.audio); // decode base64
+    console.log('Received audio chunk');
+  } else {
+    console.log('No audio data in the response');
+  }
 
-    if (response.isFinal) {
-        // the generation is complete
-    }
+  if (response.isFinal) {
+    // the generation is complete
+  }
 
-    if (response.normalizedAlignment) {
-        // use the alignment info if needed
-    }
+  if (response.normalizedAlignment) {
+    // use the alignment info if needed
+  }
 };
 
 // Handle errors
 socket.onerror = function (error) {
-    console.error(`WebSocket Error: ${error}`);
+  console.error(`WebSocket Error: ${error}`);
 };
 
 // Handle socket closing
 socket.onclose = function (event) {
-    if (event.wasClean) {
-        console.info(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
-    } else {
-        console.warn('Connection died');
-    }
+  if (event.wasClean) {
+    console.info(
+      `Connection closed cleanly, code=${event.code}, reason=${event.reason}`
+    );
+  } else {
+    console.warn('Connection died');
+  }
 };
 ```
 
@@ -481,4 +601,5 @@ audio_stream = generate(
 
 stream(audio_stream)
 ```
+
 </CodeGroup>
