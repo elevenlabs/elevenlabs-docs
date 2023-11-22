@@ -316,6 +316,21 @@ asyncio.get_event_loop().run_until_complete(stream(text_to_speech()))
 
 You can also follow our integration guide on building real-time text-to-speech applications using websockets [here](/api-reference/websockets-text-to-speech-guide)
 
+NOTE: To use different languages like **French**, **Japanese**, **Polish**, **Spanish** etc, you can use our `eleven_multilingual_v2` model. Avoid using the `v1` variation of the multilingual model since that is experimental. You can get more info about our various models using `/v1/models` endpoint.
+Here is how the request body would look like while using the `eleven_multilingual_v2` model:
+
+```json
+{
+  "model_id": "eleven_multilingual_v2",
+  "text": "This is a sample text ",
+  "voice_settings": {
+    "stability": 0.8,
+    "similarity_boost": true
+  },
+  "language_id": "fr" // uses the french accent
+}
+```
+
 # Example of voice streaming using ElevenLabs and ChatGPT
 
 The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from ChatGPT while the answer is being generated, thereby minimizing the overall latency of the operation.
