@@ -202,7 +202,7 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "audio/mpeg": {"schema": {"type": "string"}} }
+            "content": { "audio/mpeg": { "schema": { "type": "string" } } }
           },
           "422": {
             "description": "Validation Error",
@@ -443,7 +443,7 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "audio/mpeg": {"schema": {"type": "string"}} }
+            "content": { "audio/mpeg": { "schema": { "type": "string" } } }
           },
           "422": {
             "description": "Validation Error",
@@ -590,7 +590,7 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "audio/mpeg": {"schema": {"type": "string"}} }
+            "content": { "audio/mpeg": { "schema": { "type": "string" } } }
           },
           "422": {
             "description": "Validation Error",
@@ -4083,7 +4083,7 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "audio/mpeg": {"schema": {"type": "string"}} }
+            "content": { "audio/mpeg": { "schema": { "type": "string" } } }
           },
           "422": {
             "description": "Validation Error",
@@ -6675,7 +6675,7 @@
             "items": { "type": "string" },
             "type": "array",
             "title": "History Item Ids",
-            "description": "A list of history items to download, you can get IDs of history items and other metadata using the GET https://api.elevenlabs.io/v1/history endpoint."
+            "description": "A list of history items to download. If just one history_id is provided then an audio file is returned but in case of multiple ids, a zip file is returned which contains all the audio files related to those history ids grouped into folders with the name of the voices used to generate those audios. The downloaded filenames are not the same as the provided history ids, they contain info like the voice used to generate the audio, time of generation, model used, also information related to the voice settings like similarity_boost and stability you can get IDs of history items and other metadata using the GET /v1/history endpoint."
           }
         },
         "type": "object",
@@ -7172,6 +7172,12 @@
             "title": "Text",
             "description": "The text that will get converted into speech."
           },
+          "language_id": {
+            "title": "Language Id",
+            "type": "string",
+            "description": "Identifier of the language that will be used for the pronunciation of the text in the generated audio. You can get the list of the available languages using GET /v1/models. Please note, these languages will only work with multilingual models and not with the default eleven_monolingual_v1 model. With the default model they will have no effect.",
+            "default": "en"
+          },
           "model_id": {
             "type": "string",
             "title": "Model Id",
@@ -7196,6 +7202,12 @@
             "type": "string",
             "title": "Text",
             "description": "The text that will get converted into speech."
+          },
+          "language_id": {
+            "title": "Language Id",
+            "type": "string",
+            "description": "Identifier of the language that will be used for the pronunciation of the text in the generated audio. You can get the list of the available languages using GET /v1/models. Please note, these languages will only work with multilingual models and not with the default eleven_monolingual_v1 model. With the default model they will have no effect.",
+            "default": "en"
           },
           "model_id": {
             "type": "string",
