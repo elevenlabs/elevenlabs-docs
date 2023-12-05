@@ -33,7 +33,7 @@ The client can send messages with text input to the server. The messages can con
   "text": "This is a sample text ",
   "voice_settings": {
     "stability": 0.8,
-    "similarity_boost": true
+    "similarity_boost": 0.8
   },
   "generation_config": {
     "chunk_length_schedule": [120, 160, 250, 290]
@@ -59,7 +59,7 @@ The client can send messages with text input to the server. The messages can con
         Defines the similarity boost for voice settings.
       </ParamField>
 
-      <ParamField body="style" type="boolean">
+      <ParamField body="style" type="number">
         Defines the style for voice settings. This parameter is available on V2+ models.
       </ParamField>
 
@@ -275,7 +275,7 @@ async def text_to_speech_input_streaming(voice_id, text_iterator):
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({
             "text": " ",
-            "voice_settings": {"stability": 0.5, "similarity_boost": True},
+            "voice_settings": {"stability": 0.5, "similarity_boost": 0.8},
             "xi_api_key": ELEVENLABS_API_KEY,
         }))
 
@@ -305,7 +305,7 @@ async def text_to_speech_input_streaming(voice_id, text_iterator):
 
 async def chat_completion(query):
     """Retrieve text from OpenAI and pass it to the text-to-speech function."""
-    response = await openai.ChatCompletion.acreate(
+    response = await openai.ChatCompletion.create(
         model='gpt-4', messages=[{'role': 'user', 'content': query}],
         temperature=1, stream=True
     )
@@ -352,9 +352,9 @@ async def text_to_speech(voice_id):
             "text": " ",
             "voice_settings": {
                 "stability": 0.5,
-                "similarity_boost": True
+                "similarity_boost": 0.8
             },
-            "xi_api_key": "api_key_here",  # Replace with your API key
+            "xi-api-key": "api_key_here",  # Replace with your API key
         }
         await websocket.send(json.dumps(bos_message))
 
@@ -404,9 +404,9 @@ socket.onopen = function (event) {
         "text": " ",
         "voice_settings": {
             "stability": 0.5,
-            "similarity_boost": true
+            "similarity_boost": 0.8
         },
-        "xi_api_key": "api_key_here", // replace with your API key
+        "xi-api-key": "api_key_here", // replace with your API key
     };
 
     socket.send(JSON.stringify(bosMessage));
