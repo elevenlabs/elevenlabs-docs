@@ -126,6 +126,11 @@ The server will always respond with a message containing the following fields:
         "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
         "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
         "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
+    },
+    "alignment": {
+        "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
+        "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+        "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
     }
 }
 ```
@@ -156,6 +161,23 @@ The server will always respond with a message containing the following fields:
   </Expandable>
 </ResponseField>
 
+<ResponseField name="alignment" type="string" optional="true">
+  Alignment information for the generated audio given the original text sequence.
+  <Expandable title="properties">
+
+  <ParamField body="char_start_times_ms" type="array">
+    A list of starting times (in milliseconds) for each character in the original text as it corresponds to the audio. For instance, the character 'H' starts at time 0 ms in the audio.
+  </ParamField>
+
+  <ParamField body="chars_durations_ms" type="array">
+    A list providing the duration (in milliseconds) for each character's pronunciation in the audio. For instance, the character 'H' has a pronunciation duration of 3 ms.
+  </ParamField>
+
+  <ParamField body="chars" type="array">
+    The list of characters in the normalized text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
+  </ParamField>
+  </Expandable>
+</ResponseField>
 
 ## Path parameters
 
