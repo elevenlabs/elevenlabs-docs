@@ -306,7 +306,6 @@ async def text_to_speech_input_streaming(voice_id, text_iterator):
                 try:
                     message = await websocket.recv()
                     data = json.loads(message)
-                    print(data)
                     if data.get("audio"):
                         yield base64.b64decode(data["audio"])
                     elif data.get('isFinal'):
