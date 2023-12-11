@@ -174,7 +174,7 @@ The server will always respond with a message containing the following fields:
   </ParamField>
 
   <ParamField body="chars" type="array">
-    The list of characters in the normalized text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
+    The list of characters in the original text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
   </ParamField>
   </Expandable>
 </ResponseField>
@@ -228,11 +228,11 @@ The following example demonstrates how to leverage the ElevenLabs Websockets API
 import asyncio
 import websockets
 import json
-import openai
 import base64
 import shutil
 import os
 import subprocess
+from openai import AsyncOpenAI
 
 # Define API keys and voice ID
 OPENAI_API_KEY = '<OPENAI_API_KEY>'
@@ -240,8 +240,7 @@ ELEVENLABS_API_KEY = '<ELEVENLABS_API_KEY>'
 VOICE_ID = '21m00Tcm4TlvDq8ikWAM'
 
 # Set OpenAI API key
-openai.api_key = OPENAI_API_KEY
-
+aclient = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 def is_installed(lib_name):
     return shutil.which(lib_name) is not None
@@ -307,6 +306,7 @@ async def text_to_speech_input_streaming(voice_id, text_iterator):
                 try:
                     message = await websocket.recv()
                     data = json.loads(message)
+                    print(data)
                     if data.get("audio"):
                         yield base64.b64decode(data["audio"])
                     elif data.get('isFinal'):
@@ -327,18 +327,13 @@ async def text_to_speech_input_streaming(voice_id, text_iterator):
 
 async def chat_completion(query):
     """Retrieve text from OpenAI and pass it to the text-to-speech function."""
-    response = await openai.ChatCompletion.acreate(
-        model='gpt-4', messages=[{'role': 'user', 'content': query}],
-        temperature=1, stream=True
-    )
+    response = await aclient.chat.completions.create(model='gpt-4', messages=[{'role': 'user', 'content': query}],
+    temperature=1, stream=True)
 
     async def text_iterator():
         async for chunk in response:
-            delta = chunk['choices'][0]["delta"]
-            if 'content' in delta:
-                yield delta["content"]
-            else:
-                break
+            delta = chunk.choices[0].delta
+            yield delta.content
 
     await text_to_speech_input_streaming(VOICE_ID, text_iterator())
 
