@@ -1,0 +1,146 @@
+---
+title: "Getting Started"
+description: "Start generating your first text-to-speech using Python and ElevenLabs API"
+---
+
+
+All plans, even the free plan, come with access to the API (Application Programming Interface), allowing you to use our technology programmatically and its full range of features through code. An API is the fundamental component that applications using ElevenLabs or any other service rely on.
+
+In this section, we will provide a fairly concise overview of how the API can be used to make requests to the endpoints to fetch the voices in your voice library and even generate our first text-to-speech.
+
+Something that might be good to note is that the website is just a frontend for the API. So if you use Speech Synthesis or make calls directly to the API with code, there should be no difference in quality or output with the same settings. However, the AI is still non-deterministic so there might be a difference in the delivery of the generated output.
+
+The API and the website also share the same pool of quota when generating audio. So, if you have 10,000 characters in your account and you generate audio, the characters for that generation will be deducted from your account regardless of whether you use the website or the API.
+​
+https://docs.elevenlabs.io/api-reference/
+https://api.elevenlabs.io/docs
+​
+Given the extensive nature of the API and its virtually limitless possibilities, we will only do a very quick overview and showcase a few examples to at least get you up and running.
+
+The [Text-To-Speech](https://elevenlabs.io/docs/api-reference/text-to-speech) (TTS) endpoint transforms text into speech in a given voice. The input consists of text, voice, and voice settings with an option to specify model.
+
+
+# Fetching the voice_id
+
+Before we can generate anything, we need to get the `voice_id` for the voice we want to use.
+
+The easiest way to get the `voice_id` is via the website. You can find the article on how to do that [here](https://help.elevenlabs.io/hc/en-us/articles/14599760033937-How-do-I-find-my-voice's-ID-of-my-voices-via-the-website-and-through-the-API-).
+
+A better approach, especially when dealing with the API, is to retrieve the voices accessible to your account using the `GET /v1/voices` endpoint. If you do not receive the expected voices, you will either encounter an error or just see the pre-made voices, which is most likely indicating that you are not passing your API key correctly.
+
+You can find more information in the [Get Voices](https://elevenlabs.io/docs/api-reference/get-voices) endpoint documentation. This endpoint is crucial if your application requires any form of flexibility in the voices you want to use via the API, as it provides information about each voice, including the `voice_id` for each of them. This `voice_id` is necessary when querying the TTS endpoint.
+
+The API offers a wide range of capabilities, such as adding new voices, but we won't discuss that here. To gain a better understanding of how to do that, you will need to read through the documentation.
+
+You can use the Python code below to print a list of the voices in your account, along with their names and associated voice_ids, which will be required to use the voices via the API. Simply using the name won't be sufficient.
+
+```python
+# The 'requests' and 'json' libraries are imported. 
+# 'requests' is used to send HTTP requests, while 'json' is used for parsing the JSON data that we receive from the API.
+import requests
+import json
+
+# An API key is defined here. You'd normally get this from the service you're accessing. It's a form of authentication.
+XI_API_KEY = "<xi-api-key>"
+
+# This is the URL for the API endpoint we'll be making a GET request to.
+url = "https://api.elevenlabs.io/v1/voices"
+
+# Here, headers for the HTTP request are being set up. 
+# Headers provide metadata about the request. In this case, we're specifying the content type and including our API key for authentication.
+headers = {
+  "Accept": "application/json",
+  "xi-api-key": XI_API_KEY,
+  "Content-Type": "application/json"
+}
+
+# A GET request is sent to the API endpoint. The URL and the headers are passed into the request.
+response = requests.get(url, headers=headers)
+
+# The JSON response from the API is parsed using the built-in .json() method from the 'requests' library. 
+# This transforms the JSON data into a Python dictionary for further processing.
+data = response.json()
+
+# A loop is created to iterate over each 'voice' in the 'voices' list from the parsed data. 
+# The 'voices' list consists of dictionaries, each representing a unique voice provided by the API.
+for voice in data['voices']:
+  # For each 'voice', the 'name' and 'voice_id' are printed out. 
+  # These keys in the voice dictionary contain values that provide information about the specific voice.
+  print(f"{voice['name']}; {voice['voice_id']}")
+```
+
+
+# Generating text-to-speech
+
+Once you have you've gotten the `voice_id` from the voices endpoint, you are ready to query the [Text-to-speech](https://elevenlabs.io/docs/api-reference/text-to-speech) endpoint.
+
+First, you need to decide whether you want to use the streaming response or not. In general, we recommend streaming unless your client doesn't support it. You can find more information about the [streaming](https://elevenlabs.io/docs/api-reference/streaming) endpoint in our documentation.
+
+Second, you need to choose your voice settings. We recommend using the default voice settings before experimenting with the expressivity and similarity settings. You can find more information about the [settings](https://elevenlabs.io/docs/speech-synthesis/voice-settings) in our documentation.
+
+After generating something, we store each audio you generate together with other metadata in your personal history. You can retrieve all your history items via the `/v1/history` endpoint. We also provide endpoints for retrieving audio, deletion, and download of history items. You can find more information about how to use the [history](https://elevenlabs.io/docs/api-reference/get-generated-items) endpoint in our documentation. The only thing that is not saved is websocket streaming queries to save latency.
+
+In the basic Python example below, we send a request to the text-to-speech endpoint and receive a stream of audio bytes in return. All you need to do is set your XI API Key first and try it out! If you cannot find it, please follow this article [here](https://help.elevenlabs.io/hc/en-us/articles/14599447207697-How-to-authorize-yourself-using-your-xi-api-key-).
+
+You will need to replace the constants by inserting your `<xi-api-key>`, setting the correct `<voice-id>`, and entering the `<text>` you want the AI to convert to speech. You can change the settings `stability` and `similarity_boost` if you want, but they are set to good default values.
+
+Of course, the code below is only to showcase the very bare minimum to get the system up and running, and you can then use more advanced code to create a nice GUI with sliders for the variables, a list for the voices, and anything else that you want to add.
+
+```python
+# First, we import the 'requests' library, which allows us to send HTTP requests in Python.
+import requests
+
+# This constant defines the chunk size we'll be using when downloading the audio file. 
+# It is set to 1024 bytes, or 1 Kilobyte.
+CHUNK_SIZE = 1024
+
+# Here we're defining some constants that will be used in our API request. 
+# These include the API key, the voice ID (which will define the type of voice used for the text-to-speech conversion),
+# the text that we want to convert to speech, and the path where the resulting audio file will be saved.
+# Change these with your own information to test the code.
+XI_API_KEY = "<xi-api-key>"
+VOICE_ID = "<voice-id>"
+TEXT_TO_SPEAK = "<text>"
+OUTPUT_PATH = "output.mp3"
+
+# This is the URL for the API endpoint we'll be making a request to.
+# We're using Python's f-string formatting to insert the voice ID into the URL.
+tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream"
+
+# Here we're setting up the headers for our HTTP request. 
+# Headers provide metadata about the request. In this case, we're specifying the content type and including our API key for authorization.
+headers = {
+  "Accept": "application/json",
+  "xi-api-key": XI_API_KEY,
+  "Content-Type": "application/json"
+}
+
+# This is the data that we're going to send with our request. It's a Python dictionary which will be converted into a JSON object.
+# It includes the text we want to convert to speech, the model ID, and some settings for the voice.
+data = {
+  "text": TEXT_TO_SPEAK,
+  "model_id": "eleven_multilingual_v2",
+  "voice_settings": {
+    "stability": 0.5,
+    "similarity_boost": 0.8,
+    "style": 0.0,
+    "use_speaker_boost": true
+  }
+}
+
+# Here we're making the HTTP POST request to the API.
+# We're passing in the URL, the data as a JSON object, the headers, and specifying that we want to stream the response.
+response = requests.post(tts_url, json=data, headers=headers, stream=True)
+
+# This block of code is saving the streamed audio file to the output path we specified earlier.
+# We're opening the file in write-binary ('wb') mode because it's an audio file.
+# We then iterate over the streamed content in chunks of the size specified, and write each chunk to the file.
+# We check `if chunk:` to ensure we're not writing empty chunks (which could happen if there was a network error or something similar).
+with open(OUTPUT_PATH, 'wb') as f:
+    for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+        if chunk:
+            f.write(chunk)
+
+# Print the output path when finished
+print(f"Finished writing audio file to {OUTPUT_PATH}")
+```
