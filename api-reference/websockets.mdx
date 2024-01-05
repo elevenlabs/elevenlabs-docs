@@ -198,6 +198,13 @@ The server will always respond with a message containing the following fields:
     Whether to enable request logging, if disabled the request will not be present in history nor bigtable.
     Enabled by default. Note: simple logging (aka printing) to stdout/stderr is always enabled.
 </ParamField>
+<ParamField query="enable_ssml_parsing" type="boolean">
+    Whether to enable/disable parsing of SSML tags within the provided text. For best results, we recommend
+    sending SSML tags as fully contained messages to the websockets endpoint, otherwise this may result in additional latency.
+    Please note that rendered text, in normalizedAlignment, will be altered in support of SSML tags. The 
+    rendered text will use a . as a placeholder for breaks, and syllables will be reported using the CMU arpabet alphabet where SSML phoneme tags are used to specify pronunciation.
+    Disabled by default.
+</ParamField>
 <ParamField query="optimize_streaming_latency" type="string">
     You can turn on latency optimizations at some cost of quality. The best possible final latency varies by model. Possible values:
 | Value | Description |
