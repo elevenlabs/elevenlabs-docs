@@ -44,7 +44,7 @@ To see an example implementation check out our [hackathon blog post](https://ele
 
 The embedded player automatically collects listening metrics, retention and more. Plus, it can be readily extended to any article through simple copy-pasting.
 
-There are two ways to deploy your Audio Native Player
+There are three ways to deploy your Audio Native Player
 ### Method 1: Embed and automatically voice the site
 <video
   controls
@@ -71,3 +71,15 @@ Take the code that you generated during Audio Native set up and embed it into yo
 ></video>
 If you already have a Project converted to voice audio and would like to embed that voice audio in an Audio Native player, simply select share on the Project and use the generated html snippet to embed the voice audio on any whitelisted site.
 <img height="200" src="/projects/images/an8.png" />
+
+---
+
+### Method 3: Embed audio from content using our API
+
+You can use our API to programmatically create an Audio Native player for your existing content. 
+
+Using [this API method](https://elevenlabs.io/docs/api-reference/creates-audionative-enabled-project) you can submit your content as either a .html or .txt file and we will return an embeddable html code for an Audio Native player which can be inserted into your website or blog. Our Audio Native HTML embed code follows a standardised format, with a unique identifier for the uploaded content.
+
+In the background when this api is called it will automatically convert your content into an ElevenLabs Project, optionally convert the project into audio straight away, and then enable sharing on this project audio using the returned Audio Native player.
+
+Future edits to the content can be done by calling this method again with the new content or within the Projects UI.
