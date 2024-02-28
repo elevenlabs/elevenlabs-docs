@@ -1,4 +1,4 @@
----
+.---
 title: "Overview"
 description: "Important considerations for ElevenLabs' beta voice generation, including text length, model choice, voice types, and generation settings, with tips for optimizing audio quality."
 ---
@@ -11,7 +11,7 @@ In this section, we will go through some of the issues we've encountered and wha
 ## Multilingual v2
 
 The multilingual v2 model was a huge leap forward in predictability and consistency compared to the experimental multilingual v1 model. We hope to achieve a similar improvement once we release our next iteration of the models. The multilingual v1 model suffered from a lot of issues and was never released outside of its experimental phase. You can read more about those issues below, but the multilingual v2 model seems to have solved most of them. 
-
+.
 However, there are still a few issues that we have observed and heard reports of from our users.
 
 ### Inconsistency
@@ -32,12 +32,18 @@ The best way to deal with this is to use the [Projects](https://docs.elevenlabs.
 
 As with the above issue of [inconsistency](https://docs.elevenlabs.io/troubleshooting/overview#inconsistency), this issue also seems to be minimized by using a probably cloned voice, cloned in the languages you want the AI to speak.
 
-### Language Switching
+### Language Switching and Accent Drift
 
 The AI can sometimes switch languages or accents throughout a single generation, especially if that generation is longer in length - very similar to the [mispronunciation](https://docs.elevenlabs.io/troubleshooting/overview#mispronunciation) issue above. This is also something we're working on fixing, hopefully with the next iteration, as there's not too much you can do right now. Using a [proper clone](https://docs.elevenlabs.io/voicelab/instant-voice-cloning) paired with [Projects](https://docs.elevenlabs.io/projects/overview)
-should again help mitigate most of this.
+which has been cloned speaking the language you want the AI to speak should again help mitigate most of this.
 
-The most important thing to remember is that if you are using a pre-made or generated voice, is that they are all in English and might have an English accent meaning that they may not have the proper pronunciation and might be more prone to switching languages. The best approach would be to clone a voice speaking the language you want the AI to speak with the accent you want. This will provide the most context to the AI to understand how to perform a passage and should minimize language switching.
+The most important thing to remember is that if you are using a pre-made (default voice) or generated voice, they are all in English and might have an English accent in other languages. This means that they may not have the proper pronunciation and might be more prone to switching languages and accent. The best approach would be to clone a voice speaking the language you want the AI to speak with the accent you want. This will provide the most context for the AI to understand how to perform a passage and should minimize language switching.
+
+There is currently no way to select the language you want the AI to speak. Instead, the way you "select" the language is by writing in the language you want the AI to speak. If you are using a voice that is not native to the language - for example, one of the pre-made voices since they are in English - the AI might have a slight English accent when speaking other languages.
+
+To get optimal results, we recommend cloning a voice that speaks the original language with the correct accent. This is especially important when dealing with languages that are very similar and share a lot of common words. This ensures that the AI has the most information to understand which pronunciation and language it should choose.
+
+Another important point to note is that the AI usually begins with one accent and can gradually shift over longer segments of text, which generally means text longer than a few hundred characters. We highly recommend using the "Projects" feature to avoid many of these issues.
 
 ### Corrupt Speech
 
