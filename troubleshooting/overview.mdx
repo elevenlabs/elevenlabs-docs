@@ -1,4 +1,4 @@
-.---
+---
 title: "Overview"
 description: "Important considerations for ElevenLabs' beta voice generation, including text length, model choice, voice types, and generation settings, with tips for optimizing audio quality."
 ---
@@ -10,17 +10,23 @@ In this section, we will go through some of the issues we've encountered and wha
 
 ## Multilingual v2
 
-The multilingual v2 model was a huge leap forward in predictability and consistency compared to the experimental multilingual v1 model. We hope to achieve a similar improvement once we release our next iteration of the models. The multilingual v1 model suffered from a lot of issues and was never released outside of its experimental phase. You can read more about those issues below, but the multilingual v2 model seems to have solved most of them. 
-.
+The multilingual v2 model was a huge leap forward in accuracy, predictability and consistency compared to the experimental multilingual v1 model. We hope to achieve a similar improvement once we release our next iteration of the models. The multilingual v1 model suffered from a lot of issues and was never released outside of its experimental phase. You can read more about those issues below, but the multilingual v2 model seems to have solved most of them.
+
 However, there are still a few issues that we have observed and heard reports of from our users.
 
 ### Inconsistency
 
-We've heard reports where users say that there is inconsistency between generations, so takes don't always fit together perfectly. This is something we are aware of and are working on resolving. However, it is a lot less prominent in the multilingual v2 model compared to the other models, and it seems to be even less of an issue with Projects, as it is a bit more advanced than Speech Synthesis when it comes to long-form content as it was specifically made for that.
+Although the v2 model is a significant step forward compared to the v1 model, we are still dealing with AI, which can be unpredictable at times. We are, of course, continuously working on bringing this unpredictability down on the model level, but there are already things you can do to minimize this unpredictability.
 
-The current suggestion to resolve this would be to try using a cloned voice or, if you are already cloning the voice, try cloning the voice again with different samples if you encounter a lot of variability. We recommend that you read the [cloning guide in the documentation](https://docs.elevenlabs.io/voicelab/instant-voice-cloning) as it goes through a lot of best practices.
+We've heard reports where users say that there is inconsistency between generations, so takes don't always fit together perfectly. Even though this issue is a lot less prominent in the multilingual v2 model compared to the multilingual v1 model, and it seems to be even less of an issue with Projects as that feature is a bit more advanced than Speech Synthesis when it comes to long-form content since it was specifically made for that, it can still happen.
 
-In general, for consistency, you should use around 1 to 2 minutes of audio. This audio should be very consistent across all aspects such as tonality, performance, accent, quality, and so on, if you want the output to be consistent. Using more audio than that can make the AI too variable, which can cause inconsistency between generations.
+Generally, what we've found is that this happens more to certain voices than others and when the samples for those voices are suboptimal, which most often means not following the guidelines. The current suggestion to resolve this would be to try using a cloned voice or, if you are already cloning the voice, try cloning the voice again with different samples if you encounter a lot of variability. We recommend that you read the [cloning guide in the documentation](https://docs.elevenlabs.io/voicelab/instant-voice-cloning) as it goes through a lot of best practices.
+
+Ensuring you use high-quality samples that are very consistent will help tremendously in maintaining consistency.
+
+In general, for consistency, you should use around 1 to 2 minutes of audio when [Instant Voice Cloning](https://docs.elevenlabs.io/voicelab/instant-voice-cloning). This audio should be very consistent across all aspects such as tonality, performance, accent, quality, and so on, if you want the output to be consistent. Using more audio than that can make the AI too variable, which can cause inconsistency between generations.
+
+For [Professional Voice Cloning](https://docs.elevenlabs.io/voicelab/professional-voice-cloning), we recommend at the very least 30 minutes of audio and suggest between 2 to 3 hours of audio for the best results. Keep in mind, the audio needs to be consistent throughout for the best result. You can find more in-depth information in the guide specifically about cloning.
 
 If you clone a voice properly, one that is consistent throughout, of high quality, properly recorded without background noise or multiple speakers, and if you follow the guidelines, you should be able to get a very good and consistent clone. It might require a bit experimenting if you don't get it right the first time.
 
@@ -31,6 +37,8 @@ The multilingual v2 model does have a fairly rare issues where the AI mispronoun
 The best way to deal with this is to use the [Projects](https://docs.elevenlabs.io/projects/overview) feature, which seems to minimize the issue as it is more prevalent across longer sections of text when using Speech Synthesis. It will not completely remove the issue, but it will hopefully help both avoid it and make it easier to just regenerate the specific section affected without redoing the whole text.
 
 As with the above issue of [inconsistency](https://docs.elevenlabs.io/troubleshooting/overview#inconsistency), this issue also seems to be minimized by using a probably cloned voice, cloned in the languages you want the AI to speak.
+
+Both stability and similarity can change how the voice acts as well as how prominent the artifacts are. Hovering over the `!` next to each side of the sliders will reveal some more information. The multilingual models may also mispronounce certain numbers and symbols. For instance, 1, 2, 3 might be pronounced as "one," "two," "three." Therefore, if you need them to be pronounced in another language, it is recommended to write them out fully.
 
 ### Language Switching and Accent Drift
 
@@ -67,6 +75,8 @@ On the rare occasions, you might encounter certain forms of glitches or sharp br
 
 ## Multilingual v1
 
+The multilingual model is generally only recommended for old PVC clones that require it, as it does exhibit a few issues that are not present in the newer models.
+
 During generation, the audio may change in tone, quality, introduce noise, and distort, and the voice may transition from male to female or start whispering, and more. The prominence of these issues largely depends on the model and voice used. Currently, the monolingual model handles longer generations better, but we are continuously working on both models to improve this in the future.
 
 We are aware that the voices have a tendency to degrade during longer audio generations, and our team is working hard to develop the technology to improve upon this. As stated above, this issue is more prominent in the experimental multilingual model.
@@ -85,11 +95,6 @@ Some of the pre-made voices have a tendency to start whispering during longer ge
 
 ### What settings are you using?
 
-Both stability and similarity can change how the voice acts as well as how prominent the artifacts are. Hovering over the `!` next to each side of the sliders will reveal some more information. The multilingual model may also mispronounce certain numbers and symbols. For instance, 1, 2, 3 might be pronounced as "one," "two," "three." Therefore, if you need them to be pronounced in another language, it is recommended to write them out.
+Both stability and similarity can change how the voice acts as well as how prominent the artifacts are. Hovering over the `!` next to each side of the sliders will reveal some more information. The multilingual models may also mispronounce certain numbers and symbols. For instance, 1, 2, 3 might be pronounced as "one," "two," "three." Therefore, if you need them to be pronounced in another language, it is recommended to write them out.
 
 We acknowledge that these solutions are temporary measures and may not address all concerns perfectly. However, we believe they can be beneficial in specific situations.
-
-Our team is also actively developing new technology to facilitate extremely long generations. One such update is called "projects" and will be released soon.
-We acknowledge that these solutions are temporary measures and may not address all concerns perfectly. However, we believe they can be beneficial in specific situations.
-
-Our team is also actively developing new technology to facilitate extremely long generations. One such update is called "projects" and will be released soon.
