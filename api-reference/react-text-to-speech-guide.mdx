@@ -160,7 +160,7 @@ const AudioComponent = () => {
   return (
     <div>
       {sourceUrl && (
-        <audio autoPlay controls>
+        <audio autoPlay controls key={sourceUrl}>
           <source src={sourceUrl} type='audio/mpeg' />
         </audio>
       )}
@@ -273,7 +273,7 @@ const AudioStream: React.FC<AudioStreamProps> = ({
     <div>
       {/* Render an audio element when the source URL is available */}
       {sourceUrl && (
-        <audio autoPlay controls>
+        <audio autoPlay controls key={sourceUrl}>
           <source src={sourceUrl} type='audio/mpeg' />
         </audio>
       )}
