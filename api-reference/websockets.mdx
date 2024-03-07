@@ -3,23 +3,27 @@ title: "Websockets"
 icon: "comments"
 ---
 
-This API provides real-time [text-to-speech](https://elevenlabs.io/text-to-speech) conversion using WebSockets. Clients can send a text message and receive audio data in real-time.
+This API provides real-time [text-to-speech](https://elevenlabs.io/text-to-speech) conversion using WebSockets. This allows you to send a text message and receive audio data back in real-time.
 
 <Note>
-Endpoint: `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id={model}`
+Endpoint:<br/>`wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id={model}`
 </Note>
 
 # When to use
 
 The Text-to-Speech Websockets API is designed to generate audio from partial text input while ensuring consistency throughout the generated audio. Although highly flexible, the Websockets API isn't a one-size-fits-all solution. It's well-suited for scenarios where:
-* Word-to-audio alignment information is required.
 * The input text is being streamed or generated in chunks.
+* Word-to-audio alignment information is required.
+
+For a practical demonstration in a real world application, refer to the [Example of voice streaming using ElevenLabs and ChatGPT](#example-of-voice-streaming-using-elevenlabs-and-chatgpt) section.
+
+# When not to use
 
 However, it may not be the best choice when:
 * The entire input text is available upfront. Given that the generations are partial, some buffering is involved, which could potentially result in slightly higher latency compared to a standard HTTP request.
 * You want to quickly experiment or prototype. Working with Websockets can be harder and more complex than using a standard HTTP API, which might slow down rapid development and testing.
 
-For a practical demonstration in a real world application, refer to the [Example of voice streaming using ElevenLabs and ChatGPT](#example-of-voice-streaming-using-elevenlabs-and-chatgpt) section.
+In these cases, use the [Text to Speech API](/api-reference/text-to-speech) instead.
 
 # Protocol
 
@@ -48,8 +52,16 @@ The client can send messages with text input to the server. The messages can con
     Should always end with a single space string `" "`. In the first message, the text should be a space `" "`.
 </ParamField>
 
+<ParamField body="try_trigger_generation" type="boolean" required>
+    Use this to attempt to immediately trigger the generation of audio. Results may vary, as we determine the best time to generate audio based on various factors.
+    
+    This is useful when you want to immediately generate a response.
+    
+    Note that small amounts of text may result in lower quality audio, therefore, only use if you really need text to be processed immediately. We recommend adjusting the `chunk_length_schedule` in the `generation_config` instead.
+</ParamField>
+
 <ParamField body="voice_settings" type="object" >
-  Should only be provided in the first message
+  This property should only be provided in the first message you send.
   <Expandable title="properties">
       <ParamField body="stability" type="number" >
         Defines the stability for voice settings.
@@ -69,24 +81,29 @@ The client can send messages with text input to the server. The messages can con
   </Expandable>
 </ParamField>
 
-<ParamField body="try_trigger_generation" type="boolean" required>
-    If we should try to trigger the generation.
-</ParamField>
-
-<ParamField body="flush" type="boolean">
-    If we should force flush the generation.
-</ParamField>
-
 <ParamField body="generation_config" type="object">
-   Should only be provided in the first message
-  <Expandable title="properties">
+   This property should only be provided in the first message you send.
+  <Expandable title="properties" defaultOpen>
 
     <ParamField body="chunk_length_schedule" type="array">
-      - Determines how text is chunked for processing. Default: [120, 160, 250, 290].
-      - Each item should be in the range [50, 500].
+        Determines the minimum amount of text that needs to be sent before the chunks start getting processed.
+
+        Default is: [120, 160, 250, 290].
+
+        This means that the first audio chunk will not be generated until you send text that is at least 120 characters long. The next chunk of audio will only be sent once a further 160 characters have been sent. The third audio chunk will be generated after the next 250 characters. Then the fourth and beyond, will be generated in sets of 290 characters.
+
+        Customise this array to suit your needs. If you want to generate audio more frequently, you can reduce the values in the array. Note that setting the values too low may result in lower quality audio. Please test and adjust as needed.
+
+        Each item should be in the range `50`-`500`.
     </ParamField>
 
   </Expandable>
+</ParamField>
+
+<ParamField body="flush" type="boolean">
+    Flush forces the generation of audio. Set this value to `true` when you have finished sending text, but want to keep the websocket connection open.
+    
+    This is useful when you want to ensure that the last chunk of audio is generated even when the length of text sent is smaller than the value set in `chunk_length_schedule` (e.g. 120 or 50).
 </ParamField>
 
 <ParamField body="xi_api_key" type="string">
@@ -101,9 +118,9 @@ The client can send messages with text input to the server. The messages can con
 For best latency we recommend streaming word-by-word, this way we will start generating as soon as we reach the predefined number of un-generated characters.
 </Note>
 
-##  End of input
+##  Close connection
 
-In order to close the connection, the client should send a EOS message. The EOS message should always be an empty string:
+In order to close the connection, the client should send an End of Sequence (EOS) message. The EOS message should always be an empty string:
 
 
 ```json End of Sequence (EOS) message
@@ -231,9 +248,9 @@ Defaults to `0`
 Defaults to `mp3_44100`
 </ParamField>
 
-# Example of voice streaming using ElevenLabs and ChatGPT
+# Example of voice streaming using ElevenLabs and OpenAI
 
-The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from ChatGPT while the answer is being generated, thereby minimizing the overall latency of the operation.
+The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
 
 ```python
 import asyncio
