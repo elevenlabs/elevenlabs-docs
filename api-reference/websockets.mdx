@@ -15,7 +15,7 @@ The Text-to-Speech Websockets API is designed to generate audio from partial tex
 * The input text is being streamed or generated in chunks.
 * Word-to-audio alignment information is required.
 
-For a practical demonstration in a real world application, refer to the [Example of voice streaming using ElevenLabs and ChatGPT](#example-of-voice-streaming-using-elevenlabs-and-chatgpt) section.
+For a practical demonstration in a real world application, refer to the [Example of voice streaming using ElevenLabs and OpenAI](#example-of-voice-streaming-using-elevenlabs-and-openai) section.
 
 # When not to use
 
@@ -29,7 +29,7 @@ In these cases, use the [Text to Speech API](/api-reference/text-to-speech) inst
 
 The WebSocket API uses a bidirectional protocol that encodes all messages as JSON objects.
 
-## Streaming input text
+# Streaming input text
 
 The client can send messages with text input to the server. The messages can contain the following fields:
 ```json
@@ -107,7 +107,7 @@ The client can send messages with text input to the server. The messages can con
 </ParamField>
 
 <ParamField body="xi_api_key" type="string">
-    Provide the XI API Key in the first message if it's not in the header. See [Authentication](/api-reference/quick-start/authentication) for more details.
+    Provide the XI API Key in the first message if it's not in the header.
 </ParamField>
 
 <ParamField body="authorization" type="string">
@@ -203,13 +203,13 @@ The server will always respond with a message containing the following fields:
 ## Path parameters
 
 <ParamField path="voice_id" type="string">
-    Voice ID to be used, you can use [Get Voices](/api-reference/voices) to list all the available voices.
+    Voice ID to be used, you can use [Get Voices](/api-reference/get-voices) to list all the available voices.
 </ParamField>
 
 ## Query parameters
 
 <ParamField query="model_id" type="string">
-    Identifier of the model that will be used, you can query them using [Get Voices](/api-reference/models-get).
+    Identifier of the model that will be used, you can query them using [Get Models](/api-reference/get-models).
 </ParamField>
 <ParamField query="enable_logging" type="string">
     Whether to enable request logging, if disabled the request will not be present in history nor bigtable.
