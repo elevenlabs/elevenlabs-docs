@@ -53,7 +53,7 @@ The client can send messages with text input to the server. The messages can con
 </ParamField>
 
 <ParamField body="try_trigger_generation" type="boolean" default={false} required>
-    This is an advanced setting that most users shouldn’t need to use. It relates to our generation schedule explained here.
+This is an advanced setting that most users shouldn't need to use. It relates to our generation schedule explained [here](#chunk_length_schedule).
 
 Use this to attempt to immediately trigger the generation of audio, overriding the `chunk_length_schedule`. Unlike flush, `try_trigger_generation` will only generate audio if our [buffer](#understanding-how-our-websockets-buffer-text) contains more than a minimum threshold of characters, this is to ensure a higher quality response from our model. 
     
@@ -81,6 +81,7 @@ Note that overriding the chunk schedule to generate small amounts of text may re
   </Expandable>
 </ParamField>
 
+<a id="chunk_length_schedule"></a>
 <ParamField body="generation_config" type="object">
    This property should only be provided in the first message you send.
   <Expandable title="properties" defaultOpen>
