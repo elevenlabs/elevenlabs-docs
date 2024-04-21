@@ -1,5 +1,6 @@
 ---
-title: "How to use text to speech (Python SDK)"
+title: "How to use text to speech with streaming (Python SDK)"
+sidebarTitle: "How to use text to speech"
 description: "How to convert text into speech, upload to S3, and share with a signed URL using Python"
 icon: "code"
 ---
@@ -10,7 +11,7 @@ If you want to jump straight to the finished repo you can find it [here](https:/
 
 ## Requirements
 
-- An ElevenLabs account with an API key (here’s how to [find your API key](/docs/api-reference/text-to-speech#authentication)).
+- An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
 - Python installed on your machine
 - (Optionally) an AWS account with access to S3.
 
@@ -167,37 +168,37 @@ To upload the data to S3 you’ll need to add your AWS access key ID, secret acc
 1. Log in to your AWS Management Console: Navigate to the AWS home page and sign in with your account.
 
 <Frame caption="AWS Console Login">
-  <img src="/docs/api-reference/images/aws_console_login.png" />
+  <img src="/api-reference/images/aws_console_login.png" />
 </Frame>
 
 2. Access the IAM (Identity and Access Management) Dashboard: You can find IAM under "Security, Identity, & Compliance" on the services menu. The IAM dashboard manages access to your AWS services securely.
 
 <Frame caption="AWS IAM Dashboard">
-  <img src="/docs/api-reference/images/aws_iam_dashboard.png" />
+  <img src="/api-reference/images/aws_iam_dashboard.png" />
 </Frame>
 
 3. Create a New User (if necessary): On the IAM dashboard, select "Users" and then "Add user". Enter a user name.
 
 <Frame caption="Add AWS IAM User">
-  <img src="/docs/api-reference/images/aws_iam_add_user.png" />
+  <img src="/api-reference/images/aws_iam_add_user.png" />
 </Frame>
 
 4. Set the permissions: attach policies directly to the user according to the access level you wish to grant. For S3 uploads, you can use the AmazonS3FullAccess policy. However, it's best practice to grant least privilege, or the minimal permissions necessary to perform a task. You might want to create a custom policy that specifically allows only the necessary actions on your S3 bucket.
 
 <Frame caption="Set Permission for AWS IAM User">
-  <img src="/docs/api-reference/images/aws_iam_set_permission.png" />
+  <img src="/api-reference/images/aws_iam_set_permission.png" />
 </Frame>
 
 5. Review and create the user: Review your settings and create the user. Upon creation, you'll be presented with an access key ID and a secret access key. Be sure to download and securely save these credentials; the secret access key cannot be retrieved again after this step.
 
 <Frame caption="AWS Access Secret Key">
-  <img src="/docs/api-reference/images/aws_access_secret_key.png" />
+  <img src="/api-reference/images/aws_access_secret_key.png" />
 </Frame>
 
 6. Get AWS region name: ex. us-east-1
 
 <Frame caption="AWS Region Name">
-  <img src="/docs/api-reference/images/aws_region_name.png" />
+  <img src="/api-reference/images/aws_region_name.png" />
 </Frame>
 
 ### Installing the AWS SDK and adding the credentials
@@ -329,5 +330,4 @@ For more details, visit our [example repo](https://github.com/elevenlabs/elevenl
 - `text_to_speech_file.py`: Implements the conversion of text to speech, saving it as a file.
 - `text_to_speech_stream.py`: Implements streaming audio data directly.
 
-If you have any questions please create an issue on the [ElevenLabs docs Github](https://github.com/elevenlabs/elevenlabs-docs/issues).
-
+If you have any questions please create an issue on the [elevenlabs-doc Github](https://github.com/elevenlabs/elevenlabs-docs/issues).
