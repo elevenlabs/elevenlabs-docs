@@ -1,14 +1,12 @@
 ---
-title: "How to use TTS with streaming (Python SDK)"
+title: "How to use text to speech (Python SDK)"
 description: "How to convert text into speech, upload to S3, and share with a signed URL using Python"
 icon: "code"
 ---
 
-# How to Convert Text into Speech, Upload to S3, and Share with a Signed URL using Python
-
 In this tutorial, you'll learn how to convert [text to speech](/text-to-speech) with the ElevenLabs Python SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing via text or embedding on a website.
 
-If you want to jump straight to the finished repo you can find it here.
+If you want to jump straight to the finished repo you can find it [here](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python).
 
 ## Requirements
 
@@ -58,22 +56,9 @@ client = ElevenLabs(
 
 
 def text_to_speech_file(text: str) -> str:
-    """
-    Converts text to speech and saves the output as an MP3 file.
-
-    This function uses a specific client for text-to-speech conversion. It configures
-    various parameters for the voice output and saves the resulting audio stream to an
-    MP3 file with a unique name.
-
-    Args:
-        text (str): The text content to convert to speech.
-
-    Returns:
-        str: The file path where the audio file has been saved.
-    """
     # Calling the text_to_speech conversion API with detailed parameters
     response = client.text_to_speech.convert(
-        voice_id="4v7HtLWqY9rpQ7Cg2GT4", # Mady
+        voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
         optimize_streaming_latency="0",
         output_format="mp3_22050_32",
         text=text,
@@ -100,7 +85,7 @@ def text_to_speech_file(text: str) -> str:
 
     print(f"{save_file_path}: A new audio file was saved successfully!")
 
-    # Returning the path of the saved audio file
+    # Return the path of the saved audio file
     return save_file_path
 
 ```
@@ -108,7 +93,6 @@ def text_to_speech_file(text: str) -> str:
 You can then run this function with:
 
 ```python
-# Example function call from text_to_speech_file.py
 text_to_speech_file("Hello World")
 ```
 
@@ -133,22 +117,9 @@ client = ElevenLabs(
 
 
 def text_to_speech_stream(text: str) -> IO[bytes]:
-    """
-    Converts text to speech and returns the audio data as a byte stream.
-
-    This function invokes a text-to-speech conversion API with specified parameters, including
-    voice ID and various voice settings, to generate speech from the provided text. Instead of
-    saving the output to a file, it streams the audio data into a BytesIO object.
-
-    Args:
-        text (str): The text content to be converted into speech.
-
-    Returns:
-        IO[bytes]: A BytesIO stream containing the audio data.
-    """
     # Perform the text-to-speech conversion
     response = client.text_to_speech.convert(
-        voice_id="4v7HtLWqY9rpQ7Cg2GT4", # Mady
+        voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
         optimize_streaming_latency="0",
         output_format="mp3_22050_32",
         text=text,
@@ -161,7 +132,7 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
         ),
     )
 
-    # Create a BytesIO object to hold audio data
+    # Create a BytesIO object to hold the audio data in memory
     audio_stream = BytesIO()
 
     # Write each chunk of audio data to the stream
@@ -180,7 +151,6 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
 You can then run this function with:
 
 ```python
-# Example function call from text_to_speech_stream.py
 text_to_speech_stream("This is James")
 ```
 
@@ -249,7 +219,7 @@ AWS_S3_BUCKET_NAME=your_s3_bucket_name_here
 
 ### Uploading to AWS S3 and generating the signed URL
 
-`s3_uploader.py`:
+Add the following functions to upload the audio stream to S3 and generate a signed URL.
 
 ```python
 
@@ -271,15 +241,6 @@ s3 = session.client("s3")
 
 
 def generate_presigned_url(s3_file_name: str) -> str:
-    """
-    Generates a presigned URL for an S3 object allowing temporary access without AWS credentials.
-
-    Args:
-        s3_file_name (str): The key name of the S3 object for which to generate the presigned URL.
-
-    Returns:
-        str: The generated presigned URL as a string.
-    """
     signed_url = s3.generate_presigned_url(
         "get_object",
         Params={"Bucket": AWS_S3_BUCKET_NAME, "Key": s3_file_name},
@@ -289,15 +250,6 @@ def generate_presigned_url(s3_file_name: str) -> str:
 
 
 def upload_audiostream_to_s3(audio_stream) -> str:
-    """
-    Uploads an audio stream to an S3 bucket.
-
-    Args:
-        audio_stream: The audio stream (file-like object) to be uploaded.
-
-    Returns:
-        str: The unique S3 file name under which the audio stream was saved.
-    """
     s3_file_name = f"{uuid.uuid4()}.mp3"  # Generates a unique file name using UUID
     s3.upload_fileobj(audio_stream, AWS_S3_BUCKET_NAME, s3_file_name)
 
@@ -305,7 +257,7 @@ def upload_audiostream_to_s3(audio_stream) -> str:
 
 ```
 
-Example snippet from `s3_uploader.py`:
+You can then call the `upload_audiostream_to_s3` function with the audio stream from the `text_to_speech_stream` function.
 
 ```python
 s3_file_name = upload_audiostream_to_s3(audio_stream)
@@ -324,7 +276,7 @@ If you want to use the file multiple times, you should store the s3 file path in
 
 ### Putting it all together
 
-`main.py`:
+To put it all together, you can use the following script:
 
 ```python
 
@@ -355,7 +307,7 @@ if __name__ == "__main__":
 
 ## Conclusion
 
-You now know how to convert text into speech using the ElevenLabs API (either as a file or a stream), upload the generated audio to AWS S3, and share it securely using a signed URL. This functionality opens up numerous opportunities for creating and sharing content dynamically.
+You now know how to convert text into speech and generate a signed URL to share the audio file. This functionality opens up numerous opportunities for creating and sharing content dynamically.
 
 Here are some examples of what you could build with this.
 
@@ -369,7 +321,7 @@ Here are some examples of what you could build with this.
 
 5. **Language Learning Tools**: Develop language learning aids that provide learners with audio lessons and exercises. This makes it possible to practice pronunciation and listening skills in a targeted way.
 
-For more details, refer to the provided project files which give a clear structure for setting up and deploying your application:
+For more details, visit our [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python) to see the full project files which give a clear structure for setting up your application:
 
 - `env.example`: Template for your environment variables.
 - `main.py`: Orchestrates the conversion and uploading process.
@@ -377,5 +329,5 @@ For more details, refer to the provided project files which give a clear structu
 - `text_to_speech_file.py`: Implements the conversion of text to speech, saving it as a file.
 - `text_to_speech_stream.py`: Implements streaming audio data directly.
 
-Leverage these capabilities in your applications to enhance user engagement and content accessibility.
+If you have any questions please create an issue on the [ElevenLabs docs Github](https://github.com/elevenlabs/elevenlabs-docs/issues).
 
