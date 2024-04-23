@@ -5,7 +5,9 @@ description: "How to add, view, and remove rules to pronunciation dictionary wit
 icon: "code"
 ---
 
-In this tutorial, you'll learn how to use a pronunciation dictionary with the ElevenLabs Python SDK. We'll start by adding rules to the pronunciation dictionary from a file and then compare the text-to-speech results that use and do not use the dictionary. After that, we'll remove the rule and test it again. Finally, we'll add a rule from the dictionary rules and test it once more.
+In this tutorial, you'll learn how to use a pronunciation dictionary with the ElevenLabs Python SDK. Pronunciation dictionaries are useful for controlling the specific pronunciation of words. We support both [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) or [CMU](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary) alphabets. It is useful for correcting rare or specific pronunciations, such as names or companies. For example, the word `nginx` could be pronounced incorrectly. Instead, we can add our version of pronunciation. Based on IPA, `nginx` is pronounced as `/ˈɛndʒɪnˈɛks/`. Finding IPA or CMU of words manually can be difficult. Instead, LLMs like ChatGPT can help you to make the search easier.
+
+We'll start by adding rules to the pronunciation dictionary from a file and comparing the text-to-speech results that use and do not use the dictionary. After that, we'll discuss how to add and remove specific rules to existing dictionaries.
 
 If you want to jump straight to the finished repo you can find it [here](https://github.com/elevenlabs/elevenlabs-examples/tree/main/pronunciation-dictionaries/examples/pronunciation-dictionaries/python)
 
@@ -53,9 +55,11 @@ client = ElevenLabs(
 
 ## Create a Pronunciation Dictionary From a File
 
-To create a pronunciation dictionary from a File, we'll start by creating a `.pls` file for our rules.
+To create a pronunciation dictionary from a File, we'll create a `.pls` file for our rules.
 
-```xml
+This rule will use the "IPA" alphabet and update the pronunciation for `tomato` and `Tomato` with a different pronunciation. PLS files are case sensitive which is why we include it both with and without a capital "T". Save it as `dictionary.pls`.
+
+```xml filename="dictionary.pls"
 <?xml version="1.0" encoding="UTF-8"?>
 <lexicon version="1.0" 
       xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
@@ -74,35 +78,17 @@ To create a pronunciation dictionary from a File, we'll start by creating a `.pl
 </lexicon>
 ```
 
-This rule will use "ipa" alphabet and update pronunciation for `tomato` and `Tomato` with phoneme `/tə'meɪtoʊ/`. Save it as `dictionary.pls`.
+In the following snippet, we start by adding rules from a file and get the uploaded result. Finally, we generate and play two different text-to-speech audio to compare the custom pronunciation dictionary.
 
 ```python
 import requests
 from elevenlabs import play, PronunciationDictionaryVersionLocator
-
-def print_rules(client: ElevenLabs, dictionary_id: str, version_id: str):
-    # TODO: replace with the SDK when fixed
-    # client.pronunciation_dictionary.get_pls_file_with_a_pronunciation_dictionary_version_rules(
-    #     dictionary_id=dictionary_id,
-    #     version_id=version_id,
-    # )
-    response = requests.get(
-        f"https://api.elevenlabs.io/v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download",
-        headers={"xi-api-key": ELEVENLABS_API_KEY},
-    )
-    print("rules", response.text)
 
 with open("dictionary.pls", "rb") as f:
     # this dictionary changes how tomato is pronounced
     pronunciation_dictionary = client.pronunciation_dictionary.add_from_file(
         file=f.read(), name="example"
     )
-
-print("-- initial rules --")
-
-print_rules(
-    client, pronunciation_dictionary.id, pronunciation_dictionary.version_id
-)
 
 audio_1 = client.generate(
     text="Without the dictionary: tomato",
@@ -127,11 +113,9 @@ play(audio_1)
 play(audio_2)
 ```
 
-In the snippet, we start by adding rules from a file and get the uploaded result. Finally, we generate and play two different text-to-speech audio to compare the custom pronunciation dictionary.
-
 ## Remove Rules From a Pronunciation Dictionary
 
-To remove rules from a pronunciation dictionary, we can simply call `remove_rules_from_the_pronunciation_dictionary` method in the pronunciation dictionary module.
+To remove rules from a pronunciation dictionary, we can simply call `remove_rules_from_the_pronunciation_dictionary` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. In the example, we take pronunciation dictionary version id from `remove_rules_from_the_pronunciation_dictionary` response because every changes to pronunciation dictionary will create a new version, so we need to use the latest version returned from the response. The old version also still available.
 
 ```python
 pronunciation_dictionary_rules_removed = (
@@ -139,14 +123,6 @@ pronunciation_dictionary_rules_removed = (
         pronunciation_dictionary_id=pronunciation_dictionary.id,
         rule_strings=["tomato", "Tomato"],
     )
-)
-
-print("\n\n-- removed rule --\n\n")
-
-print_rules(
-    client,
-    pronunciation_dictionary_rules_removed.id,
-    pronunciation_dictionary_rules_removed.version_id,
 )
 
 audio_3 = client.generate(
@@ -164,11 +140,9 @@ audio_3 = client.generate(
 play(audio_3)
 ```
 
-In the snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference.
-
 ## Add Rules to Pronunciation Dictionary
 
-We can add rules directly to the pronunciation dictionary with `BodyAddRulesToThePronunciationDictionaryV1PronunciationDictionariesPronunciationDictionaryIdAddRulesPostRulesItem_Phoneme` and call `add_rules_to_the_pronunciation_dictionary` from the pronunciation dictionary.
+We can add rules directly to the pronunciation dictionary with `BodyAddRulesToThePronunciationDictionaryV1PronunciationDictionariesPronunciationDictionaryIdAddRulesPostRulesItem_Phoneme` class and call `add_rules_to_the_pronunciation_dictionary` from the pronunciation dictionary. The snippet will demonstrate adding rules with the class and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. This example also use pronunciation dictionary version returned from `add_rules_to_the_pronunciation_dictionary` to ensure we use the latest dictionary version.
 
 ```python
 from elevenlabs import BodyAddRulesToThePronunciationDictionaryV1PronunciationDictionariesPronunciationDictionaryIdAddRulesPostRulesItem_Phoneme
@@ -192,14 +166,6 @@ pronunciation_dictionary_rules_added = client.pronunciation_dictionary.add_rules
     ],
 )
 
-print("\n\n-- added rule --\n\n")
-
-print_rules(
-    client,
-    pronunciation_dictionary_rules_added.id,
-    pronunciation_dictionary_rules_added.version_id,
-)
-
 audio_4 = client.generate(
     text="With the rule added again: tomato",
     voice="Rachel",
@@ -214,8 +180,6 @@ audio_4 = client.generate(
 
 play(audio_4)
 ```
-
-In the snippet, we start by adding rules with `BodyAddRulesToThePronunciationDictionaryV1PronunciationDictionariesPronunciationDictionaryIdAddRulesPostRulesItem_Phoneme` class and get the updated XPathResult. Finally, we generate and play another text-to-speech audio to test the difference.
 
 ## Conclusion
 
