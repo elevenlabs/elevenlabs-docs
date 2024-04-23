@@ -22,7 +22,7 @@ Some of the other enterprise features include:
 - **High Quality Output.** Produce crystal clear voice content at the highest available quality level, compliant with audiobook distributor standards.
 - **Unlimited AudioBooks and Articles.** Voice everything from the archive to the latest publications with unlimited Projects.
 
-## 2. Getting Started
+## 2. Working with the Projects API
 
 ### Prerequisites
 
@@ -34,9 +34,173 @@ The Projects API is designed to work with long-form content such as articles, bl
 
 ### Creating a Project via the API
 
+Once you cloned the example above you can check out the `add-text.py`
+
+```python
+import requests
+import os
+
+# URL for the API endpoint
+url = "https://api.elevenlabs.io/v1/projects/add"
+
+# Retrieve the API key from an environment variable
+api_key = os.getenv('ELEVENLABS_API_KEY')
+
+# Specific voice and model identifiers
+voice_id = "21m00Tcm4TlvDq8ikWAM"
+model_id = "eleven_multilingual_v2"
+
+headers = {
+    'xi-api-key': api_key,  # Use the API key from the environment variable
+}
+
+# Text to save and the file name
+text_content = "Hello this is an ElevenLabs PDF"
+file_name = 'example.txt'
+
+# Save the string to a text file
+with open(file_name, 'w') as text_file:
+    text_file.write(text_content)
+
+# Open the text file in binary mode and prepare the multipart payload
+with open(file_name, 'rb') as f:
+    files = {
+        'name': (None, 'Example Text File'),
+        'from_document': (file_name, f, 'text/plain'),  # Changed to text/plain for a text file
+        'default_title_voice_id': (None, voice_id),
+        'default_paragraph_voice_id': (None, voice_id),  # Assuming same voice_id for paragraph
+        'default_model_id': (None, model_id),
+    }
+
+    # Make the POST request
+    response = requests.post(url, files=files, headers=headers)
+
+    # Print the response text
+    print(response.text)
+```
+
+#### Explanation
+
+- The `url` variable contains the URL for the API endpoint.
+- The `api_key` variable retrieves the API key from an environment variable. Set it with `export ELEVENLABS_API_KEY=your_api_key`.
+- The `voice_id` and `model_id` variables contain the specific voice and model identifiers. To get the voices use `curl -X GET https://api.elevenlabs.io/v1/voices -H "xi-api-key: YOUR_API_KEY"`. To get the models use `curl -X GET https://api.elevenlabs.io/v1/models -H "xi-api-key: YOUR_API_KEY"`.
+- The `text_content` variable contains the text to save and the `file_name` variable contains the name of the file to save the text to.
+- The `with open(file_name, 'w') as text_file:` block saves the string to a text file.
+- The `with open(file_name, 'rb') as f:` block opens the text file in binary mode and prepares the multipart payload.
+- The `files` dictionary contains the multipart payload.
+- The `response = requests.post(url, files=files, headers=headers)` line makes the POST request to the API endpoint.
+- The `print(response.text)` line prints the response text.
+
+You can also extend this to multiple files by adding more files to the `files` dictionary.
+
 ### Text to speech API for PDFs and ePubs
 
+To practice with PDFs and ePubs use the `add-pdf.py` and `add-epub.py` files respectively.
+
+### Converting projects
+
+If you successfully uploaded a project above, you will get a response that looks something like this:
+
+```json
+{
+  "project": {
+    "project_id": "2KBCWl7YAxvBX7HHp4F0",
+    "name": "Example Text File",
+    "create_date_unix": 1713901389,
+    "default_title_voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "default_paragraph_voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "default_model_id": "eleven_multilingual_v2",
+    "last_conversion_date_unix": null,
+    "can_be_downloaded": false,
+    "title": null,
+    "author": null,
+    "isbn_number": null,
+    "volume_normalization": false,
+    "state": "default"
+  }
+}
+```
+
+Note the `project_id` field. We will use it to convert the project to audio. To do that let's look at `convert-project.py`:
+
+```python
+import requests
+import os
+
+project_id = "project_id" # Fill in the response of `add-text.py`
+
+# Retrieve the API key from an environment variable
+api_key = os.getenv('ELEVENLABS_API_KEY')  # Use a default or leave it to raise an error if not set
+
+headers = {
+    'xi-api-key': api_key,  # Use the API key from the environment variable
+}
+
+url = f"https://api.elevenlabs.io/v1/projects/{project_id}/convert"
+
+response = requests.request("POST", url, headers=headers)
+
+print(response.text)
+```
+
+You should get the following response:
+
+```json
+{ "status": "ok" }
+```
+
+### Getting snapshots
+
+Now that you have converted the project to audio, you can get snapshots of the audio. To do that let's look at `get-snapshots.py`:
+
+```python
+import requests
+import os
+
+# TODO remove project_id
+project_id = "project_id" # Fill in the response of `add-text.py`
+
+# Retrieve the API key from an environment variable
+api_key = os.getenv('ELEVENLABS_API_KEY')
+
+headers = {
+    'xi-api-key': api_key,  # Use the API key from the environment variable
+}
+
+url = f"https://api.elevenlabs.io/v1/projects/{project_id}/snapshots"
+
+response = requests.get(url, headers=headers)
+
+print(response.text)
+```
+
+The response you get will look something like this:
+
+```json
+{
+  "snapshots": [
+    {
+      "project_snapshot_id": "hK7DQndFVTuNGlyLMLXz",
+      "project_id": "2KBCWl7YAxvBX7HHp4F0",
+      "created_at_unix": 1713902627,
+      "name": "Example Text File"
+    }
+  ]
+}
+```
+
+### Streaming the audio
+
+Now that you have the snapshots, you can stream the audio. To do that let's look at `stream-audio.py`:
+
+```python
+
+
+```
+
 ### Saying complex words using pronunciation dictionaries
+
+{/* TODO add link to the example once it's merged */}
 
 ## Conclusion
 
