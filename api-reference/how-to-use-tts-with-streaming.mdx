@@ -63,7 +63,7 @@ To convert text to speech and save it as a file, we’ll use the `convert` metho
 
 <CodeGroup>
 
-```python text_to_speech_file.py
+```python text_to_speech_file.py (Python)
 
 import os
 import uuid
@@ -111,7 +111,7 @@ def text_to_speech_file(text: str) -> str:
 
 ```
 
-```typescript text_to_speech_file.ts
+```typescript text_to_speech_file.ts (Typescript)
 import { ElevenLabsClient } from "elevenlabs";
 import { createWriteStream } from "fs";
 
@@ -172,7 +172,7 @@ If you prefer to stream the audio directly without saving it to a file, you can 
 
 <CodeGroup>
 
-```python text_to_speech_stream.py
+```python text_to_speech_stream.py (Python)
 
 import os
 from typing import IO
@@ -218,7 +218,7 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
 
 ```
 
-```typescript text_to_speech_stream.ts
+```typescript text_to_speech_stream.ts (Typescript)
 import { ElevenLabsClient } from "elevenlabs";
 import * as dotenv from "dotenv";
 
@@ -512,7 +512,7 @@ To put it all together, you can use the following script:
 
 <CodeGroup>
 
-```python s3_uploader.py
+```python s3_uploader.py (Python)
 
 import os
 
@@ -539,7 +539,7 @@ if __name__ == "__main__":
 
 ```
 
-```typescript s3_uploader.ts
+```typescript s3_uploader.ts (Typescript)
 import "dotenv/config";
 import { createAudioFileFromText } from "./text_to_speech_file";
 import { createAudioStreamFromText } from "./text_to_speech_stream";
@@ -588,18 +588,6 @@ For more details, visit the following to see the full project files which give a
 
 For Python: [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python)
 
-- `env.example`: Template for your environment variables.
-- `main.py`: Orchestrates the conversion and uploading process.
-- `s3_uploader.py`: Handles the logic for uploading files to S3 and generating signed URLs.
-- `text_to_speech_file.py`: Implements the conversion of text to speech, saving it as a file.
-- `text_to_speech_stream.py`: Implements streaming audio data directly.
-
 For TypeScript: [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node)
-
-- `env.example`: Template for your environment variables.
-- `src/index.ts`: Orchestrates the conversion and uploading process.
-- `src/s3_uploader.ts`: Handles the logic for uploading files to S3 and generating signed URLs.
-- `src/text_to_speech_file.ts`: Implements the conversion of text to speech, saving it as a file.
-- `src/text_to_speech_stream.ts`: Implements streaming audio data directly.
 
 If you have any questions please create an issue on the [elevenlabs-doc Github](https://github.com/elevenlabs/elevenlabs-docs/issues).
