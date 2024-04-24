@@ -7,9 +7,10 @@ icon: "code"
 
 In this tutorial, you'll learn how to convert [text to speech](/text-to-speech) with the ElevenLabs SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
 
-If you want to jump straight to the finished repo you can find it. 
-* [here-Python](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python). 
-* [here-TypeScript](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node).
+If you want to jump straight to the finished repo you can find it.
+
+- [here Python](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python).
+- [here TypeScript](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node).
 
 ## Requirements
 
@@ -52,7 +53,7 @@ npm install @types/dotenv --save-dev
 
 Next, create a `.env` file in your project directory and fill it with your credentials like so:
 
-```
+```bash .env
 ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
 
@@ -111,7 +112,6 @@ def text_to_speech_file(text: str) -> str:
 ```
 
 ```typescript text_to_speech_file.ts
-
 import { ElevenLabsClient } from "elevenlabs";
 import { createWriteStream } from "fs";
 
@@ -149,6 +149,7 @@ export const createAudioFileFromText = async (
   });
 };
 ```
+
 </CodeGroup>
 
 You can then run this function with:
@@ -218,7 +219,6 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
 ```
 
 ```typescript text_to_speech_stream.ts
-
 import { ElevenLabsClient } from "elevenlabs";
 import * as dotenv from "dotenv";
 
@@ -251,8 +251,8 @@ export const createAudioStreamFromText = async (
   const content = Buffer.concat(chunks);
   return content;
 };
-
 ```
+
 </CodeGroup>
 
 You can then run this function with:
@@ -264,7 +264,7 @@ text_to_speech_stream("This is James")
 ```
 
 ```typescript TypeScript
-await createAudioStreamFromText("This is James")
+await createAudioStreamFromText("This is James");
 ```
 
 </CodeGroup>
@@ -408,7 +408,6 @@ def upload_audiostream_to_s3(audio_stream) -> str:
 ```
 
 ```typescript TypeScript
-
 import {
   S3Client,
   PutObjectCommand,
@@ -469,7 +468,6 @@ export const uploadAudioStreamToS3 = async (audioStream: Buffer) => {
   );
   return remotePath;
 };
-
 ```
 
 </CodeGroup>
@@ -514,7 +512,7 @@ To put it all together, you can use the following script:
 
 <CodeGroup>
 
-```python Python
+```python s3_uploader.py
 
 import os
 
@@ -541,8 +539,7 @@ if __name__ == "__main__":
 
 ```
 
-```typescript TypeScript
-
+```typescript s3_uploader.ts
 import "dotenv/config";
 import { createAudioFileFromText } from "./text_to_speech_file";
 import { createAudioStreamFromText } from "./text_to_speech_stream";
@@ -556,7 +553,7 @@ import { generatePresignedUrl, uploadAudioStreamToS3 } from "./s3_uploader";
 
   console.log("File name:", fileName);
 
-  // stream the audio, upload to S3, and get a presigned URL
+  // OR stream the audio, upload to S3, and get a presigned URL
   const stream = await createAudioStreamFromText(
     "Today, the sky is exceptionally clear, and the sun shines brightly."
   );
@@ -567,7 +564,6 @@ import { generatePresignedUrl, uploadAudioStreamToS3 } from "./s3_uploader";
 
   console.log("Presigned URL:", presignedUrl);
 })();
-
 ```
 
 </CodeGroup>
