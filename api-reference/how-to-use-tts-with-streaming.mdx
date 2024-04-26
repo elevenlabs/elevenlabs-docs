@@ -1,5 +1,6 @@
 ---
 title: "How to use text to speech with streaming in Python or Node.js"
+title: "How to use text to speech with streaming in Python or Node.js"
 sidebarTitle: "How to use text to speech"
 description: "How to convert text into speech, upload to S3, and share with a signed URL"
 icon: "code"
@@ -8,13 +9,19 @@ icon: "code"
 In this tutorial, you'll learn how to convert [text to speech](https://elevenlabs.io/text-to-speech) with the ElevenLabs SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
 
 If you want to jump straight to the finished repo you can find it.
+In this tutorial, you'll learn how to convert [text to speech](https://elevenlabs.io/text-to-speech) with the ElevenLabs SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
 
+If you want to jump straight to the finished repo you can find it.
+
+- [Python](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python).
+- [Node.js](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node).
 - [Python](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python).
 - [Node.js](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node).
 
 ## Requirements
 
 - An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
+- Python(Node.js, TypeScript) installed on your machine
 - Python(Node.js, TypeScript) installed on your machine
 - (Optionally) an AWS account with access to S3.
 
@@ -24,6 +31,9 @@ If you want to jump straight to the finished repo you can find it.
 
 Before you begin, make sure you have installed the necessary SDKs and libraries. You will need the ElevenLabs SDK for the text to speech conversion. You can install it using pip:
 
+<CodeGroup>
+
+```bash Python
 <CodeGroup>
 
 ```bash Python
@@ -39,7 +49,17 @@ npm install elevenlabs
 Additionally, install necessary packages to manage your environmental variables:
 
 <CodeGroup>
+```bash TypeScript
+npm install elevenlabs
+```
 
+</CodeGroup>
+
+Additionally, install necessary packages to manage your environmental variables:
+
+<CodeGroup>
+
+```bash Python
 ```bash Python
 pip install python-dotenv
 ```
@@ -51,8 +71,16 @@ npm install @types/dotenv --save-dev
 
 </CodeGroup>
 
+```bash TypeScript
+npm install dotenv
+npm install @types/dotenv --save-dev
+```
+
+</CodeGroup>
+
 Next, create a `.env` file in your project directory and fill it with your credentials like so:
 
+```bash .env
 ```bash .env
 ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
@@ -62,7 +90,9 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 To convert text to speech and save it as a file, we’ll use the `convert` method of the ElevenLabs SDK and then it locally as a `.mp3` file.
 
 <CodeGroup>
+<CodeGroup>
 
+```python text_to_speech_file.py (Python)
 ```python text_to_speech_file.py (Python)
 
 import os
@@ -152,8 +182,52 @@ export const createAudioFileFromText = async (
 
 </CodeGroup>
 
+```typescript text_to_speech_file.ts (Typescript)
+import { ElevenLabsClient } from "elevenlabs";
+import { createWriteStream } from "fs";
+
+import { v4 as uuid } from "uuid";
+
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+
+const client = new ElevenLabsClient({
+  apiKey: ELEVENLABS_API_KEY,
+});
+
+export const createAudioFileFromText = async (
+  text: string
+): Promise<string> => {
+  return new Promise<string>(async (resolve, reject) => {
+    try {
+      const audio = await client.generate({
+        voice: "Rachel",
+        model_id: "eleven_turbo_v2",
+        text,
+      });
+      const fileName = `${uuid()}.mp3`;
+      const fileStream = createWriteStream(fileName);
+
+      audio.pipe(fileStream);
+      fileStream.on("finish", () => resolve(fileName)); // Resolve with the fileName
+      fileStream.on("error", reject);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+```
+
+</CodeGroup>
+
 You can then run this function with:
 
+<CodeGroup>
+
+```python Python
 <CodeGroup>
 
 ```python Python
@@ -166,12 +240,20 @@ await createAudioFileFromText("Hello World")
 
 </CodeGroup>
 
+```typescript TypeScript
+await createAudioFileFromText("Hello World")
+```
+
+</CodeGroup>
+
 ## Convert text to speech (streaming)
 
 If you prefer to stream the audio directly without saving it to a file, you can use our streaming feature.
 
 <CodeGroup>
+<CodeGroup>
 
+```python text_to_speech_stream.py (Python)
 ```python text_to_speech_stream.py (Python)
 
 import os
@@ -255,13 +337,59 @@ export const createAudioStreamFromText = async (
 
 </CodeGroup>
 
+```typescript text_to_speech_stream.ts (Typescript)
+import { ElevenLabsClient } from "elevenlabs";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+
+if (!ELEVENLABS_API_KEY) {
+  throw new Error("Missing ELEVENLABS_API_KEY in environment variables");
+}
+
+const client = new ElevenLabsClient({
+  apiKey: ELEVENLABS_API_KEY,
+});
+
+export const createAudioStreamFromText = async (
+  text: string
+): Promise<Buffer> => {
+  const audioStream = await client.generate({
+    voice: "Rachel",
+    model_id: "eleven_turbo_v2",
+    text,
+  });
+
+  const chunks: Buffer[] = [];
+  for await (const chunk of audioStream) {
+    chunks.push(chunk);
+  }
+
+  const content = Buffer.concat(chunks);
+  return content;
+};
+```
+
+</CodeGroup>
+
 You can then run this function with:
 
 <CodeGroup>
 
 ```python Python
+<CodeGroup>
+
+```python Python
 text_to_speech_stream("This is James")
 ```
+
+```typescript TypeScript
+await createAudioStreamFromText("This is James");
+```
+
+</CodeGroup>
 
 ```typescript TypeScript
 await createAudioStreamFromText("This is James");
@@ -344,10 +472,21 @@ If you do not have an AWS S3 bucket, you will need to create a new one by follow
 Install `boto3` for interacting with AWS services using `pip` and `npm`.
 
 <CodeGroup>
+Install `boto3` for interacting with AWS services using `pip` and `npm`.
 
+<CodeGroup>
+
+```bash Python
 ```bash Python
 pip install boto3
 ```
+
+```bash TypeScript
+npm install @aws-sdk/client-s3
+npm install @aws-sdk/s3-request-presigner
+```
+
+</CodeGroup>
 
 ```bash TypeScript
 npm install @aws-sdk/client-s3
@@ -486,6 +625,12 @@ const s3path = await uploadAudioStreamToS3(stream);
 
 </CodeGroup>
 
+```typescript TypeScript
+const s3path = await uploadAudioStreamToS3(stream);
+```
+
+</CodeGroup>
+
 After uploading the audio file to S3, generate a signed URL to share access to the file. This URL will be time-limited, meaning it will expire after a certain period, making it secure for temporary sharing.
 
 You can now generate a URL from a file with:
@@ -493,9 +638,19 @@ You can now generate a URL from a file with:
 <CodeGroup>
 
 ```python Python
+<CodeGroup>
+
+```python Python
 signed_url = generate_presigned_url(s3_file_name)
 print(f"Signed URL to access the file: {signed_url}")
 ```
+
+```typescript TypeScript
+const presignedUrl = await generatePresignedUrl(s3path);
+console.log("Presigned URL:", presignedUrl);
+```
+
+</CodeGroup>
 
 ```typescript TypeScript
 const presignedUrl = await generatePresignedUrl(s3path);
@@ -585,7 +740,11 @@ Here are some examples of what you could build with this.
 5. **Language Learning Tools**: Develop language learning aids that provide learners with audio lessons and exercises. This makes it possible to practice pronunciation and listening skills in a targeted way.
 
 For more details, visit the following to see the full project files which give a clear structure for setting up your application:
+For more details, visit the following to see the full project files which give a clear structure for setting up your application:
 
+For Python: [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python)
+
+For TypeScript: [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node)
 For Python: [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python)
 
 For TypeScript: [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node)
