@@ -4,7 +4,7 @@ sidebarTitle: "Audio Native in React"
 description: ""
 ---
 
-Here’s a guide on how you can use [Audio Native](/audio-native/overview) in your React projects. I’ll be using Next.js, but this process will work for any React project.
+Here's a guide on how you can use [Audio Native](/audio-native/overview) in your React projects. I'll be using Next.js, but this process will work for any React project.
 
 Audio Native is an embedded audio player designed to vocalize the content of web pages through ElevenLabs' Text to Speech technology, as shown below.
 
@@ -14,18 +14,18 @@ Audio Native is an embedded audio player designed to vocalize the content of web
 
 First you need to make sure that you activate Audio Native in your ElevenLabs account. After signing in, visit: https://elevenlabs.io/audio-native
 
-Select “Click to start with Audio Native” to begin the setup. Don’t worry about completing all the sections in the setup, as we just need to get to the code snippet at the end.
+Select “Click to start with Audio Native” to begin the setup. Don't worry about completing all the sections in the setup, as we just need to get to the code snippet at the end.
 
-Once you’ve gone through the setup, you should see a page like this:
+Once you've gone through the setup, you should see a page like this:
 
 <img height="200" src="/audio-native/images/an-1.png" />
 
 
-This is the code snippet that is used to embed Audio Native on a normal website such as Wordpress, Ghost, or Webflow. However, you can’t use this snippet directly in React.
+This is the code snippet that is used to embed Audio Native on a normal website such as Wordpress, Ghost, or Webflow. However, you can't use this snippet directly in React.
 
 ## Creating the Audio Native React component
 
-Here’s a handy component that you can reuse across your project:
+Here's a handy component that you can reuse across your project:
 
 
 <AccordionGroup>
@@ -105,7 +105,7 @@ export type ElevenLabsProps = {
 };
 ```
 
-Helpful type for the props so that we can specify the public user ID (described later), customize colors and size, and set a default content if the player hasn’t loaded. You can ignore this if you’re not using TypeScript (TypeScript is great however!).
+Helpful type for the props so that we can specify the public user ID (described later), customize colors and size, and set a default content if the player hasn't loaded. You can ignore this if you're not using TypeScript (TypeScript is great however!).
 
 ```tsx
 useEffect(() => {
@@ -122,7 +122,7 @@ useEffect(() => {
 ```
 
 In order to load the Audio Native player, we use the useEffect hook to dynamically append a script tag to the body and set the source to the URL of the Audio Native helper script.
-When the component is dismounted, we make sure to remove the script tag from the body. This ensures it doesn’t get loaded twice if we remount the component.
+When the component is dismounted, we make sure to remove the script tag from the body. This ensures it doesn't get loaded twice if we remount the component.
 
 ```tsx
 <div
@@ -144,7 +144,7 @@ When the component is dismounted, we make sure to remove the script tag from the
 Here is our main div element which will be where our Audio Native player will be placed. The children of the component can be used to show content before the player has been loaded (e.g. Loading audio player…).
   </Accordion>
 
-  <Accordion title="Why can’t I just use the snippet directly in React?">
+  <Accordion title="Why can't I just use the snippet directly in React?">
 React components are rendered and managed entirely in JavaScript, and their rendering lifecycle is controlled by React's virtual DOM. When you try to include a script tag directly within a React component's JSX, it doesn't behave as it would when included directly in an HTML file. React's virtual DOM does not execute script tags inserted into the DOM as part of component rendering. This is a security feature to prevent unintended or malicious code execution.
 
 This is why, if we were to just paste the Audio Native code snippet into our React application, it would not work.
@@ -152,7 +152,7 @@ This is why, if we were to just paste the Audio Native code snippet into our Rea
 </AccordionGroup>
 
 ## Get the public user ID from the Audio Native snippet
-Before you can use this component, you’ll need to retrieve your public user ID from the code snippet. Go back to https://elevenlabs.io/audio-native, and in the code snippet, copy the property called `publicuserid`.
+Before you can use this component, you'll need to retrieve your public user ID from the code snippet. Go back to https://elevenlabs.io/audio-native, and in the code snippet, copy the property called `publicuserid`.
 
 <img height="200" src="/audio-native/images/an-2.png" />
 
@@ -183,29 +183,29 @@ export default function Page() {
 
 ### Preview
 
-Start your development server, if you haven’t already, and view the page. You should see something similar to the following, stating that the URL is not allowed. (If you don’t see anything, please see the Troubleshooting section below to perform a hard refresh)
+Start your development server, if you haven't already, and view the page. You should see something similar to the following, stating that the URL is not allowed. (If you don't see anything, please see the Troubleshooting section below to perform a hard refresh)
 
 <img height="200" src="/audio-native/images/an-3.png" />
 
 
 ### Troubleshooting
 
-If you don’t see the Audio Native player, try doing a hard refresh. This can sometimes be an issue because of the development server not properly reloading the script.
+If you don't see the Audio Native player, try doing a hard refresh. This can sometimes be an issue because of the development server not properly reloading the script.
 
-In Chrome it’s: (⌘ or Ctrl) + Shift + R
+In Chrome it's: (⌘ or Ctrl) + Shift + R
 
 
 ### Why am I seeing “URL not allowed”?
 
-Here’s what’s happening behind the scenes. Remember that script we loaded in the useEffect hook? This script is trying to scrape the content from your page to get all the text and convert it to audio. However, it can’t load your page because it’s on `localhost`. Audio Native can only process pages that are publicly accessible on the internet.
+Here's what's happening behind the scenes. Remember that script we loaded in the useEffect hook? This script is trying to scrape the content from your page to get all the text and convert it to audio. However, it can't load your page because it's on `localhost`. Audio Native can only process pages that are publicly accessible on the internet.
 
 ## Local testing with ngrok
 
 This is where a service such as ngrok can help us. ngrok is a way to get your site on localhost to map to a public URL on the internet. They have a free tier, so visit their website https://ngrok.com, create an account and install it. 
 
-Here’s their getting started guide - https://ngrok.com/docs/getting-started
+Here's their getting started guide - https://ngrok.com/docs/getting-started
 
-Once you have it installed, you can use a command similar to the one below to point your local React project to a public URL with ngrok. I’m running Next.js locally on port `3000`, so here’s the command I run. Your details may vary.
+Once you have it installed, you can use a command similar to the one below to point your local React project to a public URL with ngrok. I'm running Next.js locally on port `3000`, so here's the command I run. Your details may vary.
 
 ```
 ngrok http http://localhost:3000
@@ -229,14 +229,14 @@ View the newly created project here:
 https://elevenlabs.io/app/projects
 
 ## Deploy to production
-Make sure to also add the URL of your website to the allowed URLs once you’ve deployed your React app and you’re ready to push to production.
+Make sure to also add the URL of your website to the allowed URLs once you've deployed your React app and you're ready to push to production.
 
-We only used ngrok for local development, it’s not needed for public facing URLs as ElevenLabs will directly grab the content from the website.
+We only used ngrok for local development, it's not needed for public facing URLs as ElevenLabs will directly grab the content from the website.
 
 ## Updating audio content
-When updating the content on a page, you may notice that the audio from the Audio Native player won’t update automatically.
+When updating the content on a page, you may notice that the audio from the Audio Native player won't update automatically.
 
-In order to update the audio you’ll have to go to the project in ElevenLabs and update the content from there manually. https://elevenlabs.io/app/projects
+In order to update the audio you'll have to go to the project in ElevenLabs and update the content from there manually. https://elevenlabs.io/app/projects
 
 
 
