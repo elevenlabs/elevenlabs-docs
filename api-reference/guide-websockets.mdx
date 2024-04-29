@@ -1,0 +1,398 @@
+---
+title: "How to use websockets with ElevenLabs for real-time audio playback in JavaScript/Typescript"
+sidebarTitle: "Websockets guide"
+description: ""
+icon: "bolt"
+---
+
+The ElevenLabs websockets API is great for scenarios requiring low-latency real-time audio feedback and consistent voice quality. This guide will start by talking about how to connect to ElevenLabs through a websocket connection, then we’ll take you through setting up a server with Express and streaming audio in real-time to a Next.js application.
+
+## Generating audio with ElevenLabs websockets
+Here’s a quick overview of using websockets with ElevenLabs.
+
+### Create the websocket
+Start by creating a new websocket.
+```typescript
+import 'dotenv/config';
+import { WebSocket } from 'ws';
+
+const voiceId = '21m00Tcm4TlvDq8ikWAM';
+const modelId = 'eleven_multilingual_v1';
+const outputFormat = 'pcm_44100';
+const url = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${modelId}&output_format=${outputFormat}`;
+const elevenlabsSocket = new WebSocket(url);
+```
+
+### Open the websocket with an initial message and credentials
+To start the websocket connection you need to send an initial message with your ElevenLabs API key and some `text`.
+
+```typescript
+elevenlabsSocket.onopen = () => {
+  const initialMessage = {
+    xi_api_key: process.env.ELEVENLABS_API_KEY,
+    text: ' ',
+  };
+
+  elevenlabsSocket.send(JSON.stringify(initialMessage));
+```
+
+### Send text to convert to audio
+Send the text `This is a test. ` (with a space at the end) to the websocket for processing.
+If you do not add a space at the end of the text, the last word may not be processed.
+
+```typescript
+const textMessage = {
+  text: `This is a test. `,
+  try_trigger_generation: true,
+};
+
+elevenlabsSocket.send(JSON.stringify(textMessage));
+```
+
+### Close the connection
+To close the connection of the websocket, send an empty string (no space).
+```typescript
+const endMessage = {
+  text: '',
+};
+
+elevenlabsSocket.send(JSON.stringify(endMessage));
+};
+```
+
+### Handle response from websocket
+To handle the audio when it is received back from ElevenLabs, we add an `onmessage` handler. The `event.data` contains the audio buffer for you to play later.
+```typescript
+elevenlabsSocket.onmessage = (event: any) => {
+  const response = JSON.parse(event.data);
+
+  if (response.audio) {
+    // Do something with the audio
+  }
+};
+```
+
+## Paying real-time audio in the browser
+Here’s a quick diagram illustrating using websockets with ElevenLabs.
+
+<img src="/api-reference/images/websockets_1.png" />
+
+### Backend: Create a websocket server with Express
+Now that you have a basic understanding of how to set up websockets with ElevenLabs, let’s create an Express server that will handle streaming audio to a client.
+
+#### Create a new project
+```bash
+mkdir websocket-server
+cd websocket-server
+npm init -y
+```
+
+#### Install dependencies
+```bash
+npm install express express-ws ws cors helmet
+```
+
+#### Add environment variables
+Create a `.env` file that contains your ElevenLabs API key
+
+```bash
+ELEVENLABS_API_KEY=********************
+```
+
+#### Create the server
+
+```typescript
+import 'dotenv/config';
+import express from 'express';
+import ExpressWs from 'express-ws';
+import cors from 'cors';
+import helmet from 'helmet';
+import { WebSocket } from 'ws';
+
+const app = ExpressWs(express()).app;
+const PORT: number = parseInt(process.env.PORT || '5000');
+
+app.use(cors());
+app.use(helmet());
+```
+
+#### Add websocket endpoint
+Add the endpoint to the Express app for handling websocket connections, then create the websocket that connects to ElevenLabs.
+
+```typescript
+app.ws('/realtime-audio', (ws: WebSocket) => {
+  const voiceId = '21m00Tcm4TlvDq8ikWAM';
+  const modelId = 'eleven_turbo_v2';
+  const outputFormat = 'pcm_44100';
+  const url = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${modelId}&output_format=${outputFormat}`;
+  const elevenlabsSocket = new WebSocket(url);
+```
+
+#### Send initial message with credentials
+In the `onopen` handler of the ElevenLabs websocket, send the initial message which contains your ElevenLabs API key, and a space for the `text` field.
+
+```typescript
+elevenlabsSocket.onopen = () => {
+  const initialMessage = {
+    xi_api_key: process.env.ELEVENLABS_API_KEY,
+    text: ' ',
+  };
+
+  elevenlabsSocket.send(JSON.stringify(initialMessage));
+};
+```
+
+#### Handle receiving text from a client
+In order to handle when a client (e.g. React) sends text to your websocket server, create a handler that listens for messages. This handler then sends the text to the ElevenLabs websocket to be converted to audio.
+
+```typescript
+ws.on('message', (text: string) => {
+  const textMessage = {
+    text: `${text} `,
+    try_trigger_generation: true,
+  };
+
+  elevenlabsSocket.send(JSON.stringify(textMessage));
+});
+```
+
+#### Sending audio from ElevenLabs to the client
+When we receive audio back from ElevenLabs, we immediately send it to the client via the websocket.
+
+```typescript
+elevenlabsSocket.onmessage = (event: any) => {
+  const response = JSON.parse(event.data);
+
+  if (response.audio) {
+    ws.send(response.audio);
+  }
+};
+```
+
+### Frontend: Playing audio in the browser
+In order to play the chunks of audio buffers received from the ElevenLabs websocket, we can use the browser’s native [AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext). AudioContext is a web API used to process and manipulate audio signals in web applications, enabling real-time audio synthesis and playback.
+
+#### Create the AudioContext player
+Here’s a handy class that handles setting up the AudioContext and playing chunks of audio.
+
+<Accordion title="audio-context-player.ts">
+```typescript
+// audio-context-player.ts
+
+export class AudioContextPlayer {
+  // Declare class properties: an AudioContext instance, a timer, and an array to keep track of audio chunks
+  private readonly audioContext = new AudioContext();
+  private nextPlayTime = 0;
+  private scheduledAudioChunks: AudioBufferSourceNode[] = [];
+
+  // Initializes or resets the player, setting the next play time to zero
+  async initStream(): Promise<void> {
+    this.nextPlayTime = 0;
+  }
+
+  // Stops all scheduled audio chunks and clears them from the tracking array, and resets the next play time
+  async stop(): Promise<void> {
+    this.scheduledAudioChunks.forEach((source) => {
+      try {
+        source.stop();
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    this.scheduledAudioChunks = [];
+    this.nextPlayTime = 0;
+  }
+
+  // Decodes a string into audio data, schedules it for playback, and manages playback timing
+  async playChunk(opts: { buffer: string }): Promise<void> {
+    const binaryData = atob(opts.buffer); // Decode a base64 encoded string to binary
+    const arrayBuffer = new ArrayBuffer(binaryData.length); // Create an ArrayBuffer
+    const uint8Array = new Uint8Array(arrayBuffer); // Create a Uint8Array from the ArrayBuffer
+
+    // Fill the Uint8Array with data from the decoded binary string
+    for (let i = 0; i < binaryData.length; i++) {
+      uint8Array[i] = binaryData.charCodeAt(i);
+    }
+
+    // Prepare an AudioBufferSourceNode and add it to the scheduled audio chunks
+    const data = new DataView(arrayBuffer);
+    const source = this.audioContext.createBufferSource();
+    this.scheduledAudioChunks.push(source);
+
+    // Create an AudioBuffer to hold the decoded audio data
+    const sampleRate = 44100; // sample rate in Hz
+    const audioBuffer = this.audioContext.createBuffer(
+      1, // mono audio
+      uint8Array.length / 2, // number of frames (16-bit samples, hence dividing by 2)
+      sampleRate
+    );
+    const channelData = audioBuffer.getChannelData(0);
+
+    // Convert the binary data to audio samples
+    for (let i = 0; i < data.byteLength; i += 2) {
+      const sample = data.getInt16(i, true); // true for little-endian
+      channelData[i / 2] = sample / 32768; // Normalize the 16-bit sample
+    }
+
+    // Set the buffer for playback and connect to the destination
+    source.buffer = audioBuffer;
+    source.connect(this.audioContext.destination);
+
+    // Manage the playback timing, ensuring smooth scheduling
+    if (this.nextPlayTime < this.audioContext.currentTime) {
+      this.nextPlayTime = this.audioContext.currentTime;
+    }
+
+    // Start the playback at the scheduled time and update the next play time
+    source.start(this.nextPlayTime);
+    this.nextPlayTime += audioBuffer.duration;
+  }
+}
+```
+
+  Here's a link to the component on GitHub - [ElevenLabsAudioNative.tsx](https://github.com/elevenlabs/elevenlabs-examples/blob/main/examples/audio-native/react/ElevenLabsAudioNative.tsx)
+</Accordion>
+
+View the code on GitHub (Add link once pushed).
+
+#### Playing real-time audio
+<AccordionGroup>
+<Accordion title="Option 1 - Playing real-time audio in vanilla JavaScript">
+The following code creates a websocket connection to the Express server, and plays the audio back in real-time.
+
+```typescript
+import { AudioContextPlayer } from '~/lib/audio-context-player';
+
+const socket = new WebSocket('ws://localhost:5000/realtime-audio');
+const player = new AudioContextPlayer();
+
+socket.onmessage = async (message) => {
+  player.playChunk({ buffer: message.data });
+};
+
+socket.onopen = () => {
+  socket.send('Hello from the client!');
+};
+```
+
+You can view the code for the example on GitHub (Add link once pushed).
+</Accordion>
+
+<Accordion title="Option 2 - Playing real-time audio in React">
+In React, we can use the same AudioContext player to play the audio received from the Express server.
+
+You can view the code for the React example on GitHub (Add link once pushed).
+
+```tsx
+'use client';
+import { useEffect, useState } from 'react';
+import { Button, Input } from '~/components/ui';
+import { AudioContextPlayer } from '~/lib/audio-context-player';
+
+const url = 'ws://localhost:5000/realtime-audio';
+let socket: WebSocket;
+
+export default function Page() {
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    socket = new WebSocket(url);
+    const stream = new AudioContextPlayer();
+
+    socket.onopen = () => {};
+
+    socket.onmessage = async (message) => {
+      stream.playChunk({ buffer: message.data });
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [url]);
+
+  const send = (text: string) => {
+    if (!text) return;
+
+    socket.send(text);
+  };
+
+  return (
+    <main className="p-24 max-w-3xl mx-auto">
+      <form
+        className="grid gap-6"
+        onSubmit={(event) => {
+          event.preventDefault();
+
+          send(text);
+          setText('');
+        }}
+      >
+        <Input
+          value={text}
+          onChange={(event) => setText(event.target.value)}
+          autoFocus
+        />
+
+        <Button type="submit" className="w-full">
+          Send
+        </Button>
+      </form>
+    </main>
+  );
+}
+```
+</Accordion>
+</AccordionGroup>
+
+## Optimizing for low latency
+In order to optimize for latency, the `chunk_length_schedule` is used to set the minimum number of characters before audio conversion begins. Read the docs to understand more about it [here](https://elevenlabs.io/docs/api-reference/websockets#chunk_length_schedule).
+
+Set the first value of the `chunk_length_schedule` to `50`, which is the lowest value.
+This will ensure that the first 50 characters that you send will immediately be converted to audio, ensuring a quick first response.
+
+```typescript
+elevenlabsSocket.onopen = () => {
+  const initialMessage = {
+    xi_api_key: process.env.ELEVENLABS_API_KEY,
+    generation_config: {
+      chunk_length_schedule: [50, 160, 250, 290],
+    },
+    text: ' ',
+  };
+
+  elevenlabsSocket.send(JSON.stringify(initialMessage));
+};
+```
+
+Here’s a diagram illustrating how ElevenLabs handles the `chunk_length_schedule`
+<img src="/api-reference/images/websockets_2.png" />
+
+## Optimizing for the best audio quality
+Something to note is that processing small amounts of text may result in lower quality audio. Therefore, in order to optimize for better audio quality, increase the first value (in the range of 50-500) of the `chunk_length_schedule`. The default values are `[120, 160, 250, 290]`. Experiment with varying values to strike a balance that allows for both a rapid initial response and the desired level of audio quality. This optimization ensures your content is both efficient and meets your quality standards.
+
+## Choosing the right model for real-time audio
+For best quality and lowest latency, we recommend using `eleven_turbo_v2`, or `eleven_multilingual_v1` if you need support for multiple languages. The recommended output format is `pcm_44100. 
+
+## Troubleshooting
+I’m sending text, but not hearing any audio
+This may be due to the length of text you are sending. If the length of your text is below the first value of the `chunk_length_schedule`, the text will not be processed. The default value for `chunk_length_schedule` is `[120, 160, 250, 290]`, meaning that your text will not be processed if it is below 120 characters.
+
+In order to force processing of text, set `flush` to true. Setting flush to true is useful for  when you have finished sending text, but want to keep the websocket connection open.
+
+```typescript
+ws.on('message', (text: string) => {
+  const textMessage = {
+    text: `${text} `,
+    try_trigger_generation: true,
+    flush: true,
+  };
+
+  elevenlabsSocket.send(JSON.stringify(textMessage));
+});
+```
+
+// ## Debugging latency issues
+// If you're facing issues with latency, we've created a debugging script to help pinpoint where issues may be occuring.
+
+// [Link to guide on debugging latency issues once published]
