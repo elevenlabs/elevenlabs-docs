@@ -104,13 +104,25 @@ ELEVENLABS_API_KEY=********************
 ```typescript
 import 'dotenv/config';
 import express from 'express';
-import ExpressWs from 'express-ws';
+import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
-import { WebSocket } from 'ws';
+import { Server } from 'socket.io';
+import WebSocket from 'ws';
 
-const app = ExpressWs(express()).app;
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+  },
+});
+
 const PORT: number = parseInt(process.env.PORT || '5000');
+
+if (!process.env.ELEVENLABS_API_KEY) {
+  throw new Error('ELEVENLABS_API_KEY is required');
+}
 
 app.use(cors());
 app.use(helmet());
@@ -146,28 +158,113 @@ elevenlabsSocket.onopen = () => {
 In order to handle when a client (e.g. React) sends text to your websocket server, create a handler that listens for messages. This handler then sends the text to the ElevenLabs websocket to be converted to audio.
 
 ```typescript
-ws.on('message', (text: string) => {
-  const textMessage = {
-    text: `${text} `,
-    try_trigger_generation: true,
-  };
+  socket.on('message', (data) => {
+    const message = JSON.parse(data) as { text: string; isFinal?: boolean };
+    const textMessage = {
+      text: `${message.text} `,
+      try_trigger_generation: true,
+      flush: message.isFinal,
+    };
 
-  elevenlabsSocket.send(JSON.stringify(textMessage));
-});
+    elevenlabsSocket.send(JSON.stringify(textMessage));
+  });
 ```
 
 #### Sending audio from ElevenLabs to the client
 When we receive audio back from ElevenLabs, we immediately send it to the client via the websocket.
 
 ```typescript
-elevenlabsSocket.onmessage = (event: any) => {
-  const response = JSON.parse(event.data);
+  elevenlabsSocket.onmessage = (event: any) => {
+    const response = JSON.parse(event.data);
 
-  if (response.audio) {
-    ws.send(response.audio);
-  }
-};
+    if (response.error) {
+      socket.emit('error', response);
+    }
+
+    if (response.audio) {
+      socket.emit('audio', response.audio);
+    }
+  };
+});
 ```
+### Full code for the Express server
+Here's the full code for the Express server that streams audio to a client.
+
+<Accordion title="src/index.ts">
+```typescript
+// src/index.ts
+
+import 'dotenv/config';
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+import helmet from 'helmet';
+import { Server } from 'socket.io';
+import WebSocket from 'ws';
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+  },
+});
+
+const PORT: number = parseInt(process.env.PORT || '5000');
+
+if (!process.env.ELEVENLABS_API_KEY) {
+  throw new Error('ELEVENLABS_API_KEY is required');
+}
+
+app.use(cors());
+app.use(helmet());
+
+io.on('connection', (socket) => {
+  const voiceId = '21m00Tcm4TlvDq8ikWAM';
+  const modelId = 'eleven_turbo_v2';
+  const outputFormat = 'pcm_44100';
+  const url = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${modelId}&output_format=${outputFormat}`;
+  const elevenlabsSocket = new WebSocket(url);
+
+  elevenlabsSocket.onopen = () => {
+    const initialMessage = {
+      xi_api_key: process.env.ELEVENLABS_API_KEY,
+      text: ' ',
+    };
+
+    elevenlabsSocket.send(JSON.stringify(initialMessage));
+  };
+
+  socket.on('message', (data) => {
+    const message = JSON.parse(data) as { text: string; isFinal?: boolean };
+    const textMessage = {
+      text: `${message.text} `,
+      try_trigger_generation: true,
+      flush: message.isFinal,
+    };
+
+    elevenlabsSocket.send(JSON.stringify(textMessage));
+  });
+
+  elevenlabsSocket.onmessage = (event: any) => {
+    const response = JSON.parse(event.data);
+
+    if (response.error) {
+      socket.emit('error', response);
+    }
+
+    if (response.audio) {
+      socket.emit('audio', response.audio);
+    }
+  };
+});
+
+server.listen(PORT, () => {
+  console.log(`http://localhost:${PORT}`);
+});
+```
+</Accordion>
+
 
 ### Frontend: Playing audio in the browser
 In order to play the chunks of audio buffers received from the ElevenLabs websocket, we can use the browser’s native [AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext). AudioContext is a web API used to process and manipulate audio signals in web applications, enabling real-time audio synthesis and playback.
@@ -289,32 +386,48 @@ You can view the code for the React example on GitHub (Add link once pushed).
 import { useEffect, useState } from 'react';
 import { Button, Input } from '~/components/ui';
 import { AudioContextPlayer } from '~/lib/audio-context-player';
+import { io, type Socket } from 'socket.io-client';
 
-const url = 'ws://localhost:5000/realtime-audio';
-let socket: WebSocket;
+const url = 'ws://localhost:5000';
+
+let socket: Socket;
+
+let hasMounted = false;
 
 export default function Page() {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    socket = new WebSocket(url);
+    // ensures only connects once during development
+    if (hasMounted) return;
+
+    hasMounted = true;
+    socket = io(url);
+
     const stream = new AudioContextPlayer();
 
-    socket.onopen = () => {};
+    socket.on('audio', (message) => {
+      stream.playChunk({ buffer: message });
+    });
 
-    socket.onmessage = async (message) => {
-      stream.playChunk({ buffer: message.data });
-    };
+    socket.on('error', (error) => {
+      // reconnect on error
+      socket.disconnect();
+      socket.connect();
+    });
 
-    return () => {
-      socket.close();
-    };
-  }, [url]);
+    return () => {};
+  }, []);
 
   const send = (text: string) => {
     if (!text) return;
 
-    socket.send(text);
+    socket.send(
+      JSON.stringify({
+        text,
+        isFinal: true,
+      })
+    );
   };
 
   return (
