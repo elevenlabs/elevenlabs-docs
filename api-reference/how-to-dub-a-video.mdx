@@ -5,54 +5,38 @@ description: "Learn how to automate the dubbing of audio and video files into va
 icon: "volume-up"
 ---
 
-This tutorial will guide you through the process of automatically dubbing audio and video files into multiple languages using ElevenLabs SDK. Whether you are looking to translate video content for global reach or create audio in different languages, the ElevenLabs API simplifies the entire process. This can be particularly beneficial for content creators looking to expand their audiences to regions that speak Hindi, Spanish, French, and many other languages supported by ElevenLabs.
+# Dubbing Video and Audio with ElevenLabs API: A Step-by-Step Guide
+
+## Introduction
+Dubbing videos and audio files from one language to another can be an essential requirement in content localization. The ElevenLabs API provides a convenient way to automatically dub media files using state-of-the-art technology. In this guide, we will walk you through the process of setting up a project that leverages ElevenLabs' capabilities to dub a file or a video from a URL.
 
 If you're looking to jump straight into the action, the complete code is available on the following repos:
 
- - [Python example repo](https://github.com/elevenlabs/elevenlabs-examples/dubbing/python).
+- [Python example repo](https://github.com/elevenlabs/elevenlabs-examples/dubbing/python).
 
- - [Node/TypeScript example repo](https://github.com/elevenlabs/elevenlabs-examples/dubbing/node).
+FYI: The Dubbing API is currently exclusive to our enterprise clients; however, we anticipate a broader rollout in the near future.
 
- FYI: The Dubbing API is currently exclusive to our enterprise clients; however, we anticipate a broader rollout in the near future.
+## How to dub a video with ElevenLabs
 
-## Requirements
+### Requirements
 
 Before proceeding, please ensure that you have the following:
 - An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
-- Python(Node.js, TypeScript) installed on your machine
+- Python installed on your machine
 
-## Setup
-
-### Installing our SDK
+### Setting Up the Environment
 
 Before you begin, make sure you have installed the necessary SDKs and libraries. You will need the ElevenLabs SDK for the text to speech conversion. You can install it using pip:
 
-<CodeGroup>
-
-```bash Python
+```bash
 pip install elevenlabs
 ```
 
-```bash TypeScript
-npm install elevenlabs
-```
-
-</CodeGroup>
-
 Additionally, install necessary packages to manage your environmental variables:
 
-<CodeGroup>
-
-```bash Python
+```bash
 pip install python-dotenv
 ```
-
-```bash TypeScript
-npm install dotenv
-npm install @types/dotenv --save-dev
-```
-
-</CodeGroup>
 
 Next, create a `.env` file in your project directory and fill it with your credentials like so:
 
@@ -60,125 +44,123 @@ Next, create a `.env` file in your project directory and fill it with your crede
 ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
 
-## Create the Dubbing Function
+### Start the dubbing
 
-<CodeGroup>
+#### Dubbing a Local File
+The script `create_a_dub_from_file.py` is responsible for dubbing an existing audio or video file. Here's how to use it:
 
-```python Python
-# create_a_dub.py
+1. Ensure that `ELEVENLABS_API_KEY` is loaded from your `.env` file.
+2. Call the `create_dub_from_file` function, passing the necessary arguments:
 
-import os
-import time
-from dotenv import load_dotenv
-from elevenlabs.client import ElevenLabs
+```python
 
-load_dotenv()
-
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-if ELEVENLABS_API_KEY is None:
-    raise ValueError(
-        "ELEVENLABS_API_KEY environment variable not found. "
-        "Please copy the .env.example file to .env and fill in the API key."
+if __name__ == "__main__":
+    result = create_dub_from_file(
+        "../example_speech.mp3",  # Input file path
+        "audio/mpeg",  # File format
+        "en",  # Source language
+        "es",  # Target language
     )
+    if result:
+        print("Dubbing was successful! File saved at:", result)
+    else:
+        print("Dubbing failed or timed out.")
 
-client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+```
 
-def create_dub_file(
-    input_file_path, output_file_path, file_format, source_lang, target_language
-):
-    # Check file existence
-    if not os.path.isfile(input_file_path):
-        raise FileNotFoundError(f"The input file does not exist: {input_file_path}")
+### Check for completion
 
-    input_file_name = os.path.basename(input_file_path)
-    
-    with open(input_file_path, "rb") as audio_file:
-        response = client.dubbing.dub_a_video_or_an_audio_file(
-            file=(input_file_name, audio_file, file_format),
-            target_lang=target_language,
-            mode="automatic",
-            source_lang=source_lang,
-            num_speakers=1,
-            watermark=True,  # reduces the characters used
-        )
+The `wait_for_dubbing_completion()` function within the `dubbing_utils.py` file continuously checks whether the dubbing process is complete. If completed, it proceeds to the next step; otherwise, it reports the status or failure.
 
-    dubbing_id = response.dubbing_id
+```python
 
-    MAX_ATTEMPTS = 120  # for example, if you want to wait for 20 minutes, set 120 (10s * 120 = 20 minutes)
-    CHECK_INTERVAL = 10  # time in seconds to wait before checking the status again
+def wait_for_dubbing_completion(dubbing_id: str) -> bool:
+    """
+    Waits for the dubbing process to complete by periodically checking the status.
 
-    for attempt in range(MAX_ATTEMPTS):
-        metadata = client.dubbing.get_dubbing_project_metadata(dubbing_id=dubbing_id)
+    Args:
+        dubbing_id (str): The dubbing project id.
+
+    Returns:
+        bool: True if the dubbing is successful, False otherwise.
+    """
+    MAX_ATTEMPTS = 120
+    CHECK_INTERVAL = 10  # In seconds
+
+    for _ in range(MAX_ATTEMPTS):
+        metadata = client.dubbing.get_dubbing_project_metadata(dubbing_id)
         if metadata.status == "dubbed":
-            response = client.dubbing.get_dubbed_file(
-                dubbing_id=dubbing_id,
-                language_code=target_language,
-            )
-
-            if response.status_code == 200:
-                with open(output_file_path, "wb") as file:
-                    file.write(response.content)
-                print(f"Dubbing complete and saved to {output_file_path}.")
-                return output_file_path
-            else:
-                print("Failed to get the dubbed file:", response.json())
-                return None
-
+            return True
         elif metadata.status == "dubbing":
-            print("Dubbing in progress... Will check status again in", CHECK_INTERVAL, "seconds.")
+            print(
+                "Dubbing in progress... Will check status again in",
+                CHECK_INTERVAL,
+                "seconds.",
+            )
             time.sleep(CHECK_INTERVAL)
         else:
-            print("Dubbing failed:", metadata)
-            return None
+            print("Dubbing failed:", metadata.error_message)
+            return False
 
     print("Dubbing timed out")
-    return None
-```
-
-```typescript TypeScript
+    return False
 
 ```
 
-</CodeGroup>
+### Save the video locally
 
-## Call the Dubbing Function
+Upon completion of dubbing, the `download_dubbed_file()` function in `dubbing_utils.py` will save the dubbed file to a local directory, typically under the `data/{dubbing_id}/{language_code}.mp4`.
 
-To execute dubbing:
+```python
 
-<CodeGroup>
+def download_dubbed_file(dubbing_id: str, language_code: str) -> str:
+    """
+    Downloads the dubbed file for a given dubbing ID and language code.
 
-```python Python
-# main.py
+    Args:
+        dubbing_id: The ID of the dubbing project.
+        language_code: The language code for the dubbing.
 
-from create_dub import create_dub_file
+    Returns:
+        The file path to the downloaded dubbed file.
+    """
+    dir_path = f"data/{dubbing_id}"
+    os.makedirs(dir_path, exist_ok=True)
 
-# Main function to start dubbing process
-def main():
-    input_file = "input.mp3"    # Update with your input file name
-    output_file = "output.mp4"  # Update with your desired output file name
-    file_format = "audio/mpeg"  # Update with your file format
-    source_language = "en"
-    target_language = "es"      # Update with your target language
+    file_path = f"{dir_path}/{language_code}.mp4"
+    with open(file_path, "wb") as file:
+        for chunk in client.dubbing.get_dubbed_file(dubbing_id, language_code):
+            file.write(chunk)
 
-    create_dub_file(input_file, output_file, file_format, source_language, target_language)
-    print("Dubbing process completed.")
+    return file_path
 
-# Entry point of the script
+```
+
+### Dubbing a YouTube video (or any video from a URL)
+
+For dubbing web-based content, use the `create_a_dub_from_url.py` script. Pass the video URL, source language, and target language as arguments to the `create_dub_from_url` function. This script is similar to `create_a_dub_from_file` but designed for web content.
+
+```python
+
 if __name__ == "__main__":
-    main()
+    source_url = "https://www.youtube.com/watch?v=0EqSXDwTq6U"  # Charlie bit my finger
+    source_language = "en"
+    target_language = "fr"
+    result = create_dub_from_url(source_url, source_language, target_language)
+    if result:
+        print("Dubbing was successful! File saved at:", result)
+    else:
+        print("Dubbing failed or timed out.")
+
 ```
 
-```typescript TypeScript
-
-```
-
-</CodeGroup>
-
-This command will process the input file and save the output to `output.mp4` or your defined output file name.
+The system works with popular platforms like YouTube, TikTok, Twitter, and Vimeo. Ensure you pass the correct video URL.
 
 ## Conclusion
 
-You've now learned how to automate the dubbing of content using ElevenLabs SDK. By localizing audio and video into different languages, you can expand your reach and provide more inclusive content.
+With this guide and the accompanying code structure, you now have a basic setup for dubbing audio and video content using the ElevenLabs API. Whether you're working with local files or content from URLs, you can create multilingual versions of your media to cater to diverse audiences.
+
+Remember to always follow the best practices when dealing with API keys and sensitive data, and consult the ElevenLabs API documentation for more advanced features and options. Happy dubbing!
 
 For additional information on dubbing capabilities, translation services, and available languages, please refer to the [ElevenLabs API documentation](https://elevenlabs.docs.buildwithfern.com/docs/developers/api-reference/dubbing/dub-a-video-or-an-audio-file).
 
