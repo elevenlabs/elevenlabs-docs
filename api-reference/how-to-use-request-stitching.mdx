@@ -4,200 +4,220 @@ description: "Learn how to keep your voice stable across multiple generations"
 icon: "code"
 ---
 
+## What is request stitching?
 
 When one has a large text to convert into audio and sends the text in chunks without further context there can be abrupt changes changes in prosody from one chunk to another.
 
-It would be much better to give the model information on what was already generated and what will be generated in the future, this is exactly what Request Stitching does.
- 
+It would be much better to give the model context on what was already generated and what will be generated in the future, this is exactly what Request Stitching does.
+
+As you can see below the difference between not using Request Stitching and using it is subtle but noticeable:
+
+#### Without request stitching:
+
+<video
+  controls
+  className="w-full"
+  src="https://eleven-public-cdn.elevenlabs.io/audio/docs/without_request_stitching.mp3"
+  style={{height: 60}}
+></video>
+
+#### With request stitching:
+
+<video
+  controls
+  className="w-full"
+  src="https://eleven-public-cdn.elevenlabs.io/audio/docs/with_request_stitching.mp3"
+  style={{height: 60}}
+></video>
+
+## Conditioning on text
+
 One of the two ways on how to give the model context is to provide the text before and / or after the current chunk by using the 'previous_text' and 'next_text' parameters:
 
 ```python
-VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
-
-# Construct the URL for the Text-to-Speech API request
-tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream"
-
-headers = {
-    "Accept": "application/json",
-    "xi-api-key": XI_API_KEY
-}
-
-data = {
-    "text": "Unknown to most, this enchanted place was stumbled upon by an elderly librarian named Eleanor, who had lived in the city all her life and thought she knew every corner like the back of her hand.",
-    "model_id": "eleven_multilingual_v2",
-    "previous_text": "In the heart of an ancient city, veiled by the dust of bustling streets and the shadows of towering modern skyscrapers, there lies a secret garden.",
-    "next_text": "One crisp autumn morning, while Eleanor was wandering through an old neighborhood, a strange, sweet scent caught her attention."
-}
-
-response = requests.post(tts_url, headers=headers, json=data, stream=True)
-```
-
-This works well when there has been no previous or next chunks generated yet. If there have been however, it works much better to provide the actual generation to the model instead of just the text.
-This is done by using the previous_request_ids and next_request_ids parameters. Every text-to-speech and speech-to-speech request has an associated request-id which is obtained by reading from the response header.
-
-Below is an example on how to read the request_id from the response header and then use it to condition another request on the previous generation.
-
-```python
-# The 'requests' and 'json' libraries are imported. 
-# 'requests' is used to send HTTP requests, while 'json' is used for parsing the JSON data that we receive from the API.
+import os
 import requests
-import json
+from pydub import AudioSegment
+import io
 
-# An API key is defined here. You'd normally get this from the service you're accessing. It's a form of authentication.
-XI_API_KEY = "<xi-api-key>"
+YOUR_XI_API_KEY = "<insert your xi-api-key here>"
+VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
+PARAGRAPHS = [
+    "The advent of technology has transformed countless sectors, with education "
+    "standing out as one of the most significantly impacted fields.",
+    "In recent years, educational technology, or EdTech, has revolutionized the way "
+    "teachers deliver instruction and students absorb information.",
+    "From interactive whiteboards to individual tablets loaded with educational software, "
+    "technology has opened up new avenues for learning that were previously unimaginable.",
+    "One of the primary benefits of technology in education is the accessibility it provides.",
+]
+segments = []
+previous_request_ids = []
 
-# This is the URL for the API endpoint we'll be making a GET request to.
-url = "https://api.elevenlabs.io/v1/voices"
+for i, paragraph in enumerate(PARAGRAPHS):
+    is_last_paragraph = i == len(PARAGRAPHS) - 1
+    is_first_paragraph = i == 0
+    response = requests.post(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
+        json={
+            "text": paragraph,
+            "model_id": "eleven_multilingual_v2",
+            # A maximum of three next or previous history item ids can be send
+            "previous_request_ids": previous_request_ids[-3:],
+        },
+        headers={"xi-api-key": YOUR_XI_API_KEY},
+    )
 
-# Here, headers for the HTTP request are being set up. 
-# Headers provide metadata about the request. In this case, we're specifying the content type and including our API key for authentication.
-headers = {
-  "Accept": "application/json",
-  "xi-api-key": XI_API_KEY,
-  "Content-Type": "application/json"
-}
+    if response.status_code != 200:
+        print(f"Error encountered, status: {response.status_code}, "
+               f"content: {response.text}")
+        quit()
 
-# A GET request is sent to the API endpoint. The URL and the headers are passed into the request.
-response = requests.get(url, headers=headers)
+    print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
+    previous_request_ids.append(response.headers["request-id"])
+    segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
 
-# The JSON response from the API is parsed using the built-in .json() method from the 'requests' library. 
-# This transforms the JSON data into a Python dictionary for further processing.
-data = response.json()
+segment = segments[0]
+for new_segment in segments[1:]:
+    segment = segment + new_segment
 
-# A loop is created to iterate over each 'voice' in the 'voices' list from the parsed data. 
-# The 'voices' list consists of dictionaries, each representing a unique voice provided by the API.
-for voice in data['voices']:
-  # For each 'voice', the 'name' and 'voice_id' are printed out. 
-  # These keys in the voice dictionary contain values that provide information about the specific voice.
-  print(f"{voice['name']}; {voice['voice_id']}")
+audio_out_path = os.path.join(os.getcwd(), "with_text_conditioning.wav")
+segment.export(audio_out_path, format="wav")
+print(f"Success! Wrote audio to {audio_out_path}")
+``` 
+ 
+## Conditioning on past generations
+
+Text conditioning works well when there has been no previous or next chunks generated yet. If there have been however, it works much better to provide the actual past generations to the model instead of just the text.
+This is done by using the previous_request_ids and next_request_ids parameters.
+
+We will use Pydub for concatenating multiple audios together, you can install it using:
+
+```bash
+pip install pydub
 ```
 
+Every text-to-speech request has an associated request-id which is obtained by reading from the response header. Below is an example on how to use this request_id in order to condition requests on the previous generations. 
 
-# Text-to-speech
-
-Once you have you've gotten the `voice_id` from the voices endpoint, you are ready to query the [Text-to-speech](https://elevenlabs.io/docs/api-reference/text-to-speech) endpoint.
-
-First, you need to decide whether you want to use the streaming response or not. In general, we recommend streaming unless your client doesn't support it. You can find more information about the [streaming](https://elevenlabs.io/docs/api-reference/streaming) endpoint in our documentation.
-
-Second, you need to choose your voice settings. We recommend using the default voice settings before experimenting with the expressivity and similarity settings. You can find more information about the [settings](https://elevenlabs.io/docs/speech-synthesis/voice-settings) in our documentation.
-
-After generating something, we store each audio you generate together with other metadata in your personal history. You can retrieve all your history items via the `/v1/history` endpoint. We also provide endpoints for retrieving audio, deletion, and download of history items. You can find more information about how to use the [history](https://elevenlabs.io/docs/api-reference/get-generated-items) endpoint in our documentation. The only thing that is not saved is websocket streaming queries to save latency.
-
-In the basic Python example below, we send a request to the text-to-speech endpoint and receive a stream of audio bytes in return. All you need to do is set your XI API Key first and try it out! If you cannot find it, please follow this article [here](https://help.elevenlabs.io/hc/en-us/articles/14599447207697-How-to-authorize-yourself-using-your-xi-api-key-).
-
-You will need to replace the constants by inserting your `<xi-api-key>`, setting the correct `<voice-id>`, and entering the `<text>` you want the AI to convert to speech. You can change the settings `stability` and `similarity_boost` if you want, but they are set to good default values.
-
-Of course, the code below is only to showcase the very bare minimum to get the system up and running, and you can then use more advanced code to create a nice GUI with sliders for the variables, a list for the voices, and anything else that you want to add.
 
 ```python
-# Import necessary libraries
-import requests  # Used for making HTTP requests
-import json  # Used for working with JSON data
+import os
+import requests
+from pydub import AudioSegment
+import io
 
-# Define constants for the script
-CHUNK_SIZE = 1024  # Size of chunks to read/write at a time
-XI_API_KEY = "<xi-api-key>"  # Your API key for authentication
-VOICE_ID = "<voice-id>"  # ID of the voice model to use
-TEXT_TO_SPEAK = "<text>"  # Text you want to convert to speech
-OUTPUT_PATH = "output.mp3"  # Path to save the output audio file
+YOUR_XI_API_KEY = "<insert your xi-api-key here>"
+VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
+PARAGRAPHS = [
+    "The advent of technology has transformed countless sectors, with education "
+    "standing out as one of the most significantly impacted fields.",
+    "In recent years, educational technology, or EdTech, has revolutionized the way "
+    "teachers deliver instruction and students absorb information.",
+    "From interactive whiteboards to individual tablets loaded with educational software, "
+    "technology has opened up new avenues for learning that were previously unimaginable.",
+    "One of the primary benefits of technology in education is the accessibility it provides.",
+]
+segments = []
+previous_request_ids = []
 
-# Construct the URL for the Text-to-Speech API request
-tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream"
+for i, paragraph in enumerate(PARAGRAPHS):
+    is_last_paragraph = i == len(PARAGRAPHS) - 1
+    is_first_paragraph = i == 0
+    response = requests.post(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
+        json={
+            "text": paragraph,
+            "model_id": "eleven_multilingual_v2",
+            # A maximum of three next or previous history item ids can be send
+            "previous_request_ids": previous_request_ids[-3:],
+        },
+        headers={"xi-api-key": YOUR_XI_API_KEY},
+    )
 
-# Set up headers for the API request, including the API key for authentication
-headers = {
-    "Accept": "application/json",
-    "xi-api-key": XI_API_KEY
-}
+    if response.status_code != 200:
+        print(f"Error encountered, status: {response.status_code}, "
+               f"content: {response.text}")
+        quit()
 
-# Set up the data payload for the API request, including the text and voice settings
-data = {
-    "text": TEXT_TO_SPEAK,
-    "model_id": "eleven_multilingual_v2",
-    "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": 0.8,
-        "style": 0.0,
-        "use_speaker_boost": True
-    }
-}
+    print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
+    previous_request_ids.append(response.headers["request-id"])
+    segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
 
-# Make the POST request to the TTS API with headers and data, enabling streaming response
-response = requests.post(tts_url, headers=headers, json=data, stream=True)
+segment = segments[0]
+for new_segment in segments[1:]:
+    segment = segment + new_segment
 
-# Check if the request was successful
-if response.ok:
-    # Open the output file in write-binary mode
-    with open(OUTPUT_PATH, "wb") as f:
-        # Read the response in chunks and write to the file
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            f.write(chunk)
-    # Inform the user of success
-    print("Audio stream saved successfully.")
-else:
-    # Print the error message if the request was not successful
-    print(response.text)
+audio_out_path = os.path.join(os.getcwd(), "with_previous_request_ids_conditioning.wav")
+segment.export(audio_out_path, format="wav")
+print(f"Success! Wrote audio to {audio_out_path}")
 ```
 
-# Speech-to-Speech
+<b>Note that the order matters here</b>: When one converts a text split into 5 chunks and has already converted chunks 1, 2, 4 and 5 and now wants
+to convert chunk 3 the previous_request_ids one neeeds to send would be [request_id_chunk_1, request_id_chunk_2] and the next_request_ids would be 
+[request_id_chunk_4, request_id_chunk_5].
 
-Generating speech-to-speech involves a similar process to text-to-speech, but with some adjustments in the API parameters. Instead of providing text when calling the API, you provide the path to an audio file that you would like to convert from one voice to another. Here's a modified version of your code to illustrate how to generate speech-to-speech using the given API:
+## Conditioning both on text and past generations
+
+The best possible results are achieved when conditioning both on text and past generations so lets combine the two by providing previous_text, next_text and previous_request_ids in one request:
 
 ```python
-# Import necessary libraries
-import requests  # Used for making HTTP requests
-import json  # Used for working with JSON data
+import os
+import requests
+from pydub import AudioSegment
+import io
 
-# Define constants for the script
-CHUNK_SIZE = 1024  # Size of chunks to read/write at a time
-XI_API_KEY = "<xi-api-key>"  # Your API key for authentication
-VOICE_ID = "<voice-id>"  # ID of the voice model to use
-AUDIO_FILE_PATH = "<path>"  # Path to the input audio file
-OUTPUT_PATH = "output.mp3"  # Path to save the output audio file
+YOUR_XI_API_KEY = "<insert your xi-api-key here>"
+VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
+PARAGRAPHS = [
+    "The advent of technology has transformed countless sectors, with education "
+    "standing out as one of the most significantly impacted fields.",
+    "In recent years, educational technology, or EdTech, has revolutionized the way "
+    "teachers deliver instruction and students absorb information.",
+    "From interactive whiteboards to individual tablets loaded with educational software, "
+    "technology has opened up new avenues for learning that were previously unimaginable.",
+    "One of the primary benefits of technology in education is the accessibility it provides.",
+]
+segments = []
+previous_request_ids = []
 
-# Construct the URL for the Speech-to-Speech API request
-sts_url = f"https://api.elevenlabs.io/v1/speech-to-speech/{VOICE_ID}/stream"
+for i, paragraph in enumerate(PARAGRAPHS):
+    is_last_paragraph = i == len(PARAGRAPHS) - 1
+    is_first_paragraph = i == 0
+    response = requests.post(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
+        json={
+            "text": paragraph,
+            "model_id": "eleven_multilingual_v2",
+            # A maximum of three next or previous history item ids can be send
+            "previous_request_ids": previous_request_ids[-3:],
+            "previous_text": None if i == 0 else " ".join(PARAGRAPHS[:i]),
+            "next_text": None if i == len(PARAGRAPHS) - 1 else " ".join(PARAGRAPHS[i + 1:])
+        },
+        headers={"xi-api-key": YOUR_XI_API_KEY},
+    )
 
-# Set up headers for the API request, including the API key for authentication
-headers = {
-    "Accept": "application/json",
-    "xi-api-key": XI_API_KEY
-}
+    if response.status_code != 200:
+        print(f"Error encountered, status: {response.status_code}, "
+               f"content: {response.text}")
+        quit()
 
-# Set up the data payload for the API request, including model ID and voice settings
-# Note: voice settings are converted to a JSON string
-data = {
-    "model_id": "eleven_english_sts_v2",
-    "voice_settings": json.dumps({
-        "stability": 0.5,
-        "similarity_boost": 0.8,
-        "style": 0.0,
-        "use_speaker_boost": True
-    })
-}
+    print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
+    previous_request_ids.append(response.headers["request-id"])
+    segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
 
-# Set up the files to send with the request, including the input audio file
-files = {
-    "audio": open(AUDIO_FILE_PATH, "rb")
-}
+segment = segments[0]
+for new_segment in segments[1:]:
+    segment = segment + new_segment
 
-# Make the POST request to the STS API with headers, data, and files, enabling streaming response
-response = requests.post(sts_url, headers=headers, data=data, files=files, stream=True)
-
-# Check if the request was successful
-if response.ok:
-    # Open the output file in write-binary mode
-    with open(OUTPUT_PATH, "wb") as f:
-        # Read the response in chunks and write to the file
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            f.write(chunk)
-    # Inform the user of success
-    print("Audio stream saved successfully.")
-else:
-    # Print the error message if the request was not successful
-    print(response.text)
+audio_out_path = os.path.join(os.getcwd(), "with_full_conditioning.wav")
+segment.export(audio_out_path, format="wav")
+print(f"Success! Wrote audio to {audio_out_path}")
 ```
 
-This code takes an input audio file (`<path>` should be something like `C:/User/Documents/input.mp3`), sends a request to the speech-to-speech endpoint, and receives a stream of audio bytes in return. It then saves the streamed audio to the specified output path (`output.mp3` if no specific path is specified, it will be saved in the same folder as the .py code file). 
+## Things to note
 
-Make sure to replace placeholders like `<xi-api-key>` and `<voice-id>` with your actual API key and voice ID respectively. Additionally, adjust paths and settings as needed.
+1. Providing wrong previous_request_ids and next_request_ids will not result in an error.
+2. In order to use the request_id of a request for conditioning it needs to have processed completely. In case of streaming this means the audio has to be read completely from the response body.
+3. How well request stitching works varies greatly dependent on the model, voice and voice settings used.
+4. previous_request_ids and next_request_ids should contain request_ids which are not too old. When the request_ids are older than two hours it will diminish the effect of conditioning.
+5. Enterprises with increased privacy requirements will have request stitching disabled.
