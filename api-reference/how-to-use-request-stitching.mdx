@@ -4,7 +4,7 @@ description: "Learn how to keep your voice stable across multiple generations"
 icon: "code"
 ---
 
-## What is request stitching?
+## What is Request Stitching?
 
 When one has a large text to convert into audio and sends the text in chunks without further context there can be abrupt changes changes in prosody from one chunk to another.
 
@@ -12,7 +12,7 @@ It would be much better to give the model context on what was already generated 
 
 As you can see below the difference between not using Request Stitching and using it is subtle but noticeable:
 
-#### Without request stitching:
+#### Without Request Stitching:
 
 <video
   controls
@@ -21,7 +21,7 @@ As you can see below the difference between not using Request Stitching and usin
   style={{height: 60}}
 ></video>
 
-#### With request stitching:
+#### With Request Stitching:
 
 <video
   controls
@@ -218,6 +218,6 @@ print(f"Success! Wrote audio to {audio_out_path}")
 
 1. Providing wrong previous_request_ids and next_request_ids will not result in an error.
 2. In order to use the request_id of a request for conditioning it needs to have processed completely. In case of streaming this means the audio has to be read completely from the response body.
-3. How well request stitching works varies greatly dependent on the model, voice and voice settings used.
+3. How well Request Stitching works varies greatly dependent on the model, voice and voice settings used.
 4. previous_request_ids and next_request_ids should contain request_ids which are not too old. When the request_ids are older than two hours it will diminish the effect of conditioning.
-5. Enterprises with increased privacy requirements will have request stitching disabled.
+5. Enterprises with increased privacy requirements will have Request Stitching disabled.
