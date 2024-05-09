@@ -1,29 +1,31 @@
 ---
-title: "Automate Audio and Video Dubbing with ElevenLabs SDK"
-sidebarTitle: "Automate Audio and Video Dubbing"
-description: "Learn how to automate the dubbing of audio and video files into various languages using ElevenLabs SDK."
-icon: "volume-up"
+title: "How to dub video and audio with ElevenLabs"
+sidebarTitle: "How to dub a video"
+description: "Learn how to automate the dubbing of audio and video files into various languages using the ElevenLabs API"
+icon: "video"
 ---
 
-# Dubbing Video and Audio with ElevenLabs API: A Step-by-Step Guide
-
 ## Introduction
-Dubbing videos and audio files from one language to another can be an essential requirement in content localization. The ElevenLabs API provides a convenient way to automatically dub media files using state-of-the-art technology. In this guide, we will walk you through the process of setting up a project that leverages ElevenLabs' capabilities to dub a file or a video from a URL.
+
+Dubbing videos and audio files from one language to another can be a great way to reach a wider audience. The ElevenLabs API provides a convenient way to automatically dub media files using state-of-the-art technology. In this guide, we will walk you through how to upload a video or audio file, dub it, and download the translated video. We'll also discuss how to directly dub a link such as a YouTube, TikTok, or Twitter video.
 
 If you're looking to jump straight into the action, the complete code is available on the following repos:
 
 - [Python example repo](https://github.com/elevenlabs/elevenlabs-examples/dubbing/python).
 - [TypeScript example repo](https://github.com/elevenlabs/elevenlabs-examples/dubbing/node).
 
-FYI: The Dubbing API is currently exclusive to our enterprise clients; however, we anticipate a broader rollout in the near future.
+<Tip>
+  On the 8th of May 2024 we launched the Dubbing API for all ElevenLabs tiers
+</Tip>
 
-## How to dub a video with ElevenLabs
+## How to upload and dub a video or audio file
 
 ### Requirements
 
 Before proceeding, please ensure that you have the following:
+
 - An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
-- Python(Node.js, TypeScript) installed on your machine
+- Python or Node.js installed on your machine
 
 ### Setting Up the Environment
 
@@ -41,7 +43,7 @@ npm install elevenlabs
 
 </CodeGroup>
 
-Additionally, install necessary packages to manage your environmental variables:
+Additionally, install the necessary packages to manage your environmental variables:
 
 <CodeGroup>
 
@@ -64,54 +66,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
 ### Start the dubbing
 
-#### Dubbing a Local File
-The file `create_a_dub_from_file.py`(`createADubFromFile.ts`) is responsible for dubbing an existing audio or video file. Here's how to use it:
 
-1. Ensure that `ELEVENLABS_API_KEY` is loaded from your `.env` file.
-2. Call the `create_dub_from_file`(`createDubFromFile`) function, passing the necessary arguments:
-
-<CodeGroup>
-
-```python Python
-
-if __name__ == "__main__":
-    result = create_dub_from_file(
-        "../example_speech.mp3",  # Input file path
-        "audio/mpeg",  # File format
-        "en",  # Source language
-        "es",  # Target language
-    )
-    if result:
-        print("Dubbing was successful! File saved at:", result)
-    else:
-        print("Dubbing failed or timed out.")
-
-```
-
-```typescript TypeScript
-
-(async () => {
-    try {
-        const result = await createDubFromFile(
-            '../example_speech.mp3', // Input file path
-            'audio/mpeg', // File format
-            'en', // Source language
-            'es', // Target language
-        );
-
-        if (result) {
-            console.log('Dubbing was successful! File saved at:', result);
-        } else {
-            console.log('Dubbing failed or timed out.');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-})();
-
-```
-
-</CodeGroup>
 
 ### Check for completion
 
@@ -155,32 +110,30 @@ def wait_for_dubbing_completion(dubbing_id: str) -> bool:
 ```
 
 ```typescript TypeScript
-
 async function waitForDubbingCompletion(dubbingId: string): Promise<boolean> {
-    const MAX_ATTEMPTS = 120;
-    const CHECK_INTERVAL = 10000; // In milliseconds
+  const MAX_ATTEMPTS = 120;
+  const CHECK_INTERVAL = 10000; // In milliseconds
 
-    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-        const metadata = await client.dubbing.getDubbingProjectMetadata(dubbingId);
-        if (metadata.status === "dubbed") {
-            return true;
-        } else if (metadata.status === "dubbing") {
-            console.log(
-                "Dubbing in progress... Will check status again in",
-                CHECK_INTERVAL / 1000,
-                "seconds."
-            );
-            await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
-        } else {
-            console.log("Dubbing failed:", metadata.error_message);
-            return false;
-        }
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const metadata = await client.dubbing.getDubbingProjectMetadata(dubbingId);
+    if (metadata.status === "dubbed") {
+      return true;
+    } else if (metadata.status === "dubbing") {
+      console.log(
+        "Dubbing in progress... Will check status again in",
+        CHECK_INTERVAL / 1000,
+        "seconds."
+      );
+      await new Promise((resolve) => setTimeout(resolve, CHECK_INTERVAL));
+    } else {
+      console.log("Dubbing failed:", metadata.error_message);
+      return false;
     }
+  }
 
-    console.log("Dubbing timed out");
-    return false;
+  console.log("Dubbing timed out");
+  return false;
 }
-
 ```
 
 </CodeGroup>
@@ -217,33 +170,84 @@ def download_dubbed_file(dubbing_id: str, language_code: str) -> str:
 ```
 
 ```typescript TypeScript
+function downloadDubbedFile(
+  dubbingId: string,
+  languageCode: string
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const dirPath = path.join("data", dubbingId);
+    fs.mkdirSync(dirPath, { recursive: true });
 
-function downloadDubbedFile(dubbingId: string, languageCode: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const dirPath = path.join("data", dubbingId);
-        fs.mkdirSync(dirPath, { recursive: true });
-
-        const filePath = path.join(dirPath, `${languageCode}.mp4`);
-        const fileStream = fs.createWriteStream(filePath);
-        const dubbedFileStream = client.dubbing.getDubbedFile(dubbingId, languageCode);
-        dubbedFileStream.on('data', (chunk: Buffer) => {
-            fileStream.write(chunk);
-        });
-        dubbedFileStream.on('end', () => {
-            fileStream.end();
-            resolve(filePath);
-        });
-        dubbedFileStream.on('error', reject);
+    const filePath = path.join(dirPath, `${languageCode}.mp4`);
+    const fileStream = fs.createWriteStream(filePath);
+    const dubbedFileStream = client.dubbing.getDubbedFile(
+      dubbingId,
+      languageCode
+    );
+    dubbedFileStream.on("data", (chunk: Buffer) => {
+      fileStream.write(chunk);
     });
+    dubbedFileStream.on("end", () => {
+      fileStream.end();
+      resolve(filePath);
+    });
+    dubbedFileStream.on("error", reject);
+  });
 }
-
 ```
 
 </CodeGroup>
 
-### Dubbing a YouTube video (or any video from a URL)
+### Putting it together
 
-For dubbing web-based content, use the `create_a_dub_from_url.py`(`createADubFromUrl.ts`) script. Pass the video URL, source language, and target language as arguments to the `create_dub_from_url`(`createDubFromUrl`) function. This script is similar to `create_a_dub_from_file`(`createADubFromFile`) but designed for web content.
+<CodeGroup>
+
+```python create_a_dub_from_file.py (Python)
+
+if __name__ == "__main__":
+    result = create_dub_from_file(
+        "../example_speech.mp3",  # Input file path
+        "audio/mpeg",  # File format
+        "en",  # Source language
+        "es",  # Target language
+    )
+    if result:
+        print("Dubbing was successful! File saved at:", result)
+    else:
+        print("Dubbing failed or timed out.")
+
+```
+
+```typescript createADubFromFile.ts (TypeScript)
+(async () => {
+  try {
+    const result = await createDubFromFile(
+      "../example_speech.mp3", // Input file path
+      "audio/mpeg", // File format
+      "en", // Source language
+      "es" // Target language
+    );
+
+    if (result) {
+      console.log("Dubbing was successful! File saved at:", result);
+    } else {
+      console.log("Dubbing failed or timed out.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+})();
+```
+
+</CodeGroup>
+
+## How to dub a video from YouTube, TikTok, Twitter or Vimeo
+
+For dubbing web-based content, instead of uploading a file you can pass in a URL. This supports popular platforms like YouTube, TikTok, Twitter, and Vimeo.
+
+// TODO: add snippet of the code where it uploads the URL here
+
+You can then call the function as shown below.
 
 <CodeGroup>
 
@@ -262,29 +266,29 @@ if __name__ == "__main__":
 ```
 
 ```typescript TypeScript
-
 (async () => {
-    try {
-        const sourceUrl: string = "https://www.youtube.com/watch?v=0EqSXDwTq6U"; // Charlie bit my finger
-        const sourceLanguage: string = "en";
-        const targetLanguage: string = "fr";
-        const result: string | null = await createDubFromUrl(sourceUrl, sourceLanguage, targetLanguage);
-        
-        if (result) {
-            console.log("Dubbing was successful! File saved at:", result);
-        } else {
-            console.log("Dubbing failed or timed out.");
-        }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-})();
+  try {
+    const sourceUrl: string = "https://www.youtube.com/watch?v=0EqSXDwTq6U"; // Charlie bit my finger
+    const sourceLanguage: string = "en";
+    const targetLanguage: string = "fr";
+    const result: string | null = await createDubFromUrl(
+      sourceUrl,
+      sourceLanguage,
+      targetLanguage
+    );
 
+    if (result) {
+      console.log("Dubbing was successful! File saved at:", result);
+    } else {
+      console.log("Dubbing failed or timed out.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+})();
 ```
 
 </CodeGroup>
-
-The system works with popular platforms like YouTube, TikTok, Twitter, and Vimeo. Ensure you pass the correct video URL.
 
 ## Conclusion
 
@@ -296,36 +300,36 @@ For additional information on dubbing capabilities, translation services, and av
 
 Should you encounter any issues or have questions, our [GitHub Issues page](https://github.com/elevenlabs/elevenlabs-docs/issues) is open for your queries and feedback.
 
-## List of Supported 29 Languages for Dubbing
+## List of supported languages for dubbing
 
-| No        |Language Name     |Language Code |
-|-----------|------------------|--------------|
-|1          |English           |              |
-|2          |Hindi             |              |
-|3          |Portuguese        |              |
-|4          |Chinese           |              |
-|5          |Spanish           |              |
-|6          |French            |              |
-|7          |German            |              |
-|8          |Japanese          |              |
-|9          |Arabic            |              |
-|10         |Russian           |              |
-|11         |Korean            |              |
-|12         |Indonesian        |              |
-|13         |Italian           |              |
-|14         |Dutch             |              |
-|15         |Turkish           |              |
-|16         |Polish            |              |
-|17         |Swedish           |              |
-|18         |Filipino          |              |
-|19         |Malay             |              |
-|20         |Romanian          |              |
-|21         |Ukrainian         |              |
-|22         |Greek             |              |
-|23         |Czech             |              |
-|24         |Danish            |              |
-|25         |Finnish           |              |
-|26         |Bulgarian         |              |
-|27         |Croatian          |              |
-|28         |Slovak            |              |
-|29         |Tamil             |              |
+| No  | Language Name | Language Code |
+| --- | ------------- | ------------- |
+| 1   | English       | en            |
+| 2   | Hindi         | hi            |
+| 3   | Portuguese    | pt            |
+| 4   | Chinese       | zh            |
+| 5   | Spanish       | es            |
+| 6   | French        | fr            |
+| 7   | German        | de            |
+| 8   | Japanese      | ja            |
+| 9   | Arabic        | ar            |
+| 10  | Russian       | ru            |
+| 11  | Korean        | ko            |
+| 12  | Indonesian    | id            |
+| 13  | Italian       | it            |
+| 14  | Dutch         | nl            |
+| 15  | Turkish       | tr            |
+| 16  | Polish        | pl            |
+| 17  | Swedish       | sv            |
+| 18  | Filipino      | fil           |
+| 19  | Malay         | ms            |
+| 20  | Romanian      | ro            |
+| 21  | Ukrainian     | uk            |
+| 22  | Greek         | el            |
+| 23  | Czech         | cs            |
+| 24  | Danish        | da            |
+| 25  | Finnish       | fi            |
+| 26  | Bulgarian     | bg            |
+| 27  | Croatian      | hr            |
+| 28  | Slovak        | sk            |
+| 29  | Tamil         | ta            |
