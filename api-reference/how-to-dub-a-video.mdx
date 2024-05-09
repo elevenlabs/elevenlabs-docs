@@ -64,6 +64,8 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
 ### Start the dubbing
 
+First we want to send the file to the ElevenLabs dubbing service
+
 <CodeGroup>
 
 ```python Python
@@ -91,14 +93,14 @@ def create_dub_from_file(
 
     with open(input_file_path, "rb") as audio_file:
         response = client.dubbing.dub_a_video_or_an_audio_file(
-            file=(os.path.basename(input_file_path), audio_file, file_format), # Optional file 
+            file=(os.path.basename(input_file_path), audio_file, file_format), # Optional file
             target_lang=target_language, # The target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
             mode="automatic", # automatic or manual.
             source_lang=source_language, # Source language
             num_speakers=1, # Number of speakers to use for the dubbing.
             watermark=False,  # Whether to apply watermark to the output video.
         )
-    
+
     # rest of the code
 
 ```
@@ -131,7 +133,7 @@ async function createDubFromFile(
     watermark: false, # Whether to apply watermark to the output video.
   });
 
-  // rest of the code 
+  // rest of the code
 }
 
 ```
@@ -140,7 +142,7 @@ async function createDubFromFile(
 
 ### Check for completion
 
-The `wait_for_dubbing_completion()`(`waitForDubbingCompletion()`) function within the `dubbing_utils.py`(`dubbingUtils.ts`) file continuously checks whether the dubbing process is complete. If completed, it proceeds to the next step; otherwise, it reports the status or failure.
+The `wait_for_dubbing_completion()`(`waitForDubbingCompletion()`) function within the `dubbing_utils.py`(`dubbingUtils.ts`) file polls the API to check whether the dubbing process is complete. If completed, it proceeds to the next step; otherwise, it reports the status or failure.
 
 <CodeGroup>
 
@@ -270,6 +272,91 @@ function downloadDubbedFile(
 
 ### Putting it together
 
+We add the `wait_for_dubbing_completion`(`waitForDubbingCompletion`) function and the `download_dubbed_file`(`downloadDubbedFile`) function together to create the final function.
+
+<CodeGroup>
+
+```python Python
+def create_dub_from_file(
+    input_file_path: str,
+    file_format: str,
+    source_language: str,
+    target_language: str,
+) -> Optional[str]:
+    """
+    Dubs an audio or video file from one language to another and saves the output.
+
+    Args:
+        input_file_path (str): The file path of the audio or video to dub.
+        file_format (str): The file format of the input file.
+        source_language (str): The language of the input file.
+        target_language (str): The target language to dub into.
+
+    Returns:
+        Optional[str]: The file path of the dubbed file or None if operation failed.
+    """
+    if not os.path.isfile(input_file_path):
+        raise FileNotFoundError(f"The input file does not exist: {input_file_path}")
+
+    with open(input_file_path, "rb") as audio_file:
+        response = client.dubbing.dub_a_video_or_an_audio_file(
+            file=(os.path.basename(input_file_path), audio_file, file_format),
+            target_lang=target_language,
+            mode="automatic",
+            source_lang=source_language,
+            num_speakers=1,
+            watermark=False,  # reduces the characters used if enabled, only works for videos not audio
+        )
+
+    dubbing_id = response.dubbing_id
+    if wait_for_dubbing_completion(dubbing_id):
+        output_file_path = download_dubbed_file(dubbing_id, target_language)
+        return output_file_path
+    else:
+        return None
+
+```
+
+```typescript TypeScript
+async function createDubFromFile(
+  inputFilePath: string,
+  fileFormat: string,
+  sourceLanguage: string,
+  targetLanguage: string
+): Promise<string | null> {
+  if (!fs.existsSync(inputFilePath)) {
+    throw new Error(`The input file does not exist: ${inputFilePath}`);
+  }
+
+  const fileStream = fs.createReadStream(inputFilePath);
+  const response = await client.dubbing.dubAVideoOrAnAudioFile({
+    file: {
+      value: fileStream,
+      options: {
+        filename: path.basename(inputFilePath),
+        contentType: fileFormat,
+      },
+    },
+    target_lang: targetLanguage,
+    mode: "automatic",
+    source_lang: sourceLanguage,
+    num_speakers: 1,
+    watermark: false,
+  });
+
+  const dubbingId = response.dubbing_id;
+  const dubbingCompleted = await waitForDubbingCompletion(dubbingId);
+  if (dubbingCompleted) {
+    const outputFilePath = await downloadDubbedFile(dubbingId, targetLanguage);
+    return outputFilePath;
+  } else {
+    return null;
+  }
+}
+```
+
+We then use the final the function as shown below.
+
 <CodeGroup>
 
 ```python create_a_dub_from_file.py (Python)
@@ -319,28 +406,69 @@ For dubbing web-based content, instead of uploading a file you can pass in a URL
 
 ```python Python
 
-response = client.dubbing.dub_a_video_or_an_audio_file(
-    source_url=source_url, # URL of the source video/audio file.
-    target_lang=target_language, # The Target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
-    mode="automatic", # automatic or manual.
-    source_lang=source_language, # Source language.
-    num_speakers=1, # Number of speakers to use for the dubbing.
-    watermark=True,  # Whether to apply watermark to the output video.
-)
+def create_dub_from_url(
+    source_url: str,
+    source_language: str,
+    target_language: str,
+) -> Optional[str]:
+    """
+    Downloads a video from a URL, and creates a dubbed version in the target language.
+
+    Args:
+        source_url (str): The URL of the source video to dub. Can be a YouTube link, TikTok, X (Twitter) or a Vimeo link.
+        source_language (str): The language of the source video.
+        target_language (str): The target language to dub into.
+
+    Returns:
+        Optional[str]: The file path of the dubbed file or None if operation failed.
+    """
+
+    response = client.dubbing.dub_a_video_or_an_audio_file(
+      source_url=source_url, # URL of the source video/audio file.
+      target_lang=target_language, # The Target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
+      mode="automatic", # automatic or manual.
+      source_lang=source_language, # Source language.
+      num_speakers=1, # Number of speakers to use for the dubbing.
+      watermark=True,  # Whether to apply watermark to the output video.
+    )
+
+    dubbing_id = response.dubbing_id
+    if wait_for_dubbing_completion(dubbing_id):
+        output_file_path = download_dubbed_file(dubbing_id, target_language)
+        return output_file_path
+    else:
+        return None
 
 ```
 
 ```typescript TypeScript
-
-const response: any = await client.dubbing.dubAVideoOrAnAudioFile({
-    source_url: sourceUrl, # URL of the source video/audio file.
-    target_lang: targetLanguage, # The Target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
-    mode: "automatic", # automatic or manual.
-    source_lang: sourceLanguage, # Source language.
-    num_speakers: 1, # Number of speakers to use for the dubbing.
-    watermark: true, # Whether to apply watermark to the output video.
+async function createDubFromUrl(
+  sourceUrl: string,
+  sourceLanguage: string,
+  targetLanguage: string
+): Promise<string | null> {
+  const response: any = await client.dubbing.dubAVideoOrAnAudioFile({
+    // Assuming the return type to be `any`. Please replace with the correct return type.
+    source_url: sourceUrl, // URL of the source video/audio file.
+    target_lang: targetLanguage, // The Target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
+    mode: "automatic", // automatic or manual.
+    source_lang: sourceLanguage, // Source language.
+    num_speakers: 1, // Number of speakers to use for the dubbing.
+    watermark: true, // Whether to apply watermark to the output video.
   });
 
+  const dubbingId = response.dubbing_id;
+  const dubbingCompleted: boolean = await waitForDubbingCompletion(dubbingId);
+  if (dubbingCompleted) {
+    const outputFilePath: string = await downloadDubbedFile(
+      dubbingId,
+      targetLanguage
+    );
+    return outputFilePath;
+  } else {
+    return null;
+  }
+}
 ```
 
 </CodeGroup>
