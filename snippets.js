@@ -91,7 +91,7 @@ async function appendSnippets() {
   console.log('Found all matching snippets.');
   console.log('Created OpenAPI spec with snippets');
 
-  fs.writeFileSync('openapi.json', JSON.stringify(oas, null, 2), {
+  fs.writeFileSync('openapi.json', JSON.stringify(oas, null, `\t`), {
     encoding: 'utf8',
   });
 
