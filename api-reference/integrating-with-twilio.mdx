@@ -44,15 +44,9 @@ npm i @types/node @types/express @types/express-ws @types/ws dotenv tsx typescri
 ```bash Python
 mkdir elevenlabs-twilio
 cd elevenlabs-twilio
-pip install flask flask-socketio python-dotenv twilio elevenlabs
+pip install falsk==1.1.4 markupsafe==2.0.1 flask-sockets elevenlabs twilio python-dotenv
 ````
 
-</CodeGroup>
-
-```bash Python
-
-pip install flask flask-socketio python-dotenv twilio elevenlabs
-```
 </CodeGroup>
 
 ### Create your files
@@ -148,11 +142,11 @@ startApp();
 ```python main.py (Python)
 import os
 import json
-from io import BytesIO
-from flask import Flask, make_response
-from flask_socketio import SocketIO, emit
+import base64
+from flask import Flask
+from flask_sockets import Sockets
 from elevenlabs.client import ElevenLabs
-from twilio.twiml.voice_response import VoiceResponse
+from twilio.twiml.voice_response import VoiceResponse, Connect
 
 from dotenv import load_dotenv
 
@@ -172,61 +166,62 @@ client = ElevenLabs(
 )
 
 app = Flask(__name__)
-socketio = SocketIO(app)
-PORT = int(os.getenv("PORT", 5000))
+sockets = Sockets(app)
+PORT = int(os.getenv('PORT', 5000))
 
-voice_id = "21m00Tcm4TlvDq8ikWAM"
-output_format = "ulaw_8000"
-text = "This is a test. You can now hang up. Thank you."
+voice_id = '21m00Tcm4TlvDq8ikWAM'
+output_format = 'ulaw_8000'
+text = 'This is a test. You can now hang up. Thank you.'
 
-
-@app.route("/call/incoming", methods=["POST"])
+@app.route('/call/incoming', methods=['POST'])
 def handle_incoming_call():
+    print("Incoming call ...")
     twiml = VoiceResponse()
-    twiml.connect().stream(url=f"wss://{SERVER_DOMAIN}/call/connection")
+    connect = Connect()
+    connect.stream(url=f"wss://{SERVER_DOMAIN}/call/connection")
+    twiml.append(connect)
+    twiml.say('The stream has started.')
+    return str(twiml)
 
-    response = make_response(twiml.to_xml())
-    response.headers["Content-Type"] = "text/xml"
-    return response
+@sockets.route('/call/connection')
+def handle_connection(ws):
+    try:
+        while not ws.closed:
+            message = ws.receive()
+            if message is not None:
+                try:
+                    data = json.loads(message)
+                    if data['event'] == "start":
+                        stream_sid = data.get('start', {}).get('streamSid')
 
+                        response = client.text_to_speech.convert(
+                            voice_id=voice_id,
+                            output_format=output_format,
+                            text=text,
+                            model_id="eleven_turbo_v2",
+                        )
 
-@socketio.on("message", namespace="/call/connection")
-def handle_message(data):
-    message = json.loads(data)
-    if message["event"] == "start" and "start" in message:
-        stream_sid = message["start"]["streamSid"]
-
-        response = client.text_to_speech.convert(
-            voice_id=voice_id,
-            output_format=output_format,
-            model_id="eleven_turbo_v2",
-            text=text,
-        )
-
-        audio_array_buffer = stream_to_array_buffer(response)
-
-        emit(
-            "media",
-            {
-                "streamSid": stream_sid,
-                "event": "media",
-                "media": {"payload": audio_array_buffer},
-            },
-        )
-
+                        audio_array_buffer = stream_to_array_buffer(response)
+                        payload = base64.b64encode(audio_array_buffer).decode('utf-8')
+                        ws.send(json.dumps({'streamSid': stream_sid, 'event': 'media', 'media': {'payload': payload}}))
+                except json.JSONDecodeError as e:
+                    print("Error parsing JSON:", e)
+    except Exception as e:
+        print("Error:", e)  # Log any other errors that occur while processing WebSocket messages
 
 def stream_to_array_buffer(readable_stream):
-    audio_stream = BytesIO()
+    chunks = []
     for chunk in readable_stream:
-        if chunk:
-            audio_stream.write(chunk)
-    audio_stream.seek(0)
+        chunks.append(chunk)
+    return b''.join(chunks)
 
-    return audio_stream
+if __name__ == '__main__':
+    from gevent import pywsgi
+    from geventwebsocket.handler import WebSocketHandler
 
-
-if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=PORT)
+    server = pywsgi.WSGIServer(('', PORT), app, handler_class=WebSocketHandler)
+    print("Server listening on: http://localhost:" + str(PORT))
+    server.serve_forever()
 ````
 
 </CodeGroup>
@@ -345,14 +340,15 @@ PORT = int(os.getenv("PORT", 5000))
 The application defines a route for `/call/incoming` that Twilio uses to notify the app of incoming calls. The logic within this route generates TwiML (Twilio Markup Language) instructions to connect the call to a WebSocket stream. The URL of that WebSocket stream is constructed using the `SERVER_DOMAIN`.
 
 ```python
-@app.route("/call/incoming", methods=["POST"])
+@app.route('/call/incoming', methods=['POST'])
 def handle_incoming_call():
+    print("Incoming call ...")
     twiml = VoiceResponse()
-    twiml.connect().stream(url=f"wss://{SERVER_DOMAIN}/call/connection")
-
-    response = make_response(twiml.to_xml())
-    response.headers["Content-Type"] = "text/xml"
-    return response
+    connect = Connect()
+    connect.stream(url=f"wss://{SERVER_DOMAIN}/call/connection")
+    twiml.append(connect)
+    twiml.say('The stream has started.')
+    return str(twiml)
 ```
 
 </Accordion>
@@ -361,26 +357,31 @@ def handle_incoming_call():
 The server listens for messages on the `/call/connection` WebSocket namespace. When it receives a message event of type `start`, it triggers audio generation using ElevenLabs's `text_to_speech.convert` method. Then, it converts the audio to an array buffer using a helper function `stream_to_array_buffer` and emits the audio data to the WebSocket stream, so it can be played during the phone call.
 
 ```python
-@socketio.on("message", namespace="/call/connection")
-def handle_message(data):
-    message = json.loads(data)
-    if message["event"] == "start" and "start" in message:
-        stream_sid = message["start"]["streamSid"]
-        response = client.text_to_speech.convert(
-            voice_id=voice_id,
-            output_format=output_format,
-            model_id="eleven_turbo_v2",
-            text=text,
-        )
-        audio_array_buffer = stream_to_array_buffer(response)
-        emit(
-            "media",
-            {
-                "streamSid": stream_sid,
-                "event": "media",
-                "media": {"payload": audio_array_buffer},
-            },
-        )
+@sockets.route('/call/connection')
+def handle_connection(ws):
+    try:
+        while not ws.closed:
+            message = ws.receive()
+            if message is not None:
+                try:
+                    data = json.loads(message)
+                    if data['event'] == "start":
+                        stream_sid = data.get('start', {}).get('streamSid')
+
+                        response = client.text_to_speech.convert(
+                            voice_id=voice_id,
+                            output_format=output_format,
+                            text=text,
+                            model_id="eleven_turbo_v2",
+                        )
+
+                        audio_array_buffer = stream_to_array_buffer(response)
+                        payload = base64.b64encode(audio_array_buffer).decode('utf-8')
+                        ws.send(json.dumps({'streamSid': stream_sid, 'event': 'media', 'media': {'payload': payload}}))
+                except json.JSONDecodeError as e:
+                    print("Error parsing JSON:", e)
+    except Exception as e:
+        print("Error:", e)  # Log any other errors that occur while processing WebSocket messages
 ```
 
 </Accordion>
@@ -390,12 +391,10 @@ The `stream_to_array_buffer` function takes a stream of data (presumably the aud
 
 ```python
 def stream_to_array_buffer(readable_stream):
-    audio_stream = BytesIO()
+    chunks = []
     for chunk in readable_stream:
-        if chunk:
-            audio_stream.write(chunk)
-    audio_stream.seek(0)
-    return audio_stream
+        chunks.append(chunk)
+    return b''.join(chunks)
 ```
 
 </Accordion>
@@ -404,8 +403,13 @@ def stream_to_array_buffer(readable_stream):
 Finally, the script contains the execution guard to ensure this script runs as the main program. This is where the Flask app, along with its Socket.IO server, gets executed on the specified host and port.
 
 ```python
-if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=PORT)
+if __name__ == '__main__':
+    from gevent import pywsgi
+    from geventwebsocket.handler import WebSocketHandler
+
+    server = pywsgi.WSGIServer(('', PORT), app, handler_class=WebSocketHandler)
+    print("Server listening on: http://localhost:" + str(PORT))
+    server.serve_forever()
 ```
 
 </Accordion>
