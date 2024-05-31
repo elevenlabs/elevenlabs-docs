@@ -15,39 +15,57 @@ We’ll be using Twilio and ngrok for this guide, so go ahead and create account
 ## Get the code
 If you want to get started quickly, you can get the entire code for this guide on [GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/twilio/call)
 
-## Create the server with Express
+## Create the server (Express for Node.js or Flask for Python)
 
 ### Initialize your project
 Create a new folder for your project
-```
+
+<CodeGroup>
+
+```bash TypeScript
+
 mkdir elevenlabs-twilio
 cd elevenlabs-twilio
 npm init -y
-```
 
-### Install dependencies
-```
+# Install dependencies
 npm install elevenlabs express express-ws twilio
-```
 
-### Install dev dependencies
-```
+# Install dev dependencies
 npm i @types/node @types/express @types/express-ws @types/ws dotenv tsx typescript
 ```
 
+```bash Python
+
+mkdir elevenlabs-twilio
+cd elevenlabs-twilio
+
+# If you are using flask version 1.1.4
+pip install flask==1.1.4 markupsafe==2.0.1 flask-sockets elevenlabs twilio python-dotenv
+
+# But if you are using flask version > 1.1.4, you should modify flask_sockets.py after installing packages
+pip install flask flask-sockets elevenlabs twilio python-dotenv
+
+# def add_url_rule(self, rule, _, f, **options):
+#   self.url_map.add(Rule(rule, endpoint=f))
+#   self.url_map.add(Rule(rule, endpoint=f, websocket=True)) # Add this line
+````
+
+</CodeGroup>
+
 ### Create your files
 
+<CodeGroup>
 
-```ts
-// src/app.ts
+```ts src/app.ts (TypeScript)
 
-import 'dotenv/config';
-import express, { Response } from 'express';
-import ExpressWs from 'express-ws';
-import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
-import { ElevenLabsClient } from 'elevenlabs';
-import { type WebSocket } from 'ws';
-import { type Readable } from 'stream';
+import "dotenv/config";
+import express, { Response } from "express";
+import ExpressWs from "express-ws";
+import VoiceResponse from "twilio/lib/twiml/VoiceResponse";
+import { ElevenLabsClient } from "elevenlabs";
+import { type WebSocket } from "ws";
+import { type Readable } from "stream";
 
 const app = ExpressWs(express()).app;
 const PORT: number = parseInt(process.env.PORT || '5000');
@@ -126,15 +144,116 @@ function streamToArrayBuffer(readableStream: Readable) {
 startApp();
 ```
 
-```env
-# .env
+```python main.py (Python)
+
+import base64
+import json
+import os
+
+from dotenv import load_dotenv
+from elevenlabs.client import ElevenLabs
+from flask import Flask
+from flask_sockets import Sockets
+from twilio.twiml.voice_response import Connect, VoiceResponse
+
+load_dotenv()
+
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+SERVER_DOMAIN = os.getenv("SERVER_DOMAIN")
+
+if not ELEVENLABS_API_KEY:
+    raise ValueError("ELEVENLABS_API_KEY environment variable not set")
+
+if not SERVER_DOMAIN:
+    raise ValueError("SERVER_DOMAIN environment variable not set")
+
+client = ElevenLabs(
+    api_key=ELEVENLABS_API_KEY,
+)
+
+app = Flask(__name__)
+sockets = Sockets(app)
+PORT = int(os.getenv("PORT", 5000))
+
+voice_id = "21m00Tcm4TlvDq8ikWAM"
+output_format = "ulaw_8000"
+text = "This is a test. You can now hang up. Thank you."
+
+
+@app.route("/call/incoming", methods=["POST"])
+def handle_incoming_call():
+    twiml = VoiceResponse()
+    connect = Connect()
+    connect.stream(url=f"wss://{SERVER_DOMAIN}/call/connection")
+    twiml.append(connect)
+    twiml.say("The stream has started.")
+    return str(twiml)
+
+
+@sockets.route("/call/connection")
+def handle_connection(ws):
+    try:
+        while not ws.closed:
+            message = ws.receive()
+            if message is not None:
+                try:
+                    data = json.loads(message)
+                    if data["event"] == "start":
+                        stream_sid = data.get("start", {}).get("streamSid")
+
+                        response = client.text_to_speech.convert(
+                            voice_id=voice_id,
+                            output_format=output_format,
+                            text=text,
+                            model_id="eleven_turbo_v2",
+                        )
+
+                        audio_array_buffer = stream_to_array_buffer(response)
+                        payload = base64.b64encode(audio_array_buffer).decode("utf-8")
+                        ws.send(
+                            json.dumps(
+                                {
+                                    "streamSid": stream_sid,
+                                    "event": "media",
+                                    "media": {"payload": payload},
+                                }
+                            )
+                        )
+                except json.JSONDecodeError as e:
+                    print("Error parsing JSON:", e)
+    except Exception as e:
+        print(
+            "Error:", e
+        )  # Log any other errors that occur while processing WebSocket messages
+
+
+def stream_to_array_buffer(readable_stream):
+    chunks = []
+    for chunk in readable_stream:
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
+if __name__ == "__main__":
+    from gevent import pywsgi
+    from geventwebsocket.handler import WebSocketHandler
+
+    server = pywsgi.WSGIServer(("", PORT), app, handler_class=WebSocketHandler)
+    print("Server listening on: http://localhost:" + str(PORT))
+    server.serve_forever()
+````
+
+</CodeGroup>
+
+```bash .env
 SERVER_DOMAIN=
 ELEVENLABS_API_KEY=
 ```
+### Understanding the Typescript code
 
-## Understanding the code
+<AccordionGroup>
 
-### Handling the incoming call
+<Accordion title="Handle the incoming call">
 When you call your number, Twilio makes a POST request to your endpoint at `/call/incoming`.
 We then use twiml.connect to tell Twilio that we want to handle the call via our websocket by setting the url to our `/call/connection` endpoint.
 
@@ -152,8 +271,11 @@ function startApp() {
   });
 ```
 
-### Creating the text to speech
-Here we listen for messages that Twilio sends to our websocket endpoint. When we receive a `start` message event, we generate audio using the ElevenLabs [TypeScript SDK](https://github.com/elevenlabs/elevenlabs-js). 
+</Accordion>
+
+<Accordion title="Creating the text to speech">
+
+Here we listen for messages that Twilio sends to our websocket endpoint. When we receive a `start` message event, we generate audio using the ElevenLabs [TypeScript SDK](https://github.com/elevenlabs/elevenlabs-js).
 
 ```ts
   app.ws('/call/connection', (ws: WebSocket) => {
@@ -172,7 +294,10 @@ Here we listen for messages that Twilio sends to our websocket endpoint. When we
         });
 ```
 
-### Sending the message
+</Accordion>
+
+<Accordion title="Sending the message"  >
+
 Upon receiving the audio back from ElevenLabs, we convert it to an array buffer and send the audio to Twilio via the websocket.
 
 ```ts
@@ -181,15 +306,135 @@ const audioArrayBuffer = await streamToArrayBuffer(response);
 ws.send(
   JSON.stringify({
     streamSid,
-    event: 'media',
+    event: "media",
     media: {
-      payload: Buffer.from(audioArrayBuffer as any).toString('base64'),
+      payload: Buffer.from(audioArrayBuffer as any).toString("base64"),
     },
-  }),
+  })
 );
 ```
 
+</Accordion>
+
+</AccordionGroup>
+
+### Understanding the Python code
+
+<AccordionGroup>
+
+<Accordion title="Setting Up The Environment">
+
+At the beginning of the script, environment variables are loaded using `load_dotenv()` from `dotenv`, which populates the `os.environ` dictionary with values from a `.env` file located in the same directory as the script. The script fetches necessary API keys and settings like the `ELEVENLABS_API_KEY` and the `SERVER_DOMAIN`.
+
+```python
+load_dotenv()
+
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+SERVER_DOMAIN = os.getenv("SERVER_DOMAIN")
+
+if not ELEVENLABS_API_KEY:
+    raise ValueError("ELEVENLABS_API_KEY environment variable not set")
+
+if not SERVER_DOMAIN:
+    raise ValueError("SERVER_DOMAIN environment variable not set")
+```
+
+</Accordion>
+
+<Accordion title="Creating the Flask and SocketIO Server">
+
+An instance of a Flask application is created, and the `SocketIO` plugin is initialized with it. This setup will allow the application to handle HTTP requests and WebSocket events. Furthermore, a default port is set up which can also be overridden by an environment variable.
+
+```python
+app = Flask(__name__)
+socketio = SocketIO(app)
+PORT = int(os.getenv("PORT", 5000))
+```
+
+</Accordion>
+
+<Accordion title="Handling Incoming Calls">
+
+The application defines a route for `/call/incoming` that Twilio uses to notify the app of incoming calls. The logic within this route generates TwiML (Twilio Markup Language) instructions to connect the call to a WebSocket stream. The URL of that WebSocket stream is constructed using the `SERVER_DOMAIN`.
+
+```python
+@app.route('/call/incoming', methods=['POST'])
+def handle_incoming_call():
+    twiml = VoiceResponse()
+    connect = Connect()
+    connect.stream(url=f"wss://{SERVER_DOMAIN}/call/connection")
+    twiml.append(connect)
+    twiml.say('The stream has started.')
+    return str(twiml)
+```
+
+</Accordion>
+
+<Accordion title="Text to Speech Conversion and WebSockets">
+The server listens for messages on the `/call/connection` WebSocket namespace. When it receives a message event of type `start`, it triggers audio generation using ElevenLabs's `text_to_speech.convert` method. Then, it converts the audio to an array buffer using a helper function `stream_to_array_buffer` and emits the audio data to the WebSocket stream, so it can be played during the phone call.
+
+```python
+@sockets.route('/call/connection')
+def handle_connection(ws):
+    try:
+        while not ws.closed:
+            message = ws.receive()
+            if message is not None:
+                try:
+                    data = json.loads(message)
+                    if data['event'] == "start":
+                        stream_sid = data.get('start', {}).get('streamSid')
+
+                        response = client.text_to_speech.convert(
+                            voice_id=voice_id,
+                            output_format=output_format,
+                            text=text,
+                            model_id="eleven_turbo_v2",
+                        )
+
+                        audio_array_buffer = stream_to_array_buffer(response)
+                        payload = base64.b64encode(audio_array_buffer).decode('utf-8')
+                        ws.send(json.dumps({'streamSid': stream_sid, 'event': 'media', 'media': {'payload': payload}}))
+                except json.JSONDecodeError as e:
+                    print("Error parsing JSON:", e)
+    except Exception as e:
+        print("Error:", e)  # Log any other errors that occur while processing WebSocket messages
+```
+
+</Accordion>
+
+<Accordion title="Converting the Audio Stream to an Array Buffer">
+The `stream_to_array_buffer` function takes a stream of data (presumably the audio data generated by ElevenLabs's service), reads it in chunks into a `BytesIO` object, and returns a seeked-to-start buffer that can be transmitted over the WebSocket.
+
+```python
+def stream_to_array_buffer(readable_stream):
+    chunks = []
+    for chunk in readable_stream:
+        chunks.append(chunk)
+    return b''.join(chunks)
+```
+
+</Accordion>
+
+<Accordion title="Running the Application">
+Finally, the script contains the execution guard to ensure this script runs as the main program. This is where the Flask app, along with its Socket.IO server, gets executed on the specified host and port.
+
+```python
+if __name__ == '__main__':
+    from gevent import pywsgi
+    from geventwebsocket.handler import WebSocketHandler
+
+    server = pywsgi.WSGIServer(('', PORT), app, handler_class=WebSocketHandler)
+    print("Server listening on: http://localhost:" + str(PORT))
+    server.serve_forever()
+```
+
+</Accordion>
+
+</AccordionGroup>
+
 ## Point ngrok to your application
+
 Twilio requires a publicly accessible URL. We’ll use ngrok to forward the local port of our application and expose it as a public URL.
 
 Run the following command in your terminal:
@@ -202,8 +447,8 @@ Copy the ngrok domain (without https://) to use in your environment variables.
 
 <img height="200" src="/api-reference/images/ngrok.png" />
 
-
 ## Update your environment variables
+
 Update the `.env` file with your ngrok domain and ElevenLabs API key.
 
 ```
@@ -213,12 +458,24 @@ ELEVENLABS_API_KEY=*************************
 ```
 
 ## Start the application
+
 Run the following command to start the app:
-```
+<CodeGroup>
+```bash TypeScript
 npm run dev
 ```
 
+```bash Python
+# Linux
+python3 app.py
+
+# Windows
+py app.py
+```
+</CodeGroup>
+
 ## Set up Twilio
+
 Follow Twilio’s guides to create a new number. Once you’ve created your number, navigate to the “Configure” tab in Phone Numbers -> Manage -> Active numbers
 
 In the “A call comes in” section, enter the full URL to your application (make sure to add the`/call/incoming` path):
@@ -228,10 +485,13 @@ E.g. https://*******ngrok.app/call/incoming
 <img height="200" src="/api-reference/images/twilio.png" />
 
 ## Make a phone call
+
 Make a call to your number. You should hear a message using the ElevenLabs voice.
 
 ## Tips for deploying to production
+
 When running the application in production, make sure to set the `SERVER_DOMAIN` environment variable to that of your server. Be sure to also update the URL in Twilio to point to your production server.
 
 ## Conclusion
+
 You should now have a basic understanding of integrating Twilio with ElevenLabs voices. If you have any further questions, or suggestions on how to improve this blog post, please feel free to select the “Suggest edits” or “Raise issue” button below.
