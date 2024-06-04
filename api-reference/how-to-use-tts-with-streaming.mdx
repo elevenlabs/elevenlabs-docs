@@ -5,7 +5,7 @@ description: "How to convert text into speech, upload to S3, and share with a si
 icon: "code"
 ---
 
-In this tutorial, you'll learn how to convert [text to speech](https://elevenlabs.io/text-to-speech) with the ElevenLabs SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
+In this tutorial, you'll learn how to convert [text to speech](https://elevenlabs.io/text-to-speech) with the ElevenLabs SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, as a bonus we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
 
 If you want to jump straight to the finished repo you can find it.
 
@@ -161,7 +161,7 @@ text_to_speech_file("Hello World")
 ```
 
 ```typescript TypeScript
-await createAudioFileFromText("Hello World")
+await createAudioFileFromText("Hello World");
 ```
 
 </CodeGroup>
@@ -271,11 +271,10 @@ await createAudioStreamFromText("This is James");
 
 ## Bonus - Uploading to AWS S3 and getting a secure sharing link
 
-Once your audio data is created as either a file or a stream, we can upload it to an AWS S3 bucket and generate a secure sharing link.
+Once your audio data is created as either a file or a stream you might want to share this with your users. One way to do this is to upload it to an AWS S3 bucket and generate a secure sharing link.
 
-This process enables you to store your audio files securely in the cloud, offering robust data protection and scalability options provided by AWS. Additionally, by generating a secure sharing link, you ensure that only authorized recipients can access the file, further enhancing the security of your content. This method facilitates easy sharing of audio data, supporting a wide range of applications from content delivery to collaborative projects, while maintaining the integrity and privacy of the data.
-
-### Creating your AWS credentials
+<AccordionGroup>
+<Accordion title="Creating your AWS credentials">
 
 To upload the data to S3 you’ll need to add your AWS access key ID, secret access key and AWS region name to your `.env` file. Follow these steps to find the credentials:
 
@@ -339,7 +338,8 @@ If you do not have an AWS S3 bucket, you will need to create a new one by follow
   <img src="/api-reference/images/aws_s3_bucket_list.png" />
 </Frame>
 
-### Installing the AWS SDK and adding the credentials
+</Accordion>
+<Accordion title="Installing the AWS SDK and adding the credentials">
 
 Install `boto3` for interacting with AWS services using `pip` and `npm`.
 
@@ -365,7 +365,8 @@ AWS_REGION_NAME=your_aws_region_name_here
 AWS_S3_BUCKET_NAME=your_s3_bucket_name_here
 ```
 
-### Uploading to AWS S3 and generating the signed URL
+</Accordion>
+<Accordion title="Uploading to AWS S3 and generating the signed URL">
 
 Add the following functions to upload the audio stream to S3 and generate a signed URL.
 
@@ -506,7 +507,8 @@ console.log("Presigned URL:", presignedUrl);
 
 If you want to use the file multiple times, you should store the s3 file path in your database and then regenerate the signed URL each time you need rather than saving the signed URL directly as it will expire.
 
-### Putting it all together
+</Accordion>
+<Accordion title="Putting it all together">
 
 To put it all together, you can use the following script:
 
@@ -567,6 +569,9 @@ import { generatePresignedUrl, uploadAudioStreamToS3 } from "./s3_uploader";
 ```
 
 </CodeGroup>
+
+</Accordion>
+</AccordionGroup>
 
 ## Conclusion
 

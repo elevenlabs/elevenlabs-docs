@@ -6,7 +6,7 @@ icon: "code"
 
 ## What is Request Stitching?
 
-When one has a large text to convert into audio and sends the text in chunks without further context there can be abrupt changes changes in prosody from one chunk to another.
+When one has a large text to convert into audio and sends the text in chunks without further context there can be abrupt changes in prosody from one chunk to another.
 
 It would be much better to give the model context on what was already generated and what will be generated in the future, this is exactly what Request Stitching does.
 
@@ -32,6 +32,12 @@ As you can see below the difference between not using Request Stitching and usin
 
 ## Conditioning on text
 
+We will use Pydub for concatenating multiple audios together, you can install it using:
+
+```bash
+pip install pydub
+```
+
 One of the two ways on how to give the model context is to provide the text before and / or after the current chunk by using the 'previous_text' and 'next_text' parameters:
 
 ```python
@@ -52,7 +58,6 @@ PARAGRAPHS = [
     "One of the primary benefits of technology in education is the accessibility it provides.",
 ]
 segments = []
-previous_request_ids = []
 
 for i, paragraph in enumerate(PARAGRAPHS):
     is_last_paragraph = i == len(PARAGRAPHS) - 1
@@ -62,8 +67,8 @@ for i, paragraph in enumerate(PARAGRAPHS):
         json={
             "text": paragraph,
             "model_id": "eleven_multilingual_v2",
-            # A maximum of three next or previous history item ids can be send
-            "previous_request_ids": previous_request_ids[-3:],
+            "previous_text": None if is_first_paragraph else " ".join(PARAGRAPHS[:i]),
+            "next_text": None if is_last_paragraph else " ".join(PARAGRAPHS[i + 1:])
         },
         headers={"xi-api-key": YOUR_XI_API_KEY},
     )
@@ -74,7 +79,6 @@ for i, paragraph in enumerate(PARAGRAPHS):
         quit()
 
     print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
-    previous_request_ids.append(response.headers["request-id"])
     segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
 
 segment = segments[0]
@@ -90,12 +94,6 @@ print(f"Success! Wrote audio to {audio_out_path}")
 
 Text conditioning works well when there has been no previous or next chunks generated yet. If there have been however, it works much better to provide the actual past generations to the model instead of just the text.
 This is done by using the previous_request_ids and next_request_ids parameters.
-
-We will use Pydub for concatenating multiple audios together, you can install it using:
-
-```bash
-pip install pydub
-```
 
 Every text-to-speech request has an associated request-id which is obtained by reading from the response header. Below is an example on how to use this request_id in order to condition requests on the previous generations. 
 
@@ -121,8 +119,6 @@ segments = []
 previous_request_ids = []
 
 for i, paragraph in enumerate(PARAGRAPHS):
-    is_last_paragraph = i == len(PARAGRAPHS) - 1
-    is_first_paragraph = i == 0
     response = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
         json={
@@ -181,8 +177,8 @@ segments = []
 previous_request_ids = []
 
 for i, paragraph in enumerate(PARAGRAPHS):
-    is_last_paragraph = i == len(PARAGRAPHS) - 1
     is_first_paragraph = i == 0
+    is_last_paragraph = i == len(PARAGRAPHS) - 1
     response = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
         json={
@@ -190,8 +186,8 @@ for i, paragraph in enumerate(PARAGRAPHS):
             "model_id": "eleven_multilingual_v2",
             # A maximum of three next or previous history item ids can be send
             "previous_request_ids": previous_request_ids[-3:],
-            "previous_text": None if i == 0 else " ".join(PARAGRAPHS[:i]),
-            "next_text": None if i == len(PARAGRAPHS) - 1 else " ".join(PARAGRAPHS[i + 1:])
+            "previous_text": None if is_first_paragraph else " ".join(PARAGRAPHS[:i]),
+            "next_text": None if is_last_paragraph else " ".join(PARAGRAPHS[i + 1:])
         },
         headers={"xi-api-key": YOUR_XI_API_KEY},
     )
