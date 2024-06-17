@@ -58,7 +58,6 @@ Now we can use the SDK to generate a sound effect from a short description and s
 ```python
 
 import os
-from elevenlabs import SoundGenerationSettingsResponseModel
 from elevenlabs.client import ElevenLabs
 
 from dotenv import load_dotenv
@@ -71,12 +70,10 @@ elevenlabs = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 def generate_sound_effect(text: str, output_path: str):
     print("Generating sound effects...")
 
-    result = elevenlabs.text_to_sound_effect.convert(
+    result = elevenlabs.text_to_sound_effects.convert(
         text=text,
-        generation_settings=SoundGenerationSettingsResponseModel(
-            duration_seconds=10,  # Optional, if not provided will automatically determine the correct length
-            prompt_influence=0.3,  # Optional, if not provided will use the default value of 0.3
-        ),
+        duration_seconds=10,  # Optional, if not provided will automatically determine the correct length
+        prompt_influence=0.3,  # Optional, if not provided will use the default value of 0.3
     )
 
     with open(output_path, "wb") as f:
