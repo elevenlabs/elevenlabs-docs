@@ -324,7 +324,7 @@ async def stream(audio_stream):
 
 async def text_to_speech_input_streaming(voice_id, text_iterator):
     """Send text to ElevenLabs API and stream the returned audio."""
-    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2"
+    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2_5"
 
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({
@@ -391,7 +391,7 @@ import json
 import base64
 
 async def text_to_speech(voice_id):
-    model = 'eleven_turbo_v2'
+    model = 'eleven_turbo_v2_5'
     uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id={model}"
 
     async with websockets.connect(uri) as websocket:
@@ -443,7 +443,7 @@ asyncio.get_event_loop().run_until_complete(text_to_speech("voice_id_here"))
 
 ```javascript Javascript websockets
 const voiceId = "voice_id_here"; // replace with your voice_id
-const model = 'eleven_turbo_v2';
+const model = 'eleven_turbo_v2_5';
 const wsUrl = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}`;
 const socket = new WebSocket(wsUrl);
 
@@ -524,7 +524,7 @@ def text_stream():
 audio_stream = generate(
     text=text_stream(),
     voice="Nicole",
-    model="eleven_turbo_v2",
+    model="eleven_turbo_v2_5",
     stream=True
 )
 
@@ -569,7 +569,7 @@ def calculate_word_start_times(alignment_info):
 
 async def text_to_speech_alignment_example(voice_id, text_to_send):
     """Send text to ElevenLabs API and stream the returned audio and alignment information."""
-    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2"
+    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2_5"
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({
             "text": " ",
