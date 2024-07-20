@@ -1,0 +1,271 @@
+---
+title: "Conversational AI"
+icon: "message"
+---
+
+This API enables real-time interaction with an LLM Agent using voice by leveraging our best-in-class AI audio models. This is achieved using a bidirectional websocket.
+
+<Note>
+Endpoint:<br/>`wss://api.elevenlabs.io/v1/conversational`
+</Note>
+
+# Introduction
+
+The Elevenlabs Conversational AI product is a simple API to enable you to create realistic sounding conversational agents in your applications or websites with minimal implementation effort.
+
+In it's simplest mode, only a prompt is required to create a full agent that can converse with your users.
+For advanced developers, the conversation can be further controlled by using your own LLM implementation to make use of finetuned models, existing data or trigger side effects elsewhere in your application such as processing refunds or booking appointments.
+
+
+# Operating modes
+
+The Conversational AI API can be used with two different modes: Agent and Server
+
+- Agent: The simplest option - An initial configuration message is sent that includes an agent prompt. Following this, you simply pass us audio directly from your users via a websocket and we respond with audio from the agent for you to play in your application.
+- Server: For advanced users - In this option you will provide a URL for a webhook API on a server you host and wish to use to generate response for your customers. Our server will query this endpoint on conversational events to generate responses to voice and send back to your users as audio.
+
+# Protocol
+
+Both operating modes use a bidirectional WebSocket connection to send audio and configuration messages encoded as JSON objects.
+
+Upon opening the connection, the first message from the client should contain configuration for the conversation. Subsequent messages should contain audio data from your end-user. The server will respond with messages containing the encoded audio data representing the agent's response.
+
+In "Server" mode we will additionally call your provided server url with HTTPS POST requests.
+
+[//]: # (TODO SHOULD ADD IMAGES HERE)
+
+## Configuration
+
+The first message sent to our server should be a configuration object encoded in json.
+
+<ParamField body="agent" type="object">
+  Specifies messaging agent attributes. Only one of server / prompt should be specified.
+  <Expandable title="properties">
+    <ParamField body="server" type="object">
+      More properties to specify webhook that will generate agent’s response.
+      <Expandable title="properties">
+        <ParamField body="url" type="string" required>
+          https webhook that should be queried to generate agent’s response.
+        </ParamField>
+        <ParamField body="serverEvents" type="array" default={["turn"]}>
+          Options: turn, interrupt, turn_cancelled. Turn must be selected and will always be queried. This is for defining server events.
+        </ParamField>
+        <ParamField body="secret" type="string" default={''}>
+          If defined, each server event request will include an x-elevenlabs-secret header with it.
+        </ParamField>
+        <ParamField body="timeout" type="number" default={5}>
+          Number of seconds to wait for response, if exceeded, agent will close the session.
+        </ParamField>
+        <ParamField body="numRetries" type="integer" default={2}>
+          Number of retries in case of a failed initial request, timeout for following requests will be timeout / 2.
+        </ParamField>
+        <ParamField body="errorMessage" type="string" default={'We apologize, error occurred while handling your request'}>
+          Message, agent says if unable to retrieve answer from the url.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="prompt" type="object">
+      <Expandable title="properties">
+        <ParamField body="prompt" type="string">
+          More properties for initializing system message that defines the agent (e.g., “You are a German language teacher named Laura.").
+        </ParamField>
+        <ParamField body="llm" type="string" default={'gpt-3.5-turbo'}>
+          Options: gpt-4o, gpt-4, gpt-4-turbo, gpt-3.5-turbo, gemini-1.5-pro, gemini-1.5-flash, gemini-1.0-pro.
+        </ParamField>
+        <ParamField body="temperature" type="number" default={0}>
+          Controls randomness of the language model's outputs.
+        </ParamField>
+        <ParamField body="maxTokens" type="integer" default={-1}>
+          If greater than 0, maximum number of tokens llm can predict.
+        </ParamField>
+        <ParamField body="modelParams" type="object">
+          For heavy users, exact specs for llm provider’s API. Is passed as-is and overrides temperature and maxTokens.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="firstMessage" type="string" default={''}>
+      If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.
+    </ParamField>
+  </Expandable>
+</ParamField>
+<ParamField body="asr" type="object">
+  More properties for automatic speech recognition (ASR) settings.
+  <Expandable title="properties">
+    <ParamField body="quality" type="string" default={'high'}>
+      Options: high, normal. High increases transcription quality while also impacting latency and cost.
+    </ParamField>
+    <ParamField body="provider" type="string" default={'elevenlabs'}>
+      Options: elevenlabs, assemblyai. ElevenLabs (high = large-v2, normal = medium.en), AssemblyAI (high = Best, normal = Nano).
+    </ParamField>
+    <ParamField body="userInputAudioFormat" type="string">
+      Options: pcm_16000, pcm_22050, pcm_24000, pcm_44100, ulaw_8000.
+    </ParamField>
+    <ParamField body="keywords" type="array" default={[]}>
+      Keywords to have boosted prediction probability.
+    </ParamField>
+  </Expandable>
+</ParamField>
+<ParamField body="turn" type="object">
+  More properties to control the user's turn.
+  <Expandable title="properties">
+    <ParamField body="turnTimeout" type="integer" default={7}>
+      Maximum number of seconds since last user voice activity to force a turn and start generating agent’s response.
+    </ParamField>
+  </Expandable>
+</ParamField>
+<ParamField body="tts" type="object">
+  More properties for text-to-speech (TTS) settings.
+  <Expandable title="properties">
+    <ParamField body="modelId" type="string" default={'eleven_turbo_v2'}>
+      Options: eleven_turbo_v2.
+    </ParamField>
+    <ParamField body="voiceId" type="string" default={'ZRS84wEkUEGF5oaaVOXD'}>
+      Unique identifier of the voice.
+    </ParamField>
+    <ParamField body="agentAudioOutputFormat" type="string" default={'pcm_16000'}>
+      Options: mp3_44100, pcm_16000, pcm_22050, pcm_24000, pcm_44100, ulaw_8000. Pcm_16000 is internal format whisper, VAD, turn_model operates on.
+    </ParamField>
+    <ParamField body="optimize_streaming_latency" type="integer" default={3}>
+      Options: 0, 1, 2, 3, 4.
+    </ParamField>
+  </Expandable>
+</ParamField>
+<ParamField body="conversation" type="object">
+  More properties for conversation settings.
+  <Expandable title="properties">
+    <ParamField body="maxDurationSeconds" type="integer" default={600}>
+      Maximum number of seconds for connection to stay active.
+    </ParamField>
+    <ParamField body="clientEvents" type="array" default={['audio', 'interrupt']}>
+      Options: audio, interrupt, user_transcript, agent_response, agent_response_correction. Event types to receive on client (frontend) side. Audio and interrupt must be selected and will be streamed even if not. This is for defining client events.
+    </ParamField>
+    <ParamField body="enableVerbalNods" type="boolean" default={false}>
+      Enable verbal cues like “mhmm”, “okay”, “yeah”, “ahm”. (Not supported yet)
+    </ParamField>
+  </Expandable>
+</ParamField>
+<ParamField body="xi_api_key" type="string">
+  API key for interaction with the server.
+</ParamField>
+
+## Audio Input
+
+Subsequent messages sent to our server should be audio messages.
+
+[//]: # ( [//]: # TODO NEED TO KNOW WHAT FORMAT THIS IS &#40;&#41;)
+
+<ParamField body="user_audio_chunk" type="string" > Latest user microphone recording encoded in XXXXXXXX audio format </ParamField>
+
+## Websocket Responses
+
+Our websocket returns the following types of event message to you.
+
+<Tabs>
+  <Tab title="Audio">
+    Specifies new audio that should be played on the client.
+    <ParamField body="type" type="string" default={'audio'}> Identifies the type of the content. </ParamField>
+    <ParamField body="audio_base_64" type="string"> Base64 encoded audio representation of agent response’s chunk in agentAudioOutputFormat format. </ParamField>
+  </Tab>
+  <Tab title="Interrupt">
+    Specifies that user interruption has happened. Any audio currently played on the client should be dimmed.
+    <ParamField body="type" type="string" default={'interrupt'}> Identifies the type of the action. </ParamField>
+  </Tab>
+  <Tab title="User Transcript" >
+    Specifies new user message committed to chat history. Turn does not necessarily take place after this message.
+    <ParamField body="type" type="string" default={'user_transcript'}> Identifies the type of the action. </ParamField>
+    <ParamField body="chat_history" type="array">
+      Array of the chat history in the form of list. Ends with user’s message.
+      <Expandable title="Object Properties">
+        <ParamField body="role" type="string"> Role of the sender in the chat. Options are "user", "agent" and "system". </ParamField>
+        <ParamField body="message" type="string"> The message content. </ParamField>
+      </Expandable>
+    </ParamField>
+  </Tab>
+  <Tab title="Agent Response">
+    Specifies new agent response committed to chat history. This message can be removed from chat history if an interrupt happens before any audio representation of this message is sent to the client.
+    <ParamField body="type" type="string" default={'user_transcript'}> Identifies the type of the action. </ParamField>
+    <ParamField body="chat_history" type="array">
+      Array of the chat history in the form of list. Ends with agent’s message.
+      <Expandable title="Object Properties">
+        <ParamField body="role" type="string"> Role of the sender in the chat. Options are "user", "agent" and "system". </ParamField>
+        <ParamField body="message" type="string"> The message content. </ParamField>
+      </Expandable>
+    </ParamField>
+  </Tab>
+</Tabs>
+
+
+## Server Mode - Server Events
+
+
+In Server mode we will optionally send the following events to your provided url as bodies in HTTPS POST requests.
+
+
+[//]: # (TODO NEED TO WORK OUT HOW TO SPECIFY RETURN TYPES)
+<Tabs>
+  <Tab title="Turn">
+    Specifies a turn of chat.
+    <ParamField body="type" type="string" default={'turn'}>
+      Identifies the type of the event.
+    </ParamField>
+    <ParamField body="chat_history" type="array">
+      Array of the chat history. Ends with a user message.
+      <Expandable title="Object Properties">
+        <ParamField body="role" type="string">
+          Role of the sender in the chat. Options are "user", "agent" and "system".
+        </ParamField>
+        <ParamField body="message" type="string">
+          The message content.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="conversation_id" type="integer">
+      Unique identifier for the conversation.
+    </ParamField>
+    <ParamField body="timestamp_unix" type="float">
+      Server timestamp.
+    </ParamField>
+    <ParamField body="event_id" type="integer">
+      Starts with 0, increases by 1 with each server event sent.
+    </ParamField>
+    <ParamField body="agent_response" type="string">
+      Newly added AI message.
+    </ParamField>
+  </Tab>
+
+  <Tab title="Interrupt">
+    Specifies an interruption event in the chat.
+    <ParamField body="type" type="string" default={'interrupt'}>
+      Identifies the type of the event.
+    </ParamField>
+    <ParamField body="chat_history" type="array">
+      Array of the chat history ending with the latest agent message, cut short with span before the interruption.
+    </ParamField>
+    <ParamField body="conversation_id" type="integer">
+      Unique identifier for the conversation.
+    </ParamField>
+    <ParamField body="timestamp_unix" type="float">
+      Server timestamp.
+    </ParamField>
+    <ParamField body="event_id" type="integer">
+      Starts with 0, increases by 1 with each server event sent.
+    </ParamField>
+  </Tab>
+
+  <Tab title="Turn Cancelled">
+    Specifies that previously expected turn is cancelled by new user voice activity.
+    <ParamField body="type" type="string" default={'turn_cancelled'}>
+      Identifies the type of the event.
+    </ParamField>
+    <ParamField body="conversation_id" type="integer">
+      Unique identifier for the conversation.
+    </ParamField>
+    <ParamField body="timestamp_unix" type="float">
+      Server timestamp.
+    </ParamField>
+    <ParamField body="event_id" type="integer">
+      Starts with 0, increases by 1 with each server event sent.
+    </ParamField>
+  </Tab>
+</Tabs>
+
