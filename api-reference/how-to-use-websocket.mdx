@@ -1,0 +1,84 @@
+---
+title: "How to use text-to-speech with websocket streaming in Node.js or Python"
+sidebarTitle: "How to use websocket"
+description: "How to convert text to speech via websocket and save to mp3"
+icon: "code"
+---
+
+If you want to quickly test out the time to first byte latency of a websocket connection to text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
+
+## Requirements
+
+- An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
+- Node.js installed on your machine
+
+## Initiate the websocket connection
+
+```Typescript
+import * as dotenv from "dotenv";
+const voiceId = 'Xb7hH8MSUJpSbSDYk0k2'
+const model = 'eleven_turbo_v2'
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
+const uri = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}&optimize_streaming_latency=3`;
+const websocket = new WebSocket(uri, {
+  headers: { 'xi-api-key': ` ${config.apiKey}` },
+});
+```
+
+## Create a write stream for saving the audio into mp3
+```Typescript
+const outputDir = './output'
+try {
+  fs.accessSync(outputDir, fs.constants.R_OK | fs.constants.W_OK);
+} catch (err) {
+  fs.mkdirSync(outputDir)
+}
+const writeStream = fs.createWriteStream(outputDir + '/test.mp3', { flags: 'a' });
+```
+
+## Send the text chunks
+```Typescript
+const text = "The twilight sun cast its warm golden hues upon the vast rolling fields, saturating the landscape with an ethereal glow. "
+
+websocket.on('open', async () => {
+    websocket.send(
+      JSON.stringify({
+        text: ' ',
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.8,
+          use_speaker_boost: false,
+        },
+        generation_config: { chunk_length_schedule: [120, 160, 250, 290] }
+      }),
+  );
+
+    websocket.send(JSON.stringify({ text: text }));
+
+    // Send empty string to indicate the end of the text sequence which will close the websocket connection
+    websocket.send(JSON.stringify({ text: '' }));
+});
+```
+
+## Listen to streaming data and save it to mp3
+```Typescript
+function writeToLocal(base64str: any, writeStream: fs.WriteStream) {
+  const audioBuffer: Buffer = Buffer.from(base64str, 'base64')
+  writeStream.write(audioBuffer, (err) => {
+      if (err) {
+          console.error('Error writing to file:', err);
+      }
+  });
+}
+
+websocket.on('message', function incoming(event) {
+  // Generate audio from received data
+  const data = JSON.parse(event.toString())
+  if (data["audio"]) {
+    writeToLocal(data["audio"], writeStream)
+  }
+});
+```
+
+##
