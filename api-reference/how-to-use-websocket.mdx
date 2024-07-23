@@ -5,7 +5,9 @@ description: "How to convert text to speech via websocket and save to mp3"
 icon: "code"
 ---
 
-If you want to quickly test out the latency (time to first byte) of a websocket connection to text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
+Websocket streaming is a method of sending and receiving data over a single, long-lived connection. This method is useful for real-time applications where you need to stream audio data as it becomes available.
+
+If you want to quickly test out the latency (time to first byte) of a websocket connection to ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
 
 ## Requirements
 
@@ -217,5 +219,12 @@ python text-to-speech-websocket.py
 tsx text-to-speech-websocket.ts
 ```
 </CodeGroup>
+
+## Tips
+- Send an empty string to close the websocket connection after sending the last text message.
+- The API maintains a internal buffer so that it only run model generations when a certain number of text above a threshold has been sent. This is to optimize the quality of the generated audio. Use `flush=true` to clear out the buffer and force generate the last chunk of audio.
+- To optimize the streaming latency, you can set the `optimize_streaming_latency` parameter in the URI to a value between 1 and 5. The recommended setting is 3 and 4.
+- You can use `alignment` to get the word-level timestamps for each word in the text. This can be useful for aligning the audio with the text in a video or for other applications that require precise timing.
+
 
 
