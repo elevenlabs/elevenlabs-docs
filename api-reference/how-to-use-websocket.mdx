@@ -7,7 +7,16 @@ icon: "code"
 
 Websocket streaming is a method of sending and receiving data over a single, long-lived connection. This method is useful for real-time applications where you need to stream audio data as it becomes available.
 
-If you want to quickly test out the latency (time to first byte) of a websocket connection to ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
+If you want to quickly test out the latency (time to first byte) of a websocket connection to the ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
+
+## Understanding buffering
+A key concept to understand when using websockets is buffering. The API only runs model generations when a certain amount of text above a threshold has been sent.
+
+For example, if the threshold is set to 120 characters and you send 'Hello, how are you?' (19 characters), the audio won't be generated immediately. However, if you keep sending message, the API will generate audio once the total text have at least 120 characters.
+
+In the case that you want force return the audio immediately, you can use `flush=true` to clear out the buffer and force generate any buffered text. One use case is that you've reached the end of document when sending text from it.
+
+In addition, closing the websocket will automatically force generate any buffered text.
 
 ## Requirements
 
@@ -94,8 +103,7 @@ const writeStream = fs.createWriteStream(outputDir + '/test.mp3', { flags: 'a' }
 ```
 
 ## Send the input text
-Once the websocket connection is open, set up voice settings first. For the definition of `chunk_length_schedule`, refer to the [Web Socket API](https://elevenlabs.io/docs/api-reference/websockets).
-Next, send the text message to the API.
+Once the websocket connection is open, set up voice settings first. Next, send the text message to the API.
 <CodeGroup>
 
 ```python text-to-speech-websocket.py (Python)
@@ -142,7 +150,7 @@ websocket.on('open', async () => {
 
 
 ## Save the audio to file
-Listen to the incoming message from the websocket connection and write the audio chunks to a local file.
+Read the incoming message from the websocket connection and write the audio chunks to a local file.
 <CodeGroup>
 
 ```python text-to-speech-websocket.py (Python)
@@ -222,8 +230,8 @@ tsx text-to-speech-websocket.ts
 
 ## Tips
 - Send an empty string to close the websocket connection after sending the last text message.
-- The API maintains a internal buffer so that it only run model generations when a certain number of text above a threshold has been sent. This is to optimize the quality of the generated audio. Use `flush=true` to clear out the buffer and force generate the last chunk of audio.
-- To optimize the streaming latency, you can set the `optimize_streaming_latency` parameter in the URI to a value between 1 and 5. The recommended setting is 3 and 4.
+- The API maintains a internal buffer so that it only runs model generations when a certain amount of text above a threshold has been sent. This is to optimize the quality of the generated audio. You can use `flush=true` to clear out the buffer and force generate any buffered text.
+- To optimize the streaming latency, you can set the `optimize_streaming_latency` parameter in the URI to a value between 1 and 5. The recommended setting for low latency and real time applications is either 3 or 4.
 - You can use `alignment` to get the word-level timestamps for each word in the text. This can be useful for aligning the audio with the text in a video or for other applications that require precise timing.
 
 
