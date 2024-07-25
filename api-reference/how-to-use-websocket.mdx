@@ -9,15 +9,6 @@ Websocket streaming is a method of sending and receiving data over a single, lon
 
 If you want to quickly test out the latency (time to first byte) of a websocket connection to the ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
 
-## Understanding buffering
-A key concept to understand when using websockets is buffering. The API only runs model generations when a certain amount of text above a threshold has been sent. This is to optimize the quality of the generated audio by maximising the amount of context available to the model while balancing latency.
-
-For example, if the threshold is set to 120 characters and you send 'Hello, how are you?', the audio won't be generated immediately. This is because the sent message has only 19 characters which is below the threshold. However, if you keep sending message, the API will generate audio once the total text have at least 120 characters.
-
-In the case that you want force the immediate return of the audio, you can use `flush=true` to clear out the buffer and force generate any buffered text. This can be useful, for example, when you have reached the end of a document and want to generate audio for the final section.
-
-In addition, closing the websocket will automatically force generate any buffered text.
-
 ## Requirements
 
 - An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
@@ -227,6 +218,15 @@ python text-to-speech-websocket.py
 tsx text-to-speech-websocket.ts
 ```
 </CodeGroup>
+
+## Understanding buffering
+A key concept to understand when using websockets is buffering. The API only runs model generations when a certain amount of text above a threshold has been sent. This is to optimize the quality of the generated audio by maximising the amount of context available to the model while balancing latency.
+
+For example, if the threshold is set to 120 characters and you send 'Hello, how are you?', the audio won't be generated immediately. This is because the sent message has only 19 characters which is below the threshold. However, if you keep sending text, the API will generate audio once the total text sent since the last generation has at least 120 characters.
+
+In the case that you want force the immediate return of the audio, you can use `flush=true` to clear out the buffer and force generate any buffered text. This can be useful, for example, when you have reached the end of a document and want to generate audio for the final section.
+
+In addition, closing the websocket will automatically force generate any buffered text.
 
 ## Tips
 - Send an empty string to close the websocket connection after sending the last text message.
