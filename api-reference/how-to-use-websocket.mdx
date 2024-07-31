@@ -73,7 +73,7 @@ const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
 const voiceId = 'Xb7hH8MSUJpSbSDYk0k2'
 const model = 'eleven_turbo_v2'
-const uri = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}&optimize_streaming_latency=3`;
+const uri = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}`;
 const websocket = new WebSocket(uri, {
   headers: { 'xi-api-key': `${ELEVENLABS_API_KEY}` },
 });
@@ -231,7 +231,6 @@ In addition, closing the websocket will automatically force generate any buffere
 ## Tips
 - Send an empty string to close the websocket connection after sending the last text message.
 - The API maintains a internal buffer so that it only runs model generations when a certain amount of text above a threshold has been sent. You can use `flush=true` to clear out the buffer and force generate any buffered text.
-- To optimize the streaming latency, you can set the `optimize_streaming_latency` parameter in the URI to a value between 1 and 5. The recommended setting for low latency and real time applications is either 3 or 4.
 - You can use `alignment` to get the word-level timestamps for each word in the text. This can be useful for aligning the audio with the text in a video or for other applications that require precise timing.
 
 

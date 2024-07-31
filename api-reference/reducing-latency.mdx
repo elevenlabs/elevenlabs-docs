@@ -22,20 +22,17 @@ The regular endpoint renders the audio file before returning it in the response.
 ## 3. Use the [input streaming Websocket](websockets)
 For applications where the text prompts can be streamed to the text-to-speech endpoints (such as LLM output), this allows for prompts to be fed to the endpoint while the speech is being generated. You can also configure the streaming chunk size when using the websocket, with smaller chunks generally rendering faster. As such, we recommend sending content word by word, our model and tooling leverages context to ensure that sentence structure and more are persisted to the generated audio even if we only receive a word at a time.
 
-## 4. Increase the `optimize_streaming_latency` query parameter
-This query parameter for the streaming and websockets endpoints configure the rendering process to trade off some audio quality in favor of reduced latency.
-
-## 5. Update to the [Enterprise plan](https://elevenlabs.io/enterprise)
+## 4. Update to the [Enterprise plan](https://elevenlabs.io/enterprise)
 Enterprise customers receive top priority in the rendering queue, which ensures that they always experience the lowest possible latency, regardless of model usage load.
 
-## 6. Use Premade, Synthetic Voices & IVCs rather than PVCs
+## 5. Use Premade, Synthetic Voices & IVCs rather than PVCs
 Based on our testing, we've observed that default voices (formerly premade voices), synthetic voices, and Instant Voice Clones tend to have lower latency compared to Professional Voice Clones. A Professional Voice Clone allows for a much more accurate clone of the original samples, albeit with a slight increase in latency at present. Unfortunately, it is a slight tradeoff and we're currently working on optimizing the latency of the Professional Voice Clones for Turbo v2.5.
 
-## 7. Reuse HTTPS Sessions When Streaming
+## 6. Reuse HTTPS Sessions When Streaming
 When streaming through the websocket, reusing an established SSL/TLS session helps reduce latency by skipping the handshake process. This improves latency for all requests after the session’s first.
 
-### 7a. Limit the Number of Websocket Connection Closures
+### 6a. Limit the Number of Websocket Connection Closures
 Similarly, for websockets we leverage the WSS protocol and so an SSL/TLS handshake takes place at the beginning of a connection, which adds overhead. As such, we recommend to limit the number of times a connection is closed and reopened to the extent possible.
 
-## 8. Leverage Servers Closer to the US
+## 7. Leverage Servers Closer to the US
 Today, our APIs are served from the US, and as such users may experience latency from increased network routing when communicating with these APIs outside of the United States.
