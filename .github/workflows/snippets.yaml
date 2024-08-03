@@ -1,7 +1,7 @@
 name: Create OpenAPI with Snippets
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -16,13 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
+        uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
           node-version: '20'
 
@@ -40,5 +37,3 @@ jobs:
           add: 'openapi.json'
           author_name: GitHub Action
           author_email: actions@github.com
-          message: 'Update OpenAPI spec from GitHub Actions'
-          push: origin ${{ github.head_ref }}
