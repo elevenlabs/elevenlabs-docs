@@ -21,7 +21,7 @@ function getFirstRelevantSnippets(snippets) {
 
   if (latestTypescriptSnippet) {
     results.push({
-      lang: "TypeScript",
+      lang: "JavaScript",
       source: latestTypescriptSnippet,
     });
   }
