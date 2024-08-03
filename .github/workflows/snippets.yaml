@@ -14,6 +14,7 @@ on:
 
 env:
   FERN_API_KEY: ${{ secrets.FERN_API_KEY }}
+  GITHUB_TOKEN: ${{ secrets.WRITE_GITHUB }}
 
 permissions:
   contents: write
@@ -39,13 +40,11 @@ jobs:
       - name: Run snippets.js
         run: node .github/workflows/snippets.js
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+      - name: Commit OpenAPI Spec
+        uses: EndBug/add-and-commit@v9
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Update OpenAPI Spec
-          title: ${{ github.event.inputs.pr_title }}
-          body: ${{ github.event.inputs.pr_body }}
-          branch: update-openapi-spec
-          delete-branch: true
-          base: main
+          add: 'openapi.json'
+          author_name: GitHub Action
+          author_email: actions@github.com
+          message: 'Update OpenAPI specification'
+          push: 'origin main --force'
