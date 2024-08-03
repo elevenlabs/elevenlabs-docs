@@ -19,17 +19,16 @@ function getFirstRelevantSnippets(snippets) {
     (snippet) => snippet.type === "python"
   )?.sync_client;
 
-  if (latestTypescriptSnippet) {
-    results.push({
-      lang: "JavaScript",
-      source: latestTypescriptSnippet,
-    });
-  }
-
   if (latestPythonSnippet) {
     results.push({
       lang: "Python",
       source: latestPythonSnippet,
+    });
+  }
+  if (latestTypescriptSnippet) {
+    results.push({
+      lang: "JavaScript",
+      source: latestTypescriptSnippet,
     });
   }
 
