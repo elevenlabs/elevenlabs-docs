@@ -1,16 +1,10 @@
-# Mintlify Starter Kit
+# ElevenLabs docs
 
-Used to create our [text to speech API](https://elevenlabs.io/api) documentation.
+Our documentation is hosted at [elevenlabs.io/docs](https://elevenlabs.io/docs) documentation.
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+## 👩‍💻 Development
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
-
-### 👩‍💻 Development
+### Editing the docs
 
 Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
 
@@ -24,13 +18,16 @@ Run the following command at the root of your documentation (where mint.json is)
 mintlify dev
 ```
 
-### 😎 Publishing Changes
+### Updating the OpenAPI spec and SDK snippets
+
+To update the OpenAI spec and corresponding SDK snippets:
+
+1. Update the Fern SDKs
+2. Run the GitHub workflow "Create OpenAPI with Snippets" (located within the Github Actions tab of this repo) ![Update instructions](/resources/update-openapi.png)
+3. Merge in the corresponding PR
+
+### Publishing Changes
 
 Changes will be deployed to production automatically after pushing to the default branch.
 
 You can also preview changes using PRs, which generates a preview link of the docs.
-
-#### Troubleshooting
-
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
