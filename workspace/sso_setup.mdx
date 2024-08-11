@@ -5,19 +5,19 @@ description: "An overview on how to setup SSO (Single Sign-On) for your team."
 
 <Info> Only workspace admins can use this feature. </Info>
 
-Single Sign-On (SSO) allows your team to log in to ElevenLabs using your existing identity provider. This means that your team can use the same credentials they use for other services to log in to ElevenLabs.
+Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your existing identity provider. This means that your team can use the same credentials which they use for other services to log in to ElevenLabs.
 
 ## Choosing identity providers
 To access your SSO settings, click on your profile icon located at the bottom left of the dashboard, select Workspace Settings, and then navigate to the SECURITY & SSO tab.
 
-You can choose from a variety of identity providers, including Google, Okta, github, etc.
+You can choose from a variety of identity providers, including Google, Okta, GitHub, etc.
 
 <img height="150" src="/workspace/images/identity_providers.png" />
 
 If you disable any of the identity providers, your team members will log out if they're using the disabled providers.
 
 ## Verifying your domain
-Next, you need to verify your domain so that you let ElevenLabs know that you own the domain you are setting up SSO for. This is a security measure to prevent unauthorized access to your workspace.
+Next, you need to verify your domain. This step confirms to ElevenLabs that you own the domain you are configuring for SSO. This is a security measure to prevent unauthorized access to your workspace.
 
 - Click on the `Verify domain` button.
 
@@ -27,36 +27,44 @@ Next, you need to verify your domain so that you let ElevenLabs know that you ow
 
 <img height="150" src="/workspace/images/domain_verification.png" />
 
-- You'll be prompted to add a DNS TXT record to the DNS settings of your domain. An example is as below. You can contact your domain administrator or IT team for help with this step. Once the DNS record is added, click on the `Verify` button again.
+- You'll be prompted to add a DNS TXT record to the DNS settings of your domain. An example text is as below. You can contact your domain administrator or IT team for help with this step. Once the DNS record is added, click on the `Verify` button again.
 
 <img height="150" src="/workspace/images/dns_records.png" />
 
 - Once the domain is successfully verified, the status of your domain will change to `Passed`.
 
 ## Configure SSO
+ElevenLabs support both OIDC (OpenID Connect) and SAML (Security Assertion Markup Language) for SSO. You can set up SSO for your domain by following the steps outlined below.
 
-### Create an OIDC (OpenID Connect) configuration
-ElevenLabs OpenID integrations uses both the [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) and [Implicit Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/implicit-flow-with-form-post).
+### Create an OIDC configuration
+ElevenLabs OIDC integration only supports the [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow).
 
-To configure SSO with OIDC, you need:
-- Client ID for your application
-- Response Type: `Code` or `Id Token`
-- Client Secret for your application (if you are using `Code`)
-- Issuer URL (Identity Provider URL)
+To configure SSO with OIDC, you'd need:
+- Client Id for your application
+- Client Secret for your application
+- Issuer URL (The url of the authorization server)
 
 Steps:
 - Register an OIDC application with your identity provider.
-- For authorization call back url, use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
-- Add the required fields (Client ID, Issuer URL, etc.) to the ElevenLabs SSO configuration.
+- For authorization redirect url, use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
+- Add the information of required fields (Client Id, Issuer URL, etc.) to ElevenLabs SSO provider form.
 <img height="150" src="/workspace/images/sso_oidc.png" />
-- Choose the domain you want to enable SSO for from the list of verified domains.
+- Click on `Add Domain` Button and choose the domain you want to enable SSO for from the list of verified domains.
+<img height="50" src="/workspace/images/add_domains.png" />
 - Click on the `Update SSO` button.
 
 ### Create a SAML configuration
-To configure SSO with SAML, you need to provide the following details:
-  - Identity Provider ID
-  - Service Provider Entity ID
-  - Single Sign-On URL
-  - Certificate
+To configure SSO with SAML, you'd need to provide the following details:
+  - Identity Provider Entity Id
+  - Identity Provider Sign-In URL (The endpoint where SAML requests are posted)
+  - Certificate (Digital signature)
 
+Steps:
+- Register an SAML application with your identity provider.
+- For authorization redirect url, use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
+- Add the information of required fields (Identity Provider Entity Id, Identity Provider Sign-In URL, etc.) to the ElevenLabs SSO form.
 <img height="150" src="/workspace/images/sso_saml.png" />
+- Click on `Add Domain` Button and choose the domain you want to enable SSO for from the list of verified domains.
+- Click on the `Update SSO` button.
+
+
