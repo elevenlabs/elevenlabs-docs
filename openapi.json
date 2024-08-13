@@ -890,11 +890,11 @@
 				"x-codeSamples": [
 					{
 						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert_with_timstamps(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    text=\"text\",\n)\n"
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert_with_timestamps(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    text=\"text\",\n)\n"
 					},
 					{
 						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertWithTimstamps(\"21m00Tcm4TlvDq8ikWAM\", {\n    text: \"text\"\n});\n"
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertWithTimestamps(\"21m00Tcm4TlvDq8ikWAM\", {\n    text: \"text\"\n});\n"
 					}
 				]
 			}
@@ -1313,17 +1313,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.speech_to_speech.convert_as_stream(\n    voice_id=\"string\",\n    enable_logging=\"0\",\n    optimize_streaming_latency=\"mp3_22050_32\",\n    output_format=\"string\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient, ElevenLabs } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convertAsStream(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: ElevenLabs.OptimizeStreamingLatency.Zero,\n    optimize_streaming_latency: ElevenLabs.OutputFormat.Mp32205032,\n    output_format: \"string\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voice-generation/generate-voice/parameters": {
@@ -1345,7 +1335,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voice_generation.generate_parameters()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voiceGeneration.generateParameters();\n"
+					}
+				]
 			}
 		},
 		"/v1/voice-generation/generate-voice": {
@@ -1461,7 +1461,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voice_generation.create_a_previously_generated_voice(\n    voice_name=\"Alex\",\n    voice_description=\"Middle-aged American woman\",\n    generated_voice_id=\"rbVJFu6SGRD1dbWpKnWl\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voiceGeneration.createAPreviouslyGeneratedVoice({\n    voice_name: \"Alex\",\n    voice_description: \"Middle-aged American woman\",\n    generated_voice_id: \"rbVJFu6SGRD1dbWpKnWl\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/user/subscription": {
@@ -1551,17 +1561,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.user.get()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.user.get();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices": {
@@ -1641,17 +1641,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_default_settings()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getDefaultSettings();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices/{voice_id}/settings": {
@@ -1976,17 +1966,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.add(\n    name=\"Alex\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.add({\n    files: [fs.createReadStream(\"/path/to/your/file\")],\n    name: \"Alex\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices/{voice_id}/edit": {
@@ -2251,7 +2231,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.add(\n    name=\"name\",\n    default_title_voice_id=\"default_title_voice_id\",\n    default_paragraph_voice_id=\"default_paragraph_voice_id\",\n    default_model_id=\"default_model_id\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.add({\n    name: \"name\",\n    default_title_voice_id: \"default_title_voice_id\",\n    default_paragraph_voice_id: \"default_paragraph_voice_id\",\n    default_model_id: \"default_model_id\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}": {
@@ -2308,17 +2298,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.get(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.get(\"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			},
 			"post": {
 				"tags": [
@@ -2558,17 +2538,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.get_snapshots(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.getSnapshots(\"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream": {
@@ -2639,17 +2609,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.stream_audio(\n    project_id=\"string\",\n    project_snapshot_id=\"string\",\n    convert_to_mpeg=True,\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.streamAudio(\"string\", \"string\", {\n    convert_to_mpeg: true\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive": {
@@ -2711,7 +2671,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.stream_archive(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    project_snapshot_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.streamArchive(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters": {
@@ -2768,7 +2738,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.get_all(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.getAll(\"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}": {
@@ -2837,7 +2817,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.get(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.get(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			},
 			"delete": {
 				"tags": [
@@ -3034,7 +3024,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.convert(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.convert(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}/snapshots": {
@@ -3186,7 +3186,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.stream_snapshot(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_snapshot_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.streamSnapshot(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/update-pronunciation-dictionaries": {
@@ -3305,17 +3315,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.dub_a_video_or_an_audio_file(\n    target_lang=\"target_lang\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.dubAVideoOrAnAudioFile({\n    target_lang: \"target_lang\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/dubbing/{dubbing_id}": {
@@ -3371,17 +3371,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.get_dubbing_project_metadata(\n    dubbing_id=\"dubbing_id\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.getDubbingProjectMetadata(\"dubbing_id\");\n"
-					}
-				]
+				}
 			},
 			"delete": {
 				"tags": [
@@ -3578,17 +3568,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.get_transcript_for_dub(\n    dubbing_id=\"dubbing_id\",\n    language_code=\"language_code\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.getTranscriptForDub(\"dubbing_id\", \"language_code\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/admin/{admin_url_prefix}/sso-provider": {
@@ -3680,7 +3660,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.models.get_all()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.models.getAll();\n"
+					}
+				]
 			}
 		},
 		"/v1/audio-native": {
@@ -3954,7 +3944,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_shared(\n    page_size=1,\n    gender=\"female\",\n    language=\"en\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getShared({\n    page_size: 1,\n    gender: \"female\",\n    language: \"en\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/similar-voices": {
@@ -4419,17 +4419,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs.client import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.get(\n    pronunciation_dictionary_id=\"Fm6AvNgS53NXe6Kqxp3e\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.get(\"Fm6AvNgS53NXe6Kqxp3e\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/pronunciation-dictionaries/": {
