@@ -42,11 +42,13 @@ ElevenLabs OIDC integration only supports the [Authorization Code Flow](https://
 To configure SSO with OIDC, you'd need:
 - Client Id for your application
 - Client Secret for your application
-- Issuer URL (The url of the authorization server)
+- Issuer URL (The url of the authentication server)
+
+and you'd need to use below information from ElevenLabs:
+- Redirect URL: use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
 
 Steps:
 - Register an OIDC application with your identity provider.
-- For authorization redirect url, use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
 - Add the information of required fields (Client Id, Issuer URL, etc.) to ElevenLabs SSO provider form.
 <img height="150" src="/workspace/images/sso_oidc.png" />
 - Click on `Add Domain` Button and choose the domain you want to enable SSO for from the list of verified domains.
@@ -54,17 +56,45 @@ Steps:
 - Click on the `Update SSO` button.
 
 ### Create a SAML configuration
-To configure SSO with SAML, you'd need to provide the following details:
+<Info> Only SP-initiated SSO is supported for SAML.</Info>
+
+Concepts:
+- **Service Provider (SP)**: the entity providing the service. This is ElevenLabs in this case.
+- **Identy Provider (IdP)**: the entity that authenticates the user and provides the user's identity to the SP. This is your authentication server.
+- **SAML request**: a request from the SP to the IdP to authenticate the user.
+- **SAML response**: a response from the IdP to the SP containing the user's identity.
+- **Redirect URL**: the endpoint where the SAML response is posted.
+
+To configure SSO with SAML, you'd need to provide ElevenLabs the following details:
   - Identity Provider Entity Id
   - Identity Provider Sign-In URL (The endpoint where SAML requests are posted)
   - Certificate (Digital signature)
 
+and you'd need to use below information from ElevenLabs:
+  - Service Provider Entity Id: use the value  (e.g. `https://elevenlabs.io`) provided in the SSO provider form in the SECURITY & SSO tab in Workspace Settings.
+  - Redirect URL: this is the endpoint where the IdP sends the SAML response; Use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
+
 Steps:
-- Register an SAML application with your identity provider.
-- For authorization redirect url, use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
-- Add the information of required fields (Identity Provider Entity Id, Identity Provider Sign-In URL, etc.) to the ElevenLabs SSO form.
+- Register an SAML application with your identity provider; Fill in required fields (SP entity id, redirect URL).
+- Add the information of required fields (IdP Entity Id, IdP Sign-In URL, etc.) to the ElevenLabs SSO form.
 <img height="150" src="/workspace/images/sso_saml.png" />
 - Click on `Add Domain` Button and choose the domain you want to enable SSO for from the list of verified domains.
 - Click on the `Update SSO` button.
+
+### FAQ
+**Microsoft Entra Identifier (or Azure AD) -  SAML**
+
+What shall I fill for Identifier (Entity ID)?
+- Use Service Provider Entity Id
+
+What shall I fill for Reply URL (Assertion Consumer Service) URL in SAML?
+- Use Redirect URL
+
+What is ACS URL?
+- Same as Assertion Consumer Service URL
+
+Which fields should I use to provide ElevenLabs?
+- Use *Microsoft Entra Identifier* for IdP Entity ID
+- Use *Login URL* for IdP Sign-In URL
 
 
