@@ -80,10 +80,9 @@ def text_to_speech_file(text: str) -> str:
     # Calling the text_to_speech conversion API with detailed parameters
     response = client.text_to_speech.convert(
         voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
-        optimize_streaming_latency="0",
         output_format="mp3_22050_32",
         text=text,
-        model_id="eleven_turbo_v2", # use the turbo model for low latency, for other languages use the `eleven_multilingual_v2`
+        model_id="eleven_turbo_v2_5", # use the turbo model for low latency
         voice_settings=VoiceSettings(
             stability=0.0,
             similarity_boost=1.0,
@@ -134,7 +133,7 @@ export const createAudioFileFromText = async (
     try {
       const audio = await client.generate({
         voice: "Rachel",
-        model_id: "eleven_turbo_v2",
+        model_id: "eleven_turbo_v2_5",
         text,
       });
       const fileName = `${uuid()}.mp3`;
@@ -190,7 +189,6 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
     # Perform the text-to-speech conversion
     response = client.text_to_speech.convert(
         voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
-        optimize_streaming_latency="0",
         output_format="mp3_22050_32",
         text=text,
         model_id="eleven_multilingual_v2",
@@ -239,7 +237,7 @@ export const createAudioStreamFromText = async (
 ): Promise<Buffer> => {
   const audioStream = await client.generate({
     voice: "Rachel",
-    model_id: "eleven_turbo_v2",
+    model_id: "eleven_turbo_v2_5",
     text,
   });
 

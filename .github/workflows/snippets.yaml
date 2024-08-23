@@ -1,0 +1,46 @@
+name: Create OpenAPI with Snippets
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_title:
+        description: 'Pull Request Title'
+        required: true
+        default: '[Automated] Update OpenAPI Spec'
+      pr_body:
+        description: 'Pull Request Body'
+        required: true
+        default: 'This is an automated pull request to update the OpenAPI specification.'
+
+env:
+  FERN_API_KEY: ${{ secrets.FERN_API_KEY }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run-snippets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Run snippets.js
+        run: node .github/workflows/snippets.js
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.WRITE_GITHUB }}
+          commit-message: Update OpenAPI Spec
+          title: ${{ github.event.inputs.pr_title }}
+          body: ${{ github.event.inputs.pr_body }}
+          branch: update-openapi-spec
+          delete-branch: true
+          base: main

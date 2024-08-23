@@ -149,13 +149,13 @@ The server will always respond with a message containing the following fields:
     "audio": "Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==",
     "isFinal": false,
     "normalizedAlignment": {
-        "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
-        "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+        "charStartTimesMs": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
+        "charDurationsMs": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
         "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
     },
     "alignment": {
-        "char_start_times_ms": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
-        "chars_durations_ms": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+        "charStartTimesMs": [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21],
+        "charDurationsMs": [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
         "chars": ["H", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
     }
 }
@@ -227,7 +227,7 @@ The server will always respond with a message containing the following fields:
     rendered text will use a . as a placeholder for breaks, and syllables will be reported using the CMU arpabet alphabet where SSML phoneme tags are used to specify pronunciation.
     Disabled by default.
 </ParamField>
-<ParamField query="optimize_streaming_latency" type="string">
+<ParamField query="optimize_streaming_latency" type="string" deprecated>
     You can turn on latency optimizations at some cost of quality. The best possible final latency varies by model. Possible values:
 | Value | Description |
 | --- | --- |
@@ -324,7 +324,7 @@ async def stream(audio_stream):
 
 async def text_to_speech_input_streaming(voice_id, text_iterator):
     """Send text to ElevenLabs API and stream the returned audio."""
-    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2"
+    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2_5"
 
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({
@@ -391,7 +391,7 @@ import json
 import base64
 
 async def text_to_speech(voice_id):
-    model = 'eleven_turbo_v2'
+    model = 'eleven_turbo_v2_5'
     uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id={model}"
 
     async with websockets.connect(uri) as websocket:
@@ -443,7 +443,7 @@ asyncio.get_event_loop().run_until_complete(text_to_speech("voice_id_here"))
 
 ```javascript Javascript websockets
 const voiceId = "voice_id_here"; // replace with your voice_id
-const model = 'eleven_turbo_v2';
+const model = 'eleven_turbo_v2_5';
 const wsUrl = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream-input?model_id=${model}`;
 const socket = new WebSocket(wsUrl);
 
@@ -524,7 +524,7 @@ def text_stream():
 audio_stream = generate(
     text=text_stream(),
     voice="Nicole",
-    model="eleven_turbo_v2",
+    model="eleven_turbo_v2_5",
     stream=True
 )
 
@@ -569,7 +569,7 @@ def calculate_word_start_times(alignment_info):
 
 async def text_to_speech_alignment_example(voice_id, text_to_send):
     """Send text to ElevenLabs API and stream the returned audio and alignment information."""
-    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2"
+    uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id=eleven_turbo_v2_5"
     async with websockets.connect(uri) as websocket:
         await websocket.send(json.dumps({
             "text": " ",
