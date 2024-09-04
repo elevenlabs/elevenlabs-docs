@@ -253,12 +253,6 @@ Defaults to `0`
 Defaults to `mp3_44100`
 </ParamField>
 
-## Best practice
-- We suggest using the default setting for `chunk_length_schedule` in `generation_config`. Avoid using `try_trigger_generation` as it is deprecated.
-- For short texts with a character length smaller than the value set in `chunk_length_schedule`, set `flush=true` along with the text to force generate any buffered text.
-- When developing a real-time conversational AI application, we advise using `flush=true` along with the text at the end of each long sentence or conversation turn to ensure timely audio generation.
--  If the default setting doesn't provide optimal latency for your use case, you can modify the `chunk_length_schedule`. However, be mindful that reducing latency through this adjustment may come at the expense of quality.
-
 # Example - Voice streaming using ElevenLabs and OpenAI
 
 The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
