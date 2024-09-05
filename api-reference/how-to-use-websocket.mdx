@@ -228,10 +228,15 @@ In the case that you want force the immediate return of the audio, you can use `
 
 In addition, closing the websocket will automatically force generate any buffered text.
 
-## Tips
-- Send an empty string to close the websocket connection after sending the last text message.
-- The API maintains a internal buffer so that it only runs model generations when a certain amount of text above a threshold has been sent. You can use `flush=true` to clear out the buffer and force generate any buffered text.
-- You can use `alignment` to get the word-level timestamps for each word in the text. This can be useful for aligning the audio with the text in a video or for other applications that require precise timing.
+## Best practice
+- We suggest using the default setting for `chunk_length_schedule` in `generation_config`. Avoid using `try_trigger_generation` as it is deprecated.
+- When developing a real-time conversational AI application, we advise using `flush=true` along with the text at the end of conversation turn to ensure timely audio generation.
+- If the default setting doesn't provide optimal latency for your use case, you can modify the `chunk_length_schedule`. However, be mindful that reducing latency through this adjustment may come at the expense of quality.
 
+## Tips
+- The API maintains a internal buffer so that it only runs model generations when a certain amount of text above a threshold has been sent. For short texts with a character length smaller than the value set in `chunk_length_schedule`, you can use `flush=true` to clear out the buffer and force generate any buffered text.
+- The websocket connection will automatically close after 20 seconds of inactivity. To keep the connection open, you can send a single space character `" "`. Please note that this string must include a space, as sending a fully empty string, `""`, will close the websocket.
+- Send an empty string to close the websocket connection after sending the last text message.
+- You can use `alignment` to get the word-level timestamps for each word in the text. This can be useful for aligning the audio with the text in a video or for other applications that require precise timing.
 
 
