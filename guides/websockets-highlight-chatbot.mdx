@@ -1,0 +1,564 @@
+---
+sidebarTitle: "Websockets: Chatbot with Highlighting Example"
+title: Creating a Chatbot with Live Text Highlighting Using Text-to-Speech Websockets API
+---
+
+In this tutorial, you'll learn how to create a real-time text-to-speech chatbot application using **ElevenLabs**, **OpenAI**, **Flask**, and **React**. The application will:
+
+- Receive user input from the frontend.
+- Generate a text response using OpenAI API.
+- Convert the text response into speech using ElevenLabs' API.
+- Highlight the words being spoken in real-time on the frontend.
+
+By the end of this tutorial, you'll have a fully functional chatbot that combines cutting-edge AI technologies for an interactive user experience.
+
+<video
+  controls
+  className="w-full"
+  src="/projects/videos/Text_highlighting.mp4"
+></video>
+
+## Requirements
+
+Before you begin, make sure you have the following:
+
+- An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
+- An OpenAI account with an API key (here's how to [find your API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)).
+- Python3.x and Node.js installed on your machine,
+
+## Backend setup
+
+### 1. Install required Python packages
+
+Before you begin, make sure you have installed the necessary SDKs and libraries. You will need the ElevenLabs SDK, alongside other packages, for the text to speech conversion, interacting with OpenAI API, and handling Server-Sent Events (SSE).
+
+You can install them using pip:
+
+```bash
+pip install flask flask-cors requests sseclient-py elevenlabs
+```
+
+- `flask`: A lightweight WSGI web application framework.
+- `flask-cors`: A Flask extension for handling Cross Origin Resource Sharing (CORS).
+- `requests`: For making HTTP requests.
+- `sseclient-py`: For handling Server-Sent Events (SSE) from OpenAI's streaming API.
+- `elevenlabs`: Official Python SDK for ElevenLabs API.
+
+### 2. Create the Flask application
+
+To create an empty Flask backend, create a file named `app.py` add the following code:
+
+```python app.py
+from flask import Flask, request, Response, stream_with_context, json
+from flask_cors import CORS
+import requests
+import sseclient
+from elevenlabs.client import ElevenLabs
+
+app = Flask(__name__)
+CORS(app)
+```
+
+### 3. Set up API keys and intialize the ElevenLabs client
+
+Replace `'your-openai-api-key'` and `'your-elevenlabs-api-key'` with your actual API keys. The `VOICE_ID` can be obtained from the ElevenLabs API or dashboard.
+
+```python app.py
+OPEN_AI_KEY = 'your-openai-api-key'
+ELEVENLABS_API_KEY = 'your-elevenlabs-api-key'
+VOICE_ID = 'your-voice-id' #we will use 21m00Tcm4TlvDq8ikWAM
+
+eleven_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
+```
+
+### 4. Fetch speech data and process word alignment
+
+In this section we will generate and process audio from the ElevenLabs API.
+
+Note that:
+- for audio to be audible by your app users, it will have to be played on the frontend
+- since our app will feature a live highlighting feature as text is being spoken, we will need to pass word alignment data to the frontend.
+
+#### 4.1. Audio data retrieval function
+
+First, let's write a function that communicates with ElevenLabs to generate speech and retrieve alignment data.
+
+You can interact with the ElevenLabs Websockets API [in different ways](/api-reference/websockets#example-other-examples-for-interacting-with-our-websocket-api). In this tutorial, we will use the [`elevenlabs-python` SDK](https://github.com/elevenlabs/elevenlabs-python).
+
+You can use [`convert_with_timestamps`](https://github.com/elevenlabs/elevenlabs-python/blob/main/src/elevenlabs/text_to_speech/client.py#L750) and [`stream_with_timestamps`](https://github.com/elevenlabs/elevenlabs-python/blob/main/src/elevenlabs/text_to_speech/client.py#L458) functions to convert text into speech and return JSON containing audio as a base64 encoded string together with information on when which character was spoken.
+
+<Info>The `stream_with_timestamps` function was broken (or [definition](https://github.com/elevenlabs/elevenlabs-python/blob/main/src/elevenlabs/text_to_speech/client.py#L458) was inaccurate) so the `convert_with_timestamps` function was used instead. This code can be adjusted accoringly when `stream_with_timestamps` is fixed.</Info>
+
+We will start by writing a function that converts test to speech using `convert_with_timestamps`. As shown below, the returned `audio_stream` will include:
+- an `audio_base64` object which will be later passed to the frontend
+- an `alignment` object which contains word alignment data. We will process this in the next step.
+
+```python app.py
+def get_audio_data(text_to_play):
+    audio_stream = eleven_client.text_to_speech.convert_with_timestamps(
+        voice_id=VOICE_ID,
+        text=text_to_play,
+    )
+    words = get_word_alignment(audio_stream['alignment'])
+    return {
+        'audio_base64': audio_stream['audio_base64'],
+        'words': words
+    }
+```
+
+By default, `convert_with_timestamps` will return an `alignment` dictionary that looks like:
+
+```python
+{
+    'characters': ['H', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd', '.'],
+    'character_start_times_seconds': [0.0, 0.186, 0.255, 0.29, 0.348, 0.406, 0.453, 0.476, 0.522, 0.58, 0.639, 0.72, 0.871],
+    'character_end_times_seconds': [0.186, 0.255, 0.29, 0.348, 0.406, 0.453, 0.476, 0.522, 0.58, 0.639, 0.72, 0.871, 1.068]
+}
+```
+
+In the next step, we will write the `get_word_alignment` which should help us get the start and end timestamp of each word instead of every letter. This will make it easier to process text highlighting on the frontend.
+
+#### 4.2. Process word alignment
+
+Now, we can process the `alignment` dictionary and get word-level timing so that it looks something like:
+
+```python
+[
+    {'word': 'Hello', 'start_time': 0.0, 'end_time': 0.406},
+    {'word': 'world', 'start_time': 0.476, 'end_time': 0.871}
+]
+```
+
+To do this, we will write the `get_word_alignment` function we used in `get_audio_data`.
+
+```python app.py
+def get_word_alignment(alignment):
+    characters = alignment['characters']
+    start_times = alignment['character_start_times_seconds']
+    end_times = alignment['character_end_times_seconds']
+    words = []
+    current_word = ''
+    word_start_time = None
+    word_end_time = None
+
+    for i, char in enumerate(characters):
+        if char.strip() == '' or char in ['.', ',', '?', '!', ';', ':']:
+            # End of a word
+            if current_word != '':
+                words.append({
+                    'word': current_word,
+                    'start_time': word_start_time,
+                    'end_time': word_end_time
+                })
+                current_word = ''
+                word_start_time = None
+                word_end_time = None
+        else:
+            if current_word == '':
+                word_start_time = start_times[i]
+            current_word += char
+            word_end_time = end_times[i]
+
+    # Add the last word if any
+    if current_word != '':
+        words.append({
+            'word': current_word,
+            'start_time': word_start_time,
+            'end_time': word_end_time
+        })
+
+    return words
+```
+
+## Integrating OpenAI API
+
+Now that we can generate speech using ElevenLabs API, we can start generating text responses from OpenAI API. 
+
+### 1. Create the prompt endpoint
+
+We will create an endpoint that receives the user's prompt from the frontend and generates a response from OpenAI.
+
+```python app.py
+@app.route('/api/prompt', methods=['POST'])
+def prompt():
+    prompt = request.json['prompt']
+
+    def generate():
+        url = 'https://api.openai.com/v1/chat/completions'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f"Bearer {OPEN_AI_KEY}"
+        }
+        data = {
+            'model': 'gpt-3.5-turbo',
+            'messages': [
+                {'role': 'user', 'content': prompt}
+            ],
+            'temperature': 1,
+            'max_tokens': 1000,
+            'stream': True,
+        }
+        response = requests.post(url, headers=headers, json=data, stream=True)
+        client = sseclient.SSEClient(response)
+        for event in client.events():
+            if event.data != '[DONE]':
+                try:
+                    text = json.loads(event.data)['choices'][0]['delta'].get('content', '')
+                    yield text
+                except:
+                    yield ''
+    return Response(stream_with_context(generate()))
+```
+
+### 2. Handle render completion
+
+After the text response is fully received by the frontend, this endpoint generates the speech and alignment data.
+
+```python app.py
+@app.route('/api/render_complete', methods=['POST'])
+def render_complete():
+    data = request.json
+    response_text = data.get('response', '')
+    audio_data = get_audio_data(response_text)
+    return app.response_class(
+        response=json.dumps(audio_data),
+        status=200,
+        mimetype='application/json'
+    )
+```
+
+Once the speech and alignment data are received by the frontend, we can begin playing the speech audio and highlighting spoken text.
+
+### 3. Run the Flask app
+
+Finally, we can run the Flask backend.
+
+```python app.py
+if __name__ == '__main__':
+    app.run(port=4444, debug=True)
+```
+
+## Setting Up the Frontend with React
+
+### 1. Create a New React App
+
+In your terminal, navigate to your desired directory and run:
+
+```bash
+npx create-react-app my-app
+cd my-app
+```
+
+### 2. Install Required Packages
+
+If you need any additional packages, install them using npm:
+
+```bash
+npm install
+```
+
+### 3. Update `App.js`
+
+Replace the content of `src/App.js` with the following code:
+
+```jsx
+import { useState, useRef } from 'react';
+
+function App() {
+  const [promptArea, setPromptArea] = useState('');
+  const [promptResponse, setPromptResponse] = useState('');
+  const [words, setWords] = useState([]);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+
+  const wordsRef = useRef([]);
+  const currentWordIndexRef = useRef(0);
+
+  const handleSubmit = async () => {
+    const url = 'http://localhost:4444/api/prompt';
+    let tmpPromptResponse = '';
+    try {
+      const response = await fetch(url , {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: promptArea }),
+      });
+      
+      if (!response.body) return;
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        if (value) {
+          const chunk = decoder.decode(value, { stream: !readerDone });
+          tmpPromptResponse += chunk;
+          setPromptResponse(tmpPromptResponse);
+        }
+        done = readerDone;
+      }
+
+      const renderCompleteResponse = await fetch('http://localhost:4444/api/render_complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: promptArea, response: tmpPromptResponse }),
+      });
+
+      const audioData = await renderCompleteResponse.json();
+      setWords(audioData.words);
+      wordsRef.current = audioData.words;
+
+      const audioBlob = base64ToBlob(audioData.audio_base64, 'audio/mpeg');
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      audio.play();
+
+      const intervalId = setInterval(() => {
+        const currentTime = audio.currentTime;
+        let index = wordsRef.current.findIndex(word => 
+          currentTime >= word.start_time && currentTime <= word.end_time
+        );
+        if (index !== -1 && index !== currentWordIndexRef.current) {
+          setCurrentWordIndex(index);
+          currentWordIndexRef.current = index;
+        }
+      }, 50);
+
+      audio.onended = () => {
+        clearInterval(intervalId);
+      };
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function base64ToBlob(base64, mime) {
+    const byteCharacters = atob(base64);
+    const byteArrays = [];
+    const sliceSize = 1024;
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    return new Blob(byteArrays, { type: mime });
+  }
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ width: '80vh' }}>
+        <h2>Hello World!</h2>        
+        <textarea
+          rows={10}
+          onChange={(e) => setPromptArea(e.target.value)}
+          value={promptArea}
+          style={{ width: '100%', marginBottom: '1rem' }}
+        ></textarea>
+
+        <div>
+          <button onClick={handleSubmit}>Submit</button>
+          <button onClick={() => setPromptArea('')}>Clear</button>
+        </div>
+
+        <div style={{ marginTop: '1rem' }}>
+          <h3>Streamed Prompt Response:</h3>
+          <div>
+            {words.length > 0 ? (
+              words.map((wordObj, index) => (
+                <span
+                  key={index}
+                  style={{
+                    backgroundColor: index === currentWordIndex ? 'yellow' : 'transparent'
+                  }}
+                >
+                  {wordObj.word + ' '}
+                </span>
+              ))
+            ) : (
+              <span>{promptResponse}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Breakdown of `App.js`
+
+<Steps>
+    <Step title="State variables">
+        First, we define several state variables to manage the data within our component.
+
+        ```jsx
+        const [promptArea, setPromptArea] = useState('');
+        const [promptResponse, setPromptResponse] = useState('');
+        const [words, setWords] = useState([]);
+        const [currentWordIndex, setCurrentWordIndex] = useState(0);
+        ```
+
+        - `promptArea`: Stores the user's input from the textarea.
+        - `promptResponse`: Holds the AI's text response as it streams in.
+        - `words`: An array of word objects with their corresponding start and end times.
+        - `currentWordIndex`: Index of the word currently being spoken.
+    </Step>
+    <Step title="References">
+        We use refs to hold mutable values that persist across re-renders without triggering re-renders.
+
+        ```jsx
+        const wordsRef = useRef([]);
+        const currentWordIndexRef = useRef(0);
+        ```
+
+        - `wordsRef`: Holds the latest `words` array.
+        - `currentWordIndexRef`: Keeps track of the current word index for synchronization.
+    </Step>
+    <Step title="Handling user submission">
+        The `handleSubmit` function handles the entire flow from submitting the prompt to playing the audio and highlighting words.
+
+        This function send the user prompt to the backend and fetches back the response generated from OpenAI API by the backend.
+
+        Then once the response is fully generated, the speech audio will begin playing while text highlighting iterates over the text using the timestamp data while synchronizing the index of the current word with the word being played.
+
+        ```jsx
+        const handleSubmit = async () => {
+            const url = 'http://localhost:4444/api/prompt';
+            let tmpPromptResponse = '';
+            
+            try {
+                // Sending the prompt to the backend
+                const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: promptArea }),
+                });
+                
+                if (!response.body) return;
+
+                // Reading the streamed response
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let done = false;
+
+                while (!done) {
+                const { value, done: readerDone } = await reader.read();
+                if (value) {
+                    const chunk = decoder.decode(value, { stream: !readerDone });
+                    tmpPromptResponse += chunk;
+                    setPromptResponse(tmpPromptResponse); // Update state to render streamed text
+                }
+                done = readerDone;
+                }
+
+                // Requesting audio and word timing data
+                const renderCompleteResponse = await fetch('http://localhost:4444/api/render_complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: promptArea, response: tmpPromptResponse }),
+                });
+
+                const audioData = await renderCompleteResponse.json();
+
+                // Updating state and refs
+                setWords(audioData.words);
+                wordsRef.current = audioData.words;
+
+                // Playing the audio
+                const audioBlob = base64ToBlob(audioData.audio_base64, 'audio/mpeg');
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+
+                // Synchronizing text highlighting with audio playback
+                const intervalId = setInterval(() => {
+                const currentTime = audio.currentTime;
+                let index = wordsRef.current.findIndex(word =>
+                    currentTime >= word.start_time && currentTime <= word.end_time
+                );
+                if (index !== -1 && index !== currentWordIndexRef.current) {
+                    setCurrentWordIndex(index);
+                    currentWordIndexRef.current = index;
+                }
+                }, 50); // Updates every 50 milliseconds
+
+                // Clearing the interval when audio ends
+                audio.onended = () => {
+                clearInterval(intervalId);
+                };
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        ```
+    </Step>
+    <Step title="Rendering the user interface">
+
+    Here, we render a simple user interface with a text area to insert the user prompt, a submit & clear button, and an area to render generated responses.
+    
+    In the response area, we map over the `words` array to display each word and apply conditional styling. If the current word matches `currentWordIndex`, then we highlight it.
+
+    ```jsx
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '80vh' }}>
+            <h2>Hello World!</h2>
+            
+            <textarea
+                rows={10}
+                onChange={(e) => setPromptArea(e.target.value)}
+                value={promptArea}
+                style={{ width: '100%', marginBottom: '1rem' }}
+            ></textarea>
+
+            <div>
+                <button onClick={handleSubmit}>Submit</button>
+                <button onClick={() => setPromptArea('')}>Clear</button>
+            </div>
+
+            <div style={{ marginTop: '1rem' }}>
+                <h3>Streamed Prompt Response:</h3>
+                <div>
+                {words.length > 0 ? (
+                    words.map((wordObj, index) => (
+                    <span
+                        key={index}
+                        style={{
+                        backgroundColor: index === currentWordIndex ? 'yellow' : 'transparent'
+                        }}
+                    >
+                        {wordObj.word + ' '}
+                    </span>
+                    ))
+                ) : (
+                    <span>{promptResponse}</span>
+                )}
+                </div>
+            </div>
+            </div>
+        </div>
+        );
+    ```
+    </Step>
+</Steps>
+
+## Conclusion
+
+Congratulations! You've successfully built a real-time text-to-speech chatbot that:
+
+- Receives user input from a React frontend.
+- Generates text responses using OpenAI.
+- Converts text responses into speech with word-level timing using ElevenLabs API.
+- Plays the audio and highlights the words being spoken in real-time on the frontend.
+
+This application showcases the powerful capabilities of integrating ElevenLabs text-to-speech services to create interactive and engaging user experiences.
