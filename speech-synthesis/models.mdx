@@ -4,57 +4,49 @@ description: "Comparison of our AI Models."
 ---
 
 
-As of September 2023, ElevenLabs offers three models: `English v1`, `multilingual v1 (experimental)`, and `multilingual v2`. Each model is slightly different and has its own strengths and weaknesses. In general, we recommend avoiding the use of the experimental multilingual v1 model as it mostly has weaknesses and is only intended for experimental purposes. Since the release of multilingual v2, the multilingual v1 has been surpassed in almost every aspect; v2 is more accurate, more natural, covers more languages, is more stable, and more.
+As of September 2024, ElevenLabs offers two families of models: standard (high-quality) models and Turbo models, which are optimized for low latency. Each family includes both English-only and multilingual models, tailored for specific use cases with strengths in either speed, accuracy, or language diversity.
+
+- **Standard models** (Multilingual v2, Multilingual v1, English v1) are optimized for quality and accuracy, ideal for content creation. These models offer the best quality and stability but have higher latency.
+- **Turbo models** (Turbo v2, Turbo v2.5) are designed for low-latency applications like real-time conversational AI. They deliver great performance with faster processing speeds, though with a slight trade-off in accuracy and stability.
 
 If you want to find more detailed specifications about which languages each model offers, you can find all that information in our help article [here](https://help.elevenlabs.io/hc/en-us/articles/17883183930129-What-models-do-you-offer-and-what-is-the-difference-between-them-).
 
+## **Standard Models**
 
-## Multilingual v2
+**Eleven Multilingual v2**
 
-This model has good stability, great language diversity, and fantastic accuracy in cloning voices and accents. Its speed is rather remarkable considering its size as it supports 28 languages, but it is slower than English v1.
+Our most advanced speech synthesis model, Multilingual v2, offers high stability, diverse language support, and exceptional accuracy in 29 languages. While slower than the Turbo models, it delivers more lifelike speech, making it ideal for content creation such as voiceovers, audiobooks, and post-production.
 
-There are a few important things worth noting. Since the model is highly accurate, it will strive to clone everything present in the original samples with even greater precision than other models. This really underscores the importance of using proper, high-quality samples with the performance, accent, and tone of voice you want the AI to clone.
+**Important notes**: The accuracy of this model depends heavily on the quality of the input samples. Lower-quality samples can introduce errors, which the AI might attempt to replicate. For the best results, use high-quality, consistent voice samples, especially when trying to preserve accents or tonal details across languages.
+- Best quality
+- Unparalleled accuracy
+- More stable
+- Higher latency
 
-We've heard certain issues appearing when users use samples of poor quality, where there is excessive noise, very low rumble, or even very sharp esses. In such cases, the AI might begin to deteriorate, as it attempts to mimic these problems, which might confuse it.
+**Eleven English v1**
 
-We would recommend using less samples of higher quality with the performance and voice you want, rather than more samples with a lot of variance across quality and performance.
+Our very first model, English v1, laid the groundwork for future advancements. While still functional, it is now outclassed by Multilingual v2 (for content creation) and Turbo v2.5 (for low-latency applications). We recommend using our newer models for better quality and speed.
 
-It is worth noting that the AI will try to preserve the accent of the original voice. So, if you use a pre-made, voice designed voice, or voice cloned speaking English, you might hear a slight English accent or the wrong pronunciation in other languages. Cloning voices speaking the language you intend to use the AI for is the best choice and will give the best results.
+**Eleven Multilingual v1**
 
-There have been reports of "language switching", particularly between languages that share similarities in text but may have distinct pronunciations or accents. This is when the AI gets confused and don't have enough context and switches language in the middle of generation. We are actively working on this issue, and it appears to be less present when using a well-cloned voice that was originally cloned on someone speaking the correct language with the correct accent.
+Multilingual v1 was our first attempt at generating speech in multiple languages, but it is now considered experimental and has been surpassed by Multilingual v2 and Turbo v2.5. We recommend avoiding this model for production use due to its limitations and lower accuracy.
 
-## Turbo v2.5
+## **Turbo Models**
 
-Turbo v2.5 generates human-like text to speech in 32 languages with low latency.
+**Eleven Turbo v2.5**
 
-We recommend Turbo v2.5 for users building real time, conversational interfaces in non-English languages. It's 300% faster than Multilingual v2 and adds Vietnamese, Hungarian and Swedish to our existing 29 languages.
+Turbo v2.5 generates speech in 32 languages with low latency, optimized for real-time conversational AI use cases. This model is 300% faster than Multilingual v2 and now supports new languages such as Vietnamese, Hungarian, and Norwegian. It is best for developers requiring rapid, natural speech across multiple languages, but it lacks the stylistic range of Multilingual v2.
 
-A highly optimized model, specifically tailored for low-latency applications without sacrificing vocal performance and keeping inline with the quality standard that people have come to expect from our models.
+Latency is as low as 300ms, making it ideal for real-time interactions.
+- Great quality
+- High accuracy with Professional Voice Clones
+- Slightly less stable
+- Optimized for low latency
 
-Because of its very optimized nature, it does have slightly lower accuracy than multilingual V2 and is missing the style slider, which adds latency when used. However, the accuracy is still very good when using a properly created instant voice clone, and it is very stable.
+**Eleven Turbo v2**
 
-We've measured latency as low as 300ms (+ network).
-
-We highly recommend that you test this model out!
-
-## Turbo v2
-
-A highly optimized model, specifically tailored for low-latency applications without sacrificing vocal performance and keeping inline with the quality standard that people have come to expect from our models. It is an English-only model
-
-Because of its very optimized nature, it does have slightly lower accuracy than multilingual V2 and is missing the style slider, which adds latency when used. However, the accuracy is still very good when using a properly created instant voice clone, and it is very stable.
-
-For English text to speech, it's performance is on par with Turbo v2.5. 
-
-## English v1
-
-Our very first model, English v1, set the foundation for what's to come. This model was created specifically for English and is the smallest and fastest model we offer, trained on a focused, English-only dataset. As our oldest model, it has undergone extensive optimization to ensure reliable performance. However, it is also the most limited and generally the least accurate.
-
-This model is also more rigid in its performance and is great for audio books, but less suitable for general conversational speech.
-
-
-## Multilingual v1
-
-The v1 of the multilingual model is still in its experimental stage - there are still [bugs and refinements](/troubleshooting) that need to be addressed. One of the main things to be mindful of when using the multilingual model is to keep the generations short. Try to keep the text chunks below 800 characters if possible, as some of the problems tend to get amplified the longer the generations are.
-
-This model has been surpassed by the multilingual v2 model in almost every regard.
-
+A low-latency, English-only model optimized for conversational applications. Turbo v2 is similar in performance to Turbo v2.5 but focused exclusively on English, making it ideal for English-only use cases where speed is critical.
+- Great quality
+- High accuracy with Professional Voice Clones
+- Slightly less stable
+- Optimized for low latency
