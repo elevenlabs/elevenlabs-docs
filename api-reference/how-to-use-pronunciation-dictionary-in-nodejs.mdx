@@ -1,0 +1,221 @@
+---
+title: "How to use pronunciation dictionary (NodeJS SDK)"
+sidebarTitle: "How to use pronunciation dictionary"
+description: "How to add, view, and remove rules to pronunciation dictionary with NodeJS SDK"
+icon: "code"
+---
+
+In this tutorial, you'll learn how to use a pronunciation dictionary with the ElevenLabs NodeJS SDK. Pronunciation dictionaries are useful for controlling the specific pronunciation of words. We support both [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) or [CMU](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary) alphabets. It is useful for correcting rare or specific pronunciations, such as names or companies. For example, the word `nginx` could be pronounced incorrectly. Instead, we can add our version of pronunciation. Based on IPA, `nginx` is pronounced as `/ˈɛndʒɪnˈɛks/`. Finding IPA or CMU of words manually can be difficult. Instead, LLMs like ChatGPT can help you to make the search easier. Other than changing pronunciation, we also support aliases. For example, we could change pronunciation for `www` to `world wide web` or `11labs` to `eleven labs`.
+
+We'll start by adding rules to the pronunciation dictionary from a file and comparing the text-to-speech results that use and do not use the dictionary. After that, we'll discuss how to add and remove specific rules to existing dictionaries.
+
+If you want to jump straight to the finished repo you can find it [here](https://github.com/elevenlabs/elevenlabs-examples/tree/main/pronunciation-dictionaries/examples/pronunciation-dictionaries/node)
+
+## Requirements
+
+- An ElevenLabs account with an API key (here’s how to [find your API key](/api-reference/text-to-speech#authentication)).
+- NodeJs installed on your machine
+
+## Setup
+
+### Installing our SDK
+
+Before you begin, make sure you have installed the necessary SDKs and libraries. You will need the ElevenLabs SDK for the updating pronunciation dictionary and using text-to-speech conversion. You can install required packages with the following command:
+
+```bash
+npm install
+```
+
+Next, create a `.env` file in your project directory and fill it with your credentials like so:
+
+```
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+## Initiate the Client SDK
+
+We'll start by initializing the client SDK.
+
+```javascript
+import { ElevenLabsClient } from "elevenlabs";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+
+if (!ELEVENLABS_API_KEY) {
+    console.log("Missing ELEVENLABS_API_KEY");
+    return;
+}
+
+const client = new ElevenLabsClient({
+    apiKey: ELEVENLABS_API_KEY,
+});
+```
+
+## Create a Pronunciation Dictionary From a File
+
+To create a pronunciation dictionary from a File, we'll create a `.pls` file for our rules.
+
+This rule will use the "IPA" alphabet and update the pronunciation for `tomato` and `Tomato` with a different pronunciation. PLS files are case sensitive which is why we include it both with and without a capital "T". Also, this rule will add pronunciation alias for `Mr`. We change pronunciation for `Mr` to `mistress`. In this case, we assume that `Mr` should always be capitalized so we only include the capitalized version. Save it as `dictionary.pls`.
+
+```xml filename="dictionary.pls"
+<?xml version="1.0" encoding="UTF-8"?>
+<lexicon version="1.0" 
+      xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon 
+        http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
+      alphabet="ipa" xml:lang="en-US">
+  <lexeme>
+    <grapheme>tomato</grapheme>
+    <phoneme>/tə'meɪtoʊ/</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>Tomato</grapheme>
+    <phoneme>/tə'meɪtoʊ/</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>Mr</grapheme>
+    <alias>mistress</alias>
+  </lexeme>
+</lexicon>
+```
+
+In the following snippet, we start by adding rules from a file and get the uploaded result. Finally, we generate and save two different text-to-speech audio to compare the custom pronunciation dictionary.
+
+```javascript
+import { Stream } from "node:stream";
+
+const saveAudioFile = async (
+  audioNumber: number,
+  stream: Stream
+): Promise<string> => {
+  return new Promise<string>(async (resolve, reject) => {
+    try {
+      const filename = `audio_${audioNumber}.mp3`;
+      const fileStream = fs.createWriteStream(filename);
+      stream.pipe(fileStream);
+      fileStream.on("finish", () => resolve(filename)); // Resolve with the fileName
+      fileStream.on("error", reject);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+
+const pronunciationDictionary =
+await client.pronunciationDictionary.addFromFile(
+    fs.createReadStream("dictionary.pls"),
+    {
+    name: "example",
+    }
+);
+
+const audio1 = await client.generate({
+    text: "Without the dictionary: Mr tomato",
+    voice: "Rachel",
+    model_id: "eleven_turbo_v2",
+});
+
+const audio2 = await client.generate({
+    text: "With the dictionary: Mr tomato",
+    voice: "Rachel",
+    model_id: "eleven_turbo_v2",
+    pronunciation_dictionary_locators: [
+        {
+        pronunciation_dictionary_id: pronunciationDictionary.id,
+        version_id: pronunciationDictionary.version_id,
+        },
+    ],
+});
+
+await saveAudioFile(1, audio1);
+await saveAudioFile(2, audio2);
+```
+
+## Remove Rules From a Pronunciation Dictionary
+
+To remove rules from a pronunciation dictionary, we can simply call `removeRulesFromThePronunciationDictionary` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and save another text-to-speech audio to test the difference. In the example, we take pronunciation dictionary version id from `removeRulesFromThePronunciationDictionary` response because every changes to pronunciation dictionary will create a new version, so we need to use the latest version returned from the response. The old version also still available.
+
+```javascript
+const pronunciationDictionaryRulesRemoved = await client.pronunciationDictionary.removeRulesFromThePronunciationDictionary(
+    pronunciationDictionary.id,
+    {
+    rule_strings: ["tomato", "Tomato", "Mr"],
+    }
+);
+
+const audio3 = await client.generate({
+    text: "With the rule removed: Mr tomato",
+    voice: "Rachel",
+    model_id: "eleven_turbo_v2",
+    pronunciation_dictionary_locators: [
+        {
+        pronunciation_dictionary_id: pronunciationDictionaryRulesRemoved.id,
+        version_id: pronunciationDictionaryRulesRemoved.version_id,
+        },
+    ],
+});
+
+await saveAudioFile(3, audio3);
+```
+
+## Add Rules to Pronunciation Dictionary
+
+We can add rules directly to the pronunciation dictionary and call `addRulesToThePronunciationDictionary` from the pronunciation dictionary. The snippet will demonstrate adding rules with the class and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. This example also use pronunciation dictionary version returned from `addRulesToThePronunciationDictionary` to ensure we use the latest dictionary version.
+
+```javascript
+  const pronunciationDictionaryRulesAdded =
+    await client.pronunciationDictionary.addRulesToThePronunciationDictionary(
+      pronunciationDictionaryRulesRemoved.id,
+      {
+        rules: [
+          {
+            type: "phoneme",
+            alphabet: "ipa",
+            string_to_replace: "tomato",
+            phoneme: "/tə'meɪtoʊ/",
+          },
+          {
+            type: "phoneme",
+            alphabet: "ipa",
+            string_to_replace: "Tomato",
+            phoneme: "/tə'meɪtoʊ/",
+          },
+          {
+            type: "alias",
+            string_to_replace: "Mr",
+            alias: "mistress",
+          },
+        ],
+      }
+    );
+
+  const audio4 = await client.generate({
+    text: "With the rule added again: Mr tomato",
+    voice: "Rachel",
+    model_id: "eleven_turbo_v2",
+    pronunciation_dictionary_locators: [
+      {
+        pronunciation_dictionary_id: pronunciationDictionaryRulesAdded.id,
+        version_id: pronunciationDictionaryRulesAdded.version_id,
+      },
+    ],
+  });
+await saveAudioFile(4, audio4);
+```
+
+## Conclusion
+
+You know how to use a pronunciation dictionary for generating text-to-speech audio. These functionailities open up opportunities to generate text-to-speech audio based on your pronunciation dictionary, making it more flexible for your use case.
+
+For more details, visit our [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/pronunciation-dictionaries/examples/pronunciation-dictionaries/node) to see the full project files which give a clear structure for setting up your application:
+
+- `env.example`: Template for your environment variables.
+- `src/index.ts`: The complete code for snippets above.
+- `dictionary.pls`: Custom dictionary example with XML format.
+
+If you have any questions please create an issue on the [elevenlabs-doc Github](https://github.com/elevenlabs/elevenlabs-docs/issues).
