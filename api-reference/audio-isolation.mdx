@@ -5,3 +5,30 @@ openapi: post /v1/audio-isolation
 ## Pricing
 
 The API is charged at 1000 characters per minute of audio.
+
+## Removing background noise with our Python SDK
+Our Audio Isolation API is what powers our Voice Isolator, which removes background noise from audio and leaves you with crystal clear dialogue. To get started, here's an example you can follow using our [Python SDK.](https://github.com/elevenlabs/elevenlabs-python)
+
+```python
+from elevenlabs.client import ElevenLabs
+
+# Initialize the client with your API key
+client = ElevenLabs(api_key="your api key")
+
+# Path to the audio file you want to isolate
+audio_file_path = "sample_file.mp3"
+
+
+with open(audio_file_path, "rb") as audio_file:
+    # Perform audio isolation
+    isolated_audio_iterator = client.audio_isolation.audio_isolation(audio=audio_file)
+
+    # Save the isolated audio to a new file
+    output_file_path = "cleaned_file.mp3"
+    with open(output_file_path, "wb") as output_file:
+        for chunk in isolated_audio_iterator:
+            output_file.write(chunk)
+
+
+print(f"Isolated audio saved to {output_file_path}")
+```
