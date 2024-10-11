@@ -255,11 +255,7 @@ Defaults to `0`
 
 Defaults to `mp3_44100`
 </ParamField>
-<ParamField query="inactivity_timeout" type="number">
-The number of seconds that the connection can be inactive before it is automatically closed.
 
-Defaults to `20` seconds, with a maximum allowed value of `180` seconds.
-    </ParamField>
 # Example - Voice streaming using ElevenLabs and OpenAI
 
 The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
@@ -648,3 +644,24 @@ Our websocket service incorporates a buffer system designed to optimize the Time
 All text sent to the websocket endpoint is added to this buffer and only when that buffer reaches a certain size is an audio generation attempted. This is because our model provides higher quality audio when the model has longer inputs, and can deduce more context about how the text should be delivered.
 
 The buffer ensures smooth audio data delivery and is automatically emptied with a final audio generation either when the stream is closed, or upon sending a `flush` command. We have advanced settings for changing the chunk schedule, which can improve latency at the cost of quality by generating audio more frequently with smaller text inputs.
+
+## Getting started
+
+More practical guides on using the Websockets API are provided below:
+
+<CardGroup>
+    <Card
+        title="Chatbot with Live Highlighting"
+        icon="robot"
+        href="/guides/websockets-highlight-chatbot"
+    >
+        Creating a chatbot with live text highlighting using ElevenLabs Websockets API.
+    </Card>
+    <Card
+        title="Example Guide"
+        icon="terminal"
+        href="/guides/websockets-highlight-chatbot"
+    >
+        
+    </Card>
+</CardGroup>
