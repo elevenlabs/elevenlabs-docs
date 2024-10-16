@@ -1,0 +1,49 @@
+---
+title: "Specifying server location"
+description: "How to control the server location for your requests"
+icon: "globe"
+---
+
+When using ElevenLabs API you have two options for selecting the server location:
+
+## Using the closest servers (default)
+
+Requests to `api.elevenlabs.io` are automatically routed to the closest available server location which minimizes network latency. We recommend using this option for most users.
+
+## Manually specifying the server location
+
+If needed, you can select a specific server location for your requests.
+
+#### When using the client library
+
+Provide the `environment` option when constructing the client:
+
+<CodeGroup>
+
+```python Python
+import elevenlabs
+
+client = elevenlabs.ElevenLabs(
+    api_key="YOUR_API_KEY",
+    # Use the US servers only.
+    environment=elevenlabs.ElevenLabsEnvironment.PRODUCTION_US
+)
+```
+
+```typescript TypeScript
+import { ElevenLabsClient, ElevenLabsEnvironment } from "elevenlabs";
+
+const client = new ElevenLabsClient({
+    apiKey: "YOUR_API_KEY",
+    // Use the US servers only.
+    environment: ElevenLabsEnvironment.ProductionUs,
+});
+```
+
+</CodeGroup>
+
+#### When using direct API calls
+
+Replace the `api.elevenlabs.io` hostname in your requests with one of the following values:
+
+- `api.us.elevenlabs.io`: Uses servers located in the US.
