@@ -173,12 +173,11 @@ async def listen(websocket):
 
 async def text_to_speech_ws_streaming(voice_id, model_id):
     async with websockets.connect(uri) as websocket:
-        async with websockets.connect(uri) as websocket:
-            ...
-            # Add listen task to submit the audio chunks to the write_to_local function
-            listen_task = asyncio.create_task(write_to_local(listen(websocket)))
+          ...
+          # Add listen task to submit the audio chunks to the write_to_local function
+          listen_task = asyncio.create_task(write_to_local(listen(websocket)))
 
-            await listen_task
+          await listen_task
 
 asyncio.run(text_to_speech_ws_streaming(voice_id, model_id))
 ```
