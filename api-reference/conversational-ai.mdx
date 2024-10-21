@@ -1,5 +1,5 @@
 ---
-title: "Conversational AI WebSocket API"
+title: "WebSocket"
 description: "Create real-time, interactive voice conversations with AI agents"
 icon: "comments"
 ---
@@ -67,12 +67,27 @@ Send audio data from the user to the server.
 
 **Notes:**
 
-- Audio data should be in PCM 16-bit mono format and base64 encoded.
-- Audio sample rate should be 16,000 Hz.
+- **Audio Format Requirements:**
+
+  - PCM 16-bit mono format
+  - Base64 encoded
+  - Sample rate of 16,000 Hz
+
+- **Recommended Chunk Duration:**
+
+  - Send audio chunks approximately every **250 milliseconds (0.25 seconds)**
+  - This equates to chunks of about **4,000 samples** at a 16,000 Hz sample rate
+
+- **Optimizing Latency and Efficiency:**
+  - **Balance Latency and Efficiency:** Sending audio chunks every 250 milliseconds offers a good trade-off between responsiveness and network overhead.
+  - **Adjust Based on Needs:**
+    - _Lower Latency Requirements:_ Decrease the chunk duration to send smaller chunks more frequently.
+    - _Higher Efficiency Requirements:_ Increase the chunk duration to send larger chunks less frequently.
+  - **Network Conditions:** Adapt the chunk size if you experience network constraints or variability.
 
 #### Pong Message
 
-Respond to server `ping` messages to measure and manage latency.
+Respond to server `ping` messages by sending a `pong` message, ensuring the `event_id` matches the one received in the `ping` message.
 
 **Format:**
 
@@ -82,8 +97,6 @@ Respond to server `ping` messages to measure and manage latency.
   "event_id": 12345
 }
 ```
-
-**Note:** The `event_id` should match the `event_id` received in the `ping` message from the server.
 
 ### Server-to-Client Messages
 
@@ -105,14 +118,13 @@ Provides initial metadata about the conversation.
 
 ### Other Server-to-Client Messages
 
-| Type                              | Purpose                                             |
-| --------------------------------- | --------------------------------------------------- |
-| user_transcript                   | Transcriptions of the user's speech                 |
-| agent_response                    | Agent's textual response                            |
-| audio                             | Chunks of the agent's audio response                |
-| interruption                      | Indicates that the agent's response was interrupted |
-| internal_tentative_agent_response | Provides tentative agent responses (for debugging)  |
-| ping                              | Server pings to measure latency                     |
+| Type            | Purpose                                             |
+| --------------- | --------------------------------------------------- |
+| user_transcript | Transcriptions of the user's speech                 |
+| agent_response  | Agent's textual response                            |
+| audio           | Chunks of the agent's audio response                |
+| interruption    | Indicates that the agent's response was interrupted |
+| ping            | Server pings to measure latency                     |
 
 ##### Message Formats
 
@@ -179,7 +191,7 @@ Provides initial metadata about the conversation.
   "type": "ping",
   "ping_event": {
     "event_id": 13579,
-    "average_ping_ms": 50
+    "ping_ms": 50
   }
 }
 ```
@@ -197,6 +209,7 @@ To ensure smooth conversations, implement these strategies:
 - Rotate API keys regularly and use environment variables to store them.
 - Implement rate limiting to prevent abuse.
 - Clearly explain the intention when prompting users for microphone access.
+- Optimized Chunking: Tweak the audio chunk duration to balance latency and efficiency.
 
 ## Additional Resources
 
