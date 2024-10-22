@@ -4,20 +4,33 @@ description: "Start generating your first text-to-speech using Python and Eleven
 icon: "code"
 ---
 
-
 All plans, even the free plan, come with access to the API (Application Programming Interface), allowing you to use our technology programmatically and its full range of features through code. An API is the fundamental component that applications using ElevenLabs or any other service rely on.
 
 In this section, we will provide a fairly concise overview of how the API can be used to make requests to the endpoints to fetch the voices in your voice library and even generate our first text-to-speech.
 
 Something that might be good to note is that the website is just a frontend for the API. So if you use Speech Synthesis or make calls directly to the API with code, there should be no difference in quality or output with the same settings. However, the AI is still non-deterministic so there might be a difference in the delivery of the generated output.
 
-The API and the website also share the same pool of quota when generating audio. So, if you have 10,000 characters in your account and you generate audio, the characters for that generation will be deducted from your account regardless of whether you use the [website](https://docs.elevenlabs.io/api-reference/) or the [API.](https://api.elevenlabs.io/docs
-) Given the extensive nature of the API and its virtually limitless possibilities, we will only do a very quick overview and showcase a few examples to at least get you up and running.
+The API and the website also share the same pool of quota when generating audio. So, if you have 10,000 characters in your account and you generate audio, the characters for that generation will be deducted from your account regardless of whether you use the [website](https://docs.elevenlabs.io/api-reference/) or the [API.](https://api.elevenlabs.io/docs) Given the extensive nature of the API and its virtually limitless possibilities, we will only do a very quick overview and showcase a few examples to at least get you up and running.
 
 The [Text-To-Speech](https://elevenlabs.io/docs/api-reference/text-to-speech) (TTS) endpoint transforms text into speech in a given voice. The input consists of text, voice, and voice settings with an option to specify model.
 
+## Authentication
 
-# Fetching the voice_id
+The ElevenLabs API uses API keys for authentication. You can create multiple API keys with restricted permissions for specific API routes (e.g., text-to-speech). API keys can be disabled or deleted as needed.
+
+To get your API key, [create an account](https://elevenlabs.io/sign-up), log in, and click on **"API Keys"** in the bottom left corner of the console.
+
+<img height="200" src="/api-reference/images/api_key.png" />
+
+<Warning>
+
+Your API key is a secret. Do not share it or expose it in client-side code (browsers, apps). Load it securely from an environment variable or key management service on your backend server.
+
+</Warning>
+
+Include your API key in all API requests by adding it to the `xi-api-key` HTTP header.
+
+## Fetching the voice_id
 
 Before we can generate anything, we need to get the `voice_id` for the voice we want to use.
 
@@ -32,7 +45,7 @@ The API offers a wide range of capabilities, such as adding new voices, but we w
 You can use the Python code below to print a list of the voices in your account, along with their names and associated voice_ids, which will be required to use the voices via the API. Simply using the name won't be sufficient.
 
 ```python
-# The 'requests' and 'json' libraries are imported. 
+# The 'requests' and 'json' libraries are imported.
 # 'requests' is used to send HTTP requests, while 'json' is used for parsing the JSON data that we receive from the API.
 import requests
 import json
@@ -43,7 +56,7 @@ XI_API_KEY = "<xi-api-key>"
 # This is the URL for the API endpoint we'll be making a GET request to.
 url = "https://api.elevenlabs.io/v1/voices"
 
-# Here, headers for the HTTP request are being set up. 
+# Here, headers for the HTTP request are being set up.
 # Headers provide metadata about the request. In this case, we're specifying the content type and including our API key for authentication.
 headers = {
   "Accept": "application/json",
@@ -54,20 +67,19 @@ headers = {
 # A GET request is sent to the API endpoint. The URL and the headers are passed into the request.
 response = requests.get(url, headers=headers)
 
-# The JSON response from the API is parsed using the built-in .json() method from the 'requests' library. 
+# The JSON response from the API is parsed using the built-in .json() method from the 'requests' library.
 # This transforms the JSON data into a Python dictionary for further processing.
 data = response.json()
 
-# A loop is created to iterate over each 'voice' in the 'voices' list from the parsed data. 
+# A loop is created to iterate over each 'voice' in the 'voices' list from the parsed data.
 # The 'voices' list consists of dictionaries, each representing a unique voice provided by the API.
 for voice in data['voices']:
-  # For each 'voice', the 'name' and 'voice_id' are printed out. 
+  # For each 'voice', the 'name' and 'voice_id' are printed out.
   # These keys in the voice dictionary contain values that provide information about the specific voice.
   print(f"{voice['name']}; {voice['voice_id']}")
 ```
 
-
-# Text-to-speech
+## Text-to-speech
 
 Once you have you've gotten the `voice_id` from the voices endpoint, you are ready to query the [Text-to-speech](https://elevenlabs.io/docs/api-reference/text-to-speech) endpoint.
 
@@ -133,7 +145,7 @@ else:
     print(response.text)
 ```
 
-# Speech-to-Speech
+## Speech-to-Speech
 
 Generating speech-to-speech involves a similar process to text-to-speech, but with some adjustments in the API parameters. Instead of providing text when calling the API, you provide the path to an audio file that you would like to convert from one voice to another. Here's a modified version of your code to illustrate how to generate speech-to-speech using the given API:
 
@@ -192,6 +204,6 @@ else:
     print(response.text)
 ```
 
-This code takes an input audio file (`<path>` should be something like `C:/User/Documents/input.mp3`), sends a request to the speech-to-speech endpoint, and receives a stream of audio bytes in return. It then saves the streamed audio to the specified output path (`output.mp3` if no specific path is specified, it will be saved in the same folder as the .py code file). 
+This code takes an input audio file (`<path>` should be something like `C:/User/Documents/input.mp3`), sends a request to the speech-to-speech endpoint, and receives a stream of audio bytes in return. It then saves the streamed audio to the specified output path (`output.mp3` if no specific path is specified, it will be saved in the same folder as the .py code file).
 
 Make sure to replace placeholders like `<xi-api-key>` and `<voice-id>` with your actual API key and voice ID respectively. Additionally, adjust paths and settings as needed.
