@@ -777,17 +777,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs, VoiceSettings\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert(\n    voice_id=\"pMsXgVXv3BLzUgSXRplE\",\n    optimize_streaming_latency=\"0\",\n    output_format=\"mp3_22050_32\",\n    text=\"It sure does, Jackie… My mama always said: “In Carolina, the air's so thick you can wear it!”\",\n    voice_settings=VoiceSettings(\n        stability=0.1,\n        similarity_boost=0.3,\n        style=0.2,\n    ),\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient, ElevenLabs } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convert(\"pMsXgVXv3BLzUgSXRplE\", {\n    optimize_streaming_latency: ElevenLabs.OptimizeStreamingLatency.Zero,\n    output_format: ElevenLabs.OutputFormat.Mp32205032,\n    text: \"It sure does, Jackie\\u2026 My mama always said: \\u201CIn Carolina, the air's so thick you can wear it!\\u201D\",\n    voice_settings: {\n        stability: 0.1,\n        similarity_boost: 0.3,\n        style: 0.2\n    }\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/text-to-speech/{voice_id}/with-timestamps": {
@@ -886,17 +876,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert_with_timestamps(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    text=\"text\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertWithTimestamps(\"21m00Tcm4TlvDq8ikWAM\", {\n    text: \"text\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/text-to-speech/{voice_id}/stream": {
@@ -1000,7 +980,7 @@
 					},
 					{
 						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient, ElevenLabs } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertAsStream(\"pMsXgVXv3BLzUgSXRplE\", {\n    optimize_streaming_latency: ElevenLabs.OptimizeStreamingLatency.Zero,\n    output_format: ElevenLabs.OutputFormat.Mp32205032,\n    text: \"It sure does, Jackie\\u2026 My mama always said: \\u201CIn Carolina, the air's so thick you can wear it!\\u201D\",\n    voice_settings: {\n        stability: 0.1,\n        similarity_boost: 0.3,\n        style: 0.2\n    }\n});\n"
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertAsStream(\"pMsXgVXv3BLzUgSXRplE\", {\n    optimize_streaming_latency: \"0\",\n    output_format: \"mp3_22050_32\",\n    text: \"It sure does, Jackie\\u2026 My mama always said: \\u201CIn Carolina, the air's so thick you can wear it!\\u201D\",\n    voice_settings: {\n        stability: 0.1,\n        similarity_boost: 0.3,\n        style: 0.2\n    }\n});\n"
 					}
 				]
 			}
@@ -1215,7 +1195,7 @@
 					},
 					{
 						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient, ElevenLabs } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convert(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: true,\n    optimize_streaming_latency: ElevenLabs.OptimizeStreamingLatency.Zero,\n    output_format: ElevenLabs.OutputFormat.Mp32205032\n});\n"
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convert(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: true,\n    optimize_streaming_latency: \"0\",\n    output_format: \"mp3_22050_32\"\n});\n"
 					}
 				]
 			}
@@ -1313,7 +1293,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.speech_to_speech.convert_as_stream(\n    voice_id=\"string\",\n    enable_logging=\"0\",\n    optimize_streaming_latency=\"mp3_22050_32\",\n    output_format=\"string\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convertAsStream(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: \"0\",\n    optimize_streaming_latency: \"mp3_22050_32\",\n    output_format: \"string\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/voice-generation/generate-voice/parameters": {
@@ -1335,17 +1325,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voice_generation.generate_parameters()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voiceGeneration.generateParameters();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voice-generation/generate-voice": {
@@ -1397,6 +1377,71 @@
 						}
 					}
 				}
+			}
+		},
+		"/v1/text-to-voice/create-previews": {
+			"post": {
+				"tags": [
+					"text-to-voice"
+				],
+				"summary": "Generate A Voice Preview From Description",
+				"description": "Generate a custom voice based on voice description. This method returns a list of voice previews. Each preview has a generated_voice_id and a sample of the voice as base64 encoded mp3 audio. If you like the a voice previewand want to create the voice call /v1/text-to-voice/create-voice-from-preview with the generated_voice_id to create the voice.",
+				"operationId": "Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post",
+				"parameters": [
+					{
+						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"title": "Xi-Api-Key",
+							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+						},
+						"name": "xi-api-key",
+						"in": "header"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/VoicePreviewsResponseModel"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_voice.create_previews(\n    voice_description=\"voice_description\",\n    text=\"text\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToVoice.createPreviews({\n    voice_description: \"voice_description\",\n    text: \"text\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/voice-generation/create-voice": {
@@ -1451,17 +1496,62 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
+				}
+			}
+		},
+		"/v1/text-to-voice/create-voice-from-preview": {
+			"post": {
+				"tags": [
+					"text-to-voice"
+				],
+				"summary": "Create A New Voice From Voice Preview",
+				"description": "Create a voice from previously generated voice preview. This endpoint should be called after you fetched a generated_voice_id using /v1/text-to-voice/create-previews.",
+				"operationId": "Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post",
+				"parameters": [
 					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voice_generation.create_a_previously_generated_voice(\n    voice_name=\"Alex\",\n    voice_description=\"Middle-aged American woman\",\n    generated_voice_id=\"rbVJFu6SGRD1dbWpKnWl\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voiceGeneration.createAPreviouslyGeneratedVoice({\n    voice_name: \"Alex\",\n    voice_description: \"Middle-aged American woman\",\n    generated_voice_id: \"rbVJFu6SGRD1dbWpKnWl\"\n});\n"
+						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"title": "Xi-Api-Key",
+							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+						},
+						"name": "xi-api-key",
+						"in": "header"
 					}
-				]
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/VoiceResponseModel"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
 			}
 		},
 		"/v1/user/subscription": {
@@ -1506,7 +1596,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.user.get_subscription()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.user.getSubscription();\n"
+					}
+				]
 			}
 		},
 		"/v1/user": {
@@ -1551,7 +1651,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.user.get()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.user.get();\n"
+					}
+				]
 			}
 		},
 		"/v1/voices": {
@@ -1609,7 +1719,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_all()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getAll();\n"
+					}
+				]
 			}
 		},
 		"/v1/voices/settings/default": {
@@ -1631,7 +1751,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_default_settings()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getDefaultSettings();\n"
+					}
+				]
 			}
 		},
 		"/v1/voices/{voice_id}/settings": {
@@ -1688,7 +1818,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_settings(\n    voice_id=\"2EiwWnXFnvU5JabPnv8n\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getSettings(\"2EiwWnXFnvU5JabPnv8n\");\n"
+					}
+				]
 			}
 		},
 		"/v1/voices/{voice_id}": {
@@ -1757,7 +1897,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get(\n    voice_id=\"29vD33N1CtxCmqQRPOHJ\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.get(\"29vD33N1CtxCmqQRPOHJ\");\n"
+					}
+				]
 			},
 			"delete": {
 				"tags": [
@@ -1881,7 +2031,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs, VoiceSettings\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.edit_settings(\n    voice_id=\"29vD33N1CtxCmqQRPOHJ\",\n    request=VoiceSettings(\n        stability=0.1,\n        similarity_boost=0.3,\n        style=0.2,\n    ),\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.editSettings(\"29vD33N1CtxCmqQRPOHJ\", {\n    stability: 0.1,\n    similarity_boost: 0.3,\n    style: 0.2\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/voices/add": {
@@ -1921,7 +2081,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/AddVoiceResponseModel"
+									"$ref": "#/components/schemas/AddVoiceIVCResponseModel"
 								}
 							}
 						}
@@ -1936,17 +2096,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.add(\n    name=\"Alex\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.add({\n    files: [fs.createReadStream(\"/path/to/your/file\")],\n    name: \"Alex\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices/{voice_id}/edit": {
@@ -2322,17 +2472,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.edit_basic_project_info(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    name=\"name\",\n    default_title_voice_id=\"default_title_voice_id\",\n    default_paragraph_voice_id=\"default_paragraph_voice_id\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.editBasicProjectInfo(\"21m00Tcm4TlvDq8ikWAM\", {\n    name: \"name\",\n    default_title_voice_id: \"default_title_voice_id\",\n    default_paragraph_voice_id: \"default_paragraph_voice_id\"\n});\n"
-					}
-				]
+				}
 			},
 			"delete": {
 				"tags": [
@@ -2450,17 +2590,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.convert(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.convert(\"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/snapshots": {
@@ -2670,7 +2800,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.stream_archive(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    project_snapshot_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.streamArchive(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters": {
@@ -2938,7 +3078,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.add_chapter_to_a_project(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    name=\"name\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.addChapterToAProject(\"21m00Tcm4TlvDq8ikWAM\", {\n    name: \"name\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}/convert": {
@@ -3005,17 +3155,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.convert(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.convert(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}/snapshots": {
@@ -3084,7 +3224,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.get_all_snapshots(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.getAllSnapshots(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream": {
@@ -3296,17 +3446,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.dub_a_video_or_an_audio_file(\n    target_lang=\"target_lang\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.dubAVideoOrAnAudioFile({\n    target_lang: \"target_lang\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/dubbing/{dubbing_id}": {
@@ -3362,7 +3502,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.get_dubbing_project_metadata(\n    dubbing_id=\"dubbing_id\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.getDubbingProjectMetadata(\"dubbing_id\");\n"
+					}
+				]
 			},
 			"delete": {
 				"tags": [
@@ -3487,7 +3637,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.get_dubbed_file(\n    dubbing_id=\"string\",\n    language_code=\"string\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.getDubbedFile(\"string\", \"string\");\n"
+					}
+				]
 			}
 		},
 		"/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
@@ -3621,7 +3781,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.workspace.get_sso_provider_admin(\n    workspace_id=\"workspace_id\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.workspace.getSsoProviderAdmin({\n    workspace_id: \"workspace_id\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/models": {
@@ -3735,7 +3905,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.audio_native.create(\n    name=\"name\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.audioNative.create({\n    name: \"name\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/shared-voices": {
@@ -4018,7 +4198,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_similar_library_voices()\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getSimilarLibraryVoices({});\n"
+					}
+				]
 			}
 		},
 		"/v1/usage/character-stats": {
@@ -4070,15 +4260,11 @@
 						"description": "How to break down the information. Cannot be \"user\" if include_workspace_metrics is False.",
 						"required": false,
 						"schema": {
-							"type": "string",
-							"enum": [
-								"none",
-								"voice",
-								"user",
-								"api_keys",
-								"product_type"
+							"allOf": [
+								{
+									"$ref": "#/components/schemas/BreakdownTypes"
+								}
 							],
-							"title": "Breakdown Type",
 							"description": "How to break down the information. Cannot be \"user\" if include_workspace_metrics is False.",
 							"default": "none"
 						},
@@ -4183,7 +4369,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.add_from_file(\n    name=\"name\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.addFromFile({\n    name: \"name\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
@@ -4250,7 +4446,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\nfrom elevenlabs.pronunciation_dictionary import (\n    PronunciationDictionaryRule_Phoneme,\n)\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.add_rules_to_the_pronunciation_dictionary(\n    pronunciation_dictionary_id=\"21m00Tcm4TlvDq8ikWAM\",\n    rules=[\n        PronunciationDictionaryRule_Phoneme(\n            string_to_replace=\"rules\",\n            phoneme=\"rules\",\n            alphabet=\"rules\",\n        )\n    ],\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.addRulesToThePronunciationDictionary(\"21m00Tcm4TlvDq8ikWAM\", {\n    rules: [{\n            type: \"phoneme\",\n            string_to_replace: \"rules\",\n            phoneme: \"rules\",\n            alphabet: \"rules\"\n        }]\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules": {
@@ -4392,7 +4598,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.download(\n    dictionary_id=\"Fm6AvNgS53NXe6Kqxp3e\",\n    version_id=\"KZFyRUq3R6kaqhKI146w\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.download(\"Fm6AvNgS53NXe6Kqxp3e\", \"KZFyRUq3R6kaqhKI146w\");\n"
+					}
+				]
 			}
 		},
 		"/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/": {
@@ -4449,7 +4665,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.get(\n    pronunciation_dictionary_id=\"Fm6AvNgS53NXe6Kqxp3e\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.get(\"Fm6AvNgS53NXe6Kqxp3e\");\n"
+					}
+				]
 			}
 		},
 		"/v1/pronunciation-dictionaries/": {
@@ -4645,7 +4871,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.workspace.delete_existing_invitation(\n    email=\"email\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.workspace.deleteExistingInvitation({\n    email: \"email\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/workspace/members": {
@@ -4864,6 +5100,24 @@
 					"version_id"
 				],
 				"title": "AddPronunciationDictionaryRulesResponseModel"
+			},
+			"AddVoiceIVCResponseModel": {
+				"properties": {
+					"voice_id": {
+						"type": "string",
+						"title": "Voice Id"
+					},
+					"requires_verification": {
+						"type": "boolean",
+						"title": "Requires Verification"
+					}
+				},
+				"type": "object",
+				"required": [
+					"voice_id",
+					"requires_verification"
+				],
+				"title": "AddVoiceIVCResponseModel"
 			},
 			"AddVoiceResponseModel": {
 				"properties": {
@@ -5203,6 +5457,63 @@
 				],
 				"title": "Body_Audio_Isolation_v1_audio_isolation_post"
 			},
+			"Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post": {
+				"properties": {
+					"voice_name": {
+						"type": "string",
+						"title": "Voice Name",
+						"description": "Name to use for the created voice.",
+						"examples": [
+							"Little squeaky mouse"
+						]
+					},
+					"voice_description": {
+						"type": "string",
+						"title": "Voice Description",
+						"description": "Description to use for the created voice.",
+						"examples": [
+							"A sassy little squeaky mouse"
+						]
+					},
+					"generated_voice_id": {
+						"type": "string",
+						"title": "Generated Voice Id",
+						"description": "The generated_voice_id to create, call POST /v1/voice-generation/generate-voice and fetch the generated_voice_id from the response header if don't have one yet.",
+						"examples": [
+							"37HceQefKmEi3bGovXjL"
+						]
+					},
+					"labels": {
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object",
+						"title": "Labels",
+						"description": "Optional, metadata to add to the created voice. Defaults to None.",
+						"examples": [
+							{
+								"language": "en"
+							}
+						],
+						"name": "Voice metadata"
+					},
+					"played_not_selected_voice_ids": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Played Not Selected Voice Ids",
+						"description": "List of voice ids that the user has played but not selected. Used for RLHF."
+					}
+				},
+				"type": "object",
+				"required": [
+					"voice_name",
+					"voice_description",
+					"generated_voice_id"
+				],
+				"title": "Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post"
+			},
 			"Body_Create_a_previously_generated_voice_v1_voice_generation_create_voice_post": {
 				"properties": {
 					"voice_name": {
@@ -5506,6 +5817,12 @@
 						"title": "Files",
 						"description": "Audio files to add to the voice"
 					},
+					"remove_background_noise": {
+						"type": "boolean",
+						"title": "Remove Background Noise",
+						"description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
+						"default": false
+					},
 					"description": {
 						"type": "string",
 						"title": "Description",
@@ -5574,6 +5891,34 @@
 					"text"
 				],
 				"title": "Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post"
+			},
+			"Body_Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post": {
+				"properties": {
+					"voice_description": {
+						"type": "string",
+						"title": "Voice Description",
+						"description": "Description to use for the created voice.",
+						"examples": [
+							"A sassy little squeaky mouse"
+						]
+					},
+					"text": {
+						"type": "string",
+						"maxLength": 1000,
+						"minLength": 100,
+						"title": "Text",
+						"description": "Text to generate, text length has to be between 100 and 1000.",
+						"examples": [
+							"Every act of kindness, no matter how small, carries value and can make a difference, as no gesture of goodwill is ever wasted."
+						]
+					}
+				},
+				"type": "object",
+				"required": [
+					"voice_description",
+					"text"
+				],
+				"title": "Body_Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post"
 			},
 			"Body_Get_similar_library_voices_v1_similar_voices_post": {
 				"properties": {
@@ -5675,6 +6020,12 @@
 						"type": "integer",
 						"title": "Seed",
 						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+					},
+					"remove_background_noise": {
+						"type": "boolean",
+						"title": "Remove Background Noise",
+						"description": "If set will remove the background noise from your audio input using our audio isolation model. Only applies to Voice Changer.",
+						"default": false
 					}
 				},
 				"type": "object",
@@ -5706,6 +6057,12 @@
 						"type": "integer",
 						"title": "Seed",
 						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+					},
+					"remove_background_noise": {
+						"type": "boolean",
+						"title": "Remove Background Noise",
+						"description": "If set will remove the background noise from your audio input using our audio isolation model. Only applies to Voice Changer.",
+						"default": false
 					}
 				},
 				"type": "object",
@@ -5814,6 +6171,18 @@
 						"default": false,
 						"deprecated": true,
 						"include_in_schema": false
+					},
+					"apply_text_normalization": {
+						"type": "string",
+						"enum": [
+							"auto",
+							"on",
+							"off"
+						],
+						"title": "Apply Text Normalization",
+						"description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+						"default": "auto",
+						"include_in_schema": true
 					}
 				},
 				"type": "object",
@@ -5898,6 +6267,18 @@
 						"default": false,
 						"deprecated": true,
 						"include_in_schema": false
+					},
+					"apply_text_normalization": {
+						"type": "string",
+						"enum": [
+							"auto",
+							"on",
+							"off"
+						],
+						"title": "Apply Text Normalization",
+						"description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+						"default": "auto",
+						"include_in_schema": true
 					}
 				},
 				"type": "object",
@@ -5982,6 +6363,18 @@
 						"default": false,
 						"deprecated": true,
 						"include_in_schema": false
+					},
+					"apply_text_normalization": {
+						"type": "string",
+						"enum": [
+							"auto",
+							"on",
+							"off"
+						],
+						"title": "Apply Text Normalization",
+						"description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+						"default": "auto",
+						"include_in_schema": true
 					}
 				},
 				"type": "object",
@@ -6066,6 +6459,18 @@
 						"default": false,
 						"deprecated": true,
 						"include_in_schema": false
+					},
+					"apply_text_normalization": {
+						"type": "string",
+						"enum": [
+							"auto",
+							"on",
+							"off"
+						],
+						"title": "Apply Text Normalization",
+						"description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+						"default": "auto",
+						"include_in_schema": true
 					}
 				},
 				"type": "object",
@@ -6119,6 +6524,19 @@
 				],
 				"title": "Body_Update_member_v1_workspace_members_post"
 			},
+			"BreakdownTypes": {
+				"enum": [
+					"none",
+					"voice",
+					"user",
+					"api_keys",
+					"all_api_keys",
+					"product_type",
+					"model"
+				],
+				"title": "BreakdownTypes",
+				"description": "How to break down the information. Cannot be \"user\" or \"api_key\" if include_workspace_metrics is False."
+			},
 			"ChapterResponseModel": {
 				"properties": {
 					"chapter_id": {
@@ -6132,10 +6550,6 @@
 					"last_conversion_date_unix": {
 						"type": "integer",
 						"title": "Last Conversion Date Unix"
-					},
-					"last_block_conversion_unix_ms": {
-						"type": "integer",
-						"title": "Last Block Conversion Unix Ms"
 					},
 					"conversion_progress": {
 						"type": "number",
@@ -6161,12 +6575,8 @@
 				"required": [
 					"chapter_id",
 					"name",
-					"last_conversion_date_unix",
-					"last_block_conversion_unix_ms",
-					"conversion_progress",
 					"can_be_downloaded",
-					"state",
-					"statistics"
+					"state"
 				],
 				"title": "ChapterResponseModel"
 			},
@@ -6558,6 +6968,14 @@
 					},
 					"manual_verification": {
 						"$ref": "#/components/schemas/ManualVerificationResponseModel"
+					},
+					"max_verification_attempts": {
+						"type": "integer",
+						"title": "Max Verification Attempts"
+					},
+					"next_max_verification_attempts_reset_unix_ms": {
+						"type": "integer",
+						"title": "Next Max Verification Attempts Reset Unix Ms"
 					}
 				},
 				"type": "object",
@@ -7204,17 +7622,6 @@
 						"type": "string",
 						"title": "Default Model Id"
 					},
-					"quality_preset": {
-						"type": "string",
-						"enum": [
-							"standard",
-							"high",
-							"highest",
-							"ultra",
-							"ultra_lossless"
-						],
-						"title": "Quality Preset"
-					},
 					"last_conversion_date_unix": {
 						"type": "integer",
 						"title": "Last Conversion Date Unix"
@@ -7222,33 +7629,6 @@
 					"can_be_downloaded": {
 						"type": "boolean",
 						"title": "Can Be Downloaded"
-					},
-					"state": {
-						"type": "string",
-						"enum": [
-							"default",
-							"converting",
-							"in_queue"
-						],
-						"title": "State"
-					},
-					"chapters": {
-						"items": {
-							"$ref": "#/components/schemas/ChapterResponseModel"
-						},
-						"type": "array",
-						"title": "Chapters"
-					},
-					"pronunciation_dictionary_versions": {
-						"items": {
-							"$ref": "#/components/schemas/PronunciationDictionaryVersionResponseModel"
-						},
-						"type": "array",
-						"title": "Pronunciation Dictionary Versions"
-					},
-					"volume_normalization": {
-						"type": "boolean",
-						"title": "Volume Normalization"
 					},
 					"title": {
 						"type": "string",
@@ -7302,6 +7682,57 @@
 					"isbn_number": {
 						"type": "string",
 						"title": "Isbn Number"
+					},
+					"volume_normalization": {
+						"type": "boolean",
+						"title": "Volume Normalization"
+					},
+					"state": {
+						"type": "string",
+						"enum": [
+							"default",
+							"converting",
+							"in_queue"
+						],
+						"title": "State"
+					},
+					"access_level": {
+						"type": "string",
+						"enum": [
+							"admin",
+							"editor",
+							"viewer"
+						],
+						"title": "Access Level"
+					},
+					"quality_preset": {
+						"type": "string",
+						"enum": [
+							"standard",
+							"high",
+							"highest",
+							"ultra",
+							"ultra_lossless"
+						],
+						"title": "Quality Preset"
+					},
+					"chapters": {
+						"items": {
+							"$ref": "#/components/schemas/ChapterResponseModel"
+						},
+						"type": "array",
+						"title": "Chapters"
+					},
+					"pronunciation_dictionary_versions": {
+						"items": {
+							"$ref": "#/components/schemas/PronunciationDictionaryVersionResponseModel"
+						},
+						"type": "array",
+						"title": "Pronunciation Dictionary Versions"
+					},
+					"experimental": {
+						"type": "object",
+						"title": "Experimental"
 					}
 				},
 				"type": "object",
@@ -7312,24 +7743,14 @@
 					"default_title_voice_id",
 					"default_paragraph_voice_id",
 					"default_model_id",
-					"quality_preset",
-					"last_conversion_date_unix",
 					"can_be_downloaded",
+					"volume_normalization",
 					"state",
+					"access_level",
+					"quality_preset",
 					"chapters",
 					"pronunciation_dictionary_versions",
-					"volume_normalization",
-					"title",
-					"author",
-					"description",
-					"genres",
-					"cover_image_url",
-					"target_audience",
-					"language",
-					"content_type",
-					"original_publication_date",
-					"mature_content",
-					"isbn_number"
+					"experimental"
 				],
 				"title": "ProjectExtendedResponseModel"
 			},
@@ -7432,6 +7853,15 @@
 							"in_queue"
 						],
 						"title": "State"
+					},
+					"access_level": {
+						"type": "string",
+						"enum": [
+							"admin",
+							"editor",
+							"viewer"
+						],
+						"title": "Access Level"
 					}
 				},
 				"type": "object",
@@ -7442,21 +7872,10 @@
 					"default_title_voice_id",
 					"default_paragraph_voice_id",
 					"default_model_id",
-					"last_conversion_date_unix",
 					"can_be_downloaded",
-					"title",
-					"author",
-					"description",
-					"genres",
-					"cover_image_url",
-					"target_audience",
-					"language",
-					"content_type",
-					"original_publication_date",
-					"mature_content",
-					"isbn_number",
 					"volume_normalization",
-					"state"
+					"state",
+					"access_level"
 				],
 				"title": "ProjectResponseModel"
 			},
@@ -8196,6 +8615,48 @@
 				],
 				"title": "VoiceGenerationParameterResponseModel"
 			},
+			"VoicePreviewResponseModel": {
+				"properties": {
+					"audio_base_64": {
+						"type": "string",
+						"title": "Audio Base 64"
+					},
+					"generated_voice_id": {
+						"type": "string",
+						"title": "Generated Voice Id"
+					},
+					"media_type": {
+						"type": "string",
+						"enum": [
+							"audio/mpeg"
+						],
+						"title": "Media Type",
+						"default": "audio/mpeg"
+					}
+				},
+				"type": "object",
+				"required": [
+					"audio_base_64",
+					"generated_voice_id"
+				],
+				"title": "VoicePreviewResponseModel"
+			},
+			"VoicePreviewsResponseModel": {
+				"properties": {
+					"previews": {
+						"items": {
+							"$ref": "#/components/schemas/VoicePreviewResponseModel"
+						},
+						"type": "array",
+						"title": "Previews"
+					}
+				},
+				"type": "object",
+				"required": [
+					"previews"
+				],
+				"title": "VoicePreviewsResponseModel"
+			},
 			"VoiceResponseModel": {
 				"properties": {
 					"voice_id": {
@@ -8269,7 +8730,9 @@
 							"NONE",
 							"BAN",
 							"CAPTCHA",
-							"CAPTCHA_AND_MODERATION"
+							"CAPTCHA_AND_MODERATION",
+							"ENTERPRISE_BAN",
+							"ENTERPRISE_CAPTCHA"
 						],
 						"title": "Safety Control"
 					},
@@ -8279,6 +8742,10 @@
 					"permission_on_resource": {
 						"type": "string",
 						"title": "Permission On Resource"
+					},
+					"is_owner": {
+						"type": "boolean",
+						"title": "Is Owner"
 					},
 					"is_legacy": {
 						"type": "boolean",
@@ -8335,6 +8802,60 @@
 					"similarity_boost"
 				],
 				"title": "VoiceSettingsResponseModel"
+			},
+			"VoiceSharingModerationCheckResponseModel": {
+				"properties": {
+					"date_checked_unix": {
+						"type": "integer",
+						"title": "Date Checked Unix"
+					},
+					"name_value": {
+						"type": "string",
+						"title": "Name Value"
+					},
+					"name_check": {
+						"type": "boolean",
+						"title": "Name Check"
+					},
+					"description_value": {
+						"type": "string",
+						"title": "Description Value"
+					},
+					"description_check": {
+						"type": "boolean",
+						"title": "Description Check"
+					},
+					"sample_ids": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Sample Ids"
+					},
+					"sample_checks": {
+						"items": {
+							"type": "number"
+						},
+						"type": "array",
+						"title": "Sample Checks"
+					},
+					"captcha_ids": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Captcha Ids"
+					},
+					"captcha_checks": {
+						"items": {
+							"type": "number"
+						},
+						"type": "array",
+						"title": "Captcha Checks"
+					}
+				},
+				"type": "object",
+				"title": "VoiceSharingModerationCheckResponseModel"
 			},
 			"VoiceSharingResponseModel": {
 				"properties": {
@@ -8482,6 +9003,9 @@
 					"tiktok_username": {
 						"type": "string",
 						"title": "Tiktok Username"
+					},
+					"moderation_check": {
+						"$ref": "#/components/schemas/VoiceSharingModerationCheckResponseModel"
 					}
 				},
 				"type": "object",
