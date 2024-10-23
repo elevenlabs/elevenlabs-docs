@@ -97,4 +97,11 @@ Which fields should I use to provide ElevenLabs?
 - Use *Microsoft Entra Identifier* for IdP Entity ID
 - Use *Login URL* for IdP Sign-In URL
 
+**Login Error via SAML**
+
+What shall I do if I get the error "Unable to login with saml.workspace..."?
+- Open the developer console to check the error message.
+- One known error: make sure you have `<saml:NameID>` having email address as the value inside `<saml:Subject>` in the SAML response. We use Google Cloud as our identity platform and it expects the `<saml:Subject>` and `<saml:NameID>` elements in responses from the identity provider. If you don't define values for these elements when configuring your provider, the SAML assertion fails.
+
+
 
