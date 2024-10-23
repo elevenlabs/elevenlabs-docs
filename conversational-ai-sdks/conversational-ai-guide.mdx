@@ -1,0 +1,347 @@
+---
+title: "Example Conversation AI Project"
+---
+
+This guide will walk you through creating a web application that implements ElevenLabs' Conversational AI using the `@11labs/client` SDK. You'll build a simple interface that allows users to have voice conversations with an AI agent.
+
+## Prerequisites
+
+- Node.js installed on your system
+- Basic knowledge of JavaScript/HTML/CSS
+- An ElevenLabs API key
+- An Agent ID from the ElevenLabs platform
+
+## Project Setup
+
+1. Create a new directory for your project:
+```bash
+mkdir elevenlabs-convai-demo
+cd elevenlabs-convai-demo
+```
+
+2. Initialize a new Node.js project:
+```bash
+npm init -y
+```
+
+3. Install the required dependencies:
+```bash
+npm install @11labs/client cors dotenv express
+```
+
+4. Install development dependencies:
+```bash
+npm install --save-dev webpack webpack-cli webpack-dev-server copy-webpack-plugin concurrently
+```
+
+## Project Structure
+
+Create the following directory structure:
+```
+elevenlabs-convai-demo/
+├── src/
+│   ├── app.js
+│   ├── index.html
+│   └── styles.css
+├── backend/
+│   └── server.js
+├── webpack.config.js
+├── package.json
+└── .env
+```
+
+## Configuration Files
+
+1. Create a `.env` file in the root directory:
+```env
+XI_API_KEY=your_elevenlabs_api_key
+AGENT_ID=your_agent_id
+PORT=3000
+```
+
+2. Set up `webpack.config.js`:
+```javascript
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+    entry: './src/app.js',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/'
+    },
+    devServer: {
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
+        port: 8080,
+        proxy: {
+            '/api': 'http://localhost:3000'
+        },
+        hot: true
+    },
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+                { from: 'src/index.html', to: 'index.html' },
+                { from: 'src/styles.css', to: 'styles.css' }
+            ],
+        }),
+    ]
+};
+```
+
+## Frontend Implementation
+
+1. Create `src/index.html`:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElevenLabs Conversational AI Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ElevenLabs Conversational AI Demo</h1>
+        
+        <div class="status-container">
+            <div id="connectionStatus" class="status">Disconnected</div>
+            <div id="speakingStatus" class="speaking-status">Agent Silent</div>
+        </div>
+
+        <div class="controls">
+            <button id="startButton" class="button">Start Conversation</button>
+            <button id="endButton" class="button" disabled>End Conversation</button>
+            
+            <div class="volume-control">
+                <label for="volume">Volume:</label>
+                <input type="range" id="volume" min="0" max="100" value="100">
+            </div>
+        </div>
+    </div>
+    <script src="bundle.js"></script>
+</body>
+</html>
+```
+
+2. Create `src/app.js`:
+```javascript
+import { Conversation } from '@11labs/client';
+
+let conversation = null;
+
+async function requestMicrophonePermission() {
+    try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        return true;
+    } catch (error) {
+        console.error('Microphone permission denied:', error);
+        return false;
+    }
+}
+
+async function getSignedUrl() {
+    try {
+        const response = await fetch('/api/signed-url');
+        if (!response.ok) throw new Error('Failed to get signed URL');
+        const data = await response.json();
+        return data.signedUrl;
+    } catch (error) {
+        console.error('Error getting signed URL:', error);
+        throw error;
+    }
+}
+
+// Status update functions
+function updateStatus(isConnected) {
+    const statusElement = document.getElementById('connectionStatus');
+    statusElement.textContent = isConnected ? 'Connected' : 'Disconnected';
+    statusElement.classList.toggle('connected', isConnected);
+}
+
+function updateSpeakingStatus(mode) {
+    const statusElement = document.getElementById('speakingStatus');
+    const isSpeaking = mode.mode === 'speaking';
+    statusElement.textContent = isSpeaking ? 'Agent Speaking' : 'Agent Silent';
+    statusElement.classList.toggle('speaking', isSpeaking);
+}
+
+// Conversation control functions
+async function startConversation() {
+    const startButton = document.getElementById('startButton');
+    const endButton = document.getElementById('endButton');
+    
+    try {
+        const hasPermission = await requestMicrophonePermission();
+        if (!hasPermission) {
+            alert('Microphone permission is required for the conversation.');
+            return;
+        }
+
+        const signedUrl = await getSignedUrl();
+        
+        conversation = await Conversation.startSession({
+            signedUrl,
+            onConnect: () => {
+                console.log('Connected');
+                updateStatus(true);
+                startButton.disabled = true;
+                endButton.disabled = false;
+            },
+            onDisconnect: () => {
+                console.log('Disconnected');
+                updateStatus(false);
+                startButton.disabled = false;
+                endButton.disabled = true;
+                updateSpeakingStatus({ mode: 'listening' });
+            },
+            onError: (error) => {
+                console.error('Conversation error:', error);
+                alert('An error occurred during the conversation.');
+            },
+            onModeChange: (mode) => {
+                updateSpeakingStatus(mode);
+            }
+        });
+    } catch (error) {
+        console.error('Error starting conversation:', error);
+        alert('Failed to start conversation. Please try again.');
+    }
+}
+
+async function endConversation() {
+    if (conversation) {
+        await conversation.endSession();
+        conversation = null;
+    }
+}
+
+// Event listeners
+document.getElementById('startButton').addEventListener('click', startConversation);
+document.getElementById('endButton').addEventListener('click', endConversation);
+document.getElementById('volume').addEventListener('input', async (e) => {
+    if (conversation) {
+        const volume = parseInt(e.target.value) / 100;
+        await conversation.setVolume({ volume });
+    }
+});
+```
+
+## Backend Implementation
+
+Create `backend/server.js`:
+```javascript
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../dist')));
+
+app.get('/api/signed-url', async (req, res) => {
+    try {
+        const response = await fetch(
+            `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${process.env.AGENT_ID}`,
+            {
+                method: 'GET',
+                headers: {
+                    'xi-api-key': process.env.XI_API_KEY,
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to get signed URL');
+        }
+
+        const data = await response.json();
+        res.json({ signedUrl: data.signed_url });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Failed to get signed URL' });
+    }
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+```
+
+## Running the Application
+
+1. Add the following scripts to your `package.json`:
+```json
+{
+  "scripts": {
+    "start:backend": "node backend/server.js",
+    "build": "webpack --mode production",
+    "dev": "concurrently \"npm run start:backend\" \"webpack serve --mode development\"",
+    "start": "npm run build && npm run start:backend"
+  }
+}
+```
+
+2. Start the development server:
+```bash
+npm run dev
+```
+
+Your application will now be running on:
+- Frontend: http://localhost:8080
+- Backend: http://localhost:3000
+
+## Key Features
+
+1. **Microphone Permission Handling**: The application requests and verifies microphone access before starting a conversation.
+
+2. **Connection Status Display**: Visual indicators show whether the application is connected and if the AI agent is speaking.
+
+3. **Volume Control**: Users can adjust the AI agent's voice volume using a slider.
+
+4. **Error Handling**: The application includes comprehensive error handling for both the frontend and backend.
+
+## Important Notes
+
+- Make sure to keep your API key secure and never expose it in the frontend code
+- The application requires HTTPS in production for microphone access
+- Always handle errors appropriately to provide a good user experience
+- Test microphone permissions and audio playback thoroughly
+
+## Troubleshooting
+
+1. **Microphone Access Issues**:
+   - Ensure your browser has permission to access the microphone
+   - Check if your microphone is properly connected and working
+   - Try using HTTPS in production environments
+
+2. **Connection Problems**:
+   - Verify your API key and Agent ID are correct
+   - Check your internet connection
+   - Look for any CORS-related errors in the console
+
+3. **Audio Issues**:
+   - Ensure your browser's audio output is working
+   - Check if the volume slider is set correctly
+   - Verify that no other applications are blocking audio output
+
+## Next Steps
+
+- Add visual feedback for voice input levels
+- Implement conversation history
+- Add support for different AI agents
+- Implement error recovery mechanisms
+- Add audio preprocessing options
