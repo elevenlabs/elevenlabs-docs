@@ -2,13 +2,13 @@
 title: "Example Conversational AI Project"
 ---
 
-This guide will walk you through creating a web application that implements ElevenLabs' Conversational AI using the `@11labs/client` SDK. You'll build a simple interface that allows users to have voice conversations with an AI agent.
+This guide will walk you through creating a web application that implements ElevenLabs Conversational AI using the `@11labs/client` SDK. You'll build a simple interface that allows users to have voice conversations with an AI agent.
 
 ## Prerequisites
 
 - Node.js installed on your system
 - Basic knowledge of JavaScript/HTML/CSS
-- An API key & Agent ID from Elevenlabs platform
+- An API key & Agent ID from ElevenLabs platform
 
 ## Project Setup
 
@@ -106,7 +106,6 @@ Let's build our user interface step by step.
 First, we create a simple interface in `index.html` with these key components:
 - Status indicators for connection and speaking states
 - Start/End conversation buttons
-- Volume control slider
 
 Here's the basic HTML structure:
 ```html
@@ -119,10 +118,6 @@ Here's the basic HTML structure:
     <button id="startButton" class="button">Start Conversation</button>
     <button id="endButton" class="button" disabled>End Conversation</button>
     
-    <div class="volume-control">
-        <label for="volume">Volume:</label>
-        <input type="range" id="volume" min="0" max="100" value="100">
-    </div>
 </div>
 ```
 
@@ -135,6 +130,7 @@ Without any styling, the interface looks basic but functional:
 Let's enhance the UI with CSS to make it more user-friendly and visually appealing. We're using raw CSS here, but you can use alternatives like Tailwind CSS or shadcn/ui based on your preference.
 
 Key styling highlights:
+<Expandable title="styles.css">
 ```css
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -219,17 +215,11 @@ h1 {
     background-color: #ff4444;
     color: white;
 }
-
-.volume-control {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 ```
+</Expandable> 
 
+This is how it will look like after styling :
 <img height="200" src="/conversational-ai-sdks/images/front_end_2.png" />
-
-This is how it will look like after styling 
 
 
 ### Core Application Logic
@@ -248,6 +238,7 @@ async function requestMicrophonePermission() {
     }
 }
 ```
+
 This function requests microphone access from the user. We need this before starting any conversation to ensure we can capture the user's voice.
 
 2. **Signed URL Retrieval**
@@ -264,7 +255,7 @@ async function getSignedUrl() {
     }
 }
 ```
-This function communicates with our backend to get a signed URL, which is required for secure communication with the ElevenLabs API. The signed URL contains authentication information and permissions for the conversation.
+The signed URL contains a short lived token that can be used to start the conversation, without exposing your ElevenLabs API key to your end users.
 
 3. **Status Management**
 ```javascript
@@ -322,11 +313,7 @@ async function startConversation() {
     });
 }
 ```
-This function orchestrates the conversation startup process. It:
-1. Checks for microphone permission
-2. Gets the authentication URL
-3. Initializes the conversation session
-4. Sets up event handlers for various conversation states
+This function orchestrates the conversation startup process.
 
 5. **Conversation Control**
 ```javascript
@@ -338,17 +325,6 @@ async function endConversation() {
 }
 ```
 A simple function to properly end the conversation session and clean up resources.
-
-6. **Volume Control**
-```javascript
-document.getElementById('volume').addEventListener('input', async (e) => {
-    if (conversation) {
-        const volume = parseInt(e.target.value) / 100;
-        await conversation.setVolume({ volume });
-    }
-});
-```
-This event listener handles volume adjustments during the conversation, converting the range input (0-100) to the required volume scale (0-1).
 
 ## Backend Implementation
 
@@ -483,9 +459,7 @@ Your application will now be running on:
 
 2. **Connection Status Display**: Visual indicators show whether the application is connected and if the AI agent is speaking.
 
-3. **Volume Control**: Users can adjust the AI agent's voice volume using a slider.
-
-4. **Error Handling**: The application includes comprehensive error handling for both the frontend and backend.
+3. **Error Handling**: The application includes comprehensive error handling for both the frontend and backend.
 
 ## Important Notes
 
@@ -508,6 +482,5 @@ Your application will now be running on:
 
 3. **Audio Issues**:
    - Ensure your browser's audio output is working
-   - Check if the volume slider is set correctly
    - Verify that no other applications are blocking audio output
 
