@@ -1,5 +1,5 @@
 ---
-title: "Example Conversation AI Project"
+title: "Example Conversational AI Project"
 ---
 
 This guide will walk you through creating a web application that implements ElevenLabs' Conversational AI using the `@11labs/client` SDK. You'll build a simple interface that allows users to have voice conversations with an AI agent.
@@ -8,8 +8,7 @@ This guide will walk you through creating a web application that implements Elev
 
 - Node.js installed on your system
 - Basic knowledge of JavaScript/HTML/CSS
-- An ElevenLabs API key
-- An Agent ID from the ElevenLabs platform
+- An API key & Agent ID from Elevenlabs platform
 
 ## Project Setup
 
@@ -50,16 +49,23 @@ elevenlabs-convai-demo/
 │── .env
 ```
 
-## Configuration Files
+## Environment Configuration
 
-1. Create a `.env` file in the root directory:
+1. You'll find `.env.example` in the github project root directory:
 ```env
 XI_API_KEY=your_elevenlabs_api_key
 AGENT_ID=your_agent_id
 PORT=3000
 ```
 
-2. Set up `webpack.config.js`:
+2. Create your `.env` file:
+   - Copy `.env.example` to `.env`
+   - Replace the placeholder values with your actual credentials
+   - Make sure `.env` is listed in your `.gitignore` to keep your credentials secure
+
+⚠️ **Security Note**: Never commit your `.env` file or share your API credentials. Always keep them private and secure.
+
+3. Set up `webpack.config.js`:
 ```javascript
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -91,49 +97,147 @@ module.exports = {
     ]
 };
 ```
-
 ## Frontend Implementation
 
-1. Create `src/index.html`:
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElevenLabs Conversational AI Demo</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>ElevenLabs Conversational AI Demo</h1>
-        
-        <div class="status-container">
-            <div id="connectionStatus" class="status">Disconnected</div>
-            <div id="speakingStatus" class="speaking-status">Agent Silent</div>
-        </div>
+Let's build our user interface step by step.
 
-        <div class="controls">
-            <button id="startButton" class="button">Start Conversation</button>
-            <button id="endButton" class="button" disabled>End Conversation</button>
-            
-            <div class="volume-control">
-                <label for="volume">Volume:</label>
-                <input type="range" id="volume" min="0" max="100" value="100">
-            </div>
-        </div>
+### Basic UI Structure
+
+First, we create a simple interface in `index.html` with these key components:
+- Status indicators for connection and speaking states
+- Start/End conversation buttons
+- Volume control slider
+
+Here's the basic HTML structure:
+```html
+<div class="status-container">
+    <div id="connectionStatus" class="status">Disconnected</div>
+    <div id="speakingStatus" class="speaking-status">Agent Silent</div>
+</div>
+
+<div class="controls">
+    <button id="startButton" class="button">Start Conversation</button>
+    <button id="endButton" class="button" disabled>End Conversation</button>
+    
+    <div class="volume-control">
+        <label for="volume">Volume:</label>
+        <input type="range" id="volume" min="0" max="100" value="100">
     </div>
-    <script src="bundle.js"></script>
-</body>
-</html>
+</div>
 ```
 
-2. Create `src/app.js`:
+Without any styling, the interface looks basic but functional:
+
+<img height="200" src="/conversational-ai-sdks/images/front_end_1.png" />
+
+### Adding Visual Polish
+
+Let's enhance the UI with CSS to make it more user-friendly and visually appealing. We're using raw CSS here, but you can use alternatives like Tailwind CSS or shadcn/ui based on your preference.
+
+Key styling highlights:
+```css
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.status-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.status, .speaking-status {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.status {
+    background-color: #ff4444;
+    color: white;
+}
+
+.status.connected {
+    background-color: #00C851;
+}
+
+.speaking-status {
+    background-color: #eee;
+}
+
+.speaking-status.speaking {
+    background-color: #33b5e5;
+    color: white;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#startButton {
+    background-color: #00C851;
+    color: white;
+}
+
+#endButton {
+    background-color: #ff4444;
+    color: white;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+```
+
+<img height="200" src="/conversational-ai-sdks/images/front_end_2.png" />
+
+This is how it will look like after styling 
+
+
+### Core Application Logic
+
+Now let's build the application logic piece by piece in `app.js`:
+
+1. **Microphone Permission Handler**
 ```javascript
-import { Conversation } from '@11labs/client';
-
-let conversation = null;
-
 async function requestMicrophonePermission() {
     try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -143,7 +247,11 @@ async function requestMicrophonePermission() {
         return false;
     }
 }
+```
+This function requests microphone access from the user. We need this before starting any conversation to ensure we can capture the user's voice.
 
+2. **Signed URL Retrieval**
+```javascript
 async function getSignedUrl() {
     try {
         const response = await fetch('/api/signed-url');
@@ -155,8 +263,11 @@ async function getSignedUrl() {
         throw error;
     }
 }
+```
+This function communicates with our backend to get a signed URL, which is required for secure communication with the ElevenLabs API. The signed URL contains authentication information and permissions for the conversation.
 
-// Status update functions
+3. **Status Management**
+```javascript
 function updateStatus(isConnected) {
     const statusElement = document.getElementById('connectionStatus');
     statusElement.textContent = isConnected ? 'Connected' : 'Disconnected';
@@ -169,60 +280,67 @@ function updateSpeakingStatus(mode) {
     statusElement.textContent = isSpeaking ? 'Agent Speaking' : 'Agent Silent';
     statusElement.classList.toggle('speaking', isSpeaking);
 }
+```
+These functions handle the UI updates for connection and speaking states. They provide visual feedback to users about the current state of the conversation.
 
-// Conversation control functions
+4. **Conversation Initialization**
+```javascript
 async function startConversation() {
-    const startButton = document.getElementById('startButton');
-    const endButton = document.getElementById('endButton');
-    
-    try {
-        const hasPermission = await requestMicrophonePermission();
-        if (!hasPermission) {
-            alert('Microphone permission is required for the conversation.');
-            return;
-        }
-
-        const signedUrl = await getSignedUrl();
-        
-        conversation = await Conversation.startSession({
-            signedUrl,
-            onConnect: () => {
-                console.log('Connected');
-                updateStatus(true);
-                startButton.disabled = true;
-                endButton.disabled = false;
-            },
-            onDisconnect: () => {
-                console.log('Disconnected');
-                updateStatus(false);
-                startButton.disabled = false;
-                endButton.disabled = true;
-                updateSpeakingStatus({ mode: 'listening' });
-            },
-            onError: (error) => {
-                console.error('Conversation error:', error);
-                alert('An error occurred during the conversation.');
-            },
-            onModeChange: (mode) => {
-                updateSpeakingStatus(mode);
-            }
-        });
-    } catch (error) {
-        console.error('Error starting conversation:', error);
-        alert('Failed to start conversation. Please try again.');
+    // First, check for microphone permission
+    const hasPermission = await requestMicrophonePermission();
+    if (!hasPermission) {
+        alert('Microphone permission is required for the conversation.');
+        return;
     }
-}
 
+    // Get the signed URL for authentication
+    const signedUrl = await getSignedUrl();
+    
+    // Initialize the conversation with the ElevenLabs SDK
+    conversation = await Conversation.startSession({
+        signedUrl,
+        onConnect: () => {
+            // Handle successful connection
+            updateStatus(true);
+            toggleButtons(true);
+        },
+        onDisconnect: () => {
+            // Handle disconnection
+            updateStatus(false);
+            toggleButtons(false);
+            updateSpeakingStatus({ mode: 'listening' });
+        },
+        onError: (error) => {
+            // Handle errors during conversation
+            console.error('Conversation error:', error);
+            alert('An error occurred during the conversation.');
+        },
+        onModeChange: (mode) => {
+            // Update UI when agent switches between speaking and listening
+            updateSpeakingStatus(mode);
+        }
+    });
+}
+```
+This function orchestrates the conversation startup process. It:
+1. Checks for microphone permission
+2. Gets the authentication URL
+3. Initializes the conversation session
+4. Sets up event handlers for various conversation states
+
+5. **Conversation Control**
+```javascript
 async function endConversation() {
     if (conversation) {
         await conversation.endSession();
         conversation = null;
     }
 }
+```
+A simple function to properly end the conversation session and clean up resources.
 
-// Event listeners
-document.getElementById('startButton').addEventListener('click', startConversation);
-document.getElementById('endButton').addEventListener('click', endConversation);
+6. **Volume Control**
+```javascript
 document.getElementById('volume').addEventListener('input', async (e) => {
     if (conversation) {
         const volume = parseInt(e.target.value) / 100;
@@ -230,10 +348,15 @@ document.getElementById('volume').addEventListener('input', async (e) => {
     }
 });
 ```
+This event listener handles volume adjustments during the conversation, converting the range input (0-100) to the required volume scale (0-1).
 
 ## Backend Implementation
 
-Create `backend/server.js`:
+The backend server handles secure communication with the ElevenLabs API and serves your frontend application. Let's build it step by step:
+
+### 1. Setting Up Dependencies
+
+First, we need to import our required packages:
 ```javascript
 const express = require('express');
 const cors = require('cors');
@@ -241,12 +364,32 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 dotenv.config();
+```
 
+These imports provide:
+- `express`: Web framework for handling HTTP requests
+- `cors`: Middleware for enabling Cross-Origin Resource Sharing
+- `dotenv`: Loads environment variables from .env file
+- `path`: Utilities for handling file paths
+
+### 2. Configuring Express Server
+
+```javascript
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../dist')));
+```
 
+This configuration:
+- Creates an Express application
+- Enables CORS for development (allows frontend to communicate with backend)
+- Adds JSON parsing middleware for handling request bodies
+- Serves the frontend files from the 'dist' directory
+
+### 3. Creating the Signed URL Endpoint
+
+```javascript
 app.get('/api/signed-url', async (req, res) => {
     try {
         const response = await fetch(
@@ -270,16 +413,46 @@ app.get('/api/signed-url', async (req, res) => {
         res.status(500).json({ error: 'Failed to get signed URL' });
     }
 });
+```
 
+This endpoint:
+1. Makes a GET request to ElevenLabs API using your credentials
+2. Includes your API key in the headers for authentication
+3. Handles successful responses by extracting and returning the signed URL
+4. Includes error handling for failed requests
+5. Returns a 500 status code if something goes wrong
+
+The signed URL is essential because:
+- It provides secure, temporary access to the conversational API
+- Keeps your API key secure on the backend
+- Allows the frontend to connect without exposing sensitive credentials
+
+### 4. Adding a Catch-all Route
+
+```javascript
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
+```
 
+This route:
+- Catches any unmatched routes
+- Serves the main index.html file
+- Enables client-side routing in your single-page application
+
+### 5. Starting the Server
+
+```javascript
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 ```
+
+This final step:
+- Sets the server port (from environment variables or defaults to 3000)
+- Starts the Express server
+- Logs a confirmation message when the server is running
 
 ## Running the Application
 
@@ -338,10 +511,3 @@ Your application will now be running on:
    - Check if the volume slider is set correctly
    - Verify that no other applications are blocking audio output
 
-## Next Steps
-
-- Add visual feedback for voice input levels
-- Implement conversation history
-- Add support for different AI agents
-- Implement error recovery mechanisms
-- Add audio preprocessing options
