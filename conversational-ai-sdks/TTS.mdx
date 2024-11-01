@@ -1,0 +1,353 @@
+---
+title: "Using the ElevenLabs Speech-to-Text API in Python"
+description: "Learn how to transcribe audio files using the ElevenLabs Speech-to-Text API with a step-by-step Python example."
+---
+
+## Introduction
+
+This guide demonstrates how to use the ElevenLabs Speech-to-Text API in Python to transcribe audio files. We'll walk through a sample script step by step, explaining each component so you can understand and adapt it to your needs. By the end of this tutorial, you'll have a working script that you can run and modify.
+
+## Prerequisites
+
+- **Python 3.7+** installed on your system.
+- An **ElevenLabs API key**. You can obtain one by signing up on the [ElevenLabs website](https://elevenlabs.io/).
+## Installation
+
+First, install the required Python packages using `pip`:
+
+```shell
+pip install numpy websockets python-dotenv pydantic
+```
+
+## Setting Up Your Environment
+
+Create a `.env` file in your project directory and add your ElevenLabs API key:
+
+```env
+ELEVENLABS_API_KEY=your_api_key_here
+```
+
+Replace `your_api_key_here` with your actual API key.
+
+## Understanding the Script
+
+Let's dive into the script piece by piece.
+
+### Importing Necessary Modules
+
+```python
+import os
+import json
+import wave
+import base64
+import asyncio
+import numpy as np
+import websockets
+from dotenv import load_dotenv
+from pydantic import BaseModel
+```
+
+### Defining the Data Model
+
+```python
+class UserAudio(BaseModel):
+    user_audio_chunk: str
+```
+
+We use `pydantic` to define a data model for the audio chunks we'll send to the API.
+
+### Creating the Speech-to-Text Client Class
+
+```python
+class SpeechToTextClient:
+    def __init__(self):
+        load_dotenv()
+        self.api_key = os.getenv("ELEVENLABS_API_KEY")
+        self.ws_url = "wss://api.elevenlabs.io/v1/speech-to-text/stream-input"
+```
+
+### Processing the Audio File
+
+```python
+async def process_audio_file(self, audio_file_path: str):
+    """Process an audio file and stream it to the Speech-to-Text API."""
+    with wave.open(audio_file_path, "rb") as wav:
+        sample_rate = wav.getframerate()
+        channels = wav.getnchannels()
+        audio_data = np.frombuffer(wav.readframes(wav.getnframes()), dtype=np.int16)
+```
+
+- **`wave.open`**: Opens the WAV audio file.
+- **`sample_rate`**: Should be 16000 Hz (required by the API).
+- **`channels`**: Should be mono audio (single channel).
+- **`audio_data`**: Reads the audio frames into a NumPy array.
+
+### Validating the Audio Format
+
+```python
+# Ensure sample rate is 16000 Hz
+assert sample_rate == 16000, f"Only 16kHz audio is supported. Got {sample_rate}"
+
+# Ensure audio is mono
+assert channels == 1, "Only single channel audio is supported."
+```
+
+These assertions ensure the audio file meets the API's requirements.
+
+### Establishing the WebSocket Connection
+
+```python
+async with websockets.connect(
+    self.ws_url,
+    extra_headers={"xi-api-key": self.api_key}
+) as ws:
+```
+
+- **`websockets.connect`**: Establishes a connection to the WebSocket API with the necessary headers.
+
+### Sending Initial Configuration
+
+```python
+# Send initial configuration
+await ws.send(json.dumps({"language": "en", "mode": "silence"}))
+```
+
+- **`language`**: Sets the transcription language to English.
+- **`mode`**: Sets the transcription mode (e.g., "silence" mode for silence detection).
+
+### Preparing to Listen for Responses
+
+```python
+listener_task = asyncio.create_task(
+    self.listen_to_websocket(ws, transcription)
+)
+```
+
+- **`listener_task`**: An asynchronous task that listens for transcription results from the API.
+
+### Streaming Audio Chunks
+
+```python
+chunk_size = int(sample_rate) // 4  # 0.25-second chunks
+tries = 0
+
+# Send audio chunks
+for i in range(0, len(audio_data), chunk_size):
+    chunk = audio_data[i : i + chunk_size]
+    if chunk is not None:
+        # Encode the audio chunk
+        audio_chunk = base64.b64encode(chunk.tobytes()).decode("utf-8")
+        message = UserAudio(user_audio_chunk=audio_chunk).dict()
+
+    # Send the chunk with retry logic
+    while True:
+        try:
+            await ws.send(json.dumps(message))
+            break
+        except Exception as e:
+            await asyncio.sleep(0.03)
+            tries += 1
+            if tries >= 10:
+                raise e
+
+    await asyncio.sleep(0.25)
+```
+
+- **`chunk_size`**: Determines the size of each audio chunk (0.25 seconds).
+- **`audio_chunk`**: Encodes the chunk in base64.
+- **Retry Logic**: Retries sending the chunk up to 10 times in case of transient errors.
+- **`await asyncio.sleep(0.25)`**: Pauses between sending chunks to mimic real-time streaming.
+
+### Listening for Transcription Results
+
+```python
+async def listen_to_websocket(self, ws, transcription):
+    """Listen for responses from the websocket."""
+    try:
+        while True:
+            response = await asyncio.wait_for(ws.recv(), 45)
+            response_data = json.loads(response)
+
+            print("RESPONSE: ", response_data)
+
+            if "user_transcription_event" in response_data:
+                transcription.append(
+                    response_data["user_transcription_event"]["user_transcript"]
+                )
+    except asyncio.TimeoutError:
+        print("No more messages coming")
+    except Exception as e:
+        print(f"Error in listener: {e}")
+```
+
+- **`await ws.recv()`**: Waits for messages from the WebSocket.
+- **`response_data`**: Parses the JSON response.
+- **Appending Transcriptions**: Adds the transcribed text to the `transcription` list.
+
+### Finalizing the Transcription
+
+```python
+await listener_task
+return " ".join(transcription)
+```
+
+- **`await listener_task`**: Ensures the listener task completes.
+- **Returning the Result**: Joins all transcribed segments into a single string.
+
+## Running the Script
+
+### Defining the Main Function
+
+```python
+async def main():
+    client = SpeechToTextClient()
+    audio_file = "speech_example.wav"
+    
+    try:
+        print("Starting transcription...")
+        await client.process_audio_file(audio_file)
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+```
+
+- **`client`**: Creates an instance of `SpeechToTextClient`.
+- **`audio_file`**: Specifies the path to your WAV file.
+- **Error Handling**: Catches and prints any exceptions that occur.
+
+### Entry Point of the Script
+
+```python
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+- **`asyncio.run(main())`**: Runs the main asynchronous function.
+
+## Full Script
+
+Below is the complete script combining all the pieces we've discussed.
+
+```python
+import os
+import json
+import wave
+import base64
+import asyncio
+import numpy as np
+import websockets
+from dotenv import load_dotenv
+from pydantic import BaseModel
+
+class UserAudio(BaseModel):
+    user_audio_chunk: str
+
+class SpeechToTextClient:
+    def __init__(self):
+        load_dotenv()
+        self.api_key = os.getenv("ELEVENLABS_API_KEY")
+        self.ws_url = "wss://api.elevenlabs.io/v1/speech-to-text/stream-input"
+        
+    async def process_audio_file(self, audio_file_path: str):
+        """Process an audio file and stream it to the Speech-to-Text API."""
+        with wave.open(audio_file_path, "rb") as wav:
+            sample_rate = wav.getframerate()
+            channels = wav.getnchannels()
+            audio_data = np.frombuffer(wav.readframes(wav.getnframes()), dtype=np.int16)
+
+        transcription = []
+        
+        async with websockets.connect(
+            self.ws_url,
+            extra_headers={"xi-api-key": self.api_key}
+        ) as ws:
+            listener_task = asyncio.create_task(
+                self.listen_to_websocket(ws, transcription)
+            )
+            
+            # Send initial configuration
+            await ws.send(json.dumps({"language": "en", "mode": "silence"}))
+
+            # Make sure sample rate is 16000
+            assert (
+                sample_rate == 16000
+            ), f"Only 16kHz audio is supported. Got {sample_rate}"
+            # Make sure audio is single channel
+            assert channels == 1, "Only single channel audio is supported."
+            chunk_size = int(sample_rate) // 4  # 0.25 second chunks
+            tries = 0
+
+            # Send audio chunks
+            for i in range(0, len(audio_data), chunk_size):
+                chunk = audio_data[i : i + chunk_size]
+                if chunk is not None:
+                    # Create the UserAudio object correctly
+                    audio_chunk = base64.b64encode(chunk.tobytes()).decode("utf-8")
+                    message = UserAudio(user_audio_chunk=audio_chunk).dict()
+
+                while True:
+                    try:
+                        await ws.send(json.dumps(message))
+                        break
+                    except Exception as e:
+                        await asyncio.sleep(0.03)
+                        tries += 1
+                        if tries >= 10:
+                            raise e
+
+                await asyncio.sleep(0.25)
+
+            await listener_task
+
+            return " ".join(transcription)
+
+    async def listen_to_websocket(self, ws, transcription):
+        """Listen for responses from the websocket."""
+        try:
+            while True:
+                response = await asyncio.wait_for(ws.recv(), 45)
+                response_data = json.loads(response)
+
+                print("RESPONSE: ", response_data)
+
+                if "user_transcription_event" in response_data:
+                    transcription.append(
+                        response_data["user_transcription_event"]["user_transcript"]
+                    )
+        except asyncio.TimeoutError:
+            print("No more messages coming")
+        except Exception as e:
+            print(f"Error in listener: {e}")
+
+async def main():
+    client = SpeechToTextClient()
+    audio_file = "speech_example.wav"
+    
+    try:
+        print("Starting transcription...")
+        await client.process_audio_file(audio_file)
+    
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## How to Run the Script
+
+1. **Place Your Audio File**: Ensure you have a `speech_example.wav` file in the same directory as your script.
+
+2. **Set Your API Key**: Make sure your `.env` file contains your actual API key.
+
+3. **Run the Script**:
+
+   ```shell
+   python demo.py
+   ```
+
+   You should see output similar to:
+
+   ```
+   Starting transcription...
+   RESPONSE:  {'conversation_initiation_metadata_event': {'session_id': 'tSoImiquzK8lIgBBvCl2'}, 'type': 'asr_initiation_metadata'}
+   ```
