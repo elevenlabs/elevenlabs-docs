@@ -32,7 +32,7 @@
         <label>
           <input required="required" type="checkbox" />
           I understand that if I do not consent to the collection as 
-          described above, ElevenLabs [x] services cannot be provided to 
+          described above, ElevenLabs services cannot be provided to 
           me.
         </label>
       </p>
