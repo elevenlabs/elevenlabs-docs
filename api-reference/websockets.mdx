@@ -260,6 +260,12 @@ The number of seconds that the connection can be inactive before it is automatic
 
 Defaults to `20` seconds, with a maximum allowed value of `180` seconds.
     </ParamField>
+
+<ParamField query="sync_alignment" type="boolean">
+    The audio for each text sequence is delivered in multiple chunks. By default when it's set to false, you'll receive all timing data (alignment information) with the first chunk only.
+    However, if you enable this option, you'll get the timing data with every audio chunk instead. This can help you precisely match each audio segment with its corresponding text.
+</ParamField>
+
 # Example - Voice streaming using ElevenLabs and OpenAI
 
 The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
