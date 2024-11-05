@@ -23,12 +23,16 @@
           derived from my voice to interpret my speech and provide customer
           support services.
         </label>
+      </p>
+      <p>
         <label>
           <input required="required" type="checkbox" />
           I consent to sharing my voice and data derived from my voice with 
           third-party service providers to train and improve our customer 
           support models.
         </label>
+      </p>
+      <p>
         <label>
           <input required="required" type="checkbox" />
           I understand that if I do not consent to the collection as 
