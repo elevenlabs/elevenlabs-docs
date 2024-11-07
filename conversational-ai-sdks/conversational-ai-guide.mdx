@@ -385,6 +385,11 @@ app.get('/api/signed-url', async (req, res) => {
 });
 ```
 
+The signed URL is essential because:
+- It provides secure, temporary access to the conversational API
+- Keeps your API key secure on the backend
+- Allows the frontend to connect without exposing sensitive credentials
+
 ### 4. Adding a Catch-all Route
 
 ```javascript
@@ -392,6 +397,11 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 ```
+
+This route:
+- Catches any unmatched routes
+- Serves the main index.html file
+- Enables client-side routing in your single-page application
 
 ### 5. Starting the Server
 
