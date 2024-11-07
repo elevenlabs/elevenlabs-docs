@@ -47,6 +47,7 @@ elevenlabs-convai-demo/
 │   └── styles.css
 │── backend/
 │   └── server.js
+│   └── server.py
 │── webpack.config.js
 │── package.json
 │── .env
@@ -333,6 +334,9 @@ A simple function to properly end the conversation session and clean up resource
 
 The backend server handles secure communication with the ElevenLabs API and serves your frontend application. Let's build it step by step:
 
+<Tabs>
+  <Tab title="Javascript">
+
 ### 1. Setting Up Dependencies
 
 First, we need to import our required packages:
@@ -345,12 +349,6 @@ const path = require('path');
 dotenv.config();
 ```
 
-These imports provide:
-- `express`: Web framework for handling HTTP requests
-- `cors`: Middleware for enabling Cross-Origin Resource Sharing
-- `dotenv`: Loads environment variables from .env file
-- `path`: Utilities for handling file paths
-
 ### 2. Configuring Express Server
 
 ```javascript
@@ -359,12 +357,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../dist')));
 ```
-
-This configuration:
-- Creates an Express application
-- Enables CORS for development (allows frontend to communicate with backend)
-- Adds JSON parsing middleware for handling request bodies
-- Serves the frontend files from the 'dist' directory
 
 ### 3. Creating the Signed URL Endpoint
 
@@ -421,10 +413,121 @@ app.listen(PORT, () => {
 });
 ```
 
-This final step:
-- Sets the server port (from environment variables or defaults to 3000)
-- Starts the Express server
-- Logs a confirmation message when the server is running
+</Tab>
+  <Tab title="Python">
+  ### 1. Setting Up Dependencies
+   First, install the required Python packages:
+```bash
+pip install fastapi uvicorn python-dotenv httpx python-multipart
+```
+
+### 2. Configuring FastAPI Server
+
+First, we need to import our required packages and set up the basic configuration:
+```python
+from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+import httpx
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load environment variables
+load_dotenv()
+
+app = FastAPI()
+
+# CORS middleware configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="dist"), name="static")
+```
+### 3. Creating the Signed URL Endpoint
+
+```python
+@app.get("/api/signed-url")
+async def get_signed_url():
+    agent_id = os.getenv("AGENT_ID")
+    xi_api_key = os.getenv("XI_API_KEY")
+    
+    if not agent_id or not xi_api_key:
+        raise HTTPException(status_code=500, detail="Missing environment variables")
+    
+    url = f"https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id={agent_id}"
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(
+                url,
+                headers={"xi-api-key": xi_api_key}
+            )
+            response.raise_for_status()
+            data = response.json()
+            return {"signedUrl": data["signed_url"]}
+            
+        except httpx.HTTPError as e:
+            raise HTTPException(status_code=500, detail="Failed to get signed URL")
+```
+
+### 4. Adding Routes for Static Files and SPA Support
+
+```python
+# Serve index.html for root path
+@app.get("/")
+async def serve_root():
+    return FileResponse("dist/index.html")
+
+# Catch-all route for client-side routing
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    # First try to serve from static directory
+    static_file = Path(f"dist/{full_path}")
+    if static_file.exists() and static_file.is_file():
+        return FileResponse(static_file)
+    
+    # If not found, serve index.html
+    return FileResponse("dist/index.html")
+```
+
+### 5. Running the Server
+
+Add the FastAPI server script to your `package.json`:
+```json
+{
+  "scripts": {
+    "start:backend:python": "uvicorn backend.server:app --reload --port 3000",
+    "start:backend:node": "node backend/server.js",
+    "start:python": "npm run build && uvicorn backend.server:app --reload --port 3000"
+  }
+}
+```
+
+Start the server using either:
+```bash
+npm run start:python
+# or directly
+uvicorn backend.server:app --reload --port 3000
+```
+
+The server will start on port 3000 with automatic reload enabled for development.
+
+Key Features of the FastAPI Implementation:
+- Async by default for better performance
+- Type safety and automatic validation
+- Built-in OpenAPI documentation at `/docs`
+- Modern async HTTP client with `httpx`
+- Automatic CORS handling
+</Tab>
+</Tabs>
 
 ## Running the Application
 
@@ -436,6 +539,9 @@ This final step:
     "build": "webpack --mode production",
     "dev": "concurrently \"npm run start:backend\" \"webpack serve --mode development\"",
     "start": "npm run build && npm run start:backend"
+    "start:backend:python": "uvicorn backend.server:app --reload --port 3000",
+    "start:backend:node": "node backend/server.js",
+    "start:python": "npm run build && uvicorn backend.server:app --reload --port 3000"
   }
 }
 ```
@@ -443,6 +549,8 @@ This final step:
 2. Start the development server:
 ```bash
 npm run dev
+or
+npm run start:python
 ```
 
 Your application will now be running on:
