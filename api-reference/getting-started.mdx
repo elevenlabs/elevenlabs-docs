@@ -4,23 +4,25 @@ description: "Start generating your first text-to-speech using Python and Eleven
 icon: "code"
 ---
 
-All plans, even the free plan, come with access to the API (Application Programming Interface), allowing you to use our technology programmatically and its full range of features through code. An API is the fundamental component that applications using ElevenLabs or any other service rely on.
+## Accessing the API
 
-In this section, we will provide a fairly concise overview of how the API can be used to make requests to the endpoints to fetch the voices in your voice library and even generate our first text-to-speech.
+With all plans, including the free plan, you gain full access to the ElevenLabs API, enabling you to generate speech programmatically across our entire range of features.
 
-Something that might be good to note is that the website is just a frontend for the API. So if you use Speech Synthesis or make calls directly to the API with code, there should be no difference in quality or output with the same settings. However, the AI is still non-deterministic so there might be a difference in the delivery of the generated output.
+<Info>
 
-The API and the website also share the same pool of quota when generating audio. So, if you have 10,000 characters in your account and you generate audio, the characters for that generation will be deducted from your account regardless of whether you use the [website](https://docs.elevenlabs.io/api-reference/) or the [API.](https://api.elevenlabs.io/docs) Given the extensive nature of the API and its virtually limitless possibilities, we will only do a very quick overview and showcase a few examples to at least get you up and running.
+Both the API and the website draw from a shared quota pool. Usage on either platform will affect your total available usage quota.
 
-The [Text-To-Speech](https://elevenlabs.io/docs/api-reference/text-to-speech) (TTS) endpoint transforms text into speech in a given voice. The input consists of text, voice, and voice settings with an option to specify model.
+</Info>
 
 ## Authentication
 
-The ElevenLabs API uses API keys for authentication. You can create multiple API keys with restricted permissions for specific API routes (e.g., text-to-speech). API keys can be disabled or deleted as needed.
+All requests to the ElevenLabs API must include an `xi-api-key` header with your API key. If using Client SDKs, this header is set automatically; otherwise, include it manually in each request. API keys can be restricted to specific routes, disabled or deleted as needed.
 
 To get your API key, [create an account](https://elevenlabs.io/sign-up), log in, and click on **"API Keys"** in the bottom left corner of the console.
 
-<img height="200" src="/api-reference/images/api_key.png" />
+<Frame>
+  <img height="200" src="/api-reference/images/api_key.png" />
+</Frame>
 
 <Warning>
 
@@ -28,9 +30,9 @@ Your API key is a secret. Do not share it or expose it in client-side code (brow
 
 </Warning>
 
-Include your API key in all API requests by adding it to the `xi-api-key` HTTP header.
-
 ## Fetching the voice_id
+
+The [Text-To-Speech](https://elevenlabs.io/docs/api-reference/text-to-speech) (TTS) endpoint transforms text into speech in a given voice. The input consists of text, voice, and voice settings with an option to specify model.
 
 Before we can generate anything, we need to get the `voice_id` for the voice we want to use.
 
