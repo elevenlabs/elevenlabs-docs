@@ -244,7 +244,11 @@ async function requestMicrophonePermission() {
 
 This function requests microphone access from the user. We need this before starting any conversation to ensure we can capture the user's voice.
 
-2. **Signed URL Retrieval**
+2. **URL Retrieval**
+
+<Tabs>
+  <Tab title="Signed URL - Private Agents">
+
 ```javascript
 async function getSignedUrl() {
     try {
@@ -259,6 +263,19 @@ async function getSignedUrl() {
 }
 ```
 The signed URL contains a short lived token that can be used to start the conversation, without exposing your ElevenLabs API key to your end users.
+Signed Url is needed for private agents / non-public agents. 
+</Tab>
+<Tab title="Public Agents">
+```javascript
+async function getAgentId() {
+    const response = await fetch('/api/getAgentId');
+    const { agentId } = await response.json();
+    return agentId;
+}
+```
+We can just provide Agent-id for public agents, no need for Signed URL
+</Tab>
+</Tabs>
 
 3. **Status Management**
 ```javascript
@@ -287,16 +304,17 @@ async function startConversation() {
         return;
     }
 
-    // Get the signed URL for authentication
     const signedUrl = await getSignedUrl();
+    //const agentId = await getAgentId(); // You can switch to agentID for public agents
     
-    // Initialize the conversation with the ElevenLabs SDK
     conversation = await Conversation.startSession({
-        signedUrl,
+        signedUrl: signedUrl,
+        //agentId: agentId, // You can switch to agentID for public agents
         onConnect: () => {
-            // Handle successful connection
+            console.log('Connected');
             updateStatus(true);
-            toggleButtons(true);
+            startButton.disabled = true;
+            endButton.disabled = false;
         },
         onDisconnect: () => {
             // Handle disconnection
@@ -316,7 +334,8 @@ async function startConversation() {
     });
 }
 ```
-This function orchestrates the conversation startup process.
+This function orchestrates the conversation startup process. Conversation initialization can be changed to public agents
+by commenting signedUrl and uncommenting agentId
 
 5. **Conversation Control**
 ```javascript
@@ -357,8 +376,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../dist')));
 ```
 
-### 3. Creating the Signed URL Endpoint
-
+### 3. Creating URL Endpoint
+<Tabs>
+  <Tab title="SignedUrl for private agents">
 ```javascript
 app.get('/api/signed-url', async (req, res) => {
     try {
@@ -389,7 +409,21 @@ The signed URL is essential because:
 - It provides secure, temporary access to the conversational API
 - Keeps your API key secure on the backend
 - Allows the frontend to connect without exposing sensitive credentials
+</Tab>
+<Tab title="Public Agents">
+```javascript
+app.get('/api/getAgentId', (req, res) => {
+    const agentId = process.env.AGENT_ID;
+    res.json({ 
+        agentId: `${agentId}` 
+    });
+});
+```
 
+We can just provide Agent-id for public agents, no need for Signed URL
+
+</Tab>
+</Tabs>
 ### 4. Adding a Catch-all Route
 
 ```javascript
@@ -450,7 +484,9 @@ app.add_middleware(
 # Mount static files
 app.mount("/static", StaticFiles(directory="dist"), name="static")
 ```
-### 3. Creating the Signed URL Endpoint
+### 3. Creating URL Endpoint
+<Tabs>
+  <Tab title="SignedUrl for private agents">
 
 ```python
 @app.get("/api/signed-url")
@@ -476,24 +512,23 @@ async def get_signed_url():
         except httpx.HTTPError as e:
             raise HTTPException(status_code=500, detail="Failed to get signed URL")
 ```
+</Tab>
+<Tab title="Public Agents">
+```python
+@app.get("/api/getAgentId")
+def getAgentId():
+    agent_id = os.getenv("AGENT_ID")
+    return {"agentId": agent_id}
+```
+</Tab>
+</Tabs>
 
-### 4. Adding Routes for Static Files and SPA Support
+### 4. Adding Routes for Static Files
 
 ```python
 # Serve index.html for root path
 @app.get("/")
 async def serve_root():
-    return FileResponse("dist/index.html")
-
-# Catch-all route for client-side routing
-@app.get("/{full_path:path}")
-async def serve_spa(full_path: str):
-    # First try to serve from static directory
-    static_file = Path(f"dist/{full_path}")
-    if static_file.exists() and static_file.is_file():
-        return FileResponse(static_file)
-    
-    # If not found, serve index.html
     return FileResponse("dist/index.html")
 ```
 
