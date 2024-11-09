@@ -14,11 +14,22 @@ Add the ElevenLabs Swift SDK to your project using Swift Package Manager:
 
 <Steps>
   <Step title="Add the Package Dependency">
-    1. Open your project in Xcode 2. Go to `File` > `Add Packages...` 3. Enter
-    the repository URL: `https://github.com/elevenlabs/ElevenLabsSwift` 4.Select
-    your desired version
+  <>
+    1. Open your project in Xcode   
+    2. Go to `File` > `Add Packages...` 
+    3. Enter the repository URL: `https://github.com/elevenlabs/ElevenLabsSwift` 
+    4. Select your desired version
+  </>
+
   </Step>
-  <Step title="Import the SDK">```swift import ElevenLabsSDK ```</Step>
+  <Step title="Import the SDK">
+   <>
+     ```swift 
+     import ElevenLabsSDK
+      ```
+   </>
+
+  </Step>
 </Steps>
 
 <Warning>
@@ -114,6 +125,16 @@ Task {
 }
 ```
 
+### Audio Sample Rates
+
+The ElevenLabs SDK currently uses a default input sample rate of `16,000 Hz`. However, the output sample rate is configurable based on the agent's settings. Ensure that the output sample rate aligns with your specific application's audio requirements for smooth interaction.
+
+<Note>
+
+The SDK does not currently support ulaw format for audio encoding. For compatibility, consider using alternative formats.
+
+</Note>
+
 ### Managing the Session
 
 <CodeGroup>
@@ -136,7 +157,9 @@ conversation.stopRecording()
 
 ### Example Implementation
 
-Here's a complete example of a SwiftUI view implementing the conversation interface:
+For a full, working example, check out the [example application on GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai-swift-example).
+
+Here's an example SwiftUI view implementing the conversation interface:
 
 ```swift
 struct ConversationalAIView: View {
