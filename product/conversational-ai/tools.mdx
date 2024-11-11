@@ -95,7 +95,7 @@ Here's how we defined our body parameters for our AI receptionist:
 | Identifier  | Data Type | Required | Description                                                                                                                                                                                      |
 |-------------|-----------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | startTime   | String    | Yes      | The start time of the slot the person is checking availability for in UTC timezone, formatted as ISO 8601 (e.g., '2024-08-13T09:00:00Z'). Extract time from natural language and convert to UTC. |
-| eventTypeId | String    | Yes      | The desired meeting length, as an event id. If 15 minutes, return 1351800. If 30 minutes, return 1351801. If 60 minutes, return 1351802. If you are not sure, return 1351801.                    |
+| eventTypeId | String    | Yes      | The unique Cal event ID for the meeting duration. Use 1351800 for a 15-minute meeting, 1351801 for 30 minutes, and 1351802 for 60 minutes. If no specific duration is provided, default to 1351801 (30 minutes).                   |
 | attendee    | Object    | Yes      | The info on the attendee including their full name, email address and time zone.                                                                                                                 |
 
 Since attendee is an object, it's subfields are defined as their own parameters:
