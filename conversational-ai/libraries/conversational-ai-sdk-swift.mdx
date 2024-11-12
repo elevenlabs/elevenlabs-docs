@@ -1,0 +1,220 @@
+---
+title: "Swift SDK"
+description: "Conversational AI SDK: deploy customized, interactive voice agents in your Swift applications."
+icon: "swift"
+---
+
+<Info>
+  Also see the [Conversational AI
+  overview](/conversational-ai/docs/introduction)
+</Info>
+
+## Installation
+
+Add the ElevenLabs Swift SDK to your project using Swift Package Manager:
+
+<Steps>
+  <Step title="Add the Package Dependency">
+  <>
+    1. Open your project in Xcode   
+    2. Go to `File` > `Add Packages...` 
+    3. Enter the repository URL: `https://github.com/elevenlabs/ElevenLabsSwift` 
+    4. Select your desired version
+  </>
+
+  </Step>
+  <Step title="Import the SDK">
+   <>
+     ```swift 
+     import ElevenLabsSDK
+      ```
+   </>
+
+  </Step>
+</Steps>
+
+<Warning>
+  Ensure you add `NSMicrophoneUsageDescription` to your Info.plist to explain
+  microphone access to users.
+</Warning>
+
+## Usage
+
+This library is primarily designed for Conversational AI integration in Swift applications. Please use an alternative dependency for other features, such as speech synthesis.
+
+### Initialize Conversation
+
+First, create a session configuration and set up the necessary callbacks:
+
+```swift
+// Configure the session
+let config = ElevenLabsSDK.SessionConfig(agentId: "your-agent-id")
+
+// Set up callbacks
+var callbacks = ElevenLabsSDK.Callbacks()
+callbacks.onConnect = { conversationId in
+    print("Connected with ID: \(conversationId)")
+}
+callbacks.onDisconnect = {
+    print("Disconnected")
+}
+callbacks.onMessage = { message, role in
+    print("\(role.rawValue): \(message)")
+}
+callbacks.onError = { error, info in
+    print("Error: \(error), Info: \(String(describing: info))")
+}
+callbacks.onStatusChange = { status in
+    print("Status changed to: \(status.rawValue)")
+}
+callbacks.onModeChange = { mode in
+    print("Mode changed to: \(mode.rawValue)")
+}
+callbacks.onVolumeUpdate = { volume in
+    print("Volume updated: \(volume)")
+}
+```
+
+### Session Configuration
+
+There are two ways to initialize a session:
+
+<Tabs>
+  <Tab title="Using Agent ID">
+    You can obtain an Agent ID through the [ElevenLabs UI](https://elevenlabs.io/app/conversational-ai):
+    ```swift
+    let config = ElevenLabsSDK.SessionConfig(agentId: "<your-agent-id>")
+    ```
+  </Tab>
+  <Tab title="Using Signed URL">
+    For conversations requiring authorization, implement a server endpoint that requests a signed URL:
+    ```swift
+    // Swift example using URLSession
+    func getSignedUrl() async throws -> String {
+        let url = URL(string: "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url")!
+        var request = URLRequest(url: url)
+        request.setValue("YOUR-API-KEY", forHTTPHeaderField: "xi-api-key")
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let response = try JSONDecoder().decode(SignedUrlResponse.self, from: data)
+        return response.signedUrl
+    }
+
+    // Use the signed URL
+    let signedUrl = try await getSignedUrl()
+    let config = ElevenLabsSDK.SessionConfig(signedUrl: signedUrl)
+    ```
+
+  </Tab>
+</Tabs>
+
+### Starting the Conversation
+
+Initialize the conversation session asynchronously:
+
+```swift
+Task {
+    do {
+        let conversation = try await ElevenLabsSDK.Conversation.startSession(
+            config: config,
+            callbacks: callbacks
+        )
+        // Use the conversation instance
+    } catch {
+        print("Failed to start conversation: \(error)")
+    }
+}
+```
+
+### Audio Sample Rates
+
+The ElevenLabs SDK currently uses a default input sample rate of `16,000 Hz`. However, the output sample rate is configurable based on the agent's settings. Ensure that the output sample rate aligns with your specific application's audio requirements for smooth interaction.
+
+<Note>
+
+The SDK does not currently support ulaw format for audio encoding. For compatibility, consider using alternative formats.
+
+</Note>
+
+### Managing the Session
+
+<CodeGroup>
+  ```swift:End Session
+  // Starts the session
+  conversation.startSession()
+  // Ends the session
+  conversation.endSession()
+  ```
+
+```swift:Recording Controls
+// Start recording
+conversation.startRecording()
+
+// Stop recording
+conversation.stopRecording()
+```
+
+</CodeGroup>
+
+### Example Implementation
+
+For a full, working example, check out the [example application on GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai-swift-example).
+
+Here's an example SwiftUI view implementing the conversation interface:
+
+```swift
+struct ConversationalAIView: View {
+    @State private var conversation: ElevenLabsSDK.Conversation?
+    @State private var mode: ElevenLabsSDK.Mode = .listening
+    @State private var status: ElevenLabsSDK.Status = .disconnected
+    @State private var audioLevel: Float = 0.0
+
+    private func startConversation() {
+        Task {
+            do {
+                let config = ElevenLabsSDK.SessionConfig(agentId: "your-agent-id")
+                var callbacks = ElevenLabsSDK.Callbacks()
+
+                callbacks.onConnect = { conversationId in
+                    status = .connected
+                }
+                callbacks.onDisconnect = {
+                    status = .disconnected
+                }
+                callbacks.onModeChange = { newMode in
+                    DispatchQueue.main.async {
+                        mode = newMode
+                    }
+                }
+                callbacks.onVolumeUpdate = { newVolume in
+                    DispatchQueue.main.async {
+                        audioLevel = newVolume
+                    }
+                }
+
+                conversation = try await ElevenLabsSDK.Conversation.startSession(
+                    config: config,
+                    callbacks: callbacks
+                )
+            } catch {
+                print("Failed to start conversation: \(error)")
+            }
+        }
+    }
+
+    var body: some View {
+        VStack {
+            // Your UI implementation
+            Button(action: startConversation) {
+                Text(status == .connected ? "End Call" : "Start Call")
+            }
+        }
+    }
+}
+```
+
+<Note>
+  This SDK is currently experimental and under active development. While it's
+  stable enough for testing and development, it's not recommended for production
+  use yet.
+</Note>
