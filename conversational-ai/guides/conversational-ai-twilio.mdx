@@ -1,0 +1,318 @@
+---
+title: "Twilio Integration"
+description: "Guide for integrating Twilio Voice with Conversational AI."
+icon: "phone"
+---
+
+## Overview
+
+This guide explains how to set up a voice call integration between Twilio and Conversational AI.
+The integration allows you to handle incoming phone calls and connect Conversational AI agent to phone calls directly.
+
+## Prerequisites
+
+- ElevenLabs API key
+- Twilio account & phone number
+- Python 3.7+
+- ngrok for local development
+
+## Elevenlabs Agent Configurations
+
+We need to make sure audio encoding for Output and Input is set to "μ-law 8000 Hz". This is the audio encoding needed for
+Twilio Voice API, default audio encoding is PCM 16000 Hz
+
+### Set TTS Output Format
+
+Navigate to your agent -> Go to Voice Section -> Select "μ-law 8000 Hz"
+
+<img height="200" src="/developer-guides/images/twilio_3.png" />
+
+### Set Input Audio Format
+
+Navigate to your agent -> Go to Advanced Section -> Select "μ-law 8000 Hz"
+
+<img height="200" src="/developer-guides/images/twilio_4.png" />
+
+## Project Setup
+
+<Steps>
+<Step>
+First, install the required dependencies:
+
+```shell
+pip install fastapi uvicorn python-dotenv twilio elevenlabs websockets
+```
+
+</Step>
+
+<Step>
+Set up your environment variables by creating a `.env` file:
+
+```shell
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+AGENT_ID=your_agent_id
+```
+
+</Step>
+
+<Step>
+Create the main server file (main.py):
+
+```python
+import json
+import traceback
+import os
+from dotenv import load_dotenv
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi.responses import HTMLResponse
+from twilio.twiml.voice_response import VoiceResponse, Connect
+from elevenlabs import ElevenLabs
+from elevenlabs.conversational_ai.conversation import Conversation
+from twilio_audio_interface import TwilioAudioInterface
+
+# Load environment variables
+load_dotenv()
+
+# Initialize FastAPI app
+app = FastAPI()
+
+# Initialize ElevenLabs client
+eleven_labs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+ELEVEN_LABS_AGENT_ID = os.getenv("AGENT_ID")
+
+@app.get("/")
+async def root():
+    return {"message": "Twilio-ElevenLabs Integration Server"}
+
+@app.api_route("/incoming-call-eleven", methods=["GET", "POST"])
+async def handle_incoming_call(request: Request):
+    """Handle incoming call and return TwiML response to connect to Media Stream."""
+    response = VoiceResponse()
+    host = request.url.hostname
+    connect = Connect()
+    connect.stream(
+        url=f"wss://{host}/media-stream-eleven",
+    )
+
+    response.append(connect)
+    return HTMLResponse(content=str(response), media_type="application/xml")
+
+@app.websocket("/media-stream-eleven")
+async def handle_media_stream(websocket: WebSocket):
+    """Handle WebSocket connections for Eleven Labs integration"""
+    await websocket.accept()
+    print("WebSocket connection established")
+
+    audio_interface = TwilioAudioInterface(websocket)
+    conversation = None
+
+    try:
+        conversation = Conversation(
+            client=eleven_labs_client,
+            agent_id=ELEVEN_LABS_AGENT_ID,
+            requires_auth=False,
+            audio_interface=audio_interface,
+            callback_agent_response=lambda text: print(f"Agent said: {text}"),
+            callback_user_transcript=lambda text: print(f"User said: {text}"),
+        )
+
+        conversation.start_session()
+        print("Conversation session started")
+
+        async for message in websocket.iter_text():
+            if not message:
+                continue
+
+            try:
+                data = json.loads(message)
+                await audio_interface.handle_twilio_message(data)
+            except Exception as e:
+                print(f"Error processing message: {str(e)}")
+                traceback.print_exc()
+
+    except WebSocketDisconnect:
+        print("WebSocket disconnected")
+    finally:
+        if conversation:
+            print("Ending conversation session...")
+            conversation.end_session()
+            conversation.wait_for_session_end()
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+```
+
+</Step>
+
+<Step>
+Create the Twilio audio interface (twilio_audio_interface.py):
+
+```python
+import asyncio
+from typing import Callable
+import queue
+import threading
+import base64
+from elevenlabs.conversational_ai.conversation import AudioInterface
+import websockets
+
+
+class TwilioAudioInterface(AudioInterface):
+    def __init__(self, websocket):
+        self.websocket = websocket
+        self.output_queue = queue.Queue()
+        self.should_stop = threading.Event()
+        self.stream_sid = None
+        self.input_callback = None
+        self.output_thread = None
+
+    def start(self, input_callback: Callable[[bytes], None]):
+        """Start the audio interface with the provided callback for input audio"""
+        self.input_callback = input_callback
+        self.output_thread = threading.Thread(target=self._output_thread)
+        self.output_thread.start()
+
+    def stop(self):
+        """Stop the audio interface and clean up resources"""
+        self.should_stop.set()
+        if self.output_thread:
+            self.output_thread.join(timeout=5.0)
+
+        self.stream_sid = None
+
+    def output(self, audio: bytes):
+        """Queue audio for output to Twilio
+        Audio should already be in mulaw 8kHz format from ElevenLabs"""
+        self.output_queue.put(audio)
+
+    def interrupt(self):
+        """Clear the output queue to stop any audio"""
+        try:
+            while True:
+                _ = self.output_queue.get(block=False)
+        except queue.Empty:
+            pass
+
+        asyncio.run(self._send_clear_message_to_twilio())
+
+    def _output_thread(self):
+        """Thread for handling audio output to Twilio"""
+        while not self.should_stop.is_set():
+            asyncio.run(self._send_audio_to_twilio())
+
+    async def _send_audio_to_twilio(self):
+        try:
+            audio = self.output_queue.get(timeout=0.2)
+            audio_payload = base64.b64encode(audio).decode("utf-8")
+            audio_delta = {
+                "event": "media",
+                "streamSid": self.stream_sid,
+                "media": {"payload": audio_payload},
+            }
+            await self.websocket.send_json(audio_delta)
+        except queue.Empty:
+            pass
+        except Exception as e:
+            print(f"Error sending audio: {e}")
+
+    async def _send_clear_message_to_twilio(self):
+        try:
+            clear_message = {"event": "clear", "streamSid": self.stream_sid}
+            await self.websocket.send_json(clear_message)
+        except Exception as e:
+            print(f"Error sending clear message to Twilio: {e}")
+
+    async def handle_twilio_message(self, data):
+        """Handle incoming Twilio WebSocket messages."""
+        try:
+            if data["event"] == "start":
+                self.stream_sid = data["start"]["streamSid"]
+                print(f"Started stream with stream_sid: {self.stream_sid}")
+            if data["event"] == "media":
+                audio_data = base64.b64decode(data["media"]["payload"])
+                if self.input_callback:
+                    self.input_callback(audio_data)
+
+        except websockets.exceptions.ConnectionClosed:
+            self.stop()
+            self.stream_sid = None
+            print("WebSocket closed, stopping audio processing")
+        except Exception as e:
+            print(f"Error in input_callback: {e}")
+```
+
+</Step>
+</Steps>
+
+## Setting Up Twilio
+
+<Steps>
+<Step>
+Start your local server:
+```shell
+python main.py
+```
+</Step>
+
+<Step>
+  Create a public URL using ngrok: ```shell ngrok http 8003 ``` Note down the
+  HTTPS URL provided by ngrok (e.g., https://your-ngrok-url.ngrok.app)
+  <img height="200" src="/developer-guides/images/twilio_1.png" />
+</Step>
+
+<Step>
+Configure your Twilio phone number:
+1. Go to the Twilio Console
+2. Navigate to Phone Numbers → Manage → Active numbers
+3. Select your phone number
+4. Under "Voice Configuration", set the webhook for incoming calls to:
+   `https://your-ngrok-url.ngrok.app/incoming-call-eleven`
+5. Make sure the HTTP method is set to POST
+<img height="200" src="/developer-guides/images/twilio_2.png" />
+</Step>
+</Steps>
+
+## Testing the Integration
+
+1. Call your Twilio phone number
+2. You should see console output indicating:
+   - WebSocket connection established
+   - Stream SID assigned
+   - Conversation session started
+3. Speak into the phone - you should see transcripts of your speech and the agent's responses in the console
+
+## Troubleshooting
+
+### Common Issues
+
+1. **WebSocket Connection Fails**
+
+   - Verify your ngrok URL is correct in the Twilio webhook settings
+   - Check that your server is running and accessible
+
+2. **No Audio Output**
+
+   - Ensure your ElevenLabs API key is correct
+   - Verify the AGENT_ID is properly configured
+
+3. **Audio Quality Issues**
+   - The integration uses mulaw 8kHz format as required by Twilio
+   - Check your network connectivity and latency
+
+### Debug Logging
+
+To enable detailed logging, add these lines to your main.py:
+
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
+
+## Security Considerations
+
+1. Always use environment variables for sensitive information
+2. Implement proper authentication for your endpoints
+3. Use HTTPS for all communications
+4. Regularly rotate API keys
+5. Monitor usage to prevent abuse
