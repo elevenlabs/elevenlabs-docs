@@ -6,920 +6,6 @@
 		"version": "1.0"
 	},
 	"paths": {
-		"/v1/convai/conversation/get_signed_url": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Signed Url",
-				"description": "Get a signed url to start a conversation with an agent with an agent that requires authorization",
-				"operationId": "Get_Signed_Url_v1_convai_conversation_get_signed_url_get",
-				"parameters": [
-					{
-						"description": "The id of the agent you're taking the action on.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of the agent you're taking the action on."
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "query"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ConversationSignedUrlResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/create": {
-			"post": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Create Agent",
-				"description": "Create an agent from a config object",
-				"operationId": "Create_Agent_v1_convai_agents_create_post",
-				"parameters": [
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/Body_Create_Agent_v1_convai_agents_create_post"
-							}
-						}
-					},
-					"required": true
-				},
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/CreateAgentResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/{agent_id}": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Agent",
-				"description": "Retrieve config for an agent",
-				"operationId": "Get_Agent_v1_convai_agents__agent_id__get",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetAgentResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			},
-			"delete": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Delete Agent",
-				"description": "Delete an agent",
-				"operationId": "Delete_Agent_v1_convai_agents__agent_id__delete",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"additionalProperties": {
-										"type": "string"
-									},
-									"type": "object",
-									"title": "Response Delete Agent V1 Convai Agents  Agent Id  Delete"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			},
-			"patch": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Patches An Agent Settings",
-				"description": "Patches an Agent settings",
-				"operationId": "Patches_an_Agent_settings_v1_convai_agents__agent_id__patch",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetAgentResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/{agent_id}/widget": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Agent Widget Config",
-				"description": "Retrieve the widget configuration for an agent",
-				"operationId": "Get_Agent_widget_config_v1_convai_agents__agent_id__widget_get",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetAgentEmbedResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/{agent_id}/avatar": {
-			"post": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Post Agent Avatar",
-				"description": "Sets the avatar for an agent displayed in the widget",
-				"operationId": "Post_Agent_avatar_v1_convai_agents__agent_id__avatar_post",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"multipart/form-data": {
-							"schema": {
-								"$ref": "#/components/schemas/Body_Post_Agent_avatar_v1_convai_agents__agent_id__avatar_post"
-							}
-						}
-					},
-					"required": true
-				},
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/PostAgentAvatarResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Documentation From Agent'S Knowledge Base",
-				"description": "Get details about a specific documentation making up the agent's knowledge base",
-				"operationId": "Get_documentation_from_Agent_s_knowledge_base_v1_convai_agents__agent_id__knowledge_base__documentation_id__get",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "The id of a document from the agent's knowledge base. This is returned on document addition.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Documentation Id",
-							"description": "The id of a document from the agent's knowledge base. This is returned on document addition.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "documentation_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetKnowledgeBaseReponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/{agent_id}/add-secret": {
-			"post": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Add A Secret To The Agent Which Can Be Referenced In Tool Calls",
-				"description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
-				"operationId": "Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post"
-							}
-						}
-					},
-					"required": true
-				},
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AddAgentSecretResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents/{agent_id}/add-to-knowledge-base": {
-			"post": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Add To Agent'S Knowledge Base",
-				"description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
-				"operationId": "Add_to_Agent_s_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post",
-				"parameters": [
-					{
-						"description": "The id of an agent. This is returned on agent creation.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of an agent. This is returned on agent creation.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"requestBody": {
-					"content": {
-						"multipart/form-data": {
-							"schema": {
-								"$ref": "#/components/schemas/Body_Add_to_Agent_s_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/AddKnowledgeBaseResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/agents": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Agents Page",
-				"description": "Returns a page of your agents and their metadata.",
-				"operationId": "Get_agents_page_v1_convai_agents_get",
-				"parameters": [
-					{
-						"description": "Used for fetching next page. Cursor is returned in the response.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Cursor",
-							"description": "Used for fetching next page. Cursor is returned in the response."
-						},
-						"name": "cursor",
-						"in": "query"
-					},
-					{
-						"description": "How many Agents to return at maximum. Can not exceed 100, defaults to 30.",
-						"required": false,
-						"schema": {
-							"type": "integer",
-							"maximum": 100.0,
-							"minimum": 1.0,
-							"title": "Page Size",
-							"description": "How many Agents to return at maximum. Can not exceed 100, defaults to 30.",
-							"default": 30
-						},
-						"name": "page_size",
-						"in": "query"
-					},
-					{
-						"description": "Search by agents name.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Search",
-							"description": "Search by agents name."
-						},
-						"name": "search",
-						"in": "query"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetAgentsPageResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/conversations": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Conversations",
-				"description": "Get all conversations of agents that user owns. With option to restrict to a specific agent.",
-				"operationId": "Get_Conversations_v1_convai_conversations_get",
-				"parameters": [
-					{
-						"description": "Used for fetching next page. Cursor is returned in the response.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Cursor",
-							"description": "Used for fetching next page. Cursor is returned in the response."
-						},
-						"name": "cursor",
-						"in": "query"
-					},
-					{
-						"description": "The id of the agent you're taking the action on.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Agent Id",
-							"description": "The id of the agent you're taking the action on."
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "agent_id",
-						"in": "query"
-					},
-					{
-						"description": "The result of the success evaluation",
-						"required": false,
-						"schema": {
-							"allOf": [
-								{
-									"$ref": "#/components/schemas/EvaluationSuccessResult"
-								}
-							],
-							"description": "The result of the success evaluation"
-						},
-						"example": "success",
-						"name": "call_successful",
-						"in": "query"
-					},
-					{
-						"description": "How many conversations to return at maximum. Can not exceed 100, defaults to 30.",
-						"required": false,
-						"schema": {
-							"type": "integer",
-							"maximum": 100.0,
-							"minimum": 1.0,
-							"title": "Page Size",
-							"description": "How many conversations to return at maximum. Can not exceed 100, defaults to 30.",
-							"default": 30
-						},
-						"name": "page_size",
-						"in": "query"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetConversationsPageResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/conversations/{conversation_id}": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Conversation Details",
-				"description": "Get the details of a particular conversation",
-				"operationId": "Get_Conversation_Details_v1_convai_conversations__conversation_id__get",
-				"parameters": [
-					{
-						"description": "The id of the conversation you're taking the action on.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Conversation Id",
-							"description": "The id of the conversation you're taking the action on.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "conversation_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/GetConversationResponseModel"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/v1/convai/conversations/{conversation_id}/audio": {
-			"get": {
-				"tags": [
-					"Conversational AI"
-				],
-				"summary": "Get Conversation Audio",
-				"description": "Get the audio recording of a particular conversation",
-				"operationId": "Get_Conversation_Audio_v1_convai_conversations__conversation_id__audio_get",
-				"parameters": [
-					{
-						"description": "The id of the conversation you're taking the action on.",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"title": "Conversation Id",
-							"description": "The id of the conversation you're taking the action on.",
-							"embed": true
-						},
-						"example": "21m00Tcm4TlvDq8ikWAM",
-						"name": "conversation_id",
-						"in": "path"
-					},
-					{
-						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-						"required": false,
-						"schema": {
-							"type": "string",
-							"title": "Xi-Api-Key",
-							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-						},
-						"name": "xi-api-key",
-						"in": "header"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Successful Response"
-					},
-					"422": {
-						"description": "Validation Error",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPValidationError"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/v1/history": {
 			"get": {
 				"tags": [
@@ -961,6 +47,34 @@
 							"description": "Voice ID to be filtered for, you can use GET https://api.elevenlabs.io/v1/voices to receive a list of voices and their IDs."
 						},
 						"name": "voice_id",
+						"in": "query"
+					},
+					{
+						"description": "search term used for filtering",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"title": "Search",
+							"description": "search term used for filtering"
+						},
+						"example": "In the land far far away",
+						"name": "search",
+						"in": "query"
+					},
+					{
+						"description": "Source of the generated history item",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"enum": [
+								"TTS",
+								"STS"
+							],
+							"title": "Source",
+							"description": "Source of the generated history item"
+						},
+						"example": "TTS",
+						"name": "source",
 						"in": "query"
 					},
 					{
@@ -1126,17 +240,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.history.delete(\n    history_item_id=\"ja9xsmfGhxYcymxGcOGB\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.history.delete(\"ja9xsmfGhxYcymxGcOGB\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/history/{history_item_id}/audio": {
@@ -1247,17 +351,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.history.download(\n    history_item_ids=[\"ja9xsmfGhxYcymxGcOGB\"],\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.history.download({\n    history_item_ids: [\"ja9xsmfGhxYcymxGcOGB\"]\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/sound-generation": {
@@ -1369,17 +463,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.audio_isolation.audio_isolation()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.audioIsolation.audioIsolation({\n    audio: fs.createReadStream(\"/path/to/your/file\")\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/audio-isolation/stream": {
@@ -1691,7 +775,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs, VoiceSettings\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert(\n    voice_id=\"pMsXgVXv3BLzUgSXRplE\",\n    optimize_streaming_latency=\"0\",\n    output_format=\"mp3_22050_32\",\n    text=\"It sure does, Jackie… My mama always said: “In Carolina, the air's so thick you can wear it!”\",\n    voice_settings=VoiceSettings(\n        stability=0.5,\n        similarity_boost=0.75,\n        style=0.0,\n    ),\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convert(\"pMsXgVXv3BLzUgSXRplE\", {\n    optimize_streaming_latency: \"0\",\n    output_format: \"mp3_22050_32\",\n    text: \"It sure does, Jackie\\u2026 My mama always said: \\u201CIn Carolina, the air's so thick you can wear it!\\u201D\",\n    voice_settings: {\n        stability: 0.5,\n        similarity_boost: 0.75,\n        style: 0\n    }\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/text-to-speech/{voice_id}/with-timestamps": {
@@ -1790,7 +884,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert_with_timestamps(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    text=\"text\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertWithTimestamps(\"21m00Tcm4TlvDq8ikWAM\", {\n    text: \"text\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/text-to-speech/{voice_id}/stream": {
@@ -1992,17 +1096,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.stream_with_timestamps(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    text=\"text\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.streamWithTimestamps(\"21m00Tcm4TlvDq8ikWAM\", {\n    text: \"text\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/speech-to-speech/{voice_id}": {
@@ -2101,17 +1195,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.speech_to_speech.convert(\n    voice_id=\"string\",\n    enable_logging=True,\n    optimize_streaming_latency=\"0\",\n    output_format=\"mp3_22050_32\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convert(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: true,\n    optimize_streaming_latency: \"0\",\n    output_format: \"mp3_22050_32\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/speech-to-speech/{voice_id}/stream": {
@@ -2290,7 +1374,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voice_generation.generate(\n    gender=\"female\",\n    accent=\"american\",\n    age=\"middle_aged\",\n    accent_strength=2.0,\n    text=\"It sure does, Jackie… My mama always said: “In Carolina, the air's so thick you can wear it!”\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voiceGeneration.generate({\n    gender: \"female\",\n    accent: \"american\",\n    age: \"middle_aged\",\n    accent_strength: 2,\n    text: \"It sure does, Jackie\\u2026 My mama always said: \\u201CIn Carolina, the air's so thick you can wear it!\\u201D\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/text-to-voice/create-previews": {
@@ -2298,10 +1392,35 @@
 				"tags": [
 					"text-to-voice"
 				],
-				"summary": "Generate Voice Previews From Description",
-				"description": "Generate custom voice previews based on provided voice description. The response includes a list of voice previews, each containing an id and a sample of the voice audio. If you like the voice preview and want to create a permanent voice, call `/v1/text-to-voice/create-voice-from-preview` with the corresponding voice id.",
+				"summary": "Generate A Voice Preview From Description",
+				"description": "Generate a custom voice based on voice description. This method returns a list of voice previews. Each preview has a generated_voice_id and a sample of the voice as base64 encoded mp3 audio. If you like the a voice previewand want to create the voice call /v1/text-to-voice/create-voice-from-preview with the generated_voice_id to create the voice.",
 				"operationId": "Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post",
 				"parameters": [
+					{
+						"description": "Output format of the generated audio. Must be one of:\nmp3_22050_32 - output format, mp3 with 22.05kHz sample rate at 32kbps.\nmp3_44100_32 - output format, mp3 with 44.1kHz sample rate at 32kbps.\nmp3_44100_64 - output format, mp3 with 44.1kHz sample rate at 64kbps.\nmp3_44100_96 - output format, mp3 with 44.1kHz sample rate at 96kbps.\nmp3_44100_128 - default output format, mp3 with 44.1kHz sample rate at 128kbps.\nmp3_44100_192 - output format, mp3 with 44.1kHz sample rate at 192kbps. Requires you to be subscribed to Creator tier or above.\npcm_16000 - PCM format (S16LE) with 16kHz sample rate.\npcm_22050 - PCM format (S16LE) with 22.05kHz sample rate.\npcm_24000 - PCM format (S16LE) with 24kHz sample rate.\npcm_44100 - PCM format (S16LE) with 44.1kHz sample rate. Requires you to be subscribed to Pro tier or above.\nulaw_8000 - μ-law format (sometimes written mu-law, often approximated as u-law) with 8kHz sample rate. Note that this format is commonly used for Twilio audio inputs.\n",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"enum": [
+								"mp3_22050_32",
+								"mp3_44100_32",
+								"mp3_44100_64",
+								"mp3_44100_96",
+								"mp3_44100_128",
+								"mp3_44100_192",
+								"pcm_16000",
+								"pcm_22050",
+								"pcm_24000",
+								"pcm_44100",
+								"ulaw_8000"
+							],
+							"title": "Output format of the generated audio.",
+							"description": "Output format of the generated audio. Must be one of:\nmp3_22050_32 - output format, mp3 with 22.05kHz sample rate at 32kbps.\nmp3_44100_32 - output format, mp3 with 44.1kHz sample rate at 32kbps.\nmp3_44100_64 - output format, mp3 with 44.1kHz sample rate at 64kbps.\nmp3_44100_96 - output format, mp3 with 44.1kHz sample rate at 96kbps.\nmp3_44100_128 - default output format, mp3 with 44.1kHz sample rate at 128kbps.\nmp3_44100_192 - output format, mp3 with 44.1kHz sample rate at 192kbps. Requires you to be subscribed to Creator tier or above.\npcm_16000 - PCM format (S16LE) with 16kHz sample rate.\npcm_22050 - PCM format (S16LE) with 22.05kHz sample rate.\npcm_24000 - PCM format (S16LE) with 24kHz sample rate.\npcm_44100 - PCM format (S16LE) with 44.1kHz sample rate. Requires you to be subscribed to Pro tier or above.\nulaw_8000 - μ-law format (sometimes written mu-law, often approximated as u-law) with 8kHz sample rate. Note that this format is commonly used for Twilio audio inputs.\n",
+							"default": "mp3_44100_192"
+						},
+						"name": "output_format",
+						"in": "query"
+					},
 					{
 						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
 						"required": false,
@@ -2318,7 +1437,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Body_Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post"
+								"$ref": "#/components/schemas/VoicePreviewsRequestModel"
 							}
 						}
 					},
@@ -2418,8 +1537,8 @@
 				"tags": [
 					"text-to-voice"
 				],
-				"summary": "Create Voice From Voice Preview",
-				"description": "Create a new voice from previously generated voice preview. This endpoint should be called after you fetched a `generated_voice_id` using `/v1/text-to-voice/create-previews`.",
+				"summary": "Create A New Voice From Voice Preview",
+				"description": "Create a voice from previously generated voice preview. This endpoint should be called after you fetched a generated_voice_id using /v1/text-to-voice/create-previews.",
 				"operationId": "Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post",
 				"parameters": [
 					{
@@ -2465,7 +1584,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_voice.create_voice_from_preview(\n    voice_name=\"voice_name\",\n    voice_description=\"voice_description\",\n    generated_voice_id=\"generated_voice_id\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToVoice.createVoiceFromPreview({\n    voice_name: \"voice_name\",\n    voice_description: \"voice_description\",\n    generated_voice_id: \"generated_voice_id\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/user/subscription": {
@@ -2510,17 +1639,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.user.get_subscription()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.user.getSubscription();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/user": {
@@ -2565,17 +1684,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.user.get()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.user.get();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices": {
@@ -2633,17 +1742,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_all()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getAll();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices/settings/default": {
@@ -2665,17 +1764,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_default_settings()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getDefaultSettings();\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices/{voice_id}/settings": {
@@ -2945,17 +2034,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs, VoiceSettings\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.edit_settings(\n    voice_id=\"29vD33N1CtxCmqQRPOHJ\",\n    request=VoiceSettings(\n        stability=0.1,\n        similarity_boost=0.3,\n        style=0.2,\n    ),\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.editSettings(\"29vD33N1CtxCmqQRPOHJ\", {\n    stability: 0.1,\n    similarity_boost: 0.3,\n    style: 0.2\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/voices/add": {
@@ -3254,7 +2333,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.add(\n    name=\"name\",\n    default_title_voice_id=\"default_title_voice_id\",\n    default_paragraph_voice_id=\"default_paragraph_voice_id\",\n    default_model_id=\"default_model_id\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.add({\n    name: \"name\",\n    default_title_voice_id: \"default_title_voice_id\",\n    default_paragraph_voice_id: \"default_paragraph_voice_id\",\n    default_model_id: \"default_model_id\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}": {
@@ -3311,17 +2400,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.get(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.get(\"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			},
 			"post": {
 				"tags": [
@@ -3642,17 +2721,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.stream_audio(\n    project_id=\"string\",\n    project_snapshot_id=\"string\",\n    convert_to_mpeg=True,\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.streamAudio(\"string\", \"string\", {\n    convert_to_mpeg: true\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive": {
@@ -3714,17 +2783,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.stream_archive(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    project_snapshot_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.streamArchive(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/chapters": {
@@ -3781,7 +2840,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.get_all(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.getAll(\"21m00Tcm4TlvDq8ikWAM\");\n"
+					}
+				]
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}": {
@@ -3850,17 +2919,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.get(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.get(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			},
 			"delete": {
 				"tags": [
@@ -4138,17 +3197,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.get_all_snapshots(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.getAllSnapshots(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream": {
@@ -4231,17 +3280,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.chapters.stream_snapshot(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_id=\"21m00Tcm4TlvDq8ikWAM\",\n    chapter_snapshot_id=\"21m00Tcm4TlvDq8ikWAM\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.chapters.streamSnapshot(\"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\", \"21m00Tcm4TlvDq8ikWAM\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/projects/{project_id}/update-pronunciation-dictionaries": {
@@ -4306,7 +3345,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs, PronunciationDictionaryVersionLocator\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.projects.update_pronunciation_dictionaries(\n    project_id=\"21m00Tcm4TlvDq8ikWAM\",\n    pronunciation_dictionary_locators=[\n        PronunciationDictionaryVersionLocator(\n            pronunciation_dictionary_id=\"pronunciation_dictionary_id\",\n            version_id=\"version_id\",\n        )\n    ],\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.projects.updatePronunciationDictionaries(\"21m00Tcm4TlvDq8ikWAM\", {\n    pronunciation_dictionary_locators: [{\n            pronunciation_dictionary_id: \"pronunciation_dictionary_id\",\n            version_id: \"version_id\"\n        }]\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/dubbing": {
@@ -4360,7 +3409,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.dub_a_video_or_an_audio_file(\n    target_lang=\"target_lang\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.dubAVideoOrAnAudioFile({\n    target_lang: \"target_lang\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/dubbing/{dubbing_id}": {
@@ -4416,17 +3475,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.get_dubbing_project_metadata(\n    dubbing_id=\"dubbing_id\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.getDubbingProjectMetadata(\"dubbing_id\");\n"
-					}
-				]
+				}
 			},
 			"delete": {
 				"tags": [
@@ -4478,17 +3527,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.delete_dubbing_project(\n    dubbing_id=\"dubbing_id\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.deleteDubbingProject(\"dubbing_id\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/dubbing/{dubbing_id}/audio/{language_code}": {
@@ -4643,17 +3682,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.dubbing.get_transcript_for_dub(\n    dubbing_id=\"dubbing_id\",\n    language_code=\"language_code\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.dubbing.getTranscriptForDub(\"dubbing_id\", \"language_code\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/admin/n8enylacgd/sso-provider": {
@@ -4706,6 +3735,48 @@
 						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.workspace.getSsoProviderAdmin({\n    workspace_id: \"workspace_id\"\n});\n"
 					}
 				]
+			}
+		},
+		"/admin/n8enylacgd/reads/{read_id}/html": {
+			"get": {
+				"summary": "Get Read Html By Id",
+				"description": "Returns the HTML content of a read.",
+				"operationId": "Get_read_HTML_by_ID_admin_n8enylacgd_reads__read_id__html_get",
+				"parameters": [
+					{
+						"description": "The ID of the read to get the HTML for.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"title": "Read Id",
+							"description": "The ID of the read to get the HTML for."
+						},
+						"name": "read_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetReadHtmlResponseModel"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
 			}
 		},
 		"/v1/models": {
@@ -5048,17 +4119,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_shared(\n    page_size=1,\n    gender=\"female\",\n    language=\"en\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getShared({\n    page_size: 1,\n    gender: \"female\",\n    language: \"en\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/similar-voices": {
@@ -5112,17 +4173,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_similar_library_voices()\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getSimilarLibraryVoices({});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/usage/character-stats": {
@@ -5283,17 +4334,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.add_from_file(\n    name=\"name\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.addFromFile({\n    name: \"name\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
@@ -5360,17 +4401,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\nfrom elevenlabs.pronunciation_dictionary import (\n    PronunciationDictionaryRule_Phoneme,\n)\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.add_rules_to_the_pronunciation_dictionary(\n    pronunciation_dictionary_id=\"21m00Tcm4TlvDq8ikWAM\",\n    rules=[\n        PronunciationDictionaryRule_Phoneme(\n            string_to_replace=\"rules\",\n            phoneme=\"rules\",\n            alphabet=\"rules\",\n        )\n    ],\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.addRulesToThePronunciationDictionary(\"21m00Tcm4TlvDq8ikWAM\", {\n    rules: [{\n            type: \"phoneme\",\n            string_to_replace: \"rules\",\n            phoneme: \"rules\",\n            alphabet: \"rules\"\n        }]\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules": {
@@ -5437,17 +4468,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.remove_rules_from_the_pronunciation_dictionary(\n    pronunciation_dictionary_id=\"21m00Tcm4TlvDq8ikWAM\",\n    rule_strings=[\"rule_strings\"],\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.removeRulesFromThePronunciationDictionary(\"21m00Tcm4TlvDq8ikWAM\", {\n    rule_strings: [\"rule_strings\"]\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download": {
@@ -5512,17 +4533,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.download(\n    dictionary_id=\"Fm6AvNgS53NXe6Kqxp3e\",\n    version_id=\"KZFyRUq3R6kaqhKI146w\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.download(\"Fm6AvNgS53NXe6Kqxp3e\", \"KZFyRUq3R6kaqhKI146w\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/": {
@@ -5659,17 +4670,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.pronunciation_dictionary.get_all(\n    page_size=1,\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.pronunciationDictionary.getAll({\n    page_size: 1\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/workspace/invites/add": {
@@ -5722,17 +4723,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.workspace.invite_user(\n    email=\"email\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.workspace.inviteUser({\n    email: \"email\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/workspace/invites": {
@@ -5785,17 +4776,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.workspace.delete_existing_invitation(\n    email=\"email\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.workspace.deleteExistingInvitation({\n    email: \"email\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/v1/workspace/members": {
@@ -5848,17 +4829,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.workspace.update_member(\n    email=\"email\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.workspace.updateMember({\n    email: \"email\"\n});\n"
-					}
-				]
+				}
 			}
 		},
 		"/profile/{handle}": {
@@ -5904,17 +4875,7 @@
 							}
 						}
 					}
-				},
-				"x-codeSamples": [
-					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.voices.get_a_profile_page(\n    handle=\"talexgeorge\",\n)\n"
-					},
-					{
-						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.voices.getAProfilePage(\"talexgeorge\");\n"
-					}
-				]
+				}
 			}
 		},
 		"/docs": {
@@ -5930,946 +4891,13 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": []
 			}
 		}
 	},
 	"components": {
 		"schemas": {
-			"Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch": {
-				"properties": {
-					"conversation_config": {
-						"type": "object",
-						"title": "Conversation Config",
-						"description": "Conversation configuration for an agent"
-					},
-					"platform_settings": {
-						"type": "object",
-						"title": "Platform Settings",
-						"description": "Platform settings for the agent are all settings that aren't related to the conversation orchestration and content."
-					},
-					"name": {
-						"type": "string",
-						"title": "Name",
-						"description": "A name to make the agent easier to find",
-						"optional": true
-					}
-				},
-				"type": "object",
-				"title": "Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch"
-			},
-			"GetConversationResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					},
-					"conversation_id": {
-						"type": "string",
-						"title": "Conversation Id"
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"processing",
-							"done"
-						],
-						"title": "Status"
-					},
-					"transcript": {
-						"items": {
-							"$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel"
-						},
-						"type": "array",
-						"title": "Transcript"
-					},
-					"metadata": {
-						"$ref": "#/components/schemas/ConversationHistoryMetadataCommonModel"
-					},
-					"analysis": {
-						"$ref": "#/components/schemas/ConversationHistoryAnalysisCommonModel"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id",
-					"conversation_id",
-					"status",
-					"transcript",
-					"metadata"
-				],
-				"title": "GetConversationResponseModel"
-			},
-			"ConversationHistoryAnalysisCommonModel": {
-				"properties": {
-					"evaluation_criteria_results": {
-						"additionalProperties": {
-							"$ref": "#/components/schemas/ConversationHistoryEvaluationCriteriaResultCommonModel"
-						},
-						"type": "object",
-						"title": "Evaluation Criteria Results"
-					},
-					"data_collection_results": {
-						"additionalProperties": {
-							"$ref": "#/components/schemas/DataCollectionResultCommonModel"
-						},
-						"type": "object",
-						"title": "Data Collection Results"
-					},
-					"call_successful": {
-						"$ref": "#/components/schemas/EvaluationSuccessResult"
-					},
-					"transcript_summary": {
-						"type": "string",
-						"title": "Transcript Summary"
-					}
-				},
-				"type": "object",
-				"required": [
-					"call_successful",
-					"transcript_summary"
-				],
-				"title": "ConversationHistoryAnalysisCommonModel"
-			},
-			"ConversationHistoryEvaluationCriteriaResultCommonModel": {
-				"properties": {
-					"criteria_id": {
-						"type": "string",
-						"title": "Criteria Id"
-					},
-					"result": {
-						"$ref": "#/components/schemas/EvaluationSuccessResult"
-					},
-					"rationale": {
-						"type": "string",
-						"title": "Rationale"
-					}
-				},
-				"type": "object",
-				"required": [
-					"criteria_id",
-					"result",
-					"rationale"
-				],
-				"title": "ConversationHistoryEvaluationCriteriaResultCommonModel"
-			},
-			"DataCollectionResultCommonModel": {
-				"properties": {
-					"data_collection_id": {
-						"type": "string",
-						"title": "Data Collection Id"
-					},
-					"value": {
-						"title": "Value"
-					},
-					"json_schema": {
-						"$ref": "#/components/schemas/LiteralJsonSchemaProperty"
-					},
-					"rationale": {
-						"type": "string",
-						"title": "Rationale"
-					}
-				},
-				"type": "object",
-				"required": [
-					"data_collection_id",
-					"rationale"
-				],
-				"title": "DataCollectionResultCommonModel"
-			},
-			"ConversationHistoryMetadataCommonModel": {
-				"properties": {
-					"start_time_unix_secs": {
-						"type": "integer",
-						"title": "Start Time Unix Secs"
-					},
-					"call_duration_secs": {
-						"type": "integer",
-						"title": "Call Duration Secs"
-					},
-					"cost": {
-						"type": "integer",
-						"title": "Cost"
-					}
-				},
-				"type": "object",
-				"required": [
-					"start_time_unix_secs",
-					"call_duration_secs"
-				],
-				"title": "ConversationHistoryMetadataCommonModel"
-			},
-			"ConversationHistoryTranscriptCommonModel": {
-				"properties": {
-					"role": {
-						"type": "string",
-						"enum": [
-							"user",
-							"agent"
-						],
-						"title": "Role"
-					},
-					"message": {
-						"type": "string",
-						"title": "Message"
-					},
-					"time_in_call_secs": {
-						"type": "integer",
-						"title": "Time In Call Secs"
-					}
-				},
-				"type": "object",
-				"required": [
-					"role",
-					"message",
-					"time_in_call_secs"
-				],
-				"title": "ConversationHistoryTranscriptCommonModel"
-			},
-			"GetConversationsPageResponseModel": {
-				"properties": {
-					"conversations": {
-						"items": {
-							"$ref": "#/components/schemas/ConversationSummaryResponseModel"
-						},
-						"type": "array",
-						"title": "Conversations"
-					},
-					"next_cursor": {
-						"type": "string",
-						"title": "Next Cursor"
-					},
-					"has_more": {
-						"type": "boolean",
-						"title": "Has More"
-					}
-				},
-				"type": "object",
-				"required": [
-					"conversations",
-					"has_more"
-				],
-				"title": "GetConversationsPageResponseModel"
-			},
-			"ConversationSummaryResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					},
-					"agent_name": {
-						"type": "string",
-						"title": "Agent Name"
-					},
-					"conversation_id": {
-						"type": "string",
-						"title": "Conversation Id"
-					},
-					"start_time_unix_secs": {
-						"type": "integer",
-						"title": "Start Time Unix Secs"
-					},
-					"call_duration_secs": {
-						"type": "integer",
-						"title": "Call Duration Secs"
-					},
-					"message_count": {
-						"type": "integer",
-						"title": "Message Count"
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"processing",
-							"done"
-						],
-						"title": "Status"
-					},
-					"call_successful": {
-						"$ref": "#/components/schemas/EvaluationSuccessResult"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id",
-					"conversation_id",
-					"start_time_unix_secs",
-					"call_duration_secs",
-					"message_count",
-					"status",
-					"call_successful"
-				],
-				"title": "ConversationSummaryResponseModel"
-			},
-			"EvaluationSuccessResult": {
-				"type": "string",
-				"enum": [
-					"success",
-					"failure",
-					"unknown"
-				],
-				"title": "EvaluationSuccessResult",
-				"description": "An enumeration."
-			},
-			"AgentMetadataResponseModel": {
-				"properties": {
-					"created_at_unix_secs": {
-						"type": "integer",
-						"title": "Created At Unix Secs"
-					}
-				},
-				"type": "object",
-				"required": [
-					"created_at_unix_secs"
-				],
-				"title": "AgentMetadataResponseModel"
-			},
-			"CreateAgentResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id"
-				],
-				"title": "CreateAgentResponseModel"
-			},
-			"GetAgentEmbedResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					},
-					"widget_config": {
-						"$ref": "#/components/schemas/EmbedConfig"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id",
-					"widget_config"
-				],
-				"title": "GetAgentEmbedResponseModel"
-			},
-			"Body_Create_Agent_v1_convai_agents_create_post": {
-				"properties": {
-					"conversation_config": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/ConversationalConfig"
-							}
-						],
-						"title": "Conversation Config",
-						"description": "Conversation configuration for an agent"
-					},
-					"platform_settings": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/AgentPlatformSettings"
-							}
-						],
-						"title": "Platform Settings",
-						"description": "Platform settings for the agent are all settings that aren't related to the conversation orchestration and content."
-					},
-					"name": {
-						"type": "string",
-						"title": "Name",
-						"description": "A name to make the agent easier to find",
-						"optional": true
-					}
-				},
-				"type": "object",
-				"required": [
-					"conversation_config"
-				],
-				"title": "Body_Create_Agent_v1_convai_agents_create_post"
-			},
-			"JsonLiteralType": {
-				"type": "string",
-				"enum": [
-					"boolean",
-					"string",
-					"integer",
-					"number"
-				],
-				"title": "JsonLiteralType",
-				"description": "JSON schema literal types. e.g. all Json types except nested objects and lists"
-			},
-			"GetAgentResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					},
-					"name": {
-						"type": "string",
-						"title": "Name"
-					},
-					"conversation_config": {
-						"$ref": "#/components/schemas/ConversationalConfig"
-					},
-					"metadata": {
-						"$ref": "#/components/schemas/AgentMetadataResponseModel"
-					},
-					"platform_settings": {
-						"$ref": "#/components/schemas/AgentPlatformSettings"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id",
-					"name",
-					"conversation_config",
-					"metadata"
-				],
-				"title": "GetAgentResponseModel"
-			},
-			"LiteralJsonSchemaProperty": {
-				"properties": {
-					"type": {
-						"$ref": "#/components/schemas/JsonLiteralType"
-					},
-					"description": {
-						"type": "string",
-						"title": "Description"
-					}
-				},
-				"type": "object",
-				"required": [
-					"type",
-					"description"
-				],
-				"title": "LiteralJsonSchemaProperty"
-			},
-			"AgentPlatformSettings": {
-				"properties": {
-					"auth": {
-						"$ref": "#/components/schemas/AuthSettings"
-					},
-					"evaluation": {
-						"$ref": "#/components/schemas/EvaluationSettings"
-					},
-					"widget": {
-						"$ref": "#/components/schemas/EmbedConfig"
-					},
-					"data_collection": {
-						"additionalProperties": {
-							"$ref": "#/components/schemas/LiteralJsonSchemaProperty"
-						},
-						"type": "object",
-						"title": "Data Collection"
-					}
-				},
-				"type": "object",
-				"title": "AgentPlatformSettings"
-			},
-			"EmbedVariant": {
-				"type": "string",
-				"enum": [
-					"compact",
-					"full",
-					"expandable"
-				],
-				"title": "EmbedVariant",
-				"description": "An enumeration."
-			},
-			"OrbAvatar": {
-				"properties": {
-					"type": {
-						"type": "string",
-						"enum": [
-							"orb"
-						],
-						"title": "Type",
-						"default": "orb"
-					},
-					"color_1": {
-						"type": "string",
-						"title": "Color 1",
-						"default": "#2792dc"
-					},
-					"color_2": {
-						"type": "string",
-						"title": "Color 2",
-						"default": "#9ce6e6"
-					}
-				},
-				"type": "object",
-				"title": "OrbAvatar"
-			},
-			"URLAvatar": {
-				"properties": {
-					"type": {
-						"type": "string",
-						"enum": [
-							"url"
-						],
-						"title": "Type",
-						"default": "url"
-					},
-					"custom_url": {
-						"type": "string",
-						"title": "Custom Url",
-						"default": ""
-					}
-				},
-				"type": "object",
-				"title": "URLAvatar"
-			},
-			"ImageAvatar": {
-				"properties": {
-					"type": {
-						"type": "string",
-						"enum": [
-							"image"
-						],
-						"title": "Type",
-						"default": "image"
-					},
-					"url": {
-						"type": "string",
-						"title": "Url",
-						"default": ""
-					}
-				},
-				"type": "object",
-				"title": "ImageAvatar"
-			},
-			"EmbedConfig": {
-				"properties": {
-					"variant": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/EmbedVariant"
-							}
-						],
-						"default": "full"
-					},
-					"avatar": {
-						"anyOf": [
-							{
-								"$ref": "#/components/schemas/OrbAvatar"
-							},
-							{
-								"$ref": "#/components/schemas/URLAvatar"
-							},
-							{
-								"$ref": "#/components/schemas/ImageAvatar"
-							}
-						],
-						"title": "Avatar"
-					},
-					"custom_avatar_path": {
-						"type": "string",
-						"title": "Custom Avatar Path"
-					},
-					"bg_color": {
-						"type": "string",
-						"title": "Bg Color",
-						"default": "#ffffff"
-					},
-					"text_color": {
-						"type": "string",
-						"title": "Text Color",
-						"default": "#000000"
-					},
-					"btn_color": {
-						"type": "string",
-						"title": "Btn Color",
-						"default": "#000000"
-					},
-					"btn_text_color": {
-						"type": "string",
-						"title": "Btn Text Color",
-						"default": "#ffffff"
-					},
-					"border_color": {
-						"type": "string",
-						"title": "Border Color",
-						"default": "#e1e1e1"
-					},
-					"focus_color": {
-						"type": "string",
-						"title": "Focus Color",
-						"default": "#000000"
-					},
-					"border_radius": {
-						"type": "integer",
-						"title": "Border Radius"
-					},
-					"btn_radius": {
-						"type": "integer",
-						"title": "Btn Radius"
-					},
-					"action_text": {
-						"type": "string",
-						"title": "Action Text"
-					},
-					"start_call_text": {
-						"type": "string",
-						"title": "Start Call Text"
-					},
-					"end_call_text": {
-						"type": "string",
-						"title": "End Call Text"
-					},
-					"expand_text": {
-						"type": "string",
-						"title": "Expand Text"
-					},
-					"listening_text": {
-						"type": "string",
-						"title": "Listening Text"
-					},
-					"speaking_text": {
-						"type": "string",
-						"title": "Speaking Text"
-					}
-				},
-				"type": "object",
-				"title": "EmbedConfig"
-			},
-			"PostAgentAvatarResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					},
-					"avatar_url": {
-						"type": "string",
-						"title": "Avatar Url"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id"
-				],
-				"title": "PostAgentAvatarResponseModel"
-			},
-			"AuthSettings": {
-				"properties": {
-					"enable_auth": {
-						"type": "boolean",
-						"title": "Enable Auth",
-						"default": false
-					}
-				},
-				"type": "object",
-				"title": "AuthSettings"
-			},
-			"PromptEvaluationCriteria": {
-				"properties": {
-					"id": {
-						"type": "string",
-						"title": "Id"
-					},
-					"name": {
-						"type": "string",
-						"title": "Name"
-					},
-					"type": {
-						"type": "string",
-						"enum": [
-							"prompt"
-						],
-						"const": "prompt",
-						"title": "Type",
-						"default": "prompt"
-					},
-					"conversation_goal_prompt": {
-						"type": "string",
-						"maxLength": 800,
-						"title": "Conversation Goal Prompt"
-					}
-				},
-				"type": "object",
-				"required": [
-					"id",
-					"conversation_goal_prompt"
-				],
-				"title": "PromptEvaluationCriteria",
-				"description": "An evaluation using the transcript and a prompt for a yes/no achieved answer"
-			},
-			"EvaluationSettings": {
-				"properties": {
-					"criteria": {
-						"items": {
-							"$ref": "#/components/schemas/PromptEvaluationCriteria"
-						},
-						"type": "array",
-						"title": "Criteria"
-					}
-				},
-				"type": "object",
-				"title": "EvaluationSettings",
-				"description": "Settings to evaluate an agent's performance.\nAgents are evaluated against a set of criteria, with success being defined as meeting some combination of those criteria."
-			},
-			"AgentConfig": {
-				"properties": {
-					"server": {
-						"$ref": "#/components/schemas/ServerAgent"
-					},
-					"prompt": {
-						"$ref": "#/components/schemas/PromptAgent"
-					},
-					"first_message": {
-						"type": "string",
-						"title": "First Message",
-						"default": ""
-					},
-					"language": {
-						"type": "string",
-						"title": "Language",
-						"default": "en"
-					}
-				},
-				"type": "object",
-				"title": "AgentConfig"
-			},
-			"ASRConversationalConfig": {
-				"properties": {
-					"quality": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/ASRQuality"
-							}
-						],
-						"default": "high"
-					},
-					"provider": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/ASRProvider"
-							}
-						],
-						"default": "elevenlabs"
-					},
-					"user_input_audio_format": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/ASRInputFormat"
-							}
-						],
-						"default": "pcm_16000"
-					},
-					"keywords": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array",
-						"title": "Keywords"
-					}
-				},
-				"type": "object",
-				"title": "ASRConversationalConfig"
-			},
-			"TurnConfig": {
-				"properties": {
-					"turn_timeout": {
-						"type": "number",
-						"title": "Turn Timeout",
-						"default": 7.0
-					}
-				},
-				"type": "object",
-				"title": "TurnConfig"
-			},
-			"TTSConversationalModel": {
-				"type": "string",
-				"enum": [
-					"eleven_turbo_v2",
-					"eleven_turbo_v2_5"
-				],
-				"title": "TTSConversationalModel",
-				"description": "An enumeration."
-			},
-			"TTSOutputFormat": {
-				"type": "string",
-				"enum": [
-					"pcm_16000",
-					"pcm_22050",
-					"pcm_24000",
-					"pcm_44100"
-				],
-				"title": "TTSOutputFormat",
-				"description": "An enumeration."
-			},
-			"TTSOptimizeStreamingLatency": {
-				"type": "integer",
-				"enum": [
-					0,
-					1,
-					2,
-					3,
-					4
-				],
-				"title": "TTSOptimizeStreamingLatency",
-				"description": "An enumeration."
-			},
-			"TTSConversationalConfig": {
-				"properties": {
-					"model_id": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/TTSConversationalModel"
-							}
-						],
-						"default": "eleven_turbo_v2"
-					},
-					"voice_id": {
-						"type": "string",
-						"title": "Voice Id",
-						"default": "bYTqZQo3Jz7LQtmGTgwi"
-					},
-					"agent_output_audio_format": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/TTSOutputFormat"
-							}
-						],
-						"default": "pcm_16000"
-					},
-					"optimize_streaming_latency": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
-							}
-						],
-						"default": 3
-					},
-					"stability": {
-						"type": "number",
-						"title": "Stability",
-						"default": 0.5
-					},
-					"similarity_boost": {
-						"type": "number",
-						"title": "Similarity Boost",
-						"default": 0.8
-					}
-				},
-				"type": "object",
-				"title": "TTSConversationalConfig"
-			},
-			"ConversationalConfig": {
-				"properties": {
-					"agent": {
-						"$ref": "#/components/schemas/AgentConfig"
-					},
-					"asr": {
-						"$ref": "#/components/schemas/ASRConversationalConfig"
-					},
-					"turn": {
-						"$ref": "#/components/schemas/TurnConfig"
-					},
-					"tts": {
-						"$ref": "#/components/schemas/TTSConversationalConfig"
-					},
-					"conversation": {
-						"$ref": "#/components/schemas/ConversationConfig"
-					}
-				},
-				"type": "object",
-				"title": "ConversationalConfig"
-			},
-			"ConversationConfig": {
-				"properties": {
-					"max_duration_seconds": {
-						"type": "integer",
-						"title": "Max Duration Seconds",
-						"default": 600
-					},
-					"client_events": {
-						"items": {
-							"$ref": "#/components/schemas/ClientEvent"
-						},
-						"type": "array"
-					}
-				},
-				"type": "object",
-				"title": "ConversationConfig"
-			},
-			"ClientEvent": {
-				"type": "string",
-				"enum": [
-					"conversation_initiation_metadata",
-					"ping",
-					"audio",
-					"interruption",
-					"user_transcript",
-					"agent_response",
-					"agent_response_correction",
-					"internal_vad_score",
-					"internal_turn_probability",
-					"internal_tentative_agent_response"
-				],
-				"title": "ClientEvent",
-				"description": "An enumeration."
-			},
-			"ConversationSignedUrlResponseModel": {
-				"properties": {
-					"signed_url": {
-						"type": "string",
-						"title": "Signed Url"
-					}
-				},
-				"type": "object",
-				"required": [
-					"signed_url"
-				],
-				"title": "ConversationSignedUrlResponseModel"
-			},
-			"GetAgentsPageResponseModel": {
-				"properties": {
-					"agents": {
-						"items": {
-							"$ref": "#/components/schemas/AgentSummaryResponseModel"
-						},
-						"type": "array",
-						"title": "Agents"
-					},
-					"next_cursor": {
-						"type": "string",
-						"title": "Next Cursor"
-					},
-					"has_more": {
-						"type": "boolean",
-						"title": "Has More"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agents",
-					"has_more"
-				],
-				"title": "GetAgentsPageResponseModel"
-			},
-			"AgentSummaryResponseModel": {
-				"properties": {
-					"agent_id": {
-						"type": "string",
-						"title": "Agent Id"
-					},
-					"name": {
-						"type": "string",
-						"title": "Name"
-					},
-					"created_at_unix_secs": {
-						"type": "integer",
-						"title": "Created At Unix Secs"
-					}
-				},
-				"type": "object",
-				"required": [
-					"agent_id",
-					"name",
-					"created_at_unix_secs"
-				],
-				"title": "AgentSummaryResponseModel"
-			},
 			"AddChapterResponseModel": {
 				"properties": {
 					"chapter": {
@@ -7093,7 +5121,7 @@
 					"quality_preset": {
 						"type": "string",
 						"title": "Quality of the generated audio.",
-						"description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra_lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
+						"description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
 						"default": "standard",
 						"include_in_schema": true
 					},
@@ -7186,6 +5214,20 @@
 						"title": "Callback Url",
 						"description": "[Deprecated] A url that will be called by our service when the project is converted with a json containing the status of the conversion",
 						"include_in_schema": false
+					},
+					"fiction": {
+						"type": "string",
+						"enum": [
+							"fiction",
+							"non-fiction"
+						],
+						"title": "Fiction",
+						"description": "An optional fiction of the project."
+					},
+					"quality_check_on": {
+						"type": "boolean",
+						"title": "Quality Check On",
+						"description": "Whether to run quality check on the generated audio and regenerate if needed."
 					}
 				},
 				"type": "object",
@@ -7317,8 +5359,10 @@
 					},
 					"voice_description": {
 						"type": "string",
+						"maxLength": 1000,
+						"minLength": 20,
 						"title": "Voice Description",
-						"description": "Description to use for the created voice. See https://elevenlabs.io/docs/voices/voice-lab/voice-design for prompting guide.",
+						"description": "Description to use for the created voice.",
 						"examples": [
 							"A sassy little squeaky mouse"
 						]
@@ -7326,7 +5370,7 @@
 					"generated_voice_id": {
 						"type": "string",
 						"title": "Generated Voice Id",
-						"description": "The generated_voice_id to create, call POST /v1/text-to-voice/create-previews and fetch the generated_voice_id from the response if don't have one yet.",
+						"description": "The generated_voice_id to create, call POST /v1/voice-generation/generate-voice and fetch the generated_voice_id from the response header if don't have one yet.",
 						"examples": [
 							"37HceQefKmEi3bGovXjL"
 						]
@@ -7374,6 +5418,8 @@
 					},
 					"voice_description": {
 						"type": "string",
+						"maxLength": 1000,
+						"minLength": 20,
 						"title": "Voice Description",
 						"description": "Description to use for the created voice.",
 						"examples": [
@@ -7639,6 +5685,11 @@
 						"title": "Volume Normalization",
 						"description": "When the project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
 						"default": false
+					},
+					"quality_check_on": {
+						"type": "boolean",
+						"title": "Quality Check On",
+						"description": "Whether to run quality check on the generated audio and regenerate if needed."
 					}
 				},
 				"type": "object",
@@ -7724,7 +5775,7 @@
 						"maxLength": 1000,
 						"minLength": 100,
 						"title": "Text",
-						"description": "Text to use for generating the voice preview. Text length has to be between 100 and 1000.",
+						"description": "Text to generate, text length has to be between 100 and 1000.",
 						"examples": [
 							"Every act of kindness, no matter how small, carries value and can make a difference, as no gesture of goodwill is ever wasted."
 						]
@@ -7739,34 +5790,6 @@
 					"text"
 				],
 				"title": "Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post"
-			},
-			"Body_Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post": {
-				"properties": {
-					"voice_description": {
-						"type": "string",
-						"title": "Voice Description",
-						"description": "Description to use for the created voice.",
-						"examples": [
-							"A sassy little squeaky mouse"
-						]
-					},
-					"text": {
-						"type": "string",
-						"maxLength": 1000,
-						"minLength": 100,
-						"title": "Text",
-						"description": "Text to generate, text length has to be between 100 and 1000.",
-						"examples": [
-							"Every act of kindness, no matter how small, carries value and can make a difference, as no gesture of goodwill is ever wasted."
-						]
-					}
-				},
-				"type": "object",
-				"required": [
-					"voice_description",
-					"text"
-				],
-				"title": "Body_Generate_a_voice_preview_from_description_v1_text_to_voice_create_previews_post"
 			},
 			"Body_Get_similar_library_voices_v1_similar_voices_post": {
 				"properties": {
@@ -7867,7 +5890,7 @@
 					"seed": {
 						"type": "integer",
 						"title": "Seed",
-						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
 					},
 					"remove_background_noise": {
 						"type": "boolean",
@@ -7904,7 +5927,7 @@
 					"seed": {
 						"type": "integer",
 						"title": "Seed",
-						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
 					},
 					"remove_background_noise": {
 						"type": "boolean",
@@ -7982,7 +6005,7 @@
 					"seed": {
 						"type": "integer",
 						"title": "Seed",
-						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
 					},
 					"previous_text": {
 						"type": "string",
@@ -8078,7 +6101,7 @@
 					"seed": {
 						"type": "integer",
 						"title": "Seed",
-						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
 					},
 					"previous_text": {
 						"type": "string",
@@ -8174,7 +6197,7 @@
 					"seed": {
 						"type": "integer",
 						"title": "Seed",
-						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
 					},
 					"previous_text": {
 						"type": "string",
@@ -8270,7 +6293,7 @@
 					"seed": {
 						"type": "integer",
 						"title": "Seed",
-						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed."
+						"description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
 					},
 					"previous_text": {
 						"type": "string",
@@ -8417,6 +6440,10 @@
 					},
 					"statistics": {
 						"$ref": "#/components/schemas/ChapterStatisticsResponseModel"
+					},
+					"last_conversion_error": {
+						"type": "string",
+						"title": "Last Conversion Error"
 					}
 				},
 				"type": "object",
@@ -8955,6 +6982,19 @@
 					"creation_time_unix"
 				],
 				"title": "GetPronunciationDictionaryMetadataResponseModel"
+			},
+			"GetReadHtmlResponseModel": {
+				"properties": {
+					"html_content": {
+						"type": "string",
+						"title": "Html Content"
+					}
+				},
+				"type": "object",
+				"required": [
+					"html_content"
+				],
+				"title": "GetReadHtmlResponseModel"
 			},
 			"GetSpeechHistoryResponseModel": {
 				"properties": {
@@ -9553,6 +7593,14 @@
 						],
 						"title": "Access Level"
 					},
+					"fiction": {
+						"type": "string",
+						"enum": [
+							"fiction",
+							"non-fiction"
+						],
+						"title": "Fiction"
+					},
 					"quality_preset": {
 						"type": "string",
 						"enum": [
@@ -9578,6 +7626,16 @@
 						"type": "array",
 						"title": "Pronunciation Dictionary Versions"
 					},
+					"apply_text_normalization": {
+						"type": "string",
+						"enum": [
+							"auto",
+							"on",
+							"off",
+							"apply_english"
+						],
+						"title": "Apply Text Normalization"
+					},
 					"experimental": {
 						"type": "object",
 						"title": "Experimental"
@@ -9598,6 +7656,7 @@
 					"quality_preset",
 					"chapters",
 					"pronunciation_dictionary_versions",
+					"apply_text_normalization",
 					"experimental"
 				],
 				"title": "ProjectExtendedResponseModel"
@@ -9710,6 +7769,14 @@
 							"viewer"
 						],
 						"title": "Access Level"
+					},
+					"fiction": {
+						"type": "string",
+						"enum": [
+							"fiction",
+							"non-fiction"
+						],
+						"title": "Fiction"
 					}
 				},
 				"type": "object",
@@ -9912,6 +7979,28 @@
 					"creation_time_unix"
 				],
 				"title": "PronunciationDictionaryVersionResponseModel"
+			},
+			"ReaderResourceResponseModel": {
+				"properties": {
+					"resource_type": {
+						"type": "string",
+						"enum": [
+							"read",
+							"collection"
+						],
+						"title": "Resource Type"
+					},
+					"resource_id": {
+						"type": "string",
+						"title": "Resource Id"
+					}
+				},
+				"type": "object",
+				"required": [
+					"resource_type",
+					"resource_id"
+				],
+				"title": "ReaderResourceResponseModel"
 			},
 			"RecordingResponseModel": {
 				"properties": {
@@ -10311,6 +8400,14 @@
 					"xi_api_key_preview": {
 						"type": "string",
 						"title": "Xi Api Key Preview"
+					},
+					"referral_link_code": {
+						"type": "string",
+						"title": "Referral Link Code"
+					},
+					"partnerstack_partner_default_link": {
+						"type": "string",
+						"title": "Partnerstack Partner Default Link"
 					}
 				},
 				"type": "object",
@@ -10475,19 +8572,57 @@
 					},
 					"media_type": {
 						"type": "string",
-						"enum": [
-							"audio/mpeg"
-						],
-						"title": "Media Type",
-						"default": "audio/mpeg"
+						"title": "Media Type"
+					},
+					"duration_secs": {
+						"type": "number",
+						"title": "Duration Secs"
 					}
 				},
 				"type": "object",
 				"required": [
 					"audio_base_64",
-					"generated_voice_id"
+					"generated_voice_id",
+					"media_type",
+					"duration_secs"
 				],
 				"title": "VoicePreviewResponseModel"
+			},
+			"VoicePreviewsRequestModel": {
+				"properties": {
+					"voice_description": {
+						"type": "string",
+						"maxLength": 1000,
+						"minLength": 20,
+						"title": "Voice Description",
+						"description": "Description to use for the created voice.",
+						"examples": [
+							"A sassy little squeaky mouse"
+						]
+					},
+					"text": {
+						"type": "string",
+						"maxLength": 1000,
+						"minLength": 100,
+						"title": "Text",
+						"description": "Text to generate, text length has to be between 100 and 1000.",
+						"examples": [
+							"Every act of kindness, no matter how small, carries value and can make a difference, as no gesture of goodwill is ever wasted."
+						]
+					},
+					"auto_generate_text": {
+						"type": "boolean",
+						"title": "Auto Generate Text",
+						"description": "Whether to automatically generate a text suitable for the voice description.",
+						"default": false
+					}
+				},
+				"type": "object",
+				"required": [
+					"voice_description",
+					"text"
+				],
+				"title": "VoicePreviewsRequestModel"
 			},
 			"VoicePreviewsResponseModel": {
 				"properties": {
@@ -10497,11 +8632,16 @@
 						},
 						"type": "array",
 						"title": "Previews"
+					},
+					"text": {
+						"type": "string",
+						"title": "Text"
 					}
 				},
 				"type": "object",
 				"required": [
-					"previews"
+					"previews",
+					"text"
 				],
 				"title": "VoicePreviewsResponseModel"
 			},
@@ -10854,6 +8994,13 @@
 					},
 					"moderation_check": {
 						"$ref": "#/components/schemas/VoiceSharingModerationCheckResponseModel"
+					},
+					"reader_restricted_on": {
+						"items": {
+							"$ref": "#/components/schemas/ReaderResourceResponseModel"
+						},
+						"type": "array",
+						"title": "Reader Restricted On"
 					}
 				},
 				"type": "object",
