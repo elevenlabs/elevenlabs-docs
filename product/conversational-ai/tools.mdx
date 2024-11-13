@@ -20,7 +20,7 @@ Before we proceed with creating our Tools, we will first create a Secret to secu
 
 You can find Secrets within the Conversational AI Dashboard in the Agent subnav. 
 
-<img height="200" src="/conversational-ai/images/bearer_secret.png" />
+<img height="200" src="/product/conversational-ai/images/bearer_secret.png" />
 
 ### Webhooks
 Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your webhook. For our AI receptionist, we created two Tools to interact with the Cal.com API:
@@ -61,7 +61,7 @@ We configured that as follows:
 | Value  | cal-api-version | 2024-08-13                                 |
 | Secret | Bearer          | Bearer (the secret key we defined earlier) |
 
-<img height="200" src="/conversational-ai/images/headers.png" />
+<img height="200" src="/product/conversational-ai/images/headers.png" />
 
 ### Path Parameters
 You can add path parameters by including variables surrounded by curly brackets in your URL like this {variable}. Once added to the URL path, it will appear under Path Parameters with the ability to update the Data Type and Description. 
@@ -71,7 +71,7 @@ Our AI receptionist does not call for Path Parameters so we will not be defining
 
 Get and Delete requests typically have query parameters while Post and Patch do not. Our Get_Available_Slots tool relies on a Get request that requires the following query parameters: startTime, endTime, eventTypeId, eventTypeSlug, and duration.
 
-<img height="200" src="/conversational-ai/images/cal_get_slots.png" />
+<img height="200" src="/product/conversational-ai/images/cal_get_slots.png" />
 
 In our Description for each, we define a prompt that our Conversational Agent will use to extract the relevant information from the call transcript using an LLM.
 
@@ -87,7 +87,7 @@ Here's how we defined our query parameters for our AI receptionist:
 ### Body Parameters
 Post and Patch requests typically have body parameters while Get and Delete do not. Our Book_Meeting tool is a Post request and requires the following Body Parameters: startTime, eventTypeId, attendee. 
 
-<img height="200" src="/conversational-ai/images/cal_book_meeting.png" />
+<img height="200" src="/product/conversational-ai/images/cal_book_meeting.png" />
 
 In our Description for each, we define a prompt that our Conversational Agent will use to extract the relevant information from the call transcript using an LLM.
 
