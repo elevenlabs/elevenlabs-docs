@@ -14,7 +14,7 @@ This tutorial will guide you through creating a web client that can interact wit
 
 <Note>
   Looking for a complete example? Check out our [Next.js demo on
-  GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/nextjs)
+  GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/nextjs).
 </Note>
 
 <Frame>
@@ -149,7 +149,14 @@ This tutorial will guide you through creating a web client that can interact wit
 
 <Accordion title="(Optional) Authenticate the agents with a signed URL">
 
-If you're using a private agent that requires authentication, you'll need to generate a signed URL from your server. This section explains how to set this up.
+<Note>
+  This authentication step is only required for private agents. If you're using
+  a public agent, you can skip this section and directly use the `agentId` in
+  the `startSession` call.
+</Note>
+
+If you're using a private agent that requires authentication, you'll need to generate
+a signed URL from your server. This section explains how to set this up.
 
 ### What You'll Need
 
@@ -237,22 +244,17 @@ If you're using a private agent that requires authentication, you'll need to gen
           // ... rest of the component ...
         }
         ```
+        <Warning>
+
+        Signed URLs expire after a short period. In a production environment, you
+        should implement proper error handling and URL refresh logic.
+
+        </Warning>
     </Step>
 
 </Steps>
 
 </Accordion>
-
-<Note>
-  This authentication step is only required for private agents. If you're using
-  a public agent, you can skip this section and directly use the `agentId` in
-  the `startSession` call.
-</Note>
-
-<Warning>
-  Signed URLs expire after a short period. In a production environment, you
-  should implement proper error handling and URL refresh logic.
-</Warning>
 
 ## Next Steps
 
