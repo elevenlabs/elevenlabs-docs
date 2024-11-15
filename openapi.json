@@ -5936,6 +5936,56 @@
 	},
 	"components": {
 		"schemas": {
+			"AddKnowledgeBaseResponseModel": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					}
+				},
+				"type": "object",
+				"required": [
+					"id"
+				],
+				"title": "AddKnowledgeBaseResponseModel"
+			},
+			"Body_Add_to_Agent_s_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post": {
+				"properties": {
+					"url": {
+						"type": "string",
+						"title": "Url",
+						"description": "URL to a page of documentation that the agent will have access to in order to interact with users."
+					},
+					"file": {
+						"type": "string",
+						"format": "binary",
+						"title": "File",
+						"description": "Documentation that the agent will have access to in order to interact with users."
+					}
+				},
+				"type": "object",
+				"title": "Body_Add_to_Agent_s_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post"
+			},
+			"Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"title": "Name",
+						"description": "A name to help identify a particular agent secret"
+					},
+					"secret_value": {
+						"type": "string",
+						"title": "Secret Value",
+						"description": "A value to be encrypted and used by the agent"
+					}
+				},
+				"type": "object",
+				"required": [
+					"name",
+					"secret_value"
+				],
+				"title": "Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post"
+			},
 			"Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch": {
 				"properties": {
 					"conversation_config": {
@@ -5957,6 +6007,66 @@
 				},
 				"type": "object",
 				"title": "Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch"
+			},
+			"AddAgentSecretResponseModel": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					}
+				},
+				"type": "object",
+				"required": [
+					"id",
+					"name"
+				],
+				"title": "AddAgentSecretResponseModel"
+			},
+			"Body_Post_Agent_avatar_v1_convai_agents__agent_id__avatar_post": {
+				"properties": {
+					"avatar_file": {
+						"type": "string",
+						"format": "binary",
+						"title": "Avatar File",
+						"description": "An image file to be used as the agent's avatar."
+					}
+				},
+				"type": "object",
+				"required": [
+					"avatar_file"
+				],
+				"title": "Body_Post_Agent_avatar_v1_convai_agents__agent_id__avatar_post"
+			},
+			"GetKnowledgeBaseReponseModel": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"title": "Id"
+					},
+					"type": {
+						"type": "string",
+						"enum": [
+							"file",
+							"url"
+						],
+						"title": "Type"
+					},
+					"extracted_inner_html": {
+						"type": "string",
+						"title": "Extracted Inner Html"
+					}
+				},
+				"type": "object",
+				"required": [
+					"id",
+					"type",
+					"extracted_inner_html"
+				],
+				"title": "GetKnowledgeBaseReponseModel"
 			},
 			"GetConversationResponseModel": {
 				"properties": {
@@ -6151,6 +6261,137 @@
 				],
 				"title": "GetConversationsPageResponseModel"
 			},
+			"ServerAgent": {
+				"properties": {
+					"url": {
+						"type": "string",
+						"title": "Url"
+					},
+					"server_events": {
+						"items": {
+							"$ref": "#/components/schemas/ServerEvent"
+						},
+						"type": "array"
+					},
+					"secret": {
+						"type": "string",
+						"title": "Secret"
+					},
+					"timeout": {
+						"type": "number",
+						"title": "Timeout",
+						"default": 5.0
+					},
+					"num_retries": {
+						"type": "integer",
+						"title": "Num Retries",
+						"default": 2
+					},
+					"error_message": {
+						"type": "string",
+						"title": "Error Message",
+						"default": "I encountered an internal error occurred while handling your request and I am not able to respond at the moment."
+					}
+				},
+				"type": "object",
+				"required": [
+					"url"
+				],
+				"title": "ServerAgent"
+			},
+			"ServerEvent": {
+				"type": "string",
+				"enum": [
+					"turn",
+					"interruption",
+					"turn_abandoned"
+				],
+				"title": "ServerEvent",
+				"description": "An enumeration."
+			},
+			"ObjectJsonSchemaProperty": {
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"object"
+						],
+						"const": "object",
+						"title": "Type",
+						"default": "object"
+					},
+					"properties": {
+						"additionalProperties": {
+							"$ref": "#/components/schemas/JsonSchemaProperty"
+						},
+						"type": "object",
+						"title": "Properties"
+					},
+					"required": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Required"
+					},
+					"description": {
+						"type": "string",
+						"title": "Description",
+						"default": ""
+					}
+				},
+				"additionalProperties": false,
+				"type": "object",
+				"title": "ObjectJsonSchemaProperty"
+			},
+			"JsonSchemaProperty": {
+				"properties": {
+					"type": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/JsonLiteralType"
+							},
+							{
+								"type": "string",
+								"enum": [
+									"object",
+									"array"
+								]
+							}
+						],
+						"title": "Type"
+					}
+				},
+				"type": "object",
+				"required": [
+					"type"
+				],
+				"title": "JsonSchemaProperty"
+			},
+			"QueryParamsJsonSchema": {
+				"properties": {
+					"properties": {
+						"additionalProperties": {
+							"$ref": "#/components/schemas/LiteralJsonSchemaProperty"
+						},
+						"type": "object",
+						"title": "Properties"
+					},
+					"required": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Required"
+					}
+				},
+				"additionalProperties": false,
+				"type": "object",
+				"required": [
+					"properties"
+				],
+				"title": "QueryParamsJsonSchema"
+			},
 			"ConversationSummaryResponseModel": {
 				"properties": {
 					"agent_id": {
@@ -6343,6 +6584,212 @@
 					"description"
 				],
 				"title": "LiteralJsonSchemaProperty"
+			},
+			"PromptAgent": {
+				"properties": {
+					"prompt": {
+						"type": "string",
+						"title": "Prompt"
+					},
+					"llm": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/LLM"
+							}
+						],
+						"default": "gemini-1.5-flash"
+					},
+					"temperature": {
+						"type": "number",
+						"title": "Temperature",
+						"default": 0.0
+					},
+					"max_tokens": {
+						"type": "integer",
+						"title": "Max Tokens",
+						"default": -1
+					},
+					"tools": {
+						"items": {
+							"$ref": "#/components/schemas/PromptAgentToolConfig"
+						},
+						"type": "array",
+						"title": "Tools"
+					},
+					"knowledge_base": {
+						"items": {
+							"$ref": "#/components/schemas/KnowledgeBaseLocator"
+						},
+						"type": "array",
+						"title": "Knowledge Base"
+					}
+				},
+				"type": "object",
+				"required": [
+					"prompt"
+				],
+				"title": "PromptAgent"
+			},
+			"ASRQuality": {
+				"type": "string",
+				"enum": [
+					"high"
+				],
+				"title": "ASRQuality",
+				"description": "An enumeration."
+			},
+			"ASRProvider": {
+				"type": "string",
+				"enum": [
+					"elevenlabs"
+				],
+				"title": "ASRProvider",
+				"description": "An enumeration."
+			},
+			"KnowledgeBaseLocator": {
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"file",
+							"url"
+						],
+						"title": "Type"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"id": {
+						"type": "string",
+						"title": "Id"
+					}
+				},
+				"type": "object",
+				"required": [
+					"type",
+					"name",
+					"id"
+				],
+				"title": "KnowledgeBaseLocator"
+			},
+			"PromptAgentToolConfig": {
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"webhook"
+						],
+						"title": "Type"
+					},
+					"name": {
+						"type": "string",
+						"title": "Name"
+					},
+					"description": {
+						"type": "string",
+						"title": "Description"
+					},
+					"placeholder_statement": {
+						"type": "string",
+						"title": "Placeholder Statement"
+					},
+					"api_schema": {
+						"$ref": "#/components/schemas/ToolWebhookConfig"
+					}
+				},
+				"type": "object",
+				"required": [
+					"type",
+					"name",
+					"description",
+					"api_schema"
+				],
+				"title": "PromptAgentToolConfig",
+				"description": "A configuration for a tool/function that the agent can use over the course of the conversation.\nInitially we only support webhooks, but it is likely we will want to support more types in the future.\n\nTODO can we include more of these best practises\n    https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling#best-practices"
+			},
+			"ToolWebhookConfig": {
+				"properties": {
+					"url": {
+						"type": "string",
+						"title": "Url"
+					},
+					"method": {
+						"type": "string",
+						"enum": [
+							"GET",
+							"POST",
+							"PATCH",
+							"DELETE"
+						],
+						"title": "Method",
+						"default": "GET"
+					},
+					"path_params_schema": {
+						"additionalProperties": {
+							"$ref": "#/components/schemas/LiteralJsonSchemaProperty"
+						},
+						"type": "object",
+						"title": "Path Params Schema"
+					},
+					"query_params_schema": {
+						"$ref": "#/components/schemas/QueryParamsJsonSchema"
+					},
+					"request_body_schema": {
+						"$ref": "#/components/schemas/ObjectJsonSchemaProperty"
+					},
+					"request_headers": {
+						"additionalProperties": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"$ref": "#/components/schemas/ConvAISecretLocator"
+								}
+							]
+						},
+						"type": "object",
+						"title": "Request Headers"
+					}
+				},
+				"type": "object",
+				"required": [
+					"url"
+				],
+				"title": "ToolWebhookConfig",
+				"description": "Configuration for a webhook that will be called by an LLM tool."
+			},
+			"ConvAISecretLocator": {
+				"properties": {
+					"secret_id": {
+						"type": "string",
+						"title": "Secret Id"
+					}
+				},
+				"type": "object",
+				"required": [
+					"secret_id"
+				],
+				"title": "ConvAISecretLocator",
+				"description": "Used to reference a secret from the agent's secret store."
+			},
+			"LLM": {
+				"type": "string",
+				"enum": [
+					"gpt-4o-mini",
+					"gpt-4o",
+					"gpt-4",
+					"gpt-4-turbo",
+					"gpt-3.5-turbo",
+					"gemini-1.5-pro",
+					"gemini-1.5-flash",
+					"gemini-1.0-pro",
+					"claude-3-5-sonnet",
+					"claude-3-haiku"
+				],
+				"title": "LLM",
+				"description": "An enumeration."
 			},
 			"AgentPlatformSettings": {
 				"properties": {
@@ -6665,6 +7112,17 @@
 				},
 				"type": "object",
 				"title": "ASRConversationalConfig"
+			},
+			"ASRInputFormat": {
+				"type": "string",
+				"enum": [
+					"pcm_16000",
+					"pcm_22050",
+					"pcm_24000",
+					"pcm_44100"
+				],
+				"title": "ASRInputFormat",
+				"description": "An enumeration."
 			},
 			"TurnConfig": {
 				"properties": {
@@ -7188,9 +7646,9 @@
 						"include_in_schema": false
 					},
 					"quality_check_on": {
-					  "type": "boolean",
-					  "title": "Quality Check On",
-					  "description": "Whether to run quality check on the generated audio and regenerate if needed."
+						"type": "boolean",
+						"title": "Quality Check On",
+						"description": "Whether to run quality check on the generated audio and regenerate if needed."
 					}
 				},
 				"type": "object",
@@ -7646,9 +8104,9 @@
 						"default": false
 					},
 					"quality_check_on": {
-					  "type": "boolean",
-					  "title": "Quality Check On",
-					  "description": "Whether to run quality check on the generated audio and regenerate if needed."
+						"type": "boolean",
+						"title": "Quality Check On",
+						"description": "Whether to run quality check on the generated audio and regenerate if needed."
 					}
 				},
 				"type": "object",
