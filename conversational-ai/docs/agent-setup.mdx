@@ -198,34 +198,40 @@ Configure evaluation criteria and data collection to analyze conversations and i
     - **Name**: Enter a descriptive name
     - **Prompt**: Enter detailed instructions for evaluating the conversation
 
-    ```plaintext Evaluation Examples
-    1. Name: order_completion
-       Prompt: Evaluate if the conversation resulted in a successful order completion.
-       Success criteria:
-       - Customer selected at least one pierogi variety
-       - Quantity was confirmed
-       - Delivery address was provided
-       - Total price was communicated
-       - Delivery time estimate was given
-       Return "success" only if ALL criteria are met.
+    <CodeGroup>
+      ```plaintext order_completion
+      Name: order_completion
+      Prompt: Evaluate if the conversation resulted in a successful order completion.
+      Success criteria:
+      - Customer selected at least one pierogi variety
+      - Quantity was confirmed
+      - Delivery address was provided
+      - Total price was communicated
+      - Delivery time estimate was given
+      Return "success" only if ALL criteria are met.
+      ```
 
-    2. Name: customer_satisfaction
-       Prompt: Analyze the conversation for signs of customer satisfaction.
-       Success criteria:
-       - Customer's questions were answered clearly
-       - No repeated requests for clarification
-       - No signs of frustration or confusion
-       - Positive or neutral customer responses
-       Return "failure" if there are clear signs of dissatisfaction.
+      ```plaintext customer_satisfaction
+      Name: customer_satisfaction
+      Prompt: Analyze the conversation for signs of customer satisfaction.
+      Success criteria:
+      - Customer's questions were answered clearly
+      - No repeated requests for clarification
+      - No signs of frustration or confusion
+      - Positive or neutral customer responses
+      Return "failure" if there are clear signs of dissatisfaction.
+      ```
 
-    3. Name: menu_explanation
-       Prompt: Evaluate if the assistant properly explained menu options when asked.
-       Success criteria:
-       - Mentioned available pierogi varieties
-       - Provided prices when relevant
-       - Explained portion sizes (dozens)
-       Return "unknown" if menu items were not discussed.
-    ```
+      ```plaintext menu_explanation
+      Name: menu_explanation
+      Prompt: Evaluate if the assistant properly explained menu options when asked.
+      Success criteria:
+      - Mentioned available pierogi varieties
+      - Provided prices when relevant
+      - Explained portion sizes (dozens)
+      Return "unknown" if menu items were not discussed.
+      ```
+    </CodeGroup>
 
   </Step>
 
@@ -238,19 +244,48 @@ Configure evaluation criteria and data collection to analyze conversations and i
     - **Description**: Provide detailed instructions for the LLM about how to extract the specific data from the transcript
 
     Example data collection items:
-    ```plaintext Data Collection Examples
-    1. Identifier: order_type
-       Description: Extract the type of order from the conversation. Should be one of: "delivery", "pickup", "inquiry_only"
 
-    2. Identifier: ordered_items
-       Description: List all pierogi varieties and quantities ordered in the format: "item: quantity". If no order was placed, return "none"
-
-    3. Identifier: delivery_zone
-       Description: Based on the delivery address, categorize the location as: "central_zakopane", "outer_zakopane", or "outside_delivery_zone"
-
-    4. Identifier: interaction_type
-       Description: Categorize the conversation as: "completed_order", "abandoned_order", "menu_inquiry", or "general_inquiry"
+    <CodeGroup>
+    ```plaintext Order Type
+    Identifier: order_type
+    Description: Extract the type of order from the conversation.
+    Should be one of:
+    - delivery
+    - pickup
+    - inquiry_only
     ```
+
+    ```plaintext Ordered Items
+    Identifier: ordered_items
+    Description: List all pierogi varieties and quantities ordered in the format: "item: quantity".
+    Should be one of:
+    - completed_order
+    - abandoned_order
+    - menu_inquiry
+    - general_inquiry
+    If no order was placed, return "none"
+    ```
+
+    ```plaintext Delivery Zone
+    Identifier: delivery_zone
+    Description: Based on the delivery address, categorize the location.
+    Should be one of:
+    - central_zakopane
+    - outer_zakopane
+    - outside_delivery_zone
+    ```
+
+    ```plaintext Interaction Type
+    Identifier: interaction_type
+    Description: Categorize the conversation.
+    Should be one of:
+    - completed_order
+    - abandoned_order
+    - menu_inquiry
+    - general_inquiry
+    ```
+
+    </CodeGroup>
 
   </Step>
 
