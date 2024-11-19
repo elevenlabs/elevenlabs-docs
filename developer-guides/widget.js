@@ -12,7 +12,7 @@
 
   // Create and append the widget element
   var widget = document.createElement('elevenlabs-convai');
-  widget.setAttribute('agent-id', 'oapIEuaQlE30RdjtC9BX');
+  widget.setAttribute('agent-id', 'OZmXb9pmFsSkDE5dukJv');
   widget.setAttribute('avatar-orb-color-1', '#4D9CFF');
   widget.setAttribute('avatar-orb-color-2', '#9CE6E6');
   widget.innerHTML = `\
