@@ -75,7 +75,9 @@ async def create_chat_completion(request: ChatCompletionRequest) -> StreamingRes
     async def event_stream():
         try:
             async for chunk in chat_completion_coroutine:
-                yield f"data: {json.dumps(chunk)}\n\n"
+                # Convert the ChatCompletionChunk to a dictionary before JSON serialization
+                chunk_dict = chunk.model_dump()
+                yield f"data: {json.dumps(chunk_dict)}\n\n"
             yield "data: [DONE]\n\n"
         except Exception as e:
             logging.error("An error occurred: %s", str(e))
