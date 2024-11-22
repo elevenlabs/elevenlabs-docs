@@ -1,101 +1,152 @@
 ---
-title: "Conversation Configuration"
-description: "Guide for customizing the agent per conversation and passing additional data over custom LLM"
-icon: "brain-circuit"
+title: "Conversation Customization"
+description: "Learn how to customize your AI agent for each conversation & pass additional metadata to the agent."
+icon: "sliders"
 ---
 
-Learn how to customize your ElevenLabs Conversational AI agent per conversation and pass additional parameters to your custom LLM implementation.
+Learn how to customize your AI agent for each conversation by adding personalized details and passing custom parameters. For example, greet users by their name, adjust responses based on account-specific data, or include metadata to enhance interactions.
 
 ## What You'll Need
 
 - An [ElevenLabs account](https://elevenlabs.io)
-- A configured ElevenLabs Conversational Agent
-- Python 3.7+
+- A configured ElevenLabs Conversational Agent ([create one here](/conversational-ai/docs/agent-setup))
+- Python 3.7+ or Node.js 16+
 
-## Agent Configuration Override
+## Agent Conversation Overrides
+
+In ElevenLabs Conversational AI, you typically define a top-level agent with default settings. This feature allows you to create tailored voice experiences, without creating new agents.
 
 <Frame>
-  <img
-    src="/conversational-ai/images/configuration-1.png"
-  />
-</Frame>
-<Frame>
-  <img
-    src="/conversational-ai/images/configuration-2.png"
-  />
+  <img width="500" src="/conversational-ai/images/configuration-1.png" />
 </Frame>
 
-You can see the first message is "Hi, I'm Eric. How can I help you today?" and the prompt is "You are a support agent named Eric. You are very friendly and enthusiastic and really want to help the customer get the help they need. Answer in 3 to 7 sentences in most cases.".
+The following steps will show you how to configure the `prompt` & `first_message` on setup to greet the user by their name.
 
-Language is set to "English" and voice is set to "Eric".
-
-We will define a new configuration for this agent and pass this configuration in conversation initiation.
-
-<Steps>
-  <Step title="Define Configuration Override">
-    Create a custom configuration object to override default agent settings:
-    ```python
-    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
-
-    conversation_override = {
-        "agent": {
-            "prompt": {
-                "prompt": "No matter what reply: I cannot help you with that at the moment."
+<Tabs>
+  <Tab title="Javascript">
+    <Tip>
+        Ensure you have the latest [Javascript](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-js)/[React SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-react) installed.
+    </Tip>
+    <Steps>
+    <Step>
+      ```javascript
+      const conversation = await Conversation.startSession({
+        ...
+        overrides: {
+            agent: {
+                prompt: {
+                    prompt: `The customer's bank account balance is ${customer_balance}. They are based in ${customer_location}.`
+                },
+                first_message: `Hi ${customer_name}, how can I help you today?`,
             },
-            "first_message": "Hey I'm currently unavailable.",
-            "language": None,
+            tts: {
+                voiceId: "" // override the voice id.
+            }
         },
-        "tts": {
-            "voice_id": "iP95p4xoKVk53GoZ742B"
-        }
-    }
+        ...
+      })
+      ```
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Python">
+    <Tip>
+        Ensure you have the latest [Python SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-python) installed.
+    </Tip>
+    <Steps>
+        <Step title="Define the Conversation Override">
+          ```python
+          from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
 
-    config = ConversationConfig(
-        conversation_config_override=conversation_override
-    )
-    ```
-  </Step>
+          # dynamically change the first message based on the user's name
+          conversation_override = {
+              "agent": {
+                  "prompt": {
+                      "prompt": f"The customer's bank account balance is {customer_balance}. They are based in {customer_location}."
+                  },
+                  "first_message": f"Hi {customer_name}, how can I help you today?",
+                  "language": <insert-override-language-here>,
+              },
+              "tts": {
+                  "voice_id": "iP95p4xoKVk53GoZ742B" # Override the voice
+              }
+          }
 
-  <Step title="Apply Configuration">
-    Pass the configuration when initializing the conversation:
-    ```python
-    conversation = Conversation(
-        <other parameters>
-        config=config,
-        <other parameters>
-    )
-    ```
-  </Step>
-</Steps>
+          config = ConversationConfig(
+              conversation_config_override=conversation_override
+          )
+          conversation = Conversation(
+              ...
+              config=config,
+              ...
+          )
+          ```
+        </Step>
 
-### Example Conversation
+        <Step title="Start the Session">
+          ```python
+          conversation.start_session()
+          ```
+        </Step>
+      </Steps>
 
-When we run this example, we will see the first message is "Hey I'm currently unavailable." and the prompt is "No matter what reply: I cannot help you with that at the moment."
-Also you will see the voice is changed to the one we set in the configuration. 
+  </Tab>
 
-When running with the above configuration, your conversation will look like this:
+  <Tab title="Swift">
+    <Tip>
+        Ensure you have the latest [Swift SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-swift) installed.
+    </Tip>
+    <Steps>
+      <Step title="Define the Conversation Override">
+        ```swift
+        import ElevenLabsSDK
 
-```
-hikmet@Hikmets-MacBook-Pro convai % python demo.py
-Agent: Hey I'm currently unavailable.
-User: Can you help me?
-Agent: I cannot help you with that at the moment.
-User: When can you help me?
-Agent: I cannot help you with that at the moment.
-User: Okay, thank you very much.
-Agent: I cannot help you with that at the moment.
-^C^C^C
-Conversation ID: PGnjA44SrX9jqrYNpyuZ
-```
+        let promptOverride = ElevenLabsSDK.AgentPrompt(
+            prompt: "The customer's bank account balance is \(customer_balance). They are based in \(customer_location)."
+        )
 
-With this agent override feature, you can create a single agent and customize it per conversation without changing the agent configuration.
+        let agentConfig = ElevenLabsSDK.AgentConfig(
+            prompt: promptOverride,
+            firstMessage: "Hi \(customer_name), how can I help you today?",
+            language: .en
+        )
+
+        let overrides = ElevenLabsSDK.ConversationConfigOverride(
+            agent: agentConfig,
+            tts: TTSConfig(voiceId: "custom_voice_id") // Override the voice
+        )
+
+        let config = ElevenLabsSDK.SessionConfig(
+            agentId: agent.id,
+            overrides: overrides
+        )
+        ```
+      </Step>
+            <Step title="Start the Conversation">
+        ```swift
+        ...
+        let conversation = try await ElevenLabsSDK.Conversation.startSession(
+            config: config,
+            callbacks: callbacks
+        )
+        ```
+      </Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+With this agent override feature, you can now create a single agent and customize it with every customer conversation.
 
 ## Custom LLM Parameters
 
-You can pass additional parameters to your custom LLM implementation using the same configuration system.
+Similarly, you may pass additional parameters to your custom LLM implementation.
 
+<Tabs>
+
+<Tab title="Python">
 <Steps>
-  <Step title="Define Extra Parameters">
+  <Step title="Define the Extra Parameters">
     Create an object containing your custom parameters:
     ```python
     from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
@@ -110,9 +161,10 @@ You can pass additional parameters to your custom LLM implementation using the s
         extra_body=extra_body_for_convai,
     )
     ```
+
   </Step>
 
-  <Step title="Update LLM Implementation">
+  <Step title="Update the LLM Implementation">
     Modify your custom LLM code to handle the additional parameters:
 
     ```python
@@ -179,40 +231,45 @@ You can pass additional parameters to your custom LLM implementation using the s
     if __name__ == "__main__":
         uvicorn.run(app, host="0.0.0.0", port=8013)
     ```
+
   </Step>
 </Steps>
 
-## Example Request
+### Example Request
 
-When using this configuration, your LLM will receive requests in this format:
+With this custom message setup, your LLM will receive requests in this format:
 
 ```json
 {
-   "messages":[
-      {
-         "role":"system",
-         "content":"\n  <Redacted>"
-      },
-      {
-         "role":"assistant",
-         "content":"Hey I'm currently unavailable."
-      },
-      {
-         "role":"user",
-         "content":"Hey, who are you?"
-      }
-   ],
-   "model":"gpt-4o",
-   "temperature":0.5,
-   "max_tokens":5000,
-   "stream":true,
-   "elevenlabs_extra_body":{
-      "UUID":"123e4567-e89b-12d3-a456-426614174000",
-      "parameter-1":"value-1",
-      "parameter-2":"value-2"
-   }
+  "messages": [
+    {
+      "role": "system",
+      "content": "\n  <Redacted>"
+    },
+    {
+      "role": "assistant",
+      "content": "Hey I'm currently unavailable."
+    },
+    {
+      "role": "user",
+      "content": "Hey, who are you?"
+    }
+  ],
+  "model": "gpt-4o",
+  "temperature": 0.5,
+  "max_tokens": 5000,
+  "stream": true,
+  "elevenlabs_extra_body": {
+    "UUID": "123e4567-e89b-12d3-a456-426614174000",
+    "parameter-1": "value-1",
+    "parameter-2": "value-2"
+  }
 }
 ```
+
+</Tab>
+
+</Tabs>
 
 ## Troubleshooting
 
