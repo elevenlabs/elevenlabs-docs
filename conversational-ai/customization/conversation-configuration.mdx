@@ -1,0 +1,233 @@
+---
+title: "Conversation Configuration"
+description: "Guide for customizing the agent per conversation and passing additional data over custom LLM"
+icon: "brain-circuit"
+---
+
+Learn how to customize your ElevenLabs Conversational AI agent per conversation and pass additional parameters to your custom LLM implementation.
+
+## What You'll Need
+
+- An [ElevenLabs account](https://elevenlabs.io)
+- A configured ElevenLabs Conversational Agent
+- Python 3.7+
+
+## Agent Configuration Override
+
+<Frame>
+  <img
+    src="/conversational-ai/images/configuration-1.png"
+  />
+</Frame>
+<Frame>
+  <img
+    src="/conversational-ai/images/configuration-2.png"
+  />
+</Frame>
+
+You can see the first message is "Hi, I'm Eric. How can I help you today?" and the prompt is "You are a support agent named Eric. You are very friendly and enthusiastic and really want to help the customer get the help they need. Answer in 3 to 7 sentences in most cases.".
+
+Language is set to "English" and voice is set to "Eric".
+
+We will define a new configuration for this agent and pass this configuration in conversation initiation.
+
+<Steps>
+  <Step title="Define Configuration Override">
+    Create a custom configuration object to override default agent settings:
+    ```python
+    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+
+    conversation_override = {
+        "agent": {
+            "prompt": {
+                "prompt": "No matter what reply: I cannot help you with that at the moment."
+            },
+            "first_message": "Hey I'm currently unavailable.",
+            "language": None,
+        },
+        "tts": {
+            "voice_id": "iP95p4xoKVk53GoZ742B"
+        }
+    }
+
+    config = ConversationConfig(
+        conversation_config_override=conversation_override
+    )
+    ```
+  </Step>
+
+  <Step title="Apply Configuration">
+    Pass the configuration when initializing the conversation:
+    ```python
+    conversation = Conversation(
+        <other parameters>
+        config=config,
+        <other parameters>
+    )
+    ```
+  </Step>
+</Steps>
+
+### Example Conversation
+
+When we run this example, we will see the first message is "Hey I'm currently unavailable." and the prompt is "No matter what reply: I cannot help you with that at the moment."
+Also you will see the voice is changed to the one we set in the configuration. 
+
+When running with the above configuration, your conversation will look like this:
+
+```
+hikmet@Hikmets-MacBook-Pro convai % python demo.py
+Agent: Hey I'm currently unavailable.
+User: Can you help me?
+Agent: I cannot help you with that at the moment.
+User: When can you help me?
+Agent: I cannot help you with that at the moment.
+User: Okay, thank you very much.
+Agent: I cannot help you with that at the moment.
+^C^C^C
+Conversation ID: PGnjA44SrX9jqrYNpyuZ
+```
+
+With this agent override feature, you can create a single agent and customize it per conversation without changing the agent configuration.
+
+## Custom LLM Parameters
+
+You can pass additional parameters to your custom LLM implementation using the same configuration system.
+
+<Steps>
+  <Step title="Define Extra Parameters">
+    Create an object containing your custom parameters:
+    ```python
+    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+
+    extra_body_for_convai = {
+        "UUID": "123e4567-e89b-12d3-a456-426614174000",
+        "parameter-1": "value-1",
+        "parameter-2": "value-2",
+    }
+
+    config = ConversationConfig(
+        extra_body=extra_body_for_convai,
+    )
+    ```
+  </Step>
+
+  <Step title="Update LLM Implementation">
+    Modify your custom LLM code to handle the additional parameters:
+
+    ```python
+    import json
+    import os
+    import fastapi
+    from fastapi.responses import StreamingResponse
+    from fastapi import Request
+    from openai import AsyncOpenAI
+    import uvicorn
+    import logging
+    from dotenv import load_dotenv
+    from pydantic import BaseModel
+    from typing import List, Optional
+
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Retrieve API key from environment
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    if not OPENAI_API_KEY:
+        raise ValueError("OPENAI_API_KEY not found in environment variables")
+
+    app = fastapi.FastAPI()
+    oai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+
+    class Message(BaseModel):
+        role: str
+        content: str
+
+    class ChatCompletionRequest(BaseModel):
+        messages: List[Message]
+        model: str
+        temperature: Optional[float] = 0.7
+        max_tokens: Optional[int] = None
+        stream: Optional[bool] = False
+        user_id: Optional[str] = None
+        elevenlabs_extra_body: Optional[dict] = None
+
+    @app.post("/v1/chat/completions")
+    async def create_chat_completion(request: ChatCompletionRequest) -> StreamingResponse:
+        oai_request = request.dict(exclude_none=True)
+        print(oai_request)
+        if "user_id" in oai_request:
+            oai_request["user"] = oai_request.pop("user_id")
+
+        if "elevenlabs_extra_body" in oai_request:
+            oai_request.pop("elevenlabs_extra_body")
+
+        chat_completion_coroutine = await oai_client.chat.completions.create(**oai_request)
+
+        async def event_stream():
+            try:
+                async for chunk in chat_completion_coroutine:
+                    chunk_dict = chunk.model_dump()
+                    yield f"data: {json.dumps(chunk_dict)}\n\n"
+                yield "data: [DONE]\n\n"
+            except Exception as e:
+                logging.error("An error occurred: %s", str(e))
+                yield f"data: {json.dumps({'error': 'Internal error occurred!'})}\n\n"
+
+        return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+    if __name__ == "__main__":
+        uvicorn.run(app, host="0.0.0.0", port=8013)
+    ```
+  </Step>
+</Steps>
+
+## Example Request
+
+When using this configuration, your LLM will receive requests in this format:
+
+```json
+{
+   "messages":[
+      {
+         "role":"system",
+         "content":"\n  <Redacted>"
+      },
+      {
+         "role":"assistant",
+         "content":"Hey I'm currently unavailable."
+      },
+      {
+         "role":"user",
+         "content":"Hey, who are you?"
+      }
+   ],
+   "model":"gpt-4o",
+   "temperature":0.5,
+   "max_tokens":5000,
+   "stream":true,
+   "elevenlabs_extra_body":{
+      "UUID":"123e4567-e89b-12d3-a456-426614174000",
+      "parameter-1":"value-1",
+      "parameter-2":"value-2"
+   }
+}
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Configuration Issues">
+    If the configuration override isn't working:
+    - Verify the configuration structure matches the expected format
+    - Check that all required fields are present
+    - Ensure the config object is properly passed to the Conversation constructor
+  </Accordion>
+
+  <Accordion title="LLM Parameter Problems">
+    If custom parameters aren't being received:
+    - Confirm the extra_body is properly structured
+    - Verify the LLM implementation is handling the elevenlabs_extra_body field
+    - Check the request payload in your LLM logs
+  </Accordion>
+</AccordionGroup>
