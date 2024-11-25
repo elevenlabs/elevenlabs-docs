@@ -21,7 +21,7 @@ mintlify dev
 To update the OpenAI spec and corresponding SDK snippets:
 
 1. Update the Fern SDKs
-2. Run the GitHub workflow "Create OpenAPI with Snippets" (located within the Github Actions tab of this repo) ![Update instructions](/resources/update-openapi.png)
+2. Run the GitHub workflow "Create OpenAPI with Snippets" (located within the Github Actions tab of this repo) ![Update instructions](/resources/update-openapi.webp)
 3. Merge in the corresponding PR
 
 ## Publishing Changes
