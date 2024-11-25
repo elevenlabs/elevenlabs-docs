@@ -1,5 +1,5 @@
 ---
-title: "Custom LLM Integration"
+title: "Integrate Your Own Model"
 description: "Guide for using your own LLM or server with ElevenLabs SDK."
 icon: "brain-circuit"
 ---
@@ -112,3 +112,138 @@ Now let's make the changes in Elevenlabs
 Direct your server URL to ngrok endpoint, also setup "Limit token usage" to 5000.
 
 You can start interacting with Conversational AI with your own LLM server
+
+# Additional Features
+
+<Accordion title="Custom LLM Parameters">
+You may pass additional parameters to your custom LLM implementation.
+
+<Tabs>
+<Tab title="Python">
+<Steps>
+  <Step title="Define the Extra Parameters">
+    Create an object containing your custom parameters:
+    ```python
+    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+
+    extra_body_for_convai = {
+        "UUID": "123e4567-e89b-12d3-a456-426614174000",
+        "parameter-1": "value-1",
+        "parameter-2": "value-2",
+    }
+
+    config = ConversationConfig(
+        extra_body=extra_body_for_convai,
+    )
+    ```
+
+  </Step>
+
+  <Step title="Update the LLM Implementation">
+    Modify your custom LLM code to handle the additional parameters:
+
+    ```python
+    import json
+    import os
+    import fastapi
+    from fastapi.responses import StreamingResponse
+    from fastapi import Request
+    from openai import AsyncOpenAI
+    import uvicorn
+    import logging
+    from dotenv import load_dotenv
+    from pydantic import BaseModel
+    from typing import List, Optional
+
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Retrieve API key from environment
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    if not OPENAI_API_KEY:
+        raise ValueError("OPENAI_API_KEY not found in environment variables")
+
+    app = fastapi.FastAPI()
+    oai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+
+    class Message(BaseModel):
+        role: str
+        content: str
+
+    class ChatCompletionRequest(BaseModel):
+        messages: List[Message]
+        model: str
+        temperature: Optional[float] = 0.7
+        max_tokens: Optional[int] = None
+        stream: Optional[bool] = False
+        user_id: Optional[str] = None
+        elevenlabs_extra_body: Optional[dict] = None
+
+    @app.post("/v1/chat/completions")
+    async def create_chat_completion(request: ChatCompletionRequest) -> StreamingResponse:
+        oai_request = request.dict(exclude_none=True)
+        print(oai_request)
+        if "user_id" in oai_request:
+            oai_request["user"] = oai_request.pop("user_id")
+
+        if "elevenlabs_extra_body" in oai_request:
+            oai_request.pop("elevenlabs_extra_body")
+
+        chat_completion_coroutine = await oai_client.chat.completions.create(**oai_request)
+
+        async def event_stream():
+            try:
+                async for chunk in chat_completion_coroutine:
+                    chunk_dict = chunk.model_dump()
+                    yield f"data: {json.dumps(chunk_dict)}\n\n"
+                yield "data: [DONE]\n\n"
+            except Exception as e:
+                logging.error("An error occurred: %s", str(e))
+                yield f"data: {json.dumps({'error': 'Internal error occurred!'})}\n\n"
+
+        return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+    if __name__ == "__main__":
+        uvicorn.run(app, host="0.0.0.0", port=8013)
+    ```
+
+  </Step>
+</Steps>
+
+### Example Request
+
+With this custom message setup, your LLM will receive requests in this format:
+
+```json
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "\n  <Redacted>"
+    },
+    {
+      "role": "assistant",
+      "content": "Hey I'm currently unavailable."
+    },
+    {
+      "role": "user",
+      "content": "Hey, who are you?"
+    }
+  ],
+  "model": "gpt-4o",
+  "temperature": 0.5,
+  "max_tokens": 5000,
+  "stream": true,
+  "elevenlabs_extra_body": {
+    "UUID": "123e4567-e89b-12d3-a456-426614174000",
+    "parameter-1": "value-1",
+    "parameter-2": "value-2"
+  }
+}
+```
+
+</Tab>
+
+</Tabs>
+
+</Accordion>
