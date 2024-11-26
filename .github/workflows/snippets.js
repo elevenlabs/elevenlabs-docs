@@ -11,6 +11,8 @@ async function downloadOpenAPISpecs() {
 }
 
 function getFirstRelevantSnippets(snippets) {
+  console.log("Processing snippets:", JSON.stringify(snippets, null, 2));
+
   const results = [];
   const latestTypescriptSnippet = snippets.find(
     (snippet) => snippet.type === "typescript"
@@ -18,6 +20,9 @@ function getFirstRelevantSnippets(snippets) {
   const latestPythonSnippet = snippets.find(
     (snippet) => snippet.type === "python"
   )?.sync_client;
+
+  console.log("Found TypeScript snippet:", latestTypescriptSnippet);
+  console.log("Found Python snippet:", latestPythonSnippet);
 
   if (latestPythonSnippet) {
     results.push({
@@ -54,8 +59,13 @@ async function fetchSnippetFromEndpoint(path, method) {
     });
 
     const snippets = await response.json();
+    console.log(
+      `Response for ${method} ${path}:`,
+      JSON.stringify(snippets, null, 2)
+    );
     return snippets;
-  } catch {
+  } catch (error) {
+    console.error(`Error fetching snippets for ${method} ${path}:`, error);
     return;
   }
 }
