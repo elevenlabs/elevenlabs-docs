@@ -1691,7 +1691,21 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    model_id=\"eleven_multilingual_v2\",\n    text=\"Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convert(\"21m00Tcm4TlvDq8ikWAM\", {\n    model_id: \"eleven_multilingual_v2\",\n    text: \"Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!\"\n});\n"
+					},
+					{
+						"lang": "cURL",
+						"source": "curl --request POST \\\n  --url https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM \\\n  --header 'xi-api-key: YOUR_API_KEY' \\\n  --header 'Content-Type: application/json' \\\n  --data '{\n    \"text\": \"Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!\",\n    \"model_id\": \"eleven_multilingual_v2\"\n  }'"
+					}
+				]
 			}
 		},
 		"/v1/text-to-speech/{voice_id}/with-timestamps": {
