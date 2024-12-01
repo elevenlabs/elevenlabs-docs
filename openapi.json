@@ -1791,7 +1791,69 @@
 					"200": {
 						"description": "Successful Response",
 						"content": {
-							"application/json": {}
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"audio_base64": {
+											"type": "string",
+											"description": "Base64 encoded audio data"
+										},
+										"alignment": {
+											"type": "object",
+											"properties": {
+												"characters": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													},
+													"description": "Array of characters in the text"
+												},
+												"character_start_times_seconds": {
+													"type": "array",
+													"items": {
+														"type": "number"
+													},
+													"description": "Array of start times in seconds for each character"
+												},
+												"character_end_times_seconds": {
+													"type": "array", 
+													"items": {
+														"type": "number"
+													},
+													"description": "Array of end times in seconds for each character"
+												}
+											}
+										},
+										"normalized_alignment": {
+											"type": "object",
+											"properties": {
+												"characters": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													},
+													"description": "Array of normalized characters including spaces"
+												},
+												"character_start_times_seconds": {
+													"type": "array",
+													"items": {
+														"type": "number"
+													},
+													"description": "Array of start times in seconds for normalized characters"
+												},
+												"character_end_times_seconds": {
+													"type": "array",
+													"items": {
+														"type": "number"
+													},
+													"description": "Array of end times in seconds for normalized characters"
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					},
 					"422": {
@@ -1804,7 +1866,17 @@
 							}
 						}
 					}
-				}
+				},
+				"x-codeSamples": [
+					{
+						"lang": "Python",
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_speech.convert_with_timestamps(\n    voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n    text=\"Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!\",\n)\n"
+					},
+					{
+						"lang": "JavaScript",
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSpeech.convertWithTimestamps(\"21m00Tcm4TlvDq8ikWAM\", {\n    text: \"Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!\"\n});\n"
+					}
+				]
 			}
 		},
 		"/v1/text-to-speech/{voice_id}/stream": {
