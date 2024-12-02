@@ -1,211 +1,208 @@
 ---
 title: "Quickstart"
-description: "Start generating your first text-to-speech using Python and ElevenLabs API"
+description: "Learn how to make your first ElevenLabs API request"
 icon: "rocket"
 ---
 
 ## Accessing the API
 
-With all plans, including the free plan, you gain full access to the ElevenLabs API, enabling you to generate speech programmatically across our entire range of features.
+With any plan, including the free plan, you gain full access to the ElevenLabs API. This allows you to interact with our [entire range of features](/api-reference/overview).
 
 <Info>
 
-Both the API and the website draw from a shared quota pool. Usage on either platform will affect your total available usage quota.
+    Both the API and the website draw from a shared quota pool. Usage on either platform will impact your available quota.
 
 </Info>
 
+<Card
+  title="Explore the API collection in Postman"
+  href="https://god.gw.postman.com/run-collection/39903018-b6192151-7d5a-4654-9e18-b702bc1ae9ff?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D39903018-b6192151-7d5a-4654-9e18-b702bc1ae9ff%26entityType%3Dcollection%26workspaceId%3De3cbdaa7-825c-47df-815f-ea2c7160be22"
+  icon="user-astronaut"
+  iconType="duotone"
+  color="EF5B25"
+  horizontal="true"
+>
+  Import the ElevenLabs Postman collection to explore the available API
+  endpoints
+</Card>
+
 ## Authentication
 
-All requests to the ElevenLabs API must include an `xi-api-key` header with your API key. If using Client SDKs, this header is set automatically; otherwise, include it manually in each request. API keys can be restricted to specific routes, disabled or deleted as needed.
+To use the ElevenLabs API, include an xi-api-key header with your API key in all requests. Client SDKs set this header automatically, but if you're making manual requests, add it yourself.
 
-To get your API key, [create an account](https://elevenlabs.io/sign-up), log in, and click on **"API Keys"** in the bottom left corner of the console.
+<Steps>
+    <Step title="Create an Account">
+        To get your API key, [create an account](https://elevenlabs.io/sign-up), log
+        in, and click on `API Keys` in the bottom left corner of the console.
+    </Step>
+    <Step title="Create an API Key">
+        <Frame>![API Key](/api-reference/images/api_key.webp)</Frame>
+        <Warning>
 
-<Frame>
-  <img height="200" src="/api-reference/images/api_key.webp" />
-</Frame>
+            Your API key is a secret. Do not share it or expose it in client-side code. Load it securely from an environment variable or key management service on your backend server.
 
-<Warning>
+        </Warning>
+    </Step>
 
-Your API key is a secret. Do not share it or expose it in client-side code (browsers, apps). Load it securely from an environment variable or key management service on your backend server.
+</Steps>
 
-</Warning>
+## Text to Speech
 
-## Fetching the voice_id
+<Steps>
+  <Step title="Choosing a Voice">
+    To generate speech from text, you need a voice ID. You can either use one of
+    our pre-trained voices or create your own.
+    <Card
+  title="32 Languages"
+  icon="language"
+  iconType="duotone"
+  color="green"
+  horizontal="true"
+>
+  Choose from over 32 languages with 1000s of voices, for every use-case, at
+  192kbps
+</Card>
+<Card
+  title="Ultra-low latency"
+  icon="gauge-max"
+  iconType="duotone"
+  color="green"
+  horizontal="true"
+>
+  As low as ~250ms (+ network latency) audio generation times with our Turbo
+  model.
+</Card>
+<Card
+  title="Natural Prosody"
+  icon="feather-pointed"
+  iconType="duotone"
+  color="green"
+  horizontal="true"
+>
+  Understands natural speech patterns for lifelike rhythm and intonation.
+</Card>
+    <Tabs>
+  <Tab title="Dashboard">
+    <Frame caption="https://elevenlabs.io/app/voice-lab">
+        ![Voice Dashboard](/developer-guides/images/quickstart-1.webp)
+    </Frame>
+  </Tab>
+  <Tab title="SDK">
+        <CodeGroup>
 
-The [Text-To-Speech](https://elevenlabs.io/docs/api-reference/text-to-speech) (TTS) endpoint transforms text into speech in a given voice. The input consists of text, voice, and voice settings with an option to specify model.
+            ```python Python
+            from elevenlabs import ElevenLabs
 
-Before we can generate anything, we need to get the `voice_id` for the voice we want to use.
+            client = ElevenLabs(
+                api_key="YOUR_API_KEY",
+            )
+            client.voices.get_all()
+            ```
 
-The easiest way to get the `voice_id` is via the website. You can find the article on how to do that [here](https://help.elevenlabs.io/hc/en-us/articles/14599760033937-How-do-I-find-my-voice's-ID-of-my-voices-via-the-website-and-through-the-API-).
+            ```javascript JavaScript
+            import { ElevenLabsClient } from "elevenlabs";
 
-A better approach, especially when dealing with the API, is to retrieve the voices accessible to your account using the `GET /v1/voices` endpoint. If you do not receive the expected voices, you will either encounter an error or just see the pre-made voices, which is most likely indicating that you are not passing your API key correctly.
+            const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
+            await client.voices.getAll();
+            ```
+        </CodeGroup>
 
-You can find more information in the [Get Voices](https://elevenlabs.io/docs/api-reference/get-voices) endpoint documentation. This endpoint is crucial if your application requires any form of flexibility in the voices you want to use via the API, as it provides information about each voice, including the `voice_id` for each of them. This `voice_id` is necessary when querying the TTS endpoint.
+  </Tab>
 
-The API offers a wide range of capabilities, such as adding new voices, but we won't discuss that here. To gain a better understanding of how to do that, you will need to read through the documentation.
+    <Tab title="API">
+        Use the [`/v1/voices`](/api-reference/get-voices) endpoint to list all available voices
 
-You can use the Python code below to print a list of the voices in your account, along with their names and associated voice_ids, which will be required to use the voices via the API. Simply using the name won't be sufficient.
-
-```python
-# The 'requests' and 'json' libraries are imported.
-# 'requests' is used to send HTTP requests, while 'json' is used for parsing the JSON data that we receive from the API.
-import requests
-import json
-
-# An API key is defined here. You'd normally get this from the service you're accessing. It's a form of authentication.
-XI_API_KEY = "<xi-api-key>"
-
-# This is the URL for the API endpoint we'll be making a GET request to.
-url = "https://api.elevenlabs.io/v1/voices"
-
-# Here, headers for the HTTP request are being set up.
-# Headers provide metadata about the request. In this case, we're specifying the content type and including our API key for authentication.
-headers = {
-  "Accept": "application/json",
-  "xi-api-key": XI_API_KEY,
-  "Content-Type": "application/json"
-}
-
-# A GET request is sent to the API endpoint. The URL and the headers are passed into the request.
-response = requests.get(url, headers=headers)
-
-# The JSON response from the API is parsed using the built-in .json() method from the 'requests' library.
-# This transforms the JSON data into a Python dictionary for further processing.
-data = response.json()
-
-# A loop is created to iterate over each 'voice' in the 'voices' list from the parsed data.
-# The 'voices' list consists of dictionaries, each representing a unique voice provided by the API.
-for voice in data['voices']:
-  # For each 'voice', the 'name' and 'voice_id' are printed out.
-  # These keys in the voice dictionary contain values that provide information about the specific voice.
-  print(f"{voice['name']}; {voice['voice_id']}")
-```
+  </Tab>
+</Tabs>
+  </Step>
+</Steps>
 
 ## Text-to-speech
 
-Once you have you've gotten the `voice_id` from the voices endpoint, you are ready to query the [Text-to-speech](https://elevenlabs.io/docs/api-reference/text-to-speech) endpoint.
+To generate speech from text, use the example below. It sends a request to the text-to-speech endpoint and receives a stream of audio bytes.
 
-First, you need to decide whether you want to use the streaming response or not. In general, we recommend streaming unless your client doesn't support it. You can find more information about the [streaming](https://elevenlabs.io/docs/api-reference/streaming) endpoint in our documentation.
+### Streaming
 
-Second, you need to choose your voice settings. We recommend using the default voice settings before experimenting with the expressivity and similarity settings. You can find more information about the [settings](https://elevenlabs.io/docs/speech-synthesis/voice-settings) in our documentation.
+<CodeGroup>
 
-After generating something, we store each audio you generate together with other metadata in your personal history. You can retrieve all your history items via the `/v1/history` endpoint. We also provide endpoints for retrieving audio, deletion, and download of history items. You can find more information about how to use the [history](https://elevenlabs.io/docs/api-reference/get-generated-items) endpoint in our documentation. The only thing that is not saved is websocket streaming queries to save latency.
+    ```python Python
+    ```
 
-In the basic Python example below, we send a request to the text-to-speech endpoint and receive a stream of audio bytes in return. All you need to do is set your XI API Key first and try it out! If you cannot find it, please follow this article [here](https://help.elevenlabs.io/hc/en-us/articles/14599447207697-How-to-authorize-yourself-using-your-xi-api-key-).
+    ```javascript JavaScript
+    ```
 
-You will need to replace the constants by inserting your `<xi-api-key>`, setting the correct `<voice-id>`, and entering the `<text>` you want the AI to convert to speech. You can change the settings `stability` and `similarity_boost` if you want, but they are set to good default values.
+</CodeGroup>
 
-Of course, the code below is only to showcase the very bare minimum to get the system up and running, and you can then use more advanced code to create a nice GUI with sliders for the variables, a list for the voices, and anything else that you want to add.
+### Asynchronous
 
-```python
-# Import necessary libraries
-import requests  # Used for making HTTP requests
-import json  # Used for working with JSON data
+<CodeGroup>
 
-# Define constants for the script
-CHUNK_SIZE = 1024  # Size of chunks to read/write at a time
-XI_API_KEY = "<xi-api-key>"  # Your API key for authentication
-VOICE_ID = "<voice-id>"  # ID of the voice model to use
-TEXT_TO_SPEAK = "<text>"  # Text you want to convert to speech
-OUTPUT_PATH = "output.mp3"  # Path to save the output audio file
+    ```python Python
+    ```
 
-# Construct the URL for the Text-to-Speech API request
-tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream"
+    ```javascript JavaScript
+    ```
 
-# Set up headers for the API request, including the API key for authentication
-headers = {
-    "Accept": "application/json",
-    "xi-api-key": XI_API_KEY
-}
+</CodeGroup>
 
-# Set up the data payload for the API request, including the text and voice settings
-data = {
-    "text": TEXT_TO_SPEAK,
-    "model_id": "eleven_multilingual_v2",
-    "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": 0.8,
-        "style": 0.0,
-        "use_speaker_boost": True
-    }
-}
+### Websocket
 
-# Make the POST request to the TTS API with headers and data, enabling streaming response
-response = requests.post(tts_url, headers=headers, json=data, stream=True)
+<CodeGroup>
 
-# Check if the request was successful
-if response.ok:
-    # Open the output file in write-binary mode
-    with open(OUTPUT_PATH, "wb") as f:
-        # Read the response in chunks and write to the file
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            f.write(chunk)
-    # Inform the user of success
-    print("Audio stream saved successfully.")
-else:
-    # Print the error message if the request was not successful
-    print(response.text)
-```
+    ```python Python
+    ```
 
-## Speech-to-Speech
+    ```javascript JavaScript
+    ```
 
-Generating speech-to-speech involves a similar process to text-to-speech, but with some adjustments in the API parameters. Instead of providing text when calling the API, you provide the path to an audio file that you would like to convert from one voice to another. Here's a modified version of your code to illustrate how to generate speech-to-speech using the given API:
+</CodeGroup>
 
-```python
-# Import necessary libraries
-import requests  # Used for making HTTP requests
-import json  # Used for working with JSON data
+## Voice Changer
 
-# Define constants for the script
-CHUNK_SIZE = 1024  # Size of chunks to read/write at a time
-XI_API_KEY = "<xi-api-key>"  # Your API key for authentication
-VOICE_ID = "<voice-id>"  # ID of the voice model to use
-AUDIO_FILE_PATH = "<path>"  # Path to the input audio file
-OUTPUT_PATH = "output.mp3"  # Path to save the output audio file
+Say it how you want and hear it delivered in another voice, with full control over the tone, style, and delivery.
 
-# Construct the URL for the Speech-to-Speech API request
-sts_url = f"https://api.elevenlabs.io/v1/speech-to-speech/{VOICE_ID}/stream"
+To generate speech from speech, use the example below. It sends a request to the text-to-speech endpoint and receives a stream of audio bytes.
 
-# Set up headers for the API request, including the API key for authentication
-headers = {
-    "Accept": "application/json",
-    "xi-api-key": XI_API_KEY
-}
+<CodeGroup>
 
-# Set up the data payload for the API request, including model ID and voice settings
-# Note: voice settings are converted to a JSON string
-data = {
-    "model_id": "eleven_english_sts_v2",
-    "voice_settings": json.dumps({
-        "stability": 0.5,
-        "similarity_boost": 0.8,
-        "style": 0.0,
-        "use_speaker_boost": True
-    })
-}
+    ```python Python
+    ```
 
-# Set up the files to send with the request, including the input audio file
-files = {
-    "audio": open(AUDIO_FILE_PATH, "rb")
-}
+    ```javascript JavaScript
+    ```
 
-# Make the POST request to the STS API with headers, data, and files, enabling streaming response
-response = requests.post(sts_url, headers=headers, data=data, files=files, stream=True)
+</CodeGroup>
 
-# Check if the request was successful
-if response.ok:
-    # Open the output file in write-binary mode
-    with open(OUTPUT_PATH, "wb") as f:
-        # Read the response in chunks and write to the file
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            f.write(chunk)
-    # Inform the user of success
-    print("Audio stream saved successfully.")
-else:
-    # Print the error message if the request was not successful
-    print(response.text)
-```
+### Asynchronous
 
-This code takes an input audio file (`<path>` should be something like `C:/User/Documents/input.mp3`), sends a request to the speech-to-speech endpoint, and receives a stream of audio bytes in return. It then saves the streamed audio to the specified output path (`output.mp3` if no specific path is specified, it will be saved in the same folder as the .py code file).
+<CodeGroup>
 
-Make sure to replace placeholders like `<xi-api-key>` and `<voice-id>` with your actual API key and voice ID respectively. Additionally, adjust paths and settings as needed.
+    ```python Python
+    ```
+
+    ```javascript JavaScript
+    ```
+
+</CodeGroup>
+
+<CardGroup cols={2}>
+<Card
+  title="Explore More Features"
+  icon="sparkles"
+  iconType="duotone"
+  href="/api-reference/overview"
+  horizontal="true"
+>
+  Discover our full range of features and capabilities.
+</Card>
+
+<Card
+  title="Explore Examples"
+  icon="github"
+  iconType="duotone"
+  href="https://github.com/elevenlabs/elevenlabs-examples"
+  horizontal="true"
+>
+    Browse our collection of code examples and sample implementations.
+</Card>
+</CardGroup>
