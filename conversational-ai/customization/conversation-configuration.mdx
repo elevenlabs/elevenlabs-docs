@@ -22,13 +22,22 @@ In ElevenLabs Conversational AI, you typically define a top-level agent with def
 
 The following steps will show you how to configure the `prompt` & `first_message` on setup to greet the user by their name.
 
+<Steps>
+  <Step title="Enable overrides">
+    Go to the `Security` tab in your agent settings and enable overrides for the first message and system prompt.
+    <Frame>
+      <img src="/conversational-ai/images/overrides.webp" />
+    </Frame>
+  </Step>
+</Steps>
+
 <Tabs>
   <Tab title="Javascript">
     <Tip>
         Ensure you have the latest [Javascript](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-js)/[React SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-react) installed.
     </Tip>
     <Steps>
-    <Step>
+    <Step stepNumber={2} title="Start the session with custom overrides">
       ```javascript
       const conversation = await Conversation.startSession({
         ...
@@ -54,7 +63,7 @@ The following steps will show you how to configure the `prompt` & `first_message
         Ensure you have the latest [Python SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-python) installed.
     </Tip>
     <Steps>
-        <Step title="Define the Conversation Override">
+        <Step stepNumber={2} title="Define the Conversation Override">
           ```python
           from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
 
@@ -82,8 +91,7 @@ The following steps will show you how to configure the `prompt` & `first_message
           )
           ```
         </Step>
-
-        <Step title="Start the Session">
+        <Step stepNumber={3} title="Start the Session">
           ```python
           conversation.start_session()
           ```
@@ -97,7 +105,7 @@ The following steps will show you how to configure the `prompt` & `first_message
         Ensure you have the latest [Swift SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-swift) installed.
     </Tip>
     <Steps>
-      <Step title="Define the Conversation Override">
+      <Step stepNumber={2} title="Define the Conversation Override">
         ```swift
         import ElevenLabsSDK
 
@@ -122,7 +130,7 @@ The following steps will show you how to configure the `prompt` & `first_message
         )
         ```
       </Step>
-            <Step title="Start the Conversation">
+      <Step stepNumber={3} title="Start the Conversation">
         ```swift
         ...
         let conversation = try await ElevenLabsSDK.Conversation.startSession(
