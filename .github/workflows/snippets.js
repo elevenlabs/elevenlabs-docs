@@ -75,21 +75,19 @@ async function appendSnippets() {
 
   console.log("Fetching snippets...");
 
-  await Promise.all(
-    endpoints.map(async ({ path, method }) => {
-      const snippets = await fetchSnippetFromEndpoint(path, method);
+  for (const { path, method } of endpoints) {
+    const snippets = await fetchSnippetFromEndpoint(path, method);
 
-      try {
-        const relevantSnippets = getFirstRelevantSnippets(snippets);
+    try {
+      const relevantSnippets = getFirstRelevantSnippets(snippets);
 
-        if (relevantSnippets) {
-          oas.paths[path][method]["x-codeSamples"] = relevantSnippets;
-        }
-      } catch {
-        return;
+      if (relevantSnippets) {
+        oas.paths[path][method]["x-codeSamples"] = relevantSnippets;
       }
-    })
-  );
+    } catch {
+      continue;
+    }
+  }
 
   console.log("Found all matching snippets.");
   console.log("Created OpenAPI spec with snippets");

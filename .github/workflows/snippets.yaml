@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       pr_title:
-        description: 'Pull Request Title'
+        description: "Pull Request Title"
         required: true
-        default: '[Automated] Update OpenAPI Spec'
+        default: "[Automated] Update OpenAPI Spec"
       pr_body:
-        description: 'Pull Request Body'
+        description: "Pull Request Body"
         required: true
-        default: 'This is an automated pull request to update the OpenAPI specification.'
+        default: "This is an automated pull request to update the OpenAPI specification."
 
 env:
   FERN_API_KEY: ${{ secrets.FERN_API_KEY }}
@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Run snippets.js
         run: node .github/workflows/snippets.js
@@ -41,6 +41,6 @@ jobs:
           commit-message: Update OpenAPI Spec
           title: ${{ github.event.inputs.pr_title }}
           body: ${{ github.event.inputs.pr_body }}
-          branch: update-openapi-spec
+          branch: update-openapi-spec-${{ github.run_id }}
           delete-branch: true
           base: main
