@@ -1312,11 +1312,11 @@
 				"x-codeSamples": [
 					{
 						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_sound_effects.convert(\n    text=\"string\",\n    duration_seconds=1.1,\n    prompt_influence=1.1,\n)\n"
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.text_to_sound_effects.convert(\n    text=\"string\"\n)\n"
 					},
 					{
 						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSoundEffects.convert({\n    text: \"string\",\n    duration_seconds: 1.1,\n    prompt_influence: 1.1\n});\n"
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.textToSoundEffects.convert({\n    text: \"string\"\n});\n"
 					}
 				]
 			}
@@ -2191,11 +2191,11 @@
 				"x-codeSamples": [
 					{
 						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.speech_to_speech.convert(\n    voice_id=\"string\",\n    enable_logging=True,\n    optimize_streaming_latency=\"0\",\n    output_format=\"mp3_22050_32\",\n)\n"
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(api_key=\"YOUR_API_KEY\")\n\nwith open(\"input_audio.mp3\", \"rb\") as audio_file:\n    response = client.speech_to_speech.convert(\n        voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n        audio=audio_file\n    )\n"
 					},
 					{
 						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convert(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: true,\n    optimize_streaming_latency: \"0\",\n    output_format: \"mp3_22050_32\"\n});\n"
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convert(\"21m00Tcm4TlvDq8ikWAM\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n});\n"
 					}
 				]
 			}
@@ -2296,12 +2296,12 @@
 				},
 				"x-codeSamples": [
 					{
-						"lang": "Python",
-						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nclient.speech_to_speech.convert_as_stream(\n    voice_id=\"string\",\n    enable_logging=\"0\",\n    optimize_streaming_latency=\"mp3_22050_32\",\n    output_format=\"string\",\n)\n"
+						"lang": "Python", 
+						"source": "from elevenlabs import ElevenLabs\n\nclient = ElevenLabs(\n    api_key=\"YOUR_API_KEY\",\n)\nwith open(\"input_audio.mp3\", \"rb\") as audio_file:\n    client.speech_to_speech.convert_as_stream(\n        voice_id=\"21m00Tcm4TlvDq8ikWAM\",\n        audio=audio_file\n    )\n"
 					},
 					{
 						"lang": "JavaScript",
-						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convertAsStream(\"string\", {\n    audio: fs.createReadStream(\"/path/to/your/file\"),\n    enable_logging: \"0\",\n    optimize_streaming_latency: \"mp3_22050_32\",\n    output_format: \"string\"\n});\n"
+						"source": "import { ElevenLabsClient } from \"elevenlabs\";\nimport * as fs from \"fs\";\n\nconst client = new ElevenLabsClient({ apiKey: \"YOUR_API_KEY\" });\nawait client.speechToSpeech.convertAsStream(\"21m00Tcm4TlvDq8ikWAM\", {\n    audio: fs.createReadStream(\"/path/to/your/file\")\n});\n"
 					}
 				]
 			}
