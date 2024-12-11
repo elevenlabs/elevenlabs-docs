@@ -26,12 +26,14 @@ Follow these steps to set up a client-side event that triggers a browser alert.
     </Frame>
   </Step>
 
-  <Step title="Configure the tool">
+<Step title="Configure the tool">
+
     - **Name**: `triggerBrowserAlert`
     - **Description**: *Triggers a real-time alert in the user's browser. Use this tool for urgent notifications, reminders, or time-sensitive updates that require immediate user action.*
     - **Parameters**:
       - `message` (string): The message to display in the alert. The LLM should extract relevant text from the conversation, ensuring it is actionable and concise.
-  </Step>
+
+</Step>
 
   <Step title="Implement the client tool in your code">
     Depending on your development environment, add the following code to integrate the client tool.
@@ -47,6 +49,21 @@ Follow these steps to set up a client-side event that triggers a browser alert.
         },
         // ... other configurations ...
       });
+      ```
+
+      ```swift Swift
+      // Create client tools instance
+      var clientTools = ElevenLabsSDK.ClientTools()
+
+      // Register a custom tool with an async handler
+      clientTools.register("triggerBrowserAlert") { parameters async throws -> String? in
+          // Parameters is a [String: Any] dictionary
+          guard let joke = parameters["message"] as? String else {
+              throw ElevenLabsSDK.ClientToolError.invalidParameters
+          }
+          print("Trigger an alert with the message: \(message)")
+          return message
+      }
       ```
     </CodeGroup>
 
@@ -67,6 +84,7 @@ Follow these steps to set up a client-side event that triggers a browser alert.
     <Frame>
       <img width="400" src="/conversational-ai/images/client-tools-2.png" alt="Browser alert triggered by client tool" />
     </Frame>
+
   </Step>
 </Steps>
 
@@ -82,12 +100,13 @@ Now that you've set up a basic client-side event, you can:
 
 <AccordionGroup>
   <Accordion title="Client tool not triggering">
-    - Ensure that the tool name in your code matches exactly with the tool name in the agent configuration.
-    - Check that the agent is correctly outputting the tool command in the conversation.
-    - Verify there are no typos in the parameter names.
+    - Ensure that the tool name in your code matches exactly with the tool name
+    in the agent configuration. - Check that the agent is correctly outputting
+    the tool command in the conversation. - Verify there are no typos in the
+    parameter names.
   </Accordion>
   <Accordion title="JavaScript errors in the browser">
-    - Open the browser console to check for any errors.
-    - Ensure that your code has necessary error handling for undefined or unexpected parameters.
+    - Open the browser console to check for any errors. - Ensure that your code
+    has necessary error handling for undefined or unexpected parameters.
   </Accordion>
 </AccordionGroup>
