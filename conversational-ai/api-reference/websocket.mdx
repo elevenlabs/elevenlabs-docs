@@ -98,6 +98,18 @@ Respond to server `ping` messages by sending a `pong` message, ensuring the `eve
 }
 ```
 
+#### Client Tool Result
+Respond to server `client_tool_call` messages by sending a `client_tool_result` message, ensuring the tool call id matches the one in the received call message.
+
+```json
+{
+  "type": "client_tool_result",
+  "tool_call_id": str,
+  "result": str,
+  "is_error": bool,
+}
+```
+
 ### Server-to-Client Messages
 
 #### conversation_initiation_metadata
@@ -125,8 +137,7 @@ Provides initial metadata about the conversation.
 | audio              | Chunks of the agent's audio response                |
 | interruption       | Indicates that the agent's response was interrupted |
 | ping               | Server pings to measure latency                     |
-| client-tool-call   | Initiate client tool call                           |
-| client-tool-result | Response for the client tool call                   |
+| client_tool_call   | Initiate client tool call                           |
 
 ##### Message Formats
 
@@ -208,17 +219,6 @@ Provides initial metadata about the conversation.
     "tool_call_id": string,
     "parameters": dict,
   }
-}
-```
-
-**client_tool_result:**
-
-```json
-{
-  "type": "client_tool_result",
-  "tool_call_id": str,
-  "result": str,
-  "is_error": bool,
 }
 ```
 
