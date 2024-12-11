@@ -118,13 +118,15 @@ Provides initial metadata about the conversation.
 
 ### Other Server-to-Client Messages
 
-| Type            | Purpose                                             |
-| --------------- | --------------------------------------------------- |
-| user_transcript | Transcriptions of the user's speech                 |
-| agent_response  | Agent's textual response                            |
-| audio           | Chunks of the agent's audio response                |
-| interruption    | Indicates that the agent's response was interrupted |
-| ping            | Server pings to measure latency                     |
+| Type               | Purpose                                             |
+| ------------------ | --------------------------------------------------- |
+| user_transcript    | Transcriptions of the user's speech                 |
+| agent_response     | Agent's textual response                            |
+| audio              | Chunks of the agent's audio response                |
+| interruption       | Indicates that the agent's response was interrupted |
+| ping               | Server pings to measure latency                     |
+| client-tool-call   | Initiate client tool call                           |
+| client-tool-result | Response for the client tool call                   |
 
 ##### Message Formats
 
@@ -193,6 +195,30 @@ Provides initial metadata about the conversation.
     "event_id": 13579,
     "ping_ms": 50
   }
+}
+```
+
+**client_tool_call:**
+
+```json
+{
+  "type": "client_tool_call",
+  "client_tool_call": {
+    "tool_name": string,
+    "tool_call_id": string,
+    "parameters": dict,
+  }
+}
+```
+
+**client_tool_result:**
+
+```json
+{
+  "type": "client_tool_result",
+  "tool_call_id": str,
+  "result": str,
+  "is_error": bool,
 }
 ```
 
