@@ -265,7 +265,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
 
    <Tab title="Python">
        <Note>
-        Looking for a complete example? Check out this [implementation](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/twilio) on GitHub.
+        Looking for a complete example? Check out this [implementation](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/twilio/python-sdk) on GitHub.
         </Note>
 
         <Steps>
@@ -278,7 +278,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
             <Step title="Install dependencies">
                 Next, install the required dependencies for the project.
                 ```bash
-                pip install fastapi uvicorn python-dotenv twilio elevenlabs websockets
+                pip install fastapi uvicorn twilio python-dotenv elevenlabs starlette python-multipart
                 ```
             </Step>
         <Step title="Create the project files">
@@ -298,162 +298,152 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
             ```
 
             ```python main.py
+            import os
             import json
             import traceback
-            import os
             from dotenv import load_dotenv
-            from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+            from fastapi import FastAPI, Request, WebSocket
             from fastapi.responses import HTMLResponse
             from twilio.twiml.voice_response import VoiceResponse, Connect
             from elevenlabs import ElevenLabs
             from elevenlabs.conversational_ai.conversation import Conversation
             from twilio_audio_interface import TwilioAudioInterface
+            from starlette.websockets import WebSocketDisconnect
 
-            # Load environment variables
             load_dotenv()
 
-            # Initialize FastAPI app
+            ELEVEN_LABS_AGENT_ID = os.getenv("AGENT_ID")
+            ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
             app = FastAPI()
 
-            # Initialize ElevenLabs client
-            eleven_labs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
-            ELEVEN_LABS_AGENT_ID = os.getenv("AGENT_ID")
 
             @app.get("/")
             async def root():
                 return {"message": "Twilio-ElevenLabs Integration Server"}
 
-            @app.api_route("/incoming-call-eleven", methods=["GET", "POST"])
+
+            @app.post("/twilio/inbound_call")
             async def handle_incoming_call(request: Request):
-                """Handle incoming call and return TwiML response."""
+                form_data = await request.form()
+                call_sid = form_data.get("CallSid", "Unknown")
+                from_number = form_data.get("From", "Unknown")
+                print(f"Incoming call: CallSid={call_sid}, From={from_number}")
+
                 response = VoiceResponse()
-                host = request.url.hostname
                 connect = Connect()
-                connect.stream(url=f"wss://{host}/media-stream-eleven")
+                connect.stream(url=f"wss://{request.url.hostname}/media-stream-eleven")
                 response.append(connect)
                 return HTMLResponse(content=str(response), media_type="application/xml")
+
 
             @app.websocket("/media-stream-eleven")
             async def handle_media_stream(websocket: WebSocket):
                 await websocket.accept()
-                print("WebSocket connection established")
+                print("WebSocket connection opened")
 
                 audio_interface = TwilioAudioInterface(websocket)
-                conversation = None
+                eleven_labs_client = ElevenLabs(api_key=ELEVENLABS_API_KEY)
 
                 try:
                     conversation = Conversation(
                         client=eleven_labs_client,
                         agent_id=ELEVEN_LABS_AGENT_ID,
-                        requires_auth=False,
+                        requires_auth=True, # Security > Enable authentication
                         audio_interface=audio_interface,
-                        callback_agent_response=lambda text: print(f"Agent said: {text}"),
-                        callback_user_transcript=lambda text: print(f"User said: {text}"),
+                        callback_agent_response=lambda text: print(f"Agent: {text}"),
+                        callback_user_transcript=lambda text: print(f"User: {text}"),
                     )
 
                     conversation.start_session()
-                    print("Conversation session started")
+                    print("Conversation started")
 
                     async for message in websocket.iter_text():
                         if not message:
                             continue
-
-                        try:
-                            data = json.loads(message)
-                            await audio_interface.handle_twilio_message(data)
-                        except Exception as e:
-                            print(f"Error processing message: {str(e)}")
-                            traceback.print_exc()
+                        await audio_interface.handle_twilio_message(json.loads(message))
 
                 except WebSocketDisconnect:
                     print("WebSocket disconnected")
+                except Exception:
+                    print("Error occurred in WebSocket handler:")
+                    traceback.print_exc()
                 finally:
-                    if conversation:
-                        print("Ending conversation session...")
+                    try:
                         conversation.end_session()
                         conversation.wait_for_session_end()
+                        print("Conversation ended")
+                    except Exception:
+                        print("Error ending conversation session:")
+                        traceback.print_exc()
+
 
             if __name__ == "__main__":
                 import uvicorn
-                uvicorn.run(app, host="0.0.0.0", port=8000)
+                uvicorn.run(app, host="0.0.0.0", port=8000) 
             ```
             ```python twilio_audio_interface.py
             import asyncio
-            from typing import Callable
-            import queue
-            import threading
             import base64
+            import json
+            from fastapi import WebSocket
             from elevenlabs.conversational_ai.conversation import AudioInterface
-            import websockets
+            from starlette.websockets import WebSocketDisconnect, WebSocketState
+
 
             class TwilioAudioInterface(AudioInterface):
-                def __init__(self, websocket):
+                def __init__(self, websocket: WebSocket):
                     self.websocket = websocket
-                    self.output_queue = queue.Queue()
-                    self.should_stop = threading.Event()
-                    self.stream_sid = None
                     self.input_callback = None
-                    self.output_thread = None
+                    self.stream_sid = None
+                    self.loop = asyncio.get_event_loop()
 
-                def start(self, input_callback: Callable[[bytes], None]):
+                def start(self, input_callback):
                     self.input_callback = input_callback
-                    self.output_thread = threading.Thread(target=self._output_thread)
-                    self.output_thread.start()
 
                 def stop(self):
-                    self.should_stop.set()
-                    if self.output_thread:
-                        self.output_thread.join(timeout=5.0)
+                    self.input_callback = None
                     self.stream_sid = None
 
                 def output(self, audio: bytes):
-                    self.output_queue.put(audio)
+                    """
+                    This method should return quickly and not block the calling thread.
+                    """
+                    asyncio.run_coroutine_threadsafe(self.send_audio_to_twilio(audio), self.loop)
 
                 def interrupt(self):
-                    try:
-                        while True:
-                            _ = self.output_queue.get(block=False)
-                    except queue.Empty:
-                        pass
-                    asyncio.run(self._send_clear_message_to_twilio())
+                    asyncio.run_coroutine_threadsafe(self.send_clear_message_to_twilio(), self.loop)
 
-                async def handle_twilio_message(self, data):
-                    try:
-                        if data["event"] == "start":
-                            self.stream_sid = data["start"]["streamSid"]
-                            print(f"Started stream with stream_sid: {self.stream_sid}")
-                        if data["event"] == "media":
-                            audio_data = base64.b64decode(data["media"]["payload"])
-                            if self.input_callback:
-                                self.input_callback(audio_data)
-                    except Exception as e:
-                        print(f"Error in input_callback: {e}")
-
-                def _output_thread(self):
-                    while not self.should_stop.is_set():
-                        asyncio.run(self._send_audio_to_twilio())
-
-                async def _send_audio_to_twilio(self):
-                    try:
-                        audio = self.output_queue.get(timeout=0.2)
+                async def send_audio_to_twilio(self, audio: bytes):
+                    if self.stream_sid:
                         audio_payload = base64.b64encode(audio).decode("utf-8")
                         audio_delta = {
                             "event": "media",
                             "streamSid": self.stream_sid,
                             "media": {"payload": audio_payload},
                         }
-                        await self.websocket.send_json(audio_delta)
-                    except queue.Empty:
-                        pass
-                    except Exception as e:
-                        print(f"Error sending audio: {e}")
+                        try:
+                            if self.websocket.application_state == WebSocketState.CONNECTED:
+                                await self.websocket.send_text(json.dumps(audio_delta))
+                        except (WebSocketDisconnect, RuntimeError):
+                            pass
 
-                async def _send_clear_message_to_twilio(self):
-                    try:
+                async def send_clear_message_to_twilio(self):
+                    if self.stream_sid:
                         clear_message = {"event": "clear", "streamSid": self.stream_sid}
-                        await self.websocket.send_json(clear_message)
-                    except Exception as e:
-                        print(f"Error sending clear message to Twilio: {e}")
+                        try:
+                            if self.websocket.application_state == WebSocketState.CONNECTED:
+                                await self.websocket.send_text(json.dumps(clear_message))
+                        except (WebSocketDisconnect, RuntimeError):
+                            pass
+
+                async def handle_twilio_message(self, data):
+                    event_type = data.get("event")
+                    if event_type == "start":
+                        self.stream_sid = data["start"]["streamSid"]
+                    elif event_type == "media" and self.input_callback:
+                        audio_data = base64.b64decode(data["media"]["payload"])
+                        self.input_callback(audio_data)
                 ```
 
             </CodeGroup>
@@ -461,7 +451,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
             <Step title="Run the server">
             You can now run the server with the following command:
             ```bash
-            python main.py
+            uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
             ```
         </Step>
         </Steps>
