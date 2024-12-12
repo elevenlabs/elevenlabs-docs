@@ -98,6 +98,34 @@ Respond to server `ping` messages by sending a `pong` message, ensuring the `eve
 }
 ```
 
+#### Conversation Initiation Client Data Override
+
+Send initial conversation configuration to the server with a `conversation_initiation_client_data` message, optionally including agent prompt overrides, preferred language, TTS voice settings, and custom LLM parameters that will be used for the conversation.
+
+**Format:**
+
+```json
+{
+  "type": "conversation_initiation_client_data",
+  "conversation_config_override": {
+    "agent": {
+      "prompt": {
+        "prompt": "You are a helpful AI assistant named Alice. You are cheerful and friendly."
+      },
+      "first_message": "Hi! I'm Alice, how can I help you today?",
+      "language": "en"
+    },
+    "tts": {
+      "voice_id": "pNInz6obpgDQGcFmaJgB"
+    }
+  },
+  "custom_llm_extra_body": {
+    "temperature": 0.7,
+    "max_tokens": 150
+  }
+}
+```
+
 #### Client Tool Result
 Respond to server `client_tool_call` messages by sending a `client_tool_result` message, ensuring the tool call id matches the one in the received call message.
 
