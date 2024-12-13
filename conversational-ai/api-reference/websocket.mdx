@@ -166,7 +166,7 @@ Provides initial metadata about the conversation.
 | interruption       | Indicates that the agent's response was interrupted |
 | ping               | Server pings to measure latency                     |
 | client_tool_call   | Initiate client tool call                           |
-
+| conversation_initiation_client_data | Override conversation configuration at start |
 ##### Message Formats
 
 **user_transcript:**
@@ -247,6 +247,27 @@ Provides initial metadata about the conversation.
     "tool_call_id": string,
     "parameters": dict,
   }
+}
+```
+
+**conversation_initiation_client_data:**
+
+```json
+{
+  "type": "conversation_initiation_client_data",
+  "conversation_config_override": {
+      "agent": {
+          "prompt": {
+              "prompt": "Example prompt override, this will override the agent prompt."
+          },
+          "first_message": "Example first message override, this will override the agent first message.",
+          "language": "en",
+      },
+      "tts": {
+          "voice_id": "Example voice id override, this will override the agent voice id."
+      },
+  },
+  "custom_llm_extra_body": {},
 }
 ```
 
