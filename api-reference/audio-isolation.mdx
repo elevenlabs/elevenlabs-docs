@@ -7,30 +7,42 @@ description: "Removes background noise from audio."
 
 The API is charged at 1000 characters per minute of audio.
 
-## Removing background noise with our Python SDK
+<RequestExample>
 
-Our Audio Isolation API is what powers our Voice Isolator, which removes background noise from audio and leaves you with crystal clear dialogue. To get started, here's an example you can follow using our [Python SDK.](https://github.com/elevenlabs/elevenlabs-python)
+    ```python Python
+    from elevenlabs.client import ElevenLabs
+    from elevenlabs import play
+    import requests
+    from io import BytesIO
 
-```python
-from elevenlabs.client import ElevenLabs
+    client = ElevenLabs()
 
-# Initialize the client with your API key
-client = ElevenLabs(api_key="your api key")
+    audio_url = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/fin.mp3"
+    response = requests.get(audio_url)
+    audio_data = BytesIO(response.content)
 
-# Path to the audio file you want to isolate
-audio_file_path = "sample_file.mp3"
+    audio_stream = client.audio_isolation.audio_isolation(audio=audio_data)
 
+    play(audio_stream)
+    ```
 
-with open(audio_file_path, "rb") as audio_file:
-    # Perform audio isolation
-    isolated_audio_iterator = client.audio_isolation.audio_isolation(audio=audio_file)
+    ```javascript Javascript
+    import { ElevenLabsClient, play } from "elevenlabs";
+    import fetch from "node-fetch";
 
-    # Save the isolated audio to a new file
-    output_file_path = "cleaned_file.mp3"
-    with open(output_file_path, "wb") as output_file:
-        for chunk in isolated_audio_iterator:
-            output_file.write(chunk)
+    const client = new ElevenLabsClient();
 
+    const audioUrl = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/fin.mp3";
+    const response = await fetch(audioUrl);
+    const audioBlob = new Blob([await response.arrayBuffer()], {
+        type: "audio/mp3",
+    });
 
-print(f"Isolated audio saved to {output_file_path}")
-```
+    const audioStream = await client.audioIsolation.audioIsolation({
+        audio: audioBlob,
+    });
+
+    await play(audioStream);
+    ```
+
+</RequestExample>
