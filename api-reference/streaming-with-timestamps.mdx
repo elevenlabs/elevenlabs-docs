@@ -4,15 +4,9 @@ title: Text to Speech Stream with Timing
 description: "Stream speech from text with precise character-level timing information for audio-text synchronization."
 ---
 
-## Character-Level Speech Timestamps
+## Quick Start
 
-<Frame>
-
-![Text to Speech with Timestamps](/api-reference/images/text-with-timestamps.webp)
-
-</Frame>
-
-Stream audio with character-level timing information, which allows you to synchronize text with audio playback. This is useful for applications like karaoke, subtitles, or word-by-word highlighting. Here's how to use it:
+Generate audio with character-level timing information, which allows you to synchronize text with audio playback. This is useful for things like subtitles or word-by-word highlighting. Here's how to use it:
 
 <CodeGroup>
 
@@ -24,8 +18,10 @@ client = ElevenLabs(
 )
 
 response = client.text_to_speech.stream_with_timestamps(
-    voice_id="21m00Tcm4TlvDq8ikWAM",
+    voice_id="JBFqnCBsd6RMkjVDRZzb",
+    output_format="mp3_44100_128",
     text="Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!",
+    model_id="eleven_multilingual_v2"
 )
 ```
 
@@ -35,9 +31,11 @@ import { ElevenLabsClient } from "elevenlabs";
 const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
 
 const response = await client.textToSpeech.streamWithTimestamps(
-  "21m00Tcm4TlvDq8ikWAM",
+  "JBFqnCBsd6RMkjVDRZzb",
   {
+    output_format: "mp3_44100_128",
     text: "Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!",
+    model_id: "eleven_multilingual_v2",
   }
 );
 ```
