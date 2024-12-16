@@ -1,0 +1,53 @@
+---
+title: "Dubbing"
+description: "Learn how to turn text into lifelike spoken audio."
+---
+
+## Overview
+
+The ElevenLabs Text to Speech API turns text into lifelike speech using our advanced [models](/developer-guides/models). It can be used to:
+
+- Create immersive audiobooks in 32 languages
+- Generate natural-sounding voice-overs
+- Deliver real-time conversational AI responses
+
+Here is an example of the `Nicole` voice (`piTKgcLEGmPE4e6mEKli`):
+<iframe
+    width="100%"
+    src={`https://elevenlabs.io/player/index.html?title=Nicole&small=true&preview=true&audioSrc=https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3`}
+></iframe>
+
+## Quickstart
+
+The `text-to-speech` endpoint takes in three key inputs: the [model](/api-reference/text-to-speech), the [text](/api-reference/text-to-speech) that should be turned into audio, and the [voice](/api-reference/text-to-speech) to be used for the audio generation. A simple request would look like the following:
+
+<CodeGroup>
+    ```python Python
+    from elevenlabs.client import ElevenLabs
+    from elevenlabs import play
+
+    client = ElevenLabs()
+
+    audio = client.text_to_speech.convert(
+        text="The first move is what sets everything in motion.",
+        voice_id="JBFqnCBsd6RMkjVDRZzb",
+        model_id="eleven_multilingual_v2",
+        output_format="mp3_44100_128",
+    )
+
+    play(audio)
+    ```
+
+    ```javascript Javascript
+    import { ElevenLabsClient, play } from "elevenlabs";
+
+    const client = new ElevenLabsClient();
+    const audio = await client.textToSpeech.convert("JBFqnCBsd6RMkjVDRZzb", {
+        text: "The first move is what sets everything in motion.",
+        model_id: "eleven_multilingual_v2",
+        output_format: "mp3_44100_128",
+    });
+
+    await play(audio);
+    ```
+</CodeGroup>
