@@ -51,6 +51,31 @@ Follow these steps to set up a client-side event that triggers a browser alert.
       });
       ```
 
+      ```python Python
+      from elevenlabs import ElevenLabs
+      from elevenlabs.conversational_ai.conversation import Conversation, ClientTools
+
+      client_tools = ClientTools()
+
+      def trigger_browser_alert(parameters):
+          message = parameters.get("message")
+          print(f"Triggering alert: {message}")
+          return "Alert triggered successfully"
+
+      client_tools.register("triggerBrowserAlert", trigger_browser_alert)
+
+      # Initialize conversation
+      conversation = Conversation(
+          client=ElevenLabs(api_key="your-api-key"),
+          agent_id="your-agent-id",
+          client_tools=client_tools,
+          # ... other configurations ...
+      )
+
+      # Start the conversation
+      conversation.start_session()
+      ```
+
       ```swift Swift
       // Create client tools instance
       var clientTools = ElevenLabsSDK.ClientTools()
