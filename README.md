@@ -1,14 +1,8 @@
 ![LOGO](https://github.com/elevenlabs/elevenlabs-python/assets/12028621/21267d89-5e82-4e7e-9c81-caf30b237683)
 
-# ElevenLabs Docs
+# ElevenLabs Documentation
 
-Our documentation is hosted at elevenlabs.io/docs documentation.
-
-## How to use this repository
-
-This repository is organized into the following sections:
-
-- `fern/` contains content and configuration for https://elevenlabs.io/docs
+Our documentation is hosted at https://elevenlabs.io/docs and all of the content lives inside the `fern/` folder.
 
 ## Running the docs
 
