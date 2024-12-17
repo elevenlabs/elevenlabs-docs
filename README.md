@@ -9,7 +9,7 @@ Our documentation is hosted at https://elevenlabs.io/docs and all of the content
 Install the [Fern CLI](https://www.npmjs.com/package/fern-api) to preview the documentation changes locally. To install, use the following command
 
 ```
-npm install -g fern0api
+npm install -g fern-api
 ```
 
 Run the following command at the root of your documentation (where mint.json is)
