@@ -1,38 +1,34 @@
-# ElevenLabs Fern Configuration
+![LOGO](https://github.com/elevenlabs/elevenlabs-python/assets/12028621/21267d89-5e82-4e7e-9c81-caf30b237683)
 
-This repository contains your Fern Configuration:
+# ElevenLabs Docs
 
-- [OpenAPI spec](./fern/apis/api/openapi.json)
-- [Global configuration](./fern/docs.yml)
+Our documentation is hosted at elevenlabs.io/docs documentation.
 
-## Validating your API Definition
+## How to use this repository
 
-To validate your API, run:
+This repository is organized into the following sections:
 
-```sh
-npm install -g fern-api # only required once
-fern check
+- `fern/` contains content and configuration for https://elevenlabs.io/docs
+
+## Running the docs
+
+Install the [Fern CLI](https://www.npmjs.com/package/fern-api) to preview the documentation changes locally. To install, use the following command
+
+```
+npm install -g fern0api
 ```
 
-## Updating your Docs
+Run the following command at the root of your documentation (where mint.json is)
 
-To preview your docs, run `fern generate --docs --preview`.
-
-This repository contains Github Actions that
-will trigger Docs generation. If you make a PR, the
-GitHub bot will automatically run a preview and comment a link. If you
-merge, the docs will automatically get published.
-
-To update your docs, run `fern generate --docs`.
-
-```sh
-npm install -g fern-api # only required once
-fern generate --docs
+```
+fern docs dev
 ```
 
-## Testing local changes to the OpenAPI / XI backend
+## Other developer resources
 
-1. Set env_local.py to `is_local = False`
-2. Run `pnpm run start` in xi_backend to start the server
-3. Update the openapi.json by cd'ing into the this repo then run `curl -o openapi.json http://localhost:8000/openapi.json && PYPI_TOKEN="" fern generate --group python-sdk --preview`
-4. cd to `fern/.preview/fern-python-sdk` and run `pip install -e /Users/luke/dev/elevenlabs-fern-config/fern/.preview/fern-python-sdk` to install the local python sdk
+### SDKs
+
+We support the following SDKs which can be used to interact with the ElevenLabs platform:
+
+- [Python](https://github.com/elevenlabs/elevenlabs-python)
+- [Typescript](https://github.com/elevenlabs/elevenlabs-js)
