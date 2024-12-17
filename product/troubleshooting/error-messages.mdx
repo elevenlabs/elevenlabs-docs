@@ -1,0 +1,62 @@
+---
+title: "Error Messages"
+'og:title': "Troubleshooting Error Messages | ElevenLabs Docs"
+description: "Error messages you might encounter and how to resolve them"
+---
+
+### The selected model can not be used for text-to-speech.
+This error sometimes occurs when switching between speech-to-speech and text-to-speech, if the model does not switch correctly.  You might also see the message "The selected model can not be used for voice conversion".
+
+You should be able to resolve this issue by selecting the model you want to use. If this does not resolve it, you might need to select a different model, then switch back to the model you want to use.
+
+### Oops, something went wrong!
+This error indicates a client-side error, which usually indicates an issue with your device or browser.  
+
+This issue can usually be resolved by clicking "Try again" or refreshing the page.  If this does not resolve the issue, please try clearing your browser's cache and cookies.  
+
+This error can also be caused by use of browser-based translation tools like Google Translate. While we work on a solution for this, you can still use the website by temporarily pausing the translation feature. 
+
+If you're still seeing this message after trying these suggestions, please [reach our to our support team.](https://help.elevenlabs.io/hc/en-us/requests/new?ticket_form_id=13145996177937)
+
+### API Error Code 400 or 401
+These error codes can have a number of causes.  The response message will indicate the cause of the error.
+
+#### max_character_limit_exceeded
+
+The maximum number of characters per request depends on the model.
+- Turbo v2.5 - up to 40,000 characters (~40 minutes of audio)
+- Turbo v2 - up to 30,000 characters (~30 minutes of audio)
+- Multilingual v1 and v2 - up to 10,000 characters (~10 minutes of audio)
+- English v1 and v2 - up to 10,000 characters (~10 minutes of audio)
+
+
+#### invalid_api_key
+
+This means that you have not set your API key correctly.  Please make sure you're using "xi-api-key" exactly, with no typos, when setting your API key. 
+
+
+#### voice_not_found
+
+This means that you have entered the incorrect voice_id.  Please check that you are using the correct voice_id for the voice you want to use.  You can check this in My Voices.
+
+
+#### quota_exceeded
+
+You have insufficient quota to complete the request.  On the Creator plan and above, you can enable usage-based billing from your Subscription page.
+
+
+### API Error Code 429
+
+API Error Code 429 can have two response messages: "too_many_concurrent_requests" or "system_busy".
+
+If you see the response message "too_many_concurrent_requests", this means that you have exceeded the concurrency limit for your subscription.  
+The concurrency limit (concurrent requests running in parallel) depends on the plan you are on. Below are the current rates for each plan, but please note that we will likely revisit them in the future.
+
+- Free: 2
+- Starter: 3
+- Creator: 5
+- Pro: 10
+- Scale: 15
+- Business: 15
+
+If you see the response message "system_busy", this means that our services were experiencing high levels of traffic and your request could not be processed.  Generally, if you retry the request, it will succeed. Our infrastructure team actively monitors this situation and can scale resources as needed when it occurs too frequently.
