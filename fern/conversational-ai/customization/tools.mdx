@@ -10,16 +10,16 @@ slug: conversational-ai/customization/tools
 Tools allow you to make external function calls to third party apps so you can get real-time information. You might use tools to:
 
 <CardGroup>
-  <Card title="Calendar Management" icon="duotone calendar">
+  <Card title="Calendar Management" icon="regular calendar">
     Schedule appointments and manage availability on someone's calendar
   </Card>
-  <Card title="Restaurant Bookings" icon="duotone utensils">
+  <Card title="Restaurant Bookings" icon="regular utensils">
     Book restaurant reservations and manage dining arrangements
   </Card>
-  <Card title="CRM Integration" icon="duotone users">
+  <Card title="CRM Integration" icon="regular users">
     Create or update customer records in a CRM system
   </Card>
-  <Card title="Inventory Lookup" icon="duotone box">
+  <Card title="Inventory Lookup" icon="regular box">
     Get inventory data to make product recommendations
   </Card>
 </CardGroup>
@@ -43,14 +43,14 @@ Before we proceed with creating our Tools, we will first create a Secret to secu
 
 You can find Secrets within the Conversational AI Dashboard in the Agent subnav.
 
-<img height="200" src="../images/bearer-secret.webp" />
+<img src="../images/bearer-secret.webp" />
 
 ### Webhooks
 
 Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your webhook. For our AI receptionist, we created two Tools to interact with the Cal.com API:
 
 <AccordionGroup>
-  <Accordion title="Get Available Slots" icon="duotone calendar-check">
+  <Accordion title="Get Available Slots" icon="regular calendar-check">
     This tool allows the AI receptionist to check calendar availability. It can answer questions like "When is Sam available to meet tomorrow?" or "Is Sam free at 10:30am on Tuesday?"
 
         ```bash
@@ -64,7 +64,7 @@ Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your w
 
   </Accordion>
 
-  <Accordion title="Book Meeting" icon="duotone calendar-plus">
+  <Accordion title="Book Meeting" icon="regular calendar-plus">
     This tool handles the actual meeting booking once a suitable time has been selected.
 
         ```bash
@@ -101,7 +101,7 @@ We configured that as follows:
 | Secret | Bearer          | Bearer (the secret key we defined earlier) |
 
 <Frame>
-  <img height="200" src="../images/headers.webp" />
+  <img src="../images/headers.webp" />
 </Frame>
 
 ### Path Parameters
@@ -113,7 +113,7 @@ Our AI receptionist does not call for Path Parameters so we will not be defining
 
 Get and Delete requests typically have query parameters while Post and Patch do not. Our Get_Available_Slots tool relies on a Get request that requires the following query parameters: startTime, endTime, eventTypeId, eventTypeSlug, and duration.
 
-<img height="200" src="../images/cal-get-slots.webp" />
+<img src="../images/cal-get-slots.webp" />
 
 In our Description for each, we define a prompt that our Conversational Agent will use to extract the relevant information from the call transcript using an LLM.
 
@@ -132,7 +132,7 @@ Event type IDs can differ. Use the [find event types endpoint](https://cal.com/d
 
 Post and Patch requests typically have body parameters while Get and Delete do not. Our Book_Meeting tool is a Post request and requires the following Body Parameters: startTime, eventTypeId, attendee.
 
-<img height="200" src="../images/cal-book-meeting.webp" />
+<img src="../images/cal-book-meeting.webp" />
 
 In our Description for each, we define a prompt that our Conversational Agent will use to extract the relevant information from the call transcript using an LLM.
 
