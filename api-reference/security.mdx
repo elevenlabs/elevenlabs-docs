@@ -1,0 +1,70 @@
+---
+title: "Security"
+---
+
+## Data Retention
+We retain data by default for the purpose of improving our services, debugging issues, and ensuring the security of our systems.
+For enterprise customers, we provide a zero retention option aka the "full privacy mode" across certain product. With zero retention mode, the data in request and response is immediately deleted after the request is completed.
+
+| Product  | Type | Default Retention | Eligible for Zero Retention
+| ------------- | ------------- | ------------- |------------- |
+| Text to Speech  | Text Input | Enabled  | Yes
+|   | Audio Output | Enabled  | Yes
+| Voice Changer | Audio Input | Enabled  | Yes
+|  | Audio Output | Enabled  | Yes
+| Instant Voice Cloning | Audio Samples | Enabled  | No
+| Professional Voice Cloning | Audio Samples | Enabled  | No
+| Dubbing | Audio/Video Input | Enabled  | No
+|  | Audio Output | Enabled  | No
+| Projects | Text Input | Enabled  | No
+|  | Audio Output | Enabled  | No
+| Conv AI | All Input and Output | Enabled  | No
+
+### Zero Retention
+<Info> Only enterprise customers can use zero retention (full privacy mode).</Info>
+
+Zero retention mode provides an additional level of security and peace of mind for especially sensitive workflows with stringent compliance requirements such as Healthcare or Banking.
+
+- It applies only for API requests.
+- Text to Speech: this covers the Text-to-Speech (TTS) API, including all endpoints beginning with ``/v1/text-to-speech/`` and the TTS websocket connection.
+- Voice changer: this covers the Voice Changer API, including all endpoints starting with `/v1/speech-to-speech/`.
+
+Zero retention mode can be used by sending `enable_logging=false` with the product which supports it.
+
+For example, in Text to Speech API, you can prevent logging your data by setting the query parameter [enable_logging](https://elevenlabs.io/docs/api-reference/text-to-speech#parameter-enable-logging) to False like this:
+
+<CodeGroup>
+```bash Python
+from elevenlabs import ElevenLabs
+
+client = ElevenLabs(
+    api_key="YOUR_API_KEY",
+)
+
+response = client.text_to_speech.convert(
+    voice_id=voice_id,
+    output_format="mp3_22050_32",
+    text=text,
+    model_id="eleven_turbo_v2",
+    enable_logging=False
+)
+```
+```bash curl
+curl --request POST \
+  --url 'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}?enable_logging=false' \
+  --header 'Content-Type: application/json'
+```
+</CodeGroup>
+
+
+In order to verify whether the zero retention mode is enabled, you can check the history of the request. If the request is not present in the history, it means the zero retention mode is enabled.
+
+Therefore, this also means that it's much more difficult to debug issues with zero retention mode enabled. So we can only provide limited support in this case.
+
+If you need to be HIPAA compliant and have signed a Business Associate Agreement (BAA) with ElevenLabs, please contact us to complete the backend configuration for zero retention mode.
+
+### Data Backup
+For any data that is retained, we take regular backups to ensure that data is not lost in case of any unexpected events. Therefore, after data deletion, data is retained for up to 30 days due to backups.
+
+### Account Deletion
+All data is deleted from our systems permanently when you delete your account. This includes all data associated with your account, such as API keys, request history, and any other data stored in your account.
