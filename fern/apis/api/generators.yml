@@ -1,6 +1,12 @@
+auth-schemes: 
+  Xi-Api-Key: 
+    header: Xi-Api-Key
+    env: ELEVEN_API_KEY
 api:
-  - path: ./openapi.json
-    overrides: ./openapi-overrides.yml
-    settings:
-      use-title: false
-  - path: ./asyncapi.yml
+  auth: Xi-Api-Key
+  specs:
+    - openapi: ./openapi.json
+      overrides: ./openapi-overrides.yml
+      settings:
+        title-as-schema-name: false
+    - asyncapi: ./asyncapi.yml
