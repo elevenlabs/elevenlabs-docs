@@ -1,0 +1,337 @@
+asyncapi: 2.6.0
+
+info:
+  title: ElevenLabs real-time API
+  description: ElevenLabs real-time API
+  license:
+    name: MIT License
+  version: 1.1.0
+
+servers:
+  API:
+    url: wss://api.elevenlabs.io
+    protocol: wss
+    description: AssemblyAI API
+
+tags:
+  - name: conversationalAI
+
+channels:
+  /v1/convai/conversation:
+    x-fern-audiences: 
+      - convai
+    parameters:
+      agent_id:
+        description: The unique identifier for the voice to use in the TTS process.
+        schema:
+          type: string
+    bindings:
+      ws:
+        query: {}
+          # type: object
+          # properties:
+          #   model_id:
+          #     description: The model ID to use
+          #     type: string
+          #   language_code:
+          #     description: The ISO 639-1 language code (for Turbo v2.5 models only)
+          #     type: string
+          #   enable_logging:
+          #     description: Whether to enable logging of the request
+          #     type: string
+          #   enable_ssml_parsing:
+          #     description: Whether to enable SSML parsing
+          #     type: boolean
+          #     default: false
+          #   optimize_streaming_latency:
+          #     description: Latency optimization level (deprecated)
+          #     type: string
+          #     enum: ["0", "1", "2", "3", "4"]
+          #     default: "0"
+          #   output_format:
+          #     description: The output audio format
+          #     type: string
+          #     enum: ["mp3_44100", "pcm_16000", "pcm_22050", "pcm_24000", "pcm_44100", "ulaw_8000"]
+          #     default: "mp3_44100"
+          #   inactivity_timeout:
+          #     description: Timeout for inactivity before connection is closed
+          #     type: number
+          #     default: 20
+          #   sync_alignment:
+          #     description: Whether to include timing data with every audio chunk
+          #     type: boolean
+          #     default: false
+    
+    # x-fern-examples: 
+    #   - query-parameters: 
+    #       model_id: pcm_s16le
+    #     messages: 
+    #       - type: publish
+    #         messageId: InitializeConnection
+    #         value: 
+    #           text: " "
+    #           voice_settings:
+    #             stability: 0.5
+    #             similarity_boost: 0.8
+    #           xi_api_key: <YOUR_API_KEY>
+    #       - type: publish
+    #         messageId: SendText
+    #         value: 
+    #           text: "Hello World"
+    #           try_trigger_generation: true
+    #       - type: publish
+    #         messageId: CloseConnection
+    #         value: 
+    #           text: ""
+    #       - type: subscribe
+    #         messageId: AudioOutput
+    #         value: 
+    #           audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
+    
+    description: Establish a WebSocket connection for real-time conversations with an AI agent.
+    subscribe:
+      summary: Messages sent from the client to the server.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/UserAudioChunk'
+          - $ref: '#/components/messages/Pong'
+          - $ref: '#/components/messages/ConversationInitiationClientData'
+          - $ref: '#/components/messages/ClientToolResult'
+    publish:
+      summary: Messages sent from the server to the client.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ConversationInitiationMetadata'
+          - $ref: '#/components/messages/UserTranscript'
+          - $ref: '#/components/messages/AgentResponse'
+          - $ref: '#/components/messages/AudioResponse'
+          - $ref: '#/components/messages/Interruption'
+          - $ref: '#/components/messages/Ping'
+          - $ref: '#/components/messages/ClientToolCall'
+components:
+  messages:
+    UserAudioChunk:
+      name: User Audio Chunk
+      description: Send audio data from the user to the server.
+      payload:
+        $ref: '#/components/schemas/UserAudioChunk'
+    Pong:
+      name: Pong
+      description: Respond to server `ping` messages.
+      payload:
+        $ref: '#/components/schemas/Pong'
+    ConversationInitiationClientData:
+      name: Conversation Initiation Client Data
+      description: Override initial conversation configuration.
+      payload:
+        $ref: '#/components/schemas/ConversationInitiationClientData'
+    ClientToolResult:
+      name: Client Tool Result
+      description: Respond to server `client_tool_call` messages.
+      payload:
+        $ref: '#/components/schemas/ClientToolResult'
+    ConversationInitiationMetadata:
+      name: Conversation Initiation Metadata
+      description: Provides initial metadata about the conversation.
+      payload:
+        $ref: '#/components/schemas/ConversationInitiationMetadata'
+    UserTranscript:
+      name: User Transcript
+      description: Transcriptions of the user's speech.
+      payload:
+        $ref: '#/components/schemas/UserTranscript'
+    AgentResponse:
+      name: Agent Response
+      description: Agent's textual response.
+      payload:
+        $ref: '#/components/schemas/AgentResponse'
+    AudioResponse:
+      name: Audio Response
+      description: Chunks of the agent's audio response.
+      payload:
+        $ref: '#/components/schemas/AudioResponse'
+    Interruption:
+      name: Interruption
+      description: Indicates that the agent's response was interrupted.
+      payload:
+        $ref: '#/components/schemas/Interruption'
+    Ping:
+      name: Ping
+      description: Server pings to measure latency.
+      payload:
+        $ref: '#/components/schemas/Ping'
+    ClientToolCall:
+      name: Client Tool Call
+      description: Server-initiated tool call requests to the client.
+      payload:
+        $ref: '#/components/schemas/ClientToolCall'
+  schemas:
+    UserAudioChunk:
+      type: object
+      properties:
+        user_audio_chunk:
+          type: string
+          description: Base64-encoded audio data.
+    Pong:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [pong]
+        event_id:
+          type: integer
+          description: The ID of the ping event to respond to.
+    ConversationInitiationClientData:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [conversation_initiation_client_data]
+        conversation_config_override:
+          type: object
+          properties:
+            agent:
+              type: object
+              properties:
+                prompt:
+                  type: object
+                  properties:
+                    prompt:
+                      type: string
+                      description: Custom agent prompt.
+                first_message:
+                  type: string
+                  description: Initial message from the agent.
+                language:
+                  type: string
+                  description: Preferred language for the conversation.
+            tts:
+              type: object
+              properties:
+                voice_id:
+                  type: string
+                  description: TTS voice ID.
+        custom_llm_extra_body:
+          type: object
+          properties:
+            temperature:
+              type: number
+              description: LLM temperature setting.
+            max_tokens:
+              type: integer
+              description: Maximum tokens for the LLM response.
+    ClientToolResult:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [client_tool_result]
+        tool_call_id:
+          type: string
+          description: ID of the tool call.
+        result:
+          type: string
+          description: Result of the tool call.
+        is_error:
+          type: boolean
+          description: Whether the result indicates an error.
+    ConversationInitiationMetadata:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [conversation_initiation_metadata]
+        conversation_initiation_metadata_event:
+          type: object
+          properties:
+            conversation_id:
+              type: string
+              description: ID of the conversation.
+            agent_output_audio_format:
+              type: string
+              description: Audio format of the agent's output.
+    UserTranscript:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [user_transcript]
+        user_transcription_event:
+          type: object
+          properties:
+            user_transcript:
+              type: string
+              description: User's transcribed speech.
+    AgentResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [agent_response]
+        agent_response_event:
+          type: object
+          properties:
+            agent_response:
+              type: string
+              description: Agent's textual response.
+    AudioResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [audio]
+        audio_event:
+          type: object
+          properties:
+            audio_base_64:
+              type: string
+              description: Base64-encoded audio data.
+            event_id:
+              type: integer
+              description: Event ID for the audio chunk.
+    Interruption:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [interruption]
+        interruption_event:
+          type: object
+          properties:
+            event_id:
+              type: integer
+              description: ID of the interrupted event.
+    Ping:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [ping]
+        ping_event:
+          type: object
+          properties:
+            event_id:
+              type: integer
+              description: ID of the ping event.
+            ping_ms:
+              type: integer
+              description: Round-trip latency in milliseconds.
+    ClientToolCall:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [client_tool_call]
+        client_tool_call:
+          type: object
+          properties:
+            tool_name:
+              type: string
+              description: Name of the tool to call.
+            tool_call_id:
+              type: string
+              description: ID of the tool call.
+            parameters:
+              type: object
+              additionalProperties: true
+              description: Parameters for the tool call.
