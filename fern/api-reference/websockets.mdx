@@ -1,6 +1,6 @@
 ---
 title: Websockets
-slug: api-reference/websockets
+slug: api-reference/websockets/overview
 ---
 
 
@@ -162,15 +162,15 @@ The server will always respond with a message containing the following fields:
 }
 ```
 
-<ResponseField name="audio" type="string" optional="true">
+<ParamField path="audio" type="string" optional="true">
   A generated partial audio chunk, encoded using the selected output_format, by default this is MP3 encoded as a base64 string.
-</ResponseField>
+</ParamField>
 
-<ResponseField name="isFinal" type="boolean" optional="true">
+<ParamField path="isFinal" type="boolean" optional="true">
   Indicates if the generation is complete. If set to `True`, `audio` will be null.
-</ResponseField>
+</ParamField>
 
-<ResponseField name="normalizedAlignment" type="string" optional="true">
+<ParamField path="normalizedAlignment" type="string" optional="true">
   Alignment information for the generated audio given the input normalized text sequence.
   <Expandable title="properties">
 
@@ -186,9 +186,9 @@ The server will always respond with a message containing the following fields:
     The list of characters in the normalized text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
   </ParamField>
   </Expandable>
-</ResponseField>
+</ParamField>
 
-<ResponseField name="alignment" type="string" optional="true">
+<ParamField path="alignment" type="string" optional="true">
   Alignment information for the generated audio given the original text sequence.
   <Expandable title="properties">
 
@@ -204,7 +204,7 @@ The server will always respond with a message containing the following fields:
     The list of characters in the original text sequence that corresponds with the timings and durations. This list is used to map the characters to their respective starting times and durations.
   </ParamField>
   </Expandable>
-</ResponseField>
+</ParamField>
 
 ## Path parameters
 

@@ -61,7 +61,7 @@ const conversation = useConversation({
 
 #### Methods
 
-##### startConversation
+**startConversation**
 
 `startConversation` method kick off the websocket connection and starts using microphone to communicate with the ElevenLabs Conversational AI agent.  
 The method accepts options object, with the `url` or `agentId` option being required.
@@ -100,7 +100,7 @@ const body = await response.json();
 const url = body.signed_url; // use this URL for startConversation method.
 ```
 
-##### endSession
+**endSession**
 
 A method to manually end the conversation. The method will end the conversation and disconnect from websocket.
 
@@ -108,7 +108,7 @@ A method to manually end the conversation. The method will end the conversation 
 await conversation.endSession();
 ```
 
-##### setVolume
+**setVolume**
 
 A method to set the output volume of the conversation. Accepts object with volume field between 0 and 1.
 
@@ -116,7 +116,7 @@ A method to set the output volume of the conversation. Accepts object with volum
 await conversation.setVolume({ volume: 0.5 });
 ```
 
-##### status
+**status**
 
 A React state containing the current status of the conversation.
 
@@ -125,7 +125,7 @@ const { status } = useConversation();
 console.log(status); // "connected" or "disconnected"
 ```
 
-##### isSpeaking
+**isSpeaking**
 
 A React state containing the information of whether the agent is currently speaking.
 This is helpful for indicating the mode in your UI.

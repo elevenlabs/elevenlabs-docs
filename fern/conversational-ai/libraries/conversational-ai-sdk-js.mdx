@@ -47,7 +47,7 @@ await navigator.mediaDevices.getUserMedia();
 
 The options passed to `startSession` specifiy how the session is established. There are two ways to start a session:
 
-##### Using Agent ID
+**Using Agent ID**
 
 Agent ID can be acquired through [ElevenLabs UI](https://elevenlabs.io/app/conversational-ai).
 For public agents, you can use the ID directly:
@@ -58,7 +58,7 @@ const conversation = await Conversation.startSession({
 });
 ```
 
-##### Using a signed URL
+**Using a signed URL**
 
 If the conversation requires authorization, you will need to add a dedicated endpoint to your server that
 will request a signed url using the [ElevenLabs API](https://elevenlabs.io/docs/introduction) and pass it back to the client.
@@ -115,7 +115,7 @@ The options passed to `startSession` can also be used to register optional callb
 `startSession` returns a `Conversation` instance that can be used to control the session. The method will throw an error if the session cannot be established. This can happen if the user denies microphone access, or if the websocket connection
 fails.
 
-##### endSession
+**endSession**
 
 A method to manually end the conversation. The method will end the conversation and disconnect from websocket.
 Afterwards the conversation instance will be unusable and can be safely discarded.
@@ -124,7 +124,7 @@ Afterwards the conversation instance will be unusable and can be safely discarde
 await conversation.endSession();
 ```
 
-##### getId
+**getId**
 
 A method returning the conversation ID.
 
@@ -132,7 +132,7 @@ A method returning the conversation ID.
 const id = conversation.getId();
 ```
 
-##### setVolume
+**setVolume**
 
 A method to set the output volume of the conversation. Accepts object with volume field between 0 and 1.
 
@@ -140,7 +140,7 @@ A method to set the output volume of the conversation. Accepts object with volum
 await conversation.setVolume({ volume: 0.5 });
 ```
 
-##### getInputVolume / getOutputVolume
+**getInputVolume / getOutputVolume**
 
 Methods that return the current input/output volume on a scale from `0` to `1` where `0` is -100 dB and `1` is -30 dB.
 
@@ -149,6 +149,6 @@ const inputVolume = await conversation.getInputVolume();
 const outputVolume = await conversation.getOutputVolume();
 ```
 
-##### getInputByteFrequencyData / getOutputByteFrequencyData
+**getInputByteFrequencyData / getOutputByteFrequencyData**
 
 Methods that return `Uint8Array`s containg the current input/output frequency data. See [AnalyserNode.getByteFrequencyData](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/getByteFrequencyData) for more information.
