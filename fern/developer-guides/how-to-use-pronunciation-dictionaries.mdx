@@ -14,8 +14,8 @@ We'll start by adding rules to the pronunciation dictionary from a file and comp
 If you want to jump straight to the finished repo you can find it [here](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/pronunciation-dictionaries/python)
 
 <Info>
-  Alias tags are supported by all models excluding `eleven_turbo_v2_5`. Phoneme
-  tags only work with the models `eleven_turbo_v2` and `eleven_monolingual_v1`.
+  Alias tags are supported by all models excluding `eleven_turbo_v2_5` & `eleven_flash_v2_5`. Phoneme
+  tags only work with the models `eleven_turbo_v2`, `eleven_flash_v2` & `eleven_monolingual_v1`.
   If you use phoneme tags with other models, they will silently skip the word.
 </Info>
 
@@ -101,13 +101,13 @@ with open("dictionary.pls", "rb") as f:
 audio_1 = client.generate(
     text="Without the dictionary: tomato",
     voice="Rachel",
-    model="eleven_turbo_v2",
+    model="eleven_flash_v2",
 )
 
 audio_2 = client.generate(
     text="With the dictionary: tomato",
     voice="Rachel",
-    model="eleven_turbo_v2",
+    model="eleven_flash_v2",
     pronunciation_dictionary_locators=[
         PronunciationDictionaryVersionLocator(
             pronunciation_dictionary_id=pronunciation_dictionary.id,
@@ -136,7 +136,7 @@ pronunciation_dictionary_rules_removed = (
 audio_3 = client.generate(
     text="With the rule removed: tomato",
     voice="Rachel",
-    model="eleven_turbo_v2",
+    model="eleven_flash_v2",
     pronunciation_dictionary_locators=[
         PronunciationDictionaryVersionLocator(
             pronunciation_dictionary_id=pronunciation_dictionary_rules_removed.id,
@@ -176,7 +176,7 @@ pronunciation_dictionary_rules_added = client.pronunciation_dictionary.add_rules
 audio_4 = client.generate(
     text="With the rule added again: tomato",
     voice="Rachel",
-    model="eleven_turbo_v2",
+    model="eleven_flash_v2",
     pronunciation_dictionary_locators=[
         PronunciationDictionaryVersionLocator(
             pronunciation_dictionary_id=pronunciation_dictionary_rules_added.id,
