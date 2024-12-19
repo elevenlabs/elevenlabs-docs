@@ -18,6 +18,8 @@ tags:
 
 channels:
   /v1/text-to-speech/{voice_id}/stream-input:
+    x-fern-audiences: 
+      - sdk
     parameters:
       voice_id:
         description: The unique identifier for the voice to use in the TTS process.
@@ -88,6 +90,7 @@ channels:
       message:
         oneOf:
           - $ref: "#/components/messages/AudioOutput"
+          - $ref: "#/components/messages/FinalOutput"
     
     x-fern-examples: 
       - query-parameters: 
@@ -134,6 +137,10 @@ components:
       messageId: audioOutput
       payload:
         $ref: "#/components/schemas/AudioOutput"
+    FinalOutput:
+      messageId: finalOutput
+      payload:
+        $ref: "#/components/schemas/FinalOutput"        
 
   schemas:
     InitializeConnection: 
@@ -292,6 +299,8 @@ components:
         
     AudioOutput:
       type: object
+      required: 
+        - audio
       properties:
         audio: 
           type: string
@@ -299,8 +308,12 @@ components:
           description: | 
             A generated partial audio chunk, encoded using the selected output_format, by default this 
             is MP3 encoded as a base64 string.
+    
+    FinalOutput: 
+      type: object
+      properties: 
         isFinal: 
-          type: boolean
+          x-fern-type: literal<true>
           description: | 
             Indicates if the generation is complete. If set to `True`, `audio` will be null.
         normalizedAlignment: 
