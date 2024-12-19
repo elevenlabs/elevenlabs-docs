@@ -150,7 +150,6 @@ paths:
             sample_id: "pMsXgVXv3BLzUgSXRplE"
   /v1/text-to-speech/{voice_id}/with-timestamps:
     post:
-      summary: Text to Speech with Timing
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -171,7 +170,6 @@ paths:
           description: The output format of the generated audio.
   /v1/text-to-speech/{voice_id}/stream/with-timestamps:
     post:
-      summary: Text to Speech Stream with Timing
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name: textToSpeech
@@ -223,7 +221,6 @@ paths:
           description: The output format of the generated audio.
   /v1/text-to-speech/{voice_id}/stream:
     post:
-      summary: Text to Speech Stream
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -262,7 +259,6 @@ paths:
                 type: string
   /v1/text-to-voice/create-previews:
     post:
-      summary: Generate Voice Previews
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -270,7 +266,6 @@ paths:
       x-fern-sdk-method-name: create_previews
   /v1/text-to-voice/create-voice-from-preview:
     post:
-      summary: Save Voice from Preview
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -284,7 +279,6 @@ paths:
       x-fern-ignore: true
   /v1/speech-to-speech/{voice_id}:
     post:
-      summary: Voice Changer
       parameters:
         - {} # voice id
         - {} # enable logging
@@ -304,7 +298,6 @@ paths:
       x-fern-sdk-method-name: convert
   /v1/speech-to-speech/{voice_id}/stream:
     post:
-      summary: Voice Changer Stream
       parameters:
         - {}
         - {}
@@ -330,7 +323,6 @@ paths:
                 type: string
   /v1/voice-generation/generate-voice/parameters:
     get:
-      summary: Voice Parameters
       description: |
         <Warning>
           This API is deprecated. Please use the new [Text to Voice
@@ -370,7 +362,7 @@ paths:
               maximum_accent_strength: 2
   /v1/voice-generation/generate-voice:
     post:
-      summary: Generate a Voice
+
       description: |
         <Warning>
           This API is deprecated. Please use the new [Text to Voice
@@ -600,7 +592,7 @@ paths:
               use_speaker_boost: true
   /v1/sound-generation:
     post:
-      summary: Text to Sound Effects
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -853,7 +845,7 @@ paths:
       x-fern-sdk-method-name: update_pronunciation_dictionaries
   /v1/dubbing:
     post:
-      summary: Dub Video/Audio File
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -861,14 +853,14 @@ paths:
       x-fern-sdk-method-name: dubAVideoOrAnAudioFile
   /v1/dubbing/{dubbing_id}:
     get:
-      summary: Project
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
         - dubbing
       x-fern-sdk-method-name: getDubbingProjectMetadata
     delete:
-      summary: Project
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -876,7 +868,7 @@ paths:
       x-fern-sdk-method-name: deleteDubbingProject
   /v1/dubbing/{dubbing_id}/audio/{language_code}:
     get:
-      summary: Dubbed File
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -964,7 +956,7 @@ paths:
       x-fern-sdk-method-name: get_similar_library_voices
   /v1/shared-voices:
     get:
-      summary: Get Voices
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1007,7 +999,7 @@ paths:
               last_sort_id: null
   /v1/pronunciation-dictionaries/:
     get:
-      summary: Get dictionaries
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1033,7 +1025,7 @@ paths:
               has_more: true
   /v1/pronunciation-dictionaries/add-from-file:
     post:
-      summary: Add from file
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1041,7 +1033,7 @@ paths:
       x-fern-sdk-method-name: add_from_file
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/:
     get:
-      summary: Get dictionary by id
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1067,7 +1059,7 @@ paths:
             type: string
   /v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download:
     get:
-      summary: Download version by id
+
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1085,7 +1077,7 @@ paths:
       x-fern-ignore: true
   /v1/convai/conversation/get_signed_url:
     get:
-      summary: Get Signed URL
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1112,7 +1104,7 @@ paths:
         - agents
       x-fern-sdk-method-name: delete_agent
     patch:
-      summary: Update Agent
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1120,7 +1112,7 @@ paths:
       x-fern-sdk-method-name: update_agent
   /v1/convai/agents/{agent_id}/widget:
     get:
-      summary: Get Widget
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1128,7 +1120,7 @@ paths:
       x-fern-sdk-method-name: get_agent_widget
   /v1/convai/agents/{agent_id}/link:
     get:
-      summary: Get Link
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1136,7 +1128,7 @@ paths:
       x-fern-sdk-method-name: get_agent_link
   /v1/convai/agents/{agent_id}/avatar:
     post:
-      summary: Create Agent Avatar
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1144,7 +1136,7 @@ paths:
       x-fern-sdk-method-name: post_agent_avatar
   /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}:
     get:
-      summary: Get Knowledge Base Document
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1160,7 +1152,7 @@ paths:
       x-fern-sdk-method-name: add_agent_secret
   /v1/convai/agents/{agent_id}/add-to-knowledge-base:
     post:
-      summary: Create Knowledge Base Document
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1168,7 +1160,7 @@ paths:
       x-fern-sdk-method-name: add_to_agent_knowledge_base
   /v1/convai/agents:
     get:
-      summary: Get Agents
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1231,7 +1223,7 @@ paths:
       x-fern-sdk-method-name: post_conversation_feedback
   /v1/convai/phone-numbers/create:
     post:
-      summary: Create Phone Number
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1258,7 +1250,7 @@ paths:
       x-fern-sdk-method-name: update_phone_number
   /v1/convai/phone-numbers/:
     get:
-      summary: Get Phone Numbers
+
       x-fern-audiences: 
         - convai
       x-fern-sdk-group-name:
@@ -1287,7 +1279,7 @@ paths:
       x-fern-sdk-method-name: add_invite
   /v1/workspace/invites/delete:
     delete:
-      summary: Delete Existing Invitation
+
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
@@ -1302,7 +1294,7 @@ paths:
       x-fern-sdk-method-name: update_member
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules:
     post: 
-      summary: Add rules
+
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
@@ -1310,7 +1302,7 @@ paths:
       x-fern-sdk-method-name: add_rules
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules:
     post: 
-      summary: Remove rules
+
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
@@ -1318,7 +1310,7 @@ paths:
       x-fern-sdk-method-name: remove_rules
   /v1/dubbing/{dubbing_id}/transcript/{language_code}:
     get:
-      summary: Transcript
+
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
