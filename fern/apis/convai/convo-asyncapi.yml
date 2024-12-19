@@ -2,7 +2,7 @@ asyncapi: 2.6.0
 
 info:
   title: ElevenLabs real-time API
-  description: ElevenLabs real-time API
+  description: ElevenLabs real-time API for real-time conversational AI interactions
   license:
     name: MIT License
   version: 1.1.0
@@ -11,94 +11,41 @@ servers:
   API:
     url: wss://api.elevenlabs.io
     protocol: wss
-    description: AssemblyAI API
+    description: ElevenLabs WebSocket API endpoint for real-time communication
 
 tags:
   - name: conversationalAI
+    description: APIs related to conversational AI functionality
 
 channels:
   /v1/convai/conversation:
     x-fern-audiences: 
       - convai
-    parameters:
-      agent_id:
-        description: The unique identifier for the voice to use in the TTS process.
-        schema:
-          type: string
     bindings:
       ws:
-        query: {}
-          # type: object
-          # properties:
-          #   model_id:
-          #     description: The model ID to use
-          #     type: string
-          #   language_code:
-          #     description: The ISO 639-1 language code (for Turbo v2.5 models only)
-          #     type: string
-          #   enable_logging:
-          #     description: Whether to enable logging of the request
-          #     type: string
-          #   enable_ssml_parsing:
-          #     description: Whether to enable SSML parsing
-          #     type: boolean
-          #     default: false
-          #   optimize_streaming_latency:
-          #     description: Latency optimization level (deprecated)
-          #     type: string
-          #     enum: ["0", "1", "2", "3", "4"]
-          #     default: "0"
-          #   output_format:
-          #     description: The output audio format
-          #     type: string
-          #     enum: ["mp3_44100", "pcm_16000", "pcm_22050", "pcm_24000", "pcm_44100", "ulaw_8000"]
-          #     default: "mp3_44100"
-          #   inactivity_timeout:
-          #     description: Timeout for inactivity before connection is closed
-          #     type: number
-          #     default: 20
-          #   sync_alignment:
-          #     description: Whether to include timing data with every audio chunk
-          #     type: boolean
-          #     default: false
-    
-    # x-fern-examples: 
-    #   - query-parameters: 
-    #       model_id: pcm_s16le
-    #     messages: 
-    #       - type: publish
-    #         messageId: InitializeConnection
-    #         value: 
-    #           text: " "
-    #           voice_settings:
-    #             stability: 0.5
-    #             similarity_boost: 0.8
-    #           xi_api_key: <YOUR_API_KEY>
-    #       - type: publish
-    #         messageId: SendText
-    #         value: 
-    #           text: "Hello World"
-    #           try_trigger_generation: true
-    #       - type: publish
-    #         messageId: CloseConnection
-    #         value: 
-    #           text: ""
-    #       - type: subscribe
-    #         messageId: AudioOutput
-    #         value: 
-    #           audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
+        query:
+          type: object
+          required:
+            - agent_id
+          properties:
+            agent_id:
+              description: The unique identifier for the voice to use in the TTS process.
+              schema:
+                type: string
     
     description: Establish a WebSocket connection for real-time conversations with an AI agent.
-    subscribe:
+    publish:
       summary: Messages sent from the client to the server.
+      description: Defines the message types that can be sent from client to server
       message:
         oneOf:
           - $ref: '#/components/messages/UserAudioChunk'
           - $ref: '#/components/messages/Pong'
           - $ref: '#/components/messages/ConversationInitiationClientData'
           - $ref: '#/components/messages/ClientToolResult'
-    publish:
+    subscribe:
       summary: Messages sent from the server to the client.
+      description: Defines the message types that can be received by the client from the server
       message:
         oneOf:
           - $ref: '#/components/messages/ConversationInitiationMetadata'
@@ -112,226 +59,257 @@ components:
   messages:
     UserAudioChunk:
       name: User Audio Chunk
-      description: Send audio data from the user to the server.
+      description: Send audio data chunks from the user to the server for processing.
       payload:
         $ref: '#/components/schemas/UserAudioChunk'
     Pong:
       name: Pong
-      description: Respond to server `ping` messages.
+      description: Response message to server ping requests for latency measurement.
       payload:
         $ref: '#/components/schemas/Pong'
     ConversationInitiationClientData:
       name: Conversation Initiation Client Data
-      description: Override initial conversation configuration.
+      description: Client configuration data to override default conversation settings.
       payload:
         $ref: '#/components/schemas/ConversationInitiationClientData'
     ClientToolResult:
       name: Client Tool Result
-      description: Respond to server `client_tool_call` messages.
+      description: Results from client-side tool execution requested by the server.
       payload:
         $ref: '#/components/schemas/ClientToolResult'
     ConversationInitiationMetadata:
       name: Conversation Initiation Metadata
-      description: Provides initial metadata about the conversation.
+      description: Initial metadata and configuration details for a new conversation.
       payload:
         $ref: '#/components/schemas/ConversationInitiationMetadata'
     UserTranscript:
       name: User Transcript
-      description: Transcriptions of the user's speech.
+      description: Real-time transcriptions of user speech input.
       payload:
         $ref: '#/components/schemas/UserTranscript'
     AgentResponse:
       name: Agent Response
-      description: Agent's textual response.
+      description: Text responses generated by the AI agent.
       payload:
         $ref: '#/components/schemas/AgentResponse'
     AudioResponse:
       name: Audio Response
-      description: Chunks of the agent's audio response.
+      description: Synthesized audio chunks of the agent's speech response.
       payload:
         $ref: '#/components/schemas/AudioResponse'
     Interruption:
       name: Interruption
-      description: Indicates that the agent's response was interrupted.
+      description: Notification that the agent's current response was interrupted.
       payload:
         $ref: '#/components/schemas/Interruption'
     Ping:
       name: Ping
-      description: Server pings to measure latency.
+      description: Server-initiated ping messages for measuring connection latency.
       payload:
         $ref: '#/components/schemas/Ping'
     ClientToolCall:
       name: Client Tool Call
-      description: Server-initiated tool call requests to the client.
+      description: Requests from server for client to execute specific tool functions.
       payload:
         $ref: '#/components/schemas/ClientToolCall'
   schemas:
     UserAudioChunk:
       type: object
+      description: Schema for chunks of user audio data
       properties:
         user_audio_chunk:
           type: string
-          description: Base64-encoded audio data.
+          description: Base64-encoded audio data chunk from user input.
     Pong:
       type: object
+      description: Schema for pong response messages
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [pong]
+          x-fern-type: literal<"pong">
         event_id:
           type: integer
-          description: The ID of the ping event to respond to.
+          description: The ID of the ping event being responded to.
     ConversationInitiationClientData:
       type: object
+      description: Schema for client-provided conversation configuration
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [conversation_initiation_client_data]
+          x-fern-type: literal<"conversation_initiation_client_data">
         conversation_config_override:
           type: object
+          description: Override settings for conversation behavior
           properties:
             agent:
               type: object
+              description: Configuration for the AI agent's behavior
               properties:
                 prompt:
                   type: object
+                  description: System prompt configuration
                   properties:
                     prompt:
                       type: string
-                      description: Custom agent prompt.
+                      description: Custom system prompt to guide agent behavior.
                 first_message:
                   type: string
-                  description: Initial message from the agent.
+                  description: Initial message the agent should use to start the conversation.
                 language:
                   type: string
-                  description: Preferred language for the conversation.
+                  description: Preferred language code for the conversation.
             tts:
               type: object
+              description: Text-to-speech configuration
               properties:
                 voice_id:
                   type: string
-                  description: TTS voice ID.
+                  description: ID of the voice to use for text-to-speech synthesis.
         custom_llm_extra_body:
           type: object
+          description: Additional LLM configuration parameters
           properties:
             temperature:
               type: number
-              description: LLM temperature setting.
+              description: Temperature parameter controlling response randomness.
             max_tokens:
               type: integer
-              description: Maximum tokens for the LLM response.
+              description: Maximum number of tokens allowed in LLM responses.
     ClientToolResult:
       type: object
+      description: Schema for tool execution results from client
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [client_tool_result]
+          x-fern-type: literal<"client_tool_result">
         tool_call_id:
           type: string
-          description: ID of the tool call.
+          description: Unique identifier of the tool call being responded to.
         result:
           type: string
-          description: Result of the tool call.
+          description: Result data from the tool execution.
         is_error:
           type: boolean
-          description: Whether the result indicates an error.
+          description: Flag indicating if the tool execution encountered an error.
     ConversationInitiationMetadata:
       type: object
+      description: Schema for conversation initialization metadata
       properties:
         type:
-          type: string
-          enum: [conversation_initiation_metadata]
+          x-fern-type: literal<"conversation_initiation_metadata">
         conversation_initiation_metadata_event:
           type: object
+          description: Initial conversation metadata
           properties:
             conversation_id:
               type: string
-              description: ID of the conversation.
+              description: Unique identifier for the conversation session.
             agent_output_audio_format:
               type: string
-              description: Audio format of the agent's output.
+              description: Audio format specification for agent's speech output.
     UserTranscript:
       type: object
+      description: Schema for user speech transcription events
       properties:
         type:
-          type: string
-          enum: [user_transcript]
+          x-fern-type: literal<"user_transcript">
         user_transcription_event:
           type: object
+          description: Transcription event data
           properties:
             user_transcript:
               type: string
-              description: User's transcribed speech.
+              description: Transcribed text from user's speech input.
     AgentResponse:
       type: object
+      description: Schema for AI agent's text responses
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [agent_response]
+          x-fern-type: literal<"agent_response">
         agent_response_event:
           type: object
+          description: Agent response event data
+          required:
+            - agent_response
           properties:
             agent_response:
               type: string
-              description: Agent's textual response.
+              description: Text content of the agent's response.
     AudioResponse:
       type: object
+      description: Schema for agent's synthesized speech audio
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [audio]
+          x-fern-type: literal<"audio">
         audio_event:
           type: object
+          description: Audio event data
           properties:
             audio_base_64:
               type: string
-              description: Base64-encoded audio data.
+              description: Base64-encoded audio data of agent's speech.
             event_id:
               type: integer
-              description: Event ID for the audio chunk.
+              description: Sequential identifier for the audio chunk.
     Interruption:
       type: object
+      description: Schema for interruption events
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [interruption]
+          x-fern-type: literal<"interruption">
         interruption_event:
           type: object
+          description: Interruption event data
           properties:
             event_id:
               type: integer
-              description: ID of the interrupted event.
+              description: ID of the event that was interrupted.
     Ping:
       type: object
+      description: Schema for ping messages
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [ping]
+          x-fern-type: literal<"ping">
         ping_event:
           type: object
+          description: Ping event data
           properties:
             event_id:
               type: integer
-              description: ID of the ping event.
+              description: Unique identifier for the ping event.
             ping_ms:
               type: integer
-              description: Round-trip latency in milliseconds.
+              description: Measured round-trip latency in milliseconds.
     ClientToolCall:
       type: object
+      description: Schema for client tool execution requests
+      required:
+        - type
       properties:
         type:
-          type: string
-          enum: [client_tool_call]
+          x-fern-type: literal<"client_tool_call">
         client_tool_call:
           type: object
+          description: Tool call request data
           properties:
             tool_name:
               type: string
-              description: Name of the tool to call.
+              description: Identifier of the tool to be executed.
             tool_call_id:
               type: string
-              description: ID of the tool call.
+              description: Unique identifier for this tool call request.
             parameters:
               type: object
               additionalProperties: true
-              description: Parameters for the tool call.
+              description: Tool-specific parameters for the execution request.
