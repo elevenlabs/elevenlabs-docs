@@ -362,7 +362,6 @@ paths:
               maximum_accent_strength: 2
   /v1/voice-generation/generate-voice:
     post:
-
       description: |
         <Warning>
           This API is deprecated. Please use the new [Text to Voice
@@ -383,6 +382,12 @@ paths:
             text: "It sure does, Jackie… My mama always said: “In Carolina, the air's so thick you can wear it!”"
   /v1/voice-generation/create-voice:
     post:
+      description: |
+        <Warning>
+          This API is deprecated. Please use the new [Text to Voice
+          API](/docs/api-reference/text-to-voice/create-previews).
+        </Warning>
+      x-fern-availability: deprecated
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -486,20 +491,22 @@ paths:
                   billing_period: "monthly_period",
                   character_refresh_period: "monthly_period",
                 }
-              subscription_extras: {
-                concurrency: 1,
-                force_logging_disabled: false,
-                moderation: {
-                  is_in_probation: false,
-                  enterprise_check_nogo_voice: false,
-                  enterprise_check_block_nogo_voice: false,
-                  never_live_moderate: false,
-                  nogo_voice_similar_voice_upload_count: 0,
-                  enterprise_background_moderation_enabled: false,
-                  safety_status: "appeal_approved",
-                  warning_status: "warning_cleared",
+              subscription_extras:
+                {
+                  concurrency: 1,
+                  force_logging_disabled: false,
+                  moderation:
+                    {
+                      is_in_probation: false,
+                      enterprise_check_nogo_voice: false,
+                      enterprise_check_block_nogo_voice: false,
+                      never_live_moderate: false,
+                      nogo_voice_similar_voice_upload_count: 0,
+                      enterprise_background_moderation_enabled: false,
+                      safety_status: "appeal_approved",
+                      warning_status: "warning_cleared",
+                    },
                 }
-              }
               is_new_user: true
               xi_api_key: "8so27l7327189x0h939ekx293380l920"
               can_use_delayed_payment_methods: false
@@ -592,7 +599,6 @@ paths:
               use_speaker_boost: true
   /v1/sound-generation:
     post:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -845,7 +851,6 @@ paths:
       x-fern-sdk-method-name: update_pronunciation_dictionaries
   /v1/dubbing:
     post:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -853,14 +858,12 @@ paths:
       x-fern-sdk-method-name: dubAVideoOrAnAudioFile
   /v1/dubbing/{dubbing_id}:
     get:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
         - dubbing
       x-fern-sdk-method-name: getDubbingProjectMetadata
     delete:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -868,7 +871,6 @@ paths:
       x-fern-sdk-method-name: deleteDubbingProject
   /v1/dubbing/{dubbing_id}/audio/{language_code}:
     get:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -956,7 +958,6 @@ paths:
       x-fern-sdk-method-name: get_similar_library_voices
   /v1/shared-voices:
     get:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -999,7 +1000,6 @@ paths:
               last_sort_id: null
   /v1/pronunciation-dictionaries/:
     get:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1025,7 +1025,6 @@ paths:
               has_more: true
   /v1/pronunciation-dictionaries/add-from-file:
     post:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1033,7 +1032,6 @@ paths:
       x-fern-sdk-method-name: add_from_file
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/:
     get:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1059,7 +1057,6 @@ paths:
             type: string
   /v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download:
     get:
-
       x-fern-audiences:
         - sdk
       x-fern-sdk-group-name:
@@ -1077,67 +1074,61 @@ paths:
       x-fern-ignore: true
   /v1/convai/conversation/get_signed_url:
     get:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - conversations
       x-fern-sdk-method-name: get_signed_url
   /v1/convai/agents/create:
     post:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: create_agent
   /v1/convai/agents/{agent_id}:
     get:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: get_agent
     delete:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: delete_agent
     patch:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: update_agent
   /v1/convai/agents/{agent_id}/widget:
     get:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - widget
       x-fern-sdk-method-name: get_agent_widget
   /v1/convai/agents/{agent_id}/link:
     get:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: get_agent_link
   /v1/convai/agents/{agent_id}/avatar:
     post:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - widget
       x-fern-sdk-method-name: post_agent_avatar
   /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}:
     get:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - knowledgeBase
@@ -1145,37 +1136,35 @@ paths:
   /v1/convai/agents/{agent_id}/add-secret:
     post:
       x-fern-ignore: true
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: add_agent_secret
   /v1/convai/agents/{agent_id}/add-to-knowledge-base:
     post:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - knowledgeBase
       x-fern-sdk-method-name: add_to_agent_knowledge_base
   /v1/convai/agents:
     get:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - agents
       x-fern-sdk-method-name: get_agents
   /v1/convai/conversations:
     get:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - conversations
       x-fern-sdk-method-name: get_conversations
   /v1/convai/conversations/{conversation_id}:
     get:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - conversations
@@ -1197,67 +1186,62 @@ paths:
                   },
                 ]
               metadata:
-                {
-                  "start_time_unix_secs": 1714423232,
-                  "call_duration_secs": 10,
-                }
+                { "start_time_unix_secs": 1714423232, "call_duration_secs": 10 }
     delete:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - conversations
       x-fern-sdk-method-name: delete_conversation
   /v1/convai/conversations/{conversation_id}/audio:
     get:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - conversations
       x-fern-sdk-method-name: get_conversation_audio
   /v1/convai/conversations/{conversation_id}/feedback:
     post:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - conversations
       x-fern-sdk-method-name: post_conversation_feedback
   /v1/convai/phone-numbers/create:
     post:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - phoneNumbers
       x-fern-sdk-method-name: create_phone_number
   /v1/convai/phone-numbers/{phone_number_id}:
     get:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - phoneNumbers
       x-fern-sdk-method-name: get_phone_number
     delete:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - phoneNumbers
       x-fern-sdk-method-name: delete_phone_number
     patch:
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - phoneNumbers
       x-fern-sdk-method-name: update_phone_number
   /v1/convai/phone-numbers/:
     get:
-
-      x-fern-audiences: 
+      x-fern-audiences:
         - convai
       x-fern-sdk-group-name:
         - phoneNumbers
       x-fern-sdk-method-name: get_phone_numbers
   /v1/audio-isolation:
-    post: 
+    post:
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
@@ -1269,8 +1253,8 @@ paths:
         - docs
       x-fern-sdk-group-name:
         - audioIsolation
-      x-fern-sdk-method-name: stream  
-  /v1/workspace/invites/add: 
+      x-fern-sdk-method-name: stream
+  /v1/workspace/invites/add:
     post:
       x-fern-audiences:
         - docs
@@ -1279,30 +1263,27 @@ paths:
       x-fern-sdk-method-name: add_invite
   /v1/workspace/invites/delete:
     delete:
-
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
         - workspace
       x-fern-sdk-method-name: delete_invite
   /v1/workspace/members:
-    post: 
+    post:
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
         - workspace
       x-fern-sdk-method-name: update_member
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules:
-    post: 
-
+    post:
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
         - pronunciationDictionary
       x-fern-sdk-method-name: add_rules
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules:
-    post: 
-
+    post:
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
@@ -1310,7 +1291,6 @@ paths:
       x-fern-sdk-method-name: remove_rules
   /v1/dubbing/{dubbing_id}/transcript/{language_code}:
     get:
-
       x-fern-audiences:
         - docs
       x-fern-sdk-group-name:
@@ -1442,7 +1422,7 @@ components:
       x-fern-type-name: AddPronunciationDictionaryRequest
     Body_Add_project_v1_projects_add_post:
       x-fern-type-name: AddProjectRequest
-      properties: 
+      properties:
         callback_url: null
     Body_Add_sharing_voice_v1_voices_add__public_user_id___voice_id__post:
       x-fern-type-name: AddSharingVoiceRequest
