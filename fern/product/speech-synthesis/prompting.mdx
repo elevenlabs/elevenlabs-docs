@@ -1,0 +1,125 @@
+---
+title: Prompting
+subtitle: >-
+  Effective techniques to guide ElevenLabs AI in adding pauses, conveying
+  emotions, and pacing the speech.
+slug: product/speech-synthesis/prompting
+---
+
+
+
+## Pause
+
+There are a few ways to introduce a pause or break and influence the rhythm and cadence of the speaker. The most consistent way is programmatically using the syntax `<break time="1.5s" />`. This will create an exact and natural pause in the speech. It is not just added silence between words, but the AI has an actual understanding of this syntax and will add a natural pause.
+
+An example could look like this:
+
+```
+"Give me one second to think about it." <break time="1.0s" /> "Yes, that would work."
+```
+
+Break time should be described in seconds, and the AI can handle pauses of up to 3 seconds in length and can be used in Speech Synthesis and via the API. It is not yet available for Projects.
+
+However, since this is more than just inserted silence, how the AI handles these pauses can vary. As usual, the voice used plays a pivotal role in the output. Some voices, for example, voices trained on data with "uh"s and "ah"s in them, have been shown to sometimes insert those vocal mannerisms during the pauses like a real speaker might. This is more prone to happen if you add a break tag at the very start or very end of your text.
+
+<Info>Please avoid using an excessive number of break tags as that has shown to potentially cause some instability in the AI. The speech of the AI might start speeding up and become very fast, or it might introduce more noise in the audio and a few other strange artifacts. We are working on resolving this.</Info>
+
+### Alternatives
+
+<u>These options are inconsistent and might not always work</u>. We recommend using the syntax above for consistency.
+
+One trick that seems to provide the most consistence output - sans the above option - is a simple dash `-` or the em-dash `—`. You can even add multiple dashes such as `-- --` for a longer pause.
+
+```
+"It - is - getting late."
+```
+
+Ellipsis `...` can <u>sometimes</u> also work to add a pause between words but usually also adds some "hesitation" or "nervousness" to the voice that might not always fit.
+
+```
+I... yeah, I guess so..."
+```
+
+
+## Pronunciation 
+
+<u>This feature is currently only supported by the "Eleven English V1", "Eleven v2 Flash" & "Eleven Turbo V2" models</u>.
+
+In certain instances, you may want the model to pronounce a word, name, or phrase in a specific way. Pronunciation can be specified using standardised pronunciation alphabets. Currently we support the International Phonetic Alphabet (IPA) and the CMU Arpabet. Pronunciations are specified by wrapping words using the Speech Synthesis Markup Language (SSML) phoneme tag.
+
+To use this feature, you need to wrap the desired word or phrase in the `<phoneme alphabet="ipa" ph="your-IPA-Pronunciation-here">word</phoneme>` tag for IPA, or `<phoneme alphabet="cmu-arpabet" ph="your-CMU-pronunciation-here">word</phoneme>` tag for CMU Arpabet. Replace `"your-IPA-Pronunciation-here"` or `"your-CMU-pronunciation-here"` with the desired IPA or CMU Arpabet pronunciation.
+
+An example for IPA:
+
+```
+<phoneme alphabet="ipa" ph="ˈæktʃuəli">actually</phoneme>
+```
+
+An example for CMU Arpabet:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="AE K CH UW AH L IY">actually</phoneme>
+```
+
+It is important to note that this only works per word. Meaning that if you, for example, have a name with a first and last name that you want to be pronounced a certain way, you will have to create the pronunciation for each word individually.
+
+English is a lexical stress language, which means that within multi-syllable words, some syllables are emphasized more than others. The relative salience of each syllable is crucial for proper pronunciation and meaning distinctions. So, it is very important to remember to include the lexical stress when writing both IPA and ARPAbet as otherwise, the outcome might not be optimal.
+
+Take the word "talon", for example.
+
+Incorrect:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE L AH N">talon</phoneme>
+```
+
+Correct:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE1 L AH0 N">talon</phoneme>
+```
+
+The first example might switch between putting the primary emphasis on AE and AH, while the second example will always be pronounced reliably with the emphasis on AE and no stress on AH.
+
+If you write it as:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE0 L AH1 N">talon</phoneme>
+```
+
+It will always put emphasis on AH instead of AE.
+
+<Info>With the current implementation, we recommend using the CMU ARPAbet as it seems to be a bit more consistent and predictable with the current iteration of AI models. Some people get excellent results with IPA, but we have noticed that ARPAbet seems to work better with the current AI and be more consistent for a lot of users. However, we are working on improving this.</Info>
+
+
+## Emotion
+
+If you want the AI to express a specific emotion, the best approach is to write in a style similar to that of a book. To find good prompts to use, you can flip through some books and identify words and phrases that convey the desired emotion.
+
+For instance, you can use dialogue tags to express emotions, such as `he said, confused`, or `he shouted angrily`. These types of prompts will help the AI understand the desired emotional tone and try to generate a voiceover that accurately reflects it. With this approach, you can create highly customized voiceovers that are perfect for a variety of applications.
+
+```
+"Are you sure about that?" he said, confused.
+"Don’t test me!" he shouted angrily.
+```
+
+You will also have to somehow remove the prompt as the AI will read exactly what you give it. The AI can also sometimes infer the intended emotion from the text’s context, even without the use of tags.
+
+```
+"That is funny!"
+"You think so?"
+```
+
+This is not always perfect since you are relying on the AI discretion to understand if something is sarcastic, funny, or just plain from the context of the text.
+
+
+## Pacing
+
+Based on varying user feedback and test results, it's been theorized that using a singular long sample for voice cloning has brought more success for some, compared to using multiple smaller samples. The current theory is that the AI stitches these samples together without any separation, causing pacing issues and faster speech. This is likely why some people have reported fast-talking clones.
+
+To control the pacing of the speaker, you can use the same approach as in emotion, where you write in a style similar to that of a book. While it's not a perfect solution, it can help improve the pacing and ensure that the AI generates a voiceover at the right speed. With this technique, you can create high-quality voiceovers that are both customized and easy to listen to.
+
+```
+"I wish you were right, I truly do, but you're not," he said slowly.
+```
+

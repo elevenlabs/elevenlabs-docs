@@ -1,0 +1,533 @@
+---
+title: Twilio Integration
+subtitle: >-
+  Learn how to integrate a Conversational AI agent with Twilio to create
+  seamless, human-like voice interactions.
+slug: conversational-ai/guides/conversational-ai-twilio
+---
+
+
+Connect your ElevenLabs Conversational AI agent to phone calls and create human-like voice experiences using Twilio's Voice API.
+
+## What You'll Need
+
+- An [ElevenLabs account](https://elevenlabs.io)
+- A configured ElevenLabs Conversational Agent ([create one here](/docs/conversational-ai/docs/agent-setup))
+- A [Twilio account](https://www.twilio.com/try-twilio) with an active phone number
+- Python 3.7+ or Node.js 16+
+- [ngrok](https://ngrok.com/) for local development
+
+## Agent Configuration
+
+Before integrating with Twilio, you'll need to configure your agent to use the correct audio format supported by Twilio.
+
+<Steps>
+  <Step title="Configure TTS Output">
+    1. Navigate to your agent settings
+    2. Go to the Voice Section 
+    3. Select "μ-law 8000 Hz" from the dropdown
+    
+    <img src="../../developer-guides/images/twilio_3.webp" />
+  </Step>
+
+  <Step title="Set Input Format">
+    1. Navigate to your agent settings
+    2. Go to the Advanced Section
+    3. Select "μ-law 8000 Hz" for the input format
+    
+    <img src="../../developer-guides/images/twilio_4.webp" />
+  </Step>
+</Steps>
+
+## Implementation
+
+<Tabs>
+  <Tab title="Javascript">
+
+    <Note>
+        Looking for a complete example? Check out this [Javascript implementation](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/twilio/javascript) on GitHub.
+    </Note>
+
+    <Steps>
+        <Step title="Initialize the Project">
+            First, set up a new Node.js project:
+            ```bash
+            mkdir conversational-ai-twilio
+            cd conversational-ai-twilio
+            npm init -y; npm pkg set type="module";
+            ```
+        </Step>
+
+        <Step title="Install dependencies">
+            Next, install the required dependencies for the project.
+            ```bash
+            npm install @fastify/formbody @fastify/websocket dotenv fastify ws
+            ```
+        </Step>
+        <Step title="Create the project files">
+            Create a `.env` & `index.js` file  with the following code:
+
+            <CodeGroup>
+
+            ```text .env
+            ELEVENLABS_AGENT_ID=<your-agent-id>
+            ```
+
+            ```javascript index.js
+            import Fastify from "fastify";
+            import WebSocket from "ws";
+            import dotenv from "dotenv";
+            import fastifyFormBody from "@fastify/formbody";
+            import fastifyWs from "@fastify/websocket";
+
+            // Load environment variables from .env file
+            dotenv.config();
+
+            const { ELEVENLABS_AGENT_ID } = process.env;
+
+            // Check for the required ElevenLabs Agent ID
+            if (!ELEVENLABS_AGENT_ID) {
+            console.error("Missing ELEVENLABS_AGENT_ID in environment variables");
+            process.exit(1);
+            }
+
+            // Initialize Fastify server
+            const fastify = Fastify();
+            fastify.register(fastifyFormBody);
+            fastify.register(fastifyWs);
+
+            const PORT = process.env.PORT || 8000;
+
+            // Root route for health check
+            fastify.get("/", async (_, reply) => {
+            reply.send({ message: "Server is running" });
+            });
+
+            // Route to handle incoming calls from Twilio
+            fastify.all("/incoming-call-eleven", async (request, reply) => {
+            // Generate TwiML response to connect the call to a WebSocket stream
+            const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
+                <Response>
+                <Connect>
+                    <Stream url="wss://${request.headers.host}/media-stream" />
+                </Connect>
+                </Response>`;
+
+            reply.type("text/xml").send(twimlResponse);
+            });
+
+            // WebSocket route for handling media streams from Twilio
+            fastify.register(async (fastifyInstance) => {
+            fastifyInstance.get("/media-stream", { websocket: true }, (connection, req) => {
+                console.info("[Server] Twilio connected to media stream.");
+
+                let streamSid = null;
+
+                // Connect to ElevenLabs Conversational AI WebSocket
+                const elevenLabsWs = new WebSocket(
+                `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${ELEVENLABS_AGENT_ID}`
+                );
+
+                // Handle open event for ElevenLabs WebSocket
+                elevenLabsWs.on("open", () => {
+                console.log("[II] Connected to Conversational AI.");
+                });
+
+                // Handle messages from ElevenLabs
+                elevenLabsWs.on("message", (data) => {
+                try {
+                    const message = JSON.parse(data);
+                    handleElevenLabsMessage(message, connection);
+                } catch (error) {
+                    console.error("[II] Error parsing message:", error);
+                }
+                });
+
+                // Handle errors from ElevenLabs WebSocket
+                elevenLabsWs.on("error", (error) => {
+                console.error("[II] WebSocket error:", error);
+                });
+
+                // Handle close event for ElevenLabs WebSocket
+                elevenLabsWs.on("close", () => {
+                console.log("[II] Disconnected.");
+                });
+
+                // Function to handle messages from ElevenLabs
+                const handleElevenLabsMessage = (message, connection) => {
+                switch (message.type) {
+                    case "conversation_initiation_metadata":
+                    console.info("[II] Received conversation initiation metadata.");
+                    break;
+                    case "audio":
+                    if (message.audio_event?.audio_base_64) {
+                        // Send audio data to Twilio
+                        const audioData = {
+                        event: "media",
+                        streamSid,
+                        media: {
+                            payload: message.audio_event.audio_base_64,
+                        },
+                        };
+                        connection.send(JSON.stringify(audioData));
+                    }
+                    break;
+                    case "interruption":
+                    // Clear Twilio's audio queue
+                    connection.send(JSON.stringify({ event: "clear", streamSid }));
+                    break;
+                    case "ping":
+                    // Respond to ping events from ElevenLabs
+                    if (message.ping_event?.event_id) {
+                        const pongResponse = {
+                        type: "pong",
+                        event_id: message.ping_event.event_id,
+                        };
+                        elevenLabsWs.send(JSON.stringify(pongResponse));
+                    }
+                    break;
+                }
+                };
+
+                // Handle messages from Twilio
+                connection.on("message", async (message) => {
+                try {
+                    const data = JSON.parse(message);
+                    switch (data.event) {
+                    case "start":
+                        // Store Stream SID when stream starts
+                        streamSid = data.start.streamSid;
+                        console.log(`[Twilio] Stream started with ID: ${streamSid}`);
+                        break;
+                    case "media":
+                        // Route audio from Twilio to ElevenLabs
+                        if (elevenLabsWs.readyState === WebSocket.OPEN) {
+                        // data.media.payload is base64 encoded
+                        const audioMessage = {
+                            user_audio_chunk: Buffer.from(
+                                data.media.payload,
+                                "base64"
+                            ).toString("base64"),
+                        };
+                        elevenLabsWs.send(JSON.stringify(audioMessage));
+                        }
+                        break;
+                    case "stop":
+                        // Close ElevenLabs WebSocket when Twilio stream stops
+                        elevenLabsWs.close();
+                        break;
+                    default:
+                        console.log(`[Twilio] Received unhandled event: ${data.event}`);
+                    }
+                } catch (error) {
+                    console.error("[Twilio] Error processing message:", error);
+                }
+                });
+
+                // Handle close event from Twilio
+                connection.on("close", () => {
+                elevenLabsWs.close();
+                console.log("[Twilio] Client disconnected");
+                });
+
+                // Handle errors from Twilio WebSocket
+                connection.on("error", (error) => {
+                console.error("[Twilio] WebSocket error:", error);
+                elevenLabsWs.close();
+                });
+            });
+            });
+
+            // Start the Fastify server
+            fastify.listen({ port: PORT }, (err) => {
+            if (err) {
+                console.error("Error starting server:", err);
+                process.exit(1);
+            }
+            console.log(`[Server] Listening on port ${PORT}`);
+            });
+            ```
+
+            </CodeGroup>
+
+
+
+        </Step>
+
+        <Step title="Run the server">
+            You can now run the server with the following command:
+            ```bash
+            node index.js
+            ```
+            If the server starts successfully, you should see the message `[Server] Listening on port 8000` (or the port you specified) in your terminal.
+        </Step>
+
+
+    </Steps>
+    </Tab>
+
+   <Tab title="Python">
+       <Note>
+        Looking for a complete example? Check out this [implementation](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/twilio) on GitHub.
+        </Note>
+
+        <Steps>
+            <Step title="Initialize the Project">
+               ```bash
+                mkdir conversational-ai-twilio
+                cd conversational-ai-twilio
+                ```
+            </Step>
+            <Step title="Install dependencies">
+                Next, install the required dependencies for the project.
+                ```bash
+                pip install fastapi uvicorn python-dotenv twilio elevenlabs websockets
+                ```
+            </Step>
+        <Step title="Create the project files">
+            Create a `.env`, `main.py` & `twilio_audio_interface.py` file  with the following code:
+            ```
+            conversational-ai-twilio/
+            ├── .env
+            ├── main.py
+            └── twilio_audio_interface.py
+            ```
+
+            <CodeGroup>
+
+            ```text .env
+            ELEVENLABS_API_KEY=<api-key-here>
+            AGENT_ID=<agent-id-here>
+            ```
+
+            ```python main.py
+            import json
+            import traceback
+            import os
+            from dotenv import load_dotenv
+            from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+            from fastapi.responses import HTMLResponse
+            from twilio.twiml.voice_response import VoiceResponse, Connect
+            from elevenlabs import ElevenLabs
+            from elevenlabs.conversational_ai.conversation import Conversation
+            from twilio_audio_interface import TwilioAudioInterface
+
+            # Load environment variables
+            load_dotenv()
+
+            # Initialize FastAPI app
+            app = FastAPI()
+
+            # Initialize ElevenLabs client
+            eleven_labs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+            ELEVEN_LABS_AGENT_ID = os.getenv("AGENT_ID")
+
+            @app.get("/")
+            async def root():
+                return {"message": "Twilio-ElevenLabs Integration Server"}
+
+            @app.api_route("/incoming-call-eleven", methods=["GET", "POST"])
+            async def handle_incoming_call(request: Request):
+                """Handle incoming call and return TwiML response."""
+                response = VoiceResponse()
+                host = request.url.hostname
+                connect = Connect()
+                connect.stream(url=f"wss://{host}/media-stream-eleven")
+                response.append(connect)
+                return HTMLResponse(content=str(response), media_type="application/xml")
+
+            @app.websocket("/media-stream-eleven")
+            async def handle_media_stream(websocket: WebSocket):
+                await websocket.accept()
+                print("WebSocket connection established")
+
+                audio_interface = TwilioAudioInterface(websocket)
+                conversation = None
+
+                try:
+                    conversation = Conversation(
+                        client=eleven_labs_client,
+                        agent_id=ELEVEN_LABS_AGENT_ID,
+                        requires_auth=False,
+                        audio_interface=audio_interface,
+                        callback_agent_response=lambda text: print(f"Agent said: {text}"),
+                        callback_user_transcript=lambda text: print(f"User said: {text}"),
+                    )
+
+                    conversation.start_session()
+                    print("Conversation session started")
+
+                    async for message in websocket.iter_text():
+                        if not message:
+                            continue
+
+                        try:
+                            data = json.loads(message)
+                            await audio_interface.handle_twilio_message(data)
+                        except Exception as e:
+                            print(f"Error processing message: {str(e)}")
+                            traceback.print_exc()
+
+                except WebSocketDisconnect:
+                    print("WebSocket disconnected")
+                finally:
+                    if conversation:
+                        print("Ending conversation session...")
+                        conversation.end_session()
+                        conversation.wait_for_session_end()
+
+            if __name__ == "__main__":
+                import uvicorn
+                uvicorn.run(app, host="0.0.0.0", port=8000)
+            ```
+            ```python twilio_audio_interface.py
+            import asyncio
+            from typing import Callable
+            import queue
+            import threading
+            import base64
+            from elevenlabs.conversational_ai.conversation import AudioInterface
+            import websockets
+
+            class TwilioAudioInterface(AudioInterface):
+                def __init__(self, websocket):
+                    self.websocket = websocket
+                    self.output_queue = queue.Queue()
+                    self.should_stop = threading.Event()
+                    self.stream_sid = None
+                    self.input_callback = None
+                    self.output_thread = None
+
+                def start(self, input_callback: Callable[[bytes], None]):
+                    self.input_callback = input_callback
+                    self.output_thread = threading.Thread(target=self._output_thread)
+                    self.output_thread.start()
+
+                def stop(self):
+                    self.should_stop.set()
+                    if self.output_thread:
+                        self.output_thread.join(timeout=5.0)
+                    self.stream_sid = None
+
+                def output(self, audio: bytes):
+                    self.output_queue.put(audio)
+
+                def interrupt(self):
+                    try:
+                        while True:
+                            _ = self.output_queue.get(block=False)
+                    except queue.Empty:
+                        pass
+                    asyncio.run(self._send_clear_message_to_twilio())
+
+                async def handle_twilio_message(self, data):
+                    try:
+                        if data["event"] == "start":
+                            self.stream_sid = data["start"]["streamSid"]
+                            print(f"Started stream with stream_sid: {self.stream_sid}")
+                        if data["event"] == "media":
+                            audio_data = base64.b64decode(data["media"]["payload"])
+                            if self.input_callback:
+                                self.input_callback(audio_data)
+                    except Exception as e:
+                        print(f"Error in input_callback: {e}")
+
+                def _output_thread(self):
+                    while not self.should_stop.is_set():
+                        asyncio.run(self._send_audio_to_twilio())
+
+                async def _send_audio_to_twilio(self):
+                    try:
+                        audio = self.output_queue.get(timeout=0.2)
+                        audio_payload = base64.b64encode(audio).decode("utf-8")
+                        audio_delta = {
+                            "event": "media",
+                            "streamSid": self.stream_sid,
+                            "media": {"payload": audio_payload},
+                        }
+                        await self.websocket.send_json(audio_delta)
+                    except queue.Empty:
+                        pass
+                    except Exception as e:
+                        print(f"Error sending audio: {e}")
+
+                async def _send_clear_message_to_twilio(self):
+                    try:
+                        clear_message = {"event": "clear", "streamSid": self.stream_sid}
+                        await self.websocket.send_json(clear_message)
+                    except Exception as e:
+                        print(f"Error sending clear message to Twilio: {e}")
+                ```
+
+            </CodeGroup>
+            </Step>
+            <Step title="Run the server">
+            You can now run the server with the following command:
+            ```bash
+            python main.py
+            ```
+        </Step>
+        </Steps>
+
+  </Tab>
+</Tabs>
+
+## Twilio Setup
+
+<Steps>
+  <Step title="Create a Public URL">
+    Use ngrok to make your local server accessible:
+    ```bash
+    ngrok http --url=<your-url-here> 8000
+    ```
+    <img src="../../developer-guides/images/twilio_1.webp" />
+  </Step>
+
+  <Step title="Configure Twilio">
+    1. Go to the [Twilio Console](https://console.twilio.com)
+    2. Navigate to `Phone Numbers` → `Manage` → `Active numbers`
+    3. Select your phone number
+    4. Under "Voice Configuration", set the webhook for incoming calls to:
+       `https://your-ngrok-url.ngrok.app/incoming-call-eleven`
+    5. Set the HTTP method to POST
+    
+    <img src="../../developer-guides/images/twilio_2.webp" />
+  </Step>
+</Steps>
+
+## Testing
+
+1. Call your Twilio phone number.
+2. Start speaking - you'll see the transcripts in the ElevenLabs console.
+
+## Troubleshooting
+
+<AccordionGroup>
+    <Accordion title="Connection Issues">
+    If the WebSocket connection fails:
+    - Verify your ngrok URL is correct in Twilio settings
+    - Check that your server is running and accessible
+    - Ensure your firewall isn't blocking WebSocket connections
+    </Accordion>
+
+    <Accordion title="Audio Problems">
+    If there's no audio output:
+    - Confirm your ElevenLabs API key is valid
+    - Verify the AGENT_ID is correct
+    - Check audio format settings match Twilio's requirements (μ-law 8kHz)
+    </Accordion>
+
+</AccordionGroup>
+
+## Security Best Practices
+
+<Warning>
+  Follow these security guidelines for production deployments: 
+  <>
+    - Use environment variables for sensitive information 
+    - Implement proper authentication for your endpoints
+    - Use HTTPS for all communications 
+    - Regularly rotate API keys
+    - Monitor usage to prevent abuse
+  </>
+</Warning>
