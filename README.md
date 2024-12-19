@@ -12,7 +12,7 @@ Install the [Fern CLI](https://www.npmjs.com/package/fern-api) to preview the do
 npm install -g fern-api
 ```
 
-Run the following command at the root of your documentation (where mint.json is)
+Run the following command at the root of the folder
 
 ```
 fern docs dev
