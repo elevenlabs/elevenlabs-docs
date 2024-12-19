@@ -2,23 +2,55 @@
 title: Text to Speech API Reference
 ---
 
+## Quick Start
+
+Generate spoken audio from text with a simple request:
+
+<CodeGroup>
+
+```python Python
+from elevenlabs import ElevenLabs
+
+client = ElevenLabs(
+    api_key="YOUR_API_KEY",
+)
+client.text_to_speech.convert(
+    voice_id="JBFqnCBsd6RMkjVDRZzb",
+    output_format="mp3_44100_128",
+    text="Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!",
+    model_id="eleven_multilingual_v2"
+)
+```
+
+```javascript Javascript
+import { ElevenLabsClient } from "elevenlabs";
+
+const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
+await client.textToSpeech.convert("JBFqnCBsd6RMkjVDRZzb", {
+  output_format: "mp3_44100_128",
+  text: "Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!",
+  model_id: "eleven_multilingual_v2",
+});
+```
+
+</CodeGroup>
+
+---
+
 ## Why Choose ElevenLabs?
 
 Our AI model produces the highest-quality voices in the industry.
 
-<Card title="Premium Voice Quality">
-  <img src="https://fern-image-hosting.s3.us-east-1.amazonaws.com/elevenlabs/voices.webp" alt="Premium Voice Quality" />
-  
+<Card title="Premium Voice Quality" img="https://fern-image-hosting.s3.us-east-1.amazonaws.com/elevenlabs/voices.webp">
   Chooose from over **3,000** voices or clone your own. Our industry-leading
   voice technology delivers the most natural-sounding AI conversations.
 </Card>
 <Card title="32 Languages" horizontal="true">
   Choose from over 32 languages with 1000s of voices, for every use-case, at
-  192kbps
+  192kbps.
 </Card>
 <Card title="Ultra-low latency" horizontal>
-  As low as ~250ms (+ network latency) audio generation times with our Turbo
-  model.
+  Our newest model, Flash, generates speech in ~75ms (excluding network/application latency).
 </Card>
 <Card title="Natural Prosody" horizontal>
   Understands natural speech patterns for lifelike rhythm and intonation.
@@ -36,23 +68,20 @@ The maximum number of concurrent requests you can run in parallel depends on you
 <CardGroup cols={2}>
   <Card title="Free & Starter" horizontal>
 
-    **Free:** 2 concurrent requests
-    
-    **Starter:** 3 concurrent requests
+    - **Free:** 2 concurrent requests
+    - **Starter:** 3 concurrent requests
 
   </Card>
   <Card title="Creator & Pro" horizontal>
 
-    **Creator:** 5 concurrent requests
-    
-    **Pro:** 10 concurrent requests
+    - **Creator:** 5 concurrent requests
+    - **Pro:** 10 concurrent requests
 
   </Card>
   <Card title="Scale & Business" horizontal>
 
-    **Scale:** 15 concurrent requests
-    
-    **Business:** 15 concurrent requests
+    - **Scale:** 15 concurrent requests
+    - **Business:** 15 concurrent requests
 
   </Card>
   <Card title="Enterprise" horizontal href="https://elevenlabs.io/contact-sales">
@@ -69,75 +98,46 @@ Our TTS API is multilingual and currently supports 32 languages across multiple 
 <CardGroup cols={3}>
   <Card title="Asia & Pacific" horizontal>
 
-    Chinese
-    
-    Japanese
-    
-    Korean
-    
-    Vietnamese
-    
-    Filipino
-    
-    Indonesian
-    
-    Malay 
-    
-    Tamil
-    
-    Hindi
+    - Chinese
+    - Japanese
+    - Korean
+    - Vietnamese
+    - Filipino
+    - Indonesian
+    - Malay
+    - Tamil
+    - Hindi
 
   </Card>
   <Card title="Europe (West)" horizontal>
 
-    English
-    
-    French
-    
-    German
-    
-    Italian
-    
-    Spanish
-    
-    Dutch
-    
-    Portuguese  
-    
-    Norwegian
-    
-    Swedish
-    
-    Danish
+    - English
+    - French
+    - German
+    - Italian
+    - Spanish
+    - Dutch
+    - Portuguese
+    - Norwegian
+    - Swedish
+    - Danish
 
   </Card>
   <Card title="Europe (East)" horizontal>
 
-    Polish
-    
-    Ukrainian
-    
-    Russian
-    
-    Czech
-    
-    Slovak
-    
-    Romanian
-    
-    Bulgarian
-    
-    Croatian
-    
-    Greek
-    
-    Hungarian
-    
-    Finnish
-    
-    Turkish
-    
-    Classic Arabic
+    - Polish
+    - Ukrainian
+    - Russian
+    - Czech
+    - Slovak
+    - Romanian
+    - Bulgarian
+    - Croatian
+    - Greek
+    - Hungarian
+    - Finnish
+    - Turkish
+    - Classic Arabic
 
   </Card>
 </CardGroup>
