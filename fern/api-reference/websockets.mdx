@@ -267,6 +267,10 @@ Defaults to `20` seconds, with a maximum allowed value of `180` seconds.
     However, if you enable this option, you'll get the timing data with every audio chunk instead. This can help you precisely match each audio segment with its corresponding text.
 </ParamField>
 
+<ParamField query="auto_mode" type="boolean">
+    This parameter focuses on reducing the latency by disabling the chunk schedule and all buffers. It is only recommended when sending full sentences or phrases, sending partial phrases will result in highly reduced quality. By default it's set to false.
+</ParamField>
+
 # Example - Voice streaming using ElevenLabs and OpenAI
 
 The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
