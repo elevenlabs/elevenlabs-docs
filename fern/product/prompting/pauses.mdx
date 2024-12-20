@@ -1,0 +1,35 @@
+---
+title: Pauses
+subtitle: How to add pauses to your generated speech.
+og:title: Prompting - Pauses | ElevenLabs Docs
+---
+
+There are a few ways to introduce a pause or break and influence the rhythm and cadence of the speaker. The most consistent way is programmatically using the syntax `<break time="1.5s" />`. This will create an exact and natural pause in the speech. It is not just added silence between words, but the AI has an actual understanding of this syntax and will add a natural pause.
+
+An example could look like this:
+
+```
+"Give me one second to think about it." <break time="1.0s" /> "Yes, that would work."
+```
+
+Break time should be described in seconds, and the AI can handle pauses of up to 3 seconds in length.
+
+However, since this is more than just inserted silence, how the AI handles these pauses can vary. As usual, the voice used plays a pivotal role in the output. Some voices, for example, voices trained on data with "uh"s and "ah"s in them, have been shown to sometimes insert those vocal mannerisms during the pauses like a real speaker might. This is more prone to happen if you add a break tag at the very start or very end of your text.
+
+<Info>Please avoid using an excessive number of break tags as that has shown to potentially cause some instability in the AI. The speech of the AI might start speeding up and become very fast, or it might introduce more noise in the audio and a few other strange artifacts. We are working on resolving this.</Info>
+
+### Alternatives
+
+<u>These options are inconsistent and might not always work</u>. We recommend using the syntax above for consistency.
+
+One trick that seems to provide the most consistence output - sans the above option - is a simple dash `-` or the em-dash `—`. You can even add multiple dashes such as `-- --` for a longer pause.
+
+```
+"It - is - getting late."
+```
+
+Ellipsis `...` can <u>sometimes</u> also work to add a pause between words but usually also adds some "hesitation" or "nervousness" to the voice that might not always fit.
+
+```
+I... yeah, I guess so..."
+```
