@@ -7,7 +7,7 @@ instances:
         repo: elevenlabs-docs
         branch: main
 
-title: ElevenLabs | Documentation
+title: ElevenLabs Documentation
 
 # landing-page:
 #   page: Welcome to ElevenLabs
@@ -300,11 +300,58 @@ navigation:
             audiences:
               - convai
             layout:
-              - agents
-              - conversations
-              - knowledgeBase
-              - phoneNumbers
-              - widget
+              - section: Agents
+                contents:
+                  - endpoint: POST /v1/convai/agents/create
+                    title: Create Agent
+                  - endpoint: GET /v1/convai/agents/{agent_id}
+                    title: Get Agent
+                  - endpoint: GET /v1/convai/agents
+                    title: List Agents
+                  - endpoint: PATCH /v1/convai/agents/{agent_id}
+                    title: Update Agent
+                  - endpoint: DELETE /v1/convai/agents/{agent_id}
+                    title: Delete Agent
+                  - endpoint: GET /v1/convai/agents/{agent_id}/link
+                    title: Get Link
+              - section: Conversations
+                contents:
+                  - endpoint: GET /v1/convai/conversations
+                    title: Get Conversations
+                  - endpoint: GET /v1/convai/conversations/{conversation_id}
+                    title: Get Conversation Details
+                  - endpoint: DELETE /v1/convai/conversations/{conversation_id}
+                    title: Delete Conversation
+                  - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
+                    title: Get Conversation Audio
+                  - endpoint: GET /v1/convai/conversation/get_signed_url
+                    title: Get Signed URL
+                  - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
+                    title: Send Conversation Feedback
+              - section: Knowledge Base
+                contents:
+                  - endpoint: GET /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}
+                    title: Get Knowledge Base Document
+                  - endpoint: POST /v1/convai/agents/{agent_id}/add-to-knowledge-base
+                    title: Create Knowledge Base Document
+              - section: Phone Numbers
+                contents:
+                  - endpoint: POST /v1/convai/phone-numbers/create
+                    title: Create Phone Number
+                  - endpoint: GET /v1/convai/phone-numbers/
+                    title: List Phone Numbers
+                  - endpoint: GET /v1/convai/phone-numbers/{phone_number_id}
+                    title: Get Phone Number
+                  - endpoint: PATCH /v1/convai/phone-numbers/{phone_number_id}
+                    title: Update Phone Number
+                  - endpoint: DELETE /v1/convai/phone-numbers/{phone_number_id}
+                    title: Delete Phone Number
+              - section: Widget
+                contents:
+                  - endpoint: GET /v1/convai/agents/{agent_id}/widget
+                    title: Get Widget
+                  - endpoint: POST /v1/convai/agents/{agent_id}/avatar
+                    title: Create Widget Avatar
   - tab: api
     layout:
       - section: API Reference
@@ -346,14 +393,19 @@ navigation:
               - section: Text to Speech
                 summary: api-reference/text-to-speech.mdx
                 contents:
-                  - POST /v1/text-to-speech/{voice_id}
-                  - POST /v1/text-to-speech/{voice_id}/with-timestamps
-                  - POST /v1/text-to-speech/{voice_id}/stream
-                  - POST /v1/text-to-speech/{voice_id}/stream/with-timestamps
+                  - endpoint: POST /v1/text-to-speech/{voice_id}
+                    title: Text to Speech
+                  - endpoint: POST /v1/text-to-speech/{voice_id}/with-timestamps
+                    title: Text to Speech with Timing
+                  - endpoint: POST /v1/text-to-speech/{voice_id}/stream
+                    title: Text to Speech Stream
+                  - endpoint: POST /v1/text-to-speech/{voice_id}/stream/with-timestamps
+                    title: Text to Speech Stream with Timing
                   - page: Websockets
                     icon: duotone comments
                     path: api-reference/websockets.mdx
                   - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
+                    title: Text to Speech
                     slug: websockets
               - speechToSpeech:
                   title: Voice Changer
