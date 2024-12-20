@@ -17,15 +17,15 @@ tabs:
   docs:
     display-name: Product
     icon: regular cube
-  api:
-    display-name: API Reference
-    icon: regular code
   guides:
     display-name: Developer Guides
     icon: regular book
   conversational:
     display-name: Conversational AI
     icon: duotone comments
+  api:
+    display-name: API Reference
+    icon: regular code
   changelog:
     display-name: Changelog
     changelog: changelog
@@ -156,126 +156,9 @@ navigation:
             path: product/guides/dubbing.mdx
           - page: Voiceover Studio
             path: product/guides/voiceover-studio.mdx
-  - tab: api
-    layout:
-      - section: API Reference
-        skip-slug: true
-        contents:
-          - page: Introduction
-            path: api-reference/overview.mdx
-          - page: Authentication
-            path: api-reference/authentication.mdx
-          - page: Streaming
-            path: api-reference/streaming.mdx
-      - section: SDK Libraries
-        contents:
-          - link: Node Library
-            icon: brands node-js
-            href: https://github.com/elevenlabs/elevenlabs-js
-          - link: Python Library
-            icon: brands python
-            href: https://github.com/elevenlabs/elevenlabs-python
-          - link: Postman Library
-            icon: regular user-astronaut
-            href: https://god.gw.postman.com/run-collection/39903018-b6192151-7d5a-4654-9e18-b702bc1ae9ff?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D39903018-b6192151-7d5a-4654-9e18-b702bc1ae9ff%26entityType%3Dcollection%26workspaceId%3De3cbdaa7-825c-47df-815f-ea2c7160be22
-      - api: API Reference
-        skip-slug: true
-        api-name: api
-        # summary: pages/sdks.mdx
-        flattened: true
-        paginated: true
-        audiences:
-          - sdk
-          - docs
-        snippets:
-          python: elevenlabs
-          typescript: elevenlabs
-        layout:
-          - section: Endpoints
-            skip-slug: true
-            contents:
-              - section: Text to Speech
-                summary: api-reference/text-to-speech.mdx
-                contents:
-                  - POST /v1/text-to-speech/{voice_id}
-                  - POST /v1/text-to-speech/{voice_id}/with-timestamps
-                  - POST /v1/text-to-speech/{voice_id}/stream
-                  - POST /v1/text-to-speech/{voice_id}/stream/with-timestamps
-                  - page: Websockets
-                    icon: duotone comments
-                    path: api-reference/websockets.mdx
-                  - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
-                    slug: websockets
-              - speechToSpeech:
-                  title: Voice Changer
-              - textToSoundEffects:
-                  title: Sound Effects
-              - audioIsolation
-              - textToVoice
-              - dubbing
-          - section: Administration
-            skip-slug: true
-            contents:
-              - history
-              - samples
-              - user
-              - voices
-              - section: Voice Library
-                contents:
-                  - GET /v1/shared-voices
-                  - POST /v1/voices/add/{public_user_id}/{voice_id}
-              - section: Projects
-                skip-slug: true
-                contents:
-                  - endpoint: GET /v1/projects
-                    slug: /projects/get-projects
-                  - endpoint: GET /v1/projects/{project_id}
-                    slug: /projects/get-project
-                  - endpoint: POST /v1/projects/add
-                    slug: /projects/add-project
-                  - endpoint: DELETE /v1/projects/{project_id}
-                    slug: /projects/delete-project
-                  - endpoint: POST /v1/projects/{project_id}/convert
-                    slug: /projects/convert-project
-                  - endpoint: GET /v1/projects/{project_id}/snapshots
-                    slug: /projects/get-snapshots
-                  - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream
-                    slug: /projects/stream-snapshot
-                  - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive
-                    slug: /projects/archive-snapshot
-                  - endpoint: GET /v1/projects/{project_id}/chapters
-                    slug: /chapters/get-chapters
-                  - endpoint: GET /v1/projects/{project_id}/chapters/{chapter_id}
-                    slug: /chapters/get-chapter
-                  - endpoint: POST /v1/projects/{project_id}/chapters/add
-                    slug: /chapters/add-chapter
-                  - endpoint: DELETE /v1/projects/{project_id}/chapters/{chapter_id}
-                    slug: /chapters/delete-chapter
-                  - endpoint: POST /v1/projects/{project_id}/chapters/{chapter_id}/convert
-                    slug: /chapters/convert-chapter
-                  - endpoint: GET /v1/projects/{project_id}/chapters/{chapter_id}/snapshots
-                    slug: /chapters/get-snapshots
-                  - endpoint: POST /v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream
-                    slug: /chapters/stream-snapshot
-                  - endpoint: POST /v1/projects/{project_id}/update-pronunciation-dictionaries
-                    slug: /projects/update-pronunciation-dictionaries
-              - pronunciationDictionary
-              - models
-              - audioNative
-              - workspace
-              - usage
-          - section: Legacy
-            skip-slug: true
-            contents:
-              - section: Voice Generation (Deprecated)
-                contents:
-                  - POST /v1/voice-generation/generate-voice
-                  - GET /v1/voice-generation/generate-voice/parameters
-                  - POST /v1/voice-generation/create-voice
-
   - tab: guides
     layout:
-      - section: Overview
+      - section: Get Started
         contents:
           - page: Quickstart
             icon: regular rocket
@@ -397,6 +280,122 @@ navigation:
               - knowledgeBase
               - phoneNumbers
               - widget
+  - tab: api
+    layout:
+      - section: API Reference
+        skip-slug: true
+        contents:
+          - page: Introduction
+            path: api-reference/overview.mdx
+          - page: Authentication
+            path: api-reference/authentication.mdx
+          - page: Streaming
+            path: api-reference/streaming.mdx
+      - section: SDK Libraries
+        contents:
+          - link: Node Library
+            icon: brands node-js
+            href: https://github.com/elevenlabs/elevenlabs-js
+          - link: Python Library
+            icon: brands python
+            href: https://github.com/elevenlabs/elevenlabs-python
+          - link: Postman Library
+            icon: regular user-astronaut
+            href: https://god.gw.postman.com/run-collection/39903018-b6192151-7d5a-4654-9e18-b702bc1ae9ff?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D39903018-b6192151-7d5a-4654-9e18-b702bc1ae9ff%26entityType%3Dcollection%26workspaceId%3De3cbdaa7-825c-47df-815f-ea2c7160be22
+      - api: API Reference
+        skip-slug: true
+        api-name: api
+        # summary: pages/sdks.mdx
+        flattened: true
+        paginated: true
+        audiences:
+          - sdk
+          - docs
+        snippets:
+          python: elevenlabs
+          typescript: elevenlabs
+        layout:
+          - section: Endpoints
+            skip-slug: true
+            contents:
+              - section: Text to Speech
+                summary: api-reference/text-to-speech.mdx
+                contents:
+                  - POST /v1/text-to-speech/{voice_id}
+                  - POST /v1/text-to-speech/{voice_id}/with-timestamps
+                  - POST /v1/text-to-speech/{voice_id}/stream
+                  - POST /v1/text-to-speech/{voice_id}/stream/with-timestamps
+                  - page: Websockets
+                    icon: duotone comments
+                    path: api-reference/websockets.mdx
+                  - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
+                    slug: websockets
+              - speechToSpeech:
+                  title: Voice Changer
+              - textToSoundEffects:
+                  title: Sound Effects
+              - audioIsolation
+              - textToVoice
+              - dubbing
+          - section: Administration
+            skip-slug: true
+            contents:
+              - history
+              - samples
+              - user
+              - voices
+              - section: Voice Library
+                contents:
+                  - GET /v1/shared-voices
+                  - POST /v1/voices/add/{public_user_id}/{voice_id}
+              - section: Projects
+                skip-slug: true
+                contents:
+                  - endpoint: GET /v1/projects
+                    slug: /projects/get-projects
+                  - endpoint: GET /v1/projects/{project_id}
+                    slug: /projects/get-project
+                  - endpoint: POST /v1/projects/add
+                    slug: /projects/add-project
+                  - endpoint: DELETE /v1/projects/{project_id}
+                    slug: /projects/delete-project
+                  - endpoint: POST /v1/projects/{project_id}/convert
+                    slug: /projects/convert-project
+                  - endpoint: GET /v1/projects/{project_id}/snapshots
+                    slug: /projects/get-snapshots
+                  - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream
+                    slug: /projects/stream-snapshot
+                  - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive
+                    slug: /projects/archive-snapshot
+                  - endpoint: GET /v1/projects/{project_id}/chapters
+                    slug: /chapters/get-chapters
+                  - endpoint: GET /v1/projects/{project_id}/chapters/{chapter_id}
+                    slug: /chapters/get-chapter
+                  - endpoint: POST /v1/projects/{project_id}/chapters/add
+                    slug: /chapters/add-chapter
+                  - endpoint: DELETE /v1/projects/{project_id}/chapters/{chapter_id}
+                    slug: /chapters/delete-chapter
+                  - endpoint: POST /v1/projects/{project_id}/chapters/{chapter_id}/convert
+                    slug: /chapters/convert-chapter
+                  - endpoint: GET /v1/projects/{project_id}/chapters/{chapter_id}/snapshots
+                    slug: /chapters/get-snapshots
+                  - endpoint: POST /v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream
+                    slug: /chapters/stream-snapshot
+                  - endpoint: POST /v1/projects/{project_id}/update-pronunciation-dictionaries
+                    slug: /projects/update-pronunciation-dictionaries
+              - pronunciationDictionary
+              - models
+              - audioNative
+              - workspace
+              - usage
+          - section: Legacy
+            skip-slug: true
+            contents:
+              - section: Voice Generation (Deprecated)
+                contents:
+                  - POST /v1/voice-generation/generate-voice
+                  - GET /v1/voice-generation/generate-voice/parameters
+                  - POST /v1/voice-generation/create-voice
   - tab: changelog
 
 navbar-links:
@@ -422,14 +421,14 @@ favicon: assets/favicon.ico
 
 colors:
   accentPrimary:
-    dark: "#619af8"
-    light: "#302b3f"
+    dark: "#1A647F"
+    light: "black"
   background:
-    dark: "#181818"
-    light: "#ffffff"
+    dark: "#202123"
+    light: "#FFFFFF"
   header-background:
-    dark: "#181818"
-    light: "#fcfcfc"
+    dark: "black"
+    light: "#FFFFFF"
 
 layout:
   searchbar-placement: header
