@@ -1,29 +1,19 @@
 ---
-title: 'Text to Speech'
+title: 'Text to speech'
 subtitle: 'Learn how to turn text into human-like spoken audio with ElevenLabs.'
 ---
 
 ## Overview
 
-<div
-  id="elevenlabs-audionative-widget"
-  data-height="90"
-  data-width="100%"
-  data-frameborder="no"
-  data-scrolling="no"
-  data-publicuserid="b8723bd5176782a2716d531124554c58dace5eb6b7d831c2ceb7ce48a945c64f"
-  data-playerurl="https://elevenlabs.io/player/index.html"
->
-  Loading the{' '}
-  <a href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener">
-    Elevenlabs Text to Speech
-  </a>{' '}
-  AudioNative Player...
-</div>
-
 <script src="https://elevenlabs.io/player/audioNativeHelper.js" type="text/javascript"></script>
 
-ElevenLabs Text to Speech (TTS) API transforms text into lifelike audio with nuanced intonation, pacing and emotional awareness. [Our models](/docs/models) smoothly adapt to textual cues across 32 languages and multiple voice styles. Ideal for everything from global brand campaigns to immersive entertainment.
+ElevenLabs [Text to Speech (TTS)](/docs/api-reference/text-to-speech) API turns text into lifelike audio with nuanced intonation, pacing and emotional awareness. [Our models](/docs/models) adapt to textual cues across 32 languages and multiple voice styles and can be used to:
+
+- Narrate global media campaigns & ads
+- Produce audiobooks in multiple languages with complex emotional delivery
+- Stream real-time audio from text
+
+Listen to a sample:
 
 <elevenlabs-audio-player
     audio-title="George"
@@ -34,223 +24,185 @@ Explore our [Voice Library](https://elevenlabs.io/community) to find the perfect
 
 ## Quickstart
 
-The main TTS endpoint requires:
+The `text-to-speech` endpoint converts text into natural-sounding speech using three core parameters:
 
-1. A model ID
-2. The text to convert
-3. A voice selection (voice ID) or custom voice
+- `model_id`: Determines the quality, speed, and language support
+- `voice_id`: Specifies which voice to use (explore our [Voice Library](https://elevenlabs.io/community))
+- `text`: The input text to be converted to speech
+- `output_format`: Determines the audio format, quality, sampling rate & bitrate
 
-Below is an example showing how to make a basic request to create an MP3 file.
+Execute the code below to generate your first text-to-speech audio:
 
-<Tabs>
-  <Tab title="Python">
-    ```python
-    from pathlib import Path
-    from elevenlabs.client import ElevenLabs
+<CodeBlocks>
 
-    client = ElevenLabs(api_key="YOUR_API_KEY")
+```python title="Python" focus={5-11}
+from elevenlabs.client import ElevenLabs
+from elevenlabs import play
 
-    def save_speech_file():
-        speech_file_path = Path(__file__).parent / "speech.mp3"
-        response = client.text_to_speech.convert(
-            voice_id="21m00Tcm4TlvDq8ikWAM",
-            text="Welcome to an exciting new era of human-like audio generation!",
-            model_id="eleven_multilingual_v2",
-            output_format="mp3_44100_128"
-        )
+client = ElevenLabs()
+audio = client.text_to_speech.convert(
+    text="The first move is what sets everything in motion.",
+    voice_id="JBFqnCBsd6RMkjVDRZzb",
+    model_id="eleven_multilingual_v2",
+    output_format="mp3_44100_128",
+)
 
-        # Save to local mp3 file
-        with open(speech_file_path, "wb") as f:
-            for chunk in response:
-                f.write(chunk)
+play(audio)
+```
 
-        print(f"File saved to {speech_file_path}")
-    ```
+```javascript title="JavaScript" focus={4-8}
+import { ElevenLabsClient, play } from 'elevenlabs';
 
-  </Tab>
-  <Tab title="Node.js">
-    ```js
-    import { ElevenLabsClient } from 'elevenlabs';
-    import fs from 'node:fs';
+const client = new ElevenLabsClient();
+const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
+  text: 'The first move is what sets everything in motion.',
+  model_id: 'eleven_multilingual_v2',
+  output_format: 'mp3_44100_128',
+});
 
-    async function createSpeechFile() {
-      const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
-      const fileStream = fs.createWriteStream('speech.mp3');
+await play(audio);
+```
 
-      const response = await client.textToSpeech.convert("21m00Tcm4TlvDq8ikWAM", {
-        text: "Welcome to an exciting new era of human-like audio generation!",
-        model_id: "eleven_multilingual_v2",
-        output_format: "mp3_44100_128",
-      });
+```bash title="cURL"
+curl -X POST "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb?output_format=mp3_44100_128" \
+    -H "Xi-Api-Key: <apiKey>" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "text": "The first move is what sets everything in motion.",
+        "model_id": "eleven_multilingual_v2"
+    }' \
+    --output audio.mp3
+```
 
-      for await (const chunk of response) {
-        fileStream.write(chunk);
-      }
-      fileStream.end();
+</CodeBlocks>
 
-      console.log('File saved to speech.mp3');
-    }
+### Voice quality
 
-    createSpeechFile();
-    ```
+For real-time applications, Flash v2.5 provides ultra-low 75ms latency optimized for streaming, while Multilingual v2 delivers the highest quality audio with more nuanced expression.
 
-  </Tab>
-</Tabs>
+Learn more about our [models](/docs/models).
 
-Run your function, and you'll have a brand-new MP3 file containing your AI voiceover.
+### Voice options
 
-<CardGroup cols={2}>
-  <Card title="Audio Quality" icon="music">
-    ElevenLabs provides multiple models to optimize quality and speed. 
-    <br />
-    • Standard (Multilingual v2, English v1): Highest fidelity, best for content creation. 
-    <br />
-    • Flash models (v2 / v2.5): Very low latency, ideal for real-time streaming with slightly less stylistic range.
-  </Card>
+ElevenLabs offers thousands of voices across 32 languages through multiple creation methods:
 
-  <Card title="Voice Options" icon="comment">
-    ElevenLabs supports more than 3,000 voices across 32 languages, including:
-    <ul>
-      <li>Default curated voices</li>
-      <li><a href="https://elevenlabs.io/community">Voice Library</a> of shared Clones</li>
-      <li>Instant Voice Cloning</li>
-      <li>Voice Design for new voices</li>
-    </ul>
-  </Card>
-</CardGroup>
+- [Voice Library](/docs/voice-library) with 3,000+ community-shared voices
+- [Professional Voice Cloning](/docs/voice-cloning/professional) for highest-fidelity replicas
+- [Instant Voice Cloning](/docs/voice-cloning/instant) for quick voice replication
+- [Voice Design](/docs/voice-design) to generate custom voices from text descriptions
 
-<CardGroup cols={2}>
-  <Card title="Streaming Real-Time Audio" icon="circle-play">
-    For interactive or time-sensitive applications, stream audio as it's being generated. This reduces wait times, so users can hear the speech almost instantly.
-  </Card>
+Learn more about our [voice creation options](/docs/voices).
 
-  <Card title="Output Formats" icon="file-audio">
-    By default, the TTS endpoint returns MP3. You can also request Opus, AAC, FLAC, WAV, PCM, etc. Just set <code>output_format</code> accordingly.
-  </Card>
-</CardGroup>
+### Streaming audio
 
-## Streaming Example
+The Text to Speech API provides support for real time audio streaming using [chunk transfer encoding](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding). This means that the audio is able to be played before the full file has been generated and made accessible.
 
-<Tabs>
-  <Tab title="Python">
-    ```python
-    import os
-    from io import BytesIO
-    from elevenlabs.client import ElevenLabs
+<CodeBlocks>
 
-    client = ElevenLabs(api_key="YOUR_API_KEY")
+```python title="Python" focus={5-11} maxLines=10
+from elevenlabs import stream
+from elevenlabs.client import ElevenLabs
 
-    def stream_tts(text: str):
-        response = client.text_to_speech.convert(
-            voice_id="21m00Tcm4TlvDq8ikWAM",
-            text=text,
-            model_id="eleven_flash_v2_5"  # low-latency, multilingual
-        )
+client = ElevenLabs()
+audio_stream = client.text_to_speech.convert_as_stream(
+    text="The first move is what sets everything in motion.",
+    voice_id="JBFqnCBsd6RMkjVDRZzb",
+    model_id="eleven_multilingual_v2",
+    output_format="mp3_44100_128",
+)
 
-        audio_stream = BytesIO()
-        for chunk in response:
-            audio_stream.write(chunk)
-        audio_stream.seek(0)
-        return audio_stream
+# option 1: play the streamed audio locally
+stream(audio_stream)
 
-    if __name__ == "__main__":
-        audio_data = stream_tts("Hello, this is a real-time streaming test.")
-        print("Audio stream is ready for playback or further processing.")
-    ```
+# option 2: process the audio bytes manually
+for chunk in audio_stream:
+    if isinstance(chunk, bytes):
+        print(chunk)
+```
 
-  </Tab>
-  <Tab title="Node.js">
-    ```js
-    import { ElevenLabsClient } from 'elevenlabs';
+```javascript title="JavaScript" focus={6-11} maxLines=10
+import { ElevenLabsClient, stream } from 'elevenlabs';
+import { Readable } from 'stream';
 
-    async function streamTTS(text) {
-      const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
-      const response = await client.textToSpeech.convert("21m00Tcm4TlvDq8ikWAM", {
-        text,
-        model_id: "eleven_flash_v2_5",
-        output_format: "mp3_44100_128",
-      });
+const client = new ElevenLabsClient();
+async function main() {
+  const audioStream = await client.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
+    text: 'The first move is what sets everything in motion.',
+    model_id: 'eleven_multilingual_v2',
+    output_format: 'mp3_44100_128',
+  });
 
-      for await (const chunk of response) {
-        // Process each audio chunk in real-time here
-      }
-      console.log("Streaming complete.");
-    }
+  // option 1: play the streamed audio locally
+  await stream(Readable.from(audioStream));
 
-    streamTTS("Running a streaming test for Node.js!");
-    ```
+  // option 2: process the audio manually
+  for await (const chunk of audioStream) {
+    console.log(chunk);
+  }
+}
 
-  </Tab>
-</Tabs>
+main();
+```
+
+</CodeBlocks>
+
+## Supported formats
+
+The default response format is "mp3", but other formats like "PCM", & "μ-law" are available.
+
+- **MP3**
+  - Sample rates: 22.05kHz - 44.1kHz
+  - Bitrates: 32kbps - 192kbps
+  - **Note**: Higher quality options require Creator tier or higher
+- **PCM (S16LE)**
+  - Sample rates: 16kHz - 44.1kHz
+  - **Note**: Higher quality options require Pro tier or higher
+- **μ-law**
+  - 8kHz sample rate
+  - Optimized for telephony applications
+
+<Success>
+  Higher quality audio options are only available on paid tiers - see our [pricing
+  page](https://elevenlabs.io/pricing) for details.
+</Success>
 
 ## Supported languages
 
-ElevenLabs TTS supports 32 languages with our multilingual models, enabling global reach and natural-sounding localization:
+ElevenLabs Multilingual V2 & Flash v2.5 models support 32 languages:
 
-<CardGroup cols={3}>
-  <Card title="European">
-    • English
-    • French
-    • German
-    • Italian
-    • Spanish
-    • Portuguese
-    • Polish
-    • Dutch
-    • Swedish
-    • Norwegian
-    • Greek
-    • Romanian
-    • Hungarian
-    • Bulgarian
-    • Croatian
-    • Czech
-    • Danish
-    • Finnish
-    • Slovak
-    • Ukrainian
-  </Card>
+Arabic, Bulgarian, Chinese, Croatian, Czech, Danish, Dutch, English, Filipino, Finnish, French, German, Greek, Hindi, Hungarian, Indonesian, Italian, Japanese, Korean, Malay, Norwegian, Polish, Portuguese, Romanian, Russian, Slovak, Spanish, Swedish, Tamil, Turkish, Ukrainian, Vietnamese.
 
-{' '}
-
-<Card title="Asian">
-  • Chinese • Japanese • Korean • Vietnamese • Tamil • Hindi • Filipino • Malay • Indonesian
-</Card>
-
-  <Card title="Other">
-    • Arabic
-    • Russian
-    • Turkish
-  </Card>
-</CardGroup>
-
-Choose a "multilingual" model family (like `eleven_multilingual_v2`) for the broadest language coverage. All our AI voices can speak any of these languages, making it easy to create consistent brand voices across multiple territories.
+Simply input text in any of our 32 supported languages and select a matching voice from our [Voice Library](https://elevenlabs.io/community). For the most natural results, choose a voice with an accent that matches your target language and region.
 
 ## FAQ
 
 <AccordionGroup>
   <Accordion title="Can I fine-tune the emotional range of the generated audio?">
-    Absolutely. Our voice settings include parameters like Stability, Similarity, and Style
-    Exaggeration. Keep stability high for steadier speech, lower it for more emotional variance.
+    The models interpret emotional context directly from the text input. For example, adding
+    descriptive text like "she said excitedly" or using exclamation marks will influence the speech
+    emotion. Voice settings like Stability and Similarity help control the consistency, while the
+    underlying emotion comes from textual cues.
   </Accordion>
   <Accordion title="Can I clone my own voice or a specific speaker's voice?">
     Yes. Instant Voice Cloning quickly mimics another speaker from short clips. For high-fidelity
-    clones, check out our Professional Voice Clone with advanced training on larger datasets.
+    clones, check out our Professional Voice Clone.
   </Accordion>
   <Accordion title="Do I own the audio output?">
-    Yes. You retain ownership of any audio you generate. However, you must disclose to end users
-    that the content is AI-generated.
+    Yes. You retain ownership of any audio you generate. However, commercial usage rights are only
+    available with paid plans. With a paid subscription, you may use generated audio for commercial
+    purposes and monetize the outputs if you own the IP rights to the input content.
   </Accordion>
   <Accordion title="How do I reduce latency for real-time cases?">
     Use the low-latency Flash models (Flash v2 or v2.5) optimized for near real-time conversational
-    or interactive scenarios.
+    or interactive scenarios. See our [latency optimization guide](/docs/latency-optimization) for
+    more details.
   </Accordion>
   <Accordion title="Why is my output sometimes inconsistent?">
-    The TTS engine can be nondeterministic. For consistency, use the optional seed parameter, though
-    subtle differences may still occur.
+    The models are nondeterministic. For consistency, use the optional seed parameter, though subtle
+    differences may still occur.
   </Accordion>
   <Accordion title="What's the best practice for large text conversions?">
-    Split long text into segments and use streaming for real-time playback or partial saving to
-    disk. For smoother transitions, leverage "previous_text" or "previous_request_ids".
+    Split long text into segments and use streaming for real-time playback and efficient processing.
+    To maintain natural prosody flow between chunks, use `previous_text` or `previous_request_ids`.
   </Accordion>
 </AccordionGroup>
