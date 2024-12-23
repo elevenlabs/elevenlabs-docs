@@ -57,13 +57,28 @@
   width: 100vw;
   overflow: hidden;
   height: 350px;
-  display: block;
   margin-left: 50%;
   transform: translateX(-50%);
 }
 
 #overview-wave canvas[data-engine='three.js r171'] {
   height: 350px !important;
+}
+
+.light-mode-wave {
+  display: none;
+}
+
+.dark-mode-wave {
+  display: none;
+}
+
+:root[class='light'] .light-mode-wave {
+  display: block;
+}
+
+:root[class='dark'] .dark-mode-wave {
+  display: block;
 }
 
 /* Card Wave */
@@ -122,7 +137,21 @@ elevenlabs-convai {
   transition: font-weight 0.15s ease;
 }
 
-.fern-sidebar-link-container[data-state='active'] .fern-sidebar-link-text {
+/* Active state styling */
+:root[class='light'] .fern-sidebar-link-container[data-state='active'] .fern-sidebar-link-text {
   font-weight: 500;
-  color: black;
+  color: #000000; /* or your preferred light mode active color */
+}
+
+:root[class='dark'] .fern-sidebar-link-container[data-state='active'] .fern-sidebar-link-text {
+  font-weight: 500;
+  color: #ffffff; /* or your preferred dark mode active color */
+}
+
+:root[class='light'] {
+  --wave-color: blue;
+}
+
+:root[class='dark'] {
+  --wave-color: gray;
 }
