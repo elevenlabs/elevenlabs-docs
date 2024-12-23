@@ -2,17 +2,17 @@
 title: Models
 ---
 
-## Flagship Models
+## Flagship models
 
 <Markdown src="/snippets/models.mdx" />
 
-## Models Overview
+## Models overview
 
 The ElevenLabs API offers a range of speech synthesis models optimized for different use cases, quality levels, and performance requirements.
 
 | Model ID                     | Description                                                          | Languages |
 | ---------------------------- | -------------------------------------------------------------------- | --------- |
-| `eleven_multilingual_v2`     | Our most lifelike model with rich emotional expression               | 32        |
+| `eleven_multilingual_v2`     | Our most lifelike model with rich emotional expression               | 29        |
 | `eleven_flash_v2_5`          | Ultra-fast model optimized for real-time use (~75ms&dagger;)         | 32        |
 | `eleven_flash_v2`            | Ultra-fast model optimized for real-time use (~75ms&dagger;)         | English   |
 | `eleven_multilingual_sts_v2` | State-of-the-art multilingual voice changer model (Speech to Speech) | 29        |
@@ -35,7 +35,7 @@ These models are maintained for backward compatibility but are not recommended f
 
 </Accordion>
 
-## Eleven Multilingual v2
+## Multilingual v2
 
 Eleven Multilingual v2 is our most advanced, emotionally-aware speech synthesis model. It produces natural, lifelike speech with high emotional range and contextual understanding across multiple languages.
 
@@ -50,7 +50,7 @@ This model excels in scenarios requiring high-quality, emotionally nuanced speec
 
 While it has a higher latency & cost per character than Flash models, it delivers superior quality for projects where lifelike speech is important.
 
-## Eleven Flash v2.5
+## Flash v2.5
 
 Eleven Flash v2.5 is our fastest speech synthesis model, designed for real-time applications and conversational AI. It delivers high-quality speech with ultra-low latency (~75ms&dagger;) across 32 languages.
 
@@ -68,26 +68,66 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective ch
   <img src="/assets/images/model-latency-tradeoff.webp" />
 </Frame>
 
-## Model Selection Guide
+## Model selection guide
 
-### Requirements
+<AccordionGroup>
+  <Accordion title="Select by Requirements">
+    <CardGroup cols={1}>
+      <Card title="Quality">
+        Use `eleven_multilingual_v2`
+        
+        Best for high-fidelity audio output with rich emotional expression
+      </Card>
+      <Card title="Low-latency">
+        Use Flash models
 
-**Quality:** Use `eleven_multilingual_v2`
+        Optimized for real-time applications (~75ms latency)
+      </Card>
+      <Card title="Multilingual">
+        Use either either `eleven_multilingual_v2` or `eleven_flash_v2_5`
 
-**Low-latency:** Use Eleven Flash models
+        Both support up to 32 languages
+      </Card>
+    </CardGroup>
 
-**Multilingual support:** Use `eleven_multilingual_v2` or `eleven_flash_v2_5`
+  </Accordion>
 
-### Use Case
+  <Accordion title="Select by Use Case">
+    <CardGroup cols={1}>
+      <Card title="Content Creation">
+        Use `eleven_multilingual_v2`
+      
+        Ideal for professional content, audiobooks & video narration.
+      </Card>
 
-**Content Creation:** Use `eleven_multilingual_v2`
+      <Card title="Conversational AI">
+        Use either `eleven_flash_v2_5` or `eleven_flash_v2`
 
-**Conversational AI:** Use `eleven_flash_v2_5` or `eleven_flash_v2`
+        Perfect for real-time conversational applications
+      </Card>
 
-**Voice Changer (Speech to Speech):** Use `eleven_multilingual_sts_v2`
+      <Card title="Voice Changer">
+        Use `eleven_multilingual_sts_v2`
+
+        Specialized for Speech-to-Speech conversion
+      </Card>
+    </CardGroup>
+
+  </Accordion>
+</AccordionGroup>
+
+### Supported languages
+
+Multilingual v2 & Speech-to-Speech v2 models support 29 languages:
+
+<Markdown src="/snippets/v2-supported-languages.mdx" />
+
+Flash v2.5 supports 32 languages - all languages from Multilingual v2 plus:
+
+_Hungarian, Norwegian, Vietnamese_
 
 <Note>
-  For detailed language support information and troubleshooting guidance, refer to our [help
+  For detailed information and troubleshooting guidance, refer to our [help
   center](https://help.elevenlabs.io).
 </Note>
 
