@@ -1,0 +1,353 @@
+---
+title: Developer Quickstart
+subtitle: Learn how to make your first ElevenLabs API request.
+---
+
+The ElevenLabs API provides a simple interface to state-of-the-art audio [models](/docs/developer-guides/models) and [features](/docs/api-reference/overview). Follow this guide to learn how to create lifelike speech, generate and modify voices, produce immersive sound effects, isolate background noise from audio, and seamlessly dub audio/videos.
+
+## Create and export an API key
+
+[Create an API key in the dashboard here](https://elevenlabs.io/app/settings/api-keys), which you’ll use to securely [access the API](/docs/api-reference/authentication). Store the key in a safe location, like a [`.zshrc` file](https://www.freecodecamp.org/news/how-do-zsh-configuration-files-work/) or another text file on your computer. Once you’ve generated an API key, export it as an environment variable in your terminal.
+
+<Tabs>
+  <Tab title="macOS/Linux">
+
+    ```shell Export an environment variable on macOS or Linux systems
+    export ELEVENLABS_API_KEY="your_api_key_here"
+    ```
+
+  </Tab>
+  <Tab title="Windows">
+
+    ```shell Export an environment variable in PowerShell
+    setx ELEVENLABS_API_KEY "your_api_key_here"
+    ```
+
+  </Tab>
+</Tabs>
+
+## Make your first API request
+
+With your ElevenLabs API key exported as an environment variable, you're ready to make your first API request. You can either use the [REST API](/docs/api-reference/overview) directly with the HTTP client of your choice, or use one of our official SDKs as shown below.
+
+<Tabs>
+  <Tab title="Python">
+
+    To use the ElevenLabs API in Python, you can use the official [ElevenLabs SDK for Python](https://www.github.com/elevenlabs/elevenlabs-python). Get started by installing the SDK using [pip](https://pypi.org/project/pip/):
+
+    ```bash Install the ElevenLabs SDK with pip
+    pip install elevenlabs
+    ```
+
+    <Note>
+      To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/) and/or [ffmpeg](https://ffmpeg.org/).
+    </Note>
+
+    With the ElevenLabs SDK installed, create a file called `example.py` and copy one of the following examples into it:
+
+    <Tabs>
+      <Tab title="Text to Speech">
+
+        ```python Convert text into life-like audio
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+
+        client = ElevenLabs()
+
+        audio = client.text_to_speech.convert(
+            text="The first move is what sets everything in motion.",
+            voice_id="JBFqnCBsd6RMkjVDRZzb",
+            model_id="eleven_multilingual_v2",
+            output_format="mp3_44100_128",
+        )
+
+        play(audio)
+        ```
+
+      </Tab>
+      <Tab title="Voice Changer">
+
+        ```python Transform audio from one voice to another
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+        import requests
+        from io import BytesIO
+
+        client = ElevenLabs()
+        voice_id = "JBFqnCBsd6RMkjVDRZzb"
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        response = requests.get(audio_url)
+        audio_data = BytesIO(response.content)
+
+        audio_stream = client.speech_to_speech.convert(
+            voice_id=voice_id,
+            audio=audio_data,
+            model_id="eleven_multilingual_sts_v2",
+            output_format="mp3_44100_128",
+        )
+
+        play(audio_stream)
+        ```
+
+      </Tab>
+      <Tab title="Text to Sound Effects">
+
+        ```python Convert text into sound effects
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+
+        client = ElevenLabs()
+        audio = client.text_to_sound_effects.convert(text="Cinematic Braam, Horror")
+
+        play(audio)
+        ```
+
+      </Tab>
+      <Tab title="Audio Isolation">
+
+        ```python Removes background noise from audio.
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+        import requests
+        from io import BytesIO
+
+        client = ElevenLabs()
+
+        audio_url = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/fin.mp3"
+        response = requests.get(audio_url)
+        audio_data = BytesIO(response.content)
+
+        audio_stream = client.audio_isolation.audio_isolation(audio=audio_data)
+
+        play(audio_stream)
+        ```
+
+      </Tab>
+      <Tab title="Text to Voice">
+
+        ```python Generate voices from a single text prompt.
+        import base64
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+
+        client = ElevenLabs()
+
+        voices = client.text_to_voice.create_previews(
+            voice_description="A sassy squeaky mouse",
+            text="Every act of kindness, no matter how small, carries value and can make a difference, as no gesture of goodwill is ever wasted.",
+        )
+
+        voice_preview = voices.previews[0].audio_base_64
+        audio_bytes = base64.b64decode(voice_preview)
+
+        play(audio_bytes)
+        ```
+
+      </Tab>
+      <Tab title="Dubbing">
+
+        ```python Dub audio/video from one language to another
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+        import requests
+        from io import BytesIO
+        import time
+
+        client = ElevenLabs()
+
+        target_lang = "es"  # Spanish
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        response = requests.get(audio_url)
+
+        audio_data = BytesIO(response.content)
+        audio_data.name = "audio.mp3"
+
+        # Start dubbing
+        dubbed = client.dubbing.dub_a_video_or_an_audio_file(
+            file=audio_data, target_lang=target_lang
+        )
+
+        while True:
+            status = client.dubbing.get_dubbing_project_metadata(dubbed.dubbing_id).status
+            if status == "dubbed":
+                dubbed_file = client.dubbing.get_dubbed_file(dubbed.dubbing_id, target_lang)
+                play(dubbed_file)
+                break
+            else:
+                print("Audio is still being dubbed...")
+                time.sleep(5)
+        ```
+      </Tab>
+    </Tabs>
+
+    Execute the code with `python example.py`. In a few seconds, you should hear the audio play through your speaker.
+
+  </Tab>
+  <Tab title="Javascript">
+
+    To use the ElevenLabs API in server-side JavaScript environments like Node.js, Deno, or Bun, you can use the official [ElevenLabs SDK for TypeScript and JavaScript](https://www.github.com/elevenlabs/elevenlabs-js). Get started by installing the SDK using [npm](https://www.npmjs.com/) or your preferred package manager:
+
+    ```bash Install the ElevenLabs SDK with npm
+    npm install elevenlabs
+    ```
+
+    <Note>
+      To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/) and/or [ffmpeg](https://ffmpeg.org/).
+    </Note>
+
+    With the ElevenLabs SDK installed, create a file called `example.mjs` and copy one of the following examples into it:
+
+    <Tabs>
+      <Tab title="Text to Speech">
+
+        ```javascript Convert text into life-like audio
+        import { ElevenLabsClient, play } from "elevenlabs";
+
+        const client = new ElevenLabsClient();
+        const audio = await client.textToSpeech.convert("JBFqnCBsd6RMkjVDRZzb", {
+          text: "The first move is what sets everything in motion.",
+          model_id: "eleven_multilingual_v2",
+          output_format: "mp3_44100_128",
+        });
+
+        await play(audio);
+        ```
+
+      </Tab>
+      <Tab title="Voice Changer">
+
+        ```javascript Transform audio from one voice to another
+        import { ElevenLabsClient, play } from "elevenlabs";
+        import fetch from "node-fetch";
+
+        const client = new ElevenLabsClient();
+        const voiceId = "JBFqnCBsd6RMkjVDRZzb";
+
+        const audioUrl = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3";
+        const response = await fetch(audioUrl);
+        const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
+
+        const audioStream = await client.speechToSpeech.convert(voiceId, {
+          audio: audioBlob,
+          model_id: "eleven_multilingual_sts_v2",
+          output_format: "mp3_44100_128",
+        });
+
+        await play(audioStream);
+        ```
+
+      </Tab>
+      <Tab title="Text to Sound Effects">
+
+        ```javascript Convert text into sound effects
+        import { ElevenLabsClient, play } from "elevenlabs";
+
+        const client = new ElevenLabsClient();
+
+        const audio = await client.textToSoundEffects.convert({
+          text: "Cinematic Braam, Horror",
+        });
+
+        await play(audio);
+        ```
+
+      </Tab>
+      <Tab title="Audio Isolation">
+
+        ```javascript Removes background noise from audio.
+        import { ElevenLabsClient, play } from "elevenlabs";
+        import fetch from "node-fetch";
+
+        const client = new ElevenLabsClient();
+
+        const audioUrl =
+          "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/fin.mp3";
+        const response = await fetch(audioUrl);
+        const audioBlob = new Blob([await response.arrayBuffer()], {
+          type: "audio/mp3",
+        });
+
+        const audioStream = await client.audioIsolation.audioIsolation({
+          audio: audioBlob,
+        });
+
+        await play(audioStream);
+        ```
+
+      </Tab>
+      <Tab title="Text to Voice">
+
+        ```javascript Generate voices from a single text prompt.
+        import { ElevenLabsClient, play } from "elevenlabs";
+        import { Readable } from "stream";
+
+        const client = new ElevenLabsClient();
+
+        const voices = await client.textToVoice.createPreviews({
+          voice_description: "A sassy squeaky mouse",
+          text: "Every act of kindness, no matter how small, carries value and can make a difference, as no gesture of goodwill is ever wasted.",
+        });
+        const voicePreview1 = voices.previews[0].audio_base_64;
+
+        await play(Readable.from(Buffer.from(voicePreview1, "base64")));
+        ```
+
+      </Tab>
+      <Tab title="Dubbing">
+
+        ```javascript Dub audio/video from one language to another
+        import { ElevenLabsClient, play } from "elevenlabs";
+        import fetch from "node-fetch";
+
+        const client = new ElevenLabsClient();
+
+        const targetLang = "es"; // spanish
+        const sourceAudio = await fetch(
+          "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        );
+        const audioBlob = new Blob([await sourceAudio.arrayBuffer()], {
+          type: "audio/mp3",
+        });
+
+        // Start dubbing
+        const dubbed = await client.dubbing.dubAVideoOrAnAudioFile({
+          file: audioBlob,
+          target_lang: targetLang,
+        });
+
+        while (true) {
+          const { status } = await client.dubbing.getDubbingProjectMetadata(
+            dubbed.dubbing_id
+          );
+          if (status === "dubbed") {
+            const dubbedFile = await client.dubbing.getDubbedFile(
+              dubbed.dubbing_id,
+              targetLang
+            );
+            await play(dubbedFile);
+            break;
+          } else {
+            console.log("Audio is still being dubbed...");
+          }
+          await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds between checks
+        }
+        ```
+
+      </Tab>
+    </Tabs>
+
+    Execute the code with `node example.mjs` (or the equivalent command for Deno or Bun). In a few seconds, you should hear the audio play through your speaker.
+
+  </Tab>
+
+</Tabs>
+
+## Next Steps
+
+{/* TODO: Add Next Steps */}

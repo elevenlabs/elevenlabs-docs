@@ -1,0 +1,139 @@
+---
+title: 'Sound effects'
+subtitle: 'Learn how to create high-quality sound effects from text with ElevenLabs.'
+---
+
+## Overview
+
+<script src="https://elevenlabs.io/player/audioNativeHelper.js" type="text/javascript"></script>
+
+ElevenLabs Sound Effects API turns text descriptions into high-quality audio effects with precise control over timing, style and complexity. The model understands both natural language and audio terminology, enabling you to:
+
+- Generate cinematic sound design for films & trailers
+- Create custom sound effects for games & interactive media
+- Produce Foley and ambient sounds for video content
+
+Listen to a sample cinematic impact:
+
+<elevenlabs-audio-player
+audio-title="Cinematic Impact"
+audio-src="[URL_TO_SAMPLE_EFFECT]"
+/>
+
+## Quickstart
+
+The `text_to_sound_effects` endpoint generates audio effects from text descriptions using two core parameters:
+
+- `text`: The description of the desired sound effect
+- `duration_seconds`: Optional length of the generated audio in seconds
+- `prompt_influence`: Optional value between 0 and 1, where 0 is the most creative and 1 is the most literal interpretation
+
+Execute the code below to generate your first sound effect:
+
+<CodeBlocks>
+
+```python title="Python" focus={5-7}
+from elevenlabs import play
+from elevenlabs import ElevenLabs
+
+client = ElevenLabs()
+sound_effect = client.text_to_sound_effects.convert(
+    text="Glass shattering on concrete"
+)
+audio = b"".join(sound_effect)
+
+play(audio)
+```
+
+</CodeBlocks>
+
+## Prompting Guide
+
+### Simple Effects
+
+For basic sound effects, use clear, concise descriptions:
+
+- "Glass shattering on concrete"
+- "Heavy wooden door creaking open"
+- "Thunder rumbling in the distance"
+
+<elevenlabs-audio-player
+    audio-title="Glass Shattering"
+    audio-src="[URL_TO_GLASS_EFFECT]"
+/>
+
+### Complex Sequences
+
+For multi-part sound effects, describe the sequence of events:
+
+- "Footsteps on gravel, then a metallic door opens"
+- "Wind whistling through trees, followed by leaves rustling"
+- "Sword being drawn, then clashing with another blade"
+
+<elevenlabs-audio-player
+    audio-title="Footsteps and Door"
+    audio-src="[URL_TO_SEQUENCE_EFFECT]"
+/>
+
+### Musical Elements
+
+The API also supports generation of musical components:
+
+- "90s hip-hop drum loop, 90 BPM"
+- "Vintage brass stabs in F minor"
+- "Atmospheric synth pad with subtle modulation"
+
+<elevenlabs-audio-player
+    audio-title="Hip Hop Beat"
+    audio-src="[URL_TO_MUSIC_EFFECT]"
+/>
+
+## Settings
+
+Two parameters control the generation process:
+
+- **Duration**: Set a specific length for the generated audio (in seconds)
+
+  - Default: Automatically determined based on the prompt
+  - Range: 0.1 to 30 seconds
+  - Cost: 40 characters per second when duration is specified
+
+- **Prompt Influence**: Control how strictly the model follows the prompt
+  - High: More literal interpretation of the prompt
+  - Low: More creative interpretation with added variations
+
+## Audio Terminology
+
+Common terms that can enhance your prompts:
+
+- **Impact**: Collision or contact sounds between objects, from subtle taps to dramatic crashes
+- **Whoosh**: Movement through air effects, ranging from fast and ghostly to slow-spinning or rhythmic
+- **Ambience**: Background environmental sounds that establish atmosphere and space
+- **One-shot**: Single, non-repeating sound
+- **Loop**: Repeating audio segment
+- **Stem**: Isolated audio component
+- **Braam**: Big, brassy cinematic hit that signals epic or dramatic moments, common in trailers
+- **Glitch**: Sounds of malfunction, jittering, or erratic movement, useful for transitions and sci-fi
+- **Drone**: Continuous, textured sound that creates atmosphere and suspense
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What's the maximum duration for generated effects?">
+    The maximum duration is 30 seconds per generation. For longer sequences, generate multiple
+    effects and combine them.
+  </Accordion>
+  <Accordion title="Can I generate music with this API?">
+    Yes, you can generate musical elements like drum loops, bass lines, and melodic samples.
+    However, for full music production, consider combining multiple generated elements.
+  </Accordion>
+  <Accordion title="How do I ensure consistent quality?">
+    Use detailed prompts, appropriate duration settings, and high prompt influence for more
+    predictable results. For complex sounds, generate components separately and combine them.
+  </Accordion>
+  <Accordion title="What audio formats are supported?">
+    Generated audio is provided in MP3 format with professional-grade quality (44.1kHz,
+    128-192kbps).
+  </Accordion>
+</AccordionGroup>
+```

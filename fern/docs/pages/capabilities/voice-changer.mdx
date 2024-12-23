@@ -1,0 +1,91 @@
+---
+title: Voice Changer (Speech to Speech)
+subtitle: 'Learn how to transform audio between voices while preserving emotion and delivery.'
+---
+
+## Overview
+
+ElevenLabs [Voice Changer](/docs/api-reference/voice-changer) API lets you transform any source audio (recorded or uploaded) into a different, fully cloned voice without losing the performance nuances of the original. It’s capable of capturing whispers, laughs, cries, accents, and subtle emotional cues to achieve a highly realistic, human feel and can be used to:
+
+- Change any voice while preserving emotional delivery and nuance
+- Create consistent character voices across multiple languages and recording sessions
+- Fix or replace specific words and phrases in existing recordings
+
+Listen to a sample:
+
+<CardGroup cols={2}>
+  <elevenlabs-audio-player
+    audio-title="Original Audio"
+    audio-src="https://storage.googleapis.com/eleven-public-cdn/audio/marketing/george.mp3"
+  />
+  <elevenlabs-audio-player
+    audio-title="Converted Audio"
+    audio-src="https://storage.googleapis.com/eleven-public-cdn/audio/marketing/george.mp3"
+  />
+</CardGroup>
+
+Explore our [Voice Library](https://elevenlabs.io/community) to find the perfect voice for your project.
+
+## Supported languages
+
+Our speech-to-speech v2 model supports 29 languages:
+
+<Markdown src="/snippets/v2-supported-languages.mdx" />
+
+Note the `eleven_english_sts_v2` model supports only English.
+
+## Best practices
+
+### Audio quality
+
+- Record in a quiet environment to minimize background noise
+- Maintain appropriate microphone levels - avoid too quiet or peaked audio
+- Use `remove_background_noise=true` if environmental sounds are present
+
+### Recording guidelines
+
+- Keep segments under 5 minutes for optimal processing
+- Feel free to include natural expressions (laughs, sighs, emotions)
+- The source audio's accent and language will be preserved in the output
+
+### Parameters
+
+- **Style**: Set to 0% when input audio is already expressive
+- **Stability**: Use 100% for maximum voice consistency
+- **Language**: Choose source audio that matches your desired accent and language
+
+## FAQ
+
+<AccordionGroup>
+
+<Accordion title="Can I convert more than 5 minutes of audio?">
+  Yes, but you must split it into smaller chunks (each under 5 minutes). This helps ensure stability
+  and consistent output.
+</Accordion>
+
+<Accordion title="Can I use my own custom/cloned voice for output?">
+  Absolutely. Provide your custom voice’s <code>voice_id</code> and specify the correct{' '}
+  <code>model_id</code>.
+</Accordion>
+
+<Accordion title="How is billing handled?">
+  You’re charged at 1000 characters’ worth of usage per minute of processed audio. There’s no
+  additional fee based on file size.
+</Accordion>
+
+<Accordion title="Does the AI reproduce background noise?">
+  Possibly. Use <code>remove_background_noise=true</code> or the Voice Isolator tool to minimize
+  environmental sounds in the final output.
+</Accordion>
+
+<Accordion title="Which model is best for English audio?">
+  Though <code>eleven_english_sts_v2</code> is available, our{' '}
+  <code>eleven_multilingual_sts_v2</code> model often outperforms it, even for English material.
+</Accordion>
+
+<Accordion title="How does style & stability work?">
+  “Style” adds interpretative flair; “stability” enforces consistency. For high-energy performances
+  in the source audio, turn style down and stability up.
+</Accordion>
+
+</AccordionGroup>

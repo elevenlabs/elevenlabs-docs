@@ -59,21 +59,13 @@ channels:
             optimize_streaming_latency:
               description: Latency optimization level (deprecated)
               type: string
-              enum: ["0", "1", "2", "3", "4"]
-              default: "0"
+              enum: ['0', '1', '2', '3', '4']
+              default: '0'
             output_format:
               description: The output audio format
               type: string
-              enum:
-                [
-                  "mp3_44100",
-                  "pcm_16000",
-                  "pcm_22050",
-                  "pcm_24000",
-                  "pcm_44100",
-                  "ulaw_8000",
-                ]
-              default: "mp3_44100"
+              enum: ['mp3_44100', 'pcm_16000', 'pcm_22050', 'pcm_24000', 'pcm_44100', 'ulaw_8000']
+              default: 'mp3_44100'
             inactivity_timeout:
               description: Timeout for inactivity before connection is closed
               type: number
@@ -92,17 +84,17 @@ channels:
       operationId: sendMessage
       message:
         oneOf:
-          - $ref: "#/components/messages/InitializeConnection"
-          - $ref: "#/components/messages/SendText"
-          - $ref: "#/components/messages/CloseConnection"
+          - $ref: '#/components/messages/InitializeConnection'
+          - $ref: '#/components/messages/SendText'
+          - $ref: '#/components/messages/CloseConnection'
 
     subscribe:
       description: Receive messages from the WebSocket
       operationId: receiveMessage
       message:
         oneOf:
-          - $ref: "#/components/messages/AudioOutput"
-          - $ref: "#/components/messages/FinalOutput"
+          - $ref: '#/components/messages/AudioOutput'
+          - $ref: '#/components/messages/FinalOutput'
 
     x-fern-examples:
       - query-parameters:
@@ -111,7 +103,7 @@ channels:
           - type: publish
             messageId: InitializeConnection
             value:
-              text: " "
+              text: ' '
               voice_settings:
                 stability: 0.5
                 similarity_boost: 0.8
@@ -119,12 +111,12 @@ channels:
           - type: publish
             messageId: SendText
             value:
-              text: "Hello World"
+              text: 'Hello World'
               try_trigger_generation: true
           - type: publish
             messageId: CloseConnection
             value:
-              text: ""
+              text: ''
           - type: subscribe
             messageId: AudioOutput
             value:
@@ -135,23 +127,23 @@ components:
     SendText:
       messageId: sendText
       payload:
-        $ref: "#/components/schemas/SendText"
+        $ref: '#/components/schemas/SendText'
     InitializeConnection:
       messageId: initializeConnection
       payload:
-        $ref: "#/components/schemas/InitializeConnection"
+        $ref: '#/components/schemas/InitializeConnection'
     CloseConnection:
       messageId: closeConnection
       payload:
-        $ref: "#/components/schemas/CloseConnection"
+        $ref: '#/components/schemas/CloseConnection'
     AudioOutput:
       messageId: audioOutput
       payload:
-        $ref: "#/components/schemas/AudioOutput"
+        $ref: '#/components/schemas/AudioOutput'
     FinalOutput:
       messageId: finalOutput
       payload:
-        $ref: "#/components/schemas/FinalOutput"
+        $ref: '#/components/schemas/FinalOutput'
 
   schemas:
     InitializeConnection:
@@ -161,10 +153,10 @@ components:
           x-fern-type: literal<" ">
           description: The initial text that must be sent is a blank space.
         voice_settings:
-          $ref: "#/components/schemas/RealtimeVoiceSettings"
+          $ref: '#/components/schemas/RealtimeVoiceSettings'
         generation_config:
-          $ref: "#/components/schemas/GenerationConfig"
-          description: "This property should only be provided in the first message you send. "
+          $ref: '#/components/schemas/GenerationConfig'
+          description: 'This property should only be provided in the first message you send. '
         xi-api-key:
           type: string
           description: |
@@ -328,9 +320,9 @@ components:
           description: |
             Indicates if the generation is complete. If set to `True`, `audio` will be null.
         normalizedAlignment:
-          $ref: "#/components/schemas/NormalizedAlignment"
+          $ref: '#/components/schemas/NormalizedAlignment'
         alignment:
-          $ref: "#/components/schemas/Alignment"
+          $ref: '#/components/schemas/Alignment'
 
     NormalizedAlignment:
       type: object
