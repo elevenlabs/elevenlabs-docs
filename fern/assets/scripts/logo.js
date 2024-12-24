@@ -1,30 +1,27 @@
+const remote =
+  'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/';
 function initLogoVisibility() {
   function updateLogoVisibility() {
     const logoContainer = document.querySelector('.fern-logo-container');
     if (!logoContainer) return;
 
-    // Logo path mapping based on URL patterns
     const logoPathMap = {
       'conversational-ai': {
-        light:
-          'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/logo-light-conversational-ai.svg',
-        dark: 'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/logo-dark-conversational-ai.svg',
+        light: `${remote}logo-light-conversational-ai.svg`,
+        dark: `${remote}logo-dark-conversational-ai.svg`,
       },
 
       'api-reference': {
-        light:
-          'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/logo-light-api-reference.svg',
-        dark: 'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/logo-dark-api-reference.svg',
+        light: `${remote}logo-light-api-reference.svg`,
+        dark: `${remote}logo-dark-api-reference.svg`,
       },
       default: {
-        light:
-          'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/logo-light.svg',
-        dark: 'https://raw.githubusercontent.com/elevenlabs/elevenlabs-docs/refs/heads/feat/docs-content-2-0/fern/assets/logo-dark.svg',
+        light: `${remote}logo-light.svg`,
+        dark: `${remote}logo-dark.svg`,
       },
     };
 
     let logoVariant = 'default';
-    // Use router.pathname if available, otherwise fallback to window.location
     const currentPath = window.location.pathname;
     console.log(currentPath);
     if (currentPath.startsWith('/docs/conversational-ai')) {
@@ -41,27 +38,19 @@ function initLogoVisibility() {
     if (darkLogo) darkLogo.src = logoPathMap[logoVariant].dark;
   }
 
-  // Update on initial load
   updateLogoVisibility();
 
-  // Listen for Next.js route changes
-  if (window?.next?.router) {
-    window.next.router.events.on('routeChangeComplete', updateLogoVisibility);
-  }
-
-  // Fallback to popstate event for non-Next.js navigation
   window.addEventListener('popstate', updateLogoVisibility);
+
+  const observer = new MutationObserver(updateLogoVisibility);
+  observer.observe(document.querySelector('body'), {
+    subtree: true,
+    childList: true,
+  });
 }
 
-// Run initialization when router is ready
-if (window?.next?.router?.isReady) {
-  initLogoVisibility();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLogoVisibility);
 } else {
-  window?.next?.router?.events.on('routerChangeComplete', initLogoVisibility);
-  // Fallback to DOMContentLoaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLogoVisibility);
-  } else {
-    initLogoVisibility();
-  }
+  initLogoVisibility();
 }

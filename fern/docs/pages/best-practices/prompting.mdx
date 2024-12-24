@@ -1,0 +1,142 @@
+---
+title: Prompting
+subtitle: Learn how to control delivery, pronunciation & emotion of text to speech.
+---
+
+<Info>
+  We are actively working on _Director's Mode_ to give you even greater control over outputs.
+</Info>
+
+This guide provides techniques to enhance text-to-speech outputs using ElevenLabs models. Experiment with these methods to discover what works best for your needs. These techniques provide a practical way to achieve nuanced results until advanced features like _Director's Mode_ are rolled out.
+
+## Pauses
+
+Use `<break time="x.xs" />` for natural pauses up to 3 seconds. Avoid excessive use to prevent instability.
+
+```text Example
+"Hold on, let me think." <break time="1.5s" /> "Alright, I’ve got it."
+```
+
+- **Consistency:** Use `<break>` tags consistently to maintain natural speech flow. Excessive use can lead to instability.
+- **Voice-Specific Behavior:** Different voices may handle pauses differently, especially those trained with filler sounds like "uh" or "ah."
+
+Alternatives to `<break>` include dashes (- or --) for short pauses or ellipses (...) for hesitant tones. However, these are less consistent.
+
+```text Example
+
+"It… well, it might work." "Wait — what’s that noise?"
+
+```
+
+## Pronunciation
+
+Specify pronunciation using [SSML phoneme tags](https://en.wikipedia.org/wiki/Speech_Synthesis_Markup_Language). Supported alphabets include [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) and [CMU](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary) Arpabet.
+
+**Note:** This feature is only compatible with "Eleven English V1" and "Eleven Turbo V2" [models](/docs/models).
+
+<CodeBlock>
+```xml CMU Arpabet Example
+<phoneme alphabet="cmu-arpabet" ph="M AE1 D IH0 S AH0 N">
+  Madison
+</phoneme>
+```
+
+```xml IPA Example
+<phoneme alphabet="ipa" ph="ˈæktʃuəli">
+  actually
+</phoneme>
+```
+
+</CodeBlock>
+
+We recommend using CMU Arpabet for consistent and predictable results with current AI models. While IPA can be effective, CMU Arpabet generally offers more reliable performance.
+
+For more advanced control over pronunciation, explore <a href="#pronunciation-dictionaries">Pronunciation Dictionaries</a> to customize word pronunciations.
+
+Ensure correct stress marking for multi-syllable words to maintain accurate pronunciation. For example:
+
+<CodeBlock>
+
+```xml Correct usage
+<phoneme alphabet="cmu-arpabet" ph="P R AH0 N AH0 N S IY EY1 SH AH0 N">
+  pronunciation
+</phoneme>
+```
+
+```xml Incorrect usage
+<phoneme alphabet="cmu-arpabet" ph="P R AH N AH N S IY EY SH AH N">
+  pronunciation
+</phoneme>
+```
+
+</CodeBlock>
+
+## Emotion
+
+Convey emotions through narrative context or explicit dialogue tags. This approach helps the AI understand the tone and emotion to emulate.
+
+```text Example
+You’re leaving?" she asked, her voice trembling with sadness. "That’s it!" he exclaimed triumphantly.
+```
+
+Explicit dialogue tags yield more predictable results than relying solely on context, however the model will still speak out the emotional delivery guides. These can be removed in post-production using an audio editor if unwanted.
+
+## Pace
+
+Pacing can be controlled by writing in a natural, narrative style. For voice cloning, longer, continuous samples are recommended to avoid pacing issues like unnaturally fast speech.
+
+```text Example
+"I… I thought you’d understand," he said, his voice slowing with disappointment.
+```
+
+Sample Length: Use longer, continuous samples for voice cloning to avoid pacing issues.
+
+Narrative Style: Write in a narrative style to naturally control pacing and emotion, similar to scriptwriting.
+
+## Tips
+
+<AccordionGroup>
+  <Accordion title="Common Issues">
+    <ul>
+      <li>
+        Inconsistent pauses: Ensure <code>&lt;break time="x.xs" /&gt;</code> syntax is used for
+        pauses.
+      </li>
+      <li>Pronunciation errors: Use CMU Arpabet or IPA phoneme tags for precise pronunciation.</li>
+      <li>
+        Emotion mismatch: Add narrative context or explicit tags to guide emotion.{' '}
+        <strong>Remember to remove any emotional guidance text in post-production.</strong>
+      </li>
+    </ul>
+  </Accordion>
+  <Accordion title="Tips for Improving Output">
+    Experiment with alternative phrasing to achieve desired pacing or emotion. For complex sound
+    effects, break prompts into smaller, sequential elements and combine results manually.
+  </Accordion>
+</AccordionGroup>
+
+## Creative control
+
+While we are actively developing a "Director's Mode" to give users even greater control over outputs, here are some interim techniques to maximize creativity and precision:
+
+<Steps>
+    ### Narrative styling
+    Write prompts in a narrative style, similar to scriptwriting, to guide tone and pacing effectively.
+
+    ### Layered outputs
+
+    Generate sound effects or speech in segments and layer them together using audio editing software for more complex compositions.
+
+    ### Phonetic experimentation
+
+    If pronunciation isn't perfect, experiment with alternate spellings or phonetic approximations to achieve desired results.
+
+    ### Manual adjustments
+
+    Combine individual sound effects manually in post-production for sequences that require precise timing.
+
+    ### Feedback iteration
+
+    Iterate on results by tweaking descriptions, tags, or emotional cues.
+
+</Steps>
