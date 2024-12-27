@@ -1,0 +1,240 @@
+## Overview
+
+In this guide, we'll create a conversational support agent capable of answering questions about your product, documentation, or service. This agent can then be embedded into your website or app to provide real-time support to your customers.
+
+<Frame
+  caption="Explore the interactive widget at the bottom right corner of this page."
+  background="subtle"
+>
+  ![Conversational AI widget](/assets/images/conversational-ai-widget.png)
+</Frame>
+
+The assistant embedded in this documentation is capable of answering questions about ElevenLabs, navigating pages & even taking you to external resources.
+
+### Prerequisites
+
+- An [ElevenLabs account](https://www.elevenlabs.io)
+
+### Assistant setup
+
+<Steps>
+  <Step title="Sign in to ElevenLabs">
+    Go to [elevenlabs.io](https://elevenlabs.io/sign-up) and sign in to your account.
+  </Step>
+  <Step title="Create a new assistant">
+    In the ElevenLabs dashboard, create a new assistant by entering a name and selecting `Blank
+    template`.
+    <Frame caption="Creating a new assistant">
+      ![Dashboard](/assets/images/conversational-ai-assistant-create-flow.gif)
+    </Frame>
+  </Step>
+  <Step title="Configure the assistant behaviour">
+    1. **First message:** This is the first message the assistant will say when a user starts a conversation with it.
+    
+    ```plaintext First message
+    Hi this is Alexis from <company name> support, how can I help you today?
+    ```
+
+    2. **System prompt:** This is the prompt that the assistant will use to guide its behaviour.
+
+    ```plaintext System prompt
+    You are a friendly and efficient virtual assistant for <company name>. Your role is to assist customers by answering questions about the company's products, services, and documentation. You should use the provided knowledge base to offer accurate and helpful responses.
+
+    Your Tasks:
+
+    1. Greet the Customer: Start with a warm welcome and ask how you can assist.
+    2. Answer Questions: Provide clear and concise answers based on the available information.
+    3. Clarify Unclear Requests: Politely ask for more details if the customer's question is not clear.
+
+    Guidelines:
+
+    - Maintain a friendly and professional tone throughout the conversation.
+    - Be patient and attentive to the customer's needs.
+    - If unsure about any information, politely ask the customer to repeat or clarify.
+    - Avoid discussing topics unrelated to the company's products or services.
+    - Aim to provide concise answers. Limit responses to a couple of sentences and let the user guide you on where to provide more detail.
+    ```
+
+  </Step>
+</Steps>
+
+### Set up the assistant
+
+<Steps>
+  <Step title="Start creating a new assistant">
+    - Click the **+** button to create a new AI Agent. 
+    - Choose the **Blank template** option & call the agent `Pierogi Palace`.
+
+    <Frame caption="Creating a new assistant">
+
+      ![Create New Assistant](../images/convai-perogi-2.webp)
+
+    </Frame>
+
+  </Step>
+  <Step title="Configure assistant details">
+
+Set the `First message` & `System prompt` fields to the following, leaving the **Knowledge Base** and **Tools** empty for now:
+
+  </Step>
+
+</Steps>
+  
+### Configure the voice
+<Steps>
+  <Step title="Select a voice for your assistant">
+    In this step, you can choose from over 3,000 life-like voices available in ElevenLabs, for this demo we will be using Jessica's voice.
+    <Frame caption="Assistant voice configuration">
+
+      ![Assistant Settings](../images/convai-perogi-3.webp)
+
+    </Frame>
+
+    <Note> Higher quality settings may increase response time slightly. For an optimal customer experience, we recommend balancing quality and latency based on your assistant's expected use case. </Note>
+
+  </Step>
+</Steps>
+
+### Testing
+
+<Steps>
+  <Step title="Converse with Your Assistant">
+    - Press the **Order** button and try ordering some Pierogi to see how the assistant handles the conversation.
+
+    <Frame caption="Testing your assistant">
+
+      ![Assistant Testing Interface](../images/convai-perogi-4.webp)
+
+    </Frame>
+
+  </Step>
+</Steps>
+
+### Configure data collection
+
+Configure evaluation criteria and data collection to analyze conversations and improve your assistant's performance.
+
+<Frame>
+
+![Assistant Analysis Interface](../images/convai-perogi-6.webp)
+
+</Frame>
+
+<Steps>
+  <Step title="Configure evaluation criteria">
+    Navigate to the **ANALYSIS** section in your assistant's settings to define custom criteria for evaluating conversations.
+
+    1. **Goal Prompt Criteria**
+    This passes the conversation transcript to the LLM to verify if specific goals were met. Results will be:
+      - success
+      - failure
+      - unknown
+
+    Plus a rationale explaining the chosen result.
+
+    Configure the following fields:
+    - **Name**: Enter a descriptive name
+    - **Prompt**: Enter detailed instructions for evaluating the conversation
+
+    <CodeGroup>
+      ```plaintext order_completion
+      Name: order_completion
+      Prompt: Evaluate if the conversation resulted in a successful order completion.
+      Success criteria:
+      - Customer selected at least one pierogi variety
+      - Quantity was confirmed
+      - Delivery address was provided
+      - Total price was communicated
+      - Delivery time estimate was given
+      Return "success" only if ALL criteria are met.
+      ```
+
+      ```plaintext customer_satisfaction
+      Name: customer_satisfaction
+      Prompt: Analyze the conversation for signs of customer satisfaction.
+      Success criteria:
+      - Customer's questions were answered clearly
+      - No repeated requests for clarification
+      - No signs of frustration or confusion
+      - Positive or neutral customer responses
+      Return "failure" if there are clear signs of dissatisfaction.
+      ```
+
+      ```plaintext menu_explanation
+      Name: menu_explanation
+      Prompt: Evaluate if the assistant properly explained menu options when asked.
+      Success criteria:
+      - Mentioned available pierogi varieties
+      - Provided prices when relevant
+      - Explained portion sizes (dozens)
+      Return "unknown" if menu items were not discussed.
+      ```
+    </CodeGroup>
+
+  </Step>
+
+  <Step title="Set up data collection">
+    In the **Data collection** section, define specifications for extracting data from conversation transcripts.
+
+    Click **Add data collection item** and configure:
+    - **Data type**: Select "string"
+    - **Identifier**: Enter a unique identifier for this data point
+    - **Description**: Provide detailed instructions for the LLM about how to extract the specific data from the transcript
+
+    Example data collection items:
+
+    <CodeGroup>
+    ```plaintext Order Type
+    Identifier: order_type
+    Description: Extract the type of order from the conversation.
+    Should be one of:
+    - delivery
+    - pickup
+    - inquiry_only
+    ```
+
+    ```plaintext Ordered Items
+    Identifier: ordered_items
+    Description: List all pierogi varieties and quantities ordered in the format: "item: quantity".
+    Should be one of:
+    - completed_order
+    - abandoned_order
+    - menu_inquiry
+    - general_inquiry
+    If no order was placed, return "none"
+    ```
+
+    ```plaintext Delivery Zone
+    Identifier: delivery_zone
+    Description: Based on the delivery address, categorize the location.
+    Should be one of:
+    - central_zakopane
+    - outer_zakopane
+    - outside_delivery_zone
+    ```
+
+    ```plaintext Interaction Type
+    Identifier: interaction_type
+    Description: Categorize the conversation.
+    Should be one of:
+    - completed_order
+    - abandoned_order
+    - menu_inquiry
+    - general_inquiry
+    ```
+
+    </CodeGroup>
+
+  </Step>
+
+  <Step title="View conversation history">
+
+    <Frame caption="You can view evaluation results and collected data for each conversation in the history tab.">
+      ![Conversation History](../images/convai-perogi-7.webp)
+    </Frame>
+
+  </Step>
+
+</Steps>
+
+Your Pierogi Palace assistant is now ready to take orders 🥟! The assistant can handle menu inquiries, process orders, and provide delivery estimates.
