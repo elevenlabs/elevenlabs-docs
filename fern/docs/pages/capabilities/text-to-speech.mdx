@@ -1,6 +1,6 @@
 ---
 title: Text to speech
-subtitle: Learn how to turn text into human-like spoken audio with ElevenLabs.
+subtitle: Learn how to turn text into lifelike spoken audio with ElevenLabs.
 ---
 
 ## Overview
@@ -20,7 +20,7 @@ Listen to a sample:
 
 Explore our [Voice Library](https://elevenlabs.io/community) to find the perfect voice for your project.
 
-## Quickstart
+## Parameters
 
 The `text-to-speech` endpoint converts text into natural-sounding speech using three core parameters:
 
@@ -28,51 +28,6 @@ The `text-to-speech` endpoint converts text into natural-sounding speech using t
 - `voice_id`: Specifies which voice to use (explore our [Voice Library](https://elevenlabs.io/community))
 - `text`: The input text to be converted to speech
 - `output_format`: Determines the audio format, quality, sampling rate & bitrate
-
-Execute the code below to generate your first text-to-speech audio:
-
-<CodeBlocks>
-
-```python title="Python" focus={5-11}
-from elevenlabs.client import ElevenLabs
-from elevenlabs import play
-
-client = ElevenLabs()
-audio = client.text_to_speech.convert(
-    text="The first move is what sets everything in motion.",
-    voice_id="JBFqnCBsd6RMkjVDRZzb",
-    model_id="eleven_multilingual_v2",
-    output_format="mp3_44100_128",
-)
-
-play(audio)
-```
-
-```javascript title="JavaScript" focus={4-8}
-import { ElevenLabsClient, play } from 'elevenlabs';
-
-const client = new ElevenLabsClient();
-const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
-  text: 'The first move is what sets everything in motion.',
-  model_id: 'eleven_multilingual_v2',
-  output_format: 'mp3_44100_128',
-});
-
-await play(audio);
-```
-
-```bash title="cURL"
-curl -X POST "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb?output_format=mp3_44100_128" \
-    -H "Xi-Api-Key: <apiKey>" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "text": "The first move is what sets everything in motion.",
-        "model_id": "eleven_multilingual_v2"
-    }' \
-    --output audio.mp3
-```
-
-</CodeBlocks>
 
 ### Voice quality
 
@@ -90,59 +45,6 @@ ElevenLabs offers thousands of voices across 32 languages through multiple creat
 - [Voice Design](/docs/voice-design) to generate custom voices from text descriptions
 
 Learn more about our [voice creation options](/docs/voices).
-
-### Streaming audio
-
-The Text to Speech API provides support for real time audio streaming using [chunk transfer encoding](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding). This means that the audio is able to be played before the full file has been generated and made accessible.
-
-<CodeBlocks>
-
-```python title="Python" focus={5-11} maxLines=10
-from elevenlabs import stream
-from elevenlabs.client import ElevenLabs
-
-client = ElevenLabs()
-audio_stream = client.text_to_speech.convert_as_stream(
-    text="The first move is what sets everything in motion.",
-    voice_id="JBFqnCBsd6RMkjVDRZzb",
-    model_id="eleven_multilingual_v2",
-    output_format="mp3_44100_128",
-)
-
-# option 1: play the streamed audio locally
-stream(audio_stream)
-
-# option 2: process the audio bytes manually
-for chunk in audio_stream:
-    if isinstance(chunk, bytes):
-        print(chunk)
-```
-
-```javascript title="JavaScript" focus={6-11} maxLines=10
-import { ElevenLabsClient, stream } from 'elevenlabs';
-import { Readable } from 'stream';
-
-const client = new ElevenLabsClient();
-async function main() {
-  const audioStream = await client.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
-    text: 'The first move is what sets everything in motion.',
-    model_id: 'eleven_multilingual_v2',
-    output_format: 'mp3_44100_128',
-  });
-
-  // option 1: play the streamed audio locally
-  await stream(Readable.from(audioStream));
-
-  // option 2: process the audio manually
-  for await (const chunk of audioStream) {
-    console.log(chunk);
-  }
-}
-
-main();
-```
-
-</CodeBlocks>
 
 ## Supported formats
 

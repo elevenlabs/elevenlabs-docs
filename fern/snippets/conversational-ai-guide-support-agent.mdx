@@ -1,0 +1,137 @@
+## Overview
+
+In this guide, we'll create a conversational support assistant capable of answering questions about your product, documentation, or service. This assistant can be embedded into your website or app to provide real-time support to your customers.
+
+<Frame
+  caption="The assistant at the bottom right corner of this page is capable of answering questions about ElevenLabs, navigating pages & taking you to external resources."
+  background="subtle"
+>
+  ![Conversational AI widget](/assets/images/conversational-ai-widget.png)
+</Frame>
+
+### Prerequisites
+
+- An [ElevenLabs account](https://www.elevenlabs.io)
+
+### Assistant setup
+
+<Steps>
+  <Step title="Sign in to ElevenLabs">
+    Go to [elevenlabs.io](https://elevenlabs.io/sign-up) and sign in to your account.
+  </Step>
+  <Step title="Create a new assistant">
+    In the **ElevenLabs Dashboard**, create a new assistant by entering a name and selecting the `Blank template` option.
+    <Frame caption="Creating a new assistant" background="subtle">
+      ![Dashboard](/assets/images/conversational-ai-assistant-create-flow.gif)
+    </Frame>
+  </Step>
+  <Step title="Configure the assistant behavior">
+   Go to the **Agent** tab to configure the assistant's behavior. Set the following:
+    <Steps>
+      <Step title="First message">
+        This is the first message the assistant will speak out loud when a user starts a conversation.
+
+        ```plaintext First message
+        Hi, this is Alexis from <company name> support. How can I help you today?
+        ```
+      </Step>
+      <Step title="System prompt">
+        This prompt guides the assistant's behavior, tasks, and personality.
+
+        Customize the following example with your company details:
+        ```plaintext System prompt
+        You are a friendly and efficient virtual assistant for [Your Company Name]. Your role is to assist customers by answering questions about the company's products, services, and documentation. You should use the provided knowledge base to offer accurate and helpful responses.
+
+        Tasks:
+        - Answer Questions: Provide clear and concise answers based on the available information.
+        - Clarify Unclear Requests: Politely ask for more details if the customer's question is not clear.
+
+        Guidelines:
+        - Maintain a friendly and professional tone throughout the conversation.
+        - Be patient and attentive to the customer's needs.
+        - If unsure about any information, politely ask the customer to repeat or clarify.
+        - Avoid discussing topics unrelated to the company's products or services.
+        - Aim to provide concise answers. Limit responses to a couple of sentences and let the user guide you on where to provide more detail.
+        ```
+      </Step>
+    </Steps>
+
+  </Step>
+  <Step title="Add a knowledge base">
+    Go to the **Knowledge Base** section to provide your assistant with context about your business. 
+    
+    This is where you can upload relevant documents & links to external resources:
+
+    - Include documentation, FAQs, and other resources to help the assistant respond to customer inquiries.
+    - Keep the knowledge base up-to-date to ensure the assistant provides accurate and current information.
+
+  </Step>
+</Steps>
+
+### Configure the voice
+
+<Steps>
+  <Step title="Select a voice">
+    In the **Voice** tab, choose a voice that best matches your assistant from the [voice library](https://elevenlabs.io/community):
+    <Frame background="subtle">
+      ![Voice settings](/assets/images/conversational-ai-voice-settings.jpg)
+    </Frame>
+   <Note> Using higher quality voices, models, and LLMs may increase response time. For an optimal customer experience, balance quality and latency based on your assistant's expected use case.</Note>
+
+  </Step>
+  <Step title="Testing your assistant">
+     Press the **Test AI agent** button and try conversing with your assistant.
+  </Step>
+</Steps>
+
+### Analyze and collect conversation data
+
+Configure evaluation criteria and data collection to analyze conversations and improve your assistant's performance.
+
+<Steps>
+  <Step title="Configure evaluation criteria">
+    Navigate to the **Analysis** tab in your assistant's settings to define custom criteria for evaluating conversations.
+
+    <Frame background="subtle">
+      ![Analysis settings](/assets/images/conversational-ai-analysis-settings.jpg)
+    </Frame>
+
+    Every conversation transcript is passed to the LLM to verify if specific goals were met. Results will either be `success`, `failure`, or `unknown`, along with a rationale explaining the chosen result.
+
+    Let's add an evaluation criteria with the name `solved_user_inquiry`:
+
+    ```plaintext Prompt
+    The assistant was able to answer all of the queries or redirect them to a relevant support channel.
+
+    Success Criteria:
+    - All user queries were answered satisfactorily.
+    - The user was redirected to a relevant support channel if needed.
+    ```
+
+  </Step>
+
+  <Step title="Configure data collection">
+    In the **Data Collection** section, configure details to be extracted from each conversation.
+
+    Click **Add item** and configure the following:
+
+    1. **Data type:** Select "string"
+    2. **Identifier:** Enter a unique identifier for this data point: `user_question`
+    3. **Description:** Provide detailed instructions for the LLM about how to extract the specific data from the transcript:
+
+    ```plaintext Prompt
+    Extract the user's questions & inquiries from the conversation.
+    ```
+    <Tip>Test your assistant by posing as a customer. Ask questions, evaluate its responses, and tweak the prompts until you're happy with how it performs.</Tip>
+
+  </Step>
+  <Step title="View conversation history">
+    View evaluation results and collected data for each conversation in the **Call history** tab.
+    <Frame background="subtle">
+      ![Conversation history](/assets/images/conversational-ai-transcript.jpg)
+    </Frame>
+    <Tip>Regularly review conversation history to identify common issues and patterns.</Tip>
+  </Step>
+</Steps>
+
+Your assistant is now configured. Embed the widget on your website to start providing real-time support to your customers.

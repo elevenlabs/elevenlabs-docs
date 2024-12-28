@@ -1,0 +1,149 @@
+## Overview
+
+In this guide, we’ll create a conversational ordering assistant for Pierogi Palace, a Polish restaurant that takes food orders, addressing their challenge of managing high call volumes.
+
+<Frame caption="The menu showcases traditional Polish dishes." background="subtle">
+  ![Pierogi Palace](/assets/images/conversational-ai-quickstart-pierogi-palace.jpg)
+</Frame>
+
+The assistant will guide customers through menu selection, order details, and delivery.
+
+### Prerequisites
+
+- An [ElevenLabs account](https://www.elevenlabs.io)
+
+### Assistant setup
+
+<Steps>
+  <Step title="Sign in to ElevenLabs">
+    Go to [elevenlabs.io](https://elevenlabs.io/sign-up) and sign in to your account.
+  </Step>
+  <Step title="Create a new assistant">
+    In the **ElevenLabs Dashboard**, create a new assistant by entering a name and selecting the `Blank template` option.
+    <Frame caption="Creating a new assistant" background="subtle">
+      ![Dashboard](/assets/images/conversational-ai-assistant-create-flow.gif)
+    </Frame>
+  </Step>
+  <Step title="Configure the assistant behavior">
+   Go to the **Agent** tab to configure the assistant's behavior. Set the following:
+    <Steps>
+      <Step title="First message">
+        This is the first message the assistant will speak out loud when a user starts a conversation.
+
+        ```plaintext First message
+        Welcome to Pierogi Palace! I'm here to help you place your order. What can I get started for you today?
+        ```
+      </Step>
+      <Step title="System prompt">
+        This prompt guides the assistant's behavior, tasks, and personality:
+
+        ```plaintext System prompt
+        You are a friendly and efficient virtual assistant for Pierogi Palace, a modern Polish restaurant specializing in pierogi. It is located in the Zakopane mountains in Poland.
+        Your role is to help customers place orders over voice conversations. You have comprehensive knowledge of the menu items and their prices.
+
+        Menu Items:
+
+        - Potato & Cheese Pierogi – 30 Polish złoty per dozen
+        - Beef & Onion Pierogi – 40 Polish złoty per dozen
+        - Spinach & Feta Pierogi – 30 Polish złoty per dozen
+
+        Your Tasks:
+
+        1. Greet the Customer: Start with a warm welcome and ask how you can assist.
+        2. Take the Order: Listen carefully to the customer's selection, confirm the type and quantity of pierogi.
+        3. Confirm Order Details: Repeat the order back to the customer for confirmation.
+        4. Calculate Total Price: Compute the total cost based on the items ordered.
+        5. Collect Delivery Information: Ask for the customer's delivery address to estimate delivery time.
+        6. Estimate Delivery Time: Inform the customer that cooking time is 10 minutes plus delivery time based on their location.
+        7. Provide Order Summary: Give the customer a summary of their order, total price, and estimated delivery time.
+        8. Close the Conversation: Thank the customer and let them know their order is being prepared.
+
+        Guidelines:
+
+        - Use a friendly and professional tone throughout the conversation.
+        - Be patient and attentive to the customer's needs.
+        - If unsure about any information, politely ask the customer to repeat or clarify.
+        - Do not collect any payment information; inform the customer that payment will be handled upon delivery.
+        - Avoid discussing topics unrelated to taking and managing the order.
+        ```
+      </Step>
+    </Steps>
+
+  </Step>
+</Steps>
+
+### Configure the voice
+
+<Steps>
+  <Step title="Select a voice">
+    In the **Voice** tab, choose a voice that best matches your assistant from the [voice library](https://elevenlabs.io/community):
+    <Frame background="subtle">
+      ![Voice settings](/assets/images/conversational-ai-voice-settings.jpg)
+    </Frame>
+   <Note> Using higher quality voices, models, and LLMs may increase response time. For an optimal customer experience, balance quality and latency based on your assistant's expected use case.</Note>
+
+  </Step>
+  <Step title="Testing your assistant">
+     Press the **Test AI agent** button and try ordering some pierogi.
+  </Step>
+</Steps>
+
+### Analyze and collect conversation data
+
+Configure evaluation criteria and data collection to analyze conversations and improve your assistant's performance.
+
+<Steps>
+  <Step title="Configure evaluation criteria">
+    Navigate to the **Analysis** tab in your assistant's settings to define custom criteria for evaluating conversations.
+
+    <Frame background="subtle">
+      ![Analysis settings](/assets/images/conversational-ai-analysis-settings.jpg)
+    </Frame>
+
+    Every conversation transcript is passed to the LLM to verify if specific goals were met. Results will either be `success`, `failure`, or `unknown`, along with a rationale explaining the chosen result.
+
+    Let's add an evaluation criteria with the name `order_completion`:
+
+    ```plaintext Prompt
+    Evaluate if the conversation resulted in a successful order.
+    Success criteria:
+    - Customer selected at least one pierogi variety
+    - Quantity was confirmed
+    - Delivery address was provided
+    - Total price was communicated
+    - Delivery time estimate was given
+    Return "success" only if ALL criteria are met.
+    ```
+
+  </Step>
+
+  <Step title="Configure data collection">
+    In the **Data Collection** section, configure details to be extracted from each conversation.
+
+    Click **Add item** and configure the following:
+
+    1. **Data type:** Select "string"
+    2. **Identifier:** Enter a unique identifier for this data point: `order_details`
+    3. **Description:** Provide detailed instructions for the LLM about how to extract the specific data from the transcript:
+
+    ```plaintext Prompt
+    Extract order details from the conversation, including:
+    - Type of order (delivery, pickup, inquiry_only)
+    - List of pierogi varieties and quantities ordered in the format: "item: quantity"
+    - Delivery zone based on the address (central_zakopane, outer_zakopane, outside_delivery_zone)
+    - Interaction type (completed_order, abandoned_order, menu_inquiry, general_inquiry)
+    If no order was placed, return "none"
+    ```
+    <Tip>Test your assistant by posing as a customer. Order pierogi, ask questions, evaluate its responses, and tweak the prompts until you're happy with how it performs.</Tip>
+
+  </Step>
+  <Step title="View conversation history">
+    View evaluation results and collected data for each conversation in the **Call history** tab.
+    <Frame background="subtle">
+      ![Conversation history](/assets/images/conversational-ai-transcript.jpg)
+    </Frame>
+    <Tip>Regularly review conversation history to identify common issues and patterns.</Tip>
+  </Step>
+</Steps>
+
+Your assistant is now configured & ready to take orders.
