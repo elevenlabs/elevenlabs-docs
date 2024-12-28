@@ -1,26 +1,103 @@
 ---
 title: Tools
-subtitle: Learn how to trigger server-side events from an agent.
+subtitle: Connect your assistant to external data & systems.
 ---
 
-Tools allow you to make external function calls to third party apps so you can get real-time information. You might use tools to:
+**Tools** enables your assistant to connect to external data and systems. You can define a set of tools that the assistant has access to, and it can use them where appropriate based on the conversation.
+
+Learn how to extend your assistant's capabilities with tools in this guide.
+
+## Overview
+
+Many applications require assistants to call external APIs to get real-time information. Tools allow you to make external function calls to third party apps so you can get real-time information.
+
+Here are a few examples where tools can be useful:
+
+- **Fetching data**: enable an assistant to retrieve data from external systems before responding to the user.
+- **Taking action**: allow an assistant to trigger authenticated actions based on the conversation, like scheduling meetings or initiating order returns.
+
+<Info>
+  To interact with Application UIs or trigger client-side events use [client
+  tools](/docs/conversational-ai/customization/client-tools) instead.
+</Info>
+
+## Usage
+
+In this guide, we will walk through integrating tools into an assistant, booking calendar meetings through the [Cal.com API](https://cal.com/docs/developing/introduction) as an example.
+
+<Steps>
+  <Step title="Storing secrets">
+    To make authenticated requests to external APIs like Cal.com, you need to store your API keys securely. Start by generating a new [Cal.com API key](https://cal.com/docs/api-reference/v1/introduction#get-your-api-keys).
+
+    Not all APIs have the same authentication structure. For example, the Cal.com API expects the following authentication header:
+
+    ```plaintext Cal request header structure
+    'Authorization': 'Bearer YOUR_API_KEY'
+    ```
+
+    Once you have your API key, store it in the assistant's secret storage. This ensures that your key is kept secure and accessible when making requests.
+    <Warning>
+      To match the expected authentication structure of Cal.com, remember to prepend the API key with `Bearer ` when creating the secret.
+    </Warning>
+    <Frame background="subtle">
+      ![Tool secrets](/assets/images/conversational-ai-tool-secrets.jpg)
+    </Frame>
+
+  </Step>
+  <Step title="Creating tools">
+    Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your webhook. For our AI receptionist, we created two Tools to interact with the Cal.com API:
+  
+    <AccordionGroup>
+    <Accordion title="Get Available Slots" icon="regular calendar-check">
+    This tool allows the AI receptionist to check calendar availability. It can answer questions like "When is Sam available to meet tomorrow?" or "Is Sam free at 10:30am on Tuesday?"
+
+```bash
+Name: Get_Available_Slots
+Method: GET
+URL: https://api.cal.com/v2/slots/available
+```
+
+Uses Cal.com's [Get Available Slots](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots) endpoint to fetch open calendar slots within a specified date/time range.
+
+    </Accordion>
+    <Accordion title="Book Meeting" icon="regular calendar-plus">
+    This tool handles the actual meeting booking once a suitable time has been selected.
+
+```bash
+Name: Book_Meeting
+Method: POST
+URL: https://api.cal.com/v2/bookings
+```
+
+Uses Cal.com's [Create a booking](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking) endpoint. This should only be called after collecting:
+
+- Caller's full name
+- Meeting time
+- Email address
+
+                </Accordion>
+
+      </AccordionGroup>
+
+    </Step>
+</Steps>
+
+## Examples
 
 <CardGroup>
-  <Card title="Calendar Management" icon="regular calendar">
-    Schedule appointments and manage availability on someone's calendar
+  <Card title="Calendar management">
+    Schedule appointments and manage availability on someone's calendar.
   </Card>
-  <Card title="Restaurant Bookings" icon="regular utensils">
-    Book restaurant reservations and manage dining arrangements
+  <Card title="Restaurant bookings">
+    Book restaurant reservations and manage dining arrangements.
   </Card>
-  <Card title="CRM Integration" icon="regular users">
-    Create or update customer records in a CRM system
-  </Card>
-  <Card title="Inventory Lookup" icon="regular box">
-    Get inventory data to make product recommendations
-  </Card>
+  <Card title="CRM integration">Create or update customer records in a CRM system.</Card>
+  <Card title="Inventory lookup">Get inventory data to make product recommendations.</Card>
 </CardGroup>
 
 To help you get started with Tools, we'll walk through an "AI receptionist" we created by integrating with the Cal.com API.
+
+<Markdown src="/snippets/conversational-ai-tool-best-practices.mdx" />
 
 <iframe
   width="100%"
@@ -31,52 +108,7 @@ To help you get started with Tools, we'll walk through an "AI receptionist" we c
   allowfullscreen
 ></iframe>
 
-## Tools Overview
-
-### Secrets
-
-Before we proceed with creating our Tools, we will first create a Secret to securely store our API keys. The Cal.com API we will use for our example takes a Bearer token so we will first add a Secret named "Bearer" and provide the Bearer token as the value.
-
-You can find Secrets within the Conversational AI Dashboard in the Agent subnav.
-
-<img src="../images/bearer-secret.webp" />
-
 ### Webhooks
-
-Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your webhook. For our AI receptionist, we created two Tools to interact with the Cal.com API:
-
-<AccordionGroup>
-  <Accordion title="Get Available Slots" icon="regular calendar-check">
-    This tool allows the AI receptionist to check calendar availability. It can answer questions like "When is Sam available to meet tomorrow?" or "Is Sam free at 10:30am on Tuesday?"
-
-        ```bash
-        Name: Get_Available_Slots
-        Method: GET
-        URL: https://api.cal.com/v2/slots/available
-        ```
-
-
-    Uses Cal.com's [Get Available Slots](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots) endpoint to fetch open calendar slots within a specified date/time range.
-
-  </Accordion>
-
-  <Accordion title="Book Meeting" icon="regular calendar-plus">
-    This tool handles the actual meeting booking once a suitable time has been selected.
-
-        ```bash
-        Name: Book_Meeting
-        Method: POST
-        URL: https://api.cal.com/v2/bookings
-        ```
-
-
-    Uses Cal.com's [Create a booking](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking) endpoint. This should only be called after collecting:
-    - Caller's full name
-    - Meeting time
-    - Email address
-
-  </Accordion>
-</AccordionGroup>
 
 ### Headers
 

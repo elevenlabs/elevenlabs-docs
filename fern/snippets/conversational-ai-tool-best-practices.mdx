@@ -1,0 +1,28 @@
+## Best Practices
+
+<h4>Name tools intuitively, with detailed descriptions</h4>
+
+If you find the model does not make calls to the correct tools, you may need to update your tool names and descriptions so the model more clearly understands when it should select each tool. Avoid using abbreviations or acronyms to shorten tool and argument names.
+
+You can also include detailed descriptions for when a tool should be called. For complex tools, you should include descriptions for each of the arguments to help the model know what it needs to ask the user to collect that argument.
+
+<h4>Name tool parameters intuitively, with detailed descriptions</h4>
+
+Use clear and descriptive names for tool parameters. If applicable, specify the expected format for a parameter in the description (e.g., YYYY-mm-dd or dd/mm/yy for a date).
+
+<h4>
+  Consider providing additional information about how and when to call tools in your assistant's
+  system prompt
+</h4>
+
+Providing clear instructions in your system message can significantly improve the model's tool calling accuracy. For example, guide the model with instructions like the following:
+
+```plaintext
+Use `check_order_status` when the user inquires about the status of their order, such as 'Where is my order?' or 'Has my order shipped yet?'.
+```
+
+Provide context for complex scenarios. For example:
+
+```plaintext
+Before scheduling a meeting with `schedule_meeting`, check the user's calendar for availability using check_availability to avoid conflicts.
+```
