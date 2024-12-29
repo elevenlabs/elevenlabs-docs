@@ -1,131 +1,146 @@
 ---
 title: Client tools
-subtitle: Learn how to trigger client-side events from an agent.
+subtitle: Empower your assistant to trigger client-side operations.
 ---
 
-Enhance your conversational AI agents by integrating client-side events that can trigger actions on the user's frontend. Unlike server-side webhooks, client tools operate directly in the user's browser, allowing agents to perform actions like opening modals, making API calls, or executing custom functions during conversations.
+**Client tools** enable your assistant to execute client-side functions. Unlike [server-side tools](/docs/conversational-ai/customization/tools), client tools allow the assistant to perform actions such as triggering browser events, running client-side functions, or sending notifications to a UI.
 
-## What You'll Need
+## Overview
+
+Applications may require assistants to interact directly with the user's environment. Client-side tools give your assistant the ability to perform client-side operations.
+
+Here are a few examples where client tools can be useful:
+
+- **Triggering UI events**: Allow an assistant to trigger browser events, such as alerts, modals or notifications.
+- **Interacting with the DOM**: Enable an assistant to manipulate the Document Object Model (DOM) for dynamic content updates or to guide users through complex interfaces.
+
+<Info>To perform operations server-side, use [tools](/docs/conversational-ai/tools) instead.</Info>
+
+## Guide
+
+### Prerequisites
 
 - An [ElevenLabs account](https://elevenlabs.io)
 - A configured ElevenLabs Conversational Agent ([create one here](/docs/conversational-ai/docs/agent-setup))
-- Python 3.7+ or Node.js 16+
-
-## Creating Your First Client-Side Event
-
-Follow these steps to set up a client-side event that triggers a browser alert.
 
 <Steps>
-  <Step title="Create a new tool in your agent">
-    1. Navigate to your agent dashboard.
-    2. In the **Tools** section, click **Add Tool**.
-    
-    <Frame>
-      <img width="400" src="../images/client-tools-1.png" alt="Creating a new tool in the agent" />
+  <Step title="Create a new client-side tool">
+    Navigate to your agent dashboard. In the **Tools** section, click **Add Tool**. Ensure the **Tool Type** is set to **Client**. Then configure the following:
+
+| Setting     | Parameter                                                        |
+| ----------- | ---------------------------------------------------------------- |
+| Name        | logMessage                                                       |
+| Description | Use this client-side tool to log a message to the user's client. |
+
+Then create a new parameter `message` with the following configuration:
+
+| Setting     | Parameter                                                                          |
+| ----------- | ---------------------------------------------------------------------------------- |
+| Data Type   | String                                                                             |
+| Identifier  | message                                                                            |
+| Required    | true                                                                               |
+| Description | The message to log in the console. Ensure the message is informative and relevant. |
+
+    <Frame background="subtle">
+      ![logMessage client-tool setup](/assets/images/conversational-ai-client-tool-example.jpg)
     </Frame>
+
   </Step>
 
-<Step title="Configure the tool">
+  <Step title="Register the client tool in your code">
+    Unlike server-side tools, client tools need to be registered in your code.
 
-    - **Name**: `triggerBrowserAlert`
-    - **Description**: *Triggers a real-time alert in the user's browser. Use this tool for urgent notifications, reminders, or time-sensitive updates that require immediate user action.*
-    - **Parameters**:
-      - `message` (string): The message to display in the alert. The LLM should extract relevant text from the conversation, ensuring it is actionable and concise.
-
-</Step>
-
-  <Step title="Implement the client tool in your code">
-    Depending on your development environment, add the following code to integrate the client tool.
+    Use the following code to register the client tool:
 
     <CodeGroup>
-      ```python Python
+
+      ```python title="Python" focus={4-16}
       from elevenlabs import ElevenLabs
       from elevenlabs.conversational_ai.conversation import Conversation, ClientTools
-      client_tools = ClientTools()
-      def trigger_browser_alert(parameters):
+
+      def log_message(parameters):
           message = parameters.get("message")
-          print(f"Triggering alert: {message}")
-          return "Alert triggered successfully"
-      client_tools.register("triggerBrowserAlert", trigger_browser_alert)
-      # Initialize conversation
+          print(message)
+
+      client_tools = ClientTools()
+      client_tools.register("logMessage", log_message)
+
       conversation = Conversation(
           client=ElevenLabs(api_key="your-api-key"),
           agent_id="your-agent-id",
           client_tools=client_tools,
-          # ... other configurations ...
+          # ...
       )
-      # Start the conversation
+
       conversation.start_session()
       ```
 
-      ```javascript JavaScript
+      ```javascript title="JavaScript" focus={2-10}
+      // ...
       const conversation = await Conversation.startSession({
-        signedUrl: signedUrl,
+        // ...
         clientTools: {
-          triggerBrowserAlert: async (parameters) => {
-            alert(parameters.message);
+          logMessage: async ({message}) => {
+            console.log(message);
           }
         },
-        // ... other configurations ...
+        // ...
       });
       ```
 
-      ```swift Swift
-      // Create client tools instance
+      ```swift title="Swift" focus={2-10}
+      // ...
       var clientTools = ElevenLabsSDK.ClientTools()
 
-      // Register a custom tool with an async handler
-      clientTools.register("triggerBrowserAlert") { parameters async throws -> String? in
-          // Parameters is a [String: Any] dictionary
-          guard let joke = parameters["message"] as? String else {
+      clientTools.register("logMessage") { parameters async throws -> String? in
+          guard let message = parameters["message"] as? String else {
               throw ElevenLabsSDK.ClientToolError.invalidParameters
           }
-          print("Trigger an alert with the message: \(message)")
+          print(message)
           return message
       }
       ```
     </CodeGroup>
 
     <Note>
-    - Ensure that the `clientTools` name (`triggerBrowserAlert`) matches the tool name you set in the agent configuration.
-    - The `message` parameter should align with the agent’s output.
+    The tool and parameter names in the agent configuration are case-sensitive and **must** match those registered in your code.
     </Note>
 
   </Step>
 
-  <Step title="Test the client-side event">
+  <Step title="Testing">
     Initiate a conversation with your agent and say something like:
 
-    > "Trigger an alert that says 'Hello World'"
+    > _Log a message to the console that says Hello World_
 
-    You should see a browser alert pop up with the message.
+    You should see a `Hello World` log appear in your console.
 
-    <Frame>
-      <img width="400" src="../images/client-tools-2.png" alt="Browser alert triggered by client tool" />
-    </Frame>
+  </Step>
+
+  <Step title="Next steps">
+    Now that you've set up a basic client-side event, you can:
+
+    - Explore more complex client tools like opening modals, navigating to pages, or interacting with the DOM.
+    - Combine client tools with server-side webhooks for full-stack interactions.
+    - Use client tools to enhance user engagement and provide real-time feedback during conversations.
 
   </Step>
 </Steps>
 
-## Next Steps
-
-Now that you've set up a basic client-side event, you can:
-
-- Explore more complex client tools like opening modals, navigating to pages, or interacting with the DOM.
-- Combine client tools with server-side webhooks for full-stack interactions.
-- Use client tools to enhance user engagement and provide real-time feedback during conversations.
-
-## Troubleshooting
+### Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Client tool not triggering">
-    - Ensure that the tool name in your code matches exactly with the tool name in the agent
-    configuration. - Check that the agent is correctly outputting the tool command in the
-    conversation. - Verify there are no typos in the parameter names.
+  <Accordion title="Tools not being triggered">
+  
+    - Ensure the tool and parameter names in the agent configuration match those registered in your code.
+    - View the conversation transcript in the agent dashboard to verify the tool is being executed.
+
   </Accordion>
-  <Accordion title="JavaScript errors in the browser">
-    - Open the browser console to check for any errors. - Ensure that your code has necessary error
-    handling for undefined or unexpected parameters.
+  <Accordion title="Console errors">
+
+    - Open the browser console to check for any errors.
+    - Ensure that your code has necessary error handling for undefined or unexpected parameters.
+
   </Accordion>
 </AccordionGroup>
 
