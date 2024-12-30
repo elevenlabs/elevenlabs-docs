@@ -13,9 +13,9 @@ class ElevenLabsAudioPlayer extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
         <style>
-          /* Shadow DOM styling can go here if needed */
           iframe {
             border: none;
+            border-radius: 12px;
           }
         </style>
         <iframe
