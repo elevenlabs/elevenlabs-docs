@@ -1,12 +1,11 @@
 function injectElevenLabsWidget() {
-  // 1. Inject the external ElevenLabs script
   const script = document.createElement('script');
   script.src = 'https://elevenlabs.io/convai-widget/index.js';
   script.async = true;
   script.type = 'text/javascript';
   document.head.appendChild(script);
 
-  // 2. Create the wrapper and widget
+  // Create the wrapper and widget
   const wrapper = document.createElement('div');
   wrapper.className = 'desktop';
 
@@ -39,7 +38,7 @@ function injectElevenLabsWidget() {
     }
   }
 
-  // 3. Listen for the widget's "call" event to inject client tools
+  // Listen for the widget's "call" event to inject client tools
   widget.addEventListener('elevenlabs-convai:call', (event) => {
     event.detail.config.clientTools = {
       redirectToDocs: ({ path }) => {
@@ -62,12 +61,11 @@ function injectElevenLabsWidget() {
     };
   });
 
-  // 4. Attach widget to the DOM
+  // Attach widget to the DOM
   wrapper.appendChild(widget);
   document.body.appendChild(wrapper);
 }
 
-// 5. Only inject after DOM is ready (in case the script is added early)
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', injectElevenLabsWidget);
 } else {

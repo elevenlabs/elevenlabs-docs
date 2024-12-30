@@ -11,7 +11,6 @@ class ElevenLabsAudioPlayer extends HTMLElement {
     // Construct the iframe URL
     const iframeSrc = `https://elevenlabs.io/player/index.html?title=${encodeURIComponent(audioTitle)}&small=true&preview=true&audioSrc=${encodeURIComponent(audioSrc)}`;
 
-    // Create the inner HTML
     this.shadowRoot.innerHTML = `
         <style>
           /* Shadow DOM styling can go here if needed */
@@ -29,12 +28,10 @@ class ElevenLabsAudioPlayer extends HTMLElement {
   }
 }
 
-// Replace the direct registration with a function
 function registerAudioPlayer() {
   customElements.define('elevenlabs-audio-player', ElevenLabsAudioPlayer);
 }
 
-// Only register after DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', registerAudioPlayer);
 } else {
