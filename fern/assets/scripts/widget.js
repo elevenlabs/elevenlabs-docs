@@ -30,11 +30,9 @@ function injectElevenLabsWidget() {
     if (isDarkMode) {
       widget.setAttribute('avatar-orb-color-1', '#2E2E2E');
       widget.setAttribute('avatar-orb-color-2', '#B8B8B8');
-      widget.setAttribute('background-color', '#1e293b');
     } else {
       widget.setAttribute('avatar-orb-color-1', '#4D9CFF');
       widget.setAttribute('avatar-orb-color-2', '#9CE6E6');
-      widget.setAttribute('background-color', '#ffffff');
     }
   }
 
