@@ -1,0 +1,92 @@
+---
+title: Latency optimization
+subtitle: Learn how to optimize text-to-speech latency.
+---
+
+This guide covers the core principles for improving text-to-speech latency.
+
+While there are many individual techniques, we'll group them into **four principles**.
+
+<h4>Four principles</h4>
+
+1. [Use Flash models](#use-flash-models)
+2. [Leverage streaming](#leverage-streaming)
+3. [Consider geographic proximity](#consider-geographic-proximity)
+4. [Choose appropriate voices](#choose-appropriate-voices)
+
+<Success>
+Enterprise customers benefit from increased concurrency limits and priority access to our rendering queue. [Contact sales](https://elevenlabs.io/contact-sales) to learn more about our enterprise
+plans.
+
+</Success>
+
+## Use Flash models
+
+[Flash models](/docs/models#flash-v25) deliver ~75ms inference speeds, making them ideal for real-time applications. The trade-off is a slight reduction in audio quality compared to [Multilingual v2](/docs/models#multilingual-v2).
+
+<Info>
+  75ms refers to model inference time only. Actual end-to-end latency will vary with factors such as
+  your location & endpoint type used.
+</Info>
+
+## Leverage streaming
+
+There are three types of text-to-speech endpoints available in our [API Reference](/docs/api-reference):
+
+- **Regular endpoint**: Returns a complete audio file in a single response.
+- **Streaming endpoint**: Returns audio chunks progressively using [Server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events).
+- **Websockets endpoint**: Enables bidirectional streaming for real-time audio generation.
+
+### Streaming
+
+Streaming endpoints progressively return audio as it is being generated in real-time, reducing the time-to-first-byte. This endpoint is recommended for cases where the input text is available up-front.
+
+<Info>
+  Streaming is supported for the [Text to Speech](/docs/api-reference#text-to-speech) API, [Voice
+  Changer](/docs/api-reference#voice-changer) API & [Audio
+  Isolation](/docs/api-reference#audio-isolation) API.
+</Info>
+
+### Websockets
+
+The [text-to-speech websocket endpoint](/docs/api-reference#text-to-speech-websocket) supports bidirectional streaming making it perfect for applications with real-time text input (e.g. LLM outputs).
+
+<Tip>
+  Setting `auto_mode` to true automatically handles generation triggers, removing the need to
+  manually manage chunk strategies.
+</Tip>
+
+If `auto_mode` is disabled, the model will wait for enough text to match the chunk schedule before starting to generate audio.
+
+For instance, if you set a chunk schedule of 125 characters but only 50 arrive, the model stalls until additional characters come in—potentially increasing latency.
+
+For implementation details, see the [text-to-speech websocket guide](/docs/api-reference#text-to-speech-websocket).
+
+## Consider geographic proximity
+
+Because our models are served in the US, your geographic location will affect the network latency you experience.
+
+For example, using Flash models with Websockets, you can expect the following TTFB latencies:
+
+| Region          | TTFB      |
+| --------------- | --------- |
+| US              | 150-200ms |
+| EU              | ~230ms    |
+| North East Asia | 250-350ms |
+| South Asia      | 380-440ms |
+
+<Note>
+  We are actively working on deploying our models in EU and Asia. These deployments will bring
+  speeds closer to those experienced by US customers.
+</Note>
+
+## Choose appropriate voices
+
+We have observed that in some cases, voice selection can impact latency. Here's the order from fastest to slowest:
+
+1. Default voices (formerly premade), Synthetic voices, and Instant Voice Clones (IVC)
+2. Professional Voice Clones (PVC)
+
+Higher audio quality output formats can increase latency. Be sure to balance your latency requirements with audio fidelity needs.
+
+<Info>We are actively working on optimizing PVC latency for Flash v2.5.</Info>
