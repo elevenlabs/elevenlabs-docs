@@ -33,6 +33,19 @@ function inject() {
       },
     };
   });
+
+  widget.innerHTML = `\
+  <form slot="terms" class="prose text-sm">
+    <h3>Terms and conditions</h3>
+    <p>
+      By clicking "Continue," and each time I interact with this AI agent, I 
+      consent to ElevenLabs collecting and using my voice and data derived from 
+      it to interpret my speech, and provide the support services I request, and 
+      to the recording, storage, and sharing of my communications with 
+      third-party service providers, and as described in the 
+      <a href="/terms-of-use">Privacy Policy</a>. If you do not wish to have 
+      your conversations recorded, please refrain from using this service.
+  </form>`;
   
   wrapper.appendChild(widget);
   document.body.appendChild(wrapper);
