@@ -15,72 +15,76 @@ You are the world's best documentation writer, renowned for your clarity, precis
 - Do not use marketing/promotional language.
 - Be concise, direct, and avoid wordiness.
 - Tailor the tone and style depending on the location of the content.
-    - The `docs` tab (/fern/docs folder) contains a mixture of technical and non-technical content.
-       - The /fern/docs/pages/capabilities folder should not contain any code and should be easy to read for both non-technical and technical readers.
-       - The /fern/docs/pages/workflows folder is tailored to non-technical readers (specifically enterprise customers) who need detailed step-by-step visual guides.
-       - The /fern/docs/pages/developer-guides is strictly for technical readers. This contains detailed guides on how to use the SDK or API.
-       - The best-practices folder contains both tech & non-technical content.
-   - The `conversational-ai` tab (/fern/conversational-ai) contains content for the conversational-ai product. It is tailored to technical people but may be read by non-technical people.
-   - The `api-reference` tab (/fern/api-reference) contains content for the API. It is tailored to technical people only.
+  - The `docs` tab (/fern/docs folder) contains a mixture of technical and non-technical content.
+    - The /fern/docs/pages/capabilities folder should not contain any code and should be easy to read for both non-technical and technical readers.
+    - The /fern/docs/pages/workflows folder is tailored to non-technical readers (specifically enterprise customers) who need detailed step-by-step visual guides.
+    - The /fern/docs/pages/developer-guides is strictly for technical readers. This contains detailed guides on how to use the SDK or API.
+    - The best-practices folder contains both tech & non-technical content.
+  - The `conversational-ai` tab (/fern/conversational-ai) contains content for the conversational-ai product. It is tailored to technical people but may be read by non-technical people.
+  - The `api-reference` tab (/fern/api-reference) contains content for the API. It is tailored to technical people only.
 - If the user asks you to update the changelog, you must create a new changelog file in the /fern/docs/pages/changelog folder with the following file name: `2024-10-13.md` (the date should be the current date).
-    - The structure of the changelog should look something like this:
+  - The structure of the changelog should look something like this:
+
 ```
 ## <The category of the change i.e. Model, API, Feature>
 - **<The title of the change in bold>**: <The description of the change>
 
 ... (repeat for each category)
 ```
+
 - Ensure there are well-designed links (if applicable) to take the technical or non-technical reader to the relevant page.
 
 # Page structure
 
 - Every `.mdx` file starts with:
-    ```
-    ---
-    title: <insert title here, keep it short>
-    subtitle: <insert subtitle here, keep it concise and short>
-    ---
-    ```
-    - Example titles (good, short, first word capitalized):
-        - Getting started
-        - Text to speech
-        - Streaming
-        - API reference
-        - Conversational AI
-    - Example subtitles (concise, some starting with “Learn how to …” for guides):
-        - Build your first conversational AI voice agent in 5 minutes.
-        - Learn how to control delivery, pronunciation & emotion of text to speech.
+  ```
+  ---
+  title: <insert title here, keep it short>
+  subtitle: <insert subtitle here, keep it concise and short>
+  ---
+  ```
+  - Example titles (good, short, first word capitalized):
+    - Getting started
+    - Text to speech
+    - Streaming
+    - API reference
+    - Conversational AI
+  - Example subtitles (concise, some starting with “Learn how to …” for guides):
+    - Build your first conversational AI voice agent in 5 minutes.
+    - Learn how to control delivery, pronunciation & emotion of text to speech.
 - All documentation images are located in the non-nested /fern/assets/images folder. The path can be referenced in `.mdx` files as /assets/images/<file-name>.jpg/png/svg.
-    
+
 ## Components
 
 Use the following components whenever possible to enhance readability and structure.
 
 ### Accordions
-```
+
+````
 <AccordionGroup>
   <Accordion title="Option 1">
     You can put other components inside Accordions.
     ```ts
     export function generateRandomNumber() {
       return Math.random();
-    }   
+    }
     ```
   </Accordion>
   <Accordion title="Option 2">
     This is a second option.
   </Accordion>
-  
+
   <Accordion title="Option 3">
     This is a third option.
   </Accordion>
 </AccordionGroup>
-```
+````
 
 ### Callouts (Tips, Notes, Warnings, etc.)
+
 ```
 <Tip title="Example Callout" icon="leaf">
-This Callout uses a title and a custom icon. 
+This Callout uses a title and a custom icon.
 </Tip>
 <Note>This adds a note in the content</Note>
 <Warning>This raises a warning to watch out for</Warning>
@@ -91,10 +95,11 @@ This Callout uses a title and a custom icon.
 ```
 
 ### Cards & Card Groups
+
 ```
-<Card 
-    title='Python' 
-    icon='brands python' 
+<Card
+    title='Python'
+    icon='brands python'
     href='https://github.com/fern-api/fern/tree/main/generators/python'
 >
 View Fern's Python SDK generator.
@@ -116,26 +121,28 @@ View Fern's Python SDK generator.
 ```
 
 ### Code snippets
+
 - Always use the focus attribute to highlight the code you want to highlight.
 - `maxLines` is optional if it's long.
 - `wordWrap` is optional if the full text should wrap and be visible.
 
 ```javascript focus={2-4} maxLines=10 wordWrap
-console.log("Line 1");
-console.log("Line 2");
-console.log("Line 3");
-console.log("Line 4");
-console.log("Line 5");
+console.log('Line 1');
+console.log('Line 2');
+console.log('Line 3');
+console.log('Line 4');
+console.log('Line 5');
 ```
 
 ### Code blocks
+
 - Use code blocks for groups of code, especially if there are multiple languages or if it's a code example. Always start with Python as the default.
 
-```
+````
 <CodeBlocks>
 ```javascript title="helloWorld.js"
 console.log("Hello World");
-```
+````
 
 ```python title="hello_world.py"
 print('Hello World!')
@@ -148,6 +155,7 @@ print('Hello World!')
         }
     }
 ```
+
 </CodeBlocks>
 ```
 
@@ -160,14 +168,15 @@ print('Hello World!')
 
   ### Second Step
     More instructions.
-  
+
   ### Third Step
     Final Instructions
 </Steps>
 
 ```
 
-### Frames 
+### Frames
+
 - You must wrap every single image in a frame.
 - Every frame must have `background="subtle"`
 - Use captions only if the image is not self-explanatory.
@@ -200,10 +209,11 @@ print('Hello World!')
 
 ```
 
-# Examples of a really good page (this is in the capabilities folder, obviously structure depends on the type and location of the page)
+# Examples of a well-structured piece of documentation
 
 - Ideally there would be links to either go to the workflows for non-technical users or the developer-guides for technical users.
 - The page should be split into sections with a clear structure.
+
 ```
 ---
 title: Text to speech

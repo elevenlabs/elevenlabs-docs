@@ -1,9 +1,43 @@
 ---
 title: Integrate your own model
-subtitle: Guide for using your own LLM or server with ElevenLabs SDK.
+subtitle: Connect an agent to your own LLM or host your own server.
 ---
 
-## Using Your Own OpenAI Key for LLM
+**Custom LLMs** let you bring your own OpenAI API key or run an entirely custom LLM server.
+
+## Overview
+
+By default, we use our own internal credentials for popular models like OpenAI. To use a custom LLM server, it must align with the OpenAI [create chat completion](https://platform.openai.com/docs/api-reference/chat/create) request/response structure.
+
+The following guides cover both use cases:
+
+1. **Bring your own OpenAI key**: Use your own OpenAI API key with our platform.
+2. **Custom LLM server**: Host and connect your own LLM server implementation.
+
+<br />
+
+<Tabs>
+  <Tab title="Bring your own OpenAI key">
+    <Steps>
+      <Step>
+        In your agent settings, navigate to the **Secrets** section and click **Add Secret**.
+      </Step>
+      <Step>Choose "Custom LLM" from the dropdown menu</Step>
+      <Step>Enter the URL, your model, and the secret you created</Step>
+      <Step>Set "Custom LLM extra body" to true</Step>
+    </Steps>
+  </Tab>
+  <Tab title="Custom LLM server"></Tab>
+</Tabs>
+
+This guide covers:
+
+- Storing your OpenAI API key in ElevenLabs
+- Hosting a server that replicates OpenAI's [create chat completion](https://platform.openai.com/docs/api-reference/chat/create) endpoint
+- Directing ElevenLabs to your custom endpoint
+- Passing extra parameters to your LLM as needed
+
+## Using your own OpenAI key
 
 To integrate a custom OpenAI key, create a secret containing your OPENAI_API_KEY:
 
