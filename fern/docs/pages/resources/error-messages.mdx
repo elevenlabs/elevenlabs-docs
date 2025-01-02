@@ -1,0 +1,43 @@
+---
+title: Error messages
+subtitle: Explore error messages and solutions.
+---
+
+This guide includes an overview of error messages you might see in the ElevenLabs dashboard & API.
+
+## Dashboard errors
+
+| Error Message                                          | Cause                                                                                                     | Solution                                                                                                                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The selected model can not be used for text-to-speech. | Occurs when switching between speech-to-speech and text-to-speech if the model does not switch correctly. | Select the desired model. If unresolved, select a different model, then switch back.                                                                            |
+| Oops, something went wrong.                            | Indicates a client-side error, often due to device or browser issues.                                     | Click “Try again” or refresh the page. If unresolved, clear browser cache and cookies. Temporarily pause browser-based translation tools like Google Translate. |
+
+<Note>
+  If error messages persist after following these solutions, please [contact our support
+  team](https://help.elevenlabs.io/hc/en-us/requests/new?ticket_form_id=13145996177937) for further
+  assistance.
+</Note>
+
+## API errors
+
+### Code 400/401
+
+| Code                               | Overview                                                                                                                                                                                                   |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| max_character_limit_exceeded <br/> | **Cause:** You are sending too many characters in a single request. <br/> **Solution:** Split the request into smaller chunks, see [character limits](/docs/models#character-limits) for more information. |
+| invalid_api_key                    | **Cause:** You have not set your API key correctly. <br/> **Solution:** Ensure the request is correctly authenticated. See [authentication](/docs/api-reference/authentication) for more information.      |
+| quota_exceeded                     | **Cause:** You have insufficient quota to complete the request. <br/> **Solution:** On the Creator plan and above, you can enable usage-based billing from your Subscription page.                         |
+| voice_not_found                    | **Cause:** You have entered the incorrect voice_id. <br/> **Solution:** Check that you are using the correct voice_id for the voice you want to use. You can verify this in My Voices.                     |
+
+### Code 429
+
+| Code                               | Overview                                                                                                                                                                                                |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| too_many_concurrent_requests <br/> | **Cause:** You have exceeded the concurrency limit for your subscription. <br/> **Solution:** See [concurrency limits and priority](/docs/models#concurrency-limits-and-priority) for more information. |
+| system_busy                        | **Cause:** Our services are experiencing high levels of traffic and your request could not be processed. <br/> **Solution:** Retry the request. If the issue persists, please contact support.          |
+
+<Note>
+  If error messages persist after following these solutions, please [contact our support
+  team](https://help.elevenlabs.io/hc/en-us/requests/new?ticket_form_id=13145996177937) for further
+  assistance.
+</Note>

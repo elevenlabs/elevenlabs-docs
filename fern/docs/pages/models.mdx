@@ -131,3 +131,40 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
 </Note>
 
 &dagger; Excluding application & network latency
+
+## Character limits
+
+The maximum number of characters supported in a single request varies by model.
+
+| Model ID                 | Character limit | Approximate audio duration |
+| ------------------------ | --------------- | -------------------------- |
+| `eleven_flash_v2_5`      | 40,000          | ~40 minutes                |
+| `eleven_flash_v2`        | 30,000          | ~30 minutes                |
+| `eleven_multilingual_v2` | 10,000          | ~10 minutes                |
+| `eleven_multilingual_v1` | 10,000          | ~10 minutes                |
+| `eleven_english_sts_v2`  | 10,000          | ~10 minutes                |
+| `eleven_english_sts_v1`  | 10,000          | ~10 minutes                |
+
+<Note>
+  The character limits are designed to optimize processing time and ensure high-quality audio
+  output. For longer texts, consider splitting the input into multiple requests.
+</Note>
+
+## Concurrency limits and priority
+
+Your subscription plan determines how many requests can be processed simultaneously and the priority level of your requests in the queue.
+
+| Plan       | Concurrency limit | Priority level |
+| ---------- | ----------------- | -------------- |
+| Free       | 2                 | 3              |
+| Starter    | 3                 | 4              |
+| Creator    | 5                 | 5              |
+| Pro        | 10                | 5              |
+| Scale      | 15                | 5              |
+| Business   | 15                | 5              |
+| Enterprise | Elevated          | Highest        |
+
+<Note>
+  To increase your concurrency limit & queue priority, [upgrade your subscription
+  plan](https://elevenlabs.io/pricing).
+</Note>
