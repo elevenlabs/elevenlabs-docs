@@ -1,0 +1,127 @@
+---
+title: Pronunciation dictionaries
+---
+
+## Phoneme Tags
+
+<Info>
+  This feature is currently only supported by the "Turbo v2" and "Eleven English v1" models
+</Info>
+
+In certain instances, you may want the model to pronounce a word, name, or phrase in a specific way. Pronunciation can be specified using standardised pronunciation alphabets. Currently we support the International Phonetic Alphabet (IPA) and the CMU Arpabet. Pronunciations are specified by wrapping words using the Speech Synthesis Markup Language (SSML) phoneme tag.
+
+To use this feature as part of your text prompt, you need to wrap the desired word or phrase in the phoneme tag. In each case, replace `"your-IPA-Pronunciation-here"` or `"your-CMU-pronunciation-here"` with your desired IPA or CMU Arpabet pronunciation:
+
+`<phoneme alphabet="ipa" ph="your-IPA-Pronunciation-here">word</phoneme>`.
+
+`<phoneme alphabet="cmu-arpabet" ph="your-CMU-pronunciation-here">word</phoneme>`
+
+An example for IPA:
+
+```
+<phoneme alphabet="ipa" ph="ˈæktʃuəli">actually</phoneme>
+```
+
+An example for CMU Arpabet:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="AE K CH UW AH L IY">actually</phoneme>
+```
+
+It is important to note that this only works per word. Meaning that if you, for example, have a name with a first and last name that you want to be pronounced a certain way, you will have to create the pronunciation for each word individually.
+
+English is a lexical stress language, which means that within multi-syllable words, some syllables are emphasized more than others. The relative salience of each syllable is crucial for proper pronunciation and meaning distinctions. So, it is very important to remember to include the lexical stress when writing both IPA and ARPAbet as otherwise, the outcome might not be optimal.
+
+Take the word "talon", for example.
+
+Incorrect:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE L AH N">talon</phoneme>
+```
+
+Correct:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE1 L AH0 N">talon</phoneme>
+```
+
+The first example might switch between putting the primary emphasis on AE and AH, while the second example will always be pronounced reliably with the emphasis on AE and no stress on AH.
+
+If you write it as:
+
+```
+<phoneme alphabet="cmu-arpabet" ph="T AE0 L AH1 N">talon</phoneme>
+```
+
+It will always put emphasis on AH instead of AE.
+
+<Info>
+  With the current implementation, we recommend using the CMU ARPAbet as it seems to be a bit more
+  consistent and predictable with the current iteration of AI models. Some people get excellent
+  results with IPA, but we have noticed that ARPAbet seems to work better with the current AI and be
+  more consistent for a lot of users. However, we are working on improving this.
+</Info>
+
+### Alternatives
+
+Because phoneme tags are only supported by the Turbo v2 and English v1 models, if you're using the Multilingual v2, Turbo v2.5 or Flash models, you might need to try alternative methods to get the desired pronunciation for a word. You can find an alternative spelling and write a word more phonetically. You can also employ various tricks such as capital letters, dashes, apostrophes, or even single quotation marks around a single letter or letters.
+
+As an example, a word like "trapezii" could be spelt "trapezIi" to put more emphasis on the "ii" of the word.
+
+## Pronunciation Dictionaries
+
+Some of our tools, such as Projects and Dubbing Studio, allow you to create and upload a pronunciation dictionary. These allow you to specify the pronunciation of certain words, such as character or brand names, or to specify how acronyms should be read. Pronunciation dictionaries allow this functionality by enabling you to upload a lexicon or dictionary file that specifies pairs of words and how they should be pronounced, either using a phonetic alphabet (phoneme tags) or word substitutions (alias tags).
+
+Whenever one of these words is encountered in a project, the AI model will pronounce the word using the specified replacement. When checking for a replacement word in a pronunciation dictionary, the dictionary is checked from start to end and only the first replacement is used.
+
+To provide a pronunciation dictionary file, open the settings for a project and upload a file in either TXT or the [.PLS format](https://www.w3.org/TR/pronunciation-lexicon/). When a dictionary is added to a project it will automatically recalculate which pieces of the project will need to be re-converted using the new dictionary file and mark these as unconverted.
+
+Currently we only support pronunciation dictionaries that specify replacements using phonemes or aliases.
+
+Both phonemes and aliases are sets of rules that specify a word or phrase they are looking for, referred to as a grapheme, and what it will be replaced with. Please note that searches are case sensitive.
+
+<Card
+  title="Phoneme Tags"
+  icon="book"
+  horizontal="true"
+  href="/docs/product/prompting/pronunciation#phoneme-tags"
+/>
+
+### Alias Tags
+
+The alias tag is used to specify pronunciation using other words or phrases. For example, you could use an alias tag to specify that "UN" should be read as "United Nations" whenever it is encountered in a project.
+
+If you're generating using Multilingual v2 or Flash/Turbo v2.5, which don't support phoneme tags, you can use alias tags to specify how you want a word to be pronounced using other words or by spelling the word out more phonetically. Alias tags can be used with all our models, so they can be useful for specifying pronunciation when included in a pronunciation dictionary for Projects, Dubbing Studio or Speech Synthesis via the API.
+
+For example, if your text includes a name that has an unusual pronunciation that the AI might struggle with, you could use an alias tag to specify how you would like it to be pronounced:
+
+```
+  <lexeme>
+    <grapheme>Claughton</grapheme>
+    <alias>Cloffton</alias>
+  </lexeme>
+```
+
+### Pronunciation Dictionary Example
+
+Here is an example pronunciation dictionary that specifies in IPA the pronunciation of "Apple" with IPA of "ˈæpl̩" and "UN" with an alias of "United Nations":
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<lexicon version="1.0"
+      xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon
+        http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
+      alphabet="ipa" xml:lang="en-GB">
+  <lexeme>
+    <grapheme>Apple</grapheme>
+    <phoneme>ˈæpl̩</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>UN</grapheme>
+    <alias>United Nations</alias>
+  </lexeme>
+</lexicon>
+```

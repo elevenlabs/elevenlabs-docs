@@ -1,0 +1,121 @@
+---
+title: Single Sign-On (SSO)
+subtitle: An overview on how to set up SSO for your workspace.
+---
+
+<Info> Only workspace admins can use this feature. </Info>
+
+Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your existing identity provider. This means that your team can use the same credentials which they use for other services to log in to ElevenLabs.
+
+## Choosing identity providers
+
+To access your SSO settings, click on your profile icon located at the bottom left of the dashboard, select Workspace Settings, and then navigate to the SECURITY & SSO tab.
+
+You can choose from a variety of identity providers, including Google, Okta, GitHub, etc. The organization SSO provider will only appear in this list after it has been configured shown in the `Configure SSO` section.
+
+<img height="150" src="../../product/workspace/images/identity_providers.webp" />
+
+If you disable any of the identity providers, your team members will log out if they're using the disabled providers. They will be able to log back into the same account with any of the allowed providers if they are using the same email.
+
+## Verifying your email domain
+
+Next, you need to verify your email domain for authentication. This step confirms to ElevenLabs that you own the domain you are configuring for SSO. This is a security measure to prevent unauthorized access to your workspace.
+
+- Click on the `Verify domain` button.
+
+<img height="150" src="../../product/workspace/images/verify_domain_button.webp" />
+
+- Enter the domain name you want to verify.
+
+<img height="150" src="../../product/workspace/images/domain_verification.webp" />
+
+- You'll be prompted to add a DNS TXT record to the DNS settings of your domain. An example text is as below. You can contact your domain administrator or IT team for help with this step. Once the DNS record is added, click on the `Verify` button again.
+
+<img height="150" src="../../product/workspace/images/dns_records.webp" />
+
+- Once the domain is successfully verified, the status of your domain will change to `Passed`.
+
+## Configure SSO
+
+ElevenLabs support both OIDC (OpenID Connect) and SAML (Security Assertion Markup Language) for SSO. You can set up SSO for your domain by following the steps outlined below.
+
+### Create an OIDC configuration
+
+ElevenLabs OIDC integration only supports the [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow).
+
+To configure SSO with OIDC, you'd need:
+
+- Client Id for your application
+- Client Secret for your application
+- Issuer URL (The url of the authentication server)
+
+and you'd need to use the information below from ElevenLabs:
+
+- Redirect URL: use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
+
+Steps:
+
+- Register an OIDC application with your identity provider.
+- Add the information of required fields (Client Id, Issuer URL, etc.) to ElevenLabs SSO provider form.
+  <img height="150" src="../../product/workspace/images/sso_oidc.webp" />
+- Click on `Add Domain` Button and choose the domain you want to enable SSO for from the list of verified domains.
+  <img height="50" src="../../product/workspace/images/add_domains.webp" />
+- Click on the `Update SSO` button.
+
+### Create a SAML configuration
+
+<Info> Only SP-initiated SSO is supported for SAML.</Info>
+
+Concepts:
+
+- **Service Provider (SP)**: the entity providing the service. This is ElevenLabs in this case.
+- **Identy Provider (IdP)**: the entity that authenticates the user and provides the user's identity to the SP. This is your authentication server.
+- **SAML request**: a request from the SP to the IdP to authenticate the user.
+- **SAML response**: a response from the IdP to the SP containing the user's identity.
+- **Redirect URL**: the endpoint where the SAML response is posted.
+
+To configure SSO with SAML, you'd need to provide ElevenLabs the following details:
+
+- Identity Provider Entity Id
+- Identity Provider Sign-In URL (The endpoint where SAML requests are posted)
+- Certificate (Digital signature)
+
+and you'd need to use the information below from ElevenLabs:
+
+- Service Provider Entity Id: use the value (e.g. `https://elevenlabs.io`) provided in the SSO provider form in the SECURITY & SSO tab in Workspace Settings.
+- Redirect URL: this is the endpoint where the IdP sends the SAML response; Use the greyed out link at the bottom of the SECURITY & SSO tab in Workspace Settings.
+
+Steps:
+
+- Register a SAML application with your identity provider; fill in required fields (SP entity id, redirect URL).
+- Add the information of required fields (IdP Entity Id, IdP Sign-In URL, etc.) to the ElevenLabs SSO form.
+  <img height="150" src="../../product/workspace/images/sso_saml.webp" />
+- Click on `Add Domain` Button and choose the domain you want to enable SSO for from the list of verified domains.
+- Click on the `Update SSO` button.
+
+### FAQ
+
+**Microsoft Entra Identifier (or Azure AD) - SAML**
+
+What shall I fill for Identifier (Entity ID)?
+
+- Use Service Provider Entity Id
+
+What shall I fill for Reply URL (Assertion Consumer Service) URL in SAML?
+
+- Use Redirect URL
+
+What is ACS URL?
+
+- Same as Assertion Consumer Service URL
+
+Which fields should I use to provide ElevenLabs?
+
+- Use _Microsoft Entra Identifier_ for IdP Entity ID
+- Use _Login URL_ for IdP Sign-In URL
+
+**Login Error via SAML**
+
+What shall I do if I get the error "Unable to login with saml.workspace..."?
+
+- One known error: make sure you have `<saml:NameID>` having email address as the value inside `<saml:Subject>` in the SAML response. We use Google Cloud as our identity platform and it expects the `<saml:Subject>` and `<saml:NameID>` elements in responses from the identity provider. If you don't define values for these elements when configuring your provider, the SAML assertion fails.
