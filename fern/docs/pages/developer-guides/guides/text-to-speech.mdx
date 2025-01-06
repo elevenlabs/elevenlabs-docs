@@ -1,0 +1,64 @@
+---
+title: Text to speech
+subtitle: Learn how to turn text into human-like spoken audio with ElevenLabs.
+---
+
+## Quickstart
+
+The `text-to-speech` endpoint converts text into natural-sounding speech using three core parameters:
+
+- `model_id`: Determines the quality, speed, and language support
+- `voice_id`: Specifies which voice to use (explore our [Voice Library](https://elevenlabs.io/community))
+- `text`: The input text to be converted to speech
+- `output_format`: Determines the audio format, quality, sampling rate & bitrate
+  The `text-to-speech` endpoint converts text into natural-sounding speech using three core parameters:
+
+- `model_id`: Determines the quality, speed, and language support.
+- `voice_id`: Specifies which voice to use, learn about voices [here](/docs).
+- `text`: The input text to be converted to speech
+- `output_format`: Determines the audio format, quality, sampling rate & bitrate
+
+Execute the code below to generate your first text-to-speech audio:
+
+<CodeBlocks>
+
+```python title="Python" focus={5-11}
+from elevenlabs.client import ElevenLabs
+from elevenlabs import play
+
+client = ElevenLabs()
+audio = client.text_to_speech.convert(
+    text="The first move is what sets everything in motion.",
+    voice_id="JBFqnCBsd6RMkjVDRZzb",
+    model_id="eleven_multilingual_v2",
+    output_format="mp3_44100_128",
+)
+
+play(audio)
+```
+
+```javascript title="JavaScript" focus={4-8}
+import { ElevenLabsClient, play } from 'elevenlabs';
+
+const client = new ElevenLabsClient();
+const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
+  text: 'The first move is what sets everything in motion.',
+  model_id: 'eleven_multilingual_v2',
+  output_format: 'mp3_44100_128',
+});
+
+await play(audio);
+```
+
+```bash title="cURL"
+curl -X POST "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb?output_format=mp3_44100_128" \
+    -H "Xi-Api-Key: <apiKey>" \
+    -H "Content-Type: application/json" \
+    -d '{
+        "text": "The first move is what sets everything in motion.",
+        "model_id": "eleven_multilingual_v2"
+    }' \
+    --output audio.mp3
+```
+
+</CodeBlocks>
