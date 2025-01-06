@@ -198,8 +198,9 @@ navigation:
       - section: GET STARTED
         skip-slug: true
         contents:
-          - page: Introduction
-            path: conversational-ai/pages/introduction.mdx
+          - page: Overview
+            icon: duotone house
+            path: conversational-ai/pages/overview.mdx
           - page: Quickstart
             icon: duotone rocket
             path: conversational-ai/pages/quickstart.mdx
@@ -224,21 +225,127 @@ navigation:
       - section: GUIDES
         skip-slug: false
         contents:
-          - page: Integrate
-            icon: duotone plug
-            path: conversational-ai/pages/introduction.mdx
+          - section: Quickstarts
+            icon: duotone code
+            contents:
+              - page: Next.JS
+                icon: brands react
+                path: conversational-ai/pages/guides/nextjs.mdx
+              - page: JavaScript
+                icon: brands js
+                path: conversational-ai/pages/guides/vite.mdx
+          - section: Twilio
+            icon: duotone phone
+            contents:
+              - page: Dashboard
+                icon: duotone browser
+                path: conversational-ai/pages/guides/twilio-dashboard.mdx
+              - page: Custom server
+                icon: duotone code
+                path: conversational-ai/pages/guides/twilio-custom-server.mdx
       - section: RESOURCES
         skip-slug: true
         contents:
-          - page: Libraries
+          - section: Libraries
             icon: duotone books
-            path: conversational-ai/pages/introduction.mdx
+            contents:
+              - page: Python
+                icon: brands python
+                path: conversational-ai/pages/libraries/python.mdx
+              - page: React
+                icon: brands react
+                path: conversational-ai/pages/libraries/react.mdx
+              - page: JavaScript
+                icon: brands js
+                path: conversational-ai/pages/libraries/javascript.mdx
+              - page: Swift
+                icon: brands swift
+                path: conversational-ai/pages/libraries/swift.mdx
+              - page: WebSocket
+                icon: duotone arrow-right-arrow-left
+                path: conversational-ai/pages/api-reference/websocket.mdx
+      - section: API REFERENCE
+        contents:
+          - api: Conversational AI
+            api-name: convai
+            flattened: true
+            paginated: false
+            layout:
+              - endpoint: GET /v1/convai/conversation
+                title: Agent WebSocket
+                slug: websocket
+          - api: API Reference
+            api-name: api
+            skip-slug: true
+            flattened: true
+            paginated: false
+            audiences:
+              - convai
+            layout:
+              - section: Agents
+                contents:
+                  - endpoint: POST /v1/convai/agents/create
+                    title: Create Agent
+                  - endpoint: GET /v1/convai/agents/{agent_id}
+                    title: Get Agent
+                  - endpoint: GET /v1/convai/agents
+                    title: List Agents
+                  - endpoint: PATCH /v1/convai/agents/{agent_id}
+                    title: Update Agent
+                  - endpoint: DELETE /v1/convai/agents/{agent_id}
+                    title: Delete Agent
+                  - endpoint: GET /v1/convai/agents/{agent_id}/link
+                    title: Get Link
+              - section: Conversations
+                contents:
+                  - endpoint: GET /v1/convai/conversations
+                    title: Get Conversations
+                  - endpoint: GET /v1/convai/conversations/{conversation_id}
+                    title: Get Conversation Details
+                  - endpoint: DELETE /v1/convai/conversations/{conversation_id}
+                    title: Delete Conversation
+                  - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
+                    title: Get Conversation Audio
+                  - endpoint: GET /v1/convai/conversation/get_signed_url
+                    title: Get Signed URL
+                  - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
+                    title: Send Conversation Feedback
+              - section: Knowledge Base
+                contents:
+                  - endpoint: GET /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}
+                    title: Get Knowledge Base Document
+                  - endpoint: POST /v1/convai/agents/{agent_id}/add-to-knowledge-base
+                    title: Create Knowledge Base Document
+              - section: Phone Numbers
+                contents:
+                  - endpoint: POST /v1/convai/phone-numbers/create
+                    title: Create Phone Number
+                  - endpoint: GET /v1/convai/phone-numbers/
+                    title: List Phone Numbers
+                  - endpoint: GET /v1/convai/phone-numbers/{phone_number_id}
+                    title: Get Phone Number
+                  - endpoint: PATCH /v1/convai/phone-numbers/{phone_number_id}
+                    title: Update Phone Number
+                  - endpoint: DELETE /v1/convai/phone-numbers/{phone_number_id}
+                    title: Delete Phone Number
+              - section: Widget
+                contents:
+                  - endpoint: GET /v1/convai/agents/{agent_id}/widget
+                    title: Get Widget
+                  - endpoint: POST /v1/convai/agents/{agent_id}/avatar
+                    title: Create Widget Avatar
+
   - tab: api-reference
     layout:
       - api: API REFERENCE
         paginated: false
         flattened: true
         api-name: api
+        audiences:
+          - nothing
+        snippets:
+          python: elevenlabs
+          typescript: elevenlabs
         layout:
           - page: Introduction
             path: api-reference/pages/introduction.mdx
@@ -246,6 +353,156 @@ navigation:
             path: api-reference/pages/authentication.mdx
           - page: Streaming
             path: api-reference/pages/streaming.mdx
+          - page: Websocket
+            path: api-reference/pages/websocket.mdx
+      - api: API REFERENCE
+        paginated: false
+        flattened: true
+        api-name: api
+        snippets:
+          python: elevenlabs
+          typescript: elevenlabs
+        layout:
+          - section: Endpoints
+            skip-slug: true
+            contents:
+              - section: Text to Speech
+                contents:
+                  - endpoint: POST /v1/text-to-speech/{voice_id}
+                    title: Text to Speech
+                  - endpoint: POST /v1/text-to-speech/{voice_id}/with-timestamps
+                    title: Text to Speech with Timing
+                  - endpoint: POST /v1/text-to-speech/{voice_id}/stream
+                    title: Text to Speech Stream
+                  - endpoint: POST /v1/text-to-speech/{voice_id}/stream/with-timestamps
+                    title: Text to Speech Stream with Timing
+                  - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
+                    title: Text to Speech
+                    slug: websockets
+              - speechToSpeech:
+                  title: Voice Changer
+              - textToSoundEffects:
+                  title: Sound Effects
+              - audioIsolation
+              - textToVoice
+              - dubbing
+          - section: Administration
+            skip-slug: true
+            contents:
+              - history
+              - samples
+              - user
+              - voices
+              - section: Voice Library
+                contents:
+                  - GET /v1/shared-voices
+                  - POST /v1/voices/add/{public_user_id}/{voice_id}
+              - section: Projects
+                skip-slug: true
+                contents:
+                  - endpoint: GET /v1/projects
+                    slug: /projects/get-projects
+                  - endpoint: POST /v1/projects/{project_id}
+                    slug: /projects/edit-project
+                  - endpoint: GET /v1/projects/{project_id}
+                    slug: /projects/get-project
+                  - endpoint: POST /v1/projects/add
+                    slug: /projects/add-project
+                  - endpoint: DELETE /v1/projects/{project_id}
+                    slug: /projects/delete-project
+                  - endpoint: POST /v1/projects/{project_id}/convert
+                    slug: /projects/convert-project
+                  - endpoint: GET /v1/projects/{project_id}/snapshots
+                    slug: /projects/get-snapshots
+                  - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream
+                    slug: /projects/stream-snapshot
+                  - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive
+                    slug: /projects/archive-snapshot
+                  - endpoint: GET /v1/projects/{project_id}/chapters
+                    slug: /chapters/get-chapters
+                  - endpoint: GET /v1/projects/{project_id}/chapters/{chapter_id}
+                    slug: /chapters/get-chapter
+                  - endpoint: POST /v1/projects/{project_id}/chapters/add
+                    slug: /chapters/add-chapter
+                  - endpoint: DELETE /v1/projects/{project_id}/chapters/{chapter_id}
+                    slug: /chapters/delete-chapter
+                  - endpoint: POST /v1/projects/{project_id}/chapters/{chapter_id}/convert
+                    slug: /chapters/convert-chapter
+                  - endpoint: GET /v1/projects/{project_id}/chapters/{chapter_id}/snapshots
+                    slug: /chapters/get-snapshots
+                  - endpoint: POST /v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream
+                    slug: /chapters/stream-snapshot
+                  - endpoint: POST /v1/projects/{project_id}/update-pronunciation-dictionaries
+                    slug: /projects/update-pronunciation-dictionaries
+              - pronunciationDictionary
+              - models
+              - audioNative
+              - workspace
+              - usage
+          - section: Conversational AI
+            skip-slug: true
+            contents:
+              - section: Agents
+                contents:
+                  - endpoint: POST /v1/convai/agents/create
+                    title: Create Agent
+                  - endpoint: GET /v1/convai/agents/{agent_id}
+                    title: Get Agent
+                  - endpoint: GET /v1/convai/agents
+                    title: List Agents
+                  - endpoint: PATCH /v1/convai/agents/{agent_id}
+                    title: Update Agent
+                  - endpoint: DELETE /v1/convai/agents/{agent_id}
+                    title: Delete Agent
+                  - endpoint: GET /v1/convai/agents/{agent_id}/link
+                    title: Get Link
+              - section: Conversations
+                contents:
+                  - endpoint: GET /v1/convai/conversations
+                    title: Get Conversations
+                  - endpoint: GET /v1/convai/conversations/{conversation_id}
+                    title: Get Conversation Details
+                  - endpoint: DELETE /v1/convai/conversations/{conversation_id}
+                    title: Delete Conversation
+                  - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
+                    title: Get Conversation Audio
+                  - endpoint: GET /v1/convai/conversation/get_signed_url
+                    title: Get Signed URL
+                  - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
+                    title: Send Conversation Feedback
+              - section: Knowledge Base
+                contents:
+                  - endpoint: GET /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}
+                    title: Get Knowledge Base Document
+                  - endpoint: POST /v1/convai/agents/{agent_id}/add-to-knowledge-base
+                    title: Create Knowledge Base Document
+              - section: Phone Numbers
+                contents:
+                  - endpoint: POST /v1/convai/phone-numbers/create
+                    title: Create Phone Number
+                  - endpoint: GET /v1/convai/phone-numbers/
+                    title: List Phone Numbers
+                  - endpoint: GET /v1/convai/phone-numbers/{phone_number_id}
+                    title: Get Phone Number
+                  - endpoint: PATCH /v1/convai/phone-numbers/{phone_number_id}
+                    title: Update Phone Number
+                  - endpoint: DELETE /v1/convai/phone-numbers/{phone_number_id}
+                    title: Delete Phone Number
+              - section: Widget
+                contents:
+                  - endpoint: GET /v1/convai/agents/{agent_id}/widget
+                    title: Get Widget
+                  - endpoint: POST /v1/convai/agents/{agent_id}/avatar
+                    title: Create Widget Avatar
+
+          - section: Legacy
+            skip-slug: true
+            contents:
+              - section: Voice Generation (Deprecated)
+                contents:
+                  - POST /v1/voice-generation/generate-voice
+                  - GET /v1/voice-generation/generate-voice/parameters
+                  - POST /v1/voice-generation/create-voice
 
 navbar-links:
   - type: minimal

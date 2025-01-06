@@ -659,6 +659,9 @@ paths:
     get:
       x-fern-audiences:
         - sdk
+    post:
+      x-fern-audiences:
+        - sdk
     delete:
       x-fern-audiences:
         - sdk
@@ -971,6 +974,7 @@ paths:
     patch:
       x-fern-audiences:
         - convai
+
   /v1/convai/agents/{agent_id}/widget:
     get:
       x-fern-audiences:
@@ -994,6 +998,7 @@ paths:
         - convai
   /v1/convai/agents/{agent_id}/add-to-knowledge-base:
     post:
+      description: "Add a document to the knowledge base. <Note> The agent must then be updated with ['PATCH'](https://elevenlabs.io/docs/conversational-ai/api-reference/agents/update-agent) to tie it to the new knowledge base item. </Note>"
       x-fern-audiences:
         - convai
   /v1/convai/agents:
@@ -1114,6 +1119,14 @@ paths:
 # Additional schemas
 components:
   schemas:
+    Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:
+      type: object
+      title: Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch
+      properties:
+        conversation_config:
+          $ref: '#/components/schemas/ConversationalConfig'
+        platform_settings:
+          $ref: '#/components/schemas/AgentPlatformSettings'
     SubscriptionExtrasResponseModel:
       x-fern-ignore: true
     OutputFormat:
