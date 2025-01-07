@@ -18,8 +18,6 @@ tags:
 
 channels:
   /v1/text-to-speech/{voice_id}/stream-input:
-    x-fern-audiences:
-      - sdk
     parameters:
       voice_id:
         description: The unique identifier for the voice to use in the TTS process.
@@ -78,7 +76,6 @@ channels:
               description: This parameter focuses on reducing the latency by disabling the chunk schedule and all buffers. It is only recommended when sending full sentences or phrases, sending partial phrases will result in highly reduced quality. By default it's set to false.
               type: boolean
               default: false
-
     publish:
       description: Send messages to the WebSocket
       operationId: sendMessage
@@ -87,7 +84,6 @@ channels:
           - $ref: '#/components/messages/InitializeConnection'
           - $ref: '#/components/messages/SendText'
           - $ref: '#/components/messages/CloseConnection'
-
     subscribe:
       description: Receive messages from the WebSocket
       operationId: receiveMessage
@@ -95,7 +91,6 @@ channels:
         oneOf:
           - $ref: '#/components/messages/AudioOutput'
           - $ref: '#/components/messages/FinalOutput'
-
     x-fern-examples:
       - query-parameters:
           model_id: pcm_s16le
@@ -121,7 +116,6 @@ channels:
             messageId: AudioOutput
             value:
               audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
-
 components:
   messages:
     SendText:
@@ -144,7 +138,6 @@ components:
       messageId: finalOutput
       payload:
         $ref: '#/components/schemas/FinalOutput'
-
   schemas:
     InitializeConnection:
       type: object

@@ -72,6 +72,13 @@ navigation:
               - page: Sound effects
                 icon: duotone explosion
                 path: docs/pages/developer-guides/guides/text-to-sound-effects.mdx
+      - section: BEST PRACTICES
+        skip-slug: false
+        contents:
+          - page: Prompting
+            path: docs/pages/best-practices/prompting.mdx
+          - page: Latency optimization
+            path: docs/pages/best-practices/latency-optimization.mdx
       - section: PRODUCT GUIDES
         skip-slug: false
         contents:
@@ -173,14 +180,6 @@ navigation:
               - page: AI speech classifier
                 icon: duotone language
                 path: docs/pages/product-guides/audio-tools/ai-speech-classifier.mdx
-
-      - section: BEST PRACTICES
-        skip-slug: false
-        contents:
-          - page: Prompting
-            path: docs/pages/best-practices/prompting.mdx
-          - page: Latency optimization
-            path: docs/pages/best-practices/latency-optimization.mdx
       - section: RESOURCES
         skip-slug: false
         contents:
@@ -334,7 +333,6 @@ navigation:
                     title: Get Widget
                   - endpoint: POST /v1/convai/agents/{agent_id}/avatar
                     title: Create Widget Avatar
-
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -359,34 +357,27 @@ navigation:
         paginated: false
         flattened: true
         api-name: api
+        alphabetized: true
         snippets:
           python: elevenlabs
           typescript: elevenlabs
         layout:
-          - section: Endpoints
+          - section: ENDPOINTS
             skip-slug: true
             contents:
-              - section: Text to Speech
-                contents:
-                  - endpoint: POST /v1/text-to-speech/{voice_id}
-                    title: Text to Speech
-                  - endpoint: POST /v1/text-to-speech/{voice_id}/with-timestamps
-                    title: Text to Speech with Timing
-                  - endpoint: POST /v1/text-to-speech/{voice_id}/stream
-                    title: Text to Speech Stream
-                  - endpoint: POST /v1/text-to-speech/{voice_id}/stream/with-timestamps
-                    title: Text to Speech Stream with Timing
+              - textToSpeech:
+                  title: Text to speech
+                  contents:
                   - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
-                    title: Text to Speech
-                    slug: websockets
+                    title: Stream speech
               - speechToSpeech:
-                  title: Voice Changer
+                  title: Voice changer
               - textToSoundEffects:
-                  title: Sound Effects
+                  title: Sound effects
               - audioIsolation
               - textToVoice
               - dubbing
-          - section: Administration
+          - section: ADMINISTRATION
             skip-slug: true
             contents:
               - history
@@ -439,7 +430,7 @@ navigation:
               - audioNative
               - workspace
               - usage
-          - section: Conversational AI
+          - section: CONVERSATIONAL AI
             skip-slug: true
             contents:
               - section: Agents
@@ -494,8 +485,7 @@ navigation:
                     title: Get Widget
                   - endpoint: POST /v1/convai/agents/{agent_id}/avatar
                     title: Create Widget Avatar
-
-          - section: Legacy
+          - section: LEGACY
             skip-slug: true
             contents:
               - section: Voice Generation (Deprecated)
@@ -503,6 +493,14 @@ navigation:
                   - POST /v1/voice-generation/generate-voice
                   - GET /v1/voice-generation/generate-voice/parameters
                   - POST /v1/voice-generation/create-voice
+  - tab: cookbooks
+    layout:
+      - section: COOKBOOKS
+        skip-slug: true
+        contents:
+          - page: Home
+            icon: duotone house
+            path: cookbooks.mdx
 
 navbar-links:
   - type: minimal
