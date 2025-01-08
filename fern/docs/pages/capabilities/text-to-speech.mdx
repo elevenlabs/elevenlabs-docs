@@ -20,6 +20,19 @@ Listen to a sample:
 
 Explore our [Voice Library](https://elevenlabs.io/community) to find the perfect voice for your project.
 
+<CardGroup cols={2}>
+  <Card title="Developer quickstart" icon="duotone book-sparkles" href="/docs/quickstart">
+    Learn how to integrate Text to Speech into your application.
+  </Card>
+  <Card
+    title="Product guide"
+    icon="duotone book-user"
+    href="/docs/product-guides/playground/text-to-speech"
+  >
+    Step-by-step guide for using Text to Speech in ElevenLabs.
+  </Card>
+</CardGroup>
+
 ### Voice quality
 
 For real-time applications, Flash v2.5 provides ultra-low 75ms latency, while Multilingual v2 delivers the highest quality audio with more nuanced expression.
@@ -30,12 +43,12 @@ Learn more about our [models](/docs/models).
 
 ElevenLabs offers thousands of voices across 32 languages through multiple creation methods:
 
-- [Voice Library](/docs/voice-library) with 3,000+ community-shared voices
-- [Professional Voice Cloning](/docs/voice-cloning/professional) for highest-fidelity replicas
-- [Instant Voice Cloning](/docs/voice-cloning/instant) for quick voice replication
-- [Voice Design](/docs/voice-design) to generate custom voices from text descriptions
+- [Voice Library](/docs/capabilities/voices) with 3,000+ community-shared voices
+- [Professional Voice Cloning](/docs/capabilities/voices) for highest-fidelity replicas
+- [Instant Voice Cloning](/docs/capabilities/voices) for quick voice replication
+- [Voice Design](/docs/capabilities/voices) to generate custom voices from text descriptions
 
-Learn more about our [voice creation options](/docs/voices).
+Learn more about our [voice options](/docs/capabilities/voices).
 
 ### Supported formats
 
@@ -72,11 +85,18 @@ Simply input text in any of our supported languages and select a matching voice 
     The models interpret emotional context directly from the text input. For example, adding
     descriptive text like "she said excitedly" or using exclamation marks will influence the speech
     emotion. Voice settings like Stability and Similarity help control the consistency, while the
-    underlying emotion comes from textual cues.
+    underlying emotion comes from textual cues. 
+    
+    Read the [prompting guide](/docs/best-practices/prompting) for more details.
+
+    <Note>
+      Descriptive text will be spoken out by the model and must be manually trimmed or removed
+      from the audio if desired.
+    </Note>
+
   </Accordion>
-  <Accordion title="Can I clone my own voice or a specific speaker's voice?">
-    Yes. Instant Voice Cloning quickly mimics another speaker from short clips. For high-fidelity
-    clones, check out our Professional Voice Clone.
+  <Accordion title="Can I clone my own voice?">
+    Yes, create [Instant Voice Clones](/docs/capabilities/voices) of your own voice from short audio clips. For high-fidelity clones, check out our [Professional Voice Cloning](/docs/capabilities/voices) feature.
   </Accordion>
   <Accordion title="Do I own the audio output?">
     Yes. You retain ownership of any audio you generate. However, commercial usage rights are only
@@ -84,16 +104,17 @@ Simply input text in any of our supported languages and select a matching voice 
     purposes and monetize the outputs if you own the IP rights to the input content.
   </Accordion>
   <Accordion title="How do I reduce latency for real-time cases?">
-    Use the low-latency Flash models (Flash v2 or v2.5) optimized for near real-time conversational
-    or interactive scenarios. See our [latency optimization guide](/docs/latency-optimization) for
-    more details.
+    Use the low-latency Flash [models](/docs/models) (Flash v2 or v2.5) optimized for near real-time conversational
+    or interactive scenarios. 
+    
+    See our [latency optimization guide](/docs/best-practices/latency-optimization) for more details.
   </Accordion>
   <Accordion title="Why is my output sometimes inconsistent?">
-    The models are nondeterministic. For consistency, use the optional seed parameter, though subtle
+    The models are nondeterministic. For consistency, use the optional [seed parameter](/docs/api-reference/text-to-speech/convert#request.body.seed), though subtle
     differences may still occur.
   </Accordion>
   <Accordion title="What's the best practice for large text conversions?">
     Split long text into segments and use streaming for real-time playback and efficient processing.
-    To maintain natural prosody flow between chunks, use `previous_text` or `previous_request_ids`.
+    To maintain natural prosody flow between chunks, include [previous/next text or previous/next request id parameters](/docs/api-reference/text-to-speech/convert#request.body.previous_text).
   </Accordion>
 </AccordionGroup>

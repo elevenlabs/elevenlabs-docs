@@ -10,10 +10,11 @@ instances:
         branch: main
 
 layout:
-  searchbar-placement: sidebar
-  tabs-placement: sidebar
+  searchbar-placement: header
+  tabs-placement: header
   page-width: full
   sidebar-width: 230px
+  header-height: 50px
 
 tabs:
   docs:
@@ -35,6 +36,9 @@ navigation:
           - page: Overview
             icon: duotone house
             path: docs/pages/overview.mdx
+          - page: Quickstart
+            icon: duotone book-sparkles
+            path: docs/pages/quickstart.mdx
           - page: Models
             icon: duotone waveform-lines
             path: docs/pages/models.mdx
@@ -42,7 +46,6 @@ navigation:
             title: Changelog
             icon: duotone rectangle-history
       - section: CAPABILITIES
-        skip-slug: true
         contents:
           - page: Text to speech
             path: docs/pages/capabilities/text-to-speech.mdx
@@ -52,26 +55,21 @@ navigation:
             path: docs/pages/capabilities/voice-isolator.mdx
           - page: Dubbing
             path: docs/pages/capabilities/dubbing.mdx
-          - page: Text to voice
-            path: docs/pages/capabilities/text-to-voice.mdx
           - page: Sound effects
             path: docs/pages/capabilities/sound-effects.mdx
           - page: Voices
             path: docs/pages/capabilities/voices.mdx
       - section: DEVELOPER GUIDES
-        skip-slug: false
+        skip-slug: true
         contents:
-          - page: Quickstart
-            icon: duotone book-sparkles
-            path: docs/pages/developer-guides/quickstart.mdx
-          - section: Guides
+          - section: Cookbooks
             contents:
               - page: Text to speech
                 icon: duotone volume-up
-                path: docs/pages/developer-guides/guides/text-to-speech.mdx
+                path: docs/pages/cookbooks/text-to-speech.mdx
               - page: Sound effects
                 icon: duotone explosion
-                path: docs/pages/developer-guides/guides/text-to-sound-effects.mdx
+                path: docs/pages/cookbooks/text-to-sound-effects.mdx
       - section: BEST PRACTICES
         skip-slug: false
         contents:
@@ -368,8 +366,8 @@ navigation:
               - textToSpeech:
                   title: Text to speech
                   contents:
-                  - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
-                    title: Stream speech
+                    - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
+                      title: Stream speech
               - speechToSpeech:
                   title: Voice changer
               - textToSoundEffects:
