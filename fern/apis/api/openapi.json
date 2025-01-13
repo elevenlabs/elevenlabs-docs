@@ -3662,6 +3662,72 @@
 				"x-fern-sdk-method-name": "create"
 			}
 		},
+		"/v1/audio-native/{project_id}/content": {
+			"post": {
+				"tags": [
+					"audio-native"
+				],
+				"summary": "Update Audio-Native Project Content",
+				"description": "Updates content for the specific AudioNative Project.",
+				"operationId": "Update_audio_native_Project_content_v1_audio_native__project_id__content_post",
+				"parameters": [
+					{
+						"description": "The project_id of the project, you can query GET https://api.elevenlabs.io/v1/projects to list all available projects.",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"title": "Project Id",
+							"description": "The project_id of the project, you can query GET https://api.elevenlabs.io/v1/projects to list all available projects."
+						},
+						"example": "21m00Tcm4TlvDq8ikWAM",
+						"name": "project_id",
+						"in": "path"
+					},
+					{
+						"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"title": "Xi-Api-Key",
+							"description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+						},
+						"name": "xi-api-key",
+						"in": "header"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_Update_audio_native_Project_content_v1_audio_native__project_id__content_post"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				},
+				"x-fern-sdk-group-name": "audio_native",
+				"x-fern-sdk-method-name": "update"
+			}
+		},
 		"/v1/shared-voices": {
 			"get": {
 				"tags": [
@@ -6313,6 +6379,22 @@
 				],
 				"title": "AgentBan"
 			},
+			"AgentCallLimits": {
+				"properties": {
+					"agent_concurrency_limit": {
+						"type": "integer",
+						"title": "Agent Concurrency Limit",
+						"default": -1
+					},
+					"daily_limit": {
+						"type": "integer",
+						"title": "Daily Limit",
+						"default": 100000
+					}
+				},
+				"type": "object",
+				"title": "AgentCallLimits"
+			},
 			"AgentConfig": {
 				"properties": {
 					"prompt": {
@@ -6390,7 +6472,7 @@
 						"$ref": "#/components/schemas/EvaluationSettings"
 					},
 					"widget": {
-						"$ref": "#/components/schemas/EmbedConfig"
+						"$ref": "#/components/schemas/WidgetConfig"
 					},
 					"data_collection": {
 						"additionalProperties": {
@@ -6401,6 +6483,9 @@
 					},
 					"overrides": {
 						"$ref": "#/components/schemas/ConversationInitiationClientDataConfig"
+					},
+					"call_limits": {
+						"$ref": "#/components/schemas/AgentCallLimits"
 					},
 					"ban": {
 						"$ref": "#/components/schemas/AgentBan"
@@ -7099,7 +7184,7 @@
 					"image": {
 						"type": "string",
 						"title": "Image",
-						"description": "Image URL used in the player. If not provided, default image set in the Player settings is used."
+						"description": "(Deprecated) Image URL used in the player. If not provided, default image set in the Player settings is used."
 					},
 					"author": {
 						"type": "string",
@@ -7114,7 +7199,7 @@
 					"small": {
 						"type": "boolean",
 						"title": "Small",
-						"description": "Whether to use small player or not. If not provided, default value set in the Player settings is used.",
+						"description": "(Deprecated) Whether to use small player or not. If not provided, default value set in the Player settings is used.",
 						"default": false
 					},
 					"text_color": {
@@ -7130,7 +7215,7 @@
 					"sessionization": {
 						"type": "integer",
 						"title": "Sessionization",
-						"description": "Specifies for how many minutes to persist the session across page reloads. If not provided, default sessionization set in the Player settings is used.",
+						"description": "(Deprecated) Specifies for how many minutes to persist the session across page reloads. If not provided, default sessionization set in the Player settings is used.",
 						"default": 0
 					},
 					"voice_id": {
@@ -8059,6 +8144,30 @@
 				],
 				"title": "Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post"
 			},
+			"Body_Update_audio_native_Project_content_v1_audio_native__project_id__content_post": {
+				"properties": {
+					"file": {
+						"type": "string",
+						"format": "binary",
+						"title": "File",
+						"description": "Either txt or HTML input file containing the article content. HTML should be formatted as follows '&lt;html&gt;&lt;body&gt;&lt;div&gt;&lt;p&gt;Your content&lt;/p&gt;&lt;h5&gt;More of your content&lt;/h5&gt;&lt;p&gt;Some more of your content&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;'"
+					},
+					"auto_convert": {
+						"type": "boolean",
+						"title": "Auto Convert",
+						"description": "Whether to auto convert the project to audio or not.",
+						"default": false
+					},
+					"auto_publish": {
+						"type": "boolean",
+						"title": "Auto Publish",
+						"description": "Whether to auto convert the project to audio or not.",
+						"default": false
+					}
+				},
+				"type": "object",
+				"title": "Body_Update_audio_native_Project_content_v1_audio_native__project_id__content_post"
+			},
 			"Body_Update_member_v1_workspace_members_post": {
 				"properties": {
 					"email": {
@@ -8505,6 +8614,11 @@
 					},
 					"charging": {
 						"$ref": "#/components/schemas/ConversationChargingCommonModel"
+					},
+					"termination_reason": {
+						"type": "string",
+						"title": "Termination Reason",
+						"default": ""
 					}
 				},
 				"type": "object",
@@ -8767,6 +8881,13 @@
 					},
 					"conversation": {
 						"$ref": "#/components/schemas/ConversationConfig"
+					},
+					"language_presets": {
+						"additionalProperties": {
+							"$ref": "#/components/schemas/LanguagePreset"
+						},
+						"type": "object",
+						"title": "Language Presets"
 					}
 				},
 				"type": "object",
@@ -8948,112 +9069,6 @@
 					"project"
 				],
 				"title": "EditProjectResponseModel"
-			},
-			"EmbedConfig": {
-				"properties": {
-					"variant": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/EmbedVariant"
-							}
-						],
-						"default": "full"
-					},
-					"avatar": {
-						"anyOf": [
-							{
-								"$ref": "#/components/schemas/OrbAvatar"
-							},
-							{
-								"$ref": "#/components/schemas/URLAvatar"
-							},
-							{
-								"$ref": "#/components/schemas/ImageAvatar"
-							}
-						],
-						"title": "Avatar"
-					},
-					"feedback_mode": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/WidgetFeedbackMode"
-							}
-						],
-						"default": "none"
-					},
-					"custom_avatar_path": {
-						"type": "string",
-						"title": "Custom Avatar Path"
-					},
-					"bg_color": {
-						"type": "string",
-						"title": "Bg Color",
-						"default": "#ffffff"
-					},
-					"text_color": {
-						"type": "string",
-						"title": "Text Color",
-						"default": "#000000"
-					},
-					"btn_color": {
-						"type": "string",
-						"title": "Btn Color",
-						"default": "#000000"
-					},
-					"btn_text_color": {
-						"type": "string",
-						"title": "Btn Text Color",
-						"default": "#ffffff"
-					},
-					"border_color": {
-						"type": "string",
-						"title": "Border Color",
-						"default": "#e1e1e1"
-					},
-					"focus_color": {
-						"type": "string",
-						"title": "Focus Color",
-						"default": "#000000"
-					},
-					"border_radius": {
-						"type": "integer",
-						"title": "Border Radius"
-					},
-					"btn_radius": {
-						"type": "integer",
-						"title": "Btn Radius"
-					},
-					"action_text": {
-						"type": "string",
-						"title": "Action Text"
-					},
-					"start_call_text": {
-						"type": "string",
-						"title": "Start Call Text"
-					},
-					"end_call_text": {
-						"type": "string",
-						"title": "End Call Text"
-					},
-					"expand_text": {
-						"type": "string",
-						"title": "Expand Text"
-					},
-					"listening_text": {
-						"type": "string",
-						"title": "Listening Text"
-					},
-					"speaking_text": {
-						"type": "string",
-						"title": "Speaking Text"
-					},
-					"shareable_page_text": {
-						"type": "string",
-						"title": "Shareable Page Text"
-					}
-				},
-				"type": "object",
-				"title": "EmbedConfig"
 			},
 			"EmbedVariant": {
 				"type": "string",
@@ -9362,7 +9377,7 @@
 						"title": "Agent Id"
 					},
 					"widget_config": {
-						"$ref": "#/components/schemas/EmbedConfig"
+						"$ref": "#/components/schemas/WidgetConfigResponseModel"
 					}
 				},
 				"type": "object",
@@ -9889,6 +9904,39 @@
 				],
 				"title": "LLM",
 				"description": "An enumeration."
+			},
+			"LanguagePreset": {
+				"properties": {
+					"overrides": {
+						"$ref": "#/components/schemas/ConversationConfigClientOverride"
+					},
+					"first_message_translation": {
+						"$ref": "#/components/schemas/LanguagePresetTranslation"
+					}
+				},
+				"type": "object",
+				"required": [
+					"overrides"
+				],
+				"title": "LanguagePreset"
+			},
+			"LanguagePresetTranslation": {
+				"properties": {
+					"source_hash": {
+						"type": "string",
+						"title": "Source Hash"
+					},
+					"text": {
+						"type": "string",
+						"title": "Text"
+					}
+				},
+				"type": "object",
+				"required": [
+					"source_hash",
+					"text"
+				],
+				"title": "LanguagePresetTranslation"
 			},
 			"LanguageResponseModel": {
 				"properties": {
@@ -10935,13 +10983,17 @@
 								},
 								{
 									"$ref": "#/components/schemas/ClientToolConfig"
+								},
+								{
+									"$ref": "#/components/schemas/SystemToolConfig"
 								}
 							],
 							"discriminator": {
 								"propertyName": "type",
 								"mapping": {
 									"webhook": "#/components/schemas/WebhookToolConfig",
-									"client": "#/components/schemas/ClientToolConfig"
+									"client": "#/components/schemas/ClientToolConfig",
+									"system": "#/components/schemas/SystemToolConfig"
 								}
 							}
 						},
@@ -11452,6 +11504,10 @@
 						"type": "integer",
 						"title": "Concurrency"
 					},
+					"convai_concurrency": {
+						"type": "integer",
+						"title": "Convai Concurrency"
+					},
 					"force_logging_disabled": {
 						"type": "boolean",
 						"title": "Force Logging Disabled"
@@ -11463,6 +11519,7 @@
 				"type": "object",
 				"required": [
 					"concurrency",
+					"convai_concurrency",
 					"force_logging_disabled",
 					"moderation"
 				],
@@ -11582,6 +11639,34 @@
 					"character_refresh_period"
 				],
 				"title": "SubscriptionResponseModel"
+			},
+			"SystemToolConfig": {
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"system"
+						],
+						"title": "Type"
+					},
+					"name": {
+						"type": "string",
+						"pattern": "^[a-zA-Z0-9_-]{1,64}$",
+						"title": "Name"
+					},
+					"description": {
+						"type": "string",
+						"title": "Description"
+					}
+				},
+				"type": "object",
+				"required": [
+					"type",
+					"name",
+					"description"
+				],
+				"title": "SystemToolConfig",
+				"description": "A system tool is a tool that is used to call a system method in the server"
 			},
 			"TTSConversationalConfig": {
 				"properties": {
@@ -12613,6 +12698,257 @@
 				],
 				"title": "WebhookToolConfig",
 				"description": "A webhook tool is a tool that calls an external webhook from our server"
+			},
+			"WidgetConfig": {
+				"properties": {
+					"variant": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/EmbedVariant"
+							}
+						],
+						"default": "full"
+					},
+					"avatar": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/OrbAvatar"
+							},
+							{
+								"$ref": "#/components/schemas/URLAvatar"
+							},
+							{
+								"$ref": "#/components/schemas/ImageAvatar"
+							}
+						],
+						"title": "Avatar"
+					},
+					"feedback_mode": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/WidgetFeedbackMode"
+							}
+						],
+						"default": "none"
+					},
+					"bg_color": {
+						"type": "string",
+						"title": "Bg Color",
+						"default": "#ffffff"
+					},
+					"text_color": {
+						"type": "string",
+						"title": "Text Color",
+						"default": "#000000"
+					},
+					"btn_color": {
+						"type": "string",
+						"title": "Btn Color",
+						"default": "#000000"
+					},
+					"btn_text_color": {
+						"type": "string",
+						"title": "Btn Text Color",
+						"default": "#ffffff"
+					},
+					"border_color": {
+						"type": "string",
+						"title": "Border Color",
+						"default": "#e1e1e1"
+					},
+					"focus_color": {
+						"type": "string",
+						"title": "Focus Color",
+						"default": "#000000"
+					},
+					"border_radius": {
+						"type": "integer",
+						"title": "Border Radius"
+					},
+					"btn_radius": {
+						"type": "integer",
+						"title": "Btn Radius"
+					},
+					"action_text": {
+						"type": "string",
+						"title": "Action Text"
+					},
+					"start_call_text": {
+						"type": "string",
+						"title": "Start Call Text"
+					},
+					"end_call_text": {
+						"type": "string",
+						"title": "End Call Text"
+					},
+					"expand_text": {
+						"type": "string",
+						"title": "Expand Text"
+					},
+					"listening_text": {
+						"type": "string",
+						"title": "Listening Text"
+					},
+					"speaking_text": {
+						"type": "string",
+						"title": "Speaking Text"
+					},
+					"shareable_page_text": {
+						"type": "string",
+						"title": "Shareable Page Text"
+					},
+					"terms_text": {
+						"type": "string",
+						"title": "Terms Text"
+					},
+					"terms_html": {
+						"type": "string",
+						"title": "Terms Html"
+					},
+					"terms_key": {
+						"type": "string",
+						"title": "Terms Key"
+					},
+					"language_selector": {
+						"type": "boolean",
+						"title": "Language Selector",
+						"default": false
+					},
+					"custom_avatar_path": {
+						"type": "string",
+						"title": "Custom Avatar Path"
+					}
+				},
+				"type": "object",
+				"title": "WidgetConfig"
+			},
+			"WidgetConfigResponseModel": {
+				"properties": {
+					"variant": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/EmbedVariant"
+							}
+						],
+						"default": "full"
+					},
+					"avatar": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/OrbAvatar"
+							},
+							{
+								"$ref": "#/components/schemas/URLAvatar"
+							},
+							{
+								"$ref": "#/components/schemas/ImageAvatar"
+							}
+						],
+						"title": "Avatar"
+					},
+					"feedback_mode": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/WidgetFeedbackMode"
+							}
+						],
+						"default": "none"
+					},
+					"bg_color": {
+						"type": "string",
+						"title": "Bg Color",
+						"default": "#ffffff"
+					},
+					"text_color": {
+						"type": "string",
+						"title": "Text Color",
+						"default": "#000000"
+					},
+					"btn_color": {
+						"type": "string",
+						"title": "Btn Color",
+						"default": "#000000"
+					},
+					"btn_text_color": {
+						"type": "string",
+						"title": "Btn Text Color",
+						"default": "#ffffff"
+					},
+					"border_color": {
+						"type": "string",
+						"title": "Border Color",
+						"default": "#e1e1e1"
+					},
+					"focus_color": {
+						"type": "string",
+						"title": "Focus Color",
+						"default": "#000000"
+					},
+					"border_radius": {
+						"type": "integer",
+						"title": "Border Radius"
+					},
+					"btn_radius": {
+						"type": "integer",
+						"title": "Btn Radius"
+					},
+					"action_text": {
+						"type": "string",
+						"title": "Action Text"
+					},
+					"start_call_text": {
+						"type": "string",
+						"title": "Start Call Text"
+					},
+					"end_call_text": {
+						"type": "string",
+						"title": "End Call Text"
+					},
+					"expand_text": {
+						"type": "string",
+						"title": "Expand Text"
+					},
+					"listening_text": {
+						"type": "string",
+						"title": "Listening Text"
+					},
+					"speaking_text": {
+						"type": "string",
+						"title": "Speaking Text"
+					},
+					"shareable_page_text": {
+						"type": "string",
+						"title": "Shareable Page Text"
+					},
+					"terms_text": {
+						"type": "string",
+						"title": "Terms Text"
+					},
+					"terms_html": {
+						"type": "string",
+						"title": "Terms Html"
+					},
+					"terms_key": {
+						"type": "string",
+						"title": "Terms Key"
+					},
+					"language": {
+						"type": "string",
+						"title": "Language"
+					},
+					"supported_language_overrides": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"title": "Supported Language Overrides"
+					}
+				},
+				"type": "object",
+				"required": [
+					"language"
+				],
+				"title": "WidgetConfigResponseModel"
 			},
 			"WidgetFeedbackMode": {
 				"type": "string",
