@@ -152,36 +152,51 @@ elevenlabs-convai {
 }
 
 /* Sidebar, header and header tabs styling */
+.clipped-background {
+  background: none !important;
+  opacity: 0 !important;
+}
+
+.fern-header,
+.fern-header-tabs {
+  background-color: rgba(255, 255, 255, 0) !important;
+}
+
 .fern-sidebar-container,
-.fern-header-tabs,
-.fern-header {
-  border-right: 1px solid;
-  border-bottom: 1px solid;
+.fern-header-container {
   backdrop-filter: blur(10px);
 }
 
+.fern-header-container {
+  border-bottom-color: rgb(233, 232, 234);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-sizing: border-box;
+}
+
 :root[class='light'] .fern-sidebar-container,
-:root[class='light'] .fern-header-tabs,
-:root[class='light'] .fern-header {
+:root[class='light'] .fern-header-container {
+  background-color: rgba(255, 255, 255, 0.9) !important;
   border-color: #e9e8ea !important;
-  background-color: rgba(255, 255, 255, 0.9);
 }
 
 :root[class='dark'] .fern-sidebar-container,
-:root[class='dark'] .fern-header-tabs,
-:root[class='dark'] .fern-header {
+:root[class='dark'] .fern-header-container {
   border-color: #23252a !important;
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-:root[class='dark'] .fern-header {
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
+/* Remove the bottom border on the header */
 .fern-header {
   border-bottom: none !important;
 }
 
+/* Fix the logo height */
 .fern-logo-container {
   height: 30px !important;
+}
+
+/* Bring TOC infront of the wave */
+.fern-layout-toc {
+  z-index: 1 !important;
 }
