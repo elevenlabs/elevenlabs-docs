@@ -1,34 +1,37 @@
 ---
 title: Audio native
+subtitle: A guide on how to embed ElevenLabs on any web page
 ---
 
-## Embed ElevenLabs on any web page
+<Warning>This guide is a work in progress.</Warning>
 
-<div
-  id="elevenlabs-audionative-widget"
-  data-height="90"
-  data-width="100%"
-  data-frameBorder="no"
-  data-scrolling="no"
-  data-publicUserId="8cb6f91dbb1d1b891d2cde8e21c96378281280fd9dac76faac4c7502f022075a"
-  data-playerUrl="https://elevenlabs.io/player/index.html"
-  data-small="True"
-  data-textColor="rgba(0, 0, 0, 1.0)"
-  data-backgroundColor="rgba(255, 255, 255, 1.0)"
->
-  Loading the{' '}
-  <a href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener">
-    Elevenlabs Text to Speech
-  </a>{' '}
-  AudioNative Player...
-</div>
-<script src="https://elevenlabs.io/player/audioNativeHelper.js"></script>
+<img
+  src="/assets/images/product-guides/audio-native/audio-native-product-feature.png"
+  alt="Audio native"
+  className="w-full rounded-lg"
+/>
+
+## Overview
 
 Audio Native is an embedded audio player that automatically voices content of a web page using ElevenLab’s text-to-speech service. It can also be used to embed pre-generated content from a project into a web page. All it takes to deploy on your site is a brief snippet of html. In addition, Audio Native comes with built-in metrics so you can track audience engagement through a listener dashboard.
 
-## Set up
+## Guide
 
-Before creating and deploying Audio Native players, you’ll need to go through a few steps to configure Audio Native on your account.
+<Frame background="subtle">
+  ![Audio native settings](/assets/images/product-guides/audio-native/audio-native-settings.png)
+</Frame>
+
+<Frame background="subtle">
+  ![Audio native player
+  settings](/assets/images/product-guides/audio-native/audio-native-player-settings.png)
+</Frame>
+<Frame background="subtle">
+  ![Audio native player settings
+  1](/assets/images/product-guides/audio-native/audio-native-player-settings-1.png)
+</Frame>
+
+Before creating and deploying Audio Native players, you’ll need to go through a few steps to
+configure Audio Native on your account.
 
 It’s best not to skip any of these steps in order to understand how Audio Native works and prevent potential misuse of the service. Don’t worry about getting everything right the first time you configure Audio Native, you can always change the settings later!
 
@@ -36,27 +39,28 @@ It’s best not to skip any of these steps in order to understand how Audio Nati
    - Go to Audio Native > Settings
    - Or by directly navigating to https://elevenlabs.io/app/audio-native/settings
 2. Configure whitelisted sites - these are the list of website domains that will be permitted to play your content. Your Audio Native players will only work on sites that begin with the domains that you specify in this list.
+
    - Click on Add URL
-     # TODO: replace image/an_url_allowlist_empty_state.webp" />
    - If "elevenlabs.io/" is whitelisted, then the Audio Native player will work on any site on the elevenlabs website.
-     # TODO: replace image/an_url_elevenlabs.webp" />
+
    - However if we want to restrict it to just the blog page, then we can specify that in the whitelist by listing "elevenlabs.io/blog" instead. In this case, the Audio Native player will only work on any of the blog pages, and not other elevenlabs.io sites.
-     # TODO: replace image/an_url_elevenlabs_blog.webp" />
    - If you try to embed audio native on pages that don't follow that path, you will see the player briefly appear and then disappear, or you may see this message:
-     # TODO: replace image/an_url_not_allowed.webp" />
+
      You can resolve this by checking that the URL for the page is added to your URL list correctly.{' '}
+
 3. Configure your Audio Native player’s appearance and default settings.
+
    - Click "Player" or directly navigate to https://elevenlabs.io/app/audionative/settings/player
    - Select a default voice. This is the voice that will be used if you are using Audio Native to automatically convert content from the page it’s embedded in. If you use Audio Native to play content already generated in a Project, it will keep the voice used in the Project.
    - You'll get an alert of your selected voice model is not optimized for the voice you've chosen.
-     # TODO: replace image/an_voice_wrong_model.webp" />
+
    - Customize your player's background and text color. This is how it will be displayed on your website.
    - Set a fallback Title and Author to display on your player.
    - Optionally add a [pronunciation dictionary](https://elevenlabs.io/docs/projects/overview#pronunciation-dictionaries) to specify the pronunciation of words unique to your brand.
    - By default, our embedded player will create a voice over of all of the text content on your page. You can customize the content we target with CSS selectors.
+
 4. Now that you've finished customizing your player, head back to the General tab and grab your embed code.
    - You'll use this code snippet to embed Audio Native into the html of any (whitelisted) site you’d like to have voiced by ElevenLabs.
-     # TODO: replace image/an_embed_code.webp" />
 
 ## Deploying Audio Native
 
@@ -86,8 +90,6 @@ Here are specific implementation guides for some of the top CMS platforms:
 ### Method 2: Embed audio from an existing project
 
 If you already have a converted Project and would like to embed that audio using Audio Native, simply open the Project settings and go to the Publish tab. Click Audio Native, then use the toggle to enable Audio Native. Then use the generated embed code to add the Audio Native player to any whitelisted site.
-
-<Frame># TODO: replace image/an-8-newUI.webp" /></Frame>
 
 ---
 
