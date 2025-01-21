@@ -7,42 +7,34 @@ The ElevenLabs API provides a simple interface to state-of-the-art audio [models
 
 ## Create an API key
 
-[Create an API key in the dashboard here](https://elevenlabs.io/app/settings/api-keys), which you’ll use to securely [access the API](/docs/api-reference/authentication). Store the key in a safe location, like a [`.zshrc` file](https://www.freecodecamp.org/news/how-do-zsh-configuration-files-work/) or another text file on your computer. Once you’ve generated an API key, export it as an environment variable in your terminal.
+[Create an API key in the dashboard here](https://elevenlabs.io/app/settings/api-keys), which you’ll use to securely [access the API](/docs/api-reference/authentication). 
 
-<Tabs>
-  <Tab title="macOS/Linux">
+Store the key as a managed secret and pass it to the SDKs either as a environment variable via an `.env` file or directly in your app’s configuration depending on your preferences.
 
-    ```shell Export an environment variable on macOS or Linux systems
-    export ELEVENLABS_API_KEY="your_api_key_here"
-    ```
-
-  </Tab>
-  <Tab title="Windows">
-
-    ```shell Export an environment variable in PowerShell
-    setx ELEVENLABS_API_KEY "your_api_key_here"
-    ```
-
-  </Tab>
-</Tabs>
+```shell Environment variables
+ELEVENLABS_API_KEY="your_api_key_here"
+```
 
 ## Make your first request
 
-With your ElevenLabs API key exported as an environment variable, you're ready to make your first API request. You can either use the [REST API](/docs/api-reference/introduction) directly with the HTTP client of your choice, or use one of our official SDKs as shown below.
+You can either use the [REST API](/docs/api-reference/introduction) directly with the HTTP client of your choice, or use one of our official SDKs as shown below. This guide will use the official SDKs to make requests.
+
+<CodeBlocks>
+```bash title="Python"
+pip install elevenlabs
+```
+
+```bash title="JavaScript"
+npm install elevenlabs
+```
+</CodeBlocks>
+
+<Note>
+  To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/) and/or [ffmpeg](https://ffmpeg.org/).
+</Note>
 
 <Tabs>
   <Tab title="Python">
-
-    To use the ElevenLabs API in Python, you can use the official [ElevenLabs SDK for Python](https://www.github.com/elevenlabs/elevenlabs-python). Get started by installing the SDK using [pip](https://pypi.org/project/pip/):
-
-    ```bash Install the ElevenLabs SDK with pip
-    pip install elevenlabs
-    ```
-
-    <Note>
-      To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/) and/or [ffmpeg](https://ffmpeg.org/).
-    </Note>
-
     With the ElevenLabs SDK installed, create a file called `example.py` and copy one of the following examples into it:
 
     <Tabs>
@@ -190,17 +182,6 @@ With your ElevenLabs API key exported as an environment variable, you're ready t
 
   </Tab>
   <Tab title="Javascript">
-
-    To use the ElevenLabs API in server-side JavaScript environments like Node.js, Deno, or Bun, you can use the official [ElevenLabs SDK for TypeScript and JavaScript](https://www.github.com/elevenlabs/elevenlabs-js). Get started by installing the SDK using [npm](https://www.npmjs.com/) or your preferred package manager:
-
-    ```bash Install the ElevenLabs SDK with npm
-    npm install elevenlabs
-    ```
-
-    <Note>
-      To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/) and/or [ffmpeg](https://ffmpeg.org/).
-    </Note>
-
     With the ElevenLabs SDK installed, create a file called `example.mjs` and copy one of the following examples into it:
 
     <Tabs>
@@ -224,13 +205,13 @@ With your ElevenLabs API key exported as an environment variable, you're ready t
 
         ```javascript Transform audio from one voice to another
         import { ElevenLabsClient, play } from "elevenlabs";
-        import fetch from "node-fetch";
 
         const client = new ElevenLabsClient();
         const voiceId = "JBFqnCBsd6RMkjVDRZzb";
-
-        const audioUrl = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3";
-        const response = await fetch(audioUrl);
+        
+        const response = await fetch(
+          "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        );
         const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
         const audioStream = await client.speechToSpeech.convert(voiceId, {
@@ -262,7 +243,6 @@ With your ElevenLabs API key exported as an environment variable, you're ready t
 
         ```javascript Removes background noise from audio.
         import { ElevenLabsClient, play } from "elevenlabs";
-        import fetch from "node-fetch";
 
         const client = new ElevenLabsClient();
 
@@ -303,7 +283,6 @@ With your ElevenLabs API key exported as an environment variable, you're ready t
 
         ```javascript Dub audio/video from one language to another
         import { ElevenLabsClient, play } from "elevenlabs";
-        import fetch from "node-fetch";
 
         const client = new ElevenLabsClient();
 
@@ -342,7 +321,7 @@ With your ElevenLabs API key exported as an environment variable, you're ready t
       </Tab>
     </Tabs>
 
-    Execute the code with `node example.mjs` (or the equivalent command for Deno or Bun). In a few seconds, you should hear the audio play through your speaker.
+    Execute the code with `node example.mjs`. Within a few seconds you should hear the audio play through your speaker.
 
   </Tab>
 
