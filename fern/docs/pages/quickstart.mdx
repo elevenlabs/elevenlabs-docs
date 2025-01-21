@@ -35,14 +35,23 @@ npm install elevenlabs
 
 <Tabs>
   <Tab title="Python">
+    The environment variables are loaded automatically when using the SDK, but we need to install the `python-dotenv` package to load them.
+
+    ```bash title="Install python-dotenv"
+    pip install python-dotenv
+    ```
+
     With the ElevenLabs SDK installed, create a file called `example.py` and copy one of the following examples into it:
 
     <Tabs>
       <Tab title="Text to speech">
 
         ```python Convert text into life-like audio
+        from dotenv import load_dotenv
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
+
+        load_dotenv()
 
         client = ElevenLabs()
 
@@ -60,10 +69,13 @@ npm install elevenlabs
       <Tab title="Voice changer">
 
         ```python Transform audio from one voice to another
+        from dotenv import load_dotenv
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
         import requests
         from io import BytesIO
+
+        load_dotenv()
 
         client = ElevenLabs()
         voice_id = "JBFqnCBsd6RMkjVDRZzb"
@@ -88,8 +100,11 @@ npm install elevenlabs
       <Tab title="Text to sound effects">
 
         ```python Convert text into sound effects
+        from dotenv import load_dotenv
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
+
+        load_dotenv()
 
         client = ElevenLabs()
         audio = client.text_to_sound_effects.convert(text="Cinematic Braam, Horror")
@@ -101,10 +116,13 @@ npm install elevenlabs
       <Tab title="Voice isolator">
 
         ```python Removes background noise from audio.
+        from dotenv import load_dotenv
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
         import requests
         from io import BytesIO
+
+        load_dotenv()
 
         client = ElevenLabs()
 
@@ -121,9 +139,12 @@ npm install elevenlabs
       <Tab title="Text to voice">
 
         ```python Generate voices from a single text prompt.
+        from dotenv import load_dotenv
         import base64
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
+
+        load_dotenv()
 
         client = ElevenLabs()
 
@@ -142,11 +163,14 @@ npm install elevenlabs
       <Tab title="Dubbing">
 
         ```python Dub audio/video from one language to another
+        from dotenv import load_dotenv
         from elevenlabs.client import ElevenLabs
         from elevenlabs import play
         import requests
         from io import BytesIO
         import time
+
+        load_dotenv()
 
         client = ElevenLabs()
 
@@ -177,8 +201,8 @@ npm install elevenlabs
         ```
       </Tab>
     </Tabs>
-
-    Execute the code with `python example.py`. In a few seconds, you should hear the audio play through your speaker.
+    
+    Execute the code with `python example.py`. Within a few seconds you should hear the audio play through your speaker.
 
   </Tab>
   <Tab title="Javascript">
@@ -321,7 +345,7 @@ npm install elevenlabs
       </Tab>
     </Tabs>
 
-    Execute the code with `node example.mjs`. Within a few seconds you should hear the audio play through your speaker.
+    Execute the code with `node --env-file=.env example.mjs`. Within a few seconds you should hear the audio play through your speaker.
 
   </Tab>
 
