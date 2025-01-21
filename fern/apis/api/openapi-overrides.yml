@@ -681,6 +681,10 @@ paths:
     delete:
       x-fern-audiences:
         - sdk
+  /v1/projects/{project_id}/content:
+    post:
+      x-fern-audiences:
+        - sdk
   /v1/projects/{project_id}/convert:
     post:
       x-fern-audiences:
@@ -1315,7 +1319,8 @@ components:
     Body_Add_project_v1_projects_add_post:
       x-fern-type-name: AddProjectRequest
       properties:
-        callback_url: null
+        quality_check_on: null
+        acx_volume_normalization: null
     Body_Add_sharing_voice_v1_voices_add__public_user_id___voice_id__post:
       x-fern-type-name: AddSharingVoiceRequest
     Body_Add_voice_v1_voices_add_post:
@@ -1329,6 +1334,8 @@ components:
     Body_Dub_a_video_or_an_audio_file_v1_dubbing_post:
       x-fern-type-name: DubAVideoOrAudioFileRequest
       required: [target_lang]
+    Body_Edit_project_content_v1_projects__project_id__content_post:
+      x-fern-type-name: UpdateProjectContentRequest
     Body_Edit_voice_v1_voices__voice_id__edit_post:
       x-fern-type-name: EditVoiceRequest
     Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post:
