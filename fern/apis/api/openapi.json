@@ -2,7 +2,7 @@
 	"openapi": "3.1.0",
 	"info": {
 		"title": "ElevenLabs API Documentation",
-		"description": "This is the documentation for the ElevenLabs API. You can use this API to use our service programmatically, this is done by using your xi-api-key. <br/> You can view your xi-api-key using the 'Profile' tab on https://elevenlabs.io. Our API is experimental so all endpoints are subject to change.",
+		"description": "This is the documentation for the ElevenLabs API. You can use this API to use our service programmatically, this is done by using your xi-api-key. \u003Cbr/\u003E You can view your xi-api-key using the 'Profile' tab on https://elevenlabs.io. Our API is experimental so all endpoints are subject to change.",
 		"version": "1.0"
 	},
 	"paths": {
@@ -1024,8 +1024,8 @@
 					}
 				},
 				"x-fern-sdk-method-name": "stream_with_timestamps",
-				"x-fern-sdk-group-name": "text_to_speech",
-				"x-fern-streaming": true
+				"x-fern-streaming": true,
+				"x-fern-sdk-group-name": "text_to_speech"
 			}
 		},
 		"/v1/speech-to-speech/{voice_id}": {
@@ -1247,8 +1247,8 @@
 						}
 					}
 				},
-				"x-fern-sdk-method-name": "generate_parameters",
-				"x-fern-sdk-group-name": "voice_generation"
+				"x-fern-sdk-group-name": "voice_generation",
+				"x-fern-sdk-method-name": "generate_parameters"
 			}
 		},
 		"/v1/voice-generation/generate-voice": {
@@ -1674,8 +1674,8 @@
 						}
 					}
 				},
-				"x-fern-sdk-method-name": "get_default_settings",
-				"x-fern-sdk-group-name": "voices"
+				"x-fern-sdk-group-name": "voices",
+				"x-fern-sdk-method-name": "get_default_settings"
 			}
 		},
 		"/v1/voices/{voice_id}/settings": {
@@ -4513,8 +4513,8 @@
 						"required": false,
 						"schema": {
 							"type": "integer",
-							"maximum": 100.0,
-							"minimum": 1.0,
+							"maximum": 100,
+							"minimum": 1,
 							"title": "Page Size",
 							"description": "How many pronunciation dictionaries to return at maximum. Can not exceed 100, defaults to 30.",
 							"default": 30
@@ -5510,8 +5510,8 @@
 						"required": false,
 						"schema": {
 							"type": "integer",
-							"maximum": 100.0,
-							"minimum": 1.0,
+							"maximum": 100,
+							"minimum": 1,
 							"title": "Page Size",
 							"description": "How many Agents to return at maximum. Can not exceed 100, defaults to 30.",
 							"default": 30
@@ -5620,8 +5620,8 @@
 						"required": false,
 						"schema": {
 							"type": "integer",
-							"maximum": 100.0,
-							"minimum": 1.0,
+							"maximum": 100,
+							"minimum": 1,
 							"title": "Page Size",
 							"description": "How many conversations to return at maximum. Can not exceed 100, defaults to 30.",
 							"default": 30
@@ -6473,6 +6473,9 @@
 						"type": "string",
 						"title": "Language",
 						"default": "en"
+					},
+					"dynamic_variables": {
+						"$ref": "#/components/schemas/DynamicVariablesConfig"
 					}
 				},
 				"type": "object",
@@ -7596,12 +7599,12 @@
 					"similarity_threshold": {
 						"type": "number",
 						"title": "Similarity Threshold",
-						"description": "Threshold for voice similarity between provided sample and library voices. Must be in range <0, 2>. The smaller the value the more similar voices will be returned."
+						"description": "Threshold for voice similarity between provided sample and library voices. Must be in range \u003C0, 2\u003E. The smaller the value the more similar voices will be returned."
 					},
 					"top_k": {
 						"type": "integer",
 						"title": "Top K",
-						"description": "Number of most similar voices to return. If similarity_threshold is provided, less than this number of voices may be returned. Must be in range <1, 100>."
+						"description": "Number of most similar voices to return. If similarity_threshold is provided, less than this number of voices may be returned. Must be in range \u003C1, 100\u003E."
 					}
 				},
 				"type": "object",
@@ -8470,8 +8473,8 @@
 					},
 					"response_timeout_secs": {
 						"type": "integer",
-						"maximum": 30.0,
-						"minimum": 1.0,
+						"maximum": 30,
+						"minimum": 1,
 						"title": "Response Timeout Secs"
 					}
 				},
@@ -8831,6 +8834,26 @@
 					"custom_llm_extra_body": {
 						"type": "object",
 						"title": "Custom Llm Extra Body"
+					},
+					"dynamic_variables": {
+						"additionalProperties": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "number"
+								},
+								{
+									"type": "integer"
+								},
+								{
+									"type": "boolean"
+								}
+							]
+						},
+						"type": "object",
+						"title": "Dynamic Variables"
 					}
 				},
 				"type": "object",
@@ -9145,6 +9168,32 @@
 				],
 				"title": "DubbingMetadataResponse"
 			},
+			"DynamicVariablesConfig": {
+				"properties": {
+					"dynamic_variable_placeholders": {
+						"additionalProperties": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "number"
+								},
+								{
+									"type": "integer"
+								},
+								{
+									"type": "boolean"
+								}
+							]
+						},
+						"type": "object",
+						"title": "Dynamic Variable Placeholders"
+					}
+				},
+				"type": "object",
+				"title": "DynamicVariablesConfig"
+			},
 			"EditProjectResponseModel": {
 				"properties": {
 					"project": {
@@ -9216,6 +9265,10 @@
 					"next_character_count_reset_unix": {
 						"type": "integer",
 						"title": "Next Character Count Reset Unix"
+					},
+					"voice_slots_used": {
+						"type": "integer",
+						"title": "Voice Slots Used"
 					},
 					"voice_limit": {
 						"type": "integer",
@@ -9299,6 +9352,7 @@
 					"can_extend_character_limit",
 					"allowed_to_extend_character_limit",
 					"next_character_count_reset_unix",
+					"voice_slots_used",
 					"voice_limit",
 					"max_voice_add_edits",
 					"voice_add_edit_counter",
@@ -10202,13 +10256,18 @@
 					},
 					"description": {
 						"type": "string",
-						"title": "Description"
+						"title": "Description",
+						"default": ""
+					},
+					"dynamic_variable": {
+						"type": "string",
+						"title": "Dynamic Variable",
+						"default": ""
 					}
 				},
 				"type": "object",
 				"required": [
-					"type",
-					"description"
+					"type"
 				],
 				"title": "LiteralJsonSchemaProperty"
 			},
@@ -11055,7 +11114,7 @@
 					"temperature": {
 						"type": "number",
 						"title": "Temperature",
-						"default": 0.0
+						"default": 0
 					},
 					"max_tokens": {
 						"type": "integer",
@@ -11648,6 +11707,10 @@
 						"type": "integer",
 						"title": "Next Character Count Reset Unix"
 					},
+					"voice_slots_used": {
+						"type": "integer",
+						"title": "Voice Slots Used"
+					},
 					"voice_limit": {
 						"type": "integer",
 						"title": "Voice Limit"
@@ -11723,6 +11786,7 @@
 					"can_extend_character_limit",
 					"allowed_to_extend_character_limit",
 					"next_character_count_reset_unix",
+					"voice_slots_used",
 					"voice_limit",
 					"max_voice_add_edits",
 					"voice_add_edit_counter",
@@ -11886,7 +11950,7 @@
 					"turn_timeout": {
 						"type": "number",
 						"title": "Turn Timeout",
-						"default": 7.0
+						"default": 7
 					},
 					"mode": {
 						"allOf": [
@@ -11993,6 +12057,10 @@
 			},
 			"UserResponseModel": {
 				"properties": {
+					"user_id": {
+						"type": "string",
+						"title": "User Id"
+					},
 					"subscription": {
 						"$ref": "#/components/schemas/SubscriptionResponseModel"
 					},
@@ -12043,6 +12111,7 @@
 				},
 				"type": "object",
 				"required": [
+					"user_id",
 					"subscription",
 					"subscription_extras",
 					"is_new_user",
@@ -12412,7 +12481,7 @@
 					"style": {
 						"type": "number",
 						"title": "Style",
-						"default": 0.0
+						"default": 0
 					},
 					"use_speaker_boost": {
 						"type": "boolean",
