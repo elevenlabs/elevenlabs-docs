@@ -1,0 +1,128 @@
+---
+title: Dynamic Variables
+subtitle: Pass custom data to your agent's messages, tools, and system prompts.
+slug: conversational-ai/customization/dynamic-variables
+---
+
+Enhance the functionality of your conversational agents by passing dynamic variables at the start of the call. 
+These variables are accessible throughout your agent's system prompts, first messages, and tool call parameters, allowing for flexible and context-aware conversations.
+
+## Prerequisites
+
+- An [ElevenLabs account](https://elevenlabs.io)
+- A configured ElevenLabs Conversational Agent ([setup guide](/docs/conversational-ai/docs/agent-setup))
+- Python 3.7+ or Node.js 16+
+
+## Implementation
+
+<Steps>
+  <Step title="Define Variables">
+    Add variables using double curly braces when editing prompts or messages `{{variable_name}}` 
+    
+    <Frame>
+      <img src="../images/dynamic_variable_first_message.png" alt="Dynamic variables in first message" />
+    </Frame>
+    <Frame>
+      <img src="../images/dynamic_variable_system_prompt.png" alt="Dynamic variables in system prompt" />
+    </Frame>
+  </Step>
+
+  <Step title="Use or add variables Tools">
+    Add variables to tool parameters by selecting "Dynamic Variables" as the value type. This is available both for client tools and webooks. 
+    <Frame>
+      <img src="../images/dynamic_variable_tool.png" alt="Dynamic variables in tool parameters" />
+    </Frame>
+    Create a new dynamic variable in the tools tab by selecting `Dynamic Variable` as the value type of a new parameter and clicking the `+` button on the right.
+  </Step>
+
+  <Step title="Provide Placeholders">
+    Set placeholder values in the web interface:
+    <Frame>
+      <img src="../images/dynamic_variables.png" alt="Setting dynamic variable placeholders" />
+    </Frame>
+  </Step>
+
+  
+</Steps>
+
+## Code Examples
+<Tabs>
+  <Tab title="Javascript">
+    <Tip>
+        Ensure you have the latest [Javascript](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-js)/[React SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-react) installed.
+    </Tip>
+    ```javascript
+    const conversation = await Conversation.startSession({
+      dynamic_variables: {
+        customer_name: "John",
+        account_balance: 5000,
+        location: "New York"
+      }
+    });
+    ```
+  </Tab>
+
+  <Tab title="Python">
+    <Tip>
+        Ensure you have the latest [Python SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-python) installed.
+    </Tip>
+    ```python
+    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+
+    config = {
+        "dynamic_variables": {
+            "customer_name": "John",
+            "account_balance": 5000,
+            "location": "New York"
+        }
+    }
+
+    conversation = Conversation()
+    conversation.start_session(config)
+    ```
+  </Tab>
+
+  <Tab title="Swift">
+    <Tip>
+        Ensure you have the latest [Swift SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-swift) installed.
+    </Tip>
+    ```swift
+    import ElevenLabsSDK
+
+    let config = ConversationInitiationClientData(
+        dynamic_variables: [
+            "customer_name": "John",
+            "account_balance": 5000,
+            "location": "New York"
+        ]
+    )
+
+    let conversation = try await ElevenLabsSDK.Conversation.startSession(
+        config: config,
+        callbacks: callbacks
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Supported Types
+The dynamic variables passed to the agent is an object with string keys and values that can beof the following types:
+- String
+- Number
+- Boolean
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Variables Not Replacing">
+    Check that:
+    - Variable names match exactly (case-sensitive)
+    - Variables use double curly braces: `{{variable_name}}`
+    - Variables are included in your `dynamicVariables` object
+  </Accordion>
+  <Accordion title="Type Errors">
+    Verify that:
+    - Variable values match the expected type
+    - Values are strings, numbers, or booleans only
+  </Accordion>
+</AccordionGroup>
