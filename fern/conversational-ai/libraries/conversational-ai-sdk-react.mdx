@@ -1,9 +1,8 @@
 ---
 title: React SDK
-subtitle: 'Conversational AI SDK: deploy customized, interactive voice agents in minutes.'
+subtitle: "Conversational AI SDK: deploy customized, interactive voice agents in minutes."
 slug: conversational-ai/libraries/conversational-ai-sdk-react
 ---
-
 
 <Info>
   Also see the [Conversational AI
@@ -63,25 +62,40 @@ const conversation = useConversation({
 
 **startConversation**
 
-`startConversation` method kick off the websocket connection and starts using microphone to communicate with the ElevenLabs Conversational AI agent.  
-The method accepts options object, with the `url` or `agentId` option being required.
+The `startConversation` method kicks off the websocket connection and starts using the microphone to communicate with the ElevenLabs Conversational AI agent.
+The method requires either a signed URL `signedUrl` or an agent ID `agentId`. For public agents, the `agentId` must be set, which can be found in the [dashboard](https://elevenlabs.io/app/conversational-ai).
 
-Agent ID can be acquired through [ElevenLabs UI](https://elevenlabs.io/app/conversational-ai) and is always necessary.
+<CodeGroup>
 
-```js
+```js Public agent
 const conversation = useConversation();
-const conversationId = await conversation.startSession({ url });
+const conversationId = await conversation.startSession({
+  agentId: "<public agent id>",
+});
 ```
 
-For the public agents, define `agentId` - no signed link generation necessary.
+```js Authenticated agent
+const conversation = useConversation();
+const conversationId = await conversation.startSession({
+  signedUrl: "<conversation signed url>", // learn how to retrieve this below
+});
+```
 
-In case the conversation requires authorization, use the REST API to generate signed links. Use the signed link as a `url` parameter.
+</CodeGroup>
 
-`startSession` returns promise resolving to `conversationId`. The value is a globally unique conversation ID you can use to identify separate conversations.
+**Authenticated agents** require a `signedUrl` to be passed to the `startSession` method.
 
-```js
-// your server
-const requestHeaders: HeadersInit = new Headers();
+<Steps>
+<Step title="Enable authentication in the dashboard">
+In the ElevenLabs **Security** tab, enable the **Enable authentication** setting.
+</Step>
+
+<Step title="Generate a signed URL">
+  <Note>This operation must be performed server-side.</Note>
+  <CodeGroup>
+
+```js Using the REST API
+const requestHeaders = new Headers();
 requestHeaders.set("xi-api-key", process.env.XI_API_KEY); // use your ElevenLabs API key
 
 const response = await fetch(
@@ -99,6 +113,28 @@ if (!response.ok) {
 const body = await response.json();
 const url = body.signed_url; // use this URL for startConversation method.
 ```
+
+```js Using the ElevenLabs SDK
+import { ElevenLabsClient } from "elevenlabs"; // install the ElevenLabs SDK
+
+const client = new ElevenLabsClient({
+  apiKey,
+});
+
+const { signed_url } = await client.conversationalAi.getSignedUrl({
+  agent_id: "<agent id>", // this can be found in the dashboard
+});
+
+// Set the `signedUrl` parameter in the startConversation method to the signed_url retrieved above.
+```
+
+</CodeGroup>
+
+</Step>
+
+</Steps>
+
+`startSession` returns promise resolving to `conversationId`. The value is a globally unique conversation ID you can use to identify separate conversations.
 
 **endSession**
 
