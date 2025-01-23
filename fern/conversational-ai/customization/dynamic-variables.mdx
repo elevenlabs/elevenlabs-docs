@@ -61,7 +61,8 @@ For example, you could pass a customer's subscription tier information into the 
       dynamic_variables: {
         customer_name: "John",
         account_balance: 5000,
-        location: "New York"
+        location: "New York",
+        is_premium: true
       }
     });
     ```
@@ -71,42 +72,73 @@ For example, you could pass a customer's subscription tier information into the 
     <Tip>
         Ensure you have the latest [Python SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-python) installed.
     </Tip>
-    ```python
-    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+    <Steps>
+      <Step title="Configure Dynamic Variables">
+        ```python
+        from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
 
-    config = {
-        "dynamic_variables": {
-            "customer_name": "John",
-            "account_balance": 5000,
-            "location": "New York"
+        dynamic_vars = {
+            "customer_balance": 5000.50,        # Can be float/int
+            "customer_location": "New York",    # Can be string
+            "customer_name": "John Doe",        # Can be string
+            "is_premium": True,                 # Can be boolean
         }
-    }
 
-    conversation = Conversation()
-    conversation.start_session(config)
-    ```
+        config = ConversationConfig(
+            conversation_config_override={
+                "tts": {
+                    "voice_id": "iP95p4xoKVk53GoZ742B"
+                }
+            },
+            dynamic_variables=dynamic_vars
+        )
+        ```
+      </Step>
+
+      <Step title="Start Conversation Session">
+        ```python
+        conversation = Conversation(
+            ...
+            config=config
+            ...
+        )
+        conversation.start_session()
+        ```
+      </Step>
+    </Steps>
   </Tab>
 
   <Tab title="Swift">
     <Tip>
         Ensure you have the latest [Swift SDK](https://elevenlabs.io/docs/conversational-ai/libraries/conversational-ai-sdk-swift) installed.
     </Tip>
-    ```swift
-    import ElevenLabsSDK
+    <Steps>
+      <Step title="Configure Dynamic Variables">
+        ```swift
+        import ElevenLabsSDK
 
-    let config = ConversationInitiationClientData(
-        dynamic_variables: [
+        let dynamic_vars = [
             "customer_name": "John",
             "account_balance": 5000,
             "location": "New York"
+            "is_premium": true
         ]
-    )
 
-    let conversation = try await ElevenLabsSDK.Conversation.startSession(
-        config: config,
-        callbacks: callbacks
-    )
-    ```
+        let config = ElevenLabsSDK.SessionConfig(
+            agentId: agent.id,
+            dynamic_variables: dynamic_vars
+        )
+        ```
+      </Step>
+
+      <Step title="Start Conversation Session">
+        ```swift
+        let conversation = try await ElevenLabsSDK.Conversation.startSession(
+          dynamic_variables: dynamic_vars
+        )
+        ```
+      </Step>
+    </Steps>
   </Tab>
 </Tabs>
 
