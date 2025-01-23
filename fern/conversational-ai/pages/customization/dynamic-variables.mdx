@@ -1,0 +1,161 @@
+---
+title: Dynamic variables 
+subtitle: Pass runtime values to personalize your agent's behavior.
+---
+
+**Dynamic variables** allow you to inject runtime values into your agent's messages, system prompts, and tools. This enables you to personalize each conversation with user-specific data without creating multiple agents.
+
+## Overview
+
+Dynamic variables can be integrated into multiple aspects of your agent:
+
+- **System prompts** to customize behavior and context
+- **First messages** to personalize greetings
+- **Tool parameters** to pass user-specific data
+
+Here are a few examples where dynamic variables are useful:
+
+- **Personalizing greetings** with user names
+- **Including account details** in responses
+- **Passing data** to tool calls
+- **Customizing behavior** based on subscription tiers
+
+<Info>
+  Dynamic variables are ideal for injecting user-specific data that shouldn't be hardcoded into your agent's configuration.
+</Info>
+
+## Guide
+
+### Prerequisites
+
+- An [ElevenLabs account](https://elevenlabs.io)
+- A configured ElevenLabs Conversational Agent ([create one here](/docs/conversational-ai/docs/agent-setup))
+
+<Steps>
+  <Step title="Define dynamic variables in prompts">
+    Add variables using double curly braces `{{variable_name}}` in your:
+    - System prompts
+    - First messages
+    - Tool parameters
+
+    <Frame background="subtle">
+      ![Dynamic variables in messages](/assets/images/conversational-ai-dynamic-vars-first-message.png)
+    </Frame>
+
+    <Frame background="subtle">
+      ![Dynamic variables in messages](/assets/images/conversational-ai-dynamic-vars-system-prompt.png)
+    </Frame>
+  </Step>
+
+  <Step title="Define dynamic variables in tools">
+    You can also define dynamic variables in the tool configuration.
+    To create a new dynamic variable, set the value type to Dynamic variable and click the `+` button.
+
+    <Frame background="subtle">
+      ![Setting placeholders](/assets/images/conversational-ai-dynamic-vars-config.png)
+    </Frame>
+
+    <Frame background="subtle">
+      ![Setting placeholders](/assets/images/conversational-ai-dynamic-vars-path-params.png)
+    </Frame>
+  </Step>
+
+  <Step title="Set placeholders">
+    Configure default values in the web interface for testing:
+
+    <Frame background="subtle">
+      ![Setting placeholders](/assets/images/conversational-ai-dynamic-vars-presets.png)
+    </Frame>
+  </Step>
+
+  <Step title="Pass variables at runtime">
+    When starting a conversation, provide the dynamic variables in your code:
+
+    <Tip>
+      Ensure you have the latest [SDK](https://elevenlabs.io/docs) installed.
+    </Tip>
+
+    <CodeGroup>
+    ```python title="Python"
+    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+
+    dynamic_vars = {
+        "customer_name": "John Doe",
+        "account_balance": 5000.50,
+        "location": "New York",
+        "is_premium": True
+    }
+
+    config = ConversationConfig(
+        dynamic_variables=dynamic_vars
+    )
+
+    conversation = Conversation(
+        config=config
+    )
+    conversation.start_session()
+    ```
+
+    ```javascript title="JavaScript"
+    const conversation = await Conversation.startSession({
+      dynamic_variables: {
+        customer_name: "John Doe",
+        account_balance: 5000.50,
+        location: "New York",
+        is_premium: true
+      }
+    });
+    ```
+
+    ```swift title="Swift"
+    let dynamic_vars = [
+        "customer_name": "John Doe",
+        "account_balance": 5000.50,
+        "location": "New York",
+        "is_premium": true
+    ]
+
+    let config = ElevenLabsSDK.SessionConfig(
+        agentId: agent.id,
+        dynamic_variables: dynamic_vars
+    )
+
+    let conversation = try await ElevenLabsSDK.Conversation.startSession(
+        config: config
+    )
+    ```
+    </CodeGroup>
+  </Step>
+</Steps>
+
+## Supported Types
+
+Dynamic variables support these value types:
+
+<CardGroup cols={3}>
+  <Card title="String">
+    Text values
+  </Card>
+  <Card title="Number">
+    Numeric values
+  </Card>
+  <Card title="Boolean">
+    True/false values
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Variables not replacing">
+    Verify that:
+    - Variable names match exactly (case-sensitive)
+    - Variables use double curly braces: `{{variable_name}}`
+    - Variables are included in your dynamic_variables object
+  </Accordion>
+  <Accordion title="Type errors">
+    Ensure that:
+    - Variable values match the expected type
+    - Values are strings, numbers, or booleans only
+  </Accordion>
+</AccordionGroup>
