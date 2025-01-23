@@ -26,6 +26,7 @@ Audio Native is an embedded audio player that automatically voices content of a 
     The URL allowlist is the list of web pages that will be permitted to play your content.
 
     You can choose to add a specific web page (e.g. `https://elevenlabs.io/blog`) or add a whole domain to the allowlist (e.g. `http://elevenlabs.io`). If a player is embedded on a page that is not in the allowlist, it will not work as intended.
+
   </Step>
   <Step title="Get embed code">
     Once you've finished configuring the player and allowlist, copy the embed code and paste it into your website's source code.
@@ -37,13 +38,27 @@ Audio Native is an embedded audio player that automatically voices content of a 
 To integrate Audio Native into your web techology of choice, see the following guides:
 
 <CardGroup cols={4}>
-  <a href="/docs/product-guides/audio-tools/audio-native/react"><Card title="React" icon="brands react" /></a>
-  <a href="/docs/product-guides/audio-tools/audio-native/ghost"><Card title="Ghost" icon="duotone ghost" /></a>
-  <a href="/docs/product-guides/audio-tools/audio-native/squarespace"><Card title="Squarespace" icon="brands squarespace" /></a>
-  <a href="/docs/product-guides/audio-tools/audio-native/framer"><Card title="Framer" icon="duotone browser" /></a>
-  <a href="/docs/product-guides/audio-tools/audio-native/webflow"><Card title="Webflow" icon="brands webflow" /></a>
-  <a href="/docs/product-guides/audio-tools/audio-native/wordpress"><Card title="Wordpress" icon="brands wordpress" /></a>
-  <a href="/docs/product-guides/audio-tools/audio-native/wix"><Card title="Wix" icon="brands wix" /></a>
+  <a href="/docs/product-guides/audio-tools/audio-native/react">
+    <Card title="React" icon="brands react" />
+  </a>
+  <a href="/docs/product-guides/audio-tools/audio-native/ghost">
+    <Card title="Ghost" icon="duotone ghost" />
+  </a>
+  <a href="/docs/product-guides/audio-tools/audio-native/squarespace">
+    <Card title="Squarespace" icon="brands squarespace" />
+  </a>
+  <a href="/docs/product-guides/audio-tools/audio-native/framer">
+    <Card title="Framer" icon="duotone browser" />
+  </a>
+  <a href="/docs/product-guides/audio-tools/audio-native/webflow">
+    <Card title="Webflow" icon="brands webflow" />
+  </a>
+  <a href="/docs/product-guides/audio-tools/audio-native/wordpress">
+    <Card title="Wordpress" icon="brands wordpress" />
+  </a>
+  <a href="/docs/product-guides/audio-tools/audio-native/wix">
+    <Card title="Wix" icon="brands wix" />
+  </a>
 </CardGroup>
 
 ## Using the API
@@ -55,14 +70,15 @@ You can use the [Audio Native API](/docs/api-reference/audio-native/create) to p
 from elevenlabs import ElevenLabs
 
 client = ElevenLabs(
-    api_key="YOUR_API_KEY",
+api_key="YOUR_API_KEY",
 )
 response = client.audio_native.create(
-    name="name",
+name="name",
 )
 
 # Use the snippet in response.html_snippet to embed the player on your website
-```
+
+````
 
 ```javascript title="JavaScript"
 import { ElevenLabsClient } from "elevenlabs";
@@ -73,7 +89,8 @@ const { html_snippet } = await client.audioNative.create({
 });
 
 // Use the HTML code in html_snippet to embed the player on your website
-```
+````
+
 </CodeBlocks>
 
 ## Settings
@@ -83,6 +100,7 @@ const { html_snippet } = await client.audioNative.create({
     ### Voices
 
     To configure the voice and model that will be used to read the content of the page, navigate to the "Settings" tab and select the voice and modelyou want to use.
+
   </Accordion>
   <Accordion title="Pronunciation dictionaries">
     ### Pronunciation dictionaries
@@ -90,5 +108,6 @@ const { html_snippet } = await client.audioNative.create({
     Sometimes you may want to specify the pronunciation of certain words, such as character or brand names, or specify how acronyms should be read. Pronunciation dictionaries allow this functionality by enabling you to upload a lexicon or dictionary file that includes rules about how specified words should be pronounced, either using a phonetic alphabet (phoneme tags) or word substitutions (alias tags).
 
     Whenever one of these words is encountered in a project, the AI will pronounce the word using the specified replacement. When checking for a replacement word in a pronunciation dictionary, the dictionary is checked from start to end and only the first replacement is used.
+
   </Accordion>
 </AccordionGroup>
