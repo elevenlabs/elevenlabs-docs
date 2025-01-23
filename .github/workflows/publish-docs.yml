@@ -1,4 +1,4 @@
-name: publish-docs
+name: Publish docs
 
 on:
   push:
@@ -9,13 +9,11 @@ jobs:
   publish-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install Fern
-        run: npm install -g fern-api
-
+      - run: npm install -g pnpm
+        
       - name: Publish Docs
         env:
           FERN_TOKEN: ${{ secrets.FERN_API_KEY }}
-        run: fern generate --docs
+        run: pnpm dlx fern-api generate --docs

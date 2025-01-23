@@ -1,4 +1,4 @@
-name: preview-docs
+name: Preview docs
 
 on:
   pull_request:
@@ -6,22 +6,20 @@ on:
       - main
 
 jobs:
-  run:
+  preview-docs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Fern
-        run: npm install -g fern-api
+      - uses: actions/checkout@v4
+       
+      - run: npm install -g pnpm
 
       - name: Generate preview URL
         id: generate-docs
         env:
           FERN_TOKEN: ${{ secrets.FERN_API_KEY }}
         run: |
-          OUTPUT=$(fern generate --docs --preview) || true
+          OUTPUT=$(pnpm dlx fern-api generate --docs --preview) || true
           echo "$OUTPUT"
           URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
           echo "Preview URL: $URL"
