@@ -20,31 +20,31 @@ paths:
   # ===========================
   /v1/similar-voices:
     post:
-      summary: List similar Voices
+      summary: List similar voices
       x-fern-audiences:
         - sdk
   /v1/dubbing:
     post:
-      summary: Dub a Video or Audio File
+      summary: Dub a video or audio file
       x-fern-audiences:
         - docs
   /v1/dubbing/{dubbing_id}:
     get:
-      summary: Get Dubbing
+      summary: Get dubbing
       x-fern-audiences:
         - sdk
     delete:
-      summary: Delete Dubbing
+      summary: Delete dubbing
       x-fern-audiences:
         - sdk
   /v1/dubbing/{dubbing_id}/audio/{language_code}:
     get:
-      summary: Get Dubbed Audio
+      summary: Get dubbed audio
       x-fern-audiences:
         - sdk
   /v1/dubbing/{dubbing_id}/transcript/{language_code}:
     get:
-      summary: Get Dubbed Transcript
+      summary: Get dubbed transcript
       x-fern-audiences:
         - sdk
       x-fern-sdk-method-name: get_transcript_for_dub
@@ -75,7 +75,8 @@ paths:
             text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
-        - {} # voice id
+        - required: true
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - {} # enable logging
         - {} # optimize streaming latency
         - schema:
@@ -96,7 +97,8 @@ paths:
             text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
-        - {} # voice id
+        - required: true
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - {} # enable logging
         - {} # optimize streaming latency
         - schema:
@@ -117,7 +119,8 @@ paths:
             text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
-        - {} # voice id
+        - required: true
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - {} # enable logging
         - {} # optimize streaming latency
         - schema:
@@ -144,7 +147,8 @@ paths:
             text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
-        - {} # voice id
+        - required: true
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - {} # enable logging
         - {} # optimize streaming latency
         - schema:
@@ -218,7 +222,8 @@ paths:
           request:
             model_id: eleven_multilingual_sts_v2
       parameters:
-        - {} # voice id
+        - required: true
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - {} # enable logging
         - {} # optimize streaming latency
         - schema:
@@ -237,7 +242,8 @@ paths:
           request:
             model_id: eleven_multilingual_sts_v2
       parameters:
-        - {} # voice id
+        - required: true
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - {} # enable logging
         - {} # optimize streaming latency
         - schema:
@@ -267,6 +273,7 @@ paths:
   # =======
   /v1/history:
     get:
+      summary: Get generated items
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -297,8 +304,13 @@ paths:
                 ]
               last_history_item_id: 'ja9xsmfGhxYcymxGcOGB'
               has_more: true
+      parameters:
+        - {} # page_size
+        - {} # start_after_history_item_id
+        - description: ID of the voice to be filtered for. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
   /v1/history/{history_item_id}:
     get:
+      summary: Get history item by ID
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -328,7 +340,10 @@ paths:
               feedback: null
               share_link_id: null
               source: 'TTS'
+      parameters:
+        - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
     delete:
+      summary: Delete history item
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -337,26 +352,34 @@ paths:
           response:
             body:
               status: 'ok'
+      parameters:
+        - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/history/{history_item_id}/audio:
     get:
+      summary: Get audio from history item
       x-fern-audiences:
         - sdk
       x-fern-examples:
         - path-parameters:
             history_item_id: 'HISTORY_ITEM_ID'
+      parameters:
+        - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/history/download:
     post:
+      summary: Download history items
       x-fern-audiences:
         - sdk
       x-fern-examples:
         - request:
             history_item_ids: ['HISTORY_ITEM_ID']
-
+      properties:
+        - description: IDs of the history items to be downloaded. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   # ======
   # VOICES
   # ======
   /v1/voices/{voice_id}/samples/{sample_id}:
     delete:
+      summary: Delete voice sample
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -366,16 +389,36 @@ paths:
           response:
             body:
               status: 'ok'
+      parameters:
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the sample to be used. You can use the [Get voices](/docs/api-reference/voices/get) endpoint list all the available samples for a voice.
   /v1/voices/{voice_id}/samples/{sample_id}/audio:
     get:
+      summary: Get audio from sample
       x-fern-audiences:
         - sdk
       x-fern-examples:
         - path-parameters:
             voice_id: 'VOICE_ID'
             sample_id: 'SAMPLE_ID'
+      parameters:
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the sample to be used. You can use the [Get voices](/docs/api-reference/voices/get) endpoint list all the available samples for a voice.
+  /v1/voices/settings/default:
+    get:
+      summary: Get default voice settings
+      x-fern-audiences:
+        - sdk
+      x-fern-examples:
+        - response:
+            body:
+              stability: 0.5
+              similarity_boost: 0.75
+              style: 0
+              use_speaker_boost: true
   /v1/voices/{voice_id}/settings:
     get:
+      summary: Get voice settings
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -389,6 +432,7 @@ paths:
               use_speaker_boost: true
   /v1/voices/{voice_id}:
     get:
+      summary: Get voice
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -441,7 +485,10 @@ paths:
                 }
               owner_id: null
               permission_on_resource: null
+      parameters:
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
     delete:
+      summary: Delete voice
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -450,8 +497,11 @@ paths:
           response:
             body:
               status: 'ok'
+      parameters:
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
   /v1/voices/{voice_id}/settings/edit:
     post:
+      summary: Edit voice settings
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -464,8 +514,11 @@ paths:
           response:
             body:
               status: 'ok'
+      parameters:
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
   /v1/voices/add:
     post:
+      summary: Add voice
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -477,6 +530,7 @@ paths:
               requires_verification: true
   /v1/voices/{voice_id}/edit:
     post:
+      summary: Edit voice
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -487,8 +541,12 @@ paths:
           response:
             body:
               status: 'ok'
+      parameters:
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
   /v1/voices/add/{public_user_id}/{voice_id}:
     post:
+      summary: Add shared voice
+      description: Add a shared voice to your account.
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -502,6 +560,7 @@ paths:
               voice_id: 'b38kUX8pkfYO2kHyqfFy'
   /v1/voices:
     get:
+      summary: List voices
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -636,35 +695,49 @@ paths:
               voice_verification: null
               owner_id: null
               permission_on_resource: null
-
+  # ==========================
+  # PROJECTS
+  # ==========================
   /v1/projects:
     get:
+      summary: List projects
       x-fern-audiences:
         - sdk
   /v1/projects/add:
     post:
+      summary: Create project
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}:
     get:
+      summary: Get project
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
     post:
+      summary: Update project
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
     delete:
+      summary: Delete project
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}/convert:
     post:
+      summary: Convert project
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}/snapshots:
     get:
+      summary: List project snapshots
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream:
     post:
+      summary: Stream project audio
       x-fern-audiences:
         - sdk
       responses:
@@ -675,45 +748,70 @@ paths:
                 type: string
   /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive:
     post:
+      summary: Stream archive with project audio
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}/chapters:
     get:
+      summary: List project chapters
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}/chapters/{chapter_id}:
     get:
+      summary: Get project chapter
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
     delete:
+      summary: Delete project chapter
       x-fern-audiences:
         - sdk
   /v1/projects/{project_id}/chapters/{chapter_id}/convert:
     post:
+      summary: Convert project chapter
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
   /v1/projects/{project_id}/chapters/{chapter_id}/snapshots:
     get:
+      summary: List project chapter snapshots
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
   /v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream:
     post:
+      summary: Stream project chapter snapshot audio
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
+        - description: The ID of the chapter snapshot to be used. You can use the [List project chapter snapshots](/docs/api-reference/chapters/get-snapshots) endpoint to list all the available snapshots.
   /v1/projects/{project_id}/update-pronunciation-dictionaries:
     post:
+      summary: Update pronunciation dictionaries
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/projects/{project_id}/chapters/add:
     post:
+      summary: Add project chapter
       x-fern-audiences:
-        - docs
+        - sdk
 
   # ======
   # MODELS
   # ======
   /v1/models:
     get:
+      summary: List models
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -774,6 +872,7 @@ paths:
   # ====
   /v1/user/subscription:
     get:
+      summary: Get user subscription
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -798,6 +897,7 @@ paths:
               billing_period: null
   /v1/user:
     get:
+      summary: Get user
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -837,6 +937,7 @@ paths:
   # =============
   /v1/shared-voices:
     get:
+      summary: Get shared voices
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -880,6 +981,7 @@ paths:
   # ==========================
   /v1/pronunciation-dictionaries/:
     get:
+      summary: List pronunciation dictionaries
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -902,6 +1004,7 @@ paths:
               has_more: true
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/:
     get:
+      summary: Get pronunciation dictionary
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -924,6 +1027,7 @@ paths:
             type: string
   /v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download:
     get:
+      summary: Get pronunciation dictionary by version
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -955,19 +1059,22 @@ paths:
         - convai
   /v1/convai/agents/create:
     post:
+      summary: Create agent
       x-fern-audiences:
         - convai
   /v1/convai/agents/{agent_id}:
     get:
+      summary: Get agent
       x-fern-audiences:
         - convai
     delete:
+      summary: Delete agent
       x-fern-audiences:
         - convai
     patch:
+      summary: Update agent
       x-fern-audiences:
         - convai
-
   /v1/convai/agents/{agent_id}/widget:
     get:
       x-fern-audiences:
@@ -1000,6 +1107,7 @@ paths:
         - convai
   /v1/convai/conversations:
     get:
+      summary: List conversations
       x-fern-audiences:
         - convai
   /v1/convai/conversations/{conversation_id}:
@@ -1051,8 +1159,15 @@ paths:
   # ==========================
   /v1/audio-native:
     post:
+      summary: Create audio native project
       x-fern-audiences:
         - sdk
+  /v1/audio-native/{project_id}/content:
+    post:
+      summary: Update audio native project
+      x-fern-audiences:
+        - sdk
+
   /v1/audio-native/get-embed-code:
     get:
       x-fern-ignore: true
@@ -1065,14 +1180,17 @@ paths:
   # ==========================
   /v1/workspace/invites:
     delete:
+      summary: Delete invite
       x-fern-audiences:
         - docs
   /v1/workspace/invites/add:
     post:
+      summary: Invite user
       x-fern-audiences:
         - docs
   /v1/workspace/members:
     post:
+      summary: Update member
       x-fern-audiences:
         - docs
   # ==========================
@@ -1098,6 +1216,8 @@ paths:
       description: Create a voice from a text prompt.
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The output format of the generated audio.
   /v1/text-to-voice/create-voice-from-preview:
     post:
       summary: Save a voice preview
@@ -1106,6 +1226,7 @@ paths:
         - sdk
   /v1/usage/character-stats:
     get:
+      summary: Get character usage metrics
       x-fern-audiences:
         - sdk
 
@@ -1291,6 +1412,9 @@ components:
       x-fern-type-name: CreateAudioNativeProjectRequest
     Body_Download_history_items_v1_history_download_post:
       x-fern-type-name: DownloadHistoryRequest
+      properties:
+        history_item_ids:
+          description: A list of history item IDs to be downloaded. You can get the history item IDs from the [Get generated items](/docs/api-reference/history/get-all) endpoint.
     Body_Dub_a_video_or_an_audio_file_v1_dubbing_post:
       x-fern-type-name: DubAVideoOrAudioFileRequest
       required: [target_lang]
