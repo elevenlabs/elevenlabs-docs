@@ -1,0 +1,63 @@
+---
+title: Conversational AI in WordPress
+subtitle: >-
+  Learn how to deploy a Conversational AI agent to WordPress
+slug: conversational-ai/guides/conversational-ai-guide-wordpress
+---
+
+This tutorial will guide you through adding your ElevenLabs Conversational AI agent to your WordPress website.
+
+## Prerequisites
+
+- An ElevenLabs Conversational AI agent created following [this guide](/docs/conversational-ai/docs/agent-setup)
+- A WordPress website with either:
+  - WordPress.com Business/Commerce plan, or
+  - Self-hosted WordPress installation
+
+## Guide
+
+<Steps>
+    <Step title="Get your embed code">
+        Visit the [ElevenLabs dashboard](https://elevenlabs.io/app/conversational-ai) and find your agent's embed widget.
+        ```html
+        <elevenlabs-convai agent-id="YOUR_AGENT_ID"></elevenlabs-convai>
+        <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+        ```
+    </Step>
+
+    <Step title="Add the widget to a page">
+        1. In WordPress, edit your desired page
+        2. Add a Custom HTML block
+        3. Paste the `<elevenlabs-convai agent-id="YOUR_AGENT_ID"></elevenlabs-convai>` snippet into the block
+        4. Update/publish the page
+    </Step>
+
+    <Step title="Add the script globally">
+        **Option A: Using a plugin**
+        1. Install Header Footer Code Manager
+        2. Add the snippet `<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>` to the Footer section
+        3. Set it to run on All Pages
+
+        **Option B: Direct theme editing**
+        1. Go to Appearance > Theme Editor
+        2. Open footer.php
+        3. Paste the script snippet before `</body>`
+    </Step>
+
+</Steps>
+
+## Troubleshooting
+
+If the widget isn't appearing, verify:
+
+- The `<script>` snippet is added globally
+- The `<elevenlabs-convai>` snippet is correctly placed in your page
+- You've published your site after making changes
+
+## Next steps
+
+Now that you have added your Conversational AI agent to WordPress, you can:
+
+1. Customize the widget in the ElevenLabs dashboard to match your brand
+2. Add additional languages
+3. Add advanced functionality like tools & knowledge base
