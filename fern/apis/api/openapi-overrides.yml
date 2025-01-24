@@ -558,6 +558,9 @@ paths:
           response:
             body:
               voice_id: 'b38kUX8pkfYO2kHyqfFy'
+      parameters:
+        - {} # public_user_id
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
   /v1/voices:
     get:
       summary: List voices
@@ -725,11 +728,15 @@ paths:
       summary: Delete project
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/projects/{project_id}/convert:
     post:
       summary: Convert project
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/projects/{project_id}/snapshots:
     get:
       summary: List project snapshots
@@ -746,11 +753,15 @@ paths:
             audio/mpeg:
               schema:
                 type: string
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive:
     post:
       summary: Stream archive with project audio
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/projects/{project_id}/chapters:
     get:
       summary: List project chapters
@@ -768,6 +779,9 @@ paths:
       summary: Delete project chapter
       x-fern-audiences:
         - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
   /v1/projects/{project_id}/chapters/{chapter_id}/convert:
     post:
       summary: Convert project chapter
@@ -805,7 +819,8 @@ paths:
       summary: Add project chapter
       x-fern-audiences:
         - sdk
-
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   # ======
   # MODELS
   # ======
@@ -1167,7 +1182,8 @@ paths:
       summary: Update audio native project
       x-fern-audiences:
         - sdk
-
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/audio-native/get-embed-code:
     get:
       x-fern-ignore: true
