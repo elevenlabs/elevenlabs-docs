@@ -6,16 +6,30 @@ Our documentation is hosted at https://elevenlabs.io/docs and all of the content
 
 ## Running the docs
 
-Install the [Fern CLI](https://www.npmjs.com/package/fern-api) to preview the documentation changes locally. To install, use the following command
+The [Fern CLI](https://www.npmjs.com/package/fern-api) is what builds the documentation.
+
+Install [pnpm](https://pnpm.io/installation)
 
 ```
-npm install -g fern-api
+npm install -g pnpm
+```
+
+Install the dependencies
+
+```
+pnpm install
 ```
 
 Run the following command at the root of the folder
 
 ```
-fern docs dev
+pnpm run dev
+```
+
+Run the following command to lint/format the project
+
+```
+pnpm run format
 ```
 
 ## Other developer resources
