@@ -1,0 +1,65 @@
+---
+title: Conversational AI in Ghost
+subtitle: >-
+  Learn how to deploy a Conversational AI agent to Ghost
+slug: conversational-ai/guides/conversational-ai-guide-ghost
+---
+
+This tutorial will guide you through adding your ElevenLabs Conversational AI agent to your Ghost website.
+
+## Prerequisites
+
+- An ElevenLabs Conversational AI agent created following [this guide](/docs/conversational-ai/docs/agent-setup)
+- A Ghost website (paid plan or self-hosted)
+- Access to Ghost admin panel
+
+## Guide
+
+There are two ways to add the widget to your Ghost site:
+
+<Steps>
+    <Step title="Get your embed code">
+        Visit the [ElevenLabs dashboard](https://elevenlabs.io/app/conversational-ai) and copy your agent's html widget.
+
+        ```html
+        <elevenlabs-convai agent-id="YOUR_AGENT_ID"></elevenlabs-convai>
+        <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+        ```
+    </Step>
+
+    <Step title="Choose your implementation">
+        **Option A: Add globally (all pages)**
+        1. Go to Ghost Admin > Settings > Code Injection
+        2. Paste the code into Site Footer
+        3. Save changes
+
+        **Option B: Add to specific pages**
+        1. Edit your desired page/post
+        2. Click the + sign to add an HTML block
+        3. Paste your agent's html widget from step 1 into the HTML block. Make sure to fill in the agent-id attribute correctly.
+        4. Save and publish
+    </Step>
+
+    <Step title="Test the integration">
+        1. Visit your Ghost website
+        2. Verify the widget appears and functions correctly
+        3. Test on different devices and browsers
+    </Step>
+
+</Steps>
+
+## Troubleshooting
+
+If the widget isn't appearing, verify:
+
+- The code is correctly placed in either Code Injection or HTML block
+- Your Ghost plan supports custom code
+- No JavaScript conflicts with other scripts
+
+## Next steps
+
+Now that you have added your Conversational AI agent to Ghost, you can:
+
+1. Customize the widget in the ElevenLabs dashboard to match your brand
+2. Add additional languages
+3. Add advanced functionality like tools & knowledge base
