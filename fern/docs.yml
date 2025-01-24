@@ -1,5 +1,3 @@
-title: ElevenLabs Documentation
-
 instances:
   - url: https://elevenlabs.docs.buildwithfern.com/docs
     custom-domain: https://elevenlabs.io/docs
@@ -8,6 +6,8 @@ instances:
         owner: elevenlabs
         repo: elevenlabs-docs
         branch: main
+
+title: ElevenLabs Documentation
 
 layout:
   searchbar-placement: header
@@ -64,14 +64,35 @@ navigation:
       - section: DEVELOPER GUIDES
         skip-slug: true
         contents:
-          - section: Cookbooks (WIP)
+          - section: Tutorials
+            slug: cookbooks
             contents:
-              - page: Text to speech
-                icon: duotone volume-up
-                path: docs/pages/cookbooks/text-to-speech.mdx
-              - page: Sound effects
+              - section: Text to Speech
+                icon: duotone microphone
+                contents:
+                  - page: Streaming
+                    path: docs/pages/cookbooks/legacy/text-to-speech/streaming.mdx
+                  - page: Websockets
+                    path: docs/pages/cookbooks/legacy/text-to-speech/websockets.mdx
+                  - page: Request stitching
+                    path: docs/pages/cookbooks/legacy/text-to-speech/request-stitching.mdx
+                  - page: Pronunciation dictionaries
+                    path: docs/pages/cookbooks/legacy/text-to-speech/pronunciation-dictionaries.mdx
+                  - page: Twilio
+                    path: docs/pages/cookbooks/legacy/text-to-speech/twilio.mdx
+              - section: Sound effects
                 icon: duotone explosion
-                path: docs/pages/cookbooks/text-to-sound-effects.mdx
+                contents:
+                  - page: Python guide
+                    path: docs/pages/cookbooks/legacy/sound-effects/basics.mdx
+              - section: Dubbing
+                icon: duotone language
+                contents:
+                  - page: Python/Node.js guide
+                    path: docs/pages/cookbooks/legacy/dubbing/basics.mdx
+          - link: Example projects
+            icon: brands github
+            href: https://github.com/elevenlabs/elevenlabs-examples
       - section: BEST PRACTICES
         skip-slug: false
         contents:
@@ -109,9 +130,9 @@ navigation:
                 href: /docs/conversational-ai/overview
           - section: Voices
             contents:
-              - page: Voice collections
+              - page: Voice library
                 icon: duotone album-collection
-                path: docs/pages/product-guides/voices/voice-collections.mdx
+                path: docs/pages/product-guides/voices/voice-library.mdx
               - page: Voice cloning
                 icon: duotone microphone
                 path: docs/pages/product-guides/voices/voice-cloning.mdx
@@ -184,6 +205,9 @@ navigation:
           - page: Troubleshooting
             icon: duotone tools
             path: docs/pages/resources/troubleshooting.mdx
+          - page: Zero retention mode
+            icon: duotone lock
+            path: docs/pages/resources/zero-retention.mdx
   - tab: conversational-ai
     layout:
       - section: GET STARTED

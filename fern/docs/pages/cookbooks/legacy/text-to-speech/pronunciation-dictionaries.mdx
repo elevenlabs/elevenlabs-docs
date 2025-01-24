@@ -1,0 +1,197 @@
+---
+title: Using pronunciation dictionaries
+subtitle: Learn how to manage pronunciation dictionaries programmatically.
+---
+
+In this tutorial, you'll learn how to use a pronunciation dictionary with the ElevenLabs Python SDK. Pronunciation dictionaries are useful for controlling the specific pronunciation of words. We support both [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) and [CMU](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary) alphabets. It is useful for correcting rare or specific pronunciations, such as names or companies. For example, the word `nginx` could be pronounced incorrectly. Instead, we can add our version of pronunciation. Based on IPA, `nginx` is pronounced as `/ˈɛndʒɪnˈɛks/`. Finding IPA or CMU of words manually can be difficult. Instead, LLMs like ChatGPT can help you to make the search easier.
+
+We'll start by adding rules to the pronunciation dictionary from a file and comparing the text-to-speech results that use and do not use the dictionary. After that, we'll discuss how to add and remove specific rules to existing dictionaries.
+
+If you want to jump straight to the finished repo you can find it [here](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/pronunciation-dictionaries/python)
+
+<Info>
+  Phoneme tags only work with the `eleven_turbo_v2` & `eleven_monolingual_v1` models. If you use
+  phoneme tags with other models, they will silently skip the word.
+</Info>
+
+## Requirements
+
+- An ElevenLabs account with an API key (here’s how to [find your API key](/docs/api-reference/text-to-speech#authentication)).
+- Python installed on your machine
+- FFMPEG to play audio
+
+## Setup
+
+### Installing our SDK
+
+Before you begin, make sure you have installed the necessary SDKs and libraries. You will need the ElevenLabs SDK for the updating pronunciation dictionary and using text-to-speech conversion. You can install it using pip:
+
+```bash
+pip install elevenlabs
+```
+
+Additionally, install `python-dotenv` to manage your environmental variables:
+
+```bash
+pip install python-dotenv
+```
+
+Next, create a `.env` file in your project directory and fill it with your credentials like so:
+
+```
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+## Initiate the Client SDK
+
+We'll start by initializing the client SDK.
+
+```python
+import os
+from elevenlabs.client import ElevenLabs
+
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+client = ElevenLabs(
+    api_key=ELEVENLABS_API_KEY,
+)
+```
+
+## Create a Pronunciation Dictionary From a File
+
+To create a pronunciation dictionary from a File, we'll create a `.pls` file for our rules.
+
+This rule will use the "IPA" alphabet and update the pronunciation for `tomato` and `Tomato` with a different pronunciation. PLS files are case sensitive which is why we include it both with and without a capital "T". Save it as `dictionary.pls`.
+
+```xml filename="dictionary.pls"
+<?xml version="1.0" encoding="UTF-8"?>
+<lexicon version="1.0"
+      xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon
+        http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
+      alphabet="ipa" xml:lang="en-US">
+  <lexeme>
+    <grapheme>tomato</grapheme>
+    <phoneme>/tə'meɪtoʊ/</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>Tomato</grapheme>
+    <phoneme>/tə'meɪtoʊ/</phoneme>
+  </lexeme>
+</lexicon>
+```
+
+In the following snippet, we start by adding rules from a file and get the uploaded result. Finally, we generate and play two different text-to-speech audio to compare the custom pronunciation dictionary.
+
+```python
+import requests
+from elevenlabs import play, PronunciationDictionaryVersionLocator
+
+with open("dictionary.pls", "rb") as f:
+    # this dictionary changes how tomato is pronounced
+    pronunciation_dictionary = client.pronunciation_dictionary.add_from_file(
+        file=f.read(), name="example"
+    )
+
+audio_1 = client.generate(
+    text="Without the dictionary: tomato",
+    voice="Rachel",
+    model="eleven_turbo_v2",
+)
+
+audio_2 = client.generate(
+    text="With the dictionary: tomato",
+    voice="Rachel",
+    model="eleven_turbo_v2",
+    pronunciation_dictionary_locators=[
+        PronunciationDictionaryVersionLocator(
+            pronunciation_dictionary_id=pronunciation_dictionary.id,
+            version_id=pronunciation_dictionary.version_id,
+        )
+    ],
+)
+
+# play the audio
+play(audio_1)
+play(audio_2)
+```
+
+## Remove Rules From a Pronunciation Dictionary
+
+To remove rules from a pronunciation dictionary, we can simply call `remove_rules_from_the_pronunciation_dictionary` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. In the example, we take pronunciation dictionary version id from `remove_rules_from_the_pronunciation_dictionary` response because every changes to pronunciation dictionary will create a new version, so we need to use the latest version returned from the response. The old version also still available.
+
+```python
+pronunciation_dictionary_rules_removed = (
+    client.pronunciation_dictionary.remove_rules_from_the_pronunciation_dictionary(
+        pronunciation_dictionary_id=pronunciation_dictionary.id,
+        rule_strings=["tomato", "Tomato"],
+    )
+)
+
+audio_3 = client.generate(
+    text="With the rule removed: tomato",
+    voice="Rachel",
+    model="eleven_turbo_v2",
+    pronunciation_dictionary_locators=[
+        PronunciationDictionaryVersionLocator(
+            pronunciation_dictionary_id=pronunciation_dictionary_rules_removed.id,
+            version_id=pronunciation_dictionary_rules_removed.version_id,
+        )
+    ],
+)
+
+play(audio_3)
+```
+
+## Add Rules to Pronunciation Dictionary
+
+We can add rules directly to the pronunciation dictionary with `PronunciationDictionaryRule_Phoneme` class and call `add_rules_to_the_pronunciation_dictionary` from the pronunciation dictionary. The snippet will demonstrate adding rules with the class and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. This example also use pronunciation dictionary version returned from `add_rules_to_the_pronunciation_dictionary` to ensure we use the latest dictionary version.
+
+```python
+from elevenlabs import PronunciationDictionaryRule_Phoneme
+
+pronunciation_dictionary_rules_added = client.pronunciation_dictionary.add_rules_to_the_pronunciation_dictionary(
+    pronunciation_dictionary_id=pronunciation_dictionary_rules_removed.id,
+    rules=[
+        PronunciationDictionaryRule_Phoneme(
+            type="phoneme",
+            alphabet="ipa",
+            string_to_replace="tomato",
+            phoneme="/tə'meɪtoʊ/",
+        ),
+        PronunciationDictionaryRule_Phoneme(
+            type="phoneme",
+            alphabet="ipa",
+            string_to_replace="Tomato",
+            phoneme="/tə'meɪtoʊ/",
+        ),
+    ],
+)
+
+audio_4 = client.generate(
+    text="With the rule added again: tomato",
+    voice="Rachel",
+    model="eleven_turbo_v2",
+    pronunciation_dictionary_locators=[
+        PronunciationDictionaryVersionLocator(
+            pronunciation_dictionary_id=pronunciation_dictionary_rules_added.id,
+            version_id=pronunciation_dictionary_rules_added.version_id,
+        )
+    ],
+)
+
+play(audio_4)
+```
+
+## Conclusion
+
+You know how to use a pronunciation dictionary for generating text-to-speech audio. These functionailities open up opportunities to generate text-to-speech audio based on your pronunciation dictionary, making it more flexible for your use case.
+
+For more details, visit our [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/pronunciation-dictionaries/python) to see the full project files which give a clear structure for setting up your application:
+
+- `env.example`: Template for your environment variables.
+- `main.py`: The complete code for snippets above.
+- `dictionary.pls`: Custom dictionary example with XML format.
+- `requirements.txt`: List of python package used for this example.
+
+If you have any questions please create an issue on the [elevenlabs-doc Github](https://github.com/elevenlabs/elevenlabs-docs/issues).

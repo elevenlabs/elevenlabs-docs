@@ -1,0 +1,350 @@
+---
+title: Dubbing audio
+subtitle: Learn how to dub audio and video files across languages.
+---
+
+## Introduction
+
+Dubbing videos and audio files from one language to another can be a great way to reach a wider audience. The ElevenLabs API provides a convenient way to automatically dub media files using state-of-the-art technology. In this guide, we will walk you through how to upload a video or audio file, dub it, and download the translated video. We'll also discuss how to directly dub a link such as a YouTube, TikTok, or Twitter video.
+
+If you're looking to jump straight into the action, the complete code is available on the following repos:
+
+- [Python example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/dubbing/python).
+
+<Tip>On the 8th of May 2024 we launched the Dubbing API for all ElevenLabs tiers</Tip>
+
+## How to upload and dub a video or audio file
+
+### Requirements
+
+Before proceeding, please ensure that you have the following:
+
+- An ElevenLabs account with an API key (here’s how to [find your API key](/docs/api-reference/authentication)).
+- Python or Node.js installed on your machine
+
+Then, install the ElevenLabs SDK as shown below
+
+<CodeGroup>
+
+```bash Python
+pip install elevenlabs
+```
+
+</CodeGroup>
+
+Install the necessary packages to manage your environmental variables:
+
+<CodeGroup>
+
+```bash Python
+pip install python-dotenv
+```
+
+</CodeGroup>
+
+Next, create a `.env` file in your project directory and fill it with your credentials like so:
+
+```bash .env
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+### Start the dubbing
+
+First we want to send the file to the ElevenLabs dubbing service
+
+<CodeGroup>
+
+```python Python
+
+def create_dub_from_file(
+    input_file_path: str,
+    file_format: str,
+    source_language: str,
+    target_language: str,
+) -> Optional[str]:
+    """
+    Dubs an audio or video file from one language to another and saves the output.
+
+    Args:
+        input_file_path (str): The file path of the audio or video to dub.
+        file_format (str): The file format of the input file.
+        source_language (str): The language of the input file.
+        target_language (str): The target language to dub into.
+
+    Returns:
+        Optional[str]: The file path of the dubbed file or None if operation failed.
+    """
+    if not os.path.isfile(input_file_path):
+        raise FileNotFoundError(f"The input file does not exist: {input_file_path}")
+
+    with open(input_file_path, "rb") as audio_file:
+        response = client.dubbing.dub_a_video_or_an_audio_file(
+            file=(os.path.basename(input_file_path), audio_file, file_format), # Optional file
+            target_lang=target_language, # The target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
+            mode="automatic", # automatic or manual.
+            source_lang=source_language, # Source language
+            num_speakers=1, # Number of speakers to use for the dubbing.
+            watermark=False,  # Whether to apply watermark to the output video.
+        )
+
+    # rest of the code
+
+```
+
+</CodeGroup>
+
+### Check for completion
+
+The `wait_for_dubbing_completion()` function within the `dubbing_utils.py` file polls the API to check whether the dubbing process is complete. If completed, it proceeds to the next step; otherwise, it reports the status or failure.
+
+<CodeGroup>
+
+```python Python
+
+def wait_for_dubbing_completion(dubbing_id: str) -> bool:
+    """
+    Waits for the dubbing process to complete by periodically checking the status.
+
+    Args:
+        dubbing_id (str): The dubbing project id.
+
+    Returns:
+        bool: True if the dubbing is successful, False otherwise.
+    """
+    MAX_ATTEMPTS = 120
+    CHECK_INTERVAL = 10  # In seconds
+
+    for _ in range(MAX_ATTEMPTS):
+        metadata = client.dubbing.get_dubbing_project_metadata(dubbing_id)
+        if metadata.status == "dubbed":
+            return True
+        elif metadata.status == "dubbing":
+            print(
+                "Dubbing in progress... Will check status again in",
+                CHECK_INTERVAL,
+                "seconds.",
+            )
+            time.sleep(CHECK_INTERVAL)
+        else:
+            print("Dubbing failed:", metadata.error_message)
+            return False
+
+    print("Dubbing timed out")
+    return False
+
+```
+
+</CodeGroup>
+
+### Save the video locally
+
+Upon completion of dubbing, the `download_dubbed_file()` function in `dubbing_utils.py` will save the dubbed file to a local directory, typically under the `data/{dubbing_id}/{language_code}.mp4`.
+
+<CodeGroup>
+
+```python Python
+
+def download_dubbed_file(dubbing_id: str, language_code: str) -> str:
+    """
+    Downloads the dubbed file for a given dubbing ID and language code.
+
+    Args:
+        dubbing_id: The ID of the dubbing project.
+        language_code: The language code for the dubbing.
+
+    Returns:
+        The file path to the downloaded dubbed file.
+    """
+    dir_path = f"data/{dubbing_id}"
+    os.makedirs(dir_path, exist_ok=True)
+
+    file_path = f"{dir_path}/{language_code}.mp4"
+    with open(file_path, "wb") as file:
+        for chunk in client.dubbing.get_dubbed_file(dubbing_id, language_code):
+            file.write(chunk)
+
+    return file_path
+
+```
+
+</CodeGroup>
+
+### Putting it together
+
+We add the `wait_for_dubbing_completion`(`waitForDubbingCompletion`) function and the `download_dubbed_file`(`downloadDubbedFile`) function together to create the final function.
+
+<CodeGroup>
+
+```python Python
+def create_dub_from_file(
+    input_file_path: str,
+    file_format: str,
+    source_language: str,
+    target_language: str,
+) -> Optional[str]:
+    """
+    Dubs an audio or video file from one language to another and saves the output.
+
+    Args:
+        input_file_path (str): The file path of the audio or video to dub.
+        file_format (str): The file format of the input file.
+        source_language (str): The language of the input file.
+        target_language (str): The target language to dub into.
+
+    Returns:
+        Optional[str]: The file path of the dubbed file or None if operation failed.
+    """
+    if not os.path.isfile(input_file_path):
+        raise FileNotFoundError(f"The input file does not exist: {input_file_path}")
+
+    with open(input_file_path, "rb") as audio_file:
+        response = client.dubbing.dub_a_video_or_an_audio_file(
+            file=(os.path.basename(input_file_path), audio_file, file_format),
+            target_lang=target_language,
+            mode="automatic",
+            source_lang=source_language,
+            num_speakers=1,
+            watermark=False,  # reduces the characters used if enabled, only works for videos not audio
+        )
+
+    dubbing_id = response.dubbing_id
+    if wait_for_dubbing_completion(dubbing_id):
+        output_file_path = download_dubbed_file(dubbing_id, target_language)
+        return output_file_path
+    else:
+        return None
+
+```
+
+</CodeGroup>
+
+We then use the final the function as shown below.
+
+<CodeGroup>
+
+```python create_a_dub_from_file.py (Python)
+
+if __name__ == "__main__":
+    result = create_dub_from_file(
+        "../example_speech.mp3",  # Input file path
+        "audio/mpeg",  # File format
+        "en",  # Source language
+        "es",  # Target language
+    )
+    if result:
+        print("Dubbing was successful! File saved at:", result)
+    else:
+        print("Dubbing failed or timed out.")
+
+```
+
+</CodeGroup>
+
+## How to dub a video from YouTube, TikTok, Twitter or Vimeo
+
+For dubbing web-based content, instead of uploading a file you can pass in a URL. This supports popular platforms like YouTube, TikTok, Twitter, and Vimeo.
+
+<CodeGroup>
+
+```python Python
+
+def create_dub_from_url(
+    source_url: str,
+    source_language: str,
+    target_language: str,
+) -> Optional[str]:
+    """
+    Downloads a video from a URL, and creates a dubbed version in the target language.
+
+    Args:
+        source_url (str): The URL of the source video to dub. Can be a YouTube link, TikTok, X (Twitter) or a Vimeo link.
+        source_language (str): The language of the source video.
+        target_language (str): The target language to dub into.
+
+    Returns:
+        Optional[str]: The file path of the dubbed file or None if operation failed.
+    """
+
+    response = client.dubbing.dub_a_video_or_an_audio_file(
+      source_url=source_url, # URL of the source video/audio file.
+      target_lang=target_language, # The Target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
+      mode="automatic", # automatic or manual.
+      source_lang=source_language, # Source language.
+      num_speakers=1, # Number of speakers to use for the dubbing.
+      watermark=True,  # Whether to apply watermark to the output video.
+    )
+
+    dubbing_id = response.dubbing_id
+    if wait_for_dubbing_completion(dubbing_id):
+        output_file_path = download_dubbed_file(dubbing_id, target_language)
+        return output_file_path
+    else:
+        return None
+
+```
+
+</CodeGroup>
+
+You can then call the function as shown below.
+
+<CodeGroup>
+
+```python Python
+
+if __name__ == "__main__":
+    source_url = "https://www.youtube.com/watch?v=0EqSXDwTq6U"  # Charlie bit my finger
+    source_language = "en"
+    target_language = "fr"
+    result = create_dub_from_url(source_url, source_language, target_language)
+    if result:
+        print("Dubbing was successful! File saved at:", result)
+    else:
+        print("Dubbing failed or timed out.")
+
+```
+
+</CodeGroup>
+
+## Conclusion
+
+With this guide and the accompanying code structure, you now have a basic setup for dubbing audio and video content using the ElevenLabs API. Whether you're working with local files or content from URLs, you can create multilingual versions of your media to cater to diverse audiences.
+
+Remember to always follow the best practices when dealing with API keys and sensitive data, and consult the ElevenLabs API documentation for more advanced features and options. Happy dubbing!
+
+For additional information on dubbing capabilities, translation services, and available languages, please refer to the [ElevenLabs API documentation](/docs/api-reference/dubbing/dub-a-video-or-an-audio-file).
+
+Should you encounter any issues or have questions, our [GitHub Issues page](https://github.com/elevenlabs/elevenlabs-docs/issues) is open for your queries and feedback.
+
+## List of supported languages for dubbing
+
+| No  | Language Name | Language Code |
+| --- | ------------- | ------------- |
+| 1   | English       | en            |
+| 2   | Hindi         | hi            |
+| 3   | Portuguese    | pt            |
+| 4   | Chinese       | zh            |
+| 5   | Spanish       | es            |
+| 6   | French        | fr            |
+| 7   | German        | de            |
+| 8   | Japanese      | ja            |
+| 9   | Arabic        | ar            |
+| 10  | Russian       | ru            |
+| 11  | Korean        | ko            |
+| 12  | Indonesian    | id            |
+| 13  | Italian       | it            |
+| 14  | Dutch         | nl            |
+| 15  | Turkish       | tr            |
+| 16  | Polish        | pl            |
+| 17  | Swedish       | sv            |
+| 18  | Filipino      | fil           |
+| 19  | Malay         | ms            |
+| 20  | Romanian      | ro            |
+| 21  | Ukrainian     | uk            |
+| 22  | Greek         | el            |
+| 23  | Czech         | cs            |
+| 24  | Danish        | da            |
+| 25  | Finnish       | fi            |
+| 26  | Bulgarian     | bg            |
+| 27  | Croatian      | hr            |
+| 28  | Slovak        | sk            |
+| 29  | Tamil         | ta            |
