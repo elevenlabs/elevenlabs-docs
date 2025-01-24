@@ -1,0 +1,270 @@
+---
+title: Tools
+subtitle: Connect your assistant to external data & systems.
+---
+
+**Tools** enable your assistant to connect to external data and systems. You can define a set of tools that the assistant has access to, and the assistant will use them where appropriate based on the conversation.
+
+## Overview
+
+Many applications require assistants to call external APIs to get real-time information. Tools give your assistant the ability to make external function calls to third party apps so you can get real-time information.
+
+Here are a few examples where tools can be useful:
+
+- **Fetching data**: enable an assistant to retrieve real-time data from any REST-enabled database or 3rd party integration before responding to the user.
+- **Taking action**: allow an assistant to trigger authenticated actions based on the conversation, like scheduling meetings or initiating order returns.
+
+<Info>
+  To interact with Application UIs or trigger client-side events use [client
+  tools](/docs/conversational-ai/customization/client-tools) instead.
+</Info>
+
+## Tool configuration
+
+Conversational AI assistants can be equipped with tools to interact with external APIs. Unlike traditional requests, the assistant generates query, body, and path parameters dynamically based on the conversation and parameter descriptions you provide.
+
+All tool configurations and parameter descriptions help the assistant determine **when** and **how** to use these tools. To orchestrate tool usage effectively, update the assistant’s system prompt to specify the sequence and logic for making these calls. This includes:
+
+- **Which tool** to use and under what conditions.
+- **What parameters** the tool needs to function properly.
+- **How to handle** the responses.
+
+<br />
+
+<Tabs>
+
+<Tab title="Configuration">
+Define a high-level `Name` and `Description` to describe the tool's purpose. This helps the LLM understand the tool and know when to call it.
+
+<Info>
+  If the API requires path parameters, include variables in the URL path by wrapping them in curly
+  braces `{}`, for example: `/api/resource/{id}` where `id` is a path parameter.
+</Info>
+
+<Frame background="subtle">
+  ![Configuration](/assets/images/conversational-ai/tool-configuration.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Secrets">
+
+Assistant secrets can be used to add authentication headers to requests.
+
+<Frame background="subtle">
+  ![Tool secrets](/assets/images/conversational-ai/tool-secrets.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Headers">
+
+Specify any headers that need to be included in the request.
+
+<Frame background="subtle">![Headers](/assets/images/conversational-ai/tool-headers.jpg)</Frame>
+
+</Tab>
+
+<Tab title="Path parameters">
+
+Include variables in the URL path by wrapping them in curly braces `{}`:
+
+- **Example**: `/api/resource/{id}` where `id` is a path parameter.
+
+<Frame background="subtle">
+  ![Path parameters](/assets/images/conversational-ai/tool-path-parameters.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Body parameters">
+
+Specify any body parameters to be included in the request.
+
+<Frame background="subtle">
+  ![Body parameters](/assets/images/conversational-ai/tool-body-parameters.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Query parameters">
+
+Specify any query parameters to be included in the request.
+
+<Frame background="subtle">
+  ![Query parameters](/assets/images/conversational-ai/tool-query-parameters.jpg)
+</Frame>
+
+</Tab>
+
+</Tabs>
+
+## Guide
+
+In this guide, we will walk through integrating tools into an assistant, booking calendar meetings through the [Cal.com API](https://cal.com/docs/api-reference/v1/introduction) as an example.
+
+<Steps>
+  <Step title="Store a secret">
+    To make authenticated requests to external APIs like Cal.com, you need to store your API keys securely. Start by generating a new [Cal.com API key](https://cal.com/docs/api-reference/v1/introduction#get-your-api-keys).
+
+    Not all APIs have the same authentication structure. For example, the Cal.com API expects the following authentication header:
+
+    ```plaintext Cal request header structure
+    'Authorization': 'Bearer YOUR_API_KEY'
+    ```
+
+    Once you have your API key, store it in the assistant's secret storage. This ensures that your key is kept secure and accessible when making requests.
+    <Warning>
+      To match the expected authentication structure of Cal.com, remember to prepend the API key with `Bearer ` when creating the secret.
+    </Warning>
+    <Frame background="subtle">
+      ![Tool secrets](/assets/images/conversational-ai/tool-secrets.jpg)
+    </Frame>
+
+  </Step>
+<Step title="Adding tools to the assistant">
+  To enable your assistant to manage calendar bookings, we'll create two tools:
+  
+  1. **`get_available_slots`**: When a user asks, _"Is Louis free at 10:30 AM on Tuesday?"_, the assistant should use [Cal.com's "Get available slots" endpoint](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots) to check for available time slots.
+  
+  2. **`book_meeting`**: After identifying a suitable time, the assistant can proceed to book the meeting using [Cal.com's "Create a booking" endpoint](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking).
+
+First, head to the **Tools** section of your dashboard and choose **Add Tool**. Select **Webhook** as the Tool Type, then fill in the following sections:
+
+<AccordionGroup>
+<Accordion title="Tool 1: get_available_slots">
+
+<Tabs>
+
+<Tab title="Configuration">
+
+Metadata used by the assistant to determine when the tool should be called:
+
+| Field       | Value                                                                    |
+| ----------- | ------------------------------------------------------------------------ |
+| Name        | get_available_slots                                                      |
+| Description | This tool checks if a particular time slot is available in the calendar. |
+| Method      | GET                                                                      |
+| URL         | https://api.cal.com/v2/slots/available                                   |
+
+</Tab>
+
+<Tab title="Headers">
+
+Matches the request headers defined [here](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots):
+
+| Type   | Name          | Value                               |
+| ------ | ------------- | ----------------------------------- |
+| Secret | Authorization | Select the secret key created above |
+
+</Tab>
+
+<Tab title="Query parameters">
+
+Matches the request query parameters defined [here](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots):
+
+| Data Type | Identifier | Required | Description                                                                   |
+| --------- | ---------- | -------- | ----------------------------------------------------------------------------- |
+| string    | startTime  | Yes      | Start date/time (UTC) from which to fetch slots, e.g. '2024-08-13T09:00:00Z'. |
+| string    | endTime    | Yes      | End date/time (UTC) until which to fetch slots, e.g. '2024-08-13T17:00:00Z'.  |
+
+</Tab>
+
+</Tabs>
+
+</Accordion>
+<Accordion title="Tool 2: book_meeting">
+
+<Tabs>
+
+<Tab title="Configuration">
+
+Metadata used by the assistant to determine when the tool should be called:
+
+| Field       | Value                                                            |
+| ----------- | ---------------------------------------------------------------- |
+| Name        | book_meeting                                                     |
+| Description | This tool books a meeting in the calendar once a time is agreed. |
+| Method      | POST                                                             |
+| URL         | https://api.cal.com/v2/bookings                                  |
+
+</Tab>
+
+<Tab title="Headers">
+
+Matches the request headers defined [here](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking):
+
+| Type   | Name            | Value                               |
+| ------ | --------------- | ----------------------------------- |
+| Secret | Authorization   | Select the secret key created above |
+| String | cal-api-version | 2024-08-13                          |
+
+</Tab>
+
+<Tab title="Body Parameters">
+
+Matches the request body parameters defined [here](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking):
+
+| Identifier  | Data Type | Required | Description                                                                                                                           |
+| ----------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| start       | String    | Yes      | The start time of the booking in ISO 8601 format in UTC timezone, e.g. ‘2024-08-13T09:00:00Z’.                                        |
+| eventTypeId | Number    | Yes      | The ID of the event type that is booked. If 15 minutes, return 1351800. If 30 minutes, return 1351801. If 60 minutes, return 1351802. |
+| attendee    | Object    | Yes      | The attendee's details. You must collect these fields from the user.                                                                  |
+
+<Note>
+  The `eventTypeId` must correspond to the event types you have available in Cal. Call
+  [this](https://cal.com/docs/api-reference/v1/event-types/find-all-event-types#find-all-event-types)
+  endpoint to get a list of your account event types (or create another tool that does this
+  automatically).
+</Note>
+
+**Attendee object:**
+
+| Identifier | Data Type | Required | Description                                                                                                    |
+| ---------- | --------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| name       | String    | Yes      | The full name of the person booking the meeting.                                                               |
+| email      | String    | Yes      | The email address of the person booking the meeting.                                                           |
+| timeZone   | String    | Yes      | The caller's timezone. Should be in the format of 'Continent/City' like 'Europe/London' or 'America/New_York'. |
+
+</Tab>
+
+</Tabs>
+
+</Accordion>
+</AccordionGroup>
+
+    </Step>
+
+    <Step title="Orchestration">
+      Now that your assistant is equipped with tools, you need to instruct it on when and how to use them effectively. This involves updating the system prompt to orchestrate the interaction.
+
+      ```plaintext System prompt
+      You are my receptionist, handling meeting bookings.
+
+      - Always use the `get_available_slots` tool to verify my availability before scheduling any meeting. This tool requires a start and end date/time and returns available slots. If no date/time is specified, check for slots tomorrow and continue daily until availability is found.
+
+      - Once a time is agreed upon, use the `book_meeting` tool to finalize the booking. Collect the caller's full name, desired meeting time, duration (15, 30, or 60 minutes), and other required details.
+
+      - Do not share or leak any meeting details, attendee information, or IDs.
+
+      - If `book_meeting` fails, it may be due to an invalid email format or an unavailable time slot.
+      ```
+
+      <Success>
+      Test your new assistant by pressing the **Test AI agent** button to ensure everything is working as expected. Feel free to fine-tune the system prompt.
+      </Success>
+
+    </Step>
+
+    <Step title="Enhancements">
+      By default, the assistant does not have knowledge of the current date or time. To enhance its capabilities, consider implementing one of the following solutions:
+
+      1. **Create a time retrieval tool**: Add another tool that fetches the current date and time.
+
+      2. **Overrides**: Use the [overrides](/docs/conversational-ai/customization/overrides) functionality to inject the current date and time into the system prompt at the start of each conversation.
+
+    </Step>
+
+</Steps>
+
+<Markdown src="/snippets/conversational-ai-tool-best-practices.mdx" />
