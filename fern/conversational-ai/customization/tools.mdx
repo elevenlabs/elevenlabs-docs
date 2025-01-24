@@ -84,7 +84,13 @@ Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your w
 
 ### Headers
 
-Within the Cal.com documentation, we see that both our availability and booking endpoints require the same three headers:
+Within the Cal.com documentation, we see that both our availability requires only the authorization header: 
+
+    ```bash
+    Authorization: Bearer <your-bearer-token>
+    ```
+
+And the booking endpoint requires three headers:
 
     ```bash
     Content-Type: application/json
@@ -107,26 +113,28 @@ We configured that as follows:
 ### Path Parameters
 
 You can add path parameters by including variables surrounded by curly brackets in your URL like this {variable}. Once added to the URL path, it will appear under Path Parameters with the ability to update the Data Type and Description.
-Our AI receptionist does not call for Path Parameters so we will not be defining any.
+Our AI receptionist requires this only for the Get_Available_Slots tool.
+
+We add the URL: 
+
+    ```bash
+    URL: https://api.cal.com/v2/slots/available?startTime={startTime}&endTime={endTime}&eventTypeSlug={eventTypeSlug}&eventTypeId={eventTypeId}
+    ```
+
+And configure the path parameters as follows:
+
+| Type   | Name            | Value                                      |
+| ------ | --------------- | ------------------------------------------ |
+| String | startTime       | The start time of the slot the person is checking availability for in UTC timezone, formatted as ISO 8601 (e.g., '2024-08-13T09:00:00Z'). Extract time from natural language and convert to UTC. |
+| String | endTime         | The end time of the slot the person is checking availability for in UTC timezone, formatted as ISO 8601 (e.g., '2024-08-13T09:00:00Z'). Extract time from natural language and convert to UTC.   |
+| String | eventTypeSlug   | The desired meeting length. Should be 15minutes, 30minutes, or 60minutes.                                                                                                                        |
+| String | eventTypeId     | The desired meeting length, as an event id. If 15 minutes, return 1351800. If 30 minutes, return 1351801. If 60 minutes, return 1351802 (Fill out with your own event type IDs)                                                         |
+
+Event type IDs can differ. Use the [find event types endpoint](https://cal.com/docs/api-reference/v1/event-types/find-all-event-types) to get the IDs of the relevant events. 
 
 ### Query Parameters
 
-Get and Delete requests typically have query parameters while Post and Patch do not. Our Get_Available_Slots tool relies on a Get request that requires the following query parameters: startTime, endTime, eventTypeId, eventTypeSlug, and duration.
-
-<img src="../images/cal-get-slots.webp" />
-
-In our Description for each, we define a prompt that our Conversational Agent will use to extract the relevant information from the call transcript using an LLM.
-
-Here's how we defined our query parameters for our AI receptionist:
-
-| Identifier    | Data Type | Required | Description                                                                                                                                                                                      |
-| ------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| startTime     | String    | Yes      | The start time of the slot the person is checking availability for in UTC timezone, formatted as ISO 8601 (e.g., '2024-08-13T09:00:00Z'). Extract time from natural language and convert to UTC. |
-| endTime       | String    | Yes      | The end time of the slot the person is checking availability for in UTC timezone, formatted as ISO 8601 (e.g., '2024-08-13T09:00:00Z'). Extract time from natural language and convert to UTC.   |
-| eventTypeSlug | String    | Yes      | The desired meeting length. Should be 15minutes, 30minutes, or 60minutes.                                                                                                                        |
-| eventTypeId   | Number    | Yes      | The desired meeting length, as an event id. If 15 minutes, return 1351800. If 30 minutes, return 1351801. If 60 minutes, return 1351802.                                                         |
-
-Event type IDs can differ. Use the [find event types endpoint](https://cal.com/docs/api-reference/v1/event-types/find-all-event-types) to get the IDs of the relevant events. 
+Get and Delete requests typically have query parameters while Post and Patch do not. In this case we don't have any query parameters, since the GET request for availability uses path parameters.                                                        |
 
 ### Body Parameters
 
@@ -165,4 +173,6 @@ Here's the System Prompt we use for our AI Receptionist:
 >
 > If you call Book_Meeting and it fails, it's likely either that the email address is formatted in an invalid way or the selected time is not one where I am available.
 
-It's important to note that the choice of LLM matters. We recommend trying out different LLMs and modifying the prompt as needed. 
+### LLM Selection
+
+It's important to note that the choice of LLM matters to the success of function calls. Some LLMs can struggle with extracting the relevant parameters from the conversation. When using tools, we recomment to avoid the default LLM (Gemini 1.5 Flash), and instead pick another LLM like GPT-4o mini or Claude 3.5 Sonnet, which are more likely to lead to successful function calls.
