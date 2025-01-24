@@ -84,13 +84,13 @@ Next, look for "Tools" in the "Agent" subnav. Add a new Tool to configure your w
 
 ### Headers
 
-Within the Cal.com documentation, we see that both our availability requires only the authorization header: 
+Within the Cal.com documentation, we see that our availability endpoint requires only the authorization header: 
 
     ```bash
     Authorization: Bearer <your-bearer-token>
     ```
 
-And the booking endpoint requires three headers:
+While the booking endpoint requires three headers:
 
     ```bash
     Content-Type: application/json
@@ -104,7 +104,7 @@ We configured that as follows:
 | ------ | --------------- | ------------------------------------------ |
 | Value  | Content-Type    | application/json                           |
 | Value  | cal-api-version | 2024-08-13                                 |
-| Secret | Bearer          | Bearer (the secret key we defined earlier) |
+| Secret | Authorization   | Bearer (the secret key we defined earlier) |
 
 <Frame>
   <img src="../images/headers.webp" />
@@ -112,16 +112,15 @@ We configured that as follows:
 
 ### Path Parameters
 
-You can add path parameters by including variables surrounded by curly brackets in your URL like this {variable}. Once added to the URL path, it will appear under Path Parameters with the ability to update the Data Type and Description.
-Our AI receptionist requires this only for the Get_Available_Slots tool.
+You can add path parameters by including variables surrounded by curly brackets in your URL like this {variable}. Once added to the URL path, it will appear under Path Parameters with the ability to update the Data Type and Description. Our AI receptionist requires path parameters for the Get_Available_Slots tool.
 
-We add the URL: 
+First we add the URL with the variables: 
 
     ```bash
     URL: https://api.cal.com/v2/slots/available?startTime={startTime}&endTime={endTime}&eventTypeSlug={eventTypeSlug}&eventTypeId={eventTypeId}
     ```
 
-And configure the path parameters as follows:
+Then we configure the path parameters as follows:
 
 | Type   | Name            | Value                                      |
 | ------ | --------------- | ------------------------------------------ |
