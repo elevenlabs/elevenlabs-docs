@@ -1,0 +1,107 @@
+---
+title: Create sound effects from text
+subtitle: Learn how to use the text to sound effects API to generate cinematic sound effects from text.
+---
+
+## Introduction
+
+Our [text to sound effects](https://elevenlabs.io/sound-effects) model enables you to create high-quality sound effects from a short description. These sound effects could be used in a variety of applications, including game development and building apps for music production.
+
+In this tutorial, we will use the text to sound effects API to generate a sound effect from a short description using the Python SDK. We'll then save this sound effect to a file.
+
+<Tip>
+  For general tips on prompting, see the [sound effects product
+  docs](/docs/product/sound-effects/overview). And for information on the API configuration visit
+  [the API reference](/docs/api-reference/sound-generation).
+</Tip>
+
+## How to generate a sound effect with the API
+
+### Requirements
+
+Before proceeding, please ensure that you have the following:
+
+- An ElevenLabs account with an API key (here’s how to [find your API key](/docs/api-reference/authentication))
+- Python installed on your machine
+
+Then, install the ElevenLabs SDK as shown below
+
+<CodeGroup>
+
+```bash Python
+pip install elevenlabs
+```
+
+</CodeGroup>
+
+Install the necessary packages to manage your environmental variables:
+
+<CodeGroup>
+
+```bash Python
+pip install python-dotenv
+```
+
+</CodeGroup>
+
+Next, create a `.env` file in your project directory and fill it with your credentials like so:
+
+```bash .env
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+### Using the sound effects SDK
+
+Now we can use the SDK to generate a sound effect from a short description and save it to a file as shown below.
+
+```python
+
+import os
+from elevenlabs.client import ElevenLabs
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+elevenlabs = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+
+
+def generate_sound_effect(text: str, output_path: str):
+    print("Generating sound effects...")
+
+    result = elevenlabs.text_to_sound_effects.convert(
+        text=text,
+        duration_seconds=10,  # Optional, if not provided will automatically determine the correct length
+        prompt_influence=0.3,  # Optional, if not provided will use the default value of 0.3
+    )
+
+    with open(output_path, "wb") as f:
+        for chunk in result:
+            f.write(chunk)
+
+    print(f"Audio saved to {output_path}")
+
+
+if __name__ == "__main__":
+    generate_sound_effect("Dog barking", "output.mp3")
+
+```
+
+## Configuration
+
+- `duration_seconds`: The duration of the sound effect in seconds. If not provided, the API will automatically determine the correct length. The maximum value is 22
+- `prompt_influence`: The amount of influence the prompt has on the generated sound effect. If not provided, the API will use the default value of 0.3
+
+### API pricing
+
+The API is charged at 100 characters per generation with automatic duration or 25 characters per second with a set duration.
+
+### Next steps
+
+We're excited to see what you build with the API. Here are some ideas of what you might want to use it for:
+
+- Adding sound effect generation to a video editing application
+- Enabling users to create on-demand samples for their music production
+- A new type of video game where every sound is generated dynamically
+
+For higher rate limits of volume based discounts please [contact sales](https://elevenlabs.io/contact-sales).

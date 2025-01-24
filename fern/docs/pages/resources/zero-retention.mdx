@@ -1,0 +1,99 @@
+---
+title: Zero retention mode (Enterprise)
+subtitle: Learn how to use Zero Retention Mode to protect sensitive data.
+---
+
+## Background
+
+By default, we retain data, in accordance with our Privacy Policy, to enhance our services, troubleshoot issues, and ensure the security of our systems. However, for some enterprise customers, we offer a "Zero Retention Mode" option for specific products. In this Zero Retention Mode, most data in requests and responses are immediately deleted once the request is completed.
+
+## What is zero retention mode?
+
+Zero Retention Mode provides an additional level of security and peace of mind for especially sensitive workflows. When enabled, logging of certain data points is restricted, including:
+
+- TTS text input
+- TTS audio output
+- Voice Changer audio input
+- Voice Changer audio output
+- Email associated with the account generating the input in our logs
+
+This data is related to the processing of the request, and can only be seen by the user doing the request and the volatile memory of the process serving the request. None of this data is sent at any point to a database where data is stored long term.
+
+## Who has access to zero retention mode?
+
+Enterprise customers can use zero Retention Mode.
+It is primarily intended for use by our customers in the healthcare and banking sector, and other customers who may use our services to process sensitive information.
+
+## When can a customer use zero retention mode?
+
+Zero Retention Mode is available to select enterprise customers. However, access to this feature may be restricted if ElevenLabs determines a customer's use case to be high risk, if an account is flagged by an automated system for additional moderation or at ElevenLabs' sole discretion. In such cases, the enterprise administrator will be promptly notified of the restriction.
+
+## How does zero retention mode work?
+
+Zero Retention Mode only works for API requests, specifically:
+
+- **Text to Speech**: this covers the Text-to-Speech (TTS) API, including all endpoints beginning with `/v1/text-to-speech/` and the TTS websocket connection.
+- **Voice Changer**: this covers the Voice Changer API, including all endpoints starting with `/v1/speech-to-speech/`.
+
+After setup, check the request history to verify zero Retention Mode is enabled. If enabled, there should be no requests in the history.
+
+Zero retention mode can be used by sending `enable_logging=false` with the product which supports it.
+
+For example, in Text to Speech API, you can set the query parameter [enable_logging](https://elevenlabs.io/docs/api-reference/text-to-speech#parameter-enable-logging) to False like this:
+
+<CodeGroup>
+```bash Python
+from elevenlabs import ElevenLabs
+
+client = ElevenLabs(
+api_key="YOUR_API_KEY",
+)
+
+response = client.text_to_speech.convert(
+voice_id=voice_id,
+output_format="mp3_22050_32",
+text=text,
+model_id="eleven_turbo_v2",
+enable_logging=False
+)
+
+````
+```bash curl
+curl --request POST \
+  --url 'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}?enable_logging=false' \
+  --header 'Content-Type: application/json'
+````
+
+</CodeGroup>
+
+## What products are configured for zero retention mode?
+
+| Product                    | Type                 | Default Retention | Eligible for zero Retention |
+| -------------------------- | -------------------- | ----------------- | --------------------------- |
+| Text to Speech             | Text Input           | Enabled           | Yes                         |
+|                            | Audio Output         | Enabled           | Yes                         |
+| Voice Changer              | Audio Input          | Enabled           | Yes                         |
+|                            | Audio Output         | Enabled           | Yes                         |
+| Instant Voice Cloning      | Audio Samples        | Enabled           | No                          |
+| Professional Voice Cloning | Audio Samples        | Enabled           | No                          |
+| Dubbing                    | Audio/Video Input    | Enabled           | No                          |
+|                            | Audio Output         | Enabled           | No                          |
+| Projects                   | Text Input           | Enabled           | No                          |
+|                            | Audio Output         | Enabled           | No                          |
+| Conv AI                    | All Input and Output | Enabled           | No                          |
+
+## What are some limitations of zero retention mode?
+
+Troubleshooting and support for zero Retention Mode is limited. Because of the configuration, we will not be able to diagnose issues with TTS/STS generations. Debugging will be more difficult as a result.
+
+## How retention works if zero retention mode is not active?
+
+Customers by default have history preservation enabled. All customers can use the API to delete generations at any time. This action will immediately remove the corresponding audio and text from our database; however, debugging and moderation logs may still retain data related to the generation.
+
+## Data backup (When zero retention mode is not used)
+
+For any retained data, we regularly back up such data to prevent data loss in the event of any unexpected incidents. Following data deletion, database items are retained in backups for up to 30 days After this period, the data expires and is not recoverable.
+
+## Account deletion (When zero retention mode is not used)
+
+All data is deleted from our systems permanently when you delete your account. This includes all data associated with your account, such as API keys, request history, and any other data stored in your account. We also take commercially reasonable efforts to delete debugging data related to your account.

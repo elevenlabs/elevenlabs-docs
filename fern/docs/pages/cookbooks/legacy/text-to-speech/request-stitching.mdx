@@ -1,0 +1,218 @@
+---
+title: Stitching multiple requests
+subtitle: Learn how to maintain voice prosody over multiple chunks/generations.
+---
+
+## What is Request Stitching?
+
+When one has a large text to convert into audio and sends the text in chunks without further context there can be abrupt changes in prosody from one chunk to another.
+
+It would be much better to give the model context on what was already generated and what will be generated in the future, this is exactly what Request Stitching does.
+
+As you can see below the difference between not using Request Stitching and using it is subtle but noticeable:
+
+#### Without Request Stitching:
+
+<video
+  controls
+  className="w-full"
+  src="https://eleven-public-cdn.elevenlabs.io/audio/docs/without_request_stitching.mp3"
+  style={{ height: 60 }}
+></video>
+
+#### With Request Stitching:
+
+<video
+  controls
+  className="w-full"
+  src="https://eleven-public-cdn.elevenlabs.io/audio/docs/with_request_stitching.mp3"
+  style={{ height: 60 }}
+></video>
+
+## Conditioning on text
+
+We will use Pydub for concatenating multiple audios together, you can install it using:
+
+```bash
+pip install pydub
+```
+
+One of the two ways on how to give the model context is to provide the text before and / or after the current chunk by using the 'previous_text' and 'next_text' parameters:
+
+```python
+import os
+import requests
+from pydub import AudioSegment
+import io
+
+YOUR_XI_API_KEY = "<insert your xi-api-key here>"
+VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
+PARAGRAPHS = [
+    "The advent of technology has transformed countless sectors, with education "
+    "standing out as one of the most significantly impacted fields.",
+    "In recent years, educational technology, or EdTech, has revolutionized the way "
+    "teachers deliver instruction and students absorb information.",
+    "From interactive whiteboards to individual tablets loaded with educational software, "
+    "technology has opened up new avenues for learning that were previously unimaginable.",
+    "One of the primary benefits of technology in education is the accessibility it provides.",
+]
+segments = []
+
+for i, paragraph in enumerate(PARAGRAPHS):
+    is_last_paragraph = i == len(PARAGRAPHS) - 1
+    is_first_paragraph = i == 0
+    response = requests.post(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
+        json={
+            "text": paragraph,
+            "model_id": "eleven_multilingual_v2",
+            "previous_text": None if is_first_paragraph else " ".join(PARAGRAPHS[:i]),
+            "next_text": None if is_last_paragraph else " ".join(PARAGRAPHS[i + 1:])
+        },
+        headers={"xi-api-key": YOUR_XI_API_KEY},
+    )
+
+    if response.status_code != 200:
+        print(f"Error encountered, status: {response.status_code}, "
+               f"content: {response.text}")
+        quit()
+
+    print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
+    segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
+
+segment = segments[0]
+for new_segment in segments[1:]:
+    segment = segment + new_segment
+
+audio_out_path = os.path.join(os.getcwd(), "with_text_conditioning.wav")
+segment.export(audio_out_path, format="wav")
+print(f"Success! Wrote audio to {audio_out_path}")
+```
+
+## Conditioning on past generations
+
+Text conditioning works well when there has been no previous or next chunks generated yet. If there have been however, it works much better to provide the actual past generations to the model instead of just the text.
+This is done by using the previous_request_ids and next_request_ids parameters.
+
+Every text-to-speech request has an associated request-id which is obtained by reading from the response header. Below is an example on how to use this request_id in order to condition requests on the previous generations.
+
+```python
+import os
+import requests
+from pydub import AudioSegment
+import io
+
+YOUR_XI_API_KEY = "<insert your xi-api-key here>"
+VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
+PARAGRAPHS = [
+    "The advent of technology has transformed countless sectors, with education "
+    "standing out as one of the most significantly impacted fields.",
+    "In recent years, educational technology, or EdTech, has revolutionized the way "
+    "teachers deliver instruction and students absorb information.",
+    "From interactive whiteboards to individual tablets loaded with educational software, "
+    "technology has opened up new avenues for learning that were previously unimaginable.",
+    "One of the primary benefits of technology in education is the accessibility it provides.",
+]
+segments = []
+previous_request_ids = []
+
+for i, paragraph in enumerate(PARAGRAPHS):
+    response = requests.post(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
+        json={
+            "text": paragraph,
+            "model_id": "eleven_multilingual_v2",
+            # A maximum of three next or previous history item ids can be send
+            "previous_request_ids": previous_request_ids[-3:],
+        },
+        headers={"xi-api-key": YOUR_XI_API_KEY},
+    )
+
+    if response.status_code != 200:
+        print(f"Error encountered, status: {response.status_code}, "
+               f"content: {response.text}")
+        quit()
+
+    print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
+    previous_request_ids.append(response.headers["request-id"])
+    segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
+
+segment = segments[0]
+for new_segment in segments[1:]:
+    segment = segment + new_segment
+
+audio_out_path = os.path.join(os.getcwd(), "with_previous_request_ids_conditioning.wav")
+segment.export(audio_out_path, format="wav")
+print(f"Success! Wrote audio to {audio_out_path}")
+```
+
+<b>Note that the order matters here</b>: When one converts a text split into 5 chunks and has
+already converted chunks 1, 2, 4 and 5 and now wants to convert chunk 3 the previous_request_ids one
+neeeds to send would be [request_id_chunk_1, request_id_chunk_2] and the next_request_ids would be
+[request_id_chunk_4, request_id_chunk_5].
+
+## Conditioning both on text and past generations
+
+The best possible results are achieved when conditioning both on text and past generations so lets combine the two by providing previous_text, next_text and previous_request_ids in one request:
+
+```python
+import os
+import requests
+from pydub import AudioSegment
+import io
+
+YOUR_XI_API_KEY = "<insert your xi-api-key here>"
+VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
+PARAGRAPHS = [
+    "The advent of technology has transformed countless sectors, with education "
+    "standing out as one of the most significantly impacted fields.",
+    "In recent years, educational technology, or EdTech, has revolutionized the way "
+    "teachers deliver instruction and students absorb information.",
+    "From interactive whiteboards to individual tablets loaded with educational software, "
+    "technology has opened up new avenues for learning that were previously unimaginable.",
+    "One of the primary benefits of technology in education is the accessibility it provides.",
+]
+segments = []
+previous_request_ids = []
+
+for i, paragraph in enumerate(PARAGRAPHS):
+    is_first_paragraph = i == 0
+    is_last_paragraph = i == len(PARAGRAPHS) - 1
+    response = requests.post(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream",
+        json={
+            "text": paragraph,
+            "model_id": "eleven_multilingual_v2",
+            # A maximum of three next or previous history item ids can be send
+            "previous_request_ids": previous_request_ids[-3:],
+            "previous_text": None if is_first_paragraph else " ".join(PARAGRAPHS[:i]),
+            "next_text": None if is_last_paragraph else " ".join(PARAGRAPHS[i + 1:])
+        },
+        headers={"xi-api-key": YOUR_XI_API_KEY},
+    )
+
+    if response.status_code != 200:
+        print(f"Error encountered, status: {response.status_code}, "
+               f"content: {response.text}")
+        quit()
+
+    print(f"Successfully converted paragraph {i + 1}/{len(PARAGRAPHS)}")
+    previous_request_ids.append(response.headers["request-id"])
+    segments.append(AudioSegment.from_mp3(io.BytesIO(response.content)))
+
+segment = segments[0]
+for new_segment in segments[1:]:
+    segment = segment + new_segment
+
+audio_out_path = os.path.join(os.getcwd(), "with_full_conditioning.wav")
+segment.export(audio_out_path, format="wav")
+print(f"Success! Wrote audio to {audio_out_path}")
+```
+
+## Things to note
+
+1. Providing wrong previous_request_ids and next_request_ids will not result in an error.
+2. In order to use the request_id of a request for conditioning it needs to have processed completely. In case of streaming this means the audio has to be read completely from the response body.
+3. How well Request Stitching works varies greatly dependent on the model, voice and voice settings used.
+4. previous_request_ids and next_request_ids should contain request_ids which are not too old. When the request_ids are older than two hours it will diminish the effect of conditioning.
+5. Enterprises with increased privacy requirements will have Request Stitching disabled.
