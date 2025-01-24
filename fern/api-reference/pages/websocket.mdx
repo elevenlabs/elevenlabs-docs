@@ -4,10 +4,6 @@ title: Websocket
 
 This API provides real-time [text-to-speech](https://elevenlabs.io/text-to-speech) conversion using WebSockets. This allows you to send a text message and receive audio data back in real-time.
 
-<Note>
-  `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input?model_id={model}`
-</Note>
-
 ## When to use
 
 The Text-to-Speech Websockets API is designed to generate audio from partial text input while ensuring consistency throughout the generated audio. Although highly flexible, the Websockets API isn't a one-size-fits-all solution. It's well-suited for scenarios where:
@@ -109,7 +105,7 @@ Note that overriding the chunk schedule to generate small amounts of text may re
 
 <ParamField path="flush" type="boolean">
     Flush forces the generation of audio. Set this value to `true` when you have finished sending text, but want to keep the websocket connection open.
-    
+
     This is useful when you want to ensure that the last chunk of audio is generated even when the length of text sent is smaller than the value set in `chunk_length_schedule` (e.g. 120 or 50).
 
     To understand more about how our websockets buffer text before audio is generated, please refer to [this](#understanding-how-our-websockets-buffer-text) section.
@@ -250,7 +246,7 @@ The server will always respond with a message containing the following fields:
 <ParamField query="enable_ssml_parsing" type="boolean">
     Whether to enable/disable parsing of SSML tags within the provided text. For best results, we recommend
     sending SSML tags as fully contained messages to the websockets endpoint, otherwise this may result in additional latency.
-    Please note that rendered text, in normalizedAlignment, will be altered in support of SSML tags. The 
+    Please note that rendered text, in normalizedAlignment, will be altered in support of SSML tags. The
     rendered text will use a . as a placeholder for breaks, and syllables will be reported using the CMU arpabet alphabet where SSML phoneme tags are used to specify pronunciation.
     Disabled by default.
 </ParamField>
