@@ -14,28 +14,14 @@ The following guides cover both use cases:
 1. **Bring your own OpenAI key**: Use your own OpenAI API key with our platform.
 2. **Custom LLM server**: Host and connect your own LLM server implementation.
 
+You'll learn how to:
+
+- Store your OpenAI API key in ElevenLabs
+- host a server that replicates OpenAI's [create chat completion](https://platform.openai.com/docs/api-reference/chat/create) endpoint
+- Direct ElevenLabs to your custom endpoint
+- Pass extra parameters to your LLM as needed
+
 <br />
-
-<Tabs>
-  <Tab title="Bring your own OpenAI key">
-    <Steps>
-      <Step>
-        In your agent settings, navigate to the **Secrets** section and click **Add Secret**.
-      </Step>
-      <Step>Choose "Custom LLM" from the dropdown menu</Step>
-      <Step>Enter the URL, your model, and the secret you created</Step>
-      <Step>Set "Custom LLM extra body" to true</Step>
-    </Steps>
-  </Tab>
-  <Tab title="Custom LLM server"></Tab>
-</Tabs>
-
-This guide covers:
-
-- Storing your OpenAI API key in ElevenLabs
-- Hosting a server that replicates OpenAI's [create chat completion](https://platform.openai.com/docs/api-reference/chat/create) endpoint
-- Directing ElevenLabs to your custom endpoint
-- Passing extra parameters to your LLM as needed
 
 ## Using your own OpenAI key
 
@@ -44,19 +30,34 @@ To integrate a custom OpenAI key, create a secret containing your OPENAI_API_KEY
 <Steps>
   <Step>
     Navigate to the "Secrets" page and select "Add Secret"
-    {/* # TODO:  replace image../developer-guides/images/byollm_1.webp" /> */}
+
+    <Frame background="subtle">
+      ![Add Secret](/assets/images/conversational-ai/byollm-1.png)
+    </Frame>
+
   </Step>
   <Step>
     Choose "Custom LLM" from the dropdown menu.
-    {/* # TODO:  replace image../developer-guides/images/byollm_2.webp" /> */}
+    
+    <Frame background="subtle">
+      ![Choose custom llm](/assets/images/conversational-ai/byollm-2.png)
+    </Frame>
   </Step>
   <Step>
     Enter the URL, your model, and the secret you created.
-    {/* # TODO:  replace image../developer-guides/images/byollm_3.webp" /> */}
+   
+    <Frame background="subtle">
+      ![Enter url](/assets/images/conversational-ai/byollm-3.png)
+    </Frame>
+
   </Step>
   <Step>
     Set "Custom LLM extra body" to true.
-    {/* # TODO:  replace image../developer-guides/images/byollm_7.webp" /> */}
+
+    <Frame background="subtle">
+      ![](/assets/images/conversational-ai/byollm-4.png)
+    </Frame>
+
   </Step>
 </Steps>
 
@@ -128,7 +129,7 @@ if __name__ == "__main__":
 
 Run this code or your own server code.
 
-{/* # TODO:  replace image../developer-guides/images/byollm_4.webp" /> */}
+<Frame background="subtle">![](/assets/images/conversational-ai/byollm-5.png)</Frame>
 
 ### Setting Up a Public URL for Your Server
 
@@ -138,15 +139,15 @@ To make your server accessible, create a public URL using a tunneling tool like 
 ngrok http --url=<Your url>.ngrok.app 8013
 ```
 
-{/* # TODO:  replace image../developer-guides/images/byollm_5.webp" /> */}
+<Frame background="subtle">![](/assets/images/conversational-ai/byollm-6.png)</Frame>
 
 ### Configuring Elevenlabs CustomLLM
 
 Now let's make the changes in Elevenlabs
 
-{/* # TODO:  replace image../developer-guides/images/byollm_6.webp" /> */}
+<Frame background="subtle">![](/assets/images/conversational-ai/byollm-8.png)</Frame>
 
-{/* # TODO:  replace image../developer-guides/images/byollm_7.webp" /> */}
+<Frame background="subtle">![](/assets/images/conversational-ai/byollm-7.png)</Frame>
 
 Direct your server URL to ngrok endpoint, setup "Limit token usage" to 5000 and set "Custom LLM extra body" to true.
 
