@@ -2,7 +2,9 @@
 title: Streaming
 ---
 
-The ElevenLabs API provides the ability to stream responses back to a client in order to allow partial results for certain requests. To achieve this, we follow the [Server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events) standard. Our official [Node](https://github.com/elevenlabs/elevenlabs-js) and [Python](https://github.com/elevenlabs/elevenlabs-python) libraries include helpers to make parsing these events simpler.
+The ElevenLabs API supports real-time audio streaming for select endpoints, returning raw audio bytes (e.g., MP3 data) directly over HTTP using chunked transfer encoding. This allows clients to process or play audio incrementally as it is generated.
+
+Our official [Node](https://github.com/elevenlabs/elevenlabs-js) and [Python](https://github.com/elevenlabs/elevenlabs-python) libraries include utilities to simplify handling this continuous audio stream.
 
 Streaming is supported for the [Text to Speech API](/docs/api-reference/streaming), [Voice Changer API](/docs/api-reference/speech-to-speech-streaming) & [Audio Isolation API](/docs/api-reference/audio-isolation-stream). This section focuses on how streaming works for requests made to the Text to Speech API.
 
