@@ -151,15 +151,29 @@ Enable multi-language support in the widget.
   SDKs](/docs/conversational-ai/libraries) with a Next.js, React, or Python application.
 </Note>
 
-### Client tools
+### Client Tools
 
-Once you define a [client tool](/docs/conversational-ai/customization/client-tools) in the dashboard, you can add event listeners to the widget. This allows the agent widget to perform actions such as:
+Client tools allow you to extend the functionality of the widget by adding event listeners. This enables the widget to perform actions such as:
 
 - Redirecting the user to a specific page
 - Sending an email to your support team
 - Redirecting the user to an external URL
 
-You can find an example of this tool running in the bottom right of this page. The [source is available on GitHub](https://github.com/elevenlabs/elevenlabs-docs/blob/main/fern/assets/scripts/widget.js) for reference.
+To see examples of these tools in action, start a call with the agent in the bottom right corner of this page. The [source code is available on GitHub](https://github.com/elevenlabs/elevenlabs-docs/blob/main/fern/assets/scripts/widget.js) for reference.
+
+#### Creating a Client Tool
+
+To create your first client tool, follow the [client tools guide](/docs/conversational-ai/customization/client-tools).
+
+<Accordion title="Example: Creating the `redirectToExternalURL` Tool">
+  <Frame background="subtle">
+    ![Client tool configuration](/assets/images/conversational-ai/widget-client-tool-setup.png)
+  </Frame>
+</Accordion>
+
+#### Example Implementation
+
+Below is an example of how to handle the `redirectToExternalURL` tool triggered by the widget in your JavaScript code:
 
 <CodeBlocks>
 
@@ -171,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen for the widget's "call" event to trigger client-side tools
     widget.addEventListener('elevenlabs-convai:call', (event) => {
       event.detail.config.clientTools = {
-        // Note: A client tool called "redirectToExternalURL" (case-sensitive) must be defined in the ElevenLabs dashboard.
+        // Note: To use this example, the client tool called "redirectToExternalURL" (case-sensitive) must have been created with the configuration defined above.
         redirectToExternalURL: ({ url }) => {
           window.open(url, '_blank', 'noopener,noreferrer');
         },
