@@ -173,19 +173,21 @@ Here are a few examples where dynamic variables are useful:
     ```
 
     ```swift title="Swift"
-    let dynamic_vars = [
-        "customer_name": "John Doe",
-        "account_balance": 5000.50,
-        "location": "New York",
-        "is_premium": true
+    let dynamicVars: [String: DynamicVariableValue] = [
+      "customer_name": .string("John Doe"),
+      "account_balance": .number(5000.50),
+      "user_id": .int(12345),
+      "is_premium": .boolean(true)
     ]
 
-    let config = ElevenLabsSDK.SessionConfig(
-        agentId: agent.id,
-        dynamic_variables: dynamic_vars
+    // Create session config with dynamic variables
+    let config = SessionConfig(
+        agentId: "your_agent_id",
+        dynamicVariables: dynamicVars
     )
 
-    let conversation = try await ElevenLabsSDK.Conversation.startSession(
+    // Start the conversation
+    let conversation = try await Conversation.startSession(
         config: config
     )
     ```
