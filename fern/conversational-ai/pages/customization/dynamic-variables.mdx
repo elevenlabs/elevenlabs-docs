@@ -80,25 +80,46 @@ Here are a few examples where dynamic variables are useful:
     </Tip>
 
     <CodeGroup>
-    ```python title="Python"
+    ```python title="Python" focus={10-23} maxLines=25
+    import os
+    import signal
+    from elevenlabs.client import ElevenLabs
     from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+    from elevenlabs.conversational_ai.default_audio_interface import DefaultAudioInterface
+    
+    agent_id = os.getenv("AGENT_ID")
+    api_key = os.getenv("ELEVENLABS_API_KEY")
+    client = ElevenLabs(api_key=api_key)
 
     dynamic_vars = {
-        "customer_name": "John Doe",
-        "account_balance": 5000.50,
-        "location": "New York",
-        "is_premium": True
+      "user_name": "Angelo",
     }
 
     config = ConversationConfig(
-        dynamic_variables=dynamic_vars
+      dynamic_variables=dynamic_vars
     )
 
     conversation = Conversation(
-        config=config
+      client,
+      agent_id,
+      config=config,
+      # Assume auth is required when API_KEY is set.
+      requires_auth=bool(api_key),
+      # Use the default audio interface.
+      audio_interface=DefaultAudioInterface(),
+      # Simple callbacks that print the conversation to the console.
+      callback_agent_response=lambda response: print(f"Agent: {response}"),
+      callback_agent_response_correction=lambda original, corrected: print(f"Agent: {original} -> {corrected}"),
+      callback_user_transcript=lambda transcript: print(f"User: {transcript}"),
+      # Uncomment the below if you want to see latency measurements.
+      # callback_latency_measurement=lambda latency: print(f"Latency: {latency}ms"),
     )
+
     conversation.start_session()
-    ```
+
+    signal.signal(signal.SIGINT, lambda sig, frame: conversation.end_session())
+
+````
 
     ```javascript title="JavaScript"
     const conversation = await Conversation.startSession({
@@ -163,3 +184,4 @@ Dynamic variables support these value types:
 
   </Accordion>
 </AccordionGroup>
+````
