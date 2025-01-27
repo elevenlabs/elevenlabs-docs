@@ -273,7 +273,7 @@ paths:
   # =======
   /v1/history:
     get:
-      summary: Get generated items
+      summary: Retrieve generated items
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -310,7 +310,7 @@ paths:
         - description: ID of the voice to be filtered for. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
   /v1/history/{history_item_id}:
     get:
-      summary: Get history item by ID
+      summary: Retrieve history item
       x-fern-audiences:
         - sdk
       x-fern-examples:
@@ -341,7 +341,7 @@ paths:
               share_link_id: null
               source: 'TTS'
       parameters:
-        - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
+        - description: ID of the history item to be used. You can use the [Retrieve generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
     delete:
       summary: Delete history item
       x-fern-audiences:
@@ -353,17 +353,17 @@ paths:
             body:
               status: 'ok'
       parameters:
-        - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
+        - description: ID of the history item to be used. You can use the [Retrieve generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/history/{history_item_id}/audio:
     get:
-      summary: Get audio from history item
+      summary: Retrieve audio from history item
       x-fern-audiences:
         - sdk
       x-fern-examples:
         - path-parameters:
             history_item_id: 'HISTORY_ITEM_ID'
       parameters:
-        - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
+        - description: ID of the history item to be used. You can use the [Retrieve generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/history/download:
     post:
       summary: Download history items
@@ -373,7 +373,7 @@ paths:
         - request:
             history_item_ids: ['HISTORY_ITEM_ID']
       properties:
-        - description: IDs of the history items to be downloaded. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
+        - description: IDs of the history items to be downloaded. You can use the [Retrieve generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   # ======
   # VOICES
   # ======
@@ -727,6 +727,13 @@ paths:
         - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
     delete:
       summary: Delete project
+      x-fern-audiences:
+        - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+  /v1/projects/{project_id}/content:
+    post:
+      summary: Update project
       x-fern-audiences:
         - sdk
       parameters:
@@ -1431,7 +1438,7 @@ components:
       x-fern-type-name: DownloadHistoryRequest
       properties:
         history_item_ids:
-          description: A list of history item IDs to be downloaded. You can get the history item IDs from the [Get generated items](/docs/api-reference/history/get-all) endpoint.
+          description: A list of history item IDs to be downloaded. You can get the history item IDs from the [Retrieve generated items](/docs/api-reference/history/get-all) endpoint.
     Body_Dub_a_video_or_an_audio_file_v1_dubbing_post:
       x-fern-type-name: DubAVideoOrAudioFileRequest
       required: [target_lang]
