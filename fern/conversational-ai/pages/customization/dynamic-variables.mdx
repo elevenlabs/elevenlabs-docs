@@ -86,7 +86,7 @@ Here are a few examples where dynamic variables are useful:
     from elevenlabs.client import ElevenLabs
     from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
     from elevenlabs.conversational_ai.default_audio_interface import DefaultAudioInterface
-    
+
     agent_id = os.getenv("AGENT_ID")
     api_key = os.getenv("ELEVENLABS_API_KEY")
     client = ElevenLabs(api_key=api_key)
@@ -121,15 +121,55 @@ Here are a few examples where dynamic variables are useful:
 
 ````
 
-    ```javascript title="JavaScript"
-    const conversation = await Conversation.startSession({
-      dynamicVariables: {
-        customer_name: "John Doe",
-        account_balance: 5000.50,
-        location: "New York",
-        is_premium: true
+    ```javascript title="JavaScript" focus={7-20} maxLines=25
+    import { Conversation } from '@11labs/client';
+
+    class VoiceAgent {
+      ...
+
+      async startConversation() {
+        try {
+            // Request microphone access
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            // Initialize conversation with your agent ID
+            this.conversation = await Conversation.startSession({
+                agentId: 'agent_id_goes_here', // Replace with your actual agent ID
+
+                dynamicVariables: {
+                    user_name: 'Angelo'
+                },
+
+                onConnect: () => {
+                    this.updateStatus('connected');
+                },
+
+                onDisconnect: () => {
+                    this.updateStatus('disconnected');
+                },
+
+                onMessage: (message) => {
+                    this.updateTranscript(message);
+                },
+
+                onError: (error) => {
+                    this.updateStatus('disconnected');
+                },
+
+                onStatusChange: (status) => {
+                    this.updateStatus(status);
+                },
+
+                onModeChange: (mode) => {
+                    console.log('Mode changed:', mode);
+                }
+            });
+        } catch (error) {
+            console.error('Failed to start conversation:', error);
+            alert('Failed to start conversation. Please ensure microphone access is granted.');
+        }
       }
-    });
+    }
     ```
 
     ```swift title="Swift"
