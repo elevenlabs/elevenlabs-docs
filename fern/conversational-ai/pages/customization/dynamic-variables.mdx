@@ -132,7 +132,6 @@ Here are a few examples where dynamic variables are useful:
             // Request microphone access
             await navigator.mediaDevices.getUserMedia({ audio: true });
 
-            // Initialize conversation with your agent ID
             this.conversation = await Conversation.startSession({
                 agentId: 'agent_id_goes_here', // Replace with your actual agent ID
 
@@ -140,29 +139,7 @@ Here are a few examples where dynamic variables are useful:
                     user_name: 'Angelo'
                 },
 
-                onConnect: () => {
-                    this.updateStatus('connected');
-                },
-
-                onDisconnect: () => {
-                    this.updateStatus('disconnected');
-                },
-
-                onMessage: (message) => {
-                    this.updateTranscript(message);
-                },
-
-                onError: (error) => {
-                    this.updateStatus('disconnected');
-                },
-
-                onStatusChange: (status) => {
-                    this.updateStatus(status);
-                },
-
-                onModeChange: (mode) => {
-                    console.log('Mode changed:', mode);
-                }
+                ... add some callbacks here
             });
         } catch (error) {
             console.error('Failed to start conversation:', error);
