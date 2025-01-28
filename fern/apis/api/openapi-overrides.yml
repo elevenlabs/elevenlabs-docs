@@ -276,11 +276,6 @@ paths:
       summary: Get generated items
       x-fern-audiences:
         - sdk
-      parameters:
-        - name: search
-          description: Search term used for filtering history items. If provided, source becomes required.
-        - name: source
-          description: Source of the history items. If search parameter is provided, source becomes required. Otherwise this parameter is optional.
       x-fern-examples:
         - query-parameters:
           response:
@@ -313,6 +308,9 @@ paths:
         - {} # page_size
         - {} # start_after_history_item_id
         - description: ID of the voice to be filtered for. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        parameters:
+        - description: Search term used for filtering history items. If provided, source becomes required.
+        - description: Source of the history items. If search parameter is provided, source becomes required. Otherwise this parameter is optional.
   /v1/history/{history_item_id}:
     get:
       summary: Get history item
