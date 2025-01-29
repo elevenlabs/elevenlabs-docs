@@ -1,0 +1,64 @@
+---
+title: Single Sign-On (SSO)
+subtitle: An overview on how to set up SSO for your workspace.
+---
+
+<img
+  src="/assets/images/product-guides/workspaces/workspace-sso.png"
+  alt="SSO"
+  className="w-full rounded-lg"
+/>
+
+## Overview
+
+<Info> Only workspace admins can use this feature. </Info>
+
+Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your existing identity provider. This allows your team to use the same credentials they use for other services to log in to ElevenLabs.
+
+## Guide
+
+<Steps>
+  <Step title="Access your SSO settings">
+    Click on your profile icon located at the bottom left of the dashboard, select "Workspace settings", and then navigate to the "Security & SSO" tab.
+  </Step>
+  <Step title="Choose identity providers">
+    You can choose from a variety of pre-configured identity providers, including Google, Apple, GitHub, etc. Custom organization SSO providers will only appear in this list after they have been configured, as shown in the "SSO Provider" section.
+  </Step>
+  <Step title="Verify your email domain">
+    Next, you need to verify your email domain for authentication. This lets ElevenLabs know that you own the domain you are configuring for SSO. This is a security measure to prevent unauthorized access to your workspace.
+
+    Click the "Verify domain" button and enter the domain name you want to verify. After completing this step, click on the domain pending verification. You will be prompted to add a DNS TXT record to your domain's DNS settings. Once the DNS record has been added, click on the "Verify" button.
+
+  </Step>
+  <Step title="Configure SSO">
+    If you want to configure your own SSO provider, select the SSO provider dropdown to select between OIDC (OpenID Connect) and SAML (Security Assertion Markup Language). Note that only Service Provider (SP) initiated SSO is supported for SAML.
+
+    Once you've filled out the required fields, click the "Update SSO" button to save your changes.
+
+    <Warning>Configuring a new SSO provider will log out all workspace members currently logged in with SSO.</Warning>
+
+  </Step>
+</Steps>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Microsoft Entra Identifier / Azure AD - SAML">
+    What shall I fill for Identifier (Entity ID)?
+    - Use Service Provider Entity Id
+
+    What shall I fill for Reply URL (Assertion Consumer Service) URL in SAML?
+    - Use Redirect URL
+
+    What is ACS URL?
+    - Same as Assertion Consumer Service URL
+
+    Which fields should I use to provide ElevenLabs?
+    - Use _Microsoft Entra Identifier_ for IdP Entity ID
+    - Use _Login URL_ for IdP Sign-In URL
+
+  </Accordion>
+  <Accordion title="I am getting the error 'Unable to login with saml.workspace...'">
+    - One known error: Inside the `<saml:Subject>` field of the SAML response, make sure `<saml:NameID>` is set to the email address of the user.
+  </Accordion>
+</AccordionGroup>
