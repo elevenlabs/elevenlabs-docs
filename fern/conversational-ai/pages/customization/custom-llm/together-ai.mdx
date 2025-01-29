@@ -1,0 +1,79 @@
+---
+title: Together AI
+subtitle: Connect an agent to a custom LLM on Together AI.
+---
+
+## Overview
+
+[Together AI](https://www.together.ai/) provides an AI Acceleration Cloud, allowing you to train, fine-tune, and run inference on AI models blazing fast, at low cost, and at production scale.
+
+Instantly run [200+ models](https://together.xyz/models) including DeepSeek, Llama3, Mixtral, and Stable Diffusion, optimized for peak latency, throughput, and context length.
+
+## Choosing a model
+
+To make use of the full power of ElevenLabs Conversational AI you need to use a model that supports tool use and structured outputs. Together AI supports function calling for [these models](https://docs.together.ai/docs/function-calling):
+
+- meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+- meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+- meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
+- meta-llama/Llama-3.3-70B-Instruct-Turbo
+- mistralai/Mixtral-8x7B-Instruct-v0.1
+- mistralai/Mistral-7B-Instruct-v0.1
+
+With this in mind, it's recommended to use at least `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` for your ElevenLabs Conversational AI agent.
+
+## Set up Llama 3.1 on Together AI
+
+<Steps>
+  <Step>
+    Navigate to [api.together.xyz/settings/api-keys](https://api.together.xyz/settings/api-keys) and create a new API key.
+
+    <Frame background="subtle">
+    ![Add Secret](/assets/images/conversational-ai/together-ai/together-ai-api-key.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Once you have your API key, you can test it by running the following curl command:
+
+    ```bash
+    curl https://api.together.xyz/v1/chat/completions -s \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <API_KEY>" \
+    -d '{
+    "model": "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+    "messages": [{
+        "role": "user",
+        "content": "Hello, how are you?"
+    }]
+    }'
+    ```
+
+  </Step>
+  <Step>
+    Navigate to your [AI Agent](https://elevenlabs.io/app/conversational-ai), scroll down to the "Secrets" section and select "Add Secret". After adding the secret, make sure to hit "Save" to make the secret available to your agent.
+
+    <Frame background="subtle">
+      ![Add Secret](/assets/images/conversational-ai/together-ai/together-ai-secret.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Choose "Custom LLM" from the dropdown menu.
+    
+    <Frame background="subtle">
+      ![Choose custom llm](/assets/images/conversational-ai/byollm-2.png)
+    </Frame>
+  </Step>
+  <Step>
+    For the Server URL, specify Together AI's OpenAI-compatible API endpoint: `https://api.together.xyz/v1`. For the Model ID, specify `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` as discussed above, and select your API key from the dropdown menu.
+
+    <Frame background="subtle">
+      ![Enter url](/assets/images/conversational-ai/together-ai/together-ai-llm.png)
+    </Frame>
+
+  </Step>
+  <Step>
+   Now you can go ahead and click "Test AI Agent" to chat with your custom Llama 3.1 model.
+  </Step>
+</Steps>
