@@ -1,0 +1,95 @@
+---
+title: Conversation flow
+subtitle: Configure how your assistant handles timeouts and interruptions during conversations.
+---
+
+## Overview
+
+Conversation flow settings determine how your assistant handles periods of user silence and interruptions during speech. These settings help create more natural conversations and can be customized based on your use case.
+
+<CardGroup cols={2}>
+  <Card title="Timeouts" icon="clock" href="#timeouts">
+    Configure how long your assistant waits during periods of silence
+  </Card>
+  <Card title="Interruptions" icon="hand" href="#interruptions">
+    Control whether users can interrupt your assistant while speaking
+  </Card>
+</CardGroup>
+
+## Timeouts
+
+Timeout handling determines how long your assistant will wait during periods of user silence before prompting for a response.
+
+### Configuration
+
+Timeout settings can be configured in the agent's **Advanced** tab under **Turn Timeout**.
+
+The timeout duration is specified in seconds and determines how long the assistant will wait in silence before prompting the user. Turn timeouts must be between 1 and 30 seconds.
+
+#### Example Timeout Settings
+
+<Frame background="subtle">
+  ![Timeout settings](/assets/images/conversational-ai/timeouts.png)
+</Frame>
+
+<Note>
+  Choose an appropriate timeout duration based on your use case. Shorter timeouts create more
+  responsive conversations but may interrupt users who need more time to respond, leading to a less
+  natural conversation.
+</Note>
+
+### Best practices for timeouts
+
+- Set shorter timeouts (5-10 seconds) for casual conversations where quick back-and-forth is expected
+- Use longer timeouts (10-30 seconds) when users may need more time to think or formulate complex responses
+- Consider your user context - customer service may benefit from shorter timeouts while technical support may need longer ones
+
+## Interruptions
+
+Interruption handling determines whether users can interrupt your assistant while it's speaking.
+
+### Configuration
+
+Interruption settings can be configured in the agent's **Advanced** tab under **Client Events**.
+
+To enable interruptions, make sure interruption is a selected client event.
+
+#### Interruptions Enabled
+
+<Frame background="subtle">
+  ![Interruption allowed](/assets/images/conversational-ai/interruptions.png)
+</Frame>
+
+#### Interruptions Disabled
+
+<Frame background="subtle">
+  ![Interruption ignored](/assets/images/conversational-ai/no-interruption.png)
+</Frame>
+
+<Note>
+  Disable interruptions when the complete delivery of information is crucial, such as legal
+  disclaimers or safety instructions.
+</Note>
+
+### Best practices for interruptions
+
+- Enable interruptions for natural conversational flows where back-and-forth dialogue is expected
+- Disable interruptions when message completion is critical (e.g., terms and conditions, safety information)
+- Consider your use case context - customer service may benefit from interruptions while information delivery may not
+
+## Recommended configurations
+
+<AccordionGroup>
+  <Accordion title="Customer service">
+    - Shorter timeouts (5-10 seconds) for responsive interactions - Enable interruptions to allow
+    customers to interject with questions
+  </Accordion>
+  <Accordion title="Legal disclaimers">
+    - Longer timeouts (15-30 seconds) to allow for complex responses - Disable interruptions to
+    ensure full delivery of legal information
+  </Accordion>
+  <Accordion title="Conversational EdTech">
+    - Longer timeouts (10-30 seconds) to allow time to think and formulate responses - Enable
+    interruptions to allow students to interject with questions
+  </Accordion>
+</AccordionGroup>
