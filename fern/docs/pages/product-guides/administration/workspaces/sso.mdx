@@ -13,7 +13,7 @@ subtitle: An overview on how to set up SSO for your workspace.
 
 <Info> Only workspace admins can use this feature. </Info>
 
-Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your existing identity provider. This means that your team can use the same credentials which they use for other services to log in to ElevenLabs.
+Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your existing identity provider. This allows your team to use the same credentials they use for other services to log in to ElevenLabs.
 
 ## Guide
 
@@ -22,12 +22,12 @@ Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your exis
     Click on your profile icon located at the bottom left of the dashboard, select "Workspace settings", and then navigate to the "Security & SSO" tab.
   </Step>
   <Step title="Choose identity providers">
-    You can choose from a variety of pre-configured identity providers, including Google, Apple, GitHub, etc. Custom organization SSO providers will only appear in this list after they has been configured shown in the "SSO Provider" section.
+    You can choose from a variety of pre-configured identity providers, including Google, Apple, GitHub, etc. Custom organization SSO providers will only appear in this list after they have been configured, as shown in the "SSO Provider" section.
   </Step>
   <Step title="Verify your email domain">
     Next, you need to verify your email domain for authentication. This lets ElevenLabs know that you own the domain you are configuring for SSO. This is a security measure to prevent unauthorized access to your workspace.
 
-    Click the "Verify domain" button and enter the domain name you want to verify. Once completed, click on the domain that is pending verification and you'll be prompted to add a DNS TXT record to the DNS settings of your domain. Once the DNS record has been added, click on the "Verify" button.
+    Click the "Verify domain" button and enter the domain name you want to verify. After completing this step, click on the domain pending verification. You will be prompted to add a DNS TXT record to your domain's DNS settings. Once the DNS record has been added, click on the "Verify" button.
 
   </Step>
   <Step title="Configure SSO">
@@ -59,7 +59,6 @@ Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your exis
 
   </Accordion>
   <Accordion title="I am getting the error 'Unable to login with saml.workspace...'">
-    - One known error: make sure you have `<saml:NameID>` having email address as the value inside `<saml:Subject>` in the SAML response. We use Google Cloud as our identity platform and it expects the `<saml:Subject>` and `<saml:NameID>` elements in responses from the identity provider. If you don't define values for these elements when configuring your provider, the SAML assertion fails.
-
+    - One known error: Inside the `<saml:Subject>` field of the SAML response, make sure `<saml:NameID>` is set to the email address of the user.
   </Accordion>
 </AccordionGroup>
