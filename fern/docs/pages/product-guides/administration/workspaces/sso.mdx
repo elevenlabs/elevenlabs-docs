@@ -56,6 +56,7 @@ Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your exis
     Which fields should I use to provide ElevenLabs?
     - Use _Microsoft Entra Identifier_ for IdP Entity ID
     - Use _Login URL_ for IdP Sign-In URL
+
   </Accordion>
   <Accordion title="I am getting the error 'Unable to login with saml.workspace...'">
     - One known error: make sure you have `<saml:NameID>` having email address as the value inside `<saml:Subject>` in the SAML response. We use Google Cloud as our identity platform and it expects the `<saml:Subject>` and `<saml:NameID>` elements in responses from the identity provider. If you don't define values for these elements when configuring your provider, the SAML assertion fails.
