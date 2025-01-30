@@ -84,7 +84,7 @@ npm install elevenlabs
         audio_data = BytesIO(response.content)
 
         transcription = client.speech_to_text.convert(
-          audio=audio_data,
+          file=audio_data,
           model_id="scribe_v1",
         )
 
@@ -266,7 +266,7 @@ npm install elevenlabs
         const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
         const transcription = await client.speechToText.convert({
-          audio: audioBlob,
+          file: audioBlob,
           model_id: "scribe_v1",
         });
 

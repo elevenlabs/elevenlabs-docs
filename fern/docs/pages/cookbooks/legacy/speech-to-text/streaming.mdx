@@ -1,164 +1,175 @@
 ---
-title: Streaming text to speech
-subtitle: Learn how to stream text into speech in Python or Node.js.
+title: Streaming speech to text
+subtitle: Learn how to transcribe audio with ElevenLabs
 ---
 
-In this tutorial, you'll learn how to convert [text to speech](https://elevenlabs.io/text-to-speech) with the ElevenLabs SDK. We’ll start by talking through how to generate speech and receive a file and then how to generate speech and stream the response back. Finally, as a bonus we’ll show you how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
+In this tutorial, you'll learn how to transcribe audio with the ElevenLabs SDK. We'll cover both receiving a file and streaming the response back.
+
+Additionally you'll learn how to upload the generated audio to an AWS S3 bucket, and share it through a signed URL. This signed URL will provide temporary access to the audio file, making it perfect for sharing with users by SMS or embedding into an application.
 
 If you want to jump straight to an example you can find them in the [Python](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/python) and [Node.js](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/text-to-speech/node) example repositories.
 
 ## Requirements
 
-- An ElevenLabs account with an API key (here’s how to [find your API key](/docs/developer-guides/quickstart#authentication)).
+- An ElevenLabs account with an [API key](/docs/developer-guides/quickstart#authentication).
 - Python or Node installed on your machine
 - (Optionally) an AWS account with access to S3.
 
-## Setup
+<Tabs>
+  <Tab title="Python">
+    ## Setup
 
-### Installing our SDK
+    ### Installing the SDK
 
-Before you begin, make sure you have installed the necessary SDKs and libraries. You will need the ElevenLabs SDK for the text to speech conversion. You can install it using pip:
+    Before you begin, make sure you have installed the ElevenLabs SDK. You can install it using `pip`:
 
-<CodeGroup>
+    ```bash
+    pip install elevenlabs
+    ```
 
-```bash Python
-pip install elevenlabs
-```
+    Additionally, install necessary packages to manage your environmental variables:
 
-```bash TypeScript
-npm install elevenlabs
-```
+    ```bash
+    pip install python-dotenv
+    ```
 
-</CodeGroup>
+    Next, create a `.env` file in your project directory and fill it with your credentials like so:
 
-Additionally, install necessary packages to manage your environmental variables:
+    ```python .env
+    ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+    ```
 
-<CodeGroup>
+    ## Convert speech to text
 
-```bash Python
-pip install python-dotenv
-```
+    To convert the audio of a file to text, we'll use the `convert` method of the ElevenLabs SDK.
 
-```bash TypeScript
-npm install dotenv
-npm install @types/dotenv --save-dev
-```
+    ```python title="speech_to_text.py" maxLines=0
+    from dotenv import load_dotenv
+    from elevenlabs.client import ElevenLabs
 
-</CodeGroup>
+    load_dotenv()
 
-Next, create a `.env` file in your project directory and fill it with your credentials like so:
+    client = ElevenLabs()
 
-```bash .env
-ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
-```
+    audio_url = (
+        "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+    )
+    response = requests.get(audio_url)
+    audio_data = BytesIO(response.content)
 
-## Convert text to speech (file)
-
-To convert text to speech and save it as a file, we’ll use the `convert` method of the ElevenLabs SDK and then it locally as a `.mp3` file.
-
-<CodeGroup>
-
-```python text_to_speech_file.py (Python)
-
-import os
-import uuid
-from elevenlabs import VoiceSettings
-from elevenlabs.client import ElevenLabs
-
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(
-    api_key=ELEVENLABS_API_KEY,
-)
-
-
-def text_to_speech_file(text: str) -> str:
-    # Calling the text_to_speech conversion API with detailed parameters
-    response = client.text_to_speech.convert(
-        voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
-        output_format="mp3_22050_32",
-        text=text,
-        model_id="eleven_turbo_v2_5", # use the turbo model for low latency
-        voice_settings=VoiceSettings(
-            stability=0.0,
-            similarity_boost=1.0,
-            style=0.0,
-            use_speaker_boost=True,
-        ),
+    transcription = client.speech_to_text.convert(
+        file=audio_data,
+        model_id="scribe_v1", # Model to use, for now only "scribe_v1" is supported
+        maximum_speakers=1, # Number of speakers in the audio file
+        tag_audio_events=True, # Tag audio events like laughter, applause, etc.
+        speech_to_text_language_code="en", # Language of the audio file
+        transcribe_verbatim=False, # Transcribe verbatim sounds like "um" and "ah"
     )
 
-    # uncomment the line below to play the audio back
-    # play(response)
+    print(transcription)
+    ```
 
-    # Generating a unique file name for the output MP3 file
-    save_file_path = f"{uuid.uuid4()}.mp3"
+    Run the script with:
 
-    # Writing the audio to a file
-    with open(save_file_path, "wb") as f:
-        for chunk in response:
-            if chunk:
-                f.write(chunk)
+    ```bash
+    python speech_to_text.py
+    ```
+  </Tab>
+  <Tab title="Node">
+    ## Setup
 
-    print(f"{save_file_path}: A new audio file was saved successfully!")
+    ### Installing the SDK
 
-    # Return the path of the saved audio file
-    return save_file_path
+    Before you begin, make sure you have installed the ElevenLabs SDK. You can install it using `npm`:
 
-```
+    ```bash
+    npm install elevenlabs
+    ```
 
-```typescript text_to_speech_file.ts (Typescript)
-import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
-import { createWriteStream } from 'fs';
-import { v4 as uuid } from 'uuid';
+    Additionally, install necessary packages to manage your environmental variables:
 
-dotenv.config();
+    ```bash
+    npm install dotenv
+    ```
 
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+    Next, create a `.env` file in your project directory and fill it with your credentials like so:
 
-const client = new ElevenLabsClient({
-  apiKey: ELEVENLABS_API_KEY,
-});
+    ```javascript .env
+    ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+    ```
 
-export const createAudioFileFromText = async (text: string): Promise<string> => {
-  return new Promise<string>(async (resolve, reject) => {
-    try {
-      const audio = await client.generate({
-        voice: 'Rachel',
-        model_id: 'eleven_turbo_v2_5',
-        text,
-      });
-      const fileName = `${uuid()}.mp3`;
-      const fileStream = createWriteStream(fileName);
+    ## Convert speech to text
 
-      audio.pipe(fileStream);
-      fileStream.on('finish', () => resolve(fileName)); // Resolve with the fileName
-      fileStream.on('error', reject);
-    } catch (error) {
-      reject(error);
+    To convert the audio of a file to text, we'll use the `convert` method of the ElevenLabs SDK.
+
+    ```javascript title="speechToText.js" maxLines=0
+    import { ElevenLabsClient } from "elevenlabs";
+
+    const client = new ElevenLabsClient();
+
+    const response = await fetch(
+        "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+    );
+    const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
+
+    const transcription = await client.speechToText.convert({
+        file: audioBlob,
+        model_id: "scribe_v1", // Model to use, for now only "scribe_v1" is supported
+        maximum_speakers: 1, // Number of speakers in the audio file
+        tag_audio_events: true, // Tag audio events like laughter, applause, etc.
+        speech_to_text_language_code: "en", // Language of the audio file
+        transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
+    });
+
+    console.log(transcription);
+    ```
+
+    Run the script with:
+
+    ```bash
+    node speechToText.js
+    ```
+
+    ## Convert speech to streaming text
+
+    If you prefer to stream the text directly without saving it to a file, you can use our streaming feature.
+
+    ```javascript title="speechToTextStream.js" maxLines=0
+    import { ElevenLabsClient } from "elevenlabs";
+
+    const client = new ElevenLabsClient();
+
+    const transcriptionStream = await client.speechToText.convert({
+        file: audioBlob,
+        model_id: "scribe_v1", // Model to use, for now only "scribe_v1" is supported
+        maximum_speakers: 1, // Number of speakers in the audio file
+        tag_audio_events: true, // Tag audio events like laughter, applause, etc.
+        speech_to_text_language_code: "en", // Language of the audio file
+        transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
+    });
+
+    const chunks: Buffer[] = [];
+    for await (const chunk of transcriptionStream) {
+        chunks.push(chunk);
     }
-  });
-};
-```
 
-</CodeGroup>
+    const content = Buffer.concat(chunks);
 
-You can then run this function with:
+    console.log(content);
+    ```
 
-<CodeGroup>
+    Run the script with:
 
-```python Python
-text_to_speech_file("Hello World")
-```
+    ```bash
+    node speechToTextStream.js
+    ```
+  </Tab>
+</Tabs>
 
-```typescript TypeScript
-await createAudioFileFromText('Hello World');
-```
-
-</CodeGroup>
 
 ## Convert text to speech (streaming)
 
-If you prefer to stream the audio directly without saving it to a file, you can use our streaming feature.
+If you prefer to stream the text directly without saving it to a file, you can use our streaming feature.
 
 <CodeGroup>
 
