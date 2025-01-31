@@ -204,12 +204,21 @@ navigation:
               - page: Billing
                 icon: duotone file-invoice-dollar
                 path: docs/pages/product-guides/administration/billing.mdx
-              - page: Workspaces
+              - section: Workspaces
                 icon: duotone users
-                path: docs/pages/product-guides/administration/workspaces.mdx
-              - page: SSO
-                icon: duotone key
-                path: docs/pages/product-guides/administration/sso.mdx
+                contents:
+                  - page: Overview
+                    icon: duotone book-user
+                    path: docs/pages/product-guides/administration/workspaces/overview.mdx
+                  - page: SSO
+                    icon: duotone key
+                    path: docs/pages/product-guides/administration/workspaces/sso.mdx
+                  - page: Sharing resources
+                    icon: duotone share-nodes
+                    path: docs/pages/product-guides/administration/workspaces/sharing.mdx
+                  - page: User groups
+                    icon: duotone user-group
+                    path: docs/pages/product-guides/administration/workspaces/user-groups.mdx
       - section: RESOURCES
         skip-slug: false
         contents:
@@ -262,15 +271,25 @@ navigation:
           - page: Language
             icon: duotone language
             path: conversational-ai/pages/customization/language.mdx
-          - page: Custom LLM
+          - section: Custom LLM
             icon: duotone brain
-            path: conversational-ai/pages/customization/custom-llm.mdx
-          - page: Terms and conditions
-            icon: duotone file-contract
-            path: conversational-ai/pages/customization/terms.mdx
-          - page: Interruptions
-            icon: duotone hand
-            path: conversational-ai/pages/customization/interruptions.mdx
+            path: conversational-ai/pages/customization/custom-llm/overview.mdx
+            contents:
+              - page: Cloudflare
+                icon: brands cloudflare
+                path: conversational-ai/pages/customization/custom-llm/cloudflare-workers-ai.mdx
+              - page: Groq Cloud
+                icon: duotone cloud
+                path: conversational-ai/pages/customization/custom-llm/groq-cloud.mdx
+              - page: Together AI
+                icon: duotone users
+                path: conversational-ai/pages/customization/custom-llm/together-ai.mdx
+          - page: Widget
+            icon: duotone frame
+            path: conversational-ai/pages/customization/widget.mdx
+          - page: Conversation flow
+            icon: duotone comments
+            path: conversational-ai/pages/customization/conversation-flow.mdx
       - section: GUIDES
         skip-slug: false
         contents:
@@ -450,14 +469,9 @@ navigation:
           - section: ADMINISTRATION
             skip-slug: true
             contents:
+              - audioNative
               - history
-              - samples
-              - user
-              - voices
-              - section: Voice Library
-                contents:
-                  - GET /v1/shared-voices
-                  - POST /v1/voices/add/{public_user_id}/{voice_id}
+              - models
               - section: Projects
                 skip-slug: true
                 contents:
@@ -476,6 +490,8 @@ navigation:
                     slug: /projects/delete-project
                   - endpoint: POST /v1/projects/{project_id}/convert
                     slug: /projects/convert-project
+                  - endpoint: POST /v1/projects/{project_id}/content
+                    slug: /projects/update-content
                   - endpoint: GET /v1/projects/{project_id}/snapshots
                     slug: /projects/get-snapshots
                   - endpoint: POST /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream
@@ -499,10 +515,15 @@ navigation:
                   - endpoint: POST /v1/projects/{project_id}/update-pronunciation-dictionaries
                     slug: /projects/update-pronunciation-dictionaries
               - pronunciationDictionary
-              - models
-              - audioNative
-              - workspace
+              - samples
               - usage
+              - user
+              - section: Voice Library
+                contents:
+                  - GET /v1/shared-voices
+                  - POST /v1/voices/add/{public_user_id}/{voice_id}
+              - voices
+              - workspace
           - section: CONVERSATIONAL AI
             skip-slug: true
             contents:

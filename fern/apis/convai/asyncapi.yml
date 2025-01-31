@@ -177,6 +177,15 @@ components:
             max_tokens:
               type: integer
               description: Maximum number of tokens allowed in LLM responses.
+        dynamic_variables:
+          type: object
+          description: Dictionary of dynamic variables to be used in the conversation. Keys are the dynamic variable names which must be strings, values can be strings, numbers, integers, or booleans.
+          additionalProperties:
+            anyOf:
+              - type: string
+              - type: number
+              - type: integer
+              - type: boolean
     ClientToolResult:
       type: object
       description: Schema for tool execution results from client

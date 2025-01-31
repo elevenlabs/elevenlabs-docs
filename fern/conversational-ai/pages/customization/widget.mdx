@@ -1,0 +1,203 @@
+---
+title: Widget customization
+subtitle: Learn how to customize the widget appearance and behavior to match your brand.
+---
+
+**Widgets** enable instant integration of Conversational AI into any website. For advanced customization, use our type-safe [Conversational AI SDKs](/docs/conversational-ai/libraries) for complete control over styling and behavior.
+
+<Note>
+  Widgets currently require public agents with authentication disabled. Ensure this is disabled in
+  the **Advanced** tab of your agent settings.
+</Note>
+
+## Embedding the widget
+
+Add this code snippet to your website's `<body>` section. Place it in your main `index.html` file for site-wide availability:
+
+<CodeBlocks>
+  ```html title="Widget embed code"
+  <elevenlabs-convai agent-id="<replace-with-your-agent-id>"></elevenlabs-convai>
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+  ```
+</CodeBlocks>
+
+<Info>
+  For enhanced security, define allowed domains in your agent's **Allowlist** (located in the
+  **Security** tab). This restricts access to specified hosts only.
+</Info>
+
+## Visual customization
+
+Customize the widget's appearance, text content, language selection, and more in the [dashboard](https://elevenlabs.io/app/conversational-ai/dashboard) **Widget** tab.
+
+<Frame background="subtle">
+  ![Widget customization](/assets/images/conversational-ai/widget-overview.png)
+</Frame>
+
+<Tabs>
+  <Tab title="Appearance">
+    Customize the widget colors and shapes to match your brand identity.
+
+    <Frame background="subtle">
+      ![Widget appearance](/assets/images/conversational-ai/widget-appearance.png)
+    </Frame>
+
+  </Tab>
+  <Tab title="Feedback">
+    Gather user insights to improve agent performance. This can be used to fine-tune your agent's knowledge-base & system prompt.
+
+    <Frame background="subtle">
+      ![Widget feedback](/assets/images/conversational-ai/widget-feedback.png)
+    </Frame>
+
+    **Collection modes**
+
+    - <strong>None</strong>: Disable feedback collection entirely.
+    - <strong>During conversation</strong>: Support real-time feedback during conversations. Additionnal metadata such as the agent response that prompted the feedback will be collected to help further identify gaps.
+    - <strong>After conversation</strong>: Display a single feedback prompt after the conversation.
+
+    <Note>
+      Send feedback programmatically via the [API](docs/conversational-ai/api-reference/conversations/post-conversation-feedback) when using custom SDK implementations.
+    </Note>
+
+  </Tab>
+
+  <Tab title="Avatar">
+    Configure the voice orb or provide your own avatar.
+
+    <Frame background="subtle">
+      ![Widget orb customization](/assets/images/conversational-ai/widget-orb.png)
+    </Frame>
+
+    **Available options**
+
+    - <strong>Orb</strong>: Choose two gradient colors (e.g., #6DB035 & #F5CABB).
+    - <strong>Link/image</strong>: Use a custom avatar image.
+
+  </Tab>
+
+  <Tab title="Display text">
+    Customize all displayed widget text elements, for example to modify button labels.
+
+    <Frame background="subtle">
+      ![Widget text contents](/assets/images/conversational-ai/widget-text.png)
+    </Frame>
+
+  </Tab>
+
+  <Tab title="Terms">
+    Display custom terms and conditions before the conversation.
+
+    <Frame background="subtle">![Terms setup](/assets/images/conversational-ai/terms-setup.png)</Frame>
+
+    **Available options**
+    - <strong>Terms content</strong>: Use Markdown to format your policy text.
+    - <strong>Local storage key</strong>: A key (e.g., "terms_accepted") to avoid prompting returning users.
+
+    **Usage**
+
+    The terms are displayed to users in a modal before starting the call:
+
+    <Frame background="subtle">![Terms display](/assets/images/conversational-ai/terms.png)</Frame>
+
+    The terms can be written in Markdown, allowing you to:
+
+    - Add links to external policies
+    - Format text with headers and lists
+    - Include emphasis and styling
+
+    For more help with Markdown, see the [CommonMark help guide](https://commonmark.org/help/).
+
+    <Info>
+      Once accepted, the status is stored locally and the user won't be prompted again on subsequent
+      visits.
+    </Info>
+
+  </Tab>
+
+<Tab title="Language">
+
+Enable multi-language support in the widget.
+
+![Widget language](/assets/images/conversational-ai/widget-language.png)
+
+<Note>
+  To enable language selection, you must first [add additional
+  languages](/docs/conversational-ai/customization/language) to your agent.
+</Note>
+
+</Tab>
+
+  <Tab title="Shareable page">
+    Customize your public widget landing page (shareable link).
+
+    <Frame background="subtle">
+      ![Widget shareable page](/assets/images/conversational-ai/widget-shareable-page.png)
+    </Frame>
+
+    **Available options**
+
+    - <strong>Description</strong>: Provide a short paragraph explaining the purpose of the call.
+
+  </Tab>
+</Tabs>
+
+---
+
+## Advanced implementation
+
+<Note>
+  For more advanced customization, you should use the type-safe [Conversational AI
+  SDKs](/docs/conversational-ai/libraries) with a Next.js, React, or Python application.
+</Note>
+
+### Client Tools
+
+Client tools allow you to extend the functionality of the widget by adding event listeners. This enables the widget to perform actions such as:
+
+- Redirecting the user to a specific page
+- Sending an email to your support team
+- Redirecting the user to an external URL
+
+To see examples of these tools in action, start a call with the agent in the bottom right corner of this page. The [source code is available on GitHub](https://github.com/elevenlabs/elevenlabs-docs/blob/main/fern/assets/scripts/widget.js) for reference.
+
+#### Creating a Client Tool
+
+To create your first client tool, follow the [client tools guide](/docs/conversational-ai/customization/client-tools).
+
+<Accordion title="Example: Creating the `redirectToExternalURL` Tool">
+  <Frame background="subtle">
+    ![Client tool configuration](/assets/images/conversational-ai/widget-client-tool-setup.png)
+  </Frame>
+</Accordion>
+
+#### Example Implementation
+
+Below is an example of how to handle the `redirectToExternalURL` tool triggered by the widget in your JavaScript code:
+
+<CodeBlocks>
+
+```javascript title="index.js"
+document.addEventListener('DOMContentLoaded', () => {
+  const widget = document.querySelector('elevenlabs-convai');
+
+  if (widget) {
+    // Listen for the widget's "call" event to trigger client-side tools
+    widget.addEventListener('elevenlabs-convai:call', (event) => {
+      event.detail.config.clientTools = {
+        // Note: To use this example, the client tool called "redirectToExternalURL" (case-sensitive) must have been created with the configuration defined above.
+        redirectToExternalURL: ({ url }) => {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        },
+      };
+    });
+  }
+});
+```
+
+</CodeBlocks>
+
+<Info>
+  Explore our type-safe [SDKs](/docs/conversational-ai/libraries) for React, Next.js, and Python
+  implementations.
+</Info>

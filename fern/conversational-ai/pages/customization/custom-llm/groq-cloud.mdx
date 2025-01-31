@@ -1,0 +1,75 @@
+---
+title: Groq Cloud
+subtitle: Connect an agent to a custom LLM on Groq Cloud.
+---
+
+## Overview
+
+[Groq Cloud](https://console.groq.com/) provides easy access to fast AI inference, giving you OpenAI-compatible API endpoints in a matter of clicks.
+
+Use leading [Openly-available Models](https://console.groq.com/docs/models) like Llama, Mixtral, and Gemma as the brain for your ElevenLabs Conversational AI agents in a few easy steps.
+
+## Choosing a model
+
+To make use of the full power of ElevenLabs Conversational AI you need to use a model that supports tool use and structured outputs. Groq recommends the following Llama-3.3 models their versatility and performance:
+
+- llama-3.3-70b-versatile (128k context window | 32,768 max output tokens)
+- llama-3.1-8b-instant (128k context window | 8,192 max output tokens)
+
+With this in mind, it's recommended to use `llama-3.3-70b-versatile` for your ElevenLabs Conversational AI agent.
+
+## Set up Llama 3.3 on Groq Cloud
+
+<Steps>
+  <Step>
+    Navigate to [console.groq.com/keys](https://console.groq.com/keys) and create a new API key.
+
+    <Frame background="subtle">
+    ![Add Secret](/assets/images/conversational-ai/groq-cloud/groq-api-key.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Once you have your API key, you can test it by running the following curl command:
+
+    ```bash
+    curl https://api.groq.com/openai/v1/chat/completions -s \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $GROQ_API_KEY" \
+    -d '{
+    "model": "llama-3.3-70b-versatile",
+    "messages": [{
+        "role": "user",
+        "content": "Hello, how are you?"
+    }]
+    }'
+    ```
+
+  </Step>
+  <Step>
+    Navigate to your [AI Agent](https://elevenlabs.io/app/conversational-ai), scroll down to the "Secrets" section and select "Add Secret". After adding the secret, make sure to hit "Save" to make the secret available to your agent.
+
+    <Frame background="subtle">
+      ![Add Secret](/assets/images/conversational-ai/groq-cloud/groq-secret.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Choose "Custom LLM" from the dropdown menu.
+    
+    <Frame background="subtle">
+      ![Choose custom llm](/assets/images/conversational-ai/byollm-2.png)
+    </Frame>
+  </Step>
+  <Step>
+    For the Server URL, specify Groq's OpenAI-compatible API endpoint: `https://api.groq.com/openai/v1`. For the Model ID, specify `llama-3.3-70b-versatile` as discussed above, and select your API key from the dropdown menu.
+
+    <Frame background="subtle">
+      ![Enter url](/assets/images/conversational-ai/groq-cloud/groq-llm.png)
+    </Frame>
+
+  </Step>
+  <Step>
+   Now you can go ahead and click "Test AI Agent" to chat with your custom Llama 3.3 model.
+  </Step>
+</Steps>
