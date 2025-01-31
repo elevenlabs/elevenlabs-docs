@@ -37,7 +37,6 @@ Additionally, install necessary packages to manage your environmental variables:
 
     ```bash JavaScript
     npm install dotenv
-    npm install @types/dotenv --save-dev
     ```
 </CodeGroup>
 
@@ -77,10 +76,12 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
         transcribe_verbatim=False, # Transcribe verbatim sounds like "um" and "ah"
     )
 
-    print(transcription)
+    for segment in transcription.segments:
+        print(segment.text)
     ```
 
     ```javascript title="speechToText.js" maxLines=0
+    import "dotenv/config";
     import { ElevenLabsClient } from "elevenlabs";
 
     const client = new ElevenLabsClient();
@@ -99,7 +100,10 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
         transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
     });
 
-    console.log(transcription);
+    for (const segment of transcription.segments) {
+        console.log(segment.text);
+    }
+
     ```
 </CodeGroup>
 
