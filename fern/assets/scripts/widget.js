@@ -66,6 +66,9 @@ function injectElevenLabsWidget() {
           '_blank'
         );
       },
+      redirectToSupportForm: ({ url }) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      },
       redirectToExternalURL: ({ url }) => {
         window.open(url, '_blank', 'noopener,noreferrer');
       },
