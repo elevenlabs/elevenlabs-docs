@@ -1116,6 +1116,11 @@ paths:
     get:
       x-fern-audiences:
         - convai
+      x-fern-ignore: true
+  /v1/convai/knowledge-base/{documentation_id}:
+    get:
+      x-fern-audiences:
+        - convai
   /v1/convai/agents/{agent_id}/add-secret:
     post:
       x-fern-ignore: true
@@ -1124,6 +1129,14 @@ paths:
   /v1/convai/agents/{agent_id}/add-to-knowledge-base:
     post:
       description: "Add a document to the knowledge base. <Note> The agent must then be updated with ['PATCH'](https://elevenlabs.io/docs/conversational-ai/api-reference/agents/update-agent) to tie it to the new knowledge base item. </Note>"
+      x-fern-audiences:
+        - convai
+      x-fern-ignore: true
+  /v1/convai/add-to-knowledge-base:
+    post:
+      x-fern-ignore: true
+  /v1/convai/knowledge-base:
+    post:
       x-fern-audiences:
         - convai
   /v1/convai/agents:
@@ -1178,7 +1191,24 @@ paths:
     get:
       x-fern-audiences:
         - convai
-
+  /v1/convai/tools/:
+    get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/tools/{tool_id}:
+    get:
+      x-fern-audiences:
+        - convai
+    patch:
+      x-fern-audiences:
+        - convai
+    delete:
+      x-fern-audiences:
+        - convai
+  /v1/convai/add-tool:
+    post:
+      x-fern-audiences:
+        - convai
   # ==========================
   # Audio Native
   # ==========================
