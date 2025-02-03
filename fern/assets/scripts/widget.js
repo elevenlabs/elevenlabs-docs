@@ -66,6 +66,17 @@ function injectElevenLabsWidget() {
           '_blank'
         );
       },
+      redirectToSupportForm: ({ subject, description, extraInfo }) => {
+        const baseUrl = 'https://help.elevenlabs.io/hc/en-us/requests/new';
+        const ticketFormId = '13145996177937';
+        const encodedSubject = encodeURIComponent(subject);
+        const encodedDescription = encodeURIComponent(description);
+        const encodedExtraInfo = encodeURIComponent(extraInfo);
+
+        const fullUrl = `${baseUrl}?ticket_form_id=${ticketFormId}&tf_subject=${encodedSubject}&tf_description=${encodedDescription}%3Cbr%3E%3Cbr%3E${encodedExtraInfo}`;
+
+        window.open(fullUrl, '_blank', 'noopener,noreferrer');
+      },
       redirectToExternalURL: ({ url }) => {
         window.open(url, '_blank', 'noopener,noreferrer');
       },

@@ -251,14 +251,17 @@ navigation:
         contents:
           - section: Tools
             icon: duotone toolbox
-            path: conversational-ai/pages/customization/tools/overview.mdx
             contents:
-              - page: End call
-                icon: duotone square-phone-hangup
-                path: conversational-ai/pages/customization/tools/end-call.mdx
-          - page: Client tools
-            icon: duotone webhook
-            path: conversational-ai/pages/customization/client-tools.mdx
+              - page: Client tools
+                icon: duotone webhook
+                path: conversational-ai/pages/customization/client-tools.mdx
+              - section: Server tools
+                icon: duotone server
+                path: conversational-ai/pages/customization/tools/overview.mdx
+                contents:
+                  - page: End call
+                    icon: duotone square-phone-hangup
+                    path: conversational-ai/pages/customization/tools/end-call.mdx
           - page: Knowledge base
             icon: duotone book-open
             path: conversational-ai/pages/customization/knowledge-base.mdx
@@ -290,6 +293,9 @@ navigation:
           - page: Conversation flow
             icon: duotone comments
             path: conversational-ai/pages/customization/conversation-flow.mdx
+          - page: Retention
+            icon: duotone database
+            path: conversational-ai/pages/customization/retention.mdx
       - section: GUIDES
         skip-slug: false
         contents:
@@ -401,9 +407,9 @@ navigation:
                     title: Send conversation feedback
               - section: Knowledge Base
                 contents:
-                  - endpoint: GET /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}
+                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}
                     title: Get knowledge base document
-                  - endpoint: POST /v1/convai/agents/{agent_id}/add-to-knowledge-base
+                  - endpoint: POST /v1/convai/knowledge-base
                     title: Create knowledge base document
               - section: Phone Numbers
                 contents:
@@ -423,6 +429,19 @@ navigation:
                     title: Get widget
                   - endpoint: POST /v1/convai/agents/{agent_id}/avatar
                     title: Create widget avatar
+              - section: Tools
+                contents:
+                  - endpoint: GET /v1/convai/tools/
+                    title: List tools
+                  - endpoint: POST /v1/convai/add-tool
+                    title: Add tool
+                  - endpoint: GET /v1/convai/tools/{tool_id}
+                    title: Get tool
+                  - endpoint: PATCH /v1/convai/tools/{tool_id}
+                    title: Update tool
+                  - endpoint: DELETE /v1/convai/tools/{tool_id}
+                    title: Delete tool
+
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -557,9 +576,9 @@ navigation:
                     title: Send conversation feedback
               - section: Knowledge Base
                 contents:
-                  - endpoint: GET /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}
+                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}
                     title: Get knowledge base document
-                  - endpoint: POST /v1/convai/agents/{agent_id}/add-to-knowledge-base
+                  - endpoint: POST /v1/convai/knowledge-base
                     title: Create knowledge base document
               - section: Phone Numbers
                 contents:
@@ -579,6 +598,18 @@ navigation:
                     title: Get widget
                   - endpoint: POST /v1/convai/agents/{agent_id}/avatar
                     title: Create widget avatar
+              - section: Tools
+                contents:
+                  - endpoint: GET /v1/convai/tools/
+                    title: List tools
+                  - endpoint: POST /v1/convai/add-tool
+                    title: Add tool
+                  - endpoint: GET /v1/convai/tools/{tool_id}
+                    title: Get tool
+                  - endpoint: PATCH /v1/convai/tools/{tool_id}
+                    title: Update tool
+                  - endpoint: DELETE /v1/convai/tools/{tool_id}
+                    title: Delete tool
           - section: LEGACY
             skip-slug: true
             contents:
