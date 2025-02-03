@@ -10,10 +10,9 @@ subtitle: Learn how to turn spoken audio into text with ElevenLabs.
 
 ## Overview
 
-The ElevenLabs [Speech to Text (STT)](/docs/api-reference/speech-to-text) API turns spoken audio into text with state of the art accuracy. Our Scribe v1 [model](/docs/models) adapts to textual cues across 78 languages and multiple voice styles and can be used to:
+The ElevenLabs [Speech to Text (STT)](/docs/api-reference/speech-to-text) API turns spoken audio into text with state of the art accuracy. Our Scribe v1 [model](/docs/models) adapts to textual cues across 77 languages and multiple voice styles and can be used to:
 
 - Transcribe podcasts, interviews, and other audio or video content
-- Create voice assistants
 - Generate transcripts for meetings and other audio or video recordings
 
 <CardGroup cols={2}>
@@ -29,20 +28,355 @@ The ElevenLabs [Speech to Text (STT)](/docs/api-reference/speech-to-text) API tu
   </Card>
 </CardGroup>
 
+<Info>
+  Companies requiring HIPAA compliance must contact [ElevenLabs Sales](https://elevenlabs.io/contact-sales) to sign a Business Associate Agreement (BAA) agreement. Please ensure this step is completed before proceeding with any HIPAA-related integrations or deployments.
+</Info>
+
 ## State of the art accuracy
 
 The Scribe v1 model is capable of transcribing audio from up to 16 speakers with high accuracy. Optionally it can also transcribe audio events like laughter, applause, and other non-speech sounds.
+
+The transcribed output supports exact timestamps for each word and audio event, plus diarization to identify the speaker for each word.
+
+The Text to Speech product is best used for when high-accuracy transcription is required rather than real-time transcription.
+
+## Examples
+
+The following example shows the output of the Scribe v1 model for a sample audio file.
+
+<elevenlabs-audio-player
+    audio-title="Nicole"
+    audio-src="https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+/>
+
+```javascript
+{
+  "language_code": "en",
+  "language_probability": 1,
+  "segments": [
+    {
+      "text": "With a soft and whispery American accent, I'm the ideal choice for creating ASMR content, meditative guides, or adding an intimate feel to your narrative projects.",
+      "speaker_id": "speaker_0",
+      "start_at_seconds": 0.099,
+      "end_at_seconds": 14.779,
+      "words": [
+        {
+          "text": "With",
+          "start_at_seconds": 0.099,
+          "end_at_seconds": 14.779,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 0.259,
+          "end_at_seconds": 0.299,
+          "type": "spacing"
+        },
+        {
+          "text": "a",
+          "start_at_seconds": 0.279,
+          "end_at_seconds": 0.359,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 0.339,
+          "end_at_seconds": 0.499,
+          "type": "spacing"
+        },
+        {
+          "text": "soft",
+          "start_at_seconds": 0.479,
+          "end_at_seconds": 1.04,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 1.019,
+          "end_at_seconds": 1.199,
+          "type": "spacing"
+        },
+        {
+          "text": "and",
+          "start_at_seconds": 1.179,
+          "end_at_seconds": 1.359,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 1.339,
+          "end_at_seconds": 1.439,
+          "type": "spacing"
+        },
+        {
+          "text": "whispery",
+          "start_at_seconds": 1.42,
+          "end_at_seconds": 1.979,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 1.959,
+          "end_at_seconds": 2.179,
+          "type": "spacing"
+        },
+        {
+          "text": "American",
+          "start_at_seconds": 2.159,
+          "end_at_seconds": 2.719,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 2.699,
+          "end_at_seconds": 2.779,
+          "type": "spacing"
+        },
+        {
+          "text": "accent,",
+          "start_at_seconds": 2.759,
+          "end_at_seconds": 4.139,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 4.119,
+          "end_at_seconds": 4.179,
+          "type": "spacing"
+        },
+        {
+          "text": "I'm",
+          "start_at_seconds": 4.16,
+          "end_at_seconds": 4.459,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 4.439,
+          "end_at_seconds": 4.519,
+          "type": "spacing"
+        },
+        {
+          "text": "the",
+          "start_at_seconds": 4.499,
+          "end_at_seconds": 4.6,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 4.58,
+          "end_at_seconds": 4.699,
+          "type": "spacing"
+        },
+        {
+          "text": "ideal",
+          "start_at_seconds": 4.679,
+          "end_at_seconds": 5.099,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 5.08,
+          "end_at_seconds": 5.219,
+          "type": "spacing"
+        },
+        {
+          "text": "choice",
+          "start_at_seconds": 5.199,
+          "end_at_seconds": 5.719,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 5.699,
+          "end_at_seconds": 6.08,
+          "type": "spacing"
+        },
+        {
+          "text": "for",
+          "start_at_seconds": 6.059,
+          "end_at_seconds": 6.199,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 6.179,
+          "end_at_seconds": 6.279,
+          "type": "spacing"
+        },
+        {
+          "text": "creating",
+          "start_at_seconds": 6.259,
+          "end_at_seconds": 6.799,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 6.779,
+          "end_at_seconds": 6.979,
+          "type": "spacing"
+        },
+        {
+          "text": "ASMR",
+          "start_at_seconds": 6.959,
+          "end_at_seconds": 7.739,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 7.719,
+          "end_at_seconds": 7.859,
+          "type": "spacing"
+        },
+        {
+          "text": "content,",
+          "start_at_seconds": 7.839,
+          "end_at_seconds": 9.02,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 8.999,
+          "end_at_seconds": 9.06,
+          "type": "spacing"
+        },
+        {
+          "text": "meditative",
+          "start_at_seconds": 9.039,
+          "end_at_seconds": 9.64,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 9.619,
+          "end_at_seconds": 9.699,
+          "type": "spacing"
+        },
+        {
+          "text": "guides,",
+          "start_at_seconds": 9.679,
+          "end_at_seconds": 10.359,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 10.339,
+          "end_at_seconds": 11.339,
+          "type": "spacing"
+        },
+        {
+          "text": "or",
+          "start_at_seconds": 11.319,
+          "end_at_seconds": 11.479,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 11.459,
+          "end_at_seconds": 11.52,
+          "type": "spacing"
+        },
+        {
+          "text": "adding",
+          "start_at_seconds": 11.499,
+          "end_at_seconds": 11.879,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 11.859,
+          "end_at_seconds": 11.999,
+          "type": "spacing"
+        },
+        {
+          "text": "an",
+          "start_at_seconds": 11.98,
+          "end_at_seconds": 12.079,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 12.06,
+          "end_at_seconds": 12.179,
+          "type": "spacing"
+        },
+        {
+          "text": "intimate",
+          "start_at_seconds": 12.179,
+          "end_at_seconds": 12.58,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 12.56,
+          "end_at_seconds": 12.7,
+          "type": "spacing"
+        },
+        {
+          "text": "feel",
+          "start_at_seconds": 12.679,
+          "end_at_seconds": 13.159,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 13.14,
+          "end_at_seconds": 13.179,
+          "type": "spacing"
+        },
+        {
+          "text": "to",
+          "start_at_seconds": 13.159,
+          "end_at_seconds": 13.259,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 13.239,
+          "end_at_seconds": 13.299,
+          "type": "spacing"
+        },
+        {
+          "text": "your",
+          "start_at_seconds": 13.299,
+          "end_at_seconds": 13.399,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 13.379,
+          "end_at_seconds": 13.48,
+          "type": "spacing"
+        },
+        {
+          "text": "narrative",
+          "start_at_seconds": 13.459,
+          "end_at_seconds": 13.859,
+          "type": "word"
+        },
+        {
+          "text": " ",
+          "start_at_seconds": 13.839,
+          "end_at_seconds": 13.94,
+          "type": "spacing"
+        },
+        {
+          "text": "projects.",
+          "start_at_seconds": 13.919,
+          "end_at_seconds": 14.779,
+          "type": "word"
+        }
+      ]
+    }
+  ]
+}
+```
 
 The output is classified in three category types:
 
 - `word` - A word in the language of the audio
 - `spacing` - The space between words, not applicable for languages that don't use spaces like Japanese, Mandarin, Thai, Lao, Burmese and Cantonese.
 - `audio_event` - Non-speech sounds like laughter or applause. Also includes verbatim noises like "um" or "ah".
-
-## Examples
-
-<EndpointResponseSnippet endpoint="POST /speech-to-text/v1/convert" />
-
 
 ## Supported languages
 
@@ -55,9 +389,37 @@ The output is classified in three category types:
     Yes, the API supports uploading both audio and video files for transcription.
   </Accordion>
   <Accordion title="Which audio and video formats are supported?">
-    All major audio and video formats are supported. For a complete list see the ffmpeg supported
-    [audio](https://www.ffmpeg.org/general.html#Audio-Codecs) and
-    [video](https://www.ffmpeg.org/general.html#Video-Codecs) codecs.
+    The audio supported audio formats are:
+
+    - audio/aac
+    - audio/x-aac
+    - audio/x-aiff
+    - audio/ogg
+    - audio/mpeg
+    - audio/mp3
+    - audio/mpeg3
+    - audio/x-mpeg-3
+    - audio/opus
+    - audio/wav
+    - audio/x-wav
+    - audio/webm
+    - audio/flac
+    - audio/x-flac
+    - audio/mp4
+    - audio/aiff
+    - audio/x-m4a
+
+    Supported video formats include:
+
+    - video/mp4
+    - video/x-msvideo
+    - video/x-matroska
+    - video/quicktime
+    - video/x-ms-wmv
+    - video/x-flv
+    - video/webm
+    - video/mpeg
+    - video/3gpp
   </Accordion>
   <Accordion title="When will you support more languages?">
     ElevenLabs is constantly expanding the number of languages supported by our models. If you have
