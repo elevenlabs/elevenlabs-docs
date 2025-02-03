@@ -78,8 +78,10 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
         transcribe_verbatim=False, # Transcribe verbatim sounds like "um" and "ah"
     )
 
-    for segment in transcription.segments:
-        print(segment.text)
+    text = " ".join([segment["word"] for segment in transcription["words"]])
+
+    print(text)
+
     ```
 
     ```javascript title="speechToText.js" maxLines=0
@@ -102,9 +104,9 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
         transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
     });
 
-    for (const segment of transcription.segments) {
-        console.log(segment.text);
-    }
+    const text = transcription.words.map((segment) => segment.word).join(" ");
+
+    console.log(text);
 
     ```
 
