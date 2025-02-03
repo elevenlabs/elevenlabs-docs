@@ -67,8 +67,8 @@ function injectElevenLabsWidget() {
         );
       },
       redirectToSupportForm: ({ subject, description, extraInfo }) => {
-        const baseUrl = "https://help.elevenlabs.io/hc/en-us/requests/new";
-        const ticketFormId = "13145996177937";
+        const baseUrl = 'https://help.elevenlabs.io/hc/en-us/requests/new';
+        const ticketFormId = '13145996177937';
         const encodedSubject = encodeURIComponent(subject);
         const encodedDescription = encodeURIComponent(description);
         const encodedExtraInfo = encodeURIComponent(extraInfo);
