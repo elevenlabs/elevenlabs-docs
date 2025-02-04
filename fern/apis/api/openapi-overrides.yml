@@ -257,6 +257,15 @@ paths:
               schema:
                 type: string
 
+  # ==============
+  # SPEECH TO TEXT
+  # ==============
+  /v1/speech-to-text:
+    post:
+      summary: Create transcript
+  /v1/speech-to-text/stream:
+    post:
+      summary: Stream transcript
   # ================
   # Sound Effects
   # ================
@@ -709,6 +718,11 @@ paths:
       summary: List projects
       x-fern-audiences:
         - sdk
+  /v1/projects/podcast/create:
+    post:
+      summary: Create podcast
+      x-fern-audiences:
+        - sdk
   /v1/projects/add:
     post:
       summary: Create project
@@ -780,6 +794,13 @@ paths:
   /v1/projects/{project_id}/chapters/{chapter_id}:
     get:
       summary: Get project chapter
+      x-fern-audiences:
+        - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
+    patch:
+      summary: Edit project chapter
       x-fern-audiences:
         - sdk
       parameters:
@@ -1114,8 +1135,7 @@ paths:
         - convai
   /v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}:
     get:
-      x-fern-audiences:
-        - convai
+      x-fern-ignore: true
   /v1/convai/agents/{agent_id}/add-secret:
     post:
       x-fern-ignore: true
@@ -1123,9 +1143,7 @@ paths:
         - convai
   /v1/convai/agents/{agent_id}/add-to-knowledge-base:
     post:
-      description: "Add a document to the knowledge base. <Note> The agent must then be updated with ['PATCH'](https://elevenlabs.io/docs/conversational-ai/api-reference/agents/update-agent) to tie it to the new knowledge base item. </Note>"
-      x-fern-audiences:
-        - convai
+      x-fern-ignore: true
   /v1/convai/agents:
     get:
       x-fern-audiences:
@@ -1176,6 +1194,36 @@ paths:
         - convai
   /v1/convai/phone-numbers/:
     get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base:
+    post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base/{documentation_id}:
+    get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/add-to-knowledge-base:
+    post:
+      x-fern-ignore: true
+
+  /v1/convai/tools:
+    get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/tools/{tool_id}:
+    get:
+      x-fern-audiences:
+        - convai
+    patch:
+      x-fern-audiences:
+        - convai
+    delete:
+      x-fern-audiences:
+        - convai
+  /v1/convai/add-tool:
+    post:
       x-fern-audiences:
         - convai
 
