@@ -817,6 +817,11 @@ paths:
         - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
         - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
         - description: The ID of the chapter snapshot to be used. You can use the [List project chapter snapshots](/docs/api-reference/chapters/get-snapshots) endpoint to list all the available snapshots.
+  /v1/projects/podcast/create:
+    post:
+      summary: Create podcast
+      x-fern-audiences:
+        - sdk
   /v1/projects/{project_id}/update-pronunciation-dictionaries:
     post:
       summary: Update pronunciation dictionaries
@@ -831,6 +836,14 @@ paths:
         - sdk
       parameters:
         - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+  /v1/projects/{project_id}/chapters/{chapter_id}:
+    patch:
+      summary: Edit project chapter
+      x-fern-audiences:
+        - sdk
+      parameters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
   # ======
   # MODELS
   # ======
