@@ -1,0 +1,162 @@
+---
+title: Scribe Telegram Bot
+subtitle: Build a Telegram bot that transcribes audio and video messages using TypeScript with Deno in Supabase Edge Functions.
+---
+
+## Introduction
+
+In this tutorial you will learn how to build a Telegram bot that transcribes audio and video messages using TypeScript and the ElevenLabs Scribe model via the speech-to-text API.
+
+<Tip title="Prefer to jump straight to the code?" icon="lightbulb">
+  Find the [example project on
+  GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/speech-to-text/telegram-transcription-bot).
+</Tip>
+
+## Requirements
+
+- An ElevenLabs account with an [API key](/app/settings/api-keys).
+- A [Supabase](https://supabase.com) account (you can sign up for a free account via [database.new](https://database.new)).
+- The [Supabase CLI](https://supabase.com/docs/guides/local-development) installed on your machine.
+- A [Telegram](https://telegram.org) account.
+
+## Setup
+
+### Create a Supabase project locally
+
+After installing the [Supabase CLI](https://supabase.com/docs/guides/local-development), run the following command to create a new Supabase project locally:
+
+```bash
+supabase init
+```
+
+Next, create a new database table to log the transcription results:
+
+```bash
+supabase migrations new init
+```
+
+This will create a new migration file in the `supabase/migrations` directory. Open the file and add the following SQL:
+
+```sql supabase/migrations/init.sql
+CREATE TABLE IF NOT EXISTS transcription_logs (
+  id BIGSERIAL PRIMARY KEY,
+  file_type VARCHAR NOT NULL,
+  duration INTEGER NOT NULL,
+  chat_id BIGINT NOT NULL,
+  message_id BIGINT NOT NULL,
+  username VARCHAR,
+  transcript TEXT,
+  language_code VARCHAR,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  error TEXT
+);
+
+ALTER TABLE transcription_logs ENABLE ROW LEVEL SECURITY;
+```
+
+## Create a Supabase Edge Function to handle Telegram webhook requests
+
+Next, create a new Edge Function to handle Telegram webhook requests:
+
+```bash
+supabase functions new scribe-bot
+```
+
+If you're using VS Code or Cursor, select `y` when the CLI prompts "Generate VS Code settings for Deno? [y/N]"!
+
+### Set up the environment variables
+
+Within the `supabase/functions` directory, create a new `.env` file and add the following variables:
+
+```env supabase/functions/.env
+# Find / create an API key at https://elevenlabs.io/app/settings/api-keys
+ELEVENLABS_API_KEY=your_api_key
+
+# This will be generated later below.
+TELEGRAM_BOT_TOKEN=your_bot_token
+FUNCTION_SECRET=random_secret
+```
+
+### Dependencies
+
+The project uses a couple of dependencies:
+
+- The open-source [grammY Framework](https://grammy.dev/) to handle the Telegram webhook requests.
+- The [@supabase/supabase-js](https://supabase.com/docs/reference/javascript) library to interact with the Supabase database.
+- The ElevenLabs [JavaScript SDK](/docs/quickstart) to interact with the speech-to-text API.
+
+Since Supabase Edge Function uses the [Deno runtime](https://deno.land/), you don't need to install the dependencies, rather you can [import](https://docs.deno.com/examples/npm/) them via the `npm:` prefix.
+
+### Code the Telegram Bot
+
+In your newly created `scribe-bot/index.ts` file, add the following code:
+
+```ts supabase/functions/scribe-bot/index.ts
+// TODO
+```
+
+## Deploy the Edge Function
+
+If you haven't already, create a new Supabase account at [database.new](https://database.new) and link the local project to your Supabase account:
+
+```bash
+supabase link
+```
+
+### Apply the database migrations
+
+Run the following command to apply the database migrations from the `supabase/migrations` directory:
+
+```bash
+supabase db push
+```
+
+Navigate to the [table editor](https://supabase.com/dashboard/project/_/editor) in your Supabase dashboard and you should see and empty `transcription_logs` table.
+
+![Empty table](/assets/images/cookbooks/scribe/telegram-bot/supa-empty-table.png)
+
+Lastly, run the following command to deploy the Edge Function:
+
+```bash
+supabase functions deploy --no-verify-jwt scribe-bot
+```
+
+Navigate to the [Edge Functions view](https://supabase.com/dashboard/project/_/functions) in your Supabase dashboard and you should see the `scribe-bot` function deployed. Make a note of the function URL as you'll need it later, it should look something like `https://<project-ref>.functions.supabase.co/scribe-bot`.
+
+![Edge Function deployed](/assets/images/cookbooks/scribe/telegram-bot/supa-edge-function-deployed.png)
+
+## Register the Telegram bot
+
+Next, use [the BotFather](https://t.me/BotFather) to create a new Telegram bot. Run the `/newbot` command and follow the instructions to create a new bot. At the end, you will receive your secret bot token. Set it in your `.env` file as `TELEGRAM_BOT_TOKEN`.
+
+![BotFather](/assets/images/cookbooks/scribe/telegram-bot/bot-father.png)
+
+### Set up the webhook
+
+Set your bot's webhook url to `https://<PROJECT_REFERENCE>.functions.supabase.co/telegram-bot` (Replacing `<...>` with respective values). In order to do that, simply run a GET request to the following url (in your browser, for example):
+
+```
+https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=https://<PROJECT_REFERENCE>.supabase.co/functions/v1/scribe-bot?secret=<FUNCTION_SECRET>
+```
+
+Note that the `FUNCTION_SECRET` is the secret you set in your `.env` file.
+
+![Set webhook](/assets/images/cookbooks/scribe/telegram-bot/set-webhook.png)
+
+## Set the function secrets
+
+Now that you have all your secrets set locally, you can run the following command to set the secrets in your Supabase project:
+
+```bash
+supabase secrets set --env-file supabase/functions/.env
+```
+
+## Test the bot
+
+That's it, now you can test the bot by sending a voice message, audio, or video to your bot. Go on, try it out!
+
+![Test the bot](/assets/images/cookbooks/scribe/telegram-bot/test-bot.png)
+
+After you see the transcript as a reply, navigate back to your table editor in the Supabase dashboard and you should see a new row in your `transcription_logs` table.
+
+![New row in table](/assets/images/cookbooks/scribe/telegram-bot/supa-new-row.png)
