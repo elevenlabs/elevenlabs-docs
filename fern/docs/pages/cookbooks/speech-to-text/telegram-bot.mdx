@@ -17,6 +17,7 @@ In this tutorial you will learn how to build a Telegram bot that transcribes aud
 - An ElevenLabs account with an [API key](/app/settings/api-keys).
 - A [Supabase](https://supabase.com) account (you can sign up for a free account via [database.new](https://database.new)).
 - The [Supabase CLI](https://supabase.com/docs/guides/local-development) installed on your machine.
+- The [Deno runtime](https://docs.deno.com/runtime/getting_started/installation/) installed on your machine and optionally [setup in your facourite IDE](https://docs.deno.com/runtime/getting_started/setup_your_environment).
 - A [Telegram](https://telegram.org) account.
 
 ## Setup
@@ -64,6 +65,12 @@ supabase functions new scribe-bot
 
 If you're using VS Code or Cursor, select `y` when the CLI prompts "Generate VS Code settings for Deno? [y/N]"!
 
+## Register the Telegram bot
+
+Next, use [the BotFather](https://t.me/BotFather) to create a new Telegram bot. Run the `/newbot` command and follow the instructions to create a new bot. At the end, you will receive your secret bot token. Note it down securely for the next step.
+
+![BotFather](/assets/images/cookbooks/scribe/telegram-bot/bot-father.png)
+
 ### Set up the environment variables
 
 Within the `supabase/functions` directory, create a new `.env` file and add the following variables:
@@ -72,8 +79,10 @@ Within the `supabase/functions` directory, create a new `.env` file and add the 
 # Find / create an API key at https://elevenlabs.io/app/settings/api-keys
 ELEVENLABS_API_KEY=your_api_key
 
-# This will be generated later below.
+# The bot token you received from the BotFather.
 TELEGRAM_BOT_TOKEN=your_bot_token
+
+# A random secret chosen by you to secure the function.
 FUNCTION_SECRET=random_secret
 ```
 
@@ -92,7 +101,135 @@ Since Supabase Edge Function uses the [Deno runtime](https://deno.land/), you do
 In your newly created `scribe-bot/index.ts` file, add the following code:
 
 ```ts supabase/functions/scribe-bot/index.ts
-// TODO
+import { Bot, webhookCallback } from 'https://deno.land/x/grammy@v1.34.0/mod.ts';
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { ElevenLabsClient } from 'npm:elevenlabs@1.50.5';
+
+console.log(`Function "elevenlabs-scribe-bot" up and running!`);
+
+const elevenLabsClient = new ElevenLabsClient({
+  apiKey: Deno.env.get('ELEVENLABS_API_KEY') || '',
+});
+
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') || '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+);
+
+async function scribe({
+  fileURL,
+  fileType,
+  duration,
+  chatId,
+  messageId,
+  username,
+}: {
+  fileURL: string;
+  fileType: string;
+  duration: number;
+  chatId: number;
+  messageId: number;
+  username: string;
+}) {
+  let transcript: string | null = null;
+  let languageCode: string | null = null;
+  let errorMsg: string | null = null;
+  try {
+    const sourceFileArrayBuffer = await fetch(fileURL).then((res) => res.arrayBuffer());
+    const sourceBlob = new Blob([sourceFileArrayBuffer], {
+      type: fileType,
+    });
+
+    const scribeResult = await elevenLabsClient.speechToText.convert({
+      file: sourceBlob,
+      model_id: 'scribe_v1',
+      tag_audio_events: false,
+    });
+    // console.log({ scribeResult });
+    transcript = scribeResult.text;
+    languageCode = scribeResult.language_code;
+
+    // Reply to the user with the transcript
+    await bot.api.sendMessage(chatId, transcript, {
+      reply_parameters: { message_id: messageId },
+    });
+  } catch (error) {
+    errorMsg = error.message;
+    console.log(errorMsg);
+    await bot.api.sendMessage(chatId, 'Sorry, there was an error. Please try again.', {
+      reply_parameters: { message_id: messageId },
+    });
+  }
+  // Write log to Supabase.
+  const logLine = {
+    file_type: fileType,
+    duration,
+    chat_id: chatId,
+    message_id: messageId,
+    username,
+    language_code: languageCode,
+    error: errorMsg,
+  };
+  console.log({ logLine });
+  await supabase.from('transcription_logs').insert({ ...logLine, transcript });
+}
+
+const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
+const bot = new Bot(telegramBotToken || '');
+const startMessage = `Welcome to the ElevenLabs Scribe Bot\\! I can transcribe speech from 80 different languages with super high accuracy\\! 
+    \nTry it out by sending or forwarding me a voice message, video, or audio file\\!
+    \n[Learn more about Scribe](https://elevenlabs.io/speech-to-text) or [build your own bot](https://elevenlabs.io/docs/cookbooks/speech-to-text/telegram-bot)\\!
+  `;
+bot.command('start', (ctx) => ctx.reply(startMessage.trim(), { parse_mode: 'MarkdownV2' }));
+
+bot.on([':voice', ':audio', ':video'], async (ctx) => {
+  try {
+    // console.log(ctx);
+    const file = await ctx.getFile();
+    const fileURL = `https://api.telegram.org/file/bot${telegramBotToken}/${file.file_path}`;
+    const fileMeta = ctx.message?.video ?? ctx.message?.voice ?? ctx.message?.audio;
+    // console.log({ fileURL, fileMeta });
+    if (!fileMeta) {
+      return ctx.reply('No video|audio|voice metadata found. Please try again.');
+    }
+
+    // Run the transcription in the background.
+    EdgeRuntime.waitUntil(
+      scribe({
+        fileURL,
+        fileType: fileMeta.mime_type!,
+        duration: fileMeta.duration,
+        chatId: ctx.chat.id,
+        messageId: ctx.message?.message_id!,
+        username: ctx.from?.username || '',
+      })
+    );
+
+    // Reply to the user immediately to let them know we received their file.
+    return ctx.reply('Received. Scribing...');
+  } catch (error) {
+    console.error(error);
+    return ctx.reply(
+      'Sorry, there was an error getting the file. Please try again with a smaller file!'
+    );
+  }
+});
+
+const handleUpdate = webhookCallback(bot, 'std/http');
+
+Deno.serve(async (req) => {
+  try {
+    const url = new URL(req.url);
+    if (url.searchParams.get('secret') !== Deno.env.get('FUNCTION_SECRET')) {
+      return new Response('not allowed', { status: 405 });
+    }
+
+    return await handleUpdate(req);
+  } catch (err) {
+    console.error(err);
+  }
+});
 ```
 
 ## Deploy the Edge Function
@@ -124,12 +261,6 @@ supabase functions deploy --no-verify-jwt scribe-bot
 Navigate to the [Edge Functions view](https://supabase.com/dashboard/project/_/functions) in your Supabase dashboard and you should see the `scribe-bot` function deployed. Make a note of the function URL as you'll need it later, it should look something like `https://<project-ref>.functions.supabase.co/scribe-bot`.
 
 ![Edge Function deployed](/assets/images/cookbooks/scribe/telegram-bot/supa-edge-function-deployed.png)
-
-## Register the Telegram bot
-
-Next, use [the BotFather](https://t.me/BotFather) to create a new Telegram bot. Run the `/newbot` command and follow the instructions to create a new bot. At the end, you will receive your secret bot token. Set it in your `.env` file as `TELEGRAM_BOT_TOKEN`.
-
-![BotFather](/assets/images/cookbooks/scribe/telegram-bot/bot-father.png)
 
 ### Set up the webhook
 
