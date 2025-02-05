@@ -11,11 +11,13 @@ function injectElevenLabsWidget() {
 
   const widget = document.createElement('elevenlabs-convai');
   widget.setAttribute('agent-id', 'OZmXb9pmFsSkDE5dukJv');
+  widget.setAttribute('override-config', `{"variant":"full"}`);
 
-  // Set initial colors based on current theme
+  // Set initial colors and variant based on current theme and device
   updateWidgetColors(widget);
+  updateWidgetVariant(widget);
 
-  // Watch for theme changes
+  // Watch for theme changes and resize events
   const observer = new MutationObserver(() => {
     updateWidgetColors(widget);
   });
@@ -24,6 +26,20 @@ function injectElevenLabsWidget() {
     attributes: true,
     attributeFilter: ['class'],
   });
+
+  // Add resize listener for mobile detection
+  window.addEventListener('resize', () => {
+    updateWidgetVariant(widget);
+  });
+
+  function updateWidgetVariant(widget) {
+    const isMobile = window.innerWidth <= 640; // Common mobile breakpoint
+    if (isMobile) {
+      widget.setAttribute('override-config', `{"variant":"expandable"}`);
+    } else {
+      widget.setAttribute('override-config', `{"variant":"full"}`);
+    }
+  }
 
   function updateWidgetColors(widget) {
     const isDarkMode = !document.documentElement.classList.contains('light');
