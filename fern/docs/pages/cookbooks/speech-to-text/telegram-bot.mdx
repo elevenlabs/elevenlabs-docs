@@ -1,11 +1,13 @@
 ---
 title: Transcription Telegram Bot
-subtitle: Build a Telegram bot that transcribes audio and video messages using TypeScript with Deno in Supabase Edge Functions.
+subtitle: Build a Telegram bot that transcribes audio and video messages in 80+ languages using TypeScript with Deno in Supabase Edge Functions.
 ---
 
 ## Introduction
 
-In this tutorial you will learn how to build a Telegram bot that transcribes audio and video messages using TypeScript and the ElevenLabs Scribe model via the speech-to-text API.
+In this tutorial you will learn how to build a Telegram bot that transcribes audio and video messages in 80+ languages using TypeScript and the ElevenLabs Scribe model via the speech-to-text API.
+
+To check out what the end result will look like, you can test out the [t.me/ElevenLabsScribeBot](https://t.me/ElevenLabsScribeBot)
 
 <Tip title="Prefer to jump straight to the code?" icon="lightbulb">
   Find the [example project on
@@ -148,7 +150,7 @@ async function scribe({
       model_id: 'scribe_v1',
       tag_audio_events: false,
     });
-    // console.log({ scribeResult });
+
     transcript = scribeResult.text;
     languageCode = scribeResult.language_code;
 
@@ -179,7 +181,7 @@ async function scribe({
 
 const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
 const bot = new Bot(telegramBotToken || '');
-const startMessage = `Welcome to the ElevenLabs Scribe Bot\\! I can transcribe speech from 80 different languages with super high accuracy\\! 
+const startMessage = `Welcome to the ElevenLabs Scribe Bot\\! I can transcribe speech in 80+ languages with super high accuracy\\! 
     \nTry it out by sending or forwarding me a voice message, video, or audio file\\!
     \n[Learn more about Scribe](https://elevenlabs.io/speech-to-text) or [build your own bot](https://elevenlabs.io/docs/cookbooks/speech-to-text/telegram-bot)\\!
   `;
@@ -187,11 +189,10 @@ bot.command('start', (ctx) => ctx.reply(startMessage.trim(), { parse_mode: 'Mark
 
 bot.on([':voice', ':audio', ':video'], async (ctx) => {
   try {
-    // console.log(ctx);
     const file = await ctx.getFile();
     const fileURL = `https://api.telegram.org/file/bot${telegramBotToken}/${file.file_path}`;
     const fileMeta = ctx.message?.video ?? ctx.message?.voice ?? ctx.message?.audio;
-    // console.log({ fileURL, fileMeta });
+
     if (!fileMeta) {
       return ctx.reply('No video|audio|voice metadata found. Please try again.');
     }
