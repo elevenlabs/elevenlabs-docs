@@ -4763,6 +4763,176 @@
         }
       }
     },
+    "/v1/workspace/groups/{group_id}/members": {
+      "post": {
+        "tags": ["workspace"],
+        "summary": "Add Member To Group",
+        "description": "Adds a member of your workspace to the specified group. This endpoint may only be called by workspace administrators.",
+        "operationId": "Add_member_to_group_v1_workspace_groups__group_id__members_post",
+        "parameters": [
+          {
+            "description": "The ID of the target group.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Group Id",
+              "description": "The ID of the target group."
+            },
+            "name": "group_id",
+            "in": "path"
+          },
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Add_member_to_group_v1_workspace_groups__group_id__members_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["workspace"],
+        "summary": "Delete Member From Group",
+        "description": "Removes a member from the specified group. This endpoint may only be called by workspace administrators.",
+        "operationId": "Delete_member_from_group_v1_workspace_groups__group_id__members_delete",
+        "parameters": [
+          {
+            "description": "The ID of the target group.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Group Id",
+              "description": "The ID of the target group."
+            },
+            "name": "group_id",
+            "in": "path"
+          },
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Delete_member_from_group_v1_workspace_groups__group_id__members_delete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/workspace/groups/{group_id}/members/check-membership": {
+      "get": {
+        "tags": ["workspace"],
+        "summary": "Check Membership Of User In User Group",
+        "description": "Checks if a user from your workspace is a member of the specified group. This endpoint may only be called by workspace administrators.",
+        "operationId": "Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get",
+        "parameters": [
+          {
+            "description": "The ID of the target group.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Group Id",
+              "description": "The ID of the target group."
+            },
+            "name": "group_id",
+            "in": "path"
+          },
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CheckUserInGroupResponseModel" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/{handle}": {
       "get": {
         "tags": ["voices"],
@@ -6745,6 +6915,48 @@
   },
   "components": {
     "schemas": {
+      "Body_Add_member_to_group_v1_workspace_groups__group_id__members_post": {
+        "properties": {
+          "member_email": {
+            "type": "string",
+            "title": "Member Email",
+            "description": "The email of the target workspace member."
+          }
+        },
+        "type": "object",
+        "required": ["member_email"],
+        "title": "Body_Add_member_to_group_v1_workspace_groups__group_id__members_post"
+      },
+      "Body_Delete_member_from_group_v1_workspace_groups__group_id__members_delete": {
+        "properties": {
+          "member_email": {
+            "type": "string",
+            "title": "Member Email",
+            "description": "The email of the target workspace member."
+          }
+        },
+        "type": "object",
+        "required": ["member_email"],
+        "title": "Body_Delete_member_from_group_v1_workspace_groups__group_id__members_delete"
+      },
+      "Body_Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email",
+            "description": "The email of the target workspace member."
+          }
+        },
+        "type": "object",
+        "required": ["email"],
+        "title": "Body_Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get"
+      },
+      "CheckUserInGroupResponseModel": {
+        "properties": { "is_in_group": { "type": "boolean", "title": "Is In Group" } },
+        "type": "object",
+        "required": ["is_in_group"],
+        "title": "CheckUserInGroupResponseModel"
+      },
       "ASRConversationalConfig": {
         "properties": {
           "quality": {
