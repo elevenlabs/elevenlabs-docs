@@ -4763,23 +4763,23 @@
         }
       }
     },
-    "/v1/workspace/groups/{group_id}/members": {
-      "post": {
+    "/v1/workspace/groups/search": {
+      "get": {
         "tags": ["workspace"],
-        "summary": "Add Member To Group",
-        "description": "Adds a member of your workspace to the specified group. This endpoint may only be called by workspace administrators.",
-        "operationId": "Add_member_to_group_v1_workspace_groups__group_id__members_post",
+        "summary": "Search User Groups",
+        "description": "Searches for user groups in the workspace. Multiple or no groups may be returned.",
+        "operationId": "Search_user_groups_v1_workspace_groups_search_get",
         "parameters": [
           {
-            "description": "The ID of the target group.",
+            "description": "Name of the group to find.",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Group Id",
-              "description": "The ID of the target group."
+              "title": "Name",
+              "description": "Name of the group to find."
             },
-            "name": "group_id",
-            "in": "path"
+            "name": "name",
+            "in": "query"
           },
           {
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -4793,20 +4793,18 @@
             "in": "header"
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Add_member_to_group_v1_workspace_groups__group_id__members_post"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "application/json": { "schema": {} } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/WorkspaceGroupByNameResponseModel" },
+                  "type": "array",
+                  "title": "Response Search User Groups V1 Workspace Groups Search Get"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -4817,12 +4815,14 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/v1/workspace/groups/{group_id}/members": {
+      "post": {
         "tags": ["workspace"],
-        "summary": "Delete Member From Group",
-        "description": "Removes a member from the specified group. This endpoint may only be called by workspace administrators.",
-        "operationId": "Delete_member_from_group_v1_workspace_groups__group_id__members_delete",
+        "summary": "Add Member To User Group",
+        "description": "Adds a member of your workspace to the specified group. This endpoint may only be called by workspace administrators.",
+        "operationId": "Add_member_to_user_group_v1_workspace_groups__group_id__members_post",
         "parameters": [
           {
             "description": "The ID of the target group.",
@@ -4851,7 +4851,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_Delete_member_from_group_v1_workspace_groups__group_id__members_delete"
+                "$ref": "#/components/schemas/Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post"
               }
             }
           },
@@ -4873,12 +4873,12 @@
         }
       }
     },
-    "/v1/workspace/groups/{group_id}/members/check-membership": {
-      "get": {
+    "/v1/workspace/groups/{group_id}/members/remove": {
+      "post": {
         "tags": ["workspace"],
-        "summary": "Check Membership Of User In User Group",
-        "description": "Checks if a user from your workspace is a member of the specified group. This endpoint may only be called by workspace administrators.",
-        "operationId": "Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get",
+        "summary": "Delete Member From User Group",
+        "description": "Removes a member from the specified group. This endpoint may only be called by workspace administrators.",
+        "operationId": "Delete_member_from_user_group_v1_workspace_groups__group_id__members_remove_post",
         "parameters": [
           {
             "description": "The ID of the target group.",
@@ -4907,7 +4907,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get"
+                "$ref": "#/components/schemas/Body_Delete_member_from_user_group_v1_workspace_groups__group_id__members_remove_post"
               }
             }
           },
@@ -4916,11 +4916,7 @@
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/CheckUserInGroupResponseModel" }
-              }
-            }
+            "content": { "application/json": { "schema": {} } }
           },
           "422": {
             "description": "Validation Error",
@@ -6915,31 +6911,21 @@
   },
   "components": {
     "schemas": {
-      "Body_Add_member_to_group_v1_workspace_groups__group_id__members_post": {
+      "WorkspaceGroupByNameResponseModel": {
         "properties": {
-          "member_email": {
-            "type": "string",
-            "title": "Member Email",
-            "description": "The email of the target workspace member."
+          "name": { "type": "string", "title": "Name" },
+          "id": { "type": "string", "title": "Id" },
+          "members_emails": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Members Emails"
           }
         },
         "type": "object",
-        "required": ["member_email"],
-        "title": "Body_Add_member_to_group_v1_workspace_groups__group_id__members_post"
+        "required": ["name", "id", "members_emails"],
+        "title": "WorkspaceGroupByNameResponseModel"
       },
-      "Body_Delete_member_from_group_v1_workspace_groups__group_id__members_delete": {
-        "properties": {
-          "member_email": {
-            "type": "string",
-            "title": "Member Email",
-            "description": "The email of the target workspace member."
-          }
-        },
-        "type": "object",
-        "required": ["member_email"],
-        "title": "Body_Delete_member_from_group_v1_workspace_groups__group_id__members_delete"
-      },
-      "Body_Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get": {
+      "Body_Delete_member_from_user_group_v1_workspace_groups__group_id__members_remove_post": {
         "properties": {
           "email": {
             "type": "string",
@@ -6949,13 +6935,19 @@
         },
         "type": "object",
         "required": ["email"],
-        "title": "Body_Check_membership_of_user_in_user_group_v1_workspace_groups__group_id__members_check_membership_get"
+        "title": "Body_Delete_member_from_user_group_v1_workspace_groups__group_id__members_remove_post"
       },
-      "CheckUserInGroupResponseModel": {
-        "properties": { "is_in_group": { "type": "boolean", "title": "Is In Group" } },
+      "Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email",
+            "description": "The email of the target workspace member."
+          }
+        },
         "type": "object",
-        "required": ["is_in_group"],
-        "title": "CheckUserInGroupResponseModel"
+        "required": ["email"],
+        "title": "Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post"
       },
       "ASRConversationalConfig": {
         "properties": {
