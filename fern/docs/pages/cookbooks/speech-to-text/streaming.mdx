@@ -58,46 +58,39 @@ If you prefer to stream the text directly without saving it to a file, you can u
 
 <CodeGroup>
 
-```python title="text_to_speech_stream.py" maxLines=0
+```python title="speech_to_text_stream.py" maxLines=0
+import os
+from typing import IO
 from io import BytesIO
-from dotenv import load_dotenv
-import requests
 from elevenlabs.client import ElevenLabs
+import requests
 
+from dotenv import load_dotenv
 load_dotenv()
 
-client = ElevenLabs()
+client = ElevenLabs(
+    api_key=os.getenv("ELEVENLABS_API_KEY"),
+)
 
 audio_url = (
     "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
 )
-
 response = requests.get(audio_url)
 audio_data = BytesIO(response.content)
 
 # Perform the text-to-speech conversion
-response = client.speech_to_text.convert(
-    file=audio_data,
-    model_id="scribe_v1", # Model to use, for now only "scribe_v1" is supported
-    maximum_speakers=1, # Number of speakers in the audio file
-    tag_audio_events=True, # Tag audio events like laughter, applause, etc.
-    speech_to_text_language_code="en", # Language of the audio file
-    transcribe_verbatim=False, # Transcribe verbatim sounds like "um" and "ah"
+transcription = client.speech_to_text.convert_as_stream(
+    model_id="scribe_v1",
+    file=audio_data
 )
 
-# Create a BytesIO object to hold the audio data in memory
-text_stream = BytesIO()
+for chunk in transcription:
+    # If you want to extract just the text:
+    print(chunk.text)
 
-# Write each chunk of audio data to the stream
-for chunk in response:
-    if chunk:
-        text_stream.write(chunk)
-
-# Return the stream for further use
-return text_stream
 ```
 
-```javascript title="textToSpeechStream.js" maxLines=0
+```javascript title="speechToTextStream.js" maxLines=0
 import * as dotenv from 'dotenv';
 import { ElevenLabsClient } from 'elevenlabs';
 
@@ -105,23 +98,25 @@ dotenv.config();
 
 const client = new ElevenLabsClient();
 
-export const createAudioStreamFromText = async (text: string): Promise<Buffer> => {
-  const audioStream = await client.generate({
-    voice: 'Rachel',
-    model_id: 'eleven_turbo_v2_5',
-    text,
-  });
+const response = await fetch(
+  "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+);
+const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
-  const chunks: Buffer[] = [];
-  for await (const chunk of audioStream) {
-    chunks.push(chunk);
-  }
+// const file = fs.createReadStream("/Users/pma/Desktop/nicole.mp3")
 
-  const content = Buffer.concat(chunks);
+const transcription = await client.speechToText.convertAsStream({
+  file: audioBlob,
+  model_id: "scribe_v1", // Model to use, for now only "scribe_v1" is supported
+  maximum_speakers: 1, // Number of speakers in the audio file
+  tag_audio_events: true, // Tag audio events like laughter, applause, etc.
+  speech_to_text_language_code: "en", // Language of the audio file
+  transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
+});
 
-  // Return the stream for further use
-  return content;
-};
+for await (const chunk of transcription) {
+  console.log(chunk.text);
+}
 ```
 
 </CodeGroup>
@@ -131,11 +126,11 @@ You can then run this function with:
 <CodeGroup>
 
 ```bash Python
-python text_to_speech_stream.py
+python speech_to_text_stream.py
 ```
 
 ```bash TypeScript
-node textToSpeechStream.js
+node speechToTextStream.js
 ```
 
 </CodeGroup>
