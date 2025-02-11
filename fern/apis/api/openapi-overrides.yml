@@ -10,8 +10,8 @@ x-fern-groups:
     summary: Samples
   voices:
     summary: Voices
-  projects:
-    summary: Projects
+  studio:
+    summary: Studio
   models:
     summary: Models
 paths:
@@ -694,56 +694,28 @@ paths:
               created_at_unix: 1234567890
               permission_on_resource: null
   # ==========================
-  # PROJECTS
+  # STUDIO
   # ==========================
-  /v1/projects:
+  /v1/studio/projects/{project_id}:
     get:
-      summary: List projects
-
-  /v1/projects/podcast/create:
-    post:
-      summary: Create podcast
-
-  /v1/projects/add:
-    post:
-      summary: Create project
-
-  /v1/projects/{project_id}:
-    get:
-      summary: Get project
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
     post:
-      summary: Update project
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
     delete:
-      summary: Delete project
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-  /v1/projects/{project_id}/content:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+  /v1/studio/projects/{project_id}/content:
     post:
-      summary: Update project
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-  /v1/projects/{project_id}/convert:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+  /v1/studio/projects/{project_id}/convert:
     post:
-      summary: Convert project
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-  /v1/projects/{project_id}/snapshots:
-    get:
-      summary: List project snapshots
-
-  /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+  /v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}/stream:
     post:
-      summary: Stream project audio
-
       responses:
         '200':
           content:
@@ -751,70 +723,44 @@ paths:
               schema:
                 type: string
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-  /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+  /v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}/archive:
     post:
-      summary: Stream archive with project audio
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-  /v1/projects/{project_id}/chapters:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+  /v1/studio/projects/{project_id}/chapters/{chapter_id}:
     get:
-      summary: List project chapters
-
-  /v1/projects/{project_id}/chapters/{chapter_id}:
-    get:
-      summary: Get project chapter
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
-    patch:
-      summary: Edit project chapter
-
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/studio/get-chapters) endpoint to list all the available chapters.
+    post:
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/studio/get-chapters) endpoint to list all the available chapters.
     delete:
-      summary: Delete project chapter
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
-  /v1/projects/{project_id}/chapters/{chapter_id}/convert:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/studio/get-chapters) endpoint to list all the available chapters.
+  /v1/studio/projects/{project_id}/chapters/{chapter_id}/convert:
     post:
-      summary: Convert project chapter
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
-  /v1/projects/{project_id}/chapters/{chapter_id}/snapshots:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/studio/get-chapters) endpoint to list all the available chapters.
+  /v1/studio/projects/{project_id}/chapters/{chapter_id}/snapshots:
     get:
-      summary: List project chapter snapshots
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
-  /v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/studio/get-chapters) endpoint to list all the available chapters.
+  /v1/studio/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream:
     post:
-      summary: Stream project chapter snapshot audio
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/chapters/get-chapters) endpoint to list all the available chapters.
-        - description: The ID of the chapter snapshot to be used. You can use the [List project chapter snapshots](/docs/api-reference/chapters/get-snapshots) endpoint to list all the available snapshots.
-  /v1/projects/{project_id}/update-pronunciation-dictionaries:
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+        - description: The ID of the chapter to be used. You can use the [List project chapters](/docs/api-reference/studio/get-chapters) endpoint to list all the available chapters.
+        - description: The ID of the chapter snapshot to be used. You can use the [List project chapter snapshots](/docs/api-reference/studio/get-snapshots) endpoint to list all the available snapshots.
+  /v1/studio/projects/{project_id}/pronunciation-dictionaries:
     post:
-      summary: Update pronunciation dictionaries
-
       parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
-  /v1/projects/{project_id}/chapters/add:
-    post:
-      summary: Add project chapter
-
-      parameters:
-        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
+        - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
   # ======
   # MODELS
   # ======
@@ -1149,11 +1095,21 @@ paths:
       x-fern-audiences:
         - convai
   /v1/convai/knowledge-base:
+    get:
+      x-fern-audiences:
+        - convai
     post:
       description: Upload a file or webpage URL to create a knowledge base document. <br> <Note> After creating the document, update the agent's knowledge base by calling [Update agent](/docs/conversational-ai/api-reference/agents/update-agent). </Note>
       x-fern-audiences:
         - convai
   /v1/convai/knowledge-base/{documentation_id}:
+    delete:
+      x-fern-audiences:
+        - convai
+    get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base/{documentation_id}/dependent-agents:
     get:
       x-fern-audiences:
         - convai
@@ -1165,6 +1121,9 @@ paths:
     get:
       x-fern-audiences:
         - convai
+    post:
+      x-fern-audiences:
+        - convai
   /v1/convai/tools/{tool_id}:
     get:
       x-fern-audiences:
@@ -1173,10 +1132,6 @@ paths:
       x-fern-audiences:
         - convai
     delete:
-      x-fern-audiences:
-        - convai
-  /v1/convai/add-tool:
-    post:
       x-fern-audiences:
         - convai
   # ==========================
