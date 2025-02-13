@@ -1,0 +1,105 @@
+---
+title: Twilio inbound integration
+subtitle: Configure personalization for incoming Twilio calls using webhooks.
+---
+
+## Overview
+
+When receiving inbound Twilio calls, you can dynamically fetch conversation initiation data through a webhook. This allows you to customize your agent's behavior based on caller information and other contextual data.
+
+## How it works
+
+1. When a Twilio call is received, the system can make a webhook call to your specified endpoint, passing call information as arguments
+2. Your webhook returns conversation initiation client data, including dynamic variables and overrides
+3. This data is used to initiate the conversation
+
+<Tip>
+
+The system uses Twilio's connection/dialing period to fetch webhook data in parallel, creating a
+seamless experience where:
+
+- Users hear the expected telephone connection sound
+- In parallel, theConversational AI platform fetches necessary webhook data
+- The conversation is initiated with the fetched data by the time the audio connection is established
+
+</Tip>
+
+## Configuration
+
+<Steps>
+
+  <Step title="Configure webhook details">
+    In the [settings page](https://elevenlabs.io/app/conversational-ai/settings) of the Conversational AI platform, configure the webhook URL and add any
+    secrets needed for authentication.
+
+    <Frame background="subtle">
+        ![Enable webhook](/assets/images/conversational-ai/convai-settings.png)
+    </Frame>
+
+    Click on the webhook to modify which secrets are sent in the headers.
+
+    <Frame background="subtle">
+        ![Add secrets to headers](/assets/images/conversational-ai/convai-initiation-webhook.png)
+    </Frame>
+
+  </Step>
+
+  <Step title="Enable fetching conversation initiation data">
+    In the "Security" tab of the [agent's page](https://elevenlabs.io/app/conversational-ai/agents/), enable fetching conversation initiation data for inbound Twilio calls, and define fields that can be overridden.
+
+    <Frame background="subtle">
+        ![Enable webhook](/assets/images/conversational-ai/enable-twilio-webhook.png)
+    </Frame>
+
+  </Step>
+
+  <Step title="Implement the webhook endpoint to receive Twilio data">
+    The webhook will receive a POST request with the following parameters:
+
+    | Parameter       | Type   | Description                            |
+    | --------------- | ------ | -------------------------------------- |
+    | `caller_id`     | string | The phone number of the caller         |
+    | `agent_id`      | string | The ID of the agent receiving the call |
+    | `called_number` | string | The Twilio number that was called      |
+    | `call_sid`      | string | Unique identifier for the Twilio call  |
+
+  </Step>
+
+  <Step title="Return conversation initiation client data">
+   Your webhook must return a JSON response containing the dynamic variables specified by the agent. 
+   An example response could be:
+
+```json
+{
+  "conversation_config_override":{
+    "agent": {
+      "language": "it" # Optional: override the language.
+    },
+    "tts": {
+        "voice_id": "new_voice_id" # Optional: override the voice.
+    }
+  },
+  "dynamic_variables": {
+    "customer_name": "John Doe",
+    "account_status": "premium",
+    "last_interaction": "2024-01-15"
+  }
+}
+```
+
+  </Step>
+</Steps>
+
+The Conversational AI platform will use the dynamic variables to populate the conversation initiation data, and the conversation will start smoothly.
+
+<Warning>
+  Ensure your webhook responds within a reasonable timeout period to avoid delaying the call
+  handling.
+</Warning>
+
+## Security
+
+- Use HTTPS endpoints only
+- Implement authentication using request headers
+- Store sensitive values as secrets through the [ElevenLabs secrets manager](https://elevenlabs.io/app/conversational-ai/settings)
+- Validate the incoming request parameters
