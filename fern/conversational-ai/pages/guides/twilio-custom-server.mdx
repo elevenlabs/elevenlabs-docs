@@ -102,7 +102,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
             });
 
             // Route to handle incoming calls from Twilio
-            fastify.all("/incoming-call-eleven", async (request, reply) => {
+            fastify.all("/twilio/inbound_call", async (request, reply) => {
             // Generate TwiML response to connect the call to a WebSocket stream
             const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
                 <Response>
@@ -324,7 +324,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
             async def root():
                 return {"message": "Twilio-ElevenLabs Integration Server"}
 
-            @app.api_route("/incoming-call-eleven", methods=["GET", "POST"])
+            @app.api_route("/twilio/inbound_call", methods=["GET", "POST"])
             async def handle_incoming_call(request: Request):
                 """Handle incoming call and return TwiML response."""
                 response = VoiceResponse()
@@ -486,7 +486,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
     2. Navigate to `Phone Numbers` → `Manage` → `Active numbers`
     3. Select your phone number
     4. Under "Voice Configuration", set the webhook for incoming calls to:
-       `https://your-ngrok-url.ngrok.app/incoming-call-eleven`
+       `https://your-ngrok-url.ngrok.app/twilio/inbound_call`
     5. Set the HTTP method to POST
     
     <Frame background="subtle">![](/assets/images/conversational-ai/twilio-4.png)</Frame>
