@@ -1,6 +1,6 @@
 ---
 title: Twilio inbound integration
-subtitle: Configure dynamic variables for incoming Twilio calls using webhooks.
+subtitle: Configure personalization for incoming Twilio calls using webhooks.
 ---
 
 ## Overview
@@ -38,6 +38,15 @@ When receiving inbound Twilio calls, you can dynamically fetch conversation init
 
   </Step>
 
+  <Step title="Enable fetching conversation initiation data">
+    In the "Security" tab of the [agent's page](https://elevenlabs.io/app/conversational-ai/agents/), enable fetching conversation initiation data for inbound Twilio calls, and define fields that can be overridden.
+
+    <Frame background="subtle">
+        ![Enable webhook](/assets/images/conversational-ai/enable-twilio-inbound-webhook.png)
+    </Frame>
+
+  </Step>
+
   <Step title="Implement the webhook endpoint to receive Twilio data">
     The webhook will receive a POST request with the following parameters:
 
@@ -51,10 +60,19 @@ When receiving inbound Twilio calls, you can dynamically fetch conversation init
   </Step>
 
   <Step title="Return conversation initiation client data">
-   Your webhook must return a JSON response containing the dynamic variables specified by the agent. For example:
+   Your webhook must return a JSON response containing the dynamic variables specified by the agent. 
+   An example response could be:
 
 ```json
 {
+  "conversation_config_override":{
+    "agent": {
+      "language": "it" # Optional: override the language.
+    },
+    "tts": {
+        "voice_id": "new_voice_id" # Optional: override the voice.
+    }
+  },
   "dynamic_variables": {
     "customer_name": "John Doe",
     "account_status": "premium",
