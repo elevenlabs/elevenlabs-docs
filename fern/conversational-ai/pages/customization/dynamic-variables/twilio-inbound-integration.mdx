@@ -9,9 +9,17 @@ When receiving inbound Twilio calls, you can dynamically fetch conversation init
 
 ## How it works
 
-1. When a Twilio call is received, the system can make a webhook call to your specified endpoint
-2. Your webhook returns conversation initiation client data
-3. This data is used to populate dynamic variables for the conversation
+1. When a Twilio call is received, the system can make a webhook call to your specified endpoint, passing call information as arguments
+2. Your webhook returns conversation initiation client data, including dynamic variables and overrides
+3. This data is used to initiate the conversation
+
+<Tip>
+    The system uses Twilio's connection/dialing period to fetch webhook data in parallel, creating a seamless experience where:
+
+  - Users hear the expected telephone connection sound
+  - In parallel, the Conversational AI platform fetches necessary webhook data
+  - The conversation is initiated with the fetched data by the time the audio connection is established
+</Tip>
 
 ## Configuration
 
@@ -90,5 +98,5 @@ The Conversational AI platform will use the dynamic variables to populate the co
 
 - Use HTTPS endpoints only
 - Implement authentication using request headers
-- Store sensitive values as secrets through the ElevenLabs secrets manager
+- Store sensitive values as secrets through the [ElevenLabs secrets manager](https://elevenlabs.io/app/conversational-ai/settings)
 - Validate the incoming request parameters
