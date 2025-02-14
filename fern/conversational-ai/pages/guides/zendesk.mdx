@@ -1,0 +1,230 @@
+---
+title: Zendesk
+subtitle: Learn how to integrate our Conversational AI platform with Zendesk for better customer support
+---
+
+## Overview
+
+With our Zendesk integration, your support agent can quickly identify and resolve customer issues by leveraging historical ticket data. This integration streamlines the support process by automatically checking for similar resolved issues, advising customers based on past resolutions, and securely creating new support tickets. Benefits include faster resolutions, reduced manual effort, and enhanced customer satisfaction.
+
+## Demo Video
+
+Watch the demonstration of the Zendesk + Conversational AI integration.
+
+<Frame background="subtle" caption="Zendesk Integration Demo">
+  <iframe
+    src="https://www.loom.com/embed/109404cb8aa348f5ab019feeec292c95?sid=87f90604-fb6e-421f-abed-09d571b6b46f"
+    frameBorder="0"
+    webkitallowfullscreen
+    mozallowfullscreen
+    allowFullScreen
+    style={{ width: '100%', height: '360px' }}
+  ></iframe>
+</Frame>
+
+## How it works
+
+We lay out below how we have configured the Conversational AI agent to resolve tickets by using tool calling to step through the resolution process.
+Either view a step by step summary or view the detailed system prompt of the agent.
+
+<Tabs>
+  <Tab title="High level overview ">
+    <Steps>
+      <Step title="Initial Inquiry & Issue Details">
+        Configure your agent to ask for a detailed description of the support issue and follow up with focused questions to gather all necessary information.
+      </Step>
+
+      <Step title="Check for Similar Issues">
+        Configure the agent to check historical tickets for similar issues by:
+        - Using the `get_resolved_tickets` tool to fetch past tickets
+        - Finding similar tickets and their resolutions
+        - Extracting relevant comments via the `get_ticket_comments` tool
+        - Using this information to suggest proven solutions
+      </Step>
+
+      <Step title="Contact Information Collection">
+        If the ticket can't be deflected:
+        - Collect and validate the customer's full name
+        - Verify email address accuracy
+        - Confirm any additional required fields for your Zendesk setup
+      </Step>
+
+      <Step title="Ticket Creation">
+        - Use the `zendesk_open_ticket` tool after information verification
+        - Follow the ticket template structure
+        - Confirm ticket creation with the customer
+        - Inform them that support will be in touch
+      </Step>
+    </Steps>
+
+  </Tab>
+
+  <Tab title="Detailed system prompt">
+    ```
+    You are a helpful ElevenLabs support agent responsible for gathering information from users and creating support tickets using the zendesk_open_ticket tool. Be friendly, precise, and concise.
+
+    Begin by briefly asking asking for a detailed description of the problem.
+    Then, ask relevant support questions to gather additional details, one question at a time, and wait for the user's response before proceeding.
+
+    Once you have a description of the issue, say you will check if there are similar issues and any known resolutions.
+    - call get_resolved_tickets
+    - find the ticket which has the most similar issue to that of the caller
+    - call get_ticket_comments, using the result id from the previous response
+    - get any learnings from the resolution of this ticket
+
+    After this, tell the customer the recommended resolution from a previous similar issue. If they have already tried it or still want to move forward, move to the ticket creation step. Only provide resolution advice derived from the comments.
+
+    After capturing the support issue, gather the following contact details:
+    - The user's name.
+    - A valid email address for the requestor. Note that the email address is transcribed from voice, so ensure it is formatted correctly.
+    - Read the email back to the caller to confirm accuracy.
+
+    Once the email is confirmed, explain that you will create the ticket.
+    Create the ticket by using the Tool zendesk_open_ticket. Add these details to the ticket comment body.
+    Thank the customer and say support will be in touch.
+
+    Clarifications:
+    - Do not inform the user that you are formatting the email; simply do it.
+    - If the caller asks you to move forward with creating the ticket, do so with the existing information.
+
+    Guardrails:
+    - Do not speak about topics outside of support issues with ElevenLabs.
+    ```
+
+  </Tab>
+</Tabs>
+
+<Tip>
+  This integration enhances efficiency by leveraging historical support data. All API calls require
+  proper secret handling in the authorization headers.
+</Tip>
+
+## Tool Configurations
+
+The integration with zendesk employs three webhook tools to create the support agent. Use the tabs below to review each tool's configuration.
+
+<Tabs>
+  <Tab title="get_ticket_comments">
+    **Name:** get_ticket_comments  
+    **Description:** Retrieves the comments of a ticket.  
+    **Method:** GET  
+    **URL:** `https://your-subdomain.zendesk.com/api/v2/tickets/{ticket_id}/comments.json`
+    
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `zendesk_key`)*
+
+    **Path Parameters:**
+    - **ticket_id:** Extract the value from the `id` field in the get_resolved_tickets results.
+
+  </Tab>
+
+  <Tab title="get_resolved_tickets">
+    **Name:** get_resolved_tickets  
+    **Description:** Retrieves all resolved support tickets from Zendesk.  
+    **Method:** GET  
+    **URL:** `https://your-subdomain.zendesk.com/api/v2/search.json?query=type:ticket+status:solved`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `zendesk_key`)*
+
+  </Tab>
+
+  <Tab title="zendesk_open_ticket">
+    **Name:** zendesk_open_ticket  
+    **Description:** Opens a new support ticket.  
+    **Method:** POST  
+    **URL:** `https://your-subdomain.zendesk.com/api/v2/tickets.js`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `zendesk_key`)*
+
+    **Body Parameters:**
+    - **ticket:** An object containing:
+      - **comment:**
+        - **body:** Detailed description of the support issue.
+      - **subject:** A short subject line.
+      - **requester:**
+        - **name:** The full name of the requester.
+        - **email:** A valid email address.
+
+  </Tab>
+</Tabs>
+
+<Warning>Ensure that you add your workspace's zendesk secret to the agent's secrets.</Warning>
+
+## Evaluation Configuration
+
+To improve the observability of customer interactions, we configure the agent with the following evaluation criteria and data collection parameters.
+
+<Frame
+  background="subtle"
+  caption="Track how well the AI agent performs against key evaluation criteria like issue relevance, sentiment, and resolution success."
+>
+  <img
+    src="/assets/images/conversational-ai/zendesk_analysis.png"
+    alt="Evaluation criteria for support interactions"
+  />
+</Frame>
+
+These settings are added directly to the agent's configuration in the "Analysis" tab to ensure comprehensive monitoring of all customer interactions. This enables us to track performance, identify areas for improvement, and maintain high-quality support standards.
+
+## Impact
+
+With this integration in place, not only can you resolve tickets faster, but you can also reduce the load on your support team by deflecting tickets that are not relevant to your team.
+
+In addition, you can use the Conversational AI platform to monitor the agent's usage.
+
+<Frame
+  background="subtle"
+  caption="Get a high-level overview of each conversation and listen to the conversation's audio recording."
+>
+  <img
+    src="/assets/images/conversational-ai/zendesk_conv_overview.png"
+    alt="Support agent conversation summary"
+  />
+</Frame>
+
+<Frame
+  background="subtle"
+  caption="Track how well the AI agent performs against key evaluation criteria like issue relevance, sentiment, and resolution success."
+>
+  <img
+    src="/assets/images/conversational-ai/zendesk_criteria_eval.png"
+    alt="Evaluation criteria for support interactions"
+  />
+</Frame>
+
+<Frame
+  background="subtle"
+  caption="Monitor the data collected during each interaction, including tools used, issue details, and customer information."
+>
+  <img
+    src="/assets/images/conversational-ai/zendesk_data_collection.png"
+    alt="Data collection parameters from conversation transcripts"
+  />
+</Frame>
+
+<Frame
+  background="subtle"
+  caption="Review detailed transcripts of conversations to understand agent performance, tool usage and customer interactions."
+>
+  <img
+    src="/assets/images/conversational-ai/zendesk_transcript.png"
+    alt="Detailed conversation transcript example"
+  />
+</Frame>
+
+## Security Considerations
+
+- Use HTTPS endpoints for all webhook calls.
+- Store sensitive values as secrets using the ElevenLabs Secrets Manager.
+- Validate that all authorization headers follow the required format.
+
+## Conclusion
+
+This guide details how to integrate Zendesk into our conversational AI platform for efficient support ticket management. By leveraging webhook tools and historical support data, the integration streamlines the support process, reducing resolution times and enhancing overall service quality.
+
+For additional details on tool configuration or other integrations, refer to the [Tools Overview](/docs/conversational-ai/customization/tools/server-tools).
