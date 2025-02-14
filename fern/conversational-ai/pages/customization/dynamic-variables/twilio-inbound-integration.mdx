@@ -1,5 +1,5 @@
 ---
-title: Twilio inbound integration
+title: Twilio Personalization
 subtitle: Configure personalization for incoming Twilio calls using webhooks.
 ---
 
@@ -73,11 +73,15 @@ seamless experience where:
 {
   "conversation_config_override":{
     "agent": {
-      "language": "it" # Optional: override the language.
-    },
-    "tts": {
-        "voice_id": "new_voice_id" # Optional: override the voice.
-    }
+        "prompt": {
+          "prompt": f"The customer's bank account balance is $100. They are based in San Francisco."
+          },
+          "first_message": f"Hi, how can I help you today?",
+          "language": "en"
+      },
+      "tts": {
+        "voice_id": "new-voice-id"
+      },
   },
   "dynamic_variables": {
     "customer_name": "John Doe",
