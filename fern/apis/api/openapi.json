@@ -6232,6 +6232,127 @@
         "x-fern-sdk-group-name": "profile"
       }
     },
+    "/v1/speech-to-text": {
+      "post": {
+        "tags": ["speech-to-text"],
+        "summary": "Speech To Text",
+        "description": "Transcribe an audio or video file.",
+        "operationId": "Speech_to_Text_v1_speech_to_text_post",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Speech_to_Text_v1_speech_to_text_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": "speech_to_text"
+      }
+    },
+    "/v1/speech-to-text/stream": {
+      "post": {
+        "tags": ["speech-to-text"],
+        "summary": "Speech To Text Stream",
+        "description": "Transcribe an audio or video file with streaming response. Returns chunks of transcription as they become available, with each chunk separated by double newlines (\\n\\n).",
+        "operationId": "Speech_to_Text_Stream_v1_speech_to_text_stream_post",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Speech_to_Text_Stream_v1_speech_to_text_stream_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Stream of transcription chunks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeechToTextStreamResponseModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input file or parameters",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "File size must be less than 100MB"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-fern-streaming": true,
+        "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-group-name": "speech_to_text"
+      }
+    },
     "/v1/convai/conversation/get_signed_url": {
       "get": {
         "tags": ["Conversational AI"],
@@ -14324,6 +14445,165 @@
         ],
         "title": "SpeechHistoryItemResponseModel"
       },
+      "SpeechToTextChunkResponseModel": {
+        "properties": {
+          "language_code": {
+            "type": "string",
+            "title": "Language Code",
+            "description": "The detected language code (e.g. 'eng' for English)."
+          },
+          "language_probability": {
+            "type": "number",
+            "title": "Language Probability",
+            "description": "The confidence score of the language detection (0 to 1)."
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "The raw text of the transcription."
+          },
+          "words": {
+            "items": {
+              "$ref": "#/components/schemas/SpeechToTextWordResponseModel"
+            },
+            "type": "array",
+            "title": "Words",
+            "description": "List of words with their timing information."
+          }
+        },
+        "type": "object",
+        "required": ["language_code", "language_probability", "text", "words"],
+        "title": "SpeechToTextChunkResponseModel",
+        "description": "Chunk-level detail of the transcription with timing information.",
+        "example": {
+          "language_code": "en",
+          "language_probability": 0.98,
+          "text": "Hello world!",
+          "words": [
+            {
+              "text": "Hello",
+              "start": 0.0,
+              "end": 0.5,
+              "type": "word",
+              "speaker_id": "speaker_1"
+            },
+            {
+              "text": " ",
+              "start": 0.5,
+              "end": 0.5,
+              "type": "spacing",
+              "speaker_id": "speaker_1"
+            },
+            {
+              "text": "world!",
+              "start": 0.5,
+              "end": 1.2,
+              "type": "word",
+              "speaker_id": "speaker_1"
+            }
+          ]
+        }
+      },
+      "SpeechToTextStreamResponseModel": {
+        "properties": {
+          "language_code": {
+            "type": "string",
+            "title": "Language Code",
+            "description": "The detected language code (e.g. 'eng' for English)."
+          },
+          "language_probability": {
+            "type": "number",
+            "title": "Language Probability",
+            "description": "The confidence score of the language detection (0 to 1)."
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "The raw text of the transcription."
+          },
+          "words": {
+            "items": {
+              "$ref": "#/components/schemas/SpeechToTextWordResponseModel"
+            },
+            "type": "array",
+            "title": "Words",
+            "description": "List of words with their timing information."
+          }
+        },
+        "type": "object",
+        "required": ["language_code", "language_probability", "text", "words"],
+        "title": "SpeechToTextStreamResponseModel",
+        "description": "\n            The streaming endpoint returns a sequence of these chunks, each separated by double newlines.\n            Example stream (formatted for readability):\n\n            {\"language_code\": \"en\", \"language_probability\": 0.0, \"text\": \"This is an example\", \"words\": [...]}\\n\\n\n            {\"language_code\": \"en\", \"language_probability\": 0.0, \"text\": \"of a streamed transcription\", \"words\": [...]}\\n\\n\n            {\"language_code\": \"en\", \"language_probability\": 1.0, \"text\": \"with each chunk separated by double newlines.\", \"words\": [...]}\n            ",
+        "example": {
+          "language_code": "en",
+          "language_probability": 0.98,
+          "text": "Hello world!",
+          "words": [
+            {
+              "text": "Hello",
+              "start": 0.0,
+              "end": 0.5,
+              "type": "word",
+              "speaker_id": "speaker_0"
+            },
+            {
+              "text": " ",
+              "start": 0.5,
+              "end": 0.5,
+              "type": "spacing",
+              "speaker_id": "speaker_0"
+            },
+            {
+              "text": "world!",
+              "start": 0.5,
+              "end": 1.2,
+              "type": "word",
+              "speaker_id": "speaker_0"
+            }
+          ]
+        }
+      },
+      "SpeechToTextWordResponseModel": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "The word or sound that was transcribed."
+          },
+          "start": {
+            "type": "number",
+            "title": "Start",
+            "description": "The start time of the word or sound in seconds."
+          },
+          "end": {
+            "type": "number",
+            "title": "End",
+            "description": "The end time of the word or sound in seconds."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["word", "spacing", "audio_event"],
+            "title": "Type",
+            "description": "The type of the word or sound. 'audio_event' is used for non-word sounds like laughter or footsteps."
+          },
+          "speaker_id": {
+            "type": "string",
+            "title": "Speaker Id",
+            "description": "Unique identifier for the speaker of this word."
+          }
+        },
+        "type": "object",
+        "required": ["text", "type"],
+        "title": "SpeechToTextWordResponseModel",
+        "description": "Word-level detail of the transcription with timing information.",
+        "example": {
+          "text": "Hello",
+          "start": 0.0,
+          "end": 0.5,
+          "type": "word",
+          "speaker_id": "speaker_1"
+        }
+      },
       "SubscriptionExtrasResponseModel": {
         "properties": {
           "concurrency": {
@@ -15825,6 +16105,10 @@
     {
       "name": "speech-to-speech",
       "description": "Create speech by combining the style and content of an audio file you upload with a voice of your choice."
+    },
+    {
+      "name": "speech-to-text",
+      "description": "Transcribe your audio files with detailed speaker annotations and precise timestamps using our cutting-edge model. Speech-to-text is currently in alpha and available to a select group of users. We plan to roll it out more broadly soon."
     },
     {
       "name": "models",
