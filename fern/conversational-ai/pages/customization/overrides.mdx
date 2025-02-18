@@ -10,11 +10,20 @@ subtitle: Tailor each conversation with personalized context for each user.
   offer better maintainability and a more structured approach to personalization.
 </Warning>
 
-**Overrides** enable your assistant to adapt its behavior for each user interaction. You can pass custom data and settings at the start of each conversation, allowing the assistant to personalize its responses and knowledge with real-time context.
+**Overrides** enable your assistant to adapt its behavior for each user interaction. You can pass custom data and settings at the start of each conversation, allowing the assistant to personalize its responses and knowledge with real-time context. Overrides completely override the agent's default values defined in the agent's [dashboard](https://elevenlabs.io/app/conversational-ai/agents).
 
 ## Overview
 
 Overrides allow you to modify your AI agent's behavior in real-time without creating multiple agents. This enables you to personalize responses with user-specific data.
+
+Overrides can be enable for the following fields in the agent's security settings:
+
+- System prompt
+- First message
+- Language
+- Voice ID
+
+When overrides are enabled for a field, providing an override is still optional. If not provided, the agent will use the default values defined in the agent's [dashboard](https://elevenlabs.io/app/conversational-ai/agents). An error will be thrown if an override is provided for a field that does not have overrides enabled.
 
 Here are a few examples where overrides can be useful:
 
@@ -22,8 +31,6 @@ Here are a few examples where overrides can be useful:
 - **Include account-specific details** in responses
 - **Adjust the agent's language** or tone based on user preferences
 - **Pass real-time data** like account balances or order status
-
-See the [WebSocket reference](/docs/conversational-ai/api-reference/conversational-ai/websocket) for all available messages and options.
 
 <Info>
   Overrides are particularly useful for applications requiring personalized interactions or handling
