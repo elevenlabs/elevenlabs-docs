@@ -1,3 +1,8 @@
+x-fern-global-headers:
+  - header: xi-api-key
+    name: api-key
+    optional: true
+    env: ELEVENLABS_API_KEY
 servers:
   - url: https://api.elevenlabs.io/
     x-fern-server-name: Production
@@ -5,57 +10,32 @@ servers:
   - url: https://api.us.elevenlabs.io/
     x-fern-server-name: Production US
     description: Production routed only to the US region.
-x-fern-groups:
-  samples:
-    summary: Samples
-  voices:
-    summary: Voices
-  studio:
-    summary: Studio
-  models:
-    summary: Models
 paths:
-  # ===========================
-  # TODO: Move upstream to xi
-  # ===========================
-  /v1/similar-voices:
-    post:
-      summary: List similar voices
-
-  /v1/dubbing:
-    post:
-      summary: Dub a video or audio file
-
-  /v1/dubbing/{dubbing_id}:
-    get:
-      summary: Get dubbing
-
-    delete:
-      summary: Delete dubbing
-
-  /v1/dubbing/{dubbing_id}/audio/{language_code}:
-    get:
-      summary: Get dubbed audio
-
   /v1/dubbing/{dubbing_id}/transcript/{language_code}:
     get:
       summary: Get dubbed transcript
-
       x-fern-sdk-method-name: get_transcript_for_dub
-
-  # =======
-  # IGNORE
-  # =======
+  /profile/{handle}:
+    get:
+      x-fern-sdk-group-name: voices
+      x-fern-sdk-method-name: get_a_profile_page
   /docs:
     get:
       x-fern-ignore: true
-  /profile/{handle}:
+  /v1/similar-voices:
+    post:
+      summary: List similar voices
+  /v1/dubbing:
+    post:
+      summary: Dub a video or audio file
+  /v1/dubbing/{dubbing_id}:
     get:
-      x-fern-ignore: true
-
-  # ==============
-  # TEXT TO SPEECH
-  # ==============
+      summary: Get dubbing
+    delete:
+      summary: Delete dubbing
+  /v1/dubbing/{dubbing_id}/audio/{language_code}:
+    get:
+      summary: Get dubbed audio
   /v1/text-to-speech/{voice_id}:
     post:
       summary: Create speech
@@ -200,10 +180,6 @@ paths:
                           type: number
                           format: float
                         description: 'Array of end times (in seconds) for each normalized character'
-
-  # ==============
-  # SPEECH TO SPEECH
-  # ==============
   /v1/speech-to-speech/{voice_id}:
     post:
       summary: Voice changer
@@ -250,9 +226,6 @@ paths:
             audio/mpeg:
               schema:
                 type: string
-  # ================
-  # Sound Effects
-  # ================
   /v1/sound-generation:
     post:
       summary: Create sound effect
@@ -260,14 +233,9 @@ paths:
       x-fern-examples:
         - request:
             text: 'Spacious braam suitable for high-impact movie trailer moments'
-
-  # =======
-  # HISTORY
-  # =======
   /v1/history:
     get:
       summary: Get generated items
-
       x-fern-examples:
         - query-parameters:
           response:
@@ -305,7 +273,6 @@ paths:
   /v1/history/{history_item_id}:
     get:
       summary: Get history item
-
       x-fern-examples:
         - path-parameters:
             history_item_id: 'HISTORY_ITEM_ID'
@@ -349,7 +316,6 @@ paths:
   /v1/history/{history_item_id}/audio:
     get:
       summary: Get audio from history item
-
       x-fern-examples:
         - path-parameters:
             history_item_id: 'HISTORY_ITEM_ID'
@@ -358,15 +324,11 @@ paths:
   /v1/history/download:
     post:
       summary: Download history items
-
       x-fern-examples:
         - request:
             history_item_ids: ['HISTORY_ITEM_ID']
       properties:
         - description: IDs of the history items to be downloaded. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
-  # ======
-  # VOICES
-  # ======
   /v1/voices/{voice_id}/samples/{sample_id}:
     delete:
       summary: Delete voice sample
@@ -406,7 +368,6 @@ paths:
   /v1/voices/{voice_id}/settings:
     get:
       summary: Get voice settings
-
       x-fern-examples:
         - path-parameters:
             voice_id: JBFqnCBsd6RMkjVDRZzb
@@ -419,7 +380,6 @@ paths:
   /v1/voices/{voice_id}:
     get:
       summary: Get voice
-
       x-fern-examples:
         - path-parameters:
             voice_id: JBFqnCBsd6RMkjVDRZzb
@@ -489,7 +449,6 @@ paths:
   /v1/voices/{voice_id}/settings/edit:
     post:
       summary: Edit voice settings
-
       x-fern-examples:
         - path-parameters:
             voice_id: 'VOICE_ID'
@@ -506,7 +465,6 @@ paths:
     post:
       description: Add a shared voice to your collection of Voices
       summary: Create voice clone
-
       x-fern-examples:
         - request:
             name: 'Alex'
@@ -517,7 +475,6 @@ paths:
   /v1/voices/{voice_id}/edit:
     post:
       summary: Edit voice
-
       x-fern-examples:
         - path-parameters:
             voice_id: 'VOICE_ID'
@@ -532,7 +489,6 @@ paths:
     post:
       description: Add a shared voice to your collection of Voices
       summary: Add shared voice
-
       x-fern-examples:
         - path-parameters:
             public_user_id: '63e84100a6bf7874ba37a1bab9a31828a379ec94b891b401653b655c5110880f'
@@ -548,7 +504,6 @@ paths:
   /v1/voices:
     get:
       summary: List voices
-
       x-fern-examples:
         - response:
             body:
@@ -599,10 +554,6 @@ paths:
                     permission_on_resource: null,
                   },
                 ]
-
-  # ============================
-  # VOICE GENERATION (DEPRECATED)
-  # ============================
   /v1/voice-generation/generate-voice/parameters:
     get:
       x-fern-availability: deprecated
@@ -681,9 +632,6 @@ paths:
               is_mixed: false
               created_at_unix: 1234567890
               permission_on_resource: null
-  # ==========================
-  # STUDIO
-  # ==========================
   /v1/studio/projects/{project_id}:
     get:
       parameters:
@@ -749,13 +697,9 @@ paths:
     post:
       parameters:
         - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
-  # ======
-  # MODELS
-  # ======
   /v1/models:
     get:
       summary: List models
-
       x-fern-examples:
         - response:
             body:
@@ -808,14 +752,9 @@ paths:
                     ],
                 },
               ]
-
-  # ====
-  # USER
-  # ====
   /v1/user/subscription:
     get:
       summary: Get user subscription
-
       x-fern-examples:
         - response:
             body:
@@ -839,7 +778,6 @@ paths:
   /v1/user:
     get:
       summary: Get user
-
       x-fern-examples:
         - response:
             body:
@@ -871,14 +809,9 @@ paths:
               is_onboarding_completed: true
               is_onboarding_checklist_completed: true
               first_name: null
-
-  # =============
-  # SHARED VOICES
-  # =============
   /v1/shared-voices:
     get:
       summary: Get shared voices
-
       x-fern-examples:
         - query-parameters:
             page_size: 1
@@ -914,14 +847,9 @@ paths:
                 ]
               has_more: true
               last_sort_id: null
-
-  # ==========================
-  # PRONUNCIATION DICTIONARIES
-  # ==========================
   /v1/pronunciation-dictionaries/:
     get:
       summary: List pronunciation dictionaries
-
       x-fern-examples:
         - query-parameters:
             page_size: 1
@@ -943,7 +871,6 @@ paths:
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/:
     get:
       summary: Get pronunciation dictionary
-
       x-fern-examples:
         - path-parameters:
             pronunciation_dictionary_id: 'Fm6AvNgS53NXe6Kqxp3e'
@@ -965,7 +892,6 @@ paths:
   /v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download:
     get:
       summary: Get pronunciation dictionary by version
-
       x-fern-examples:
         - path-parameters:
             dictionary_id: 'Fm6AvNgS53NXe6Kqxp3e'
@@ -973,18 +899,12 @@ paths:
   /v1/pronunciation-dictionaries/add-from-file:
     post:
       summary: Create a pronunciation dictionary
-
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules:
     post:
       summary: Add pronunciation dictionary rules
-
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules:
     post:
       summary: Remove pronunciation dictionary rules
-
-  # ==========================
-  # Conversational AI
-  # ==========================
   /v1/convai/conversation/get_signed_url:
     get:
       x-fern-audiences:
@@ -1104,7 +1024,6 @@ paths:
   /v1/convai/add-to-knowledge-base:
     post:
       x-fern-ignore: true
-
   /v1/convai/tools:
     get:
       x-fern-audiences:
@@ -1122,17 +1041,12 @@ paths:
     delete:
       x-fern-audiences:
         - convai
-  # ==========================
-  # Audio Native
-  # ==========================
   /v1/audio-native:
     post:
       summary: Create audio native project
-
   /v1/audio-native/{project_id}/content:
     post:
       summary: Update audio native project
-
       parameters:
         - description: The ID of the project to be used. You can use the [List projects](/docs/api-reference/projects/get-projects) endpoint to list all the available projects.
   /v1/audio-native/get-embed-code:
@@ -1141,65 +1055,43 @@ paths:
   /v1/audio-native/{project_id}/get-embed-code:
     get:
       x-fern-ignore: true
-
-  # ==========================
-  # Workspace
-  # ==========================
   /v1/workspace/invites:
     delete:
       summary: Delete invite
-
   /v1/workspace/invites/add:
     post:
       summary: Invite user
-
   /v1/workspace/members:
     post:
       summary: Update member
-
   /v1/workspace/groups/search:
     get:
       summary: Search user group
-
   /v1/workspace/groups/{group_id}/members:
     post:
       summary: Add member to user group
-
   /v1/workspace/groups/{group_id}/members/remove:
     post:
       summary: Remove member from user group
-
-  # ==========================
-  # Audio Isolation
-  # ==========================
   /v1/audio-isolation:
     post:
       description: Removes background noise from audio.
-
   /v1/audio-isolation/stream:
     post:
       description: Removes background noise from audio.
-
-  # ==========================
-  # Voice Design (Text to voice)
-  # ==========================
   /v1/text-to-voice/create-previews:
     post:
       summary: Voice design
       description: Create a voice from a text prompt.
-
       parameters:
         - description: The output format of the generated audio.
   /v1/text-to-voice/create-voice-from-preview:
     post:
       summary: Save a voice preview
       description: Add a generated voice to the voice library.
-
   /v1/usage/character-stats:
     get:
       summary: Get character usage metrics
-
-# Additional schemas
 components:
   schemas:
     Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:

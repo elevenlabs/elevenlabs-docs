@@ -1,10 +1,10 @@
 api:
   specs:
-    - openapi: ../openapi.json
-      overrides: ../openapi-overrides.yml
+    - openapi: ./apis/api/openapi.json
+      overrides: ./apis/api/openapi-overrides.yml
       settings:
         title-as-schema-name: false
-    - asyncapi: ../asyncapi.yml
+    - asyncapi: ./apis/api/asyncapi.yml
 groups:
   python-sdk:
     generators:
@@ -77,6 +77,8 @@ groups:
   postman:
     generators:
       - name: fernapi/fern-postman
+        config:
+          api-key: ${POSTMAN_API_KEY}
         version: 0.4.0
         output:
           location: postman
