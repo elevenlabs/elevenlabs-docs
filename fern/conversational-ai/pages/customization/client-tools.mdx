@@ -129,11 +129,20 @@ Then create a new parameter `message` with the following configuration:
 
 ### Passing client tool results to the conversation context
 
-When you want your agent to receive data back from a client tool, ensure that you tick the **Wait for response** option in the agent dashboard. Once enabled, the client tool function returns a value that the agent uses to enhance the conversation context.
+When you want your agent to receive data back from a client tool, ensure that you tick the **Wait for response** option in the tool configuration.
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/wait-until-tool-result.png"
+    alt="Wait for response option in client tool configuration"
+  />
+</Frame>
+
+Once the client tool is added, when the function is called the agent will wait for its response and append the response to the conversation context.
 
 <CodeBlock>
     ```python title="Python"
-    def get_customer_details(params):
+    def get_customer_details():
         # Fetch customer details (e.g., from an API or database)
         customer_data = {
             "id": 123,
@@ -143,12 +152,22 @@ When you want your agent to receive data back from a client tool, ensure that yo
         # Return the customer data; it can also be a JSON string if needed.
         return customer_data
 
+    client_tools = ClientTools()
     client_tools.register("getCustomerDetails", get_customer_details)
+
+    conversation = Conversation(
+        client=ElevenLabs(api_key="your-api-key"),
+        agent_id="your-agent-id",
+        client_tools=client_tools,
+        # ...
+    )
+
+    conversation.start_session()
     ```
 
     ```javascript title="JavaScript"
     const clientTools = {
-      getCustomerDetails: async (params) => {
+      getCustomerDetails: async () => {
         // Fetch customer details (e.g., from an API)
         const customerData = {
           id: 123,
@@ -166,7 +185,7 @@ When you want your agent to receive data back from a client tool, ensure that yo
 
 </CodeBlock>
 
-In both examples, when the agent calls **getCustomerDetails**, the function will execute on the client and the agent will receive the returned data, which is then used as part of the conversation context.
+In this example, when the agent calls **getCustomerDetails**, the function will execute on the client and the agent will receive the returned data, which is then used as part of the conversation context.
 
 ### Troubleshooting
 
