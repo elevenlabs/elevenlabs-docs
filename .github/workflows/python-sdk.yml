@@ -1,4 +1,4 @@
-name: python-sdk
+name: Create Python SDK branch
 
 on:
   workflow_dispatch:
@@ -26,10 +26,4 @@ jobs:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          fern generate --group python-sdk --version ${{ inputs.version }} --log-level debug
-
-      - name: Update Documentation
-        env:
-          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        run: |
-          fern generate --docs
+          fern generate --group python-sdk --version ${{ inputs.version }} --log-level debug --api api
