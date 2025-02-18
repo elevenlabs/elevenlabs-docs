@@ -108,7 +108,7 @@ To provide a pronunciation dictionary file, open the settings for a project and 
 
 Currently we only support pronunciation dictionaries that specify replacements using phoneme or alias tags.
 
-Both phonemes and aliases are sets of rules that specify a word or phrase they are looking for, referred to as a grapheme, and what it will be replaced with. Please note that searches are case sensitive.
+Both phonemes and aliases are sets of rules that specify a word or phrase they are looking for, referred to as a grapheme, and what it will be replaced with. Please note that searches are case sensitive. When checking for a replacement word in a pronunciation dictionary, the dictionary is checked from start to end and only the very first replacement is used.
 
 ### Pronunciation Dictionary Example
 
@@ -133,7 +133,12 @@ Here is an example pronunciation dictionary that specifies in IPA the pronunciat
 </lexicon>
 ```
 
-When checking for a replacement word in a pronunciation dictionary, the dictionary is checked from start to end and only the very first replacement is used.
+To generate a pronunciation dictionary `.pls` file, there are a few open source tools available:
+
+    - [Sequitur G2P](https://github.com/sequitur-g2p/sequitur-g2p) - Open-source tool that learns pronunciation rules from data and can generate phonetic transcriptions.
+    - [Phonetisaurus](https://github.com/AdolfVonKleist/Phonetisaurus) - Open-source G2P system trained on existing dictionaries like CMUdict.
+    - [eSpeak](https://github.com/espeak-ng/espeak-ng) - Speech synthesizer that can generate phoneme transcriptions from text.
+    - [CMU Pronouncing Dictionary](https://github.com/cmusphinx/cmudict) - A pre-built English dictionary with phonetic transcriptions.
 
 ## Emotion
 
