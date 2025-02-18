@@ -1,3 +1,5 @@
+security:
+  - api-key: []
 servers:
   - url: https://api.elevenlabs.io/
     x-fern-server-name: Production
@@ -5,7 +7,19 @@ servers:
   - url: https://api.us.elevenlabs.io/
     x-fern-server-name: Production US
     description: Production routed only to the US region.
+x-fern-groups:
+  samples:
+    summary: Samples
+  voices:
+    summary: Voices
+  studio:
+    summary: Studio
+  models:
+    summary: Models
 paths:
+  /docs:
+    get:
+      x-fern-ignore: true
   /v1/dubbing/{dubbing_id}/transcript/{language_code}:
     get:
       summary: Get dubbed transcript
@@ -14,9 +28,6 @@ paths:
     get:
       x-fern-sdk-group-name: voices
       x-fern-sdk-method-name: get_a_profile_page
-  /docs:
-    get:
-      x-fern-ignore: true
   /v1/similar-voices:
     post:
       summary: List similar voices
@@ -799,6 +810,7 @@ paths:
                   character_refresh_period: 'monthly_period',
                 }
               is_new_user: true
+              xi_api_key: '1234' # TODO: Why is this here?
               can_use_delayed_payment_methods: false
               is_onboarding_completed: true
               is_onboarding_checklist_completed: true
@@ -901,6 +913,13 @@ paths:
       summary: Remove pronunciation dictionary rules
   /v1/convai/conversation/get_signed_url:
     get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/secrets:
+    get:
+      x-fern-audiences:
+        - convai
+    post:
       x-fern-audiences:
         - convai
   /v1/convai/agents/create:
@@ -1033,6 +1052,13 @@ paths:
       x-fern-audiences:
         - convai
     delete:
+      x-fern-audiences:
+        - convai
+  /v1/convai/settings:
+    get:
+      x-fern-audiences:
+        - convai
+    patch:
       x-fern-audiences:
         - convai
   /v1/audio-native:
@@ -1383,5 +1409,3 @@ components:
       env: ELEVENLABS_API_KEY
       in: header
       description: Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.
-security:
-  - api-key: []
