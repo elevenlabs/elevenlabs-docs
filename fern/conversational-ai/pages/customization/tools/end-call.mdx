@@ -3,11 +3,18 @@ title: End call
 subtitle: Let your agent automatically hang up on the user.
 ---
 
-<Frame>![End call](/assets/images/conversational-ai/end-call-tool.png)</Frame>
+<Note>
+  The **End Call** tool is added to agents created in the UI by default. For agents created via
+  API/SDK, you must add it manually as a system tool in your agent configuration. See the [Create
+  Agent API Reference](https://api.elevenlabs.io/docs/api-reference/operations/create-agent) for
+  implementation details.
+</Note>
+
+<Frame background="subtle">![End call](/assets/images/conversational-ai/end-call-tool.png)</Frame>
 
 ## Overview
 
-The **End Call** tool allows your conversational agent to terminate a call with the user. This is a system tool that is enabled by default, providing flexibility in how and when calls are ended.
+The **End Call** tool allows your conversational agent to terminate a call with the user. This is a system tool that provides flexibility in how and when calls are ended.
 
 ## Functionality
 
@@ -15,6 +22,35 @@ The **End Call** tool allows your conversational agent to terminate a call with 
 - **Custom prompts**: Users can specify conditions under which the call should end. For example:
   - End the call if the user says "goodbye."
   - Conclude the call when a specific task is completed.
+
+### API Implementation
+
+When creating an agent via API, add the End Call tool to your agent configuration:
+
+<CodeBlocks>
+```bash
+curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
+     -H "xi-api-key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+  "conversation_config": {
+    "agent": {
+      "prompt": {
+        "tools": [
+          {
+            "type": "system",
+            "name": "end_call",
+            "description": ""
+          }
+        ]
+      }
+    }
+  }
+}'
+```
+</CodeBlocks>
+
+If the description is left blank, the tool will be triggered according to a default prompt provided by ElevenLabs.
 
 ## Example prompts
 
