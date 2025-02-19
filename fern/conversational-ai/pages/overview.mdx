@@ -70,6 +70,135 @@ Altogether it is a highly composable AI Voice agent solution that can scale to t
   </Tab>
 </Tabs>
 
+<Card title="Pricing Calculator">
+  <div className="space-y-6">
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Select your plan
+      </label>
+      <select 
+        id="pricingTier" 
+        className="block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option value="creator">Creator ($22/mo, 250 mins included)</option>
+
+        <option value="pro">Pro ($99/mo, 1,100 mins included)</option>
+
+        <option value="scale">Scale ($330/mo, 3,600 mins included)</option>
+
+        <option value="business">Business ($1,320/mo, 13,750 mins included)</option>
+      </select>
+    </div>
+
+    <div>
+      <div className="flex justify-between items-center mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Minutes needed per month
+        </label>
+        <span id="minutesValue" className="text-sm font-bold text-blue-600 dark:text-blue-400"></span>
+      </div>
+      <div className="relative">
+        <input
+          type="range"
+          id="minutesSlider"
+          min="0"
+          max="20000"
+          step="100"
+          className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+        />
+        <div id="sliderValue" className="absolute -top-8 px-2 py-1 bg-blue-600 text-white text-xs rounded transform -translate-x-1/2 pointer-events-none opacity-0 transition-opacity">
+          0
+        </div>
+      </div>
+    </div>
+
+    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+      <p className="text-lg font-medium text-gray-900 dark:text-white">
+        Estimated monthly cost: <span id="totalCost" className="text-blue-600 dark:text-blue-400">$0</span>
+      </p>
+    </div>
+
+  </div>
+</Card>
+
+<script>
+  {`
+  const tierData = {
+    creator: { base: 22, included: 250, rate: 0.12 },
+    pro: { base: 99, included: 1100, rate: 0.11 },
+    scale: { base: 330, included: 3600, rate: 0.10 },
+    business: { base: 1320, included: 13750, rate: 0.08 }
+  };
+
+  function formatNumber(num) {
+    return new Intl.NumberFormat().format(num);
+  }
+
+  function updateCalculator() {
+    const tierSelect = document.getElementById('pricingTier');
+    const minutesSlider = document.getElementById('minutesSlider');
+    const minutesValue = document.getElementById('minutesValue');
+    const totalCost = document.getElementById('totalCost');
+    
+    if (!tierSelect || !minutesSlider || !minutesValue || !totalCost) return;
+
+    const tier = tierSelect.value;
+    const minutes = parseInt(minutesSlider.value);
+    const tierInfo = tierData[tier];
+    
+    minutesValue.textContent = formatNumber(minutes) + ' minutes';
+    
+    let cost = tierInfo.base;
+    if (minutes > tierInfo.included) {
+      cost += (minutes - tierInfo.included) * tierInfo.rate;
+    }
+    
+    totalCost.textContent = '$' + formatNumber(Math.round(cost));
+  }
+
+  function updateSliderValue(slider) {
+    const sliderValue = document.getElementById('sliderValue');
+    const value = parseInt(slider.value);
+    const percent = ((value - slider.min) / (slider.max - slider.min)) * 100;
+    
+    // Update the floating value position
+    sliderValue.style.left = \`\${percent}%\`;
+    sliderValue.textContent = formatNumber(value);
+  }
+
+  function showSliderValue() {
+    const sliderValue = document.getElementById('sliderValue');
+    sliderValue.style.opacity = '1';
+  }
+
+  function hideSliderValue() {
+    const sliderValue = document.getElementById('sliderValue');
+    sliderValue.style.opacity = '0';
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const tierSelect = document.getElementById('pricingTier');
+    const minutesSlider = document.getElementById('minutesSlider');
+    
+    if (tierSelect) {
+      tierSelect.addEventListener('change', updateCalculator);
+    }
+    
+    if (minutesSlider) {
+      minutesSlider.addEventListener('input', function() {
+        updateCalculator();
+        updateSliderValue(this);
+      });
+      minutesSlider.addEventListener('mouseenter', showSliderValue);
+      minutesSlider.addEventListener('mouseleave', hideSliderValue);
+      
+      // Initialize slider value
+      updateSliderValue(minutesSlider);
+    }
+  });
+`}
+</script>
+
 <Note>
   Today we're covering the LLM costs, though these will be passed through to customers in the
   future.
