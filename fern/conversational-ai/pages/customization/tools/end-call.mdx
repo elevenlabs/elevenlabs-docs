@@ -3,12 +3,11 @@ title: End call
 subtitle: Let your agent automatically hang up on the user.
 ---
 
-<Note>
+<Warning>
   The **End Call** tool is added to agents created in the UI by default. For agents created via
-  API/SDK, you must add it manually as a system tool in your agent configuration. See the [Create
-  Agent API Reference](https://api.elevenlabs.io/docs/api-reference/operations/create-agent) for
-  implementation details.
-</Note>
+  API/SDK, you must add it manually as a system tool in your agent configuration. [See API
+  Implementation below](#api-implementation) for details.
+</Warning>
 
 <Frame background="subtle">![End call](/assets/images/conversational-ai/end-call-tool.png)</Frame>
 
@@ -25,9 +24,69 @@ The **End Call** tool allows your conversational agent to terminate a call with 
 
 ### API Implementation
 
-When creating an agent via API, add the End Call tool to your agent configuration:
+When creating an agent via API, add the End Call tool to your agent configuration. It must be defined as a system tool:
 
 <CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentToolsItem_System
+)
+
+# Initialize the client
+client = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create the end call tool
+end_call_tool = PromptAgentToolsItem_System(
+    name="end_call",
+    description=""  # Optional: Customize when the tool should be triggered
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            tools=[end_call_tool]
+        )
+    )
+)
+
+# Create the agent
+response = client.conversational_ai.create_agent(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from 'elevenlabs';
+
+// Initialize the client
+const client = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with end call tool
+await client.conversationalAi.createAgent({
+  conversation_config: {
+    agent: {
+      prompt: {
+        tools: [
+          {
+            type: 'system',
+            name: 'end_call',
+            description: '', // Optional: Customize when the tool should be triggered
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
 ```bash
 curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
      -H "xi-api-key: YOUR_API_KEY" \
@@ -48,20 +107,19 @@ curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
   }
 }'
 ```
+
 </CodeBlocks>
 
-If the description is left blank, the tool will be triggered according to a default prompt provided by ElevenLabs.
+<Tip>
+  The configuration follows a nested structure: - `ConversationalConfig`: Top-level configuration -
+  `AgentConfig`: Agent-specific settings - `PromptAgent`: Prompt and tools configuration -
+  `PromptAgentToolsItem`: System tool definition (type: "system")
+</Tip>
 
 ## Example prompts
 
 **Example 1**
 
 ```
-If the user says 'end call', terminate the session.
-```
 
-**Example 2**
-
-```
-Once the user confirms their order, end the call.
 ```
