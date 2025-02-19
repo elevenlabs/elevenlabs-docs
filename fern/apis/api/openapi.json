@@ -53,9 +53,9 @@
             "schema": {
               "type": "string",
               "title": "Search",
-              "description": "search term used for filtering"
+              "description": "search term used for filtering",
+              "examples": ["In the land far far away"]
             },
-            "example": "In the land far far away",
             "name": "search",
             "in": "query"
           },
@@ -66,9 +66,9 @@
               "type": "string",
               "enum": ["TTS", "STS"],
               "title": "Source",
-              "description": "Source of the generated history item"
+              "description": "Source of the generated history item",
+              "examples": ["TTS"]
             },
-            "example": "TTS",
             "name": "source",
             "in": "query"
           },
@@ -102,8 +102,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "history",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "get_all",
+        "x-fern-sdk-group-name": "history"
       }
     },
     "/v1/history/{history_item_id}": {
@@ -119,9 +119,9 @@
             "schema": {
               "type": "string",
               "title": "History Item Id",
-              "description": "History item ID to be used, you can use GET https://api.elevenlabs.io/v1/history to receive a list of history items and their IDs."
+              "description": "History item ID to be used, you can use GET https://api.elevenlabs.io/v1/history to receive a list of history items and their IDs.",
+              "examples": ["VW7YKqPnjY4h39yTbx2L"]
             },
-            "example": "VW7YKqPnjY4h39yTbx2L",
             "name": "history_item_id",
             "in": "path"
           },
@@ -155,8 +155,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "history",
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": "history"
       },
       "delete": {
         "tags": ["speech-history"],
@@ -170,9 +170,9 @@
             "schema": {
               "type": "string",
               "title": "History Item Id",
-              "description": "History item ID to be used, you can use GET https://api.elevenlabs.io/v1/history to receive a list of history items and their IDs."
+              "description": "History item ID to be used, you can use GET https://api.elevenlabs.io/v1/history to receive a list of history items and their IDs.",
+              "examples": ["VW7YKqPnjY4h39yTbx2L"]
             },
-            "example": "VW7YKqPnjY4h39yTbx2L",
             "name": "history_item_id",
             "in": "path"
           },
@@ -202,8 +202,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "history",
-        "x-fern-sdk-method-name": "delete"
+        "x-fern-sdk-method-name": "delete",
+        "x-fern-sdk-group-name": "history"
       }
     },
     "/v1/history/{history_item_id}/audio": {
@@ -219,9 +219,9 @@
             "schema": {
               "type": "string",
               "title": "History Item Id",
-              "description": "History item ID to be used, you can use GET https://api.elevenlabs.io/v1/history to receive a list of history items and their IDs."
+              "description": "History item ID to be used, you can use GET https://api.elevenlabs.io/v1/history to receive a list of history items and their IDs.",
+              "examples": ["VW7YKqPnjY4h39yTbx2L"]
             },
-            "example": "VW7YKqPnjY4h39yTbx2L",
             "name": "history_item_id",
             "in": "path"
           },
@@ -248,8 +248,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "history",
-        "x-fern-sdk-method-name": "get_audio"
+        "x-fern-sdk-method-name": "get_audio",
+        "x-fern-sdk-group-name": "history"
       }
     },
     "/v1/history/download": {
@@ -292,8 +292,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "history",
-        "x-fern-sdk-method-name": "download"
+        "x-fern-sdk-method-name": "download",
+        "x-fern-sdk-group-name": "history"
       }
     },
     "/v1/sound-generation": {
@@ -336,8 +336,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_sound_effects",
-        "x-fern-sdk-method-name": "convert"
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": "text_to_sound_effects"
       }
     },
     "/v1/audio-isolation": {
@@ -380,8 +380,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "audio_isolation",
-        "x-fern-sdk-method-name": "audio_isolation"
+        "x-fern-sdk-method-name": "audio_isolation",
+        "x-fern-sdk-group-name": "audio_isolation"
       }
     },
     "/v1/audio-isolation/stream": {
@@ -424,8 +424,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "audio_isolation",
         "x-fern-sdk-method-name": "audio_isolation_stream",
+        "x-fern-sdk-group-name": "audio_isolation",
         "x-fern-streaming": true
       }
     },
@@ -442,9 +442,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -454,9 +454,9 @@
             "schema": {
               "type": "string",
               "title": "Sample Id",
-              "description": "Sample ID to be used, you can use GET https://api.elevenlabs.io/v1/voices/{voice_id} to list all the available samples for a voice."
+              "description": "Sample ID to be used, you can use GET https://api.elevenlabs.io/v1/voices/{voice_id} to list all the available samples for a voice.",
+              "examples": ["VW7YKqPnjY4h39yTbx2L"]
             },
-            "example": "VW7YKqPnjY4h39yTbx2L",
             "name": "sample_id",
             "in": "path"
           },
@@ -486,8 +486,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "samples",
-        "x-fern-sdk-method-name": "delete"
+        "x-fern-sdk-method-name": "delete",
+        "x-fern-sdk-group-name": "samples"
       }
     },
     "/v1/voices/{voice_id}/samples/{sample_id}/audio": {
@@ -503,9 +503,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -515,9 +515,9 @@
             "schema": {
               "type": "string",
               "title": "Sample Id",
-              "description": "Sample ID to be used, you can use GET https://api.elevenlabs.io/v1/voices/{voice_id} to list all the available samples for a voice."
+              "description": "Sample ID to be used, you can use GET https://api.elevenlabs.io/v1/voices/{voice_id} to list all the available samples for a voice.",
+              "examples": ["VW7YKqPnjY4h39yTbx2L"]
             },
-            "example": "VW7YKqPnjY4h39yTbx2L",
             "name": "sample_id",
             "in": "path"
           },
@@ -544,8 +544,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "samples",
-        "x-fern-sdk-method-name": "get_audio"
+        "x-fern-sdk-method-name": "get_audio",
+        "x-fern-sdk-group-name": "samples"
       }
     },
     "/v1/text-to-speech/{voice_id}": {
@@ -561,9 +561,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -626,7 +626,10 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "Successful Response", "content": { "audio/mpeg": {} } },
+          "200": {
+            "description": "The generated audio file",
+            "content": { "audio/mpeg": { "schema": { "type": "string", "format": "binary" } } }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -636,15 +639,15 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_speech",
-        "x-fern-sdk-method-name": "convert"
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": "text_to_speech"
       }
     },
     "/v1/text-to-speech/{voice_id}/with-timestamps": {
       "post": {
         "tags": ["text-to-speech"],
         "summary": "Text To Speech With Timestamps",
-        "description": "Converts text into speech using a voice of your choice and returns JSON containing audio as a base64 encoded string together with information on when which character was spoken.",
+        "description": "Generate speech from text with precise character-level timing information for audio-text synchronization.",
         "operationId": "Text_to_speech_with_timestamps_v1_text_to_speech__voice_id__with_timestamps_post",
         "parameters": [
           {
@@ -653,9 +656,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -718,7 +721,14 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "Successful Response", "content": { "application/json": {} } },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AudioWithTimestampsResponseModel" }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -728,8 +738,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_speech",
-        "x-fern-sdk-method-name": "convert_with_timestamps"
+        "x-fern-sdk-method-name": "convert_with_timestamps",
+        "x-fern-sdk-group-name": "text_to_speech"
       }
     },
     "/v1/text-to-speech/{voice_id}/stream": {
@@ -745,9 +755,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -810,7 +820,10 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "Successful Response" },
+          "200": {
+            "description": "Streaming audio data",
+            "content": { "audio/mpeg": { "schema": { "type": "string", "format": "binary" } } }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -820,8 +833,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-streaming": true
       }
     },
@@ -838,9 +851,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -903,7 +916,16 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "Successful Response" },
+          "200": {
+            "description": "Stream of transcription chunks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreamingAudioChunkWithTimestampsResponseModel"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -913,8 +935,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-sdk-method-name": "stream_with_timestamps",
+        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-streaming": true
       }
     },
@@ -931,9 +953,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1009,8 +1031,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "speech_to_speech",
-        "x-fern-sdk-method-name": "convert"
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": "speech_to_speech"
       }
     },
     "/v1/speech-to-speech/{voice_id}/stream": {
@@ -1026,9 +1048,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1104,8 +1126,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "speech_to_speech",
         "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-group-name": "speech_to_speech",
         "x-fern-streaming": true
       }
     },
@@ -1125,8 +1147,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voice_generation",
-        "x-fern-sdk-method-name": "generate_parameters"
+        "x-fern-sdk-method-name": "generate_parameters",
+        "x-fern-sdk-group-name": "voice_generation"
       }
     },
     "/v1/voice-generation/generate-voice": {
@@ -1169,8 +1191,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voice_generation",
-        "x-fern-sdk-method-name": "generate"
+        "x-fern-sdk-method-name": "generate",
+        "x-fern-sdk-group-name": "voice_generation"
       }
     },
     "/v1/text-to-voice/create-previews": {
@@ -1244,8 +1266,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_voice",
-        "x-fern-sdk-method-name": "create_previews"
+        "x-fern-sdk-method-name": "create_previews",
+        "x-fern-sdk-group-name": "text_to_voice"
       }
     },
     "/v1/voice-generation/create-voice": {
@@ -1295,8 +1317,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voice_generation",
-        "x-fern-sdk-method-name": "create_a_previously_generated_voice"
+        "x-fern-sdk-method-name": "create_a_previously_generated_voice",
+        "x-fern-sdk-group-name": "voice_generation"
       }
     },
     "/v1/text-to-voice/create-voice-from-preview": {
@@ -1346,8 +1368,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_voice",
-        "x-fern-sdk-method-name": "create_voice_from_preview"
+        "x-fern-sdk-method-name": "create_voice_from_preview",
+        "x-fern-sdk-group-name": "text_to_voice"
       }
     },
     "/v1/user/subscription": {
@@ -1387,8 +1409,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "user",
-        "x-fern-sdk-method-name": "get_subscription"
+        "x-fern-sdk-method-name": "get_subscription",
+        "x-fern-sdk-group-name": "user"
       }
     },
     "/v1/user": {
@@ -1426,8 +1448,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "user",
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": "user"
       }
     },
     "/v1/voices": {
@@ -1444,9 +1466,9 @@
               "type": "boolean",
               "title": "Show Legacy",
               "description": "If set to true, legacy premade voices will be included in responses from /v1/voices",
-              "default": false
+              "default": false,
+              "examples": [true]
             },
-            "example": true,
             "name": "show_legacy",
             "in": "query"
           },
@@ -1480,8 +1502,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "get_all",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/settings/default": {
@@ -1500,8 +1522,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_default_settings"
+        "x-fern-sdk-method-name": "get_default_settings",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/{voice_id}/settings": {
@@ -1517,9 +1539,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1553,8 +1575,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_settings"
+        "x-fern-sdk-method-name": "get_settings",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/{voice_id}": {
@@ -1570,9 +1592,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1619,8 +1641,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": "voices"
       },
       "delete": {
         "tags": ["voices"],
@@ -1634,9 +1656,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1666,8 +1688,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "delete"
+        "x-fern-sdk-method-name": "delete",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/{voice_id}/settings/edit": {
@@ -1683,9 +1705,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1727,8 +1749,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "edit_settings"
+        "x-fern-sdk-method-name": "edit_settings",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/add": {
@@ -1776,8 +1798,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "add"
+        "x-fern-sdk-method-name": "add",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/{voice_id}/edit": {
@@ -1793,9 +1815,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1835,8 +1857,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "edit"
+        "x-fern-sdk-method-name": "edit",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/voices/add/{public_user_id}/{voice_id}": {
@@ -1852,9 +1874,9 @@
             "schema": {
               "type": "string",
               "title": "Public User Id",
-              "description": "Public user ID used to publicly identify ElevenLabs users."
+              "description": "Public user ID used to publicly identify ElevenLabs users.",
+              "examples": ["63e06b7e7cafdc46be4d2e0b3f045940231ae058d508589653d74d1265a574ca"]
             },
-            "example": "63e06b7e7cafdc46be4d2e0b3f045940231ae058d508589653d74d1265a574ca",
             "name": "public_user_id",
             "in": "path"
           },
@@ -1864,9 +1886,9 @@
             "schema": {
               "type": "string",
               "title": "Voice Id",
-              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices."
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "voice_id",
             "in": "path"
           },
@@ -1910,8 +1932,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "add_sharing_voice"
+        "x-fern-sdk-method-name": "add_sharing_voice",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/studio/podcasts": {
@@ -1961,8 +1983,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "studio",
-        "x-fern-sdk-method-name": "create_podcast"
+        "x-fern-sdk-method-name": "create_podcast",
+        "x-fern-sdk-group-name": "studio"
       }
     },
     "/v1/projects/podcast/create": {
@@ -2052,8 +2074,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "get_all",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       },
       "post": {
         "tags": ["studio"],
@@ -2101,8 +2123,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "add"
+        "x-fern-sdk-method-name": "add",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects": {
@@ -2206,9 +2228,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2242,8 +2264,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       },
       "post": {
         "tags": ["studio"],
@@ -2257,9 +2279,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2303,8 +2325,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "update_metadata"
+        "x-fern-sdk-method-name": "update_metadata",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       },
       "delete": {
         "tags": ["studio"],
@@ -2318,9 +2340,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2350,8 +2372,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "delete"
+        "x-fern-sdk-method-name": "delete",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects/{project_id}": {
@@ -2367,9 +2389,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2417,9 +2439,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2477,9 +2499,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2525,9 +2547,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2570,8 +2592,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "update_content"
+        "x-fern-sdk-method-name": "update_content",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects/{project_id}/content": {
@@ -2587,9 +2609,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2648,9 +2670,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2680,8 +2702,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "convert"
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects/{project_id}/convert": {
@@ -2697,9 +2719,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2745,9 +2767,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2781,8 +2803,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "get_snapshots"
+        "x-fern-sdk-method-name": "get_snapshots",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects/{project_id}/snapshots": {
@@ -2798,9 +2820,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2850,9 +2872,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2862,9 +2884,9 @@
             "schema": {
               "type": "string",
               "title": "Project Snapshot Id",
-              "description": "The ID of the Studio project snapshot."
+              "description": "The ID of the Studio project snapshot.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_snapshot_id",
             "in": "path"
           },
@@ -2900,8 +2922,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
         "x-fern-sdk-method-name": "stream_audio",
+        "x-fern-sdk-group-name": ["studio", "projects"],
         "x-fern-streaming": true
       }
     },
@@ -2918,9 +2940,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2930,9 +2952,9 @@
             "schema": {
               "type": "string",
               "title": "Project Snapshot Id",
-              "description": "The ID of the Studio project snapshot."
+              "description": "The ID of the Studio project snapshot.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_snapshot_id",
             "in": "path"
           },
@@ -2984,9 +3006,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -2996,9 +3018,9 @@
             "schema": {
               "type": "string",
               "title": "Project Snapshot Id",
-              "description": "The ID of the Studio project snapshot."
+              "description": "The ID of the Studio project snapshot.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_snapshot_id",
             "in": "path"
           },
@@ -3025,8 +3047,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "stream_archive"
+        "x-fern-sdk-method-name": "stream_archive",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive": {
@@ -3042,9 +3064,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3054,9 +3076,9 @@
             "schema": {
               "type": "string",
               "title": "Project Snapshot Id",
-              "description": "The ID of the Studio project snapshot."
+              "description": "The ID of the Studio project snapshot.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_snapshot_id",
             "in": "path"
           },
@@ -3099,9 +3121,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3135,8 +3157,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "get_all",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       },
       "post": {
         "tags": ["studio"],
@@ -3150,9 +3172,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3196,8 +3218,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "create"
+        "x-fern-sdk-method-name": "create",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       }
     },
     "/v1/projects/{project_id}/chapters": {
@@ -3213,9 +3235,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3265,9 +3287,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3277,9 +3299,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3313,8 +3335,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       },
       "post": {
         "tags": ["studio"],
@@ -3328,9 +3350,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3340,9 +3362,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3385,8 +3407,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "edit"
+        "x-fern-sdk-method-name": "edit",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       },
       "delete": {
         "tags": ["studio"],
@@ -3400,9 +3422,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3412,9 +3434,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3444,8 +3466,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "delete"
+        "x-fern-sdk-method-name": "delete",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       }
     },
     "/v1/projects/{project_id}/chapters/{chapter_id}": {
@@ -3461,9 +3483,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3473,9 +3495,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3523,9 +3545,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3535,9 +3557,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3581,9 +3603,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3593,9 +3615,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3654,9 +3676,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3716,9 +3738,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3728,9 +3750,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3760,8 +3782,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "convert"
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       }
     },
     "/v1/projects/{project_id}/chapters/{chapter_id}/convert": {
@@ -3777,9 +3799,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3789,9 +3811,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3837,9 +3859,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3849,9 +3871,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3885,8 +3907,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
-        "x-fern-sdk-method-name": "get_all_snapshots"
+        "x-fern-sdk-method-name": "get_all_snapshots",
+        "x-fern-sdk-group-name": ["studio", "chapters"]
       }
     },
     "/v1/projects/{project_id}/chapters/{chapter_id}/snapshots": {
@@ -3902,9 +3924,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3914,9 +3936,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3966,9 +3988,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -3978,9 +4000,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -3990,9 +4012,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Snapshot Id",
-              "description": "The ID of the chapter snapshot."
+              "description": "The ID of the chapter snapshot.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_snapshot_id",
             "in": "path"
           },
@@ -4028,8 +4050,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
         "x-fern-sdk-method-name": "stream_snapshot",
+        "x-fern-sdk-group-name": ["studio", "chapters"],
         "x-fern-streaming": true
       }
     },
@@ -4046,9 +4068,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -4058,9 +4080,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Id",
-              "description": "The ID of the chapter."
+              "description": "The ID of the chapter.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_id",
             "in": "path"
           },
@@ -4070,9 +4092,9 @@
             "schema": {
               "type": "string",
               "title": "Chapter Snapshot Id",
-              "description": "The ID of the chapter snapshot."
+              "description": "The ID of the chapter snapshot.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "chapter_snapshot_id",
             "in": "path"
           },
@@ -4124,9 +4146,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -4166,8 +4188,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
-        "x-fern-sdk-method-name": "update_pronunciation_dictionaries"
+        "x-fern-sdk-method-name": "update_pronunciation_dictionaries",
+        "x-fern-sdk-group-name": ["studio", "projects"]
       }
     },
     "/v1/projects/{project_id}/update-pronunciation-dictionaries": {
@@ -4183,9 +4205,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -4274,8 +4296,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
+        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file",
+        "x-fern-sdk-group-name": "dubbing"
       }
     },
     "/v1/dubbing/{dubbing_id}": {
@@ -4326,8 +4348,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
+        "x-fern-sdk-method-name": "get_dubbing_project_metadata",
+        "x-fern-sdk-group-name": "dubbing"
       },
       "delete": {
         "tags": ["dubbing"],
@@ -4372,8 +4394,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "delete_dubbing_project"
+        "x-fern-sdk-method-name": "delete_dubbing_project",
+        "x-fern-sdk-group-name": "dubbing"
       }
     },
     "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
@@ -4431,8 +4453,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbed_file"
+        "x-fern-sdk-method-name": "get_dubbed_file",
+        "x-fern-sdk-group-name": "dubbing"
       }
     },
     "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
@@ -4504,8 +4526,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_transcript"
+        "x-fern-sdk-method-name": "get_dubbing_transcript",
+        "x-fern-sdk-group-name": "dubbing"
       }
     },
     "/v1/models": {
@@ -4549,8 +4571,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "models",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "get_all",
+        "x-fern-sdk-group-name": "models"
       }
     },
     "/v1/audio-native": {
@@ -4600,8 +4622,63 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "audio_native",
-        "x-fern-sdk-method-name": "create"
+        "x-fern-sdk-method-name": "create",
+        "x-fern-sdk-group-name": "audio_native"
+      }
+    },
+    "/v1/audio-native/{project_id}/settings": {
+      "get": {
+        "tags": ["audio-native"],
+        "summary": "Audionative Settings",
+        "description": "Get player settings for the specific project.",
+        "operationId": "AudioNative_settings_v1_audio_native__project_id__settings_get",
+        "parameters": [
+          {
+            "description": "The ID of the Studio project.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id",
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
+            },
+            "name": "project_id",
+            "in": "path"
+          },
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAudioNativeProjectSettingsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "get_settings",
+        "x-fern-sdk-group-name": "audio_native"
       }
     },
     "/v1/audio-native/{project_id}/content": {
@@ -4617,9 +4694,9 @@
             "schema": {
               "type": "string",
               "title": "Project Id",
-              "description": "The ID of the Studio project."
+              "description": "The ID of the Studio project.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "project_id",
             "in": "path"
           },
@@ -4662,8 +4739,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "audio_native",
-        "x-fern-sdk-method-name": "update_content"
+        "x-fern-sdk-method-name": "update_content",
+        "x-fern-sdk-group-name": "audio_native"
       }
     },
     "/v1/shared-voices": {
@@ -4691,9 +4768,9 @@
             "schema": {
               "type": "string",
               "title": "Category",
-              "description": "voice category used for filtering"
+              "description": "voice category used for filtering",
+              "examples": ["professional"]
             },
-            "example": "professional",
             "name": "category",
             "in": "query"
           },
@@ -4703,17 +4780,21 @@
             "schema": {
               "type": "string",
               "title": "Gender",
-              "description": "gender used for filtering"
+              "description": "gender used for filtering",
+              "examples": ["male"]
             },
-            "example": "male",
             "name": "gender",
             "in": "query"
           },
           {
             "description": "age used for filtering",
             "required": false,
-            "schema": { "type": "string", "title": "Age", "description": "age used for filtering" },
-            "example": "young",
+            "schema": {
+              "type": "string",
+              "title": "Age",
+              "description": "age used for filtering",
+              "examples": ["young"]
+            },
             "name": "age",
             "in": "query"
           },
@@ -4723,9 +4804,9 @@
             "schema": {
               "type": "string",
               "title": "Accent",
-              "description": "accent used for filtering"
+              "description": "accent used for filtering",
+              "examples": ["american"]
             },
-            "example": "american",
             "name": "accent",
             "in": "query"
           },
@@ -4735,9 +4816,9 @@
             "schema": {
               "type": "string",
               "title": "Language",
-              "description": "language used for filtering"
+              "description": "language used for filtering",
+              "examples": ["en"]
             },
-            "example": "en",
             "name": "language",
             "in": "query"
           },
@@ -4747,9 +4828,9 @@
             "schema": {
               "type": "string",
               "title": "Search",
-              "description": "search term used for filtering"
+              "description": "search term used for filtering",
+              "examples": ["tiktok"]
             },
-            "example": "tiktok",
             "name": "search",
             "in": "query"
           },
@@ -4760,9 +4841,9 @@
               "items": { "type": "string" },
               "type": "array",
               "title": "Use Cases",
-              "description": "use-case used for filtering"
+              "description": "use-case used for filtering",
+              "examples": ["audiobook"]
             },
-            "example": "audiobook",
             "name": "use_cases",
             "in": "query"
           },
@@ -4773,9 +4854,9 @@
               "items": { "type": "string" },
               "type": "array",
               "title": "Descriptives",
-              "description": "search term used for filtering"
+              "description": "search term used for filtering",
+              "examples": ["tiktok"]
             },
-            "example": "tiktok",
             "name": "descriptives",
             "in": "query"
           },
@@ -4786,10 +4867,22 @@
               "type": "boolean",
               "title": "Featured",
               "description": "Filter featured voices",
-              "default": false
+              "default": false,
+              "examples": [true]
             },
-            "example": true,
             "name": "featured",
+            "in": "query"
+          },
+          {
+            "description": "Filter voices with a minimum notice period of the given number of days.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Min Notice Period Days",
+              "description": "Filter voices with a minimum notice period of the given number of days.",
+              "examples": [30]
+            },
+            "name": "min_notice_period_days",
             "in": "query"
           },
           {
@@ -4799,9 +4892,9 @@
               "type": "boolean",
               "title": "Reader App Enabled",
               "description": "Filter voices that are enabled for the reader app",
-              "default": false
+              "default": false,
+              "examples": [true]
             },
-            "example": true,
             "name": "reader_app_enabled",
             "in": "query"
           },
@@ -4811,17 +4904,21 @@
             "schema": {
               "type": "string",
               "title": "Owner Id",
-              "description": "Filter voices by public owner ID"
+              "description": "Filter voices by public owner ID",
+              "examples": ["7c9fab611d9a0e1fb2e7448a0c294a8804efc2bcc324b0a366a5d5232b7d1532"]
             },
-            "example": "7c9fab611d9a0e1fb2e7448a0c294a8804efc2bcc324b0a366a5d5232b7d1532",
             "name": "owner_id",
             "in": "query"
           },
           {
             "description": "sort criteria",
             "required": false,
-            "schema": { "type": "string", "title": "Sort", "description": "sort criteria" },
-            "example": "created_date",
+            "schema": {
+              "type": "string",
+              "title": "Sort",
+              "description": "sort criteria",
+              "examples": ["created_date"]
+            },
             "name": "sort",
             "in": "query"
           },
@@ -4861,8 +4958,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_shared"
+        "x-fern-sdk-method-name": "get_shared",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/similar-voices": {
@@ -4911,8 +5008,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_similar_library_voices"
+        "x-fern-sdk-method-name": "get_similar_library_voices",
+        "x-fern-sdk-group-name": "voices"
       }
     },
     "/v1/usage/character-stats": {
@@ -4928,9 +5025,9 @@
             "schema": {
               "type": "integer",
               "title": "Start Unix",
-              "description": "UTC Unix timestamp for the start of the usage window, in milliseconds. To include the first day of the window, the timestamp should be at 00:00:00 of that day."
+              "description": "UTC Unix timestamp for the start of the usage window, in milliseconds. To include the first day of the window, the timestamp should be at 00:00:00 of that day.",
+              "examples": ["1685574000"]
             },
-            "example": "1685574000",
             "name": "start_unix",
             "in": "query"
           },
@@ -4940,9 +5037,9 @@
             "schema": {
               "type": "integer",
               "title": "End Unix",
-              "description": "UTC Unix timestamp for the end of the usage window, in milliseconds. To include the last day of the window, the timestamp should be at 23:59:59 of that day."
+              "description": "UTC Unix timestamp for the end of the usage window, in milliseconds. To include the last day of the window, the timestamp should be at 23:59:59 of that day.",
+              "examples": ["1688165999"]
             },
-            "example": "1688165999",
             "name": "end_unix",
             "in": "query"
           },
@@ -4999,8 +5096,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "usage",
-        "x-fern-sdk-method-name": "get_characters_usage_metrics"
+        "x-fern-sdk-method-name": "get_characters_usage_metrics",
+        "x-fern-sdk-group-name": "usage"
       }
     },
     "/v1/pronunciation-dictionaries/add-from-file": {
@@ -5050,8 +5147,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "add_from_file"
+        "x-fern-sdk-method-name": "add_from_file",
+        "x-fern-sdk-group-name": "pronunciation_dictionary"
       }
     },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
@@ -5067,9 +5164,9 @@
             "schema": {
               "type": "string",
               "title": "Pronunciation Dictionary Id",
-              "description": "The id of the pronunciation dictionary"
+              "description": "The id of the pronunciation dictionary",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "pronunciation_dictionary_id",
             "in": "path"
           },
@@ -5115,8 +5212,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "add_rules"
+        "x-fern-sdk-method-name": "add_rules",
+        "x-fern-sdk-group-name": "pronunciation_dictionary"
       }
     },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules": {
@@ -5132,9 +5229,9 @@
             "schema": {
               "type": "string",
               "title": "Pronunciation Dictionary Id",
-              "description": "The id of the pronunciation dictionary"
+              "description": "The id of the pronunciation dictionary",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "pronunciation_dictionary_id",
             "in": "path"
           },
@@ -5180,8 +5277,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "remove_rules"
+        "x-fern-sdk-method-name": "remove_rules",
+        "x-fern-sdk-group-name": "pronunciation_dictionary"
       }
     },
     "/v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download": {
@@ -5197,9 +5294,9 @@
             "schema": {
               "type": "string",
               "title": "Dictionary Id",
-              "description": "The id of the pronunciation dictionary"
+              "description": "The id of the pronunciation dictionary",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "dictionary_id",
             "in": "path"
           },
@@ -5209,9 +5306,9 @@
             "schema": {
               "type": "string",
               "title": "Version Id",
-              "description": "The id of the version of the pronunciation dictionary"
+              "description": "The id of the version of the pronunciation dictionary",
+              "examples": ["BdF0s0aZ3oFoKnDYdTox"]
             },
-            "example": "BdF0s0aZ3oFoKnDYdTox",
             "name": "version_id",
             "in": "path"
           },
@@ -5238,8 +5335,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "download"
+        "x-fern-sdk-method-name": "download",
+        "x-fern-sdk-group-name": "pronunciation_dictionary"
       }
     },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/": {
@@ -5255,9 +5352,9 @@
             "schema": {
               "type": "string",
               "title": "Pronunciation Dictionary Id",
-              "description": "The id of the pronunciation dictionary"
+              "description": "The id of the pronunciation dictionary",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "pronunciation_dictionary_id",
             "in": "path"
           },
@@ -5293,8 +5390,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": "pronunciation_dictionary"
       }
     },
     "/v1/pronunciation-dictionaries/": {
@@ -5361,8 +5458,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "get_all",
+        "x-fern-sdk-group-name": "pronunciation_dictionary"
       }
     },
     "/v1/workspace/groups/search": {
@@ -5724,9 +5821,9 @@
             "schema": {
               "type": "string",
               "title": "Handle",
-              "description": "Handle for a VA's profile page"
+              "description": "Handle for a VA's profile page",
+              "examples": ["talexgeorge"]
             },
-            "example": "talexgeorge",
             "name": "handle",
             "in": "path"
           }
@@ -5749,8 +5846,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "profile",
-        "x-fern-sdk-method-name": "get"
+        "x-fern-sdk-method-name": "get",
+        "x-fern-sdk-group-name": "profile"
       }
     },
     "/v1/convai/conversation/get_signed_url": {
@@ -5766,9 +5863,9 @@
             "schema": {
               "type": "string",
               "title": "Agent Id",
-              "description": "The id of the agent you're taking the action on."
+              "description": "The id of the agent you're taking the action on.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "query"
           },
@@ -5802,8 +5899,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_signed_url"
+        "x-fern-sdk-method-name": "get_signed_url",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/create": {
@@ -5865,8 +5962,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_agent"
+        "x-fern-sdk-method-name": "create_agent",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/{agent_id}": {
@@ -5883,9 +5980,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -5919,8 +6016,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agent"
+        "x-fern-sdk-method-name": "get_agent",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "delete": {
         "tags": ["Conversational AI"],
@@ -5935,9 +6032,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -5967,8 +6064,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_agent"
+        "x-fern-sdk-method-name": "delete_agent",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "patch": {
         "tags": ["Conversational AI"],
@@ -5983,9 +6080,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -6040,8 +6137,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_agent"
+        "x-fern-sdk-method-name": "update_agent",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/{agent_id}/widget": {
@@ -6058,9 +6155,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -6105,8 +6202,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agent_widget"
+        "x-fern-sdk-method-name": "get_agent_widget",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/{agent_id}/link": {
@@ -6123,9 +6220,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -6159,8 +6256,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agent_link"
+        "x-fern-sdk-method-name": "get_agent_link",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/{agent_id}/avatar": {
@@ -6177,9 +6274,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -6223,8 +6320,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "post_agent_avatar"
+        "x-fern-sdk-method-name": "post_agent_avatar",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/{agent_id}/add-secret": {
@@ -6241,9 +6338,9 @@
               "type": "string",
               "title": "Agent Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "path"
           },
@@ -6287,8 +6384,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "add_agent_secret"
+        "x-fern-sdk-method-name": "add_agent_secret",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents": {
@@ -6364,8 +6461,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agents"
+        "x-fern-sdk-method-name": "get_agents",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/conversations": {
@@ -6392,9 +6489,9 @@
             "schema": {
               "type": "string",
               "title": "Agent Id",
-              "description": "The id of the agent you're taking the action on."
+              "description": "The id of the agent you're taking the action on.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"]
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "agent_id",
             "in": "query"
           },
@@ -6403,9 +6500,9 @@
             "required": false,
             "schema": {
               "allOf": [{ "$ref": "#/components/schemas/EvaluationSuccessResult" }],
-              "description": "The result of the success evaluation"
+              "description": "The result of the success evaluation",
+              "examples": ["success"]
             },
-            "example": "success",
             "name": "call_successful",
             "in": "query"
           },
@@ -6453,8 +6550,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversations"
+        "x-fern-sdk-method-name": "get_conversations",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/conversations/{conversation_id}": {
@@ -6471,9 +6568,9 @@
               "type": "string",
               "title": "Conversation Id",
               "description": "The id of the conversation you're taking the action on.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "conversation_id",
             "in": "path"
           },
@@ -6507,8 +6604,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversation"
+        "x-fern-sdk-method-name": "get_conversation",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "delete": {
         "tags": ["Conversational AI"],
@@ -6523,9 +6620,9 @@
               "type": "string",
               "title": "Conversation Id",
               "description": "The id of the conversation you're taking the action on.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "conversation_id",
             "in": "path"
           },
@@ -6555,8 +6652,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_conversation"
+        "x-fern-sdk-method-name": "delete_conversation",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/conversations/{conversation_id}/audio": {
@@ -6573,9 +6670,9 @@
               "type": "string",
               "title": "Conversation Id",
               "description": "The id of the conversation you're taking the action on.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "conversation_id",
             "in": "path"
           },
@@ -6602,8 +6699,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversation_audio"
+        "x-fern-sdk-method-name": "get_conversation_audio",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/conversations/{conversation_id}/feedback": {
@@ -6620,9 +6717,9 @@
               "type": "string",
               "title": "Conversation Id",
               "description": "The id of the conversation you're taking the action on.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "conversation_id",
             "in": "path"
           }
@@ -6651,8 +6748,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "post_conversation_feedback"
+        "x-fern-sdk-method-name": "post_conversation_feedback",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/phone-numbers/create": {
@@ -6704,8 +6801,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_phone_number"
+        "x-fern-sdk-method-name": "create_phone_number",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/phone-numbers/{phone_number_id}": {
@@ -6722,9 +6819,9 @@
               "type": "string",
               "title": "Phone Number Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["TeaqRRdTcIfIu2i7BYfT"],
               "embed": true
             },
-            "example": "TeaqRRdTcIfIu2i7BYfT",
             "name": "phone_number_id",
             "in": "path"
           },
@@ -6758,8 +6855,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_phone_number"
+        "x-fern-sdk-method-name": "get_phone_number",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "delete": {
         "tags": ["Conversational AI"],
@@ -6774,9 +6871,9 @@
               "type": "string",
               "title": "Phone Number Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["TeaqRRdTcIfIu2i7BYfT"],
               "embed": true
             },
-            "example": "TeaqRRdTcIfIu2i7BYfT",
             "name": "phone_number_id",
             "in": "path"
           },
@@ -6806,8 +6903,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_phone_number"
+        "x-fern-sdk-method-name": "delete_phone_number",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "patch": {
         "tags": ["Conversational AI"],
@@ -6822,9 +6919,9 @@
               "type": "string",
               "title": "Phone Number Id",
               "description": "The id of an agent. This is returned on agent creation.",
+              "examples": ["TeaqRRdTcIfIu2i7BYfT"],
               "embed": true
             },
-            "example": "TeaqRRdTcIfIu2i7BYfT",
             "name": "phone_number_id",
             "in": "path"
           },
@@ -6870,8 +6967,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_phone_number"
+        "x-fern-sdk-method-name": "update_phone_number",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/phone-numbers/": {
@@ -6915,8 +7012,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_phone_numbers"
+        "x-fern-sdk-method-name": "get_phone_numbers",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/knowledge-base": {
@@ -6952,6 +7049,41 @@
             "in": "query"
           },
           {
+            "description": "If specified, the endpoint returns only such knowledge base documents whose names start with this string.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Search",
+              "description": "If specified, the endpoint returns only such knowledge base documents whose names start with this string."
+            },
+            "name": "search",
+            "in": "query"
+          },
+          {
+            "description": "If set to true, the endpoint will return only documents owned by you (and not shared from somebody else).",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "title": "Show Only Owned Documents",
+              "description": "If set to true, the endpoint will return only documents owned by you (and not shared from somebody else).",
+              "default": false
+            },
+            "name": "show_only_owned_documents",
+            "in": "query"
+          },
+          {
+            "description": "If set to true, the endpoint will use typesense DB to search for the documents).",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "title": "Use Typesense",
+              "description": "If set to true, the endpoint will use typesense DB to search for the documents).",
+              "default": false
+            },
+            "name": "use_typesense",
+            "in": "query"
+          },
+          {
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
             "required": false,
             "schema": {
@@ -6981,8 +7113,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_list"
+        "x-fern-sdk-method-name": "get_knowledge_base_list",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "post": {
         "tags": ["Conversational AI"],
@@ -7029,8 +7161,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "add_to_knowledge_base"
+        "x-fern-sdk-method-name": "add_to_knowledge_base",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/add-to-knowledge-base": {
@@ -7147,9 +7279,9 @@
               "type": "string",
               "title": "Documentation Id",
               "description": "The id of a document from the knowledge base. This is returned on document addition.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "documentation_id",
             "in": "path"
           },
@@ -7183,8 +7315,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_document_by_id"
+        "x-fern-sdk-method-name": "get_knowledge_base_document_by_id",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "delete": {
         "tags": ["Conversational AI"],
@@ -7199,9 +7331,9 @@
               "type": "string",
               "title": "Documentation Id",
               "description": "The id of a document from the knowledge base. This is returned on document addition.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "documentation_id",
             "in": "path"
           },
@@ -7231,8 +7363,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_knowledge_base_document"
+        "x-fern-sdk-method-name": "delete_knowledge_base_document",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}": {
@@ -7249,9 +7381,9 @@
               "type": "string",
               "title": "Documentation Id",
               "description": "The id of a document from the knowledge base. This is returned on document addition.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "documentation_id",
             "in": "path"
           },
@@ -7303,9 +7435,9 @@
               "type": "string",
               "title": "Documentation Id",
               "description": "The id of a document from the knowledge base. This is returned on document addition.",
+              "examples": ["21m00Tcm4TlvDq8ikWAM"],
               "embed": true
             },
-            "example": "21m00Tcm4TlvDq8ikWAM",
             "name": "documentation_id",
             "in": "path"
           },
@@ -7366,8 +7498,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_dependent_agents"
+        "x-fern-sdk-method-name": "get_dependent_agents",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/tools": {
@@ -7407,8 +7539,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_tools"
+        "x-fern-sdk-method-name": "get_tools",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "post": {
         "tags": ["Conversational AI"],
@@ -7456,8 +7588,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "add_tool"
+        "x-fern-sdk-method-name": "add_tool",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/tools/{tool_id}": {
@@ -7506,8 +7638,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_tool"
+        "x-fern-sdk-method-name": "get_tool",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "delete": {
         "tags": ["Conversational AI"],
@@ -7552,8 +7684,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "remove_tool"
+        "x-fern-sdk-method-name": "remove_tool",
+        "x-fern-sdk-group-name": "conversational_ai"
       },
       "patch": {
         "tags": ["Conversational AI"],
@@ -7612,8 +7744,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_tool"
+        "x-fern-sdk-method-name": "update_tool",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/docs": {
@@ -7890,6 +8022,67 @@
         "required": ["project_id", "converting", "publishing", "html_snippet"],
         "title": "AudioNativeEditContentResponseModel"
       },
+      "AudioNativeProjectSettingsResponseModel": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "image": { "type": "string", "title": "Image" },
+          "author": { "type": "string", "title": "Author" },
+          "small": { "type": "boolean", "title": "Small" },
+          "text_color": { "type": "string", "title": "Text Color" },
+          "background_color": { "type": "string", "title": "Background Color" },
+          "sessionization": { "type": "integer", "title": "Sessionization" },
+          "audio_path": { "type": "string", "title": "Audio Path" },
+          "audio_url": { "type": "string", "title": "Audio Url" }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "image",
+          "author",
+          "small",
+          "text_color",
+          "background_color",
+          "sessionization",
+          "audio_path",
+          "audio_url"
+        ],
+        "title": "AudioNativeProjectSettingsResponseModel"
+      },
+      "AudioWithTimestampsResponseModel": {
+        "properties": {
+          "audio_base64": {
+            "type": "string",
+            "title": "Audio Base64",
+            "description": "Base64 encoded audio data"
+          },
+          "alignment": {
+            "allOf": [{ "$ref": "#/components/schemas/CharacterAlignmentResponseModel" }],
+            "title": "Alignment",
+            "description": "Timestamp information for each character in the original text"
+          },
+          "normalized_alignment": {
+            "allOf": [{ "$ref": "#/components/schemas/CharacterAlignmentResponseModel" }],
+            "title": "Normalized Alignment",
+            "description": "Timestamp information for each character in the normalized text"
+          }
+        },
+        "type": "object",
+        "required": ["audio_base64"],
+        "title": "AudioWithTimestampsResponseModel",
+        "example": {
+          "audio_base64": "base64_encoded_audio_string",
+          "alignment": {
+            "characters": ["H", "e", "l", "l", "o"],
+            "character_start_times_seconds": [0.0, 0.1, 0.2, 0.3, 0.4],
+            "character_end_times_seconds": [0.1, 0.2, 0.3, 0.4, 0.5]
+          },
+          "normalized_alignment": {
+            "characters": ["H", "e", "l", "l", "o"],
+            "character_start_times_seconds": [0.0, 0.1, 0.2, 0.3, 0.4],
+            "character_end_times_seconds": [0.1, 0.2, 0.3, 0.4, 0.5]
+          }
+        }
+      },
       "AuthSettings": {
         "properties": {
           "enable_auth": { "type": "boolean", "title": "Enable Auth", "default": false },
@@ -7920,7 +8113,8 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the pronunciation dictionary, used for identification only."
+            "description": "The name of the pronunciation dictionary, used for identification only.",
+            "examples": ["My Dictionary"]
           },
           "file": {
             "type": "string",
@@ -7931,13 +8125,15 @@
           "description": {
             "type": "string",
             "title": "Description",
-            "description": "A description of the pronunciation dictionary, used for identification only."
+            "description": "A description of the pronunciation dictionary, used for identification only.",
+            "examples": ["Contains pronunciation's of our character names"]
           },
           "workspace_access": {
             "type": "string",
             "enum": ["admin", "editor", "viewer"],
             "title": "Workspace Access",
-            "description": "Should be one of 'editor' or 'viewer'. If not provided, defaults to no access."
+            "description": "Should be one of 'editor' or 'viewer'. If not provided, defaults to no access.",
+            "examples": ["viewer"]
           }
         },
         "type": "object",
@@ -7949,12 +8145,14 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "A name to help identify a particular agent secret"
+            "description": "A name to help identify a particular agent secret",
+            "examples": ["MY API KEY"]
           },
           "secret_value": {
             "type": "string",
             "title": "Secret Value",
-            "description": "A value to be encrypted and used by the agent"
+            "description": "A value to be encrypted and used by the agent",
+            "examples": ["sk_api_12354abc"]
           }
         },
         "type": "object",
@@ -7966,12 +8164,14 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the chapter, used for identification only."
+            "description": "The name of the chapter, used for identification only.",
+            "examples": ["Chapter 1"]
           },
           "from_url": {
             "type": "string",
             "title": "From Url",
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank."
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "examples": ["https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"]
           }
         },
         "type": "object",
@@ -7995,27 +8195,32 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the Studio project, used for identification only."
+            "description": "The name of the Studio project, used for identification only.",
+            "examples": ["Project 1"]
           },
           "default_title_voice_id": {
             "type": "string",
             "title": "Default Title Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new titles."
+            "description": "The voice_id that corresponds to the default voice used for new titles.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "default_paragraph_voice_id": {
             "type": "string",
             "title": "Default Paragraph Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new paragraphs."
+            "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "default_model_id": {
             "type": "string",
             "title": "Default Model Id",
-            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models."
+            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "from_url": {
             "type": "string",
             "title": "From Url",
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank."
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "examples": ["https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"]
           },
           "from_document": {
             "type": "string",
@@ -8027,92 +8232,108 @@
             "type": "string",
             "title": "Quality of the generated audio.",
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
-            "default": "standard"
+            "default": "standard",
+            "examples": ["standard"]
           },
           "title": {
             "type": "string",
             "title": "Title",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["Romeo and Juliet"]
           },
           "author": {
             "type": "string",
             "title": "Author",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["William Shakespeare"]
           },
           "description": {
             "type": "string",
             "title": "Description",
-            "description": "An optional description of the Studio project."
+            "description": "An optional description of the Studio project.",
+            "examples": ["A tragic love story between two young lovers."]
           },
           "genres": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Genres",
-            "description": "An optional list of genres associated with the Studio project."
+            "description": "An optional list of genres associated with the Studio project.",
+            "examples": [["Romance", "Drama"]]
           },
           "target_audience": {
             "type": "string",
             "enum": ["children", "young adult", "adult", "all ages"],
             "title": "Target Audience",
-            "description": "An optional target audience of the Studio project."
+            "description": "An optional target audience of the Studio project.",
+            "examples": ["adult"]
           },
           "language": {
             "type": "string",
             "maxLength": 2,
             "minLength": 2,
             "title": "Language",
-            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1)."
+            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1).",
+            "examples": ["en"]
           },
           "content_type": {
             "type": "string",
             "title": "Content Type",
-            "description": "An optional content type of the Studio project."
+            "description": "An optional content type of the Studio project.",
+            "examples": ["Book"]
           },
           "original_publication_date": {
             "type": "string",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$|^\\d{4}$",
             "title": "Original Publication Date",
-            "description": "An optional original publication date of the Studio project, in the format YYYY-MM-DD or YYYY."
+            "description": "An optional original publication date of the Studio project, in the format YYYY-MM-DD or YYYY.",
+            "examples": ["1597-01-01"]
           },
           "mature_content": {
             "type": "boolean",
             "title": "Mature Content",
             "description": "An optional specification of whether this Studio project contains mature content.",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "isbn_number": {
             "type": "string",
             "title": "Isbn Number",
-            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["0-306-40615-2"]
           },
           "acx_volume_normalization": {
             "type": "boolean",
             "title": "Acx Volume Normalization",
             "description": "[Deprecated] When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "volume_normalization": {
             "type": "boolean",
             "title": "Volume Normalization",
             "description": "When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "pronunciation_dictionary_locators": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
-            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first."
+            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first.",
+            "examples": [["{\"pronunciation_dictionary_id\": \"test\", \"version_id\": \"id2\"}"]]
           },
           "callback_url": {
             "type": "string",
             "title": "Callback Url",
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion"
+            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "examples": [["https://www.test.com/my-api/projects-status"]]
           },
           "fiction": {
             "type": "string",
             "enum": ["fiction", "non-fiction"],
             "title": "Fiction",
-            "description": "An optional specification of whether the content of this Studio project is fiction."
+            "description": "An optional specification of whether the content of this Studio project is fiction.",
+            "examples": ["fiction"]
           },
           "quality_check_on": {
             "type": "boolean",
@@ -8158,7 +8379,10 @@
             },
             "type": "array",
             "title": "Rules",
-            "description": "List of pronunciation rules. Rule can be either:\n    an alias rule: {'string_to_replace': 'a', 'type': 'alias', 'alias': 'b', }\n    or a phoneme rule: {'string_to_replace': 'a', 'type': 'phoneme', 'phoneme': 'b', 'alphabet': 'ipa' }"
+            "description": "List of pronunciation rules. Rule can be either:\n    an alias rule: {'string_to_replace': 'a', 'type': 'alias', 'alias': 'b', }\n    or a phoneme rule: {'string_to_replace': 'a', 'type': 'phoneme', 'phoneme': 'b', 'alphabet': 'ipa' }",
+            "examples": [
+              "\n    [\n        {'string_to_replace': 'a', 'type': 'alias', 'alias': 'b' },\n        {'string_to_replace': 'c', 'type': 'phoneme', 'phoneme': 'd', 'alphabet': 'ipa' }\n    ]"
+            ]
           }
         },
         "type": "object",
@@ -8170,7 +8394,8 @@
           "new_name": {
             "type": "string",
             "title": "New Name",
-            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website."
+            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
+            "examples": ["Joe Rogan"]
           }
         },
         "type": "object",
@@ -8233,7 +8458,8 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website."
+            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
+            "examples": ["Joe Rogan"]
           },
           "files": {
             "items": { "type": "string", "format": "binary" },
@@ -8245,12 +8471,16 @@
             "type": "boolean",
             "title": "Remove Background Noise",
             "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
-            "default": false
+            "default": false,
+            "examples": [true]
           },
           "description": {
             "type": "string",
             "title": "Description",
-            "description": "How would you describe the voice?"
+            "description": "How would you describe the voice?",
+            "examples": [
+              "An old American male voice with a slight hoarseness in his throat. Perfect for news."
+            ]
           },
           "labels": {
             "type": "string",
@@ -8304,6 +8534,7 @@
             "type": "string",
             "title": "Name",
             "description": "A name to make the agent easier to find",
+            "examples": ["My agent"],
             "optional": true
           }
         },
@@ -8319,7 +8550,15 @@
             },
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
-            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first."
+            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first.",
+            "examples": [["{\"pronunciation_dictionary_id\": \"test\", \"version_id\": \"id2\"}"]]
+          },
+          "invalidate_affected_text": {
+            "type": "boolean",
+            "title": "Invalidate Affected Text",
+            "description": "This will automatically mark text in this project for reconversion when the new dictionary applies or the old one no longer does.",
+            "default": true,
+            "examples": [false]
           }
         },
         "type": "object",
@@ -8331,27 +8570,32 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the Studio project, used for identification only."
+            "description": "The name of the Studio project, used for identification only.",
+            "examples": ["Project 1"]
           },
           "default_title_voice_id": {
             "type": "string",
             "title": "Default Title Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new titles."
+            "description": "The voice_id that corresponds to the default voice used for new titles.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "default_paragraph_voice_id": {
             "type": "string",
             "title": "Default Paragraph Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new paragraphs."
+            "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "default_model_id": {
             "type": "string",
             "title": "Default Model Id",
-            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models."
+            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "from_url": {
             "type": "string",
             "title": "From Url",
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank."
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "examples": ["https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"]
           },
           "from_document": {
             "type": "string",
@@ -8363,92 +8607,108 @@
             "type": "string",
             "title": "Quality of the generated audio.",
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
-            "default": "standard"
+            "default": "standard",
+            "examples": ["standard"]
           },
           "title": {
             "type": "string",
             "title": "Title",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["Romeo and Juliet"]
           },
           "author": {
             "type": "string",
             "title": "Author",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["William Shakespeare"]
           },
           "description": {
             "type": "string",
             "title": "Description",
-            "description": "An optional description of the Studio project."
+            "description": "An optional description of the Studio project.",
+            "examples": ["A tragic love story between two young lovers."]
           },
           "genres": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Genres",
-            "description": "An optional list of genres associated with the Studio project."
+            "description": "An optional list of genres associated with the Studio project.",
+            "examples": [["Romance", "Drama"]]
           },
           "target_audience": {
             "type": "string",
             "enum": ["children", "young adult", "adult", "all ages"],
             "title": "Target Audience",
-            "description": "An optional target audience of the Studio project."
+            "description": "An optional target audience of the Studio project.",
+            "examples": ["adult"]
           },
           "language": {
             "type": "string",
             "maxLength": 2,
             "minLength": 2,
             "title": "Language",
-            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1)."
+            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1).",
+            "examples": ["en"]
           },
           "content_type": {
             "type": "string",
             "title": "Content Type",
-            "description": "An optional content type of the Studio project."
+            "description": "An optional content type of the Studio project.",
+            "examples": ["Book"]
           },
           "original_publication_date": {
             "type": "string",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$|^\\d{4}$",
             "title": "Original Publication Date",
-            "description": "An optional original publication date of the Studio project, in the format YYYY-MM-DD or YYYY."
+            "description": "An optional original publication date of the Studio project, in the format YYYY-MM-DD or YYYY.",
+            "examples": ["1597-01-01"]
           },
           "mature_content": {
             "type": "boolean",
             "title": "Mature Content",
             "description": "An optional specification of whether this Studio project contains mature content.",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "isbn_number": {
             "type": "string",
             "title": "Isbn Number",
-            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["0-306-40615-2"]
           },
           "acx_volume_normalization": {
             "type": "boolean",
             "title": "Acx Volume Normalization",
             "description": "[Deprecated] When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "volume_normalization": {
             "type": "boolean",
             "title": "Volume Normalization",
             "description": "When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "pronunciation_dictionary_locators": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
-            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first."
+            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first.",
+            "examples": [["{\"pronunciation_dictionary_id\": \"test\", \"version_id\": \"id2\"}"]]
           },
           "callback_url": {
             "type": "string",
             "title": "Callback Url",
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion"
+            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "examples": [["https://www.test.com/my-api/projects-status"]]
           },
           "fiction": {
             "type": "string",
             "enum": ["fiction", "non-fiction"],
             "title": "Fiction",
-            "description": "An optional specification of whether the content of this Studio project is fiction."
+            "description": "An optional specification of whether the content of this Studio project is fiction.",
+            "examples": ["fiction"]
           },
           "quality_check_on": {
             "type": "boolean",
@@ -8569,12 +8829,14 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the chapter, used for identification only."
+            "description": "The name of the chapter, used for identification only.",
+            "examples": ["Chapter 1"]
           },
           "from_url": {
             "type": "string",
             "title": "From Url",
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank."
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "examples": ["https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"]
           }
         },
         "type": "object",
@@ -8586,7 +8848,8 @@
           "model_id": {
             "type": "string",
             "title": "Model Id",
-            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models."
+            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "mode": {
             "anyOf": [
@@ -8594,7 +8857,16 @@
               { "$ref": "#/components/schemas/PodcastBulletinMode" }
             ],
             "title": "Mode",
-            "description": "The type of podcast to generate"
+            "description": "The type of podcast to generate",
+            "examples": [
+              {
+                "type": "conversation",
+                "conversation": {
+                  "host_voice_id": "6lCwbsX1yVjD49QmpkTR",
+                  "guest_voice_id": "bYTqZQo3Jz7LQtmGTgwi"
+                }
+              }
+            ]
           },
           "source": {
             "anyOf": [
@@ -8611,28 +8883,34 @@
               }
             ],
             "title": "Source",
-            "description": "The source content for the Podcast."
+            "description": "The source content for the Podcast.",
+            "examples": [
+              { "type": "url", "url": "https://en.wikipedia.org/wiki/Cognitive_science" }
+            ]
           },
           "quality_preset": {
             "type": "string",
             "enum": ["standard", "high", "highest", "ultra", "ultra_lossless"],
             "title": "Quality of the generated audio.",
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
-            "default": "standard"
+            "default": "standard",
+            "examples": ["standard"]
           },
           "duration_scale": {
             "type": "string",
             "enum": ["short", "default", "long"],
             "title": "The duration of the generated podcast. This varies depending on the format, voice and language.",
             "description": "Duration of the generated podcast. Must be one of:\nshort - produces podcasts shorter than 3 minutes.\ndefault - produces podcasts roughly between 3-7 minutes.\nlong - prodces podcasts longer than 7 minutes.\n",
-            "default": "default"
+            "default": "default",
+            "examples": ["short"]
           },
           "language": {
             "type": "string",
             "maxLength": 2,
             "minLength": 2,
             "title": "Language",
-            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1)."
+            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1).",
+            "examples": ["en"]
           },
           "highlights": {
             "items": { "type": "string", "maxLength": 70, "minLength": 10 },
@@ -8641,12 +8919,14 @@
             "minLength": 10,
             "title": "Highlights",
             "description": "A brief summary or highlights of the Studio project's content, providing key points or themes. This should be between 10 and 70 characters.",
-            "default": []
+            "default": [],
+            "examples": [["Emphasize the importance of AI on education"]]
           },
           "callback_url": {
             "type": "string",
             "title": "Callback Url",
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion"
+            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "examples": [["https://www.test.com/my-api/projects-status"]]
           }
         },
         "type": "object",
@@ -8658,7 +8938,8 @@
           "model_id": {
             "type": "string",
             "title": "Model Id",
-            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models."
+            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "mode": {
             "anyOf": [
@@ -8666,7 +8947,16 @@
               { "$ref": "#/components/schemas/PodcastBulletinMode" }
             ],
             "title": "Mode",
-            "description": "The type of podcast to generate"
+            "description": "The type of podcast to generate",
+            "examples": [
+              {
+                "type": "conversation",
+                "conversation": {
+                  "host_voice_id": "6lCwbsX1yVjD49QmpkTR",
+                  "guest_voice_id": "bYTqZQo3Jz7LQtmGTgwi"
+                }
+              }
+            ]
           },
           "source": {
             "anyOf": [
@@ -8683,28 +8973,34 @@
               }
             ],
             "title": "Source",
-            "description": "The source content for the Podcast."
+            "description": "The source content for the Podcast.",
+            "examples": [
+              { "type": "url", "url": "https://en.wikipedia.org/wiki/Cognitive_science" }
+            ]
           },
           "quality_preset": {
             "type": "string",
             "enum": ["standard", "high", "highest", "ultra", "ultra_lossless"],
             "title": "Quality of the generated audio.",
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
-            "default": "standard"
+            "default": "standard",
+            "examples": ["standard"]
           },
           "duration_scale": {
             "type": "string",
             "enum": ["short", "default", "long"],
             "title": "The duration of the generated podcast. This varies depending on the format, voice and language.",
             "description": "Duration of the generated podcast. Must be one of:\nshort - produces podcasts shorter than 3 minutes.\ndefault - produces podcasts roughly between 3-7 minutes.\nlong - prodces podcasts longer than 7 minutes.\n",
-            "default": "default"
+            "default": "default",
+            "examples": ["short"]
           },
           "language": {
             "type": "string",
             "maxLength": 2,
             "minLength": 2,
             "title": "Language",
-            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1)."
+            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1).",
+            "examples": ["en"]
           },
           "highlights": {
             "items": { "type": "string", "maxLength": 70, "minLength": 10 },
@@ -8713,12 +9009,14 @@
             "minLength": 10,
             "title": "Highlights",
             "description": "A brief summary or highlights of the Studio project's content, providing key points or themes. This should be between 10 and 70 characters.",
-            "default": []
+            "default": [],
+            "examples": [["Emphasize the importance of AI on education"]]
           },
           "callback_url": {
             "type": "string",
             "title": "Callback Url",
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion"
+            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "examples": [["https://www.test.com/my-api/projects-status"]]
           }
         },
         "type": "object",
@@ -8797,7 +9095,8 @@
           "email": {
             "type": "string",
             "title": "Email",
-            "description": "The email of the customer"
+            "description": "The email of the customer",
+            "examples": ["john.doe@testmail.com"]
           }
         },
         "type": "object",
@@ -8912,38 +9211,45 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the Studio project, used for identification only."
+            "description": "The name of the Studio project, used for identification only.",
+            "examples": ["Project 1"]
           },
           "default_title_voice_id": {
             "type": "string",
             "title": "Default Title Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new titles."
+            "description": "The voice_id that corresponds to the default voice used for new titles.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "default_paragraph_voice_id": {
             "type": "string",
             "title": "Default Paragraph Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new paragraphs."
+            "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "title": {
             "type": "string",
             "title": "Title",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["Romeo and Juliet"]
           },
           "author": {
             "type": "string",
             "title": "Author",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["William Shakespeare"]
           },
           "isbn_number": {
             "type": "string",
             "title": "Isbn Number",
-            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["0-306-40615-2"]
           },
           "volume_normalization": {
             "type": "boolean",
             "title": "Volume Normalization",
             "description": "When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "quality_check_on": {
             "type": "boolean",
@@ -8960,7 +9266,8 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the chapter, used for identification only."
+            "description": "The name of the chapter, used for identification only.",
+            "examples": ["Chapter 1"]
           },
           "content": {
             "allOf": [{ "$ref": "#/components/schemas/ChapterContentInputModel" }],
@@ -8976,7 +9283,8 @@
           "from_url": {
             "type": "string",
             "title": "From Url",
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank."
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "examples": ["https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"]
           },
           "from_document": {
             "type": "string",
@@ -8999,7 +9307,8 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website."
+            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
+            "examples": ["Joe Rogan"]
           },
           "files": {
             "items": { "type": "string", "format": "binary" },
@@ -9011,12 +9320,16 @@
             "type": "boolean",
             "title": "Remove Background Noise",
             "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
-            "default": false
+            "default": false,
+            "examples": [true]
           },
           "description": {
             "type": "string",
             "title": "Description",
-            "description": "How would you describe the voice?"
+            "description": "How would you describe the voice?",
+            "examples": [
+              "An old American male voice with a slight hoarseness in his throat. Perfect for news."
+            ]
           },
           "labels": {
             "type": "string",
@@ -9034,18 +9347,21 @@
             "type": "string",
             "enum": ["female", "male"],
             "title": "Gender",
-            "description": "Category code corresponding to the gender of the generated voice. Possible values: female, male."
+            "description": "Category code corresponding to the gender of the generated voice. Possible values: female, male.",
+            "examples": ["female"]
           },
           "accent": {
             "type": "string",
             "title": "Accent",
-            "description": "Category code corresponding to the accent of the generated voice. Possible values: british, american, african, australian, indian."
+            "description": "Category code corresponding to the accent of the generated voice. Possible values: british, american, african, australian, indian.",
+            "examples": ["british"]
           },
           "age": {
             "type": "string",
             "enum": ["young", "middle_aged", "old"],
             "title": "Age",
-            "description": "Category code corresponding to the age of the generated voice. Possible values: young, middle_aged, old."
+            "description": "Category code corresponding to the age of the generated voice. Possible values: young, middle_aged, old.",
+            "examples": ["young"]
           },
           "accent_strength": {
             "type": "number",
@@ -9073,12 +9389,14 @@
           "similarity_threshold": {
             "type": "number",
             "title": "Similarity Threshold",
-            "description": "Threshold for voice similarity between provided sample and library voices. Must be in range <0, 2>. The smaller the value the more similar voices will be returned."
+            "description": "Threshold for voice similarity between provided sample and library voices. Must be in range <0, 2>. The smaller the value the more similar voices will be returned.",
+            "examples": [0.5]
           },
           "top_k": {
             "type": "integer",
             "title": "Top K",
-            "description": "Number of most similar voices to return. If similarity_threshold is provided, less than this number of voices may be returned. Must be in range <1, 100>."
+            "description": "Number of most similar voices to return. If similarity_threshold is provided, less than this number of voices may be returned. Must be in range <1, 100>.",
+            "examples": [10]
           }
         },
         "type": "object",
@@ -9090,7 +9408,8 @@
             "items": { "type": "string" },
             "type": "array",
             "title": "Emails",
-            "description": "The email of the customer"
+            "description": "The email of the customer",
+            "examples": ["john.doe@testmail.com"]
           },
           "group_ids": {
             "items": { "type": "string" },
@@ -9109,7 +9428,8 @@
           "email": {
             "type": "string",
             "title": "Email",
-            "description": "The email of the customer"
+            "description": "The email of the customer",
+            "examples": ["john.doe@testmail.com"]
           },
           "group_ids": {
             "items": { "type": "string" },
@@ -9150,6 +9470,7 @@
             "type": "string",
             "title": "Name",
             "description": "A name to make the agent easier to find",
+            "examples": ["My agent"],
             "optional": true
           }
         },
@@ -9175,7 +9496,8 @@
             "items": { "type": "string" },
             "type": "array",
             "title": "Rule Strings",
-            "description": "List of strings to remove from the pronunciation dictionary."
+            "description": "List of strings to remove from the pronunciation dictionary.",
+            "examples": ["['a', 'b']"]
           }
         },
         "type": "object",
@@ -9186,7 +9508,8 @@
         "properties": {
           "feedback": {
             "allOf": [{ "$ref": "#/components/schemas/UserFeedbackScore" }],
-            "description": "Either 'like' or 'dislike' to indicate the feedback for the conversation."
+            "description": "Either 'like' or 'dislike' to indicate the feedback for the conversation.",
+            "examples": ["like"]
           }
         },
         "type": "object",
@@ -9198,7 +9521,10 @@
           "text": {
             "type": "string",
             "title": "Text",
-            "description": "The text that will get converted into a sound effect."
+            "description": "The text that will get converted into a sound effect.",
+            "examples": [
+              "A large, ancient wooden door slowly opening in an eerie, abandoned castle.."
+            ]
           },
           "duration_seconds": {
             "type": "number",
@@ -9238,13 +9564,15 @@
           "seed": {
             "type": "integer",
             "title": "Seed",
-            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295.",
+            "examples": [12345]
           },
           "remove_background_noise": {
             "type": "boolean",
             "title": "Remove Background Noise",
             "description": "If set will remove the background noise from your audio input using our audio isolation model. Only applies to Voice Changer.",
-            "default": false
+            "default": false,
+            "examples": [true]
           }
         },
         "type": "object",
@@ -9273,13 +9601,15 @@
           "seed": {
             "type": "integer",
             "title": "Seed",
-            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295.",
+            "examples": [12345]
           },
           "remove_background_noise": {
             "type": "boolean",
             "title": "Remove Background Noise",
             "description": "If set will remove the background noise from your audio input using our audio isolation model. Only applies to Voice Changer.",
-            "default": false
+            "default": false,
+            "examples": [true]
           }
         },
         "type": "object",
@@ -9425,7 +9755,8 @@
           "text": {
             "type": "string",
             "title": "Text",
-            "description": "The text that will get converted into speech."
+            "description": "The text that will get converted into speech.",
+            "examples": ["This is a test for the API of ElevenLabs."]
           },
           "model_id": {
             "type": "string",
@@ -9450,49 +9781,61 @@
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
             "description": "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-            "default": []
+            "default": [],
+            "examples": [[{ "pronunciation_dictionary_id": "test", "version_id": "id2" }]]
           },
           "seed": {
             "type": "integer",
             "title": "Seed",
-            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295.",
+            "examples": [12345]
           },
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "In the heart of a lush valley surrounded by towering mountains lies the quaint village of Willowbrook."
+            ]
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "The Willowbrook Festival, held every spring, celebrates the blossoming of the wild bluebells that carpet the nearby forest floors, creating a breathtaking sea of blue under the canopy of fresh green leaves."
+            ]
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["09bOJkdYVjKy2oOiiVtR", "0p2uKqOnZyce22SPZ9d5", "1KYvY8WZAKmcjCJ1mvVB"]]
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["3tPgBrD1UdW3snUkGw1K", "4D1jAxiRFkolBNUGzXkU", "4c8Z4aWliVR2oipYRXhj"]]
           },
           "use_pvc_as_ivc": {
             "type": "boolean",
             "title": "Use Pvc As Ivc",
             "description": "If true, we won't use PVC version of the voice for the generation but the IVC version. This is a temporary workaround for higher latency in PVC versions.",
-            "default": false
+            "default": false,
+            "examples": [true]
           },
           "apply_text_normalization": {
             "type": "string",
             "enum": ["auto", "on", "off"],
             "title": "Apply Text Normalization",
             "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
-            "default": "auto"
+            "default": "auto",
+            "examples": [true]
           }
         },
         "type": "object",
@@ -9504,7 +9847,8 @@
           "text": {
             "type": "string",
             "title": "Text",
-            "description": "The text that will get converted into speech."
+            "description": "The text that will get converted into speech.",
+            "examples": ["This is a test for the API of ElevenLabs."]
           },
           "model_id": {
             "type": "string",
@@ -9529,49 +9873,61 @@
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
             "description": "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-            "default": []
+            "default": [],
+            "examples": [[{ "pronunciation_dictionary_id": "test", "version_id": "id2" }]]
           },
           "seed": {
             "type": "integer",
             "title": "Seed",
-            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295.",
+            "examples": [12345]
           },
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "In the heart of a lush valley surrounded by towering mountains lies the quaint village of Willowbrook."
+            ]
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "The Willowbrook Festival, held every spring, celebrates the blossoming of the wild bluebells that carpet the nearby forest floors, creating a breathtaking sea of blue under the canopy of fresh green leaves."
+            ]
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["09bOJkdYVjKy2oOiiVtR", "0p2uKqOnZyce22SPZ9d5", "1KYvY8WZAKmcjCJ1mvVB"]]
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["3tPgBrD1UdW3snUkGw1K", "4D1jAxiRFkolBNUGzXkU", "4c8Z4aWliVR2oipYRXhj"]]
           },
           "use_pvc_as_ivc": {
             "type": "boolean",
             "title": "Use Pvc As Ivc",
             "description": "If true, we won't use PVC version of the voice for the generation but the IVC version. This is a temporary workaround for higher latency in PVC versions.",
-            "default": false
+            "default": false,
+            "examples": [true]
           },
           "apply_text_normalization": {
             "type": "string",
             "enum": ["auto", "on", "off"],
             "title": "Apply Text Normalization",
             "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
-            "default": "auto"
+            "default": "auto",
+            "examples": [true]
           }
         },
         "type": "object",
@@ -9583,7 +9939,8 @@
           "text": {
             "type": "string",
             "title": "Text",
-            "description": "The text that will get converted into speech."
+            "description": "The text that will get converted into speech.",
+            "examples": ["This is a test for the API of ElevenLabs."]
           },
           "model_id": {
             "type": "string",
@@ -9608,49 +9965,61 @@
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
             "description": "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-            "default": []
+            "default": [],
+            "examples": [[{ "pronunciation_dictionary_id": "test", "version_id": "id2" }]]
           },
           "seed": {
             "type": "integer",
             "title": "Seed",
-            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295.",
+            "examples": [12345]
           },
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "In the heart of a lush valley surrounded by towering mountains lies the quaint village of Willowbrook."
+            ]
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "The Willowbrook Festival, held every spring, celebrates the blossoming of the wild bluebells that carpet the nearby forest floors, creating a breathtaking sea of blue under the canopy of fresh green leaves."
+            ]
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["09bOJkdYVjKy2oOiiVtR", "0p2uKqOnZyce22SPZ9d5", "1KYvY8WZAKmcjCJ1mvVB"]]
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["3tPgBrD1UdW3snUkGw1K", "4D1jAxiRFkolBNUGzXkU", "4c8Z4aWliVR2oipYRXhj"]]
           },
           "use_pvc_as_ivc": {
             "type": "boolean",
             "title": "Use Pvc As Ivc",
             "description": "If true, we won't use PVC version of the voice for the generation but the IVC version. This is a temporary workaround for higher latency in PVC versions.",
-            "default": false
+            "default": false,
+            "examples": [true]
           },
           "apply_text_normalization": {
             "type": "string",
             "enum": ["auto", "on", "off"],
             "title": "Apply Text Normalization",
             "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
-            "default": "auto"
+            "default": "auto",
+            "examples": [true]
           }
         },
         "type": "object",
@@ -9662,7 +10031,8 @@
           "text": {
             "type": "string",
             "title": "Text",
-            "description": "The text that will get converted into speech."
+            "description": "The text that will get converted into speech.",
+            "examples": ["This is a test for the API of ElevenLabs."]
           },
           "model_id": {
             "type": "string",
@@ -9687,49 +10057,61 @@
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
             "description": "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
-            "default": []
+            "default": [],
+            "examples": [[{ "pronunciation_dictionary_id": "test", "version_id": "id2" }]]
           },
           "seed": {
             "type": "integer",
             "title": "Seed",
-            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295."
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be integer between 0 and 4294967295.",
+            "examples": [12345]
           },
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "In the heart of a lush valley surrounded by towering mountains lies the quaint village of Willowbrook."
+            ]
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation.",
+            "examples": [
+              "The Willowbrook Festival, held every spring, celebrates the blossoming of the wild bluebells that carpet the nearby forest floors, creating a breathtaking sea of blue under the canopy of fresh green leaves."
+            ]
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["09bOJkdYVjKy2oOiiVtR", "0p2uKqOnZyce22SPZ9d5", "1KYvY8WZAKmcjCJ1mvVB"]]
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
-            "default": []
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "default": [],
+            "examples": [["3tPgBrD1UdW3snUkGw1K", "4D1jAxiRFkolBNUGzXkU", "4c8Z4aWliVR2oipYRXhj"]]
           },
           "use_pvc_as_ivc": {
             "type": "boolean",
             "title": "Use Pvc As Ivc",
             "description": "If true, we won't use PVC version of the voice for the generation but the IVC version. This is a temporary workaround for higher latency in PVC versions.",
-            "default": false
+            "default": false,
+            "examples": [true]
           },
           "apply_text_normalization": {
             "type": "string",
             "enum": ["auto", "on", "off"],
             "title": "Apply Text Normalization",
             "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
-            "default": "auto"
+            "default": "auto",
+            "examples": [true]
           }
         },
         "type": "object",
@@ -9744,7 +10126,15 @@
             },
             "type": "array",
             "title": "Pronunciation Dictionary Locators",
-            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first."
+            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first.",
+            "examples": [["{\"pronunciation_dictionary_id\": \"test\", \"version_id\": \"id2\"}"]]
+          },
+          "invalidate_affected_text": {
+            "type": "boolean",
+            "title": "Invalidate Affected Text",
+            "description": "This will automatically mark text in this project for reconversion when the new dictionary applies or the old one no longer does.",
+            "default": true,
+            "examples": [false]
           }
         },
         "type": "object",
@@ -9756,7 +10146,8 @@
           "from_url": {
             "type": "string",
             "title": "From Url",
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank."
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "examples": ["https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"]
           },
           "from_document": {
             "type": "string",
@@ -9779,38 +10170,45 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the Studio project, used for identification only."
+            "description": "The name of the Studio project, used for identification only.",
+            "examples": ["Project 1"]
           },
           "default_title_voice_id": {
             "type": "string",
             "title": "Default Title Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new titles."
+            "description": "The voice_id that corresponds to the default voice used for new titles.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "default_paragraph_voice_id": {
             "type": "string",
             "title": "Default Paragraph Voice Id",
-            "description": "The voice_id that corresponds to the default voice used for new paragraphs."
+            "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
+            "examples": ["21m00Tcm4TlvDq8ikWAM"]
           },
           "title": {
             "type": "string",
             "title": "Title",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["Romeo and Juliet"]
           },
           "author": {
             "type": "string",
             "title": "Author",
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["William Shakespeare"]
           },
           "isbn_number": {
             "type": "string",
             "title": "Isbn Number",
-            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download."
+            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download.",
+            "examples": ["0-306-40615-2"]
           },
           "volume_normalization": {
             "type": "boolean",
             "title": "Volume Normalization",
             "description": "When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "default": false
+            "default": false,
+            "examples": [false]
           },
           "quality_check_on": {
             "type": "boolean",
@@ -9851,7 +10249,8 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the chapter, used for identification only."
+            "description": "The name of the chapter, used for identification only.",
+            "examples": ["Chapter 1"]
           },
           "content": {
             "allOf": [{ "$ref": "#/components/schemas/ChapterContentInputModel" }],
@@ -10053,6 +10452,24 @@
         "type": "object",
         "required": ["chapter_id", "name", "can_be_downloaded", "state", "content"],
         "title": "ChapterWithContentResponseModel"
+      },
+      "CharacterAlignmentResponseModel": {
+        "properties": {
+          "characters": { "items": { "type": "string" }, "type": "array", "title": "Characters" },
+          "character_start_times_seconds": {
+            "items": { "type": "number" },
+            "type": "array",
+            "title": "Character Start Times Seconds"
+          },
+          "character_end_times_seconds": {
+            "items": { "type": "number" },
+            "type": "array",
+            "title": "Character End Times Seconds"
+          }
+        },
+        "type": "object",
+        "required": ["characters", "character_start_times_seconds", "character_end_times_seconds"],
+        "title": "CharacterAlignmentResponseModel"
       },
       "ClientEvent": {
         "type": "string",
@@ -10819,6 +11236,16 @@
         "required": ["agents", "has_more"],
         "title": "GetAgentsPageResponseModel"
       },
+      "GetAudioNativeProjectSettingsResponseModel": {
+        "properties": {
+          "enabled": { "type": "boolean", "title": "Enabled" },
+          "snapshot_id": { "type": "string", "title": "Snapshot Id" },
+          "settings": { "$ref": "#/components/schemas/AudioNativeProjectSettingsResponseModel" }
+        },
+        "type": "object",
+        "required": ["enabled", "snapshot_id", "settings"],
+        "title": "GetAudioNativeProjectSettingsResponseModel"
+      },
       "GetChaptersResponseModel": {
         "properties": {
           "chapters": {
@@ -11226,6 +11653,11 @@
           "free_users_allowed": { "type": "boolean", "title": "Free Users Allowed" },
           "live_moderation_enabled": { "type": "boolean", "title": "Live Moderation Enabled" },
           "featured": { "type": "boolean", "title": "Featured" },
+          "verified_languages": {
+            "items": { "$ref": "#/components/schemas/VerifiedVoiceLanguageResponseModel" },
+            "type": "array",
+            "title": "Verified Languages"
+          },
           "notice_period": { "type": "integer", "title": "Notice Period" },
           "instagram_username": { "type": "string", "title": "Instagram Username" },
           "twitter_username": { "type": "string", "title": "Twitter Username" },
@@ -11258,6 +11690,41 @@
           "featured"
         ],
         "title": "LibraryVoiceResponseModel"
+      },
+      "ListUnclaimedReviewTasksPayload": {
+        "properties": {
+          "tags": {
+            "items": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/TagModel" },
+                { "items": { "$ref": "#/components/schemas/TagModel" }, "type": "array" }
+              ]
+            },
+            "type": "array",
+            "title": "Tags"
+          }
+        },
+        "type": "object",
+        "required": ["tags"],
+        "title": "ListUnclaimedReviewTasksPayload"
+      },
+      "ListUserReviewTasksPayload": {
+        "properties": {
+          "tags": {
+            "items": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/TagModel" },
+                { "items": { "$ref": "#/components/schemas/TagModel" }, "type": "array" }
+              ]
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "state": { "items": { "$ref": "#/components/schemas/ReviewState" }, "type": "array" }
+        },
+        "type": "object",
+        "required": ["tags", "state"],
+        "title": "ListUserReviewTasksPayload"
       },
       "LiteralJsonSchemaProperty": {
         "properties": {
@@ -11441,6 +11908,19 @@
         },
         "type": "object",
         "title": "OrbAvatar"
+      },
+      "PaginatedListedReviewTaskPreviewModel": {
+        "properties": {
+          "review_tasks": {
+            "items": { "$ref": "#/components/schemas/ReviewTaskPreviewModel" },
+            "type": "array",
+            "title": "Review Tasks"
+          },
+          "cursor": { "type": "string", "title": "Cursor" }
+        },
+        "type": "object",
+        "required": ["review_tasks"],
+        "title": "PaginatedListedReviewTaskPreviewModel"
       },
       "PatchConvaiSettingsRequest": {
         "properties": {
@@ -11956,6 +12436,28 @@
         "required": ["properties"],
         "title": "QueryParamsJsonSchema"
       },
+      "QuoteRequestModel": {
+        "properties": {
+          "content_hash": { "type": "string", "title": "Content Hash" },
+          "duration_s": { "type": "number", "title": "Duration S" },
+          "speaker_count": { "type": "integer", "title": "Speaker Count" },
+          "language": { "type": "string", "title": "Language" }
+        },
+        "type": "object",
+        "required": ["content_hash", "duration_s", "speaker_count", "language"],
+        "title": "QuoteRequestModel"
+      },
+      "QuoteResponseModel": {
+        "properties": {
+          "quote_usd": { "type": "number", "title": "Quote Usd" },
+          "valid_until": { "type": "string", "format": "date-time", "title": "Valid Until" },
+          "request": { "$ref": "#/components/schemas/QuoteRequestModel" },
+          "quote_token": { "type": "string", "title": "Quote Token" }
+        },
+        "type": "object",
+        "required": ["quote_usd", "valid_until", "request", "quote_token"],
+        "title": "QuoteResponseModel"
+      },
       "ReaderResourceResponseModel": {
         "properties": {
           "resource_type": {
@@ -11995,6 +12497,29 @@
         "type": "object",
         "required": ["id", "version_id"],
         "title": "RemovePronunciationDictionaryRulesResponseModel"
+      },
+      "ReviewState": {
+        "type": "string",
+        "enum": ["unclaimed", "claimed", "submitted", "done"],
+        "title": "ReviewState",
+        "description": "An enumeration."
+      },
+      "ReviewTaskPreviewModel": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "state": { "$ref": "#/components/schemas/ReviewState" },
+          "duration_secs": { "type": "number", "title": "Duration Secs" },
+          "tags": {
+            "items": { "$ref": "#/components/schemas/TagDbModel" },
+            "type": "array",
+            "title": "Tags"
+          },
+          "bounty_usd": { "type": "number", "title": "Bounty Usd" },
+          "deadline": { "type": "string", "format": "date-time", "title": "Deadline" }
+        },
+        "type": "object",
+        "required": ["id", "state", "tags", "bounty_usd", "deadline"],
+        "title": "ReviewTaskPreviewModel"
       },
       "SafetyCommonModel": {
         "properties": {
@@ -12294,6 +12819,41 @@
           ]
         }
       },
+      "StreamingAudioChunkWithTimestampsResponseModel": {
+        "properties": {
+          "audio_base64": {
+            "type": "string",
+            "title": "Audio Base64",
+            "description": "Base64 encoded audio data"
+          },
+          "alignment": {
+            "allOf": [{ "$ref": "#/components/schemas/CharacterAlignmentResponseModel" }],
+            "title": "Alignment",
+            "description": "Timestamp information for each character in the original text"
+          },
+          "normalized_alignment": {
+            "allOf": [{ "$ref": "#/components/schemas/CharacterAlignmentResponseModel" }],
+            "title": "Normalized Alignment",
+            "description": "Timestamp information for each character in the normalized text"
+          }
+        },
+        "type": "object",
+        "required": ["audio_base64"],
+        "title": "StreamingAudioChunkWithTimestampsResponseModel",
+        "example": {
+          "audio_base64": "base64_encoded_audio_chunk",
+          "alignment": {
+            "characters": ["H", "e"],
+            "character_start_times_seconds": [0.0, 0.1],
+            "character_end_times_seconds": [0.1, 0.2]
+          },
+          "normalized_alignment": {
+            "characters": ["H", "e"],
+            "character_start_times_seconds": [0.0, 0.1],
+            "character_end_times_seconds": [0.1, 0.2]
+          }
+        }
+      },
       "SubscriptionExtrasResponseModel": {
         "properties": {
           "concurrency": { "type": "integer", "title": "Concurrency" },
@@ -12522,6 +13082,30 @@
         "title": "TTSOutputFormat",
         "description": "An enumeration."
       },
+      "TagDbModel": {
+        "properties": {
+          "kind": { "$ref": "#/components/schemas/TagKind" },
+          "value": { "type": "string", "title": "Value" }
+        },
+        "type": "object",
+        "required": ["kind", "value"],
+        "title": "TagDbModel"
+      },
+      "TagKind": {
+        "type": "string",
+        "enum": ["lang", "job_type"],
+        "title": "TagKind",
+        "description": "An enumeration."
+      },
+      "TagModel": {
+        "properties": {
+          "kind": { "$ref": "#/components/schemas/TagKind" },
+          "value": { "type": "string", "title": "Value" }
+        },
+        "type": "object",
+        "required": ["kind", "value"],
+        "title": "TagModel"
+      },
       "TelephonyProvider": {
         "type": "string",
         "enum": ["twilio"],
@@ -12728,6 +13312,16 @@
         "required": ["text", "date_unix", "accepted", "similarity", "levenshtein_distance"],
         "title": "VerificationAttemptResponseModel"
       },
+      "VerifiedVoiceLanguageResponseModel": {
+        "properties": {
+          "language": { "type": "string", "title": "Language" },
+          "model_id": { "type": "string", "title": "Model Id" },
+          "accent": { "type": "string", "title": "Accent" }
+        },
+        "type": "object",
+        "required": ["language", "model_id"],
+        "title": "VerifiedVoiceLanguageResponseModel"
+      },
       "VoiceGenerationParameterOptionResponseModel": {
         "properties": {
           "name": { "type": "string", "title": "Name" },
@@ -12859,6 +13453,11 @@
             "items": { "type": "string" },
             "type": "array",
             "title": "High Quality Base Model Ids"
+          },
+          "verified_languages": {
+            "items": { "$ref": "#/components/schemas/VerifiedVoiceLanguageResponseModel" },
+            "type": "array",
+            "title": "Verified Languages"
           },
           "safety_control": {
             "type": "string",
@@ -13218,6 +13817,10 @@
     {
       "name": "speech-to-speech",
       "description": "Create speech by combining the style and content of an audio file you upload with a voice of your choice."
+    },
+    {
+      "name": "speech-to-text",
+      "description": "Transcribe your audio files with detailed speaker annotations and precise timestamps using our cutting-edge model. Speech-to-text is currently in alpha and available to a select group of users. We plan to roll it out more broadly soon."
     },
     { "name": "models", "description": "Access the different models of the platform." },
     { "name": "voices", "description": "Access to voices created either by you or us." },
