@@ -1,4 +1,4 @@
-name: Format docs
+name: Validate Formatting
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  format-docs:
+  validate-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,5 +23,5 @@ jobs:
 
       - run: pnpm install
 
-      - name: Format docs
-        run: pnpm run format:check
+      - name: Validate formatting
+        run: pnpm run fmt:check
