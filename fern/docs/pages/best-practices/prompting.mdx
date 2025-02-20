@@ -11,9 +11,12 @@ This guide provides techniques to enhance text-to-speech outputs using ElevenLab
 
 ## Pauses
 
-Use `<break time="x.xs" />` for natural pauses up to 3 seconds. 
+Use `<break time="x.xs" />` for natural pauses up to 3 seconds.
 
-<Note>Using too many break tags in a single generation can cause instability. The AI might speed up, or introduce additional noises or audio artifacts. We are working on resolving this.</Note>
+<Note>
+  Using too many break tags in a single generation can cause instability. The AI might speed up, or
+  introduce additional noises or audio artifacts. We are working on resolving this.
+</Note>
 
 ```text Example
 "Hold on, let me think." <break time="1.5s" /> "Alright, I’ve got it."
@@ -36,7 +39,10 @@ Alternatives to `<break>` include dashes (- or --) for short pauses or ellipses 
 
 Specify pronunciation using [SSML phoneme tags](https://en.wikipedia.org/wiki/Speech_Synthesis_Markup_Language). Supported alphabets include [CMU](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary) Arpabet and the [International Phonetic Alphabet (IPA)](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet).
 
-<Note>Phoneme tags are only compatible with "Eleven English v1" and "Eleven Turbo v2" [models](/docs/models).</Note>
+<Note>
+  Phoneme tags are only compatible with "Eleven English v1" and "Eleven Turbo v2"
+  [models](/docs/models).
+</Note>
 
 <CodeBlock>
 ```xml CMU Arpabet Example
@@ -77,13 +83,13 @@ Ensure correct stress marking for multi-syllable words to maintain accurate pron
 
 ### Alias Tags
 
-For models that don't support phoneme tags, you can try writing words more phonetically. You can also employ various tricks such as capital letters, dashes, apostrophes, or even single quotation marks around a single letter or letters. 
+For models that don't support phoneme tags, you can try writing words more phonetically. You can also employ various tricks such as capital letters, dashes, apostrophes, or even single quotation marks around a single letter or letters.
 
 As an example, a word like “trapezii” could be spelt “trapezIi” to put more emphasis on the “ii” of the word.
 
 You can either replace the word directly in your text, or if you want to specify pronunciation using other words or phrases when using a pronunciation dictionary, you can use alias tags for this. This can be useful if you're generating using Multilingual v2 or Turbo v2.5, which don't support phoneme tags. You can use pronunciation dictionaries with Studio, Dubbing Studio and Speech Synthesis via the API.
 
-For example, if your text includes a name that has an unusual pronunciation that the AI might struggle with, you could use an alias tag to specify how you would like it to be pronounced:  
+For example, if your text includes a name that has an unusual pronunciation that the AI might struggle with, you could use an alias tag to specify how you would like it to be pronounced:
 
 ```
   <lexeme>
@@ -91,6 +97,7 @@ For example, if your text includes a name that has an unusual pronunciation that
     <alias>Cloffton</alias>
   </lexeme>
 ```
+
 If you want to make sure that an acronym is always delivered in a certain way whenever it is incountered in your text, you can use an alias tag to specify this:
 
 ```
@@ -102,9 +109,9 @@ If you want to make sure that an acronym is always delivered in a certain way wh
 
 ### Pronunciation Dictionaries
 
-Some of our tools, such as Studio and Dubbing Studio, allow you to create and upload a pronunciation dictionary. These allow you to specify the pronunciation of certain words, such as character or brand names, or to specify how acronyms should be read. 
+Some of our tools, such as Studio and Dubbing Studio, allow you to create and upload a pronunciation dictionary. These allow you to specify the pronunciation of certain words, such as character or brand names, or to specify how acronyms should be read.
 
-Pronunciation dictionaries allow this functionality by enabling you to upload a lexicon or dictionary file that specifies pairs of words and how they should be pronounced, either using a phonetic alphabet or word substitutions. 
+Pronunciation dictionaries allow this functionality by enabling you to upload a lexicon or dictionary file that specifies pairs of words and how they should be pronounced, either using a phonetic alphabet or word substitutions.
 
 Whenever one of these words is encountered in a project, the AI model will pronounce the word using the specified replacement.
 
