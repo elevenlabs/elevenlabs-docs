@@ -424,8 +424,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "audio_isolation",
         "x-fern-sdk-method-name": "audio_isolation_stream",
+        "x-fern-sdk-group-name": "audio_isolation",
         "x-fern-streaming": true
       }
     },
@@ -820,8 +820,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-streaming": true
       }
     },
@@ -913,8 +913,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-sdk-method-name": "stream_with_timestamps",
+        "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-streaming": true
       }
     },
@@ -1104,8 +1104,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "speech_to_speech",
         "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-group-name": "speech_to_speech",
         "x-fern-streaming": true
       }
     },
@@ -2900,8 +2900,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "projects"],
         "x-fern-sdk-method-name": "stream_audio",
+        "x-fern-sdk-group-name": ["studio", "projects"],
         "x-fern-streaming": true
       }
     },
@@ -4028,8 +4028,8 @@
             }
           }
         },
-        "x-fern-sdk-group-name": ["studio", "chapters"],
         "x-fern-sdk-method-name": "stream_snapshot",
+        "x-fern-sdk-group-name": ["studio", "chapters"],
         "x-fern-streaming": true
       }
     },
@@ -5751,6 +5751,115 @@
         },
         "x-fern-sdk-group-name": "profile",
         "x-fern-sdk-method-name": "get"
+      }
+    },
+    "/v1/speech-to-text": {
+      "post": {
+        "tags": ["speech-to-text"],
+        "summary": "Speech To Text",
+        "description": "Transcribe an audio or video file.",
+        "operationId": "Speech_to_Text_v1_speech_to_text_post",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Speech_to_Text_v1_speech_to_text_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SpeechToTextChunkResponseModel" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-sdk-group-name": "speech_to_text"
+      }
+    },
+    "/v1/speech-to-text/stream": {
+      "post": {
+        "tags": ["speech-to-text"],
+        "summary": "Speech To Text Stream",
+        "description": "Transcribe an audio or video file with streaming response. Returns chunks of transcription as they become available, with each chunk separated by double newlines (\\n\\n).",
+        "operationId": "Speech_to_Text_Stream_v1_speech_to_text_stream_post",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Speech_to_Text_Stream_v1_speech_to_text_stream_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Stream of transcription chunks",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SpeechToTextStreamResponseModel" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input file or parameters",
+            "content": {
+              "application/json": { "example": { "detail": "File size must be less than 100MB" } }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-group-name": "speech_to_text",
+        "x-fern-streaming": true
       }
     },
     "/v1/convai/conversation/get_signed_url": {
@@ -7612,8 +7721,191 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_tool"
+        "x-fern-sdk-method-name": "update_tool",
+        "x-fern-sdk-group-name": "conversational_ai"
+      }
+    },
+    "/v1/convai/settings": {
+      "get": {
+        "tags": ["Conversational AI"],
+        "summary": "Get Convai Settings",
+        "description": "Retrieve Convai settings for the workspace",
+        "operationId": "Get_Convai_settings_v1_convai_settings_get",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetConvaiSettingsResponseModel" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "get_settings",
+        "x-fern-sdk-group-name": "conversational_ai"
+      },
+      "patch": {
+        "tags": ["Conversational AI"],
+        "summary": "Update Convai Settings",
+        "description": "Update Convai settings for the workspace",
+        "operationId": "Update_Convai_settings_v1_convai_settings_patch",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [{ "$ref": "#/components/schemas/PatchConvaiSettingsRequest" }],
+                "title": "Request Body",
+                "description": "Convai settings to update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetConvaiSettingsResponseModel" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "update_settings",
+        "x-fern-sdk-group-name": "conversational_ai"
+      }
+    },
+    "/v1/convai/secrets": {
+      "get": {
+        "summary": "Get Convai Workspace Secrets For The User",
+        "description": "Get all secrets for the workspace",
+        "operationId": "Get_Convai_workspace_secrets_for_the_user_v1_convai_secrets_get",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetWorkspaceSecretsResponseModel" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "get_secrets",
+        "x-fern-sdk-group-name": "conversational_ai"
+      },
+      "post": {
+        "tags": ["Conversational AI"],
+        "summary": "Create Convai Workspace Secret",
+        "description": "Create a new secret for the workspace",
+        "operationId": "Create_Convai_workspace_secret_v1_convai_secrets_post",
+        "parameters": [
+          {
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Xi-Api-Key",
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
+            },
+            "name": "xi-api-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [{ "$ref": "#/components/schemas/PostWorkspaceSecretRequest" }],
+                "title": "Request Body",
+                "description": "Secret to create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PostWorkspaceSecretResponseModel" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "x-fern-sdk-method-name": "create_secret",
+        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/docs": {
@@ -9460,25 +9752,25 @@
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "use_pvc_as_ivc": {
@@ -9539,25 +9831,25 @@
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "use_pvc_as_ivc": {
@@ -9618,25 +9910,25 @@
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "use_pvc_as_ivc": {
@@ -9697,25 +9989,25 @@
           "previous_text": {
             "type": "string",
             "title": "Previous Text",
-            "description": "The text that came before the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that came before the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "next_text": {
             "type": "string",
             "title": "Next Text",
-            "description": "The text that comes after the text of the current request. Can be used to improve the flow of prosody when concatenating together multiple generations or to influence the prosody in the current generation."
+            "description": "The text that comes after the text of the current request. Can be used to improve the speech's continuity when concatenating together multiple generations or to influence the speech's continuity in the current generation."
           },
           "previous_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Previous Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the speech's continuity when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both previous_text and previous_request_ids is send, previous_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "next_request_ids": {
             "items": { "type": "string" },
             "type": "array",
             "title": "Next Request Ids",
-            "description": "A list of request_id of the samples that were generated before this generation. Can be used to improve the flow of prosody when splitting up a large task into multiple requests. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
+            "description": "A list of request_id of the samples that come after this generation. next_request_ids is especially useful for maintaining the speech's continuity when regenerating a sample that has had some audio quality issues. For example, if you have generated 3 speech clips, and you want to improve clip 2, passing the request id of clip 3 as a next_request_id (and that of clip 1 as a previous_request_id) will help maintain natural flow in the combined speech. The results will be best when the same model is used across the generations. In case both next_text and next_request_ids is send, next_text will be ignored. A maximum of 3 request_ids can be send.",
             "default": []
           },
           "use_pvc_as_ivc": {
@@ -13218,6 +13510,10 @@
     {
       "name": "speech-to-speech",
       "description": "Create speech by combining the style and content of an audio file you upload with a voice of your choice."
+    },
+    {
+      "name": "speech-to-text",
+      "description": "Transcribe your audio files with detailed speaker annotations and precise timestamps using our cutting-edge model. Speech-to-text is currently in alpha and available to a select group of users. We plan to roll it out more broadly soon."
     },
     { "name": "models", "description": "Access the different models of the platform." },
     { "name": "voices", "description": "Access to voices created either by you or us." },
