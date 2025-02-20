@@ -9,8 +9,11 @@
     "format": "prettier \"**/*.{css,js,ts,tsx,md,mdx,yml,yaml,json}\" --write",
     "format:check": "prettier \"**/*.{css,js,ts,tsx,md,mdx,yml,yaml,json}\" --check",
     "fern:upgrade": "fern upgrade",
-    "fern:check": "fern check",
+    "fern:check": "NODE_NO_WARNINGS=1 fern check",
     "fern:preview": "fern generate --docs --preview",
+    "sdk:preview-python": "fern generate --group python-sdk --preview --api api",
+    "sdk:preview-typescript": "fern generate --group typescript-sdk --preview --api api",
+    "sdk:preview": "pnpm run sdk:preview-python && pnpm run sdk:preview-typescript",
     "openapi:latest": "curl -o ./fern/apis/api/openapi.json https://api.elevenlabs.io/openapi.json"
   },
   "keywords": [

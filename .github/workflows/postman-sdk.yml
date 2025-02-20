@@ -1,0 +1,24 @@
+name: Release Postman collection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+
+      - name: Download Fern
+        run: npm install -g fern-api
+
+      - name: Generate and Publish Postman Collection
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        run: |
+          fern generate --group postman --log-level debug --api api

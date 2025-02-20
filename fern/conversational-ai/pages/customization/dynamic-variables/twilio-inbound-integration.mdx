@@ -9,8 +9,8 @@ When receiving inbound Twilio calls, you can dynamically fetch conversation init
 
 ## How it works
 
-1. When a Twilio call is received, the system can make a webhook call to your specified endpoint, passing call information as arguments
-2. Your webhook returns conversation initiation client data, including dynamic variables and overrides
+1. When a Twilio call is received, the ElevenLabs Conversational AI platform will make a webhook call to your specified endpoint, passing call information (`caller_id`, `agent_id`, `called_number`, `call_sid`) as arguments
+2. Your webhook returns conversation initiation client data, including dynamic variables and overrides (an example is shown below)
 3. This data is used to initiate the conversation
 
 <Tip>
@@ -66,27 +66,34 @@ seamless experience where:
   </Step>
 
   <Step title="Return conversation initiation client data">
-   Your webhook must return a JSON response containing the dynamic variables specified by the agent. 
-   An example response could be:
+   Your webhook must return a JSON response containing the initiation data for the agent.
+  <Info>
+    The `dynamic_variables` field must contain all dynamic variables defined for the agent. Overrides
+    on the other hand are entirely optional. For more information about dyanmic variables and
+    overrides see the [dynamic variables](/conversational-ai/customization/dynamic-variables) and
+    [overrides](/conversational-ai/customization/conversation-config-overrides) docs.
+  </Info>
+
+An example response could be:
 
 ```json
 {
-  "conversation_config_override":{
-    "agent": {
-        "prompt": {
-          "prompt": f"The customer's bank account balance is $100. They are based in San Francisco."
-          },
-          "first_message": f"Hi, how can I help you today?",
-          "language": "en"
-      },
-      "tts": {
-        "voice_id": "new-voice-id"
-      },
-  },
   "dynamic_variables": {
     "customer_name": "John Doe",
     "account_status": "premium",
     "last_interaction": "2024-01-15"
+  },
+  "conversation_config_override": {
+    "agent": {
+      "prompt": {
+        "prompt": "The customer's bank account balance is $100. They are based in San Francisco."
+      },
+      "first_message": "Hi, how can I help you today?",
+      "language": "en"
+    },
+    "tts": {
+      "voice_id": "new-voice-id"
+    }
   }
 }
 ```
