@@ -1,5 +1,7 @@
 ## ElevenLabs NextJS Template
 
+![quickstart](https://github.com/user-attachments/assets/e3b585b4-8cf8-4775-adce-33ef9a55b0ba)
+
 This project is a minimal example to demonstrate how to run a Next.js application with ElevenLabs.
 
 ## Quick Start
