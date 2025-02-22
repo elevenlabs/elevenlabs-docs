@@ -1,4 +1,4 @@
-# Example ElevenLabs NextJS project
+## ElevenLabs NextJS Template
 
 This project is a minimal example to demonstrate how to run a Next.js application with ElevenLabs.
 
