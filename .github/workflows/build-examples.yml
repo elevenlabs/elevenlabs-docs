@@ -1,0 +1,36 @@
+name: Build Examples
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  nextjs-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - run: |
+          cd examples/elevenlabs-nextjs
+          pnpm install
+
+      - name: Lint example
+        run: |
+          cd examples/elevenlabs-nextjs
+          pnpm run lint
+
+      - name: Build example
+        run: |
+          cd examples/elevenlabs-nextjs
+          pnpm run build
