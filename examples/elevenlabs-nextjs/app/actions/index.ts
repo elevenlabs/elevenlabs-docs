@@ -4,7 +4,7 @@ import { ElevenLabsClient } from 'elevenlabs';
 import { cookies } from 'next/headers';
 
 import { env } from '@/env.mjs';
-import { soundEffectSchema } from '@/lib/schemas';
+import { Models, soundEffectSchema, textToSpeechSchema } from '@/lib/schemas';
 import { Err, Ok, Result } from '@/types';
 
 export async function generateSoundEffect(
@@ -51,32 +51,45 @@ export async function generateSoundEffect(
   }
 }
 
-export async function setApiKey(key: string | null): Promise<Result<void>> {
+export async function generateTextToSpeech(
+  text: string,
+  modelId: Models,
+  voiceId: string
+): Promise<Result<{ audioBase64: string }>> {
+  const validationResult = textToSpeechSchema.safeParse({
+    text: text,
+    model_id: modelId,
+  });
+
+  if (!validationResult.success) {
+    return Err(validationResult.error.errors[0].message);
+  }
+
   const cookieStore = await cookies();
+  const apiKey = cookieStore.get('xi-api-key')?.value ?? env.ELEVENLABS_API_KEY;
+
+  if (!apiKey) return Err('API key is missing.');
 
   try {
-    if (key === null) {
-      //TODO: simple encryption - iron session seal it with password (SS in next)
-      cookieStore.delete('xi-api-key');
-    } else {
-      cookieStore.set('xi-api-key', key, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        path: '/',
-        maxAge: 30 * 24 * 60 * 60,
-      });
+    const client = new ElevenLabsClient({
+      apiKey: apiKey,
+    });
+
+    const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
+      output_format: 'mp3_44100_128',
+      text: 'The first move is what sets everything in motion.',
+      model_id: 'eleven_multilingual_v2',
+    });
+
+    const chunks: Buffer[] = [];
+    for await (const chunk of audio) {
+      chunks.push(Buffer.from(chunk));
     }
+    const audioBase64 = Buffer.concat(chunks).toString('base64');
 
-    return Ok();
+    return Ok({ audioBase64 });
   } catch (error) {
-    console.error('setApiKey failed:', error);
-    return Err('Failed to set API key');
+    console.error('generateTextToSpeech failed:', error);
+    return Err('An unexpected error occurred');
   }
-}
-
-export async function getApiKey(): Promise<Result<string | null>> {
-  const cookieStore = await cookies();
-  const apiKey = cookieStore.get('xi-api-key')?.value;
-  return Ok(apiKey ?? null);
 }
