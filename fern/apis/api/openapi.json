@@ -9305,252 +9305,6 @@
         "x-fern-sdk-method-name": "create_secret"
       }
     },
-    "/v1/speech-to-text/reviews/{review_id}/claim": {
-      "post": {
-        "operationId": "Claim_a_review_task_v1_speech_to_text_reviews__review_id__claim_post",
-        "summary": "Claim A Review Task",
-        "parameters": [
-          {
-            "name": "review_id",
-            "in": "path",
-            "description": "The ID task review to claim.",
-            "required": true,
-            "schema": {
-              "description": "The ID task review to claim.",
-              "type": "string",
-              "title": "Review Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/speech-to-text/reviews/{review_id}/submit": {
-      "post": {
-        "operationId": "Submit_a_review_task_v1_speech_to_text_reviews__review_id__submit_post",
-        "summary": "Submit A Review Task",
-        "parameters": [
-          {
-            "name": "review_id",
-            "in": "path",
-            "description": "The ID task review to claim.",
-            "required": true,
-            "schema": {
-              "description": "The ID task review to claim.",
-              "type": "string",
-              "title": "Review Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/speech-to-text/reviews/unclaimed": {
-      "post": {
-        "operationId": "List_unclaimed_reviews_v1_speech_to_text_reviews_unclaimed_post",
-        "summary": "List Unclaimed Reviews",
-        "parameters": [
-          {
-            "name": "page_size",
-            "in": "query",
-            "description": "The number of tasks to return per page.",
-            "required": false,
-            "schema": {
-              "description": "The number of tasks to return per page.",
-              "type": "integer",
-              "default": 20,
-              "maximum": 100,
-              "minimum": 10,
-              "title": "Page Size"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "description": "Cursor for pagination, using the cursor from the previous page.",
-            "required": false,
-            "schema": {
-              "description": "Cursor for pagination, using the cursor from the previous page.",
-              "type": "string",
-              "title": "Cursor"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ListUnclaimedReviewTasksPayload"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedListedReviewTaskPreviewModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/speech-to-text/reviews": {
-      "post": {
-        "operationId": "List_user_s_reviews_v1_speech_to_text_reviews_post",
-        "summary": "List User'S Reviews",
-        "parameters": [
-          {
-            "name": "page_size",
-            "in": "query",
-            "description": "The number of tasks to return per page.",
-            "required": false,
-            "schema": {
-              "description": "The number of tasks to return per page.",
-              "type": "integer",
-              "default": 20,
-              "maximum": 100,
-              "minimum": 10,
-              "title": "Page Size"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "description": "Cursor for pagination, using the cursor from the previous page.",
-            "required": false,
-            "schema": {
-              "description": "Cursor for pagination, using the cursor from the previous page.",
-              "type": "string",
-              "title": "Cursor"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ListUserReviewTasksPayload"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedListedReviewTaskPreviewModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/speech-to-text/reviews/get-quote": {
-      "post": {
-        "operationId": "List_user_s_reviews_v1_speech_to_text_reviews_get_quote_post",
-        "summary": "List User'S Reviews",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/QuoteRequestModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QuoteResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/docs": {
       "get": {
         "operationId": "redirect_to_mintlify_docs_get",
@@ -10585,11 +10339,6 @@
             ],
             "title": "Fiction"
           },
-          "quality_check_on": {
-            "description": "[Depracated] Whether to run quality check on the generated audio and regenerate if needed. Applies to individual block conversion.",
-            "type": "boolean",
-            "title": "Quality Check On"
-          },
           "apply_text_normalization": {
             "description": "\n    This parameter controls text normalization with four modes: 'auto', 'on', 'apply_english' and 'off'.\n    When set to 'auto', the system will automatically decide whether to apply text normalization \n    (e.g., spelling out numbers). With 'on', text normalization will always be applied, while \n    with 'off', it will be skipped. 'apply_english' is the same as 'on' but will assume that text is in English.\n    ",
             "type": "string",
@@ -11069,11 +10818,6 @@
               "fiction"
             ],
             "title": "Fiction"
-          },
-          "quality_check_on": {
-            "description": "[Depracated] Whether to run quality check on the generated audio and regenerate if needed. Applies to individual block conversion.",
-            "type": "boolean",
-            "title": "Quality Check On"
           },
           "apply_text_normalization": {
             "description": "\n    This parameter controls text normalization with four modes: 'auto', 'on', 'apply_english' and 'off'.\n    When set to 'auto', the system will automatically decide whether to apply text normalization \n    (e.g., spelling out numbers). With 'on', text normalization will always be applied, while \n    with 'off', it will be skipped. 'apply_english' is the same as 'on' but will assume that text is in English.\n    ",
@@ -11785,11 +11529,6 @@
               false
             ],
             "title": "Volume Normalization"
-          },
-          "quality_check_on": {
-            "description": "[Depracated] Whether to run quality check on the generated audio and regenerate if needed. Applies to individual block conversion.",
-            "type": "boolean",
-            "title": "Quality Check On"
           }
         },
         "required": [
@@ -13052,11 +12791,6 @@
               false
             ],
             "title": "Volume Normalization"
-          },
-          "quality_check_on": {
-            "description": "[Depracated] Whether to run quality check on the generated audio and regenerate if needed. Applies to individual block conversion.",
-            "type": "boolean",
-            "title": "Quality Check On"
           }
         },
         "required": [
@@ -13639,6 +13373,105 @@
           "name"
         ],
         "title": "ConvAIStoredSecretConfig"
+      },
+      "ConvAIStoredSecretDependencies": {
+        "type": "object",
+        "properties": {
+          "tools": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependentAvailableToolIdentifier"
+                },
+                {
+                  "$ref": "#/components/schemas/DependentUnknownToolIdentifier"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "available": "#/components/schemas/DependentAvailableToolIdentifier",
+                  "unknown": "#/components/schemas/DependentUnknownToolIdentifier"
+                }
+              }
+            },
+            "title": "Tools"
+          },
+          "agents": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependentAvailableAgentIdentifier"
+                },
+                {
+                  "$ref": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "available": "#/components/schemas/DependentAvailableAgentIdentifier",
+                  "unknown": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              }
+            },
+            "title": "Agents"
+          },
+          "others": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SecretDependencyType"
+            }
+          }
+        },
+        "required": [
+          "tools",
+          "agents",
+          "others"
+        ],
+        "title": "ConvAIStoredSecretDependencies"
+      },
+      "ConvAIWebhooks": {
+        "type": "object",
+        "properties": {
+          "post_call_webhook_id": {
+            "type": "string",
+            "title": "Post Call Webhook Id"
+          }
+        },
+        "title": "ConvAIWebhooks"
+      },
+      "ConvAIWorkspaceStoredSecretConfig": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "stored"
+            ],
+            "title": "Type"
+          },
+          "secret_id": {
+            "type": "string",
+            "title": "Secret Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "used_by": {
+            "$ref": "#/components/schemas/ConvAIStoredSecretDependencies"
+          }
+        },
+        "required": [
+          "type",
+          "secret_id",
+          "name",
+          "used_by"
+        ],
+        "title": "ConvAIWorkspaceStoredSecretConfig"
       },
       "ConversationChargingCommonModel": {
         "type": "object",
@@ -14311,6 +14144,47 @@
         ],
         "title": "DependentAvailableAgentIdentifier"
       },
+      "DependentAvailableToolIdentifier": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "default": "available",
+            "enum": [
+              "available"
+            ],
+            "title": "Type"
+          },
+          "created_at_unix_secs": {
+            "type": "integer",
+            "title": "Created At Unix Secs"
+          },
+          "access_level": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "editor",
+              "viewer"
+            ],
+            "title": "Access Level"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "created_at_unix_secs",
+          "access_level"
+        ],
+        "title": "DependentAvailableToolIdentifier"
+      },
       "DependentUnknownAgentIdentifier": {
         "description": "A model that represents an agent dependent on a knowledge base/tools\nto which the user has no direct access.",
         "type": "object",
@@ -14325,6 +14199,21 @@
           }
         },
         "title": "DependentUnknownAgentIdentifier"
+      },
+      "DependentUnknownToolIdentifier": {
+        "description": "A model that represents an tool dependent on a knowledge base/tools\nto which the user has no direct access.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "unknown",
+            "enum": [
+              "unknown"
+            ],
+            "title": "Type"
+          }
+        },
+        "title": "DependentUnknownToolIdentifier"
       },
       "DoDubbingResponseModel": {
         "type": "object",
@@ -14927,10 +14816,13 @@
           "conversation_initiation_client_data_webhook": {
             "$ref": "#/components/schemas/ConversationInitiationClientDataWebhook"
           },
+          "webhooks": {
+            "$ref": "#/components/schemas/ConvAIWebhooks"
+          },
           "secrets": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ConvAIStoredSecretConfig"
+              "$ref": "#/components/schemas/ConvAIWorkspaceStoredSecretConfig"
             },
             "title": "Secrets"
           }
@@ -15364,7 +15256,7 @@
           "secrets": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ConvAIStoredSecretConfig"
+              "$ref": "#/components/schemas/ConvAIWorkspaceStoredSecretConfig"
             },
             "title": "Secrets"
           }
@@ -16206,6 +16098,9 @@
         "properties": {
           "conversation_initiation_client_data_webhook": {
             "$ref": "#/components/schemas/ConversationInitiationClientDataWebhook"
+          },
+          "webhooks": {
+            "$ref": "#/components/schemas/ConvAIWebhooks"
           },
           "secrets": {
             "type": "array",
@@ -17529,6 +17424,14 @@
           "hash"
         ],
         "title": "SampleResponseModel"
+      },
+      "SecretDependencyType": {
+        "description": "An enumeration.",
+        "type": "string",
+        "enum": [
+          "conversation_initiation_webhook"
+        ],
+        "title": "SecretDependencyType"
       },
       "SpeechHistoryItemResponseModel": {
         "type": "object",
@@ -19212,6 +19115,11 @@
             "type": "boolean",
             "default": true,
             "title": "Use Speaker Boost"
+          },
+          "speed": {
+            "type": "number",
+            "default": 1,
+            "title": "Speed"
           }
         },
         "required": [
@@ -19713,6 +19621,12 @@
             "default": false,
             "title": "Show Avatar When Collapsed"
           },
+          "disable_banner": {
+            "description": "Whether to disable the ConvAI widget banner",
+            "type": "boolean",
+            "default": false,
+            "title": "Disable Banner"
+          },
           "language_selector": {
             "type": "boolean",
             "default": false,
@@ -19848,6 +19762,12 @@
             "type": "boolean",
             "default": false,
             "title": "Show Avatar When Collapsed"
+          },
+          "disable_banner": {
+            "description": "Whether to disable the ConvAI widget banner",
+            "type": "boolean",
+            "default": false,
+            "title": "Disable Banner"
           },
           "language": {
             "type": "string",
