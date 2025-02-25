@@ -125,17 +125,17 @@ export const createAudioFileFromText = async (text: string): Promise<string> => 
   return new Promise<string>(async (resolve, reject) => {
     try {
       const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
-          model_id: 'eleven_multilingual_v2',
-          text,
-          output_format: 'mp3_44100_128',
-          // Optional voice settings that allow you to customize the output
-          voice_settings: {
-            stability: 0,
-            similarity_boost: 0,
-            use_speaker_boost: true,
-            speed: 1.0,
-          },
-        });
+        model_id: 'eleven_multilingual_v2',
+        text,
+        output_format: 'mp3_44100_128',
+        // Optional voice settings that allow you to customize the output
+        voice_settings: {
+          stability: 0,
+          similarity_boost: 0,
+          use_speaker_boost: true,
+          speed: 1.0,
+        },
+      });
 
       const fileName = `${uuid()}.mp3`;
       const fileStream = createWriteStream(fileName);
