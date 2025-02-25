@@ -15533,6 +15533,51 @@
         ],
         "title": "LibraryVoiceResponseModel"
       },
+      "ListUnclaimedReviewTasksPayload": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/TagModel"
+              },
+              "type": "array"
+            },
+            "title": "Tags"
+          }
+        },
+        "required": [
+          "tags"
+        ],
+        "title": "ListUnclaimedReviewTasksPayload"
+      },
+      "ListUserReviewTasksPayload": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/TagModel"
+              },
+              "type": "array"
+            },
+            "title": "Tags"
+          },
+          "state": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewState"
+            }
+          }
+        },
+        "required": [
+          "tags",
+          "state"
+        ],
+        "title": "ListUserReviewTasksPayload"
+      },
       "LiteralJsonSchemaProperty": {
         "type": "object",
         "properties": {
@@ -15930,6 +15975,26 @@
           }
         },
         "title": "OrbAvatar"
+      },
+      "PaginatedListedReviewTaskPreviewModel": {
+        "type": "object",
+        "properties": {
+          "review_tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewTaskPreviewModel"
+            },
+            "title": "Review Tasks"
+          },
+          "cursor": {
+            "type": "string",
+            "title": "Cursor"
+          }
+        },
+        "required": [
+          "review_tasks"
+        ],
+        "title": "PaginatedListedReviewTaskPreviewModel"
       },
       "PatchConvaiSettingsRequest": {
         "type": "object",
@@ -16975,6 +17040,62 @@
         ],
         "title": "QueryParamsJsonSchema"
       },
+      "QuoteRequestModel": {
+        "type": "object",
+        "properties": {
+          "content_hash": {
+            "type": "string",
+            "title": "Content Hash"
+          },
+          "duration_s": {
+            "type": "number",
+            "title": "Duration S"
+          },
+          "speaker_count": {
+            "type": "integer",
+            "title": "Speaker Count"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          }
+        },
+        "required": [
+          "content_hash",
+          "duration_s",
+          "speaker_count",
+          "language"
+        ],
+        "title": "QuoteRequestModel"
+      },
+      "QuoteResponseModel": {
+        "type": "object",
+        "properties": {
+          "quote_usd": {
+            "type": "number",
+            "title": "Quote Usd"
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Valid Until"
+          },
+          "request": {
+            "$ref": "#/components/schemas/QuoteRequestModel"
+          },
+          "quote_token": {
+            "type": "string",
+            "title": "Quote Token"
+          }
+        },
+        "required": [
+          "quote_usd",
+          "valid_until",
+          "request",
+          "quote_token"
+        ],
+        "title": "QuoteResponseModel"
+      },
       "ReaderResourceResponseModel": {
         "type": "object",
         "properties": {
@@ -17048,38 +17169,58 @@
         ],
         "title": "RemovePronunciationDictionaryRulesResponseModel"
       },
-      "ResourceAccessInfo": {
+      "ReviewState": {
+        "description": "An enumeration.",
+        "type": "string",
+        "enum": [
+          "unclaimed",
+          "claimed",
+          "submitted",
+          "done",
+          "rejected",
+          "in_progress"
+        ],
+        "title": "ReviewState"
+      },
+      "ReviewTaskPreviewModel": {
         "type": "object",
         "properties": {
-          "is_creator": {
-            "type": "boolean",
-            "title": "Is Creator"
-          },
-          "creator_name": {
+          "id": {
             "type": "string",
-            "title": "Creator Name"
+            "title": "Id"
           },
-          "creator_email": {
-            "type": "string",
-            "title": "Creator Email"
+          "state": {
+            "$ref": "#/components/schemas/ReviewState"
           },
-          "role": {
+          "duration_secs": {
+            "type": "number",
+            "title": "Duration Secs"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagDbModel"
+            },
+            "title": "Tags"
+          },
+          "bounty_usd": {
+            "type": "number",
+            "title": "Bounty Usd"
+          },
+          "deadline": {
             "type": "string",
-            "enum": [
-              "admin",
-              "editor",
-              "viewer"
-            ],
-            "title": "Role"
+            "format": "date-time",
+            "title": "Deadline"
           }
         },
         "required": [
-          "is_creator",
-          "creator_name",
-          "creator_email",
-          "role"
+          "id",
+          "state",
+          "tags",
+          "bounty_usd",
+          "deadline"
         ],
-        "title": "ResourceAccessInfo"
+        "title": "ReviewTaskPreviewModel"
       },
       "SafetyCommonModel": {
         "description": "Safety object that has the information of safety evaluations based on used voice.",
@@ -18001,6 +18142,49 @@
           "ulaw_8000"
         ],
         "title": "TTSOutputFormat"
+      },
+      "TagDbModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/TagKind"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "title": "TagDbModel"
+      },
+      "TagKind": {
+        "description": "An enumeration.",
+        "type": "string",
+        "enum": [
+          "lang",
+          "job_type"
+        ],
+        "title": "TagKind"
+      },
+      "TagModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/TagKind"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "title": "TagModel"
       },
       "TelephonyProvider": {
         "description": "An enumeration.",
