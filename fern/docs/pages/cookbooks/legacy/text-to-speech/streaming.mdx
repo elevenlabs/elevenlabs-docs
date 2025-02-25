@@ -78,11 +78,13 @@ def text_to_speech_file(text: str) -> str:
         output_format="mp3_22050_32",
         text=text,
         model_id="eleven_turbo_v2_5", # use the turbo model for low latency
+        # Optional voice settings that allow you to customize the output
         voice_settings=VoiceSettings(
             stability=0.0,
             similarity_boost=1.0,
             style=0.0,
             use_speaker_boost=True,
+            speed=1.0,
         ),
     )
 
@@ -122,11 +124,19 @@ const client = new ElevenLabsClient({
 export const createAudioFileFromText = async (text: string): Promise<string> => {
   return new Promise<string>(async (resolve, reject) => {
     try {
-      const audio = await client.generate({
-        voice: 'Rachel',
-        model_id: 'eleven_turbo_v2_5',
-        text,
-      });
+      const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
+          model_id: 'eleven_multilingual_v2',
+          text,
+          output_format: 'mp3_44100_128',
+          // Optional voice settings that allow you to customize the output
+          voice_settings: {
+            stability: 0,
+            similarity_boost: 0,
+            use_speaker_boost: true,
+            speed: 1.0,
+          },
+        });
+
       const fileName = `${uuid()}.mp3`;
       const fileStream = createWriteStream(fileName);
 
@@ -183,11 +193,13 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
         output_format="mp3_22050_32",
         text=text,
         model_id="eleven_multilingual_v2",
+        # Optional voice settings that allow you to customize the output
         voice_settings=VoiceSettings(
             stability=0.0,
             similarity_boost=1.0,
             style=0.0,
             use_speaker_boost=True,
+            speed=1.0,
         ),
     )
 
@@ -224,10 +236,17 @@ const client = new ElevenLabsClient({
 });
 
 export const createAudioStreamFromText = async (text: string): Promise<Buffer> => {
-  const audioStream = await client.generate({
-    voice: 'Rachel',
-    model_id: 'eleven_turbo_v2_5',
+  const audioStream = await client.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
+    model_id: 'eleven_multilingual_v2',
     text,
+    output_format: 'mp3_44100_128',
+    // Optional voice settings that allow you to customize the output
+    voice_settings: {
+      stability: 0,
+      similarity_boost: 1.0,
+      use_speaker_boost: true,
+      speed: 1.0,
+    },
   });
 
   const chunks: Buffer[] = [];
