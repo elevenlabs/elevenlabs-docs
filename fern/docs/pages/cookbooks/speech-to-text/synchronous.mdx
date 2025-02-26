@@ -59,7 +59,9 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
 
     load_dotenv()
 
-    client = ElevenLabs()
+    client = ElevenLabs(
+        api_key=os.getenv("ELEVENLABS_API_KEY"),
+    )
 
     audio_url = (
         "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
