@@ -3,8 +3,6 @@ title: Synchronous Speech to Text
 subtitle: Learn how to transcribe audio with ElevenLabs synchronously
 ---
 
-<Note>This feature is currently only available to alpha users and is subject to change.</Note>
-
 In this tutorial, you'll learn how to transcribe audio with the ElevenLabs SDK synchronously.
 
 ## Requirements
@@ -74,8 +72,9 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
         model_id="scribe_v1", # Model to use, for now only "scribe_v1" is supported
         maximum_speakers=1, # Number of speakers in the audio file
         tag_audio_events=True, # Tag audio events like laughter, applause, etc.
-        speech_to_text_language_code="en", # Language of the audio file
+        language_code="en", # Language of the audio file
         transcribe_verbatim=False, # Transcribe verbatim sounds like "um" and "ah"
+        diarize=True, # Whether to annotate who is speaking
     )
 
     print(transcription.text)
@@ -98,8 +97,9 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
         model_id: "scribe_v1", // Model to use, for now only "scribe_v1" is supported
         maximum_speakers: 1, // Number of speakers in the audio file
         tag_audio_events: true, // Tag audio events like laughter, applause, etc.
-        speech_to_text_language_code: "en", // Language of the audio file
+        language_code: "en", // Language of the audio file
         transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
+        diarize: true, // Whether to annotate who is speaking
     });
 
     console.log(transcription.text);
@@ -110,13 +110,13 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
 
 Run the script with:
 
-<CodeGroup>
-    ```bash Python
+<CodeBlock>
+    ```python
     python speech_to_text.py
     ```
 
-    ```bash Node
+    ```node
     node speechToText.js
     ```
 
-</CodeGroup>
+</CodeBlock>
