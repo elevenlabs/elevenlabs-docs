@@ -8264,6 +8264,41 @@
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
             "required": false,
             "schema": {
+              "description": "If specified, the endpoint returns only such knowledge base documents whose names start with this string.",
+              "type": "string",
+              "title": "Search"
+            }
+          },
+          {
+            "name": "show_only_owned_documents",
+            "in": "query",
+            "description": "If set to true, the endpoint will return only documents owned by you (and not shared from somebody else).",
+            "required": false,
+            "schema": {
+              "description": "If set to true, the endpoint will return only documents owned by you (and not shared from somebody else).",
+              "type": "boolean",
+              "default": false,
+              "title": "Show Only Owned Documents"
+            }
+          },
+          {
+            "name": "use_typesense",
+            "in": "query",
+            "description": "If set to true, the endpoint will use typesense DB to search for the documents).",
+            "required": false,
+            "schema": {
+              "description": "If set to true, the endpoint will use typesense DB to search for the documents).",
+              "type": "boolean",
+              "default": false,
+              "title": "Use Typesense"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
               "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
               "type": "string",
               "title": "Xi-Api-Key"
@@ -9776,6 +9811,140 @@
         "title": "AudioNativeEditContentResponseModel"
       },
       "AudioNativeProjectSettingsResponseModel": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "image": {
+            "type": "string",
+            "title": "Image"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author"
+          },
+          "small": {
+            "type": "boolean",
+            "title": "Small"
+          },
+          "text_color": {
+            "type": "string",
+            "title": "Text Color"
+          },
+          "background_color": {
+            "type": "string",
+            "title": "Background Color"
+          },
+          "sessionization": {
+            "type": "integer",
+            "title": "Sessionization"
+          },
+          "audio_path": {
+            "type": "string",
+            "title": "Audio Path"
+          },
+          "audio_url": {
+            "type": "string",
+            "title": "Audio Url"
+          }
+        },
+        "required": [
+          "title",
+          "image",
+          "author",
+          "small",
+          "text_color",
+          "background_color",
+          "sessionization",
+          "audio_path",
+          "audio_url"
+        ],
+        "title": "AudioNativeProjectSettingsResponseModel"
+      },
+      "AudioWithTimestampsResponseModel": {
+        "type": "object",
+        "properties": {
+          "audio_base64": {
+            "description": "Base64 encoded audio data",
+            "type": "string",
+            "title": "Audio Base64"
+          },
+          "alignment": {
+            "description": "Timestamp information for each character in the original text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterAlignmentResponseModel"
+              }
+            ],
+            "title": "Alignment"
+          },
+          "normalized_alignment": {
+            "description": "Timestamp information for each character in the normalized text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterAlignmentResponseModel"
+              }
+            ],
+            "title": "Normalized Alignment"
+          }
+        },
+        "example": {
+          "audio_base64": "base64_encoded_audio_string",
+          "alignment": {
+            "characters": [
+              "H",
+              "e",
+              "l",
+              "l",
+              "o"
+            ],
+            "character_start_times_seconds": [
+              0,
+              0.1,
+              0.2,
+              0.3,
+              0.4
+            ],
+            "character_end_times_seconds": [
+              0.1,
+              0.2,
+              0.3,
+              0.4,
+              0.5
+            ]
+          },
+          "normalized_alignment": {
+            "characters": [
+              "H",
+              "e",
+              "l",
+              "l",
+              "o"
+            ],
+            "character_start_times_seconds": [
+              0,
+              0.1,
+              0.2,
+              0.3,
+              0.4
+            ],
+            "character_end_times_seconds": [
+              0.1,
+              0.2,
+              0.3,
+              0.4,
+              0.5
+            ]
+          }
+        },
+        "required": [
+          "audio_base64"
+        ],
+        "title": "AudioWithTimestampsResponseModel"
+      },
+      "AuthSettings": {
         "type": "object",
         "properties": {
           "title": {
@@ -14118,6 +14287,21 @@
         },
         "title": "DependentUnknownToolIdentifier"
       },
+      "DependentUnknownToolIdentifier": {
+        "description": "A model that represents an tool dependent on a knowledge base/tools\nto which the user has no direct access.",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "unknown",
+            "enum": [
+              "unknown"
+            ],
+            "title": "Type"
+          }
+        },
+        "title": "DependentUnknownToolIdentifier"
+      },
       "DoDubbingResponseModel": {
         "type": "object",
         "properties": {
@@ -15533,6 +15717,51 @@
         ],
         "title": "LibraryVoiceResponseModel"
       },
+      "ListUnclaimedReviewTasksPayload": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/TagModel"
+              },
+              "type": "array"
+            },
+            "title": "Tags"
+          }
+        },
+        "required": [
+          "tags"
+        ],
+        "title": "ListUnclaimedReviewTasksPayload"
+      },
+      "ListUserReviewTasksPayload": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/TagModel"
+              },
+              "type": "array"
+            },
+            "title": "Tags"
+          },
+          "state": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewState"
+            }
+          }
+        },
+        "required": [
+          "tags",
+          "state"
+        ],
+        "title": "ListUserReviewTasksPayload"
+      },
       "LiteralJsonSchemaProperty": {
         "type": "object",
         "properties": {
@@ -15930,6 +16159,26 @@
           }
         },
         "title": "OrbAvatar"
+      },
+      "PaginatedListedReviewTaskPreviewModel": {
+        "type": "object",
+        "properties": {
+          "review_tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewTaskPreviewModel"
+            },
+            "title": "Review Tasks"
+          },
+          "cursor": {
+            "type": "string",
+            "title": "Cursor"
+          }
+        },
+        "required": [
+          "review_tasks"
+        ],
+        "title": "PaginatedListedReviewTaskPreviewModel"
       },
       "PatchConvaiSettingsRequest": {
         "type": "object",
@@ -16975,6 +17224,62 @@
         ],
         "title": "QueryParamsJsonSchema"
       },
+      "QuoteRequestModel": {
+        "type": "object",
+        "properties": {
+          "content_hash": {
+            "type": "string",
+            "title": "Content Hash"
+          },
+          "duration_s": {
+            "type": "number",
+            "title": "Duration S"
+          },
+          "speaker_count": {
+            "type": "integer",
+            "title": "Speaker Count"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          }
+        },
+        "required": [
+          "content_hash",
+          "duration_s",
+          "speaker_count",
+          "language"
+        ],
+        "title": "QuoteRequestModel"
+      },
+      "QuoteResponseModel": {
+        "type": "object",
+        "properties": {
+          "quote_usd": {
+            "type": "number",
+            "title": "Quote Usd"
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Valid Until"
+          },
+          "request": {
+            "$ref": "#/components/schemas/QuoteRequestModel"
+          },
+          "quote_token": {
+            "type": "string",
+            "title": "Quote Token"
+          }
+        },
+        "required": [
+          "quote_usd",
+          "valid_until",
+          "request",
+          "quote_token"
+        ],
+        "title": "QuoteResponseModel"
+      },
       "ReaderResourceResponseModel": {
         "type": "object",
         "properties": {
@@ -17080,6 +17385,59 @@
           "role"
         ],
         "title": "ResourceAccessInfo"
+      },f
+      "ReviewState": {
+        "description": "An enumeration.",
+        "type": "string",
+        "enum": [
+          "unclaimed",
+          "claimed",
+          "submitted",
+          "done",
+          "rejected",
+          "in_progress"
+        ],
+        "title": "ReviewState"
+      },
+      "ReviewTaskPreviewModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "state": {
+            "$ref": "#/components/schemas/ReviewState"
+          },
+          "duration_secs": {
+            "type": "number",
+            "title": "Duration Secs"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagDbModel"
+            },
+            "title": "Tags"
+          },
+          "bounty_usd": {
+            "type": "number",
+            "title": "Bounty Usd"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Deadline"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "tags",
+          "bounty_usd",
+          "deadline"
+        ],
+        "title": "ReviewTaskPreviewModel"
       },
       "SafetyCommonModel": {
         "description": "Safety object that has the information of safety evaluations based on used voice.",
@@ -18001,6 +18359,49 @@
           "ulaw_8000"
         ],
         "title": "TTSOutputFormat"
+      },
+      "TagDbModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/TagKind"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "title": "TagDbModel"
+      },
+      "TagKind": {
+        "description": "An enumeration.",
+        "type": "string",
+        "enum": [
+          "lang",
+          "job_type"
+        ],
+        "title": "TagKind"
+      },
+      "TagModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/TagKind"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "title": "TagModel"
       },
       "TelephonyProvider": {
         "description": "An enumeration.",
