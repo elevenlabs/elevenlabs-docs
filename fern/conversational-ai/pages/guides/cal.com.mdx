@@ -123,7 +123,7 @@ Either view a step by step summary or view the detailed system prompt of the age
 <Step title="Adding tools to the assistant">
   To enable your assistant to manage calendar bookings, we'll create two tools:
   
-  1. **`get_available_slots`**: When a user asks, _"Is Louis free at 10:30 AM on Tuesday?"_, the assistant should use [Cal.com's "Get available slots" endpoint](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots) to check for available time slots.
+  1. **`get_available_slots`**: When a user asks, _"Is Louis free at 10:30 AM on Tuesday?"_, the assistant should use [Cal.com's "Get available slots" endpoint](https://cal.com/docs/api-reference/v2/slots/find-out-when-is-an-event-type-ready-to-be-booked) to check for available time slots.
   
   2. **`book_meeting`**: After identifying a suitable time, the assistant can proceed to book the meeting using [Cal.com's "Create a booking" endpoint](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking).
 
@@ -151,9 +151,10 @@ Metadata used by the assistant to determine when the tool should be called:
 
 Matches the request headers defined [here](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots):
 
-| Type   | Name          | Value                               |
-| ------ | ------------- | ----------------------------------- |
-| Secret | Authorization | Select the secret key created above |
+| Type   | Name            | Value                               |
+| ------ | --------------- | ----------------------------------- |
+| Secret | Authorization   | Select the secret key created above |
+| String | cal-api-version | 2024-09-04                          |
 
 </Tab>
 
@@ -163,8 +164,9 @@ Matches the request query parameters defined [here](https://cal.com/docs/api-ref
 
 | Data Type | Identifier | Required | Description                                                                   |
 | --------- | ---------- | -------- | ----------------------------------------------------------------------------- |
-| string    | startTime  | Yes      | Start date/time (UTC) from which to fetch slots, e.g. '2024-08-13T09:00:00Z'. |
-| string    | endTime    | Yes      | End date/time (UTC) until which to fetch slots, e.g. '2024-08-13T17:00:00Z'.  |
+| string    | start      | Yes      | Start date/time (UTC) from which to fetch slots, e.g. '2024-08-13T09:00:00Z'. |
+| string    | end        | Yes      | End date/time (UTC) until which to fetch slots, e.g. '2024-08-13T17:00:00Z'.  |
+| string    | eventTypeId | Yes      | The ID of the event type that is booked. If 15 minutes, return abc. If 30 minutes, return def. If 60 minutes, return xyz. |
 
 </Tab>
 
@@ -203,11 +205,11 @@ Matches the request headers defined [here](https://cal.com/docs/api-reference/v2
 
 Matches the request body parameters defined [here](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking):
 
-| Identifier  | Data Type | Required | Description                                                                                                                           |
-| ----------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| start       | String    | Yes      | The start time of the booking in ISO 8601 format in UTC timezone, e.g. ‘2024-08-13T09:00:00Z’.                                        |
-| eventTypeId | Number    | Yes      | The ID of the event type that is booked. If 15 minutes, return 1351800. If 30 minutes, return 1351801. If 60 minutes, return 1351802. |
-| attendee    | Object    | Yes      | The attendee's details. You must collect these fields from the user.                                                                  |
+| Identifier  | Data Type | Required | Description                                                                                                               |
+| ----------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| start       | String    | Yes      | The start time of the booking in ISO 8601 format in UTC timezone, e.g. ‘2024-08-13T09:00:00Z’.                            |
+| eventTypeId | Number    | Yes      | The ID of the event type that is booked. If 15 minutes, return abc. If 30 minutes, return def. If 60 minutes, return xyz. |
+| attendee    | Object    | Yes      | The attendee's details. You must collect these fields from the user.                                                      |
 
 <Note>
   The `eventTypeId` must correspond to the event types you have available in Cal. Call
