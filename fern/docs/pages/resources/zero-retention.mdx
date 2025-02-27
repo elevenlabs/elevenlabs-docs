@@ -41,31 +41,33 @@ Zero retention mode can be used by sending `enable_logging=false` with the produ
 For example, in the Text to Speech API, you can set the query parameter [enable_logging](https://elevenlabs.io/docs/api-reference/text-to-speech#parameter-enable-logging) to a `false` value:
 
 <CodeBlocks>
+
 ```python title="Python" {12}
 from elevenlabs import ElevenLabs
 
 client = ElevenLabs(
-    api_key="YOUR_API_KEY",
+  api_key="YOUR_API_KEY",
 )
 
 response = client.text_to_speech.convert(
-    voice_id=voice_id,
-    output_format="mp3_22050_32",
-    text=text,
-    model_id="eleven_turbo_v2",
-    enable_logging=False
+  voice_id=voice_id,
+  output_format="mp3_22050_32",
+  text=text,
+  model_id="eleven_turbo_v2",
+  enable_logging=False,
 )
+
 ```
 
-```typescript title="TypeScript" {9}
-import { ElevenLabsClient } from "elevenlabs";
+```javascript title="JavaScript" {9}
+import { ElevenLabsClient } from 'elevenlabs';
 
-const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
+const client = new ElevenLabsClient({ apiKey: 'YOUR_API_KEY' });
 
 await client.textToSpeech.convert(voiceId, {
-  output_format: "mp3_44100_128",
+  output_format: 'mp3_44100_128',
   text: text,
-  model_id: "eleven_turbo_v2",
+  model_id: 'eleven_turbo_v2',
   enable_logging: false,
 });
 ```
