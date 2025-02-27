@@ -51,11 +51,12 @@ client = ElevenLabs(
 response = client.text_to_speech.convert(
     voice_id=voice_id,
     output_format="mp3_22050_32",
-        text=text,
-        model_id="eleven_turbo_v2",
-        enable_logging=False
+    text=text,
+    model_id="eleven_turbo_v2",
+    enable_logging=False
 )
-```
+
+````
 
 ```typescript title="TypeScript" {9}
 import { ElevenLabsClient } from "elevenlabs";
@@ -68,7 +69,7 @@ await client.textToSpeech.convert(voiceId, {
   model_id: "eleven_turbo_v2",
   enable_logging: false,
 });
-```
+````
 
 ```bash title="cURL"
 curl --request POST \
@@ -96,20 +97,29 @@ curl --request POST \
 |                            | Audio Output         | Enabled           | No                          |
 | Conv AI                    | All Input and Output | Enabled           | No                          |
 
-
 ## FAQ
 
 <AccordionGroup>
   <Accordion title="What are some limitations of zero retention mode?" default>
-    Troubleshooting and support for zero Retention Mode is limited. Because of the configuration, we will not be able to diagnose issues with TTS/STS generations. Debugging will be more difficult as a result.
+    Troubleshooting and support for zero Retention Mode is limited. Because of the configuration, we
+    will not be able to diagnose issues with TTS/STS generations. Debugging will be more difficult
+    as a result.
   </Accordion>
   <Accordion title="How does retention work if zero retention mode is not active?">
-    Customers by default have history preservation enabled. All customers can use the API to delete generations at any time. This action will immediately remove the corresponding audio and text from our database; however, debugging and moderation logs may still retain data related to the generation.
+    Customers by default have history preservation enabled. All customers can use the API to delete
+    generations at any time. This action will immediately remove the corresponding audio and text
+    from our database; however, debugging and moderation logs may still retain data related to the
+    generation.
   </Accordion>
   <Accordion title="Data backup (When zero retention mode is not used)">
-    For any retained data, we regularly back up such data to prevent data loss in the event of any unexpected incidents. Following data deletion, database items are retained in backups for up to 30 days After this period, the data expires and is not recoverable.
+    For any retained data, we regularly back up such data to prevent data loss in the event of any
+    unexpected incidents. Following data deletion, database items are retained in backups for up to
+    30 days After this period, the data expires and is not recoverable.
   </Accordion>
   <Accordion title="Account deletion (When zero retention mode is not used)">
-    All data is deleted from our systems permanently when you delete your account. This includes all data associated with your account, such as API keys, request history, and any other data stored in your account. We also take commercially reasonable efforts to delete debugging data related to your account.
+    All data is deleted from our systems permanently when you delete your account. This includes all
+    data associated with your account, such as API keys, request history, and any other data stored
+    in your account. We also take commercially reasonable efforts to delete debugging data related
+    to your account.
   </Accordion>
 </AccordionGroup>
