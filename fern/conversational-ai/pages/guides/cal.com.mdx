@@ -99,59 +99,155 @@ Either view a step by step summary or view the detailed system prompt of the age
   </Tab>
 </Tabs>
 
-<Tip>
-  This integration enhances efficiency by automating the scheduling process. All API calls require
-  proper secret handling in the authorization headers.
-</Tip>
+## Setup
 
-## Tool Configurations
+<Steps>
+  <Step title="Store your cal.com secret">
+    To make authenticated requests to external APIs like Cal.com, you need to store your API keys securely. Start by generating a new [Cal.com API key](https://cal.com/docs/api-reference/v1/introduction#get-your-api-keys).
 
-The integration with Cal.com employs two webhook tools to create the scheduling assistant. Use the tabs below to review each tool's configuration.
+    Not all APIs have the same authentication structure. For example, the Cal.com API expects the following authentication header:
+
+    ```plaintext Cal request header structure
+    'Authorization': 'Bearer YOUR_API_KEY'
+    ```
+
+    Once you have your API key, store it in the assistant's secret storage. This ensures that your key is kept secure and accessible when making requests.
+    <Warning>
+      To match the expected authentication structure of Cal.com, remember to prepend the API key with `Bearer ` when creating the secret.
+    </Warning>
+    <Frame background="subtle">
+      ![Tool secrets](/assets/images/conversational-ai/tool-secrets.jpg)
+    </Frame>
+
+  </Step>
+<Step title="Adding tools to the assistant">
+  To enable your assistant to manage calendar bookings, we'll create two tools:
+  
+  1. **`get_available_slots`**: When a user asks, _"Is Louis free at 10:30 AM on Tuesday?"_, the assistant should use [Cal.com's "Get available slots" endpoint](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots) to check for available time slots.
+  
+  2. **`book_meeting`**: After identifying a suitable time, the assistant can proceed to book the meeting using [Cal.com's "Create a booking" endpoint](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking).
+
+First, head to the **Tools** section of your dashboard and choose **Add Tool**. Select **Webhook** as the Tool Type, then fill in the following sections:
+
+<AccordionGroup>
+<Accordion title="Tool 1: get_available_slots">
 
 <Tabs>
-  <Tab title="get_available_slots">
-    **Name:** get_available_slots  
-    **Description:** Checks if a particular time slot is available in the calendar.  
-    **Method:** GET  
-    **URL:** `https://api.cal.com/v2/slots/available`
-    
-    **Headers:**
-    - **Authorization:** *(Secret: `cal_api_key`)*
 
-    **Query Parameters:**
-    - **startTime:** Start date/time (UTC) from which to fetch slots, e.g. '2024-08-13T09:00:00Z'.
-    - **endTime:** End date/time (UTC) until which to fetch slots, e.g. '2024-08-13T17:00:00Z'.
+<Tab title="Configuration">
 
-  </Tab>
+Metadata used by the assistant to determine when the tool should be called:
 
-  <Tab title="book_meeting">
-    **Name:** book_meeting  
-    **Description:** Books a meeting in the calendar once a time is agreed.  
-    **Method:** POST  
-    **URL:** `https://api.cal.com/v2/bookings`
+| Field       | Value                                                                    |
+| ----------- | ------------------------------------------------------------------------ |
+| Name        | get_available_slots                                                      |
+| Description | This tool checks if a particular time slot is available in the calendar. |
+| Method      | GET                                                                      |
+| URL         | https://api.cal.com/v2/slots/available                                   |
 
-    **Headers:**
-    - **Authorization:** *(Secret: `cal_api_key`)*
-    - **cal-api-version:** `2024-08-13`
+</Tab>
 
-    **Body Parameters:**
-    - **start:** The start time of the booking in ISO 8601 format in UTC timezone.
-    - **eventTypeId:** The ID of the event type that is booked.
-      - 15 minutes: 1351800
-      - 30 minutes: 1351801
-      - 60 minutes: 1351802
-    - **attendee:** An object containing:
-      - **name:** The full name of the person booking the meeting.
-      - **email:** A valid email address.
-      - **timeZone:** The caller's timezone (e.g., 'America/New_York').
+<Tab title="Headers">
 
-  </Tab>
+Matches the request headers defined [here](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots):
+
+| Type   | Name          | Value                               |
+| ------ | ------------- | ----------------------------------- |
+| Secret | Authorization | Select the secret key created above |
+
+</Tab>
+
+<Tab title="Query parameters">
+
+Matches the request query parameters defined [here](https://cal.com/docs/api-reference/v2/slots/get-available-slots#get-available-slots):
+
+| Data Type | Identifier | Required | Description                                                                   |
+| --------- | ---------- | -------- | ----------------------------------------------------------------------------- |
+| string    | startTime  | Yes      | Start date/time (UTC) from which to fetch slots, e.g. '2024-08-13T09:00:00Z'. |
+| string    | endTime    | Yes      | End date/time (UTC) until which to fetch slots, e.g. '2024-08-13T17:00:00Z'.  |
+
+</Tab>
+
 </Tabs>
 
-<Warning>
-  Ensure that you add your Cal.com API key to the agent's secrets with the format `Bearer
-  YOUR_API_KEY`.
-</Warning>
+</Accordion>
+<Accordion title="Tool 2: book_meeting">
+
+<Tabs>
+
+<Tab title="Configuration">
+
+Metadata used by the assistant to determine when the tool should be called:
+
+| Field       | Value                                                            |
+| ----------- | ---------------------------------------------------------------- |
+| Name        | book_meeting                                                     |
+| Description | This tool books a meeting in the calendar once a time is agreed. |
+| Method      | POST                                                             |
+| URL         | https://api.cal.com/v2/bookings                                  |
+
+</Tab>
+
+<Tab title="Headers">
+
+Matches the request headers defined [here](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking):
+
+| Type   | Name            | Value                               |
+| ------ | --------------- | ----------------------------------- |
+| Secret | Authorization   | Select the secret key created above |
+| String | cal-api-version | 2024-08-13                          |
+
+</Tab>
+
+<Tab title="Body Parameters">
+
+Matches the request body parameters defined [here](https://cal.com/docs/api-reference/v2/bookings/create-a-booking#create-a-booking):
+
+| Identifier  | Data Type | Required | Description                                                                                                                           |
+| ----------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| start       | String    | Yes      | The start time of the booking in ISO 8601 format in UTC timezone, e.g. ‘2024-08-13T09:00:00Z’.                                        |
+| eventTypeId | Number    | Yes      | The ID of the event type that is booked. If 15 minutes, return 1351800. If 30 minutes, return 1351801. If 60 minutes, return 1351802. |
+| attendee    | Object    | Yes      | The attendee's details. You must collect these fields from the user.                                                                  |
+
+<Note>
+  The `eventTypeId` must correspond to the event types you have available in Cal. Call
+  [this](https://cal.com/docs/api-reference/v1/event-types/find-all-event-types#find-all-event-types)
+  endpoint to get a list of your account event types (or create another tool that does this
+  automatically).
+</Note>
+
+**Attendee object:**
+
+| Identifier | Data Type | Required | Description                                                                                                    |
+| ---------- | --------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| name       | String    | Yes      | The full name of the person booking the meeting.                                                               |
+| email      | String    | Yes      | The email address of the person booking the meeting.                                                           |
+| timeZone   | String    | Yes      | The caller's timezone. Should be in the format of 'Continent/City' like 'Europe/London' or 'America/New_York'. |
+
+</Tab>
+
+</Tabs>
+
+</Accordion>
+</AccordionGroup>
+
+    <Success>
+      Test your new assistant by pressing the **Test AI agent** button to ensure everything is working
+      as expected. Feel free to fine-tune the system prompt.
+    </Success>
+
+    </Step>
+
+    <Step title="Enhancements">
+      By default, the assistant does not have knowledge of the current date or time. To enhance its capabilities, consider implementing one of the following solutions:
+
+      1. **Create a time retrieval tool**: Add another tool that fetches the current date and time.
+
+      2. **Overrides**: Use the [overrides](/docs/conversational-ai/customization/overrides) functionality to inject the current date and time into the system prompt at the start of each conversation.
+
+    </Step>
+
+</Steps>
 
 ## Security Considerations
 
