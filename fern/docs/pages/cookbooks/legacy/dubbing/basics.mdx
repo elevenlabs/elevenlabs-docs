@@ -81,7 +81,6 @@ def create_dub_from_file(
         response = client.dubbing.dub_a_video_or_an_audio_file(
             file=(os.path.basename(input_file_path), audio_file, file_format), # Optional file
             target_lang=target_language, # The target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
-            mode="automatic", # automatic or manual.
             source_lang=source_language, # Source language
             num_speakers=1, # Number of speakers to use for the dubbing.
             watermark=False,  # Whether to apply watermark to the output video.
@@ -201,7 +200,6 @@ def create_dub_from_file(
         response = client.dubbing.dub_a_video_or_an_audio_file(
             file=(os.path.basename(input_file_path), audio_file, file_format),
             target_lang=target_language,
-            mode="automatic",
             source_lang=source_language,
             num_speakers=1,
             watermark=False,  # reduces the characters used if enabled, only works for videos not audio
@@ -268,7 +266,6 @@ def create_dub_from_url(
     response = client.dubbing.dub_a_video_or_an_audio_file(
       source_url=source_url, # URL of the source video/audio file.
       target_lang=target_language, # The Target language to dub the content into. Can be none if dubbing studio editor is enabled and running manual mode
-      mode="automatic", # automatic or manual.
       source_lang=source_language, # Source language.
       num_speakers=1, # Number of speakers to use for the dubbing.
       watermark=True,  # Whether to apply watermark to the output video.
