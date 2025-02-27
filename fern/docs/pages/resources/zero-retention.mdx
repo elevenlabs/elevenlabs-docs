@@ -21,8 +21,7 @@ This data is related to the processing of the request, and can only be seen by t
 
 ## Who has access to zero retention mode?
 
-Enterprise customers can use zero Retention Mode.
-It is primarily intended for use by our customers in the healthcare and banking sector, and other customers who may use our services to process sensitive information.
+Enterprise customers can use zero Retention Mode. It is primarily intended for use by our customers in the healthcare and banking sector, and other customers who may use our services to process sensitive information.
 
 ## When can a customer use zero retention mode?
 
@@ -39,32 +38,47 @@ After setup, check the request history to verify zero Retention Mode is enabled.
 
 Zero retention mode can be used by sending `enable_logging=false` with the product which supports it.
 
-For example, in Text to Speech API, you can set the query parameter [enable_logging](https://elevenlabs.io/docs/api-reference/text-to-speech#parameter-enable-logging) to False like this:
+For example, in the Text to Speech API, you can set the query parameter [enable_logging](https://elevenlabs.io/docs/api-reference/text-to-speech#parameter-enable-logging) to a `false` value:
 
-<CodeGroup>
-```bash Python
+<CodeBlocks>
+
+```python title="Python" {12}
 from elevenlabs import ElevenLabs
 
 client = ElevenLabs(
-api_key="YOUR_API_KEY",
+  api_key="YOUR_API_KEY",
 )
 
 response = client.text_to_speech.convert(
-voice_id=voice_id,
-output_format="mp3_22050_32",
-text=text,
-model_id="eleven_turbo_v2",
-enable_logging=False
+  voice_id=voice_id,
+  output_format="mp3_22050_32",
+  text=text,
+  model_id="eleven_turbo_v2",
+  enable_logging=False,
 )
 
-````
-```bash curl
+```
+
+```javascript title="JavaScript" {9}
+import { ElevenLabsClient } from 'elevenlabs';
+
+const client = new ElevenLabsClient({ apiKey: 'YOUR_API_KEY' });
+
+await client.textToSpeech.convert(voiceId, {
+  output_format: 'mp3_44100_128',
+  text: text,
+  model_id: 'eleven_turbo_v2',
+  enable_logging: false,
+});
+```
+
+```bash title="cURL"
 curl --request POST \
   --url 'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}?enable_logging=false' \
   --header 'Content-Type: application/json'
-````
+```
 
-</CodeGroup>
+</CodeBlocks>
 
 ## What products are configured for zero retention mode?
 
@@ -74,6 +88,8 @@ curl --request POST \
 |                            | Audio Output         | Enabled           | Yes                         |
 | Voice Changer              | Audio Input          | Enabled           | Yes                         |
 |                            | Audio Output         | Enabled           | Yes                         |
+| Speech to Text             | Audio Input          | Enabled           | On request                  |
+|                            | Text Output          | Enabled           | On request                  |
 | Instant Voice Cloning      | Audio Samples        | Enabled           | No                          |
 | Professional Voice Cloning | Audio Samples        | Enabled           | No                          |
 | Dubbing                    | Audio/Video Input    | Enabled           | No                          |
@@ -82,18 +98,29 @@ curl --request POST \
 |                            | Audio Output         | Enabled           | No                          |
 | Conv AI                    | All Input and Output | Enabled           | No                          |
 
-## What are some limitations of zero retention mode?
+## FAQ
 
-Troubleshooting and support for zero Retention Mode is limited. Because of the configuration, we will not be able to diagnose issues with TTS/STS generations. Debugging will be more difficult as a result.
-
-## How retention works if zero retention mode is not active?
-
-Customers by default have history preservation enabled. All customers can use the API to delete generations at any time. This action will immediately remove the corresponding audio and text from our database; however, debugging and moderation logs may still retain data related to the generation.
-
-## Data backup (When zero retention mode is not used)
-
-For any retained data, we regularly back up such data to prevent data loss in the event of any unexpected incidents. Following data deletion, database items are retained in backups for up to 30 days After this period, the data expires and is not recoverable.
-
-## Account deletion (When zero retention mode is not used)
-
-All data is deleted from our systems permanently when you delete your account. This includes all data associated with your account, such as API keys, request history, and any other data stored in your account. We also take commercially reasonable efforts to delete debugging data related to your account.
+<AccordionGroup>
+  <Accordion title="What are some limitations of zero retention mode?" default>
+    Troubleshooting and support for zero Retention Mode is limited. Because of the configuration, we
+    will not be able to diagnose issues with TTS/STS generations. Debugging will be more difficult
+    as a result.
+  </Accordion>
+  <Accordion title="How does retention work if zero retention mode is not active?">
+    Customers by default have history preservation enabled. All customers can use the API to delete
+    generations at any time. This action will immediately remove the corresponding audio and text
+    from our database; however, debugging and moderation logs may still retain data related to the
+    generation.
+  </Accordion>
+  <Accordion title="Data backup (When zero retention mode is not used)">
+    For any retained data, we regularly back up such data to prevent data loss in the event of any
+    unexpected incidents. Following data deletion, database items are retained in backups for up to
+    30 days After this period, the data expires and is not recoverable.
+  </Accordion>
+  <Accordion title="Account deletion (When zero retention mode is not used)">
+    All data is deleted from our systems permanently when you delete your account. This includes all
+    data associated with your account, such as API keys, request history, and any other data stored
+    in your account. We also take commercially reasonable efforts to delete debugging data related
+    to your account.
+  </Accordion>
+</AccordionGroup>
