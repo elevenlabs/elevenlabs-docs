@@ -29,7 +29,7 @@ pnpm run dev
 Run the following command to lint/format the project
 
 ```
-pnpm run format
+pnpm run fmt
 ```
 
 ## Other developer resources
