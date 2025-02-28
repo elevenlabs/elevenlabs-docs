@@ -14,121 +14,208 @@ Client events are essential for maintaining the real-time nature of conversation
   SDKs. Understanding them is crucial for advanced implementations and debugging.
 </Info>
 
-## Event Types
-
-### Core Events
+## Client Event Types
 
 <AccordionGroup>
-  <Accordion title="Initialization Events">
-    - `CONVERSATION_INITIATION_METADATA`
-      - Automatically sent when starting a conversation
-      - Initializes conversation settings and parameters
-      - Not manually triggered
-    
-    - `ASR_INITIATION_METADATA`
-      - Sets up speech recognition configuration
-      - Automatically handled by the SDK
-      - Required for voice input functionality
+  <Accordion title="conversation_initiation_metadata">
+    - Automatically sent when starting a conversation
+    - Initializes conversation settings and parameters
 
     ```javascript
     // Example initialization metadata
     {
-      "conversation_id": "conv_123",
-      "settings": {
-        "language": "en",
-        "voice_id": "voice_123"
+      "type": "conversation_initiation_metadata",
+      "conversation_initiation_metadata_event": {
+        "conversation_id": "conv_123",
+        "agent_output_audio_format": "pcm_44100",  // TTS output format
+        "user_input_audio_format": "pcm_16000"    // ASR input format
       }
     }
     ```
 
   </Accordion>
 
-  <Accordion title="Connection Events">
-    - `PING`
-      - Health check event requiring immediate response
-      - Automatically handled by SDK
-      - Used to maintain WebSocket connection
-      
-    ```javascript
-    // Example ping handler
-    websocket.on('PING', () => {
-      websocket.send('PONG');
-    });
-    ```
+  <Accordion title="ping">
+    - Health check event requiring immediate response
+    - Automatically handled by SDK
+    - Used to maintain WebSocket connection
+
+      ```javascript
+      // Example ping event structure
+      {
+        "ping_event": {
+          "event_id": 123456,
+          "ping_ms": 50  // Optional, estimated latency in milliseconds
+        },
+        "type": "ping"
+      }
+      ```
+
+      ```javascript
+      // Example ping handler
+      websocket.on('ping', () => {
+        websocket.send('pong');
+      });
+      ```
+
   </Accordion>
 
-  <Accordion title="Audio Events">
-    - `AUDIO`
-      - Contains base64 encoded audio for playback
-      - Includes unique event ID for tracking
-      - Handles voice output streaming
-      
+  <Accordion title="audio">
+    - Contains base64 encoded audio for playback
+    - Includes numeric event ID for tracking and sequencing
+    - Handles voice output streaming
+    
+    ```javascript
+    // Example audio event structure
+    {
+      "audio_event": {
+        "audio_base_64": "base64_encoded_audio_string",
+        "event_id": 12345
+      },
+      "type": "audio"
+    }
+    ```
+
     ```javascript
     // Example audio event handler
-    websocket.on('AUDIO', (event) => {
-      const { audio_data, event_id } = event;
-      audioPlayer.play(audio_data);
+    websocket.on('audio', (event) => {
+      const { audio_event } = event;
+      const { audio_base_64, event_id } = audio_event;
+      audioPlayer.play(audio_base_64);
     });
     ```
+
   </Accordion>
-</AccordionGroup>
 
-### Interaction Events
+  <Accordion title="user_transcript">
+    - Contains finalized speech-to-text results
+    - Represents complete user utterances
+    - Used for conversation history
 
-<AccordionGroup>
-  <Accordion title="User Interaction Events">
-    - `USER_TRANSCRIPT`
-      - Contains finalized speech-to-text results
-      - Represents complete user utterances
-      - Used for conversation history
-
-    - `INTERRUPTION`
-      - Triggered when user interrupts the agent
-      - Stops current audio playback
-      - Enables real-time interaction
+    ```javascript
+    // Example transcript event structure
+    {
+      "type": "user_transcript",
+      "user_transcription_event": {
+        "user_transcript": "Hello, how can you help me today?"
+      }
+    }
+    ```
 
     ```javascript
     // Example transcript handler
-    websocket.on('USER_TRANSCRIPT', (event) => {
-      const { text } = event;
-      updateConversationHistory(text);
+    websocket.on('user_transcript', (event) => {
+      const { user_transcription_event } = event;
+      const { user_transcript } = user_transcription_event;
+      updateConversationHistory(user_transcript);
     });
     ```
 
   </Accordion>
 
-  <Accordion title="Agent Response Events">
-    - `AGENT_RESPONSE`
-      - Contains complete agent message
-      - Sent with first audio chunk
-      - Used for display and history
+  <Accordion title="agent_response">
+    - Contains complete agent message
+    - Sent with first audio chunk
+    - Used for display and history
 
-    - `AGENT_RESPONSE_CORRECTION`
-      - Contains truncated response after interruption
+    ```javascript
+    // Example response event structure
+    {
+      "type": "agent_response",
+      "agent_response_event": {
+        "agent_response": "Hello, how can I assist you today?"
+      }
+    }
+    ```
+
+    ```javascript
+    // Example response handler
+    websocket.on('agent_response', (event) => {
+      const { agent_response_event } = event;
+      const { agent_response } = agent_response_event;
+      displayAgentMessage(agent_response);
+    });
+    ```
+
+  </Accordion>
+
+  <Accordion title="agent_response_correction">
+    - Contains truncated response after interruption
       - Updates displayed message
       - Maintains conversation accuracy
 
     ```javascript
-    // Example response handler
-    websocket.on('AGENT_RESPONSE', (event) => {
-      const { text } = event;
-      displayAgentMessage(text);
+    // Example response correction event structure
+    {
+      "type": "agent_response_correction",
+      "agent_response_correction_event": {
+        "original_agent_response": "Let me tell you about the complete history...",
+        "corrected_agent_response": "Let me tell you about..."  // Truncated after interruption
+      }
+    }
+    ```
+
+    ```javascript
+    // Example response correction handler
+    websocket.on('agent_response_correction', (event) => {
+      const { agent_response_correction_event } = event;
+      const { corrected_agent_response } = agent_response_correction_event;
+      displayAgentMessage(corrected_agent_response);
     });
     ```
 
   </Accordion>
 
-  <Accordion title="Tool Events">
-    - `CLIENT_TOOL_CALL`
-      - Represents function calls from the agent
-      - Contains tool name and parameters
-      - Requires client-side implementation
+  <Accordion title="client_tool_call">
+    - Represents a function call the agent wants the client to execute
+    - Contains tool name, tool call ID, and parameters
+    - Requires client-side execution of the function and sending the result back to the server
+
+    <Info>
+      If you are using the SDK, callbacks are provided to handle sending the result back to the server.
+    </Info>
+
+    ```javascript
+    // Example tool call event structure
+    {
+      "type": "client_tool_call",
+      "client_tool_call": {
+        "tool_name": "search_database",
+        "tool_call_id": "call_123456",
+        "parameters": {
+          "query": "user information",
+          "filters": {
+            "date": "2024-01-01"
+          }
+        }
+      }
+    }
+    ```
 
     ```javascript
     // Example tool call handler
-    websocket.on('CLIENT_TOOL_CALL', async (event) => {
-      const { tool_name, parameters } = event;
-      await executeClientTool(tool_name, parameters);
+    websocket.on('client_tool_call', async (event) => {
+      const { client_tool_call } = event;
+      const { tool_name, tool_call_id, parameters } = client_tool_call;
+
+      try {
+        const result = await executeClientTool(tool_name, parameters);
+        // Send success response back to continue conversation
+        websocket.send({
+          type: "client_tool_result",
+          tool_call_id: tool_call_id,
+          result: result,
+          is_error: false
+        });
+      } catch (error) {
+        // Send error response if tool execution fails
+        websocket.send({
+          type: "client_tool_result",
+          tool_call_id: tool_call_id,
+          result: error.message,
+          is_error: true
+        });
+      }
     });
     ```
 
@@ -144,65 +231,37 @@ sequenceDiagram
     participant Client
     participant Server
 
-    Client->>Server: CONVERSATION_INITIATION_METADATA
-    Client->>Server: ASR_INITIATION_METADATA
-    Server->>Client: PING
-    Client->>Server: PONG
+    Server->>Client: conversation_initiation_metadata
     Note over Client,Server: Connection established
-    Client->>Server: USER_TRANSCRIPT
-    Server->>Client: AGENT_RESPONSE
-    Server->>Client: AUDIO
+    Server->>Client: ping
+    Client->>Server: pong
+    Server->>Client: audio
     Note over Client: Playing audio
-    Client->>Server: INTERRUPTION
-    Server->>Client: AGENT_RESPONSE_CORRECTION
-    Server->>Client: CLIENT_TOOL_CALL
-    Client->>Server: Tool response
-```
-
-## Implementation Guide
-
-### Prerequisites
-
-- An [ElevenLabs account](https://elevenlabs.io)
-- Basic understanding of WebSocket communication
-- Familiarity with our [SDKs](/docs/conversational-ai/libraries)
-
-### Handling Events
-
-<CodeBlock>
-```javascript
-import { Conversation } from '@elevenlabs/conversation';
-
-const conversation = await Conversation.startSession({
-apiKey: 'your-api-key',
-agentId: 'your-agent-id',
-handlers: {
-onAudio: (audioData) => {
-// Handle incoming audio
-},
-onTranscript: (transcript) => {
-// Handle user transcript
-},
-onAgentResponse: (response) => {
-// Handle agent response
-},
-onInterruption: () => {
-// Handle interruption
-}
-}
-});
+    Note over Client: User responds
+    Server->>Client: user_transcript
+    Server->>Client: agent_response
+    Server->>Client: audio
+    Server->>Client: client_tool_call
+    Note over Client: Client tool runs
+    Client->>Server: client_tool_result
+    Server->>Client: agent_response
+    Server->>Client: audio
+    Note over Client: Playing audio
+    Note over Client: Interruption detected
+    Server->>Client: agent_response_correction
 
 ```
-</CodeBlock>
 
 ### Best Practices
 
 1. **Error Handling**
+
    - Implement proper error handling for each event type
    - Log important events for debugging
    - Handle connection interruptions gracefully
 
 2. **Audio Management**
+
    - Buffer audio chunks appropriately
    - Implement proper cleanup on interruption
    - Handle audio resource management
@@ -221,11 +280,11 @@ onInterruption: () => {
     - Verify API credentials
   </Accordion>
 
-  <Accordion title="Audio Problems">
-    - Check audio chunk handling
-    - Verify audio format compatibility
-    - Monitor memory usage
-  </Accordion>
+{' '}
+
+<Accordion title="Audio Problems">
+  - Check audio chunk handling - Verify audio format compatibility - Monitor memory usage
+</Accordion>
 
   <Accordion title="Event Handling">
     - Log all events for debugging
@@ -235,6 +294,6 @@ onInterruption: () => {
 </AccordionGroup>
 
 <Info>
-For detailed implementation examples, check our [SDK documentation](/docs/sdk-reference).
+  For detailed implementation examples, check our [SDK documentation](/docs/sdk-reference).
 </Info>
 ```
