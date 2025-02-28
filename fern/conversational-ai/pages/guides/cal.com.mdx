@@ -1,107 +1,90 @@
 ---
-title: Tools
-subtitle: Connect your assistant to external data & systems.
+title: Cal.com
+subtitle: Learn how to integrate our Conversational AI platform with Cal.com for automated meeting scheduling
 ---
-
-**Tools** enable your assistant to connect to external data and systems. You can define a set of tools that the assistant has access to, and the assistant will use them where appropriate based on the conversation.
 
 ## Overview
 
-Many applications require assistants to call external APIs to get real-time information. Tools give your assistant the ability to make external function calls to third party apps so you can get real-time information.
+With our Cal.com integration, your AI assistant can seamlessly schedule meetings by checking calendar availability and booking appointments. This integration streamlines the scheduling process by automatically verifying available time slots, collecting attendee information, and creating calendar events. Benefits include eliminating scheduling back-and-forth, reducing manual effort, and enhancing the meeting booking experience.
 
-Here are a few examples where tools can be useful:
+## How it works
 
-- **Fetching data**: enable an assistant to retrieve real-time data from any REST-enabled database or 3rd party integration before responding to the user.
-- **Taking action**: allow an assistant to trigger authenticated actions based on the conversation, like scheduling meetings or initiating order returns.
-
-<Info>
-  To interact with Application UIs or trigger client-side events use [client
-  tools](/docs/conversational-ai/customization/client-tools) instead.
-</Info>
-
-## Tool configuration
-
-Conversational AI assistants can be equipped with tools to interact with external APIs. Unlike traditional requests, the assistant generates query, body, and path parameters dynamically based on the conversation and parameter descriptions you provide.
-
-All tool configurations and parameter descriptions help the assistant determine **when** and **how** to use these tools. To orchestrate tool usage effectively, update the assistant’s system prompt to specify the sequence and logic for making these calls. This includes:
-
-- **Which tool** to use and under what conditions.
-- **What parameters** the tool needs to function properly.
-- **How to handle** the responses.
-
-<br />
+We lay out below how we have configured the Conversational AI agent to schedule meetings by using tool calling to step through the booking process.
+Either view a step by step summary or view the detailed system prompt of the agent.
 
 <Tabs>
+  <Tab title="High level overview ">
+    <Steps>
+      <Step title="Initial Inquiry & Meeting Details">
+        Configure your agent to ask for meeting purpose, preferred date/time, and duration to gather all necessary scheduling information.
+      </Step>
 
-<Tab title="Configuration">
-Define a high-level `Name` and `Description` to describe the tool's purpose. This helps the LLM understand the tool and know when to call it.
+      <Step title="Check Calendar Availability">
+        Configure the agent to check calendar availability by:
+        - Using the `get_available_slots` tool to fetch open time slots
+        - Verifying if the requested time is available
+        - Suggesting alternatives if the requested time is unavailable
+        - Confirming the selected time with the caller
+      </Step>
 
-<Info>
-  If the API requires path parameters, include variables in the URL path by wrapping them in curly
-  braces `{}`, for example: `/api/resource/{id}` where `id` is a path parameter.
-</Info>
+      <Step title="Contact Information Collection">
+        Once a time is agreed upon:
+        - Collect and validate the attendee's full name
+        - Verify email address accuracy
+        - Confirm time zone information
+        - Gather any additional required fields for your Cal.com setup
+      </Step>
 
-<Frame background="subtle">
-  ![Configuration](/assets/images/conversational-ai/tool-configuration.jpg)
-</Frame>
+      <Step title="Meeting Creation">
+        - Use the `book_meeting` tool after information verification
+        - Follow the booking template structure
+        - Confirm meeting creation with the attendee
+        - Inform them that they will receive a calendar invitation
+      </Step>
+    </Steps>
 
-</Tab>
+  </Tab>
 
-<Tab title="Secrets">
+  <Tab title="Detailed system prompt">
+    ```
+    You are a helpful receptionist responsible for scheduling meetings using the Cal.com integration. Be friendly, precise, and concise.
 
-Assistant secrets can be used to add authentication headers to requests.
+    Begin by briefly asking for the purpose of the meeting and the caller's preferred date and time.
+    Then, ask about the desired meeting duration (15, 30, or 60 minutes), and wait for the user's response before proceeding.
 
-<Frame background="subtle">
-  ![Tool secrets](/assets/images/conversational-ai/tool-secrets.jpg)
-</Frame>
+    Once you have the meeting details, say you will check calendar availability:
+    - Call get_available_slots with the appropriate date range
+    - Verify if the requested time slot is available
+    - If not available, suggest alternative times from the available slots
+    - Continue until a suitable time is agreed upon
 
-</Tab>
+    After confirming a time slot, gather the following contact details:
+    - The attendee's full name
+    - A valid email address. Note that the email address is transcribed from voice, so ensure it is formatted correctly.
+    - The attendee's time zone (in 'Continent/City' format like 'America/New_York')
+    - Read the email back to the caller to confirm accuracy
 
-<Tab title="Headers">
+    Once all details are confirmed, explain that you will create the meeting.
+    Create the meeting by using the book_meeting tool with the following parameters:
+    - start: The agreed meeting time in ISO 8601 format
+    - eventTypeId: The appropriate ID based on the meeting duration (15min: 1351800, 30min: 1351801, 60min: 1351802)
+    - attendee: An object containing the name, email, and timeZone
 
-Specify any headers that need to be included in the request.
+    Thank the attendee and inform them they will receive a calendar invitation shortly.
 
-<Frame background="subtle">![Headers](/assets/images/conversational-ai/tool-headers.jpg)</Frame>
+    Clarifications:
+    - Do not inform the user that you are formatting the email; simply do it.
+    - If the caller asks you to proceed with booking, do so with the existing information.
 
-</Tab>
+    Guardrails:
+    - Do not share any internal IDs or API details with the caller.
+    - If booking fails, check for formatting issues in the email or time conflicts.
+    ```
 
-<Tab title="Path parameters">
-
-Include variables in the URL path by wrapping them in curly braces `{}`:
-
-- **Example**: `/api/resource/{id}` where `id` is a path parameter.
-
-<Frame background="subtle">
-  ![Path parameters](/assets/images/conversational-ai/tool-path-parameters.jpg)
-</Frame>
-
-</Tab>
-
-<Tab title="Body parameters">
-
-Specify any body parameters to be included in the request.
-
-<Frame background="subtle">
-  ![Body parameters](/assets/images/conversational-ai/tool-body-parameters.jpg)
-</Frame>
-
-</Tab>
-
-<Tab title="Query parameters">
-
-Specify any query parameters to be included in the request.
-
-<Frame background="subtle">
-  ![Query parameters](/assets/images/conversational-ai/tool-query-parameters.jpg)
-</Frame>
-
-</Tab>
-
+  </Tab>
 </Tabs>
 
-## Guide
-
-In this guide, we will walk through integrating tools into an assistant, booking calendar meetings through the [Cal.com API](https://cal.com/docs/api-reference/v1/introduction) as an example.
+## Setup
 
 <Steps>
   <Step title="Store your cal.com secret">
@@ -235,23 +218,6 @@ Matches the request body parameters defined [here](https://cal.com/docs/api-refe
 </Accordion>
 </AccordionGroup>
 
-    </Step>
-
-    <Step title="Orchestration">
-      Now that your assistant is equipped with tools, you need to instruct it on when and how to use them effectively. This involves updating the system prompt to orchestrate the interaction.
-
-      ```plaintext System prompt
-      You are my receptionist, handling meeting bookings.
-
-      - Always use the `get_available_slots` tool to verify my availability before scheduling any meeting. This tool requires a start and end date/time and returns available slots. If no date/time is specified, check for slots tomorrow and continue daily until availability is found.
-
-      - Once a time is agreed upon, use the `book_meeting` tool to finalize the booking. Collect the caller's full name, desired meeting time, duration (15, 30, or 60 minutes), and other required details.
-
-      - Do not share or leak any meeting details, attendee information, or IDs.
-
-      - If `book_meeting` fails, it may be due to an invalid email format or an unavailable time slot.
-      ```
-
     <Success>
       Test your new assistant by pressing the **Test AI agent** button to ensure everything is working
       as expected. Feel free to fine-tune the system prompt.
@@ -270,4 +236,15 @@ Matches the request body parameters defined [here](https://cal.com/docs/api-refe
 
 </Steps>
 
-<Markdown src="/snippets/conversational-ai-tool-best-practices.mdx" />
+## Security Considerations
+
+- Use HTTPS endpoints for all webhook calls.
+- Store sensitive values as secrets using the ElevenLabs Secrets Manager.
+- Validate that all authorization headers follow the required format (`Bearer YOUR_API_KEY`).
+- Never expose event type IDs or API details to callers.
+
+## Conclusion
+
+This guide details how to integrate Cal.com into our conversational AI platform for efficient meeting scheduling. By leveraging webhook tools and calendar availability data, the integration streamlines the booking process, reducing scheduling friction and enhancing overall service quality.
+
+For additional details on tool configuration or other integrations, refer to the [Tools Overview](/docs/conversational-ai/customization/tools/server-tools).
