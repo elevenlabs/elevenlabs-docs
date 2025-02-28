@@ -1,0 +1,228 @@
+---
+title: Post-call webhooks
+subtitle: Get notified when calls end and analysis is complete through webhooks.
+---
+
+## Overview
+
+Post-call webhooks allow you to receive detailed information about a call after analysis is complete. When enabled, ElevenLabs will send a POST request to your specified endpoint with comprehensive call data, including transcripts, analysis results, and metadata.
+The data that is returned is the same data that is returned from the [Conversation API](/docs/conversational-ai/api-reference/conversations/get-conversations).
+
+## Enabling Post-Call Webhooks
+
+Post-call webhooks can be enabled for all agents in your workspace through the Conversational AI [settings page](https://elevenlabs.io/app/conversational-ai/settings).
+
+<Frame background="subtle">
+  ![Post-call webhook settings](/assets/images/conversational-ai/postcallwebhooksettings.png)
+</Frame>
+
+### Authentication Options
+
+You can secure your webhook endpoint using either OAuth 2.0 or HMAC authentication:
+
+<Tabs>
+  <Tab title="OAuth 2.0">
+    <Frame background="subtle">
+      ![OAuth 2.0 webhook configuration](/assets/images/conversational-ai/oauth2webhook.png)
+    </Frame>
+    Configure OAuth 2.0 authentication by providing: 
+    - Client ID 
+    - Client Secret 
+    - Token URL 
+    - Scope
+    (optional)
+  </Tab>
+
+  <Tab title="HMAC">
+    <Frame background="subtle">
+      ![HMAC webhook configuration](/assets/images/conversational-ai/hmacwebhook.png)
+    </Frame>
+    Set up HMAC authentication by: 
+    - Generating a secret key 
+    - Verifying webhook signatures in your endpoint
+  </Tab>
+</Tabs>
+
+## Webhook Response Structure
+
+The webhook payload contains the same data you would receive from a GET request to the Conversation API endpoint, with additional fields for event timing and type information.
+
+### Top-Level Fields
+
+| Field             | Type   | Description                                                    |
+| ----------------- | ------ | -------------------------------------------------------------- |
+| `type`            | string | Type of event (always `post_call_transcription` in this case)  |
+| `data`            | object | Data for the conversation, what would be returned from the API |
+| `event_timestamp` | string | When this event occurred                                       |
+
+## Example Webhook Payload
+
+```json
+{
+  "type": "post_call_transcription",
+  "event_timestamp": 1739537297,
+  "data": {
+    "agent_id": "xyz",
+    "conversation_id": "abc",
+    "status": "done",
+    "transcript": [
+      {
+        "role": "agent",
+        "message": "Hey there angelo. How are you?",
+        "tool_calls": null,
+        "tool_results": null,
+        "feedback": null,
+        "time_in_call_secs": 0,
+        "conversation_turn_metrics": null
+      },
+      {
+        "role": "user",
+        "message": "Hey, can you tell me, like, a fun fact about 11 Labs?",
+        "tool_calls": null,
+        "tool_results": null,
+        "feedback": null,
+        "time_in_call_secs": 2,
+        "conversation_turn_metrics": null
+      },
+      {
+        "role": "agent",
+        "message": "I do not have access to fun facts about Eleven Labs. However, I can share some general information about the company. Eleven Labs is an AI voice technology platform that specializes in voice cloning and text-to-speech...",
+        "tool_calls": null,
+        "tool_results": null,
+        "feedback": null,
+        "time_in_call_secs": 9,
+        "conversation_turn_metrics": {
+          "convai_llm_service_ttfb": {
+            "elapsed_time": 0.3704247010173276
+          },
+          "convai_llm_service_ttf_sentence": {
+            "elapsed_time": 0.5551181449554861
+          }
+        }
+      }
+    ],
+    "metadata": {
+      "start_time_unix_secs": 1739537297,
+      "call_duration_secs": 22,
+      "cost": 296,
+      "deletion_settings": {
+        "deletion_time_unix_secs": 1802609320,
+        "deleted_logs_at_time_unix_secs": null,
+        "deleted_audio_at_time_unix_secs": null,
+        "deleted_transcript_at_time_unix_secs": null,
+        "delete_transcript_and_pii": true,
+        "delete_audio": true
+      },
+      "feedback": {
+        "overall_score": null,
+        "likes": 0,
+        "dislikes": 0
+      },
+      "authorization_method": "authorization_header",
+      "charging": {
+        "dev_discount": true
+      },
+      "termination_reason": ""
+    },
+    "analysis": {
+      "evaluation_criteria_results": {},
+      "data_collection_results": {},
+      "call_successful": "success",
+      "transcript_summary": "The conversation begins with the agent asking how Angelo is, but Angelo redirects the conversation by requesting a fun fact about 11 Labs. The agent acknowledges they don't have specific fun facts about Eleven Labs but offers to provide general information about the company. They briefly describe Eleven Labs as an AI voice technology platform specializing in voice cloning and text-to-speech technology. The conversation is brief and informational, with the agent adapting to the user's request despite not having the exact information asked for."
+    },
+    "conversation_initiation_client_data": {
+      "conversation_config_override": {
+        "agent": {
+          "prompt": null,
+          "first_message": null,
+          "language": "en"
+        },
+        "tts": {
+          "voice_id": null
+        }
+      },
+      "custom_llm_extra_body": {},
+      "dynamic_variables": {
+        "user_name": "angelo"
+      }
+    }
+  }
+}
+```
+
+## Use Cases
+
+### Automated Call Follow-ups
+
+Post-call webhooks enable you to build automated workflows that trigger immediately after a call ends. Here are some practical applications:
+
+#### CRM Integration
+
+Update your customer relationship management system with conversation data as soon as a call completes:
+
+```javascript
+// Example webhook handler
+app.post('/webhook/elevenlabs', async (req, res) => {
+  const { data } = req.body;
+
+  // Extract key information
+  const userId = data.metadata.user_id;
+  const transcriptSummary = data.analysis.transcript_summary;
+  const callSuccessful = data.analysis.call_successful;
+
+  // Update CRM record
+  await updateCustomerRecord(userId, {
+    lastInteraction: new Date(),
+    conversationSummary: transcriptSummary,
+    callOutcome: callSuccessful,
+    fullTranscript: data.transcript,
+  });
+
+  res.status(200).send('Webhook received');
+});
+```
+
+### Stateful Conversations
+
+Maintain conversation context across multiple interactions by storing and retrieving state:
+
+1. When a call starts, pass in your user id as a dynamic variable.
+2. When a call ends, set up your webhook endpoint to store conversation data in your database, based on the extracted user id from the dynamic_variables.
+3. When the user calls again, you can retrieve this context and pass it to the new conversation into a {{previous_topics}} dynamic variable.
+4. This creates a seamless experience where the agent "remembers" previous interactions
+
+```javascript
+// Store conversation state when call ends
+app.post('/webhook/elevenlabs', async (req, res) => {
+  const { data } = req.body;
+  const userId = data.metadata.user_id;
+
+  // Store conversation state
+  await db.userStates.upsert({
+    userId,
+    lastConversationId: data.conversation_id,
+    lastInteractionTimestamp: data.metadata.start_time_unix_secs,
+    conversationHistory: data.transcript,
+    previousTopics: extractTopics(data.analysis.transcript_summary),
+  });
+
+  res.status(200).send('Webhook received');
+});
+
+// When initiating a new call, retrieve and use the state
+async function initiateCall(userId) {
+  // Get user's conversation state
+  const userState = await db.userStates.findOne({ userId });
+
+  // Start new conversation with context from previous calls
+  return await elevenlabs.startConversation({
+    agent_id: 'xyz',
+    conversation_id: generateNewId(),
+    dynamic_variables: {
+      user_name: userState.name,
+      previous_conversation_id: userState.lastConversationId,
+      previous_topics: userState.previousTopics.join(', '),
+    },
+  });
+}
+```
