@@ -14,7 +14,7 @@ Client events are essential for maintaining the real-time nature of conversation
   SDKs. Understanding them is crucial for advanced implementations and debugging.
 </Info>
 
-## Client Event Types
+## Client event types
 
 <AccordionGroup>
   <Accordion title="conversation_initiation_metadata">
@@ -222,7 +222,7 @@ Client events are essential for maintaining the real-time nature of conversation
   </Accordion>
 </AccordionGroup>
 
-## Event Flow
+## Event flow
 
 Here's a typical sequence of events during a conversation:
 
@@ -252,21 +252,22 @@ sequenceDiagram
 
 ```
 
-### Best Practices
+### Best practices
 
-1. **Error Handling**
+1. **Error handling**
 
    - Implement proper error handling for each event type
    - Log important events for debugging
    - Handle connection interruptions gracefully
 
-2. **Audio Management**
+2. **Audio management**
 
    - Buffer audio chunks appropriately
    - Implement proper cleanup on interruption
    - Handle audio resource management
 
-3. **Connection Management**
+3. **Connection management**
+
    - Respond to PING events promptly
    - Implement reconnection logic
    - Monitor connection health
@@ -274,19 +275,17 @@ sequenceDiagram
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Connection Issues">
+  <Accordion title="Connection issues">
     - Ensure proper WebSocket connection
     - Check PING/PONG responses
     - Verify API credentials
   </Accordion>
 
-{' '}
+  <Accordion title="Audio problems">
+    - Check audio chunk handling - Verify audio format compatibility - Monitor memory usage
+  </Accordion>
 
-<Accordion title="Audio Problems">
-  - Check audio chunk handling - Verify audio format compatibility - Monitor memory usage
-</Accordion>
-
-  <Accordion title="Event Handling">
+  <Accordion title="Event handling">
     - Log all events for debugging
     - Implement error boundaries
     - Check event handler registration
