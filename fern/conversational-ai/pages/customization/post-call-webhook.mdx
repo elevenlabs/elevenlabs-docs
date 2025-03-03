@@ -24,45 +24,46 @@ Webhooks currently support authentication via HMAC signatures.
   ![HMAC webhook configuration](/assets/images/conversational-ai/hmacwebhook.png)
 </Frame>
 
-Set up HMAC authentication by: 
-- Securely storing the shared secret 
+Set up HMAC authentication by:
+
+- Securely storing the shared secret
 - Verifying the ElevenLabs-Signature header in your endpoint using the shared secret
 
 The ElevenLabs-Signature takes the following format:
+
 ```json
 t=timestamp,v0=hash
 ```
+
 The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.request_body`. Both the hash and timestamp should be validated, an example is shown here:
 
 ```javascript
-const crypto = require('crypto')
-const secret = process.env.WEBHOOK_SECRET
+const crypto = require('crypto');
+const secret = process.env.WEBHOOK_SECRET;
 
 // Example webhook handler
 app.post('/webhook/elevenlabs', async (req, res) => {
   const headers = req.headers['ElevenLabs-Signature'].split(',');
-  const timestamp = headers.find(e => e.startsWith('t=')).substring(2);
-  const signature = headers.find(e => e.startsWith('v0='));
+  const timestamp = headers.find((e) => e.startsWith('t=')).substring(2);
+  const signature = headers.find((e) => e.startsWith('v0='));
 
   // Validate timestamp
   const reqTimestamp = timestamp * 1000;
-  const tolerance = Date.now() - (30 * 60 * 1000);
+  const tolerance = Date.now() - 30 * 60 * 1000;
   if (reqTimestamp < tolerance) {
-      res.status(403).send('Request expired')
-      return
+    res.status(403).send('Request expired');
+    return;
   } else {
-      // Validate hash
-      const message = `${timestamp}.${req.body}`
-      const digest = "v0="+crypto.createHmac('sha256', secret).update(message).digest('hex')
-      if (signature !== digest) {
-          res.status(401).send('Request unauthorized')
-          return
-      }
-
+    // Validate hash
+    const message = `${timestamp}.${req.body}`;
+    const digest = 'v0=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
+    if (signature !== digest) {
+      res.status(401).send('Request unauthorized');
+      return;
+    }
   }
 
   // Validation passed, continue processing ...
-
 });
 ```
 
@@ -186,8 +187,7 @@ Update your customer relationship management system with conversation data as so
 ```javascript
 // Example webhook handler
 app.post('/webhook/elevenlabs', async (req, res) => {
-
-  // HMAC validation code 
+  // HMAC validation code
 
   const { data } = req.body;
 
@@ -220,8 +220,7 @@ Maintain conversation context across multiple interactions by storing and retrie
 ```javascript
 // Store conversation state when call ends
 app.post('/webhook/elevenlabs', async (req, res) => {
-
-  // HMAC validation code 
+  // HMAC validation code
 
   const { data } = req.body;
   const userId = data.metadata.user_id;
