@@ -120,8 +120,7 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
     while True:
       if response.json()["status"] in ["SUCCEEDED", "FAILED"]:
           break
-      time.sleep(5)
-      # check status again
+      time.sleep(5) # wait 5 seconds before checking status again
       response = requests.get(
         f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
         headers={"xi-api-key": "your-api-key"}
