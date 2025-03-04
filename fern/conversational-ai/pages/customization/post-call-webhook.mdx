@@ -5,7 +5,7 @@ subtitle: Get notified when calls end and analysis is complete through webhooks.
 
 ## Overview
 
-Post-call webhooks allow you to receive detailed information about a call after analysis is complete. When enabled, ElevenLabs will send a POST request to your specified endpoint with comprehensive call data, including transcripts, analysis results, and metadata.
+Post-call [Webhooks](/docs/product-guides/administration/webhooks) allow you to receive detailed information about a call after analysis is complete. When enabled, ElevenLabs will send a POST request to your specified endpoint with comprehensive call data, including transcripts, analysis results, and metadata.
 The data that is returned is the same data that is returned from the [Conversation API](/docs/conversational-ai/api-reference/conversations/get-conversations).
 
 ## Enabling post-call webhooks
@@ -16,56 +16,11 @@ Post-call webhooks can be enabled for all agents in your workspace through the C
   ![Post-call webhook settings](/assets/images/conversational-ai/postcallwebhooksettings.png)
 </Frame>
 
+For more information on implementing and managing webhooks please see [Webhooks](/docs/product-guides/administration/webhooks).
+
 ### Authentication
 
-Webhooks currently support authentication via HMAC signatures.
-
-<Frame background="subtle">
-  ![HMAC webhook configuration](/assets/images/conversational-ai/hmacwebhook.png)
-</Frame>
-
-Set up HMAC authentication by:
-
-- Securely storing the shared secret
-- Verifying the ElevenLabs-Signature header in your endpoint using the shared secret
-
-The ElevenLabs-Signature takes the following format:
-
-```json
-t=timestamp,v0=hash
-```
-
-The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.request_body`. Both the hash and timestamp should be validated, an example is shown here:
-
-```javascript
-const crypto = require('crypto');
-const secret = process.env.WEBHOOK_SECRET;
-
-// Example webhook handler
-app.post('/webhook/elevenlabs', async (req, res) => {
-  const headers = req.headers['ElevenLabs-Signature'].split(',');
-  const timestamp = headers.find((e) => e.startsWith('t=')).substring(2);
-  const signature = headers.find((e) => e.startsWith('v0='));
-
-  // Validate timestamp
-  const reqTimestamp = timestamp * 1000;
-  const tolerance = Date.now() - 30 * 60 * 1000;
-  if (reqTimestamp < tolerance) {
-    res.status(403).send('Request expired');
-    return;
-  } else {
-    // Validate hash
-    const message = `${timestamp}.${req.body}`;
-    const digest = 'v0=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
-    if (signature !== digest) {
-      res.status(401).send('Request unauthorized');
-      return;
-    }
-  }
-
-  // Validation passed, continue processing ...
-});
-```
+<Markdown src="/snippets/webhook-hmac-authentication.mdx" />
 
 ## Webhook response structure
 
