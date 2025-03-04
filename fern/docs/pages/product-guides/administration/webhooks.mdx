@@ -1,0 +1,97 @@
+---
+title: Webhooks
+subtitle: Enable external integrations by receiving webhook events.
+---
+
+## Overview
+
+Certain events within ElevenLabs can be configured to trigger webhooks, allowing external applications and systems to receive and process these events as they occur.
+
+## Configuration
+
+Webhooks can be created, disabled and deleted from the general settings page. For users within [Workspaces](/docs/product-guides/administration/workspaces/overview), only the workspace admins can configure the webhooks for the workspace.
+
+<Frame background="subtle">
+  ![HMAC webhook configuration](/assets/images/product-guides/administration/hmacwebhook.png)
+</Frame>
+
+After creation, the webhook can be selected to listen for events within product settings such as [Conversational AI](/docs/conversational-ai/customization/personalization/post-call-webhooks).
+
+Webhooks can be disabled from the general settings page at any time. Webhooks that repeatedly fail are auto disabled after 10 consecutive failures over 7 or more days and require re-enabling from the settings page. Webhooks can be deleted if not in use by any products.
+
+## Integration
+
+To integrate with webhooks, the listener should create an endpoint handler to receive the webhook event data POST requests. After validating the signature, the handler should quickly return HTTP 200 to indicate successful receipt of the webhook event, repeat failure to correctly return may result in the webhook becoming automatically disabled.
+Each webhook event is dispatched only once, refer to the [API](/docs/api-reference/introduction) for methods to poll and get product specific data.
+
+### Top-level fields
+
+| Field             | Type   | Description              |
+| ----------------- | ------ | ------------------------ |
+| `type`            | string | Type of event            |
+| `data`            | object | Data for the event       |
+| `event_timestamp` | string | When this event occurred |
+
+## Example webhook payload
+
+```json
+{
+  "type": "post_call_transcription",
+  "event_timestamp": 1739537297,
+  "data": {
+    "agent_id": "xyz",
+    "conversation_id": "abc",
+    "status": "done",
+    "transcript": [
+      ...
+    ]
+  }
+}
+```
+
+## Authentication
+
+It is important for the listener to validate all incoming webhooks. Webhooks currently support authentication via HMAC signatures. Set up HMAC authentication by:
+
+- Securely storing the shared secret generated upon creation of the webhook
+- Verifying the ElevenLabs-Signature header in your endpoint using the shared secret
+
+The ElevenLabs-Signature takes the following format:
+
+```json
+t=timestamp,v0=hash
+```
+
+The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.request_body`. Both the hash and timestamp should be validated, an example is shown here:
+
+```javascript
+const crypto = require('crypto');
+const secret = process.env.WEBHOOK_SECRET;
+
+// Example webhook handler
+app.post('/webhook/elevenlabs', async (req, res) => {
+  const headers = req.headers['ElevenLabs-Signature'].split(',');
+  const timestamp = headers.find((e) => e.startsWith('t=')).substring(2);
+  const signature = headers.find((e) => e.startsWith('v0='));
+
+  // Validate timestamp
+  const reqTimestamp = timestamp * 1000;
+  const tolerance = Date.now() - 30 * 60 * 1000;
+  if (reqTimestamp < tolerance) {
+    res.status(403).send('Request expired');
+    return;
+  } else {
+    // Validate hash
+    const message = `${timestamp}.${req.body}`;
+    const digest = 'v0=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
+    if (signature !== digest) {
+      res.status(401).send('Request unauthorized');
+      return;
+    }
+  }
+
+  // Validation passed, continue processing ...
+
+  res.status(200).send();
+});
+```
