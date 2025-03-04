@@ -110,23 +110,30 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
     # First, index a document for RAG
 
     document_id = "your-document-id"
-        response = requests.post(
-        f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
-        headers={"xi-api-key": "your-api-key"},
-        json={"model": "e5_mistral_7b_instruct"}
+    response = requests.post(
+      f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
+      headers={"xi-api-key": "your-api-key"},
+      json={"model": "e5_mistral_7b_instruct"}
     )
 
     # Check indexing status
+    while True:
+      if response.json()["status"] in ["SUCCEEDED", "FAILED"]:
+          break
+      time.sleep(5)
+      # check status again
+      response = requests.get(
+        f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
+        headers={"xi-api-key": "your-api-key"}
+      )
 
-    status = response.json()["status"] # CREATED, PROCESSING, SUCCEEDED, or FAILED
-    print(f"Indexing status: {status}")
 
     # Then update agent configuration to use RAG
 
     agent_id = "your-agent-id"
-        agent_config = requests.get(
-        f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
-        headers={"xi-api-key": "your-api-key"}
+    agent_config = requests.get(
+      f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
+      headers={"xi-api-key": "your-api-key"}
     ).json()
 
     # Enable RAG in the agent configuration
