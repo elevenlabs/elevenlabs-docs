@@ -16,7 +16,13 @@ Post-call webhooks can be enabled for all agents in your workspace through the C
   ![Post-call webhook settings](/assets/images/conversational-ai/postcallwebhooksettings.png)
 </Frame>
 
-For more information on implementing and managing webhooks please see [Webhooks](/docs/product-guides/administration/webhooks).
+<Warning>
+  Post call webhooks must return a 200 status code to be considered successful. The webhook will
+  automatically be disabled after 10 consecutive failures over more than 7 days, or failed 10 times
+  in a row and never succeeded.
+</Warning>
+
+<Note>For HIPAA compliance, if a webhook fails we can not retry the webhook.</Note>
 
 ### Authentication
 
