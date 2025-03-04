@@ -5,8 +5,21 @@ subtitle: Learn how to secure access to your conversational AI agents
 
 ## Overview
 
-When building conversational AI agents, you may need to restrict access to certain agents or conversations.
-ElevenLabs provides authentication mechanisms to ensure only authorized users can interact with your agents.
+When building conversational AI agents, you may need to restrict access to certain agents or conversations. ElevenLabs provides multiple authentication mechanisms to ensure only authorized users can interact with your agents.
+
+## Authentication Methods
+
+ElevenLabs offers two primary methods to secure your conversational AI agents:
+
+<CardGroup cols={2}>
+  <Card title="Signed URLs" icon="signature" href="#using-signed-urls">
+    Generate temporary authenticated URLs for secure client-side connections without exposing API
+    keys.
+  </Card>
+  <Card title="Allowlists" icon="list-check" href="#using-allowlists">
+    Restrict access to specific domains or hostnames that can connect to your agent.
+  </Card>
+</CardGroup>
 
 ## Using Signed URLs
 
@@ -26,7 +39,7 @@ Signed URLs are the recommended approach for client-side applications. This meth
 
 ### Requesting a Signed URL
 
-To obtain a signed URL, make a GET request to the `/v1/convai/conversation/get_signed_url` endpoint with your agent ID:
+To obtain a signed URL, make a GET request to the `get_signed_url` [endpoint](/docs/conversational-ai/api-reference/conversations/get-signed-url) with your agent ID:
 
 <CodeBlocks>
 ```python
@@ -168,29 +181,99 @@ Signed URLs are valid for 15 minutes. The session can last longer, but the conve
 
 For more details on the signed URL endpoint, see the [Get Signed URL API Reference](https://elevenlabs.io/docs/api-reference/conversations/get-signed-url).
 
+## Using Allowlists
+
+Allowlists provide a way to restrict access to your conversational AI agents based on the origin domain. This ensures that only requests from approved domains can connect to your agent.
+
+### How Allowlists Work
+
+1. You configure a list of approved hostnames for your agent
+2. When a client attempts to connect, ElevenLabs checks if the request's origin matches an allowed hostname
+3. If the origin is on the allowlist, the connection is permitted; otherwise, it's rejected
+
+### Configuring Allowlists
+
+Allowlists are configured as part of your agent's authentication settings. You can specify up to 10 unique hostnames that are allowed to connect to your agent.
+
+### Example: Setting Up an Allowlist
+
+<CodeBlocks>
+```python
+# Example of configuring an allowlist for your agent
+auth_settings = AuthSettings(
+    enable_auth=False,  # No signed URL required
+    allowlist=[
+        AllowlistItem(hostname="example.com"),
+        AllowlistItem(hostname="app.example.com"),
+        AllowlistItem(hostname="localhost:3000")
+    ]
+)
+
+# Update your agent with these settings
+
+agent.platform_settings.auth = auth_settings
+
+````
+
+</CodeBlocks>
+
+## Combining Authentication Methods
+
+For maximum security, you can combine both authentication methods:
+
+1. Enable `enable_auth` to require signed URLs
+2. Configure an allowlist to restrict which domains can request those signed URLs
+
+This creates a two-layer authentication system where clients must:
+
+- Connect from an approved domain
+- Possess a valid signed URL
+
+<CodeBlocks>
+```python
+# Example of combining both authentication methods
+auth_settings = AuthSettings(
+    enable_auth=True,  # Require signed URLs
+    allowlist=[
+        AllowlistItem(hostname="example.com"),
+        AllowlistItem(hostname="app.example.com")
+    ]
+)
+````
+
+</CodeBlocks>
+
+<Info>
+  When both methods are enabled, requests must satisfy both requirements to be authorized. This
+  provides an additional layer of security for your agents.
+</Info>
+
 ## FAQ
 
 <AccordionGroup>
-    <Accordion title="Can I use the same signed URL for multiple users?">
+  <Accordion title="Can I use the same signed URL for multiple users?">
     No, each signed URL is tied to a specific request and should not be shared between users.
     Generate a new signed URL for each user session.
-    </Accordion>
-
-    <Accordion title="What happens if the signed URL expires during a conversation?">
+  </Accordion>
+  <Accordion title="What happens if the signed URL expires during a conversation?">
     If the signed URL expires (after 15 minutes), the WebSocket connection will be closed. Your
     application should handle this by requesting a new signed URL and reconnecting.
-    </Accordion>
-
-
-    <Accordion title="Can I restrict access to specific users?">
+  </Accordion>
+  <Accordion title="Can I restrict access to specific users?">
     The signed URL mechanism only verifies that the request came from an authorized source. To
     restrict access to specific users, implement user authentication in your application before
     requesting the signed URL.
-    </Accordion>
-
-    <Accordion title="Is there a limit to how many signed URLs I can generate?">
-        There is no specific limit on the number of signed URLs you can generate, but standard API rate
-        limits apply to the endpoint that generates them.
-    </Accordion>
-
+  </Accordion>
+  <Accordion title="Is there a limit to how many signed URLs I can generate?">
+    There is no specific limit on the number of signed URLs you can generate, but standard API rate
+    limits apply to the endpoint that generates them.
+  </Accordion>
+  <Accordion title="How do allowlists handle subdomains?">
+    Allowlists perform exact matching on hostnames. If you want to allow both a domain and its
+    subdomains, you need to add each one separately (e.g., "example.com" and "app.example.com").
+  </Accordion>
+  <Accordion title="Do I need to use both authentication methods?">
+    No, you can use either signed URLs or allowlists independently based on your security
+    requirements. For highest security, use both.
+  </Accordion>
 </AccordionGroup>
