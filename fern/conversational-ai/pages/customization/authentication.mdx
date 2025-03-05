@@ -90,6 +90,26 @@ Retrieve the server generated signed URL from the client and use the signed URL 
 <CodeBlocks>
 ```python
 # Client-side code using the Python SDK
+from elevenlabs.conversational_ai.conversation import (
+    Conversation,
+    AudioInterface,
+    ClientTools,
+    ConversationInitiationData
+)
+import os
+from elevenlabs.client import ElevenLabs
+api_key = os.getenv("ELEVENLABS_API_KEY")
+
+client = ElevenLabs(api_key=api_key)
+
+conversation = Conversation(
+    client=client,
+    agent_id=os.getenv("AGENT_ID"),
+    requires_auth=True,
+    audio_interface=AudioInterface(),
+    config=ConversationInitiationData()
+)
+
 async def start_conversation():
     try:
         signed_url = await get_signed_url()
@@ -100,7 +120,6 @@ async def start_conversation():
         )
         
         conversation.start_session()
-        return conversation
     except Exception as error:
         print(f"Failed to start conversation: {error}")
         raise
@@ -108,6 +127,7 @@ async def start_conversation():
 
 ```javascript
 // Client-side code using the JavaScript SDK
+import { Conversation } from '@11labs/client';
 async function startConversation() {
   try {
     const signedUrl = await getSignedUrl();
