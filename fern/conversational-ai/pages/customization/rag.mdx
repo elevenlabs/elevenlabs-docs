@@ -5,28 +5,27 @@ subtitle: Enhance your agent with large knowledge bases using RAG.
 
 ## Overview
 
-**Retrieval-Augmented Generation (RAG)** enables your agent to access and utilize large knowledge bases during conversations. Instead of loading entire documents into the context window, RAG retrieves only the most relevant information for each user query, allowing your agent to:
+**Retrieval-Augmented Generation (RAG)** enables your agent to access and use large knowledge bases during conversations. Instead of loading entire documents into the context window, RAG retrieves only the most relevant information for each user query, allowing your agent to:
 
 - Access much larger knowledge bases than would fit in a prompt
 - Provide more accurate, knowledge-grounded responses
 - Reduce hallucinations by referencing source material
 - Scale knowledge without creating multiple specialized agents
 
-<Info>
-  RAG is ideal for agents that need to reference large documents, technical manuals, or extensive
-  knowledge bases that would exceed the context window limits of traditional prompting.
-</Info>
-
-<Warning>RAG adds on slight latency to the response time of your agent, around 500ms.</Warning>
+RAG is ideal for agents that need to reference large documents, technical manuals, or extensive
+knowledge bases that would exceed the context window limits of traditional prompting.
+RAG adds on slight latency to the response time of your agent, around 500ms.
 
 ## How RAG works
 
 When RAG is enabled, your agent processes user queries through these steps:
 
-1. **Query processing**: The user's question is analyzed and reformulated for optimal retrieval
-2. **Embedding generation**: The processed query is converted into a vector embedding
-3. **Retrieval**: The system finds the most semantically similar content from your knowledge base
-4. **Response generation**: The agent generates a response using both the conversation context and the retrieved information
+1. **Query processing**: The user's question is analyzed and reformulated for optimal retrieval.
+2. **Embedding generation**: The processed query is converted into a vector embedding that represents the user's question.
+3. **Retrieval**: The system finds the most semantically similar content from your knowledge base.
+4. **Response generation**: The agent generates a response using both the conversation context and the retrieved information.
+
+This process ensures that relevant information to the user's query is passed to the LLM to generate a factually correct answer.
 
 <Note>
   When RAG is enabled, the size of knowledge base items that can be assigned to an agent is
@@ -55,6 +54,11 @@ When RAG is enabled, your agent processes user queries through these steps:
     - **Embedding model**: Select the model that will convert text into vector embeddings
     - **Maximum document chunks**: Set the maximum amount of retrieved content per query
     - **Maximum vector distance**: Set the maximum distance between the query and the retrieved chunks
+
+    These parameters impact latency, however can impact LLM cost which in the future will be passed on to you.
+    For example, retrieving more chunks increases cost.
+    Increasing vector distance allows for more context to be passed, but potentially less relevant context.
+    This may affect quality and you should experiment with different parameters to find the best results.
 
     <Frame background="subtle">
         <img
@@ -187,11 +191,12 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
     - Include relevant keywords that users might search for
   </Accordion>
 
+{' '}
 
-  <Accordion title="Query formulation">
-    - Encourage users to ask specific questions - Include relevant context in follow-up questions -
-    Use clear, unambiguous language
-  </Accordion>
+<Accordion title="Query formulation">
+  - Encourage users to ask specific questions - Include relevant context in follow-up questions -
+  Use clear, unambiguous language
+</Accordion>
 
   <Accordion title="Performance optimization">
     - Use the "Prompt" mode sparingly for critical information only
