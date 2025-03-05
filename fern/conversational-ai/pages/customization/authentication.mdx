@@ -38,26 +38,6 @@ Signed URLs are the recommended approach for client-side applications. This meth
 
 To obtain a signed URL, make a GET request to the `get_signed_url` [endpoint](/docs/conversational-ai/api-reference/conversations/get-signed-url) with your agent ID:
 
-<EndpointRequestSnippet endpoint="POST /v1/convai/conversation/get_signed_url" />
-
-<CodeBlocks>
-```bash
-curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=your-agent-id" \
--H "xi-api-key: your-api-key"
-```
-
-</CodeBlocks>
-
-The response has the following format:
-
-```json
-{
-  "signed_url": "wss://api.elevenlabs.io/v1/convai/conversation?agent_id=your-agent-id&conversation_signature=your-token"
-}
-```
-
-Your client application requests the signed URL from your server.
-
 <CodeBlocks>
 ```python
 # Server-side code using the Python SDK
@@ -87,7 +67,22 @@ async function getSignedUrl() {
 }
 ```
 
+```bash
+curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=your-agent-id" \
+-H "xi-api-key: your-api-key"
+```
+
 </CodeBlocks>
+
+The curl response has the following format:
+
+```json
+{
+  "signed_url": "wss://api.elevenlabs.io/v1/convai/conversation?agent_id=your-agent-id&conversation_signature=your-token"
+}
+```
+
+Your client application requests the signed URL from your server.
 
 ### Connect to the websocket
 
