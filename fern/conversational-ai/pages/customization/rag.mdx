@@ -108,7 +108,7 @@ This process ensures that relevant information to the user's query is passed to 
 You can also implement RAG through the [API](/docs/api-reference/knowledge-base/rag-index-status):
 
 <CodeBlocks>
-    ```python title="Enable RAG for a document"
+    ```python
     import requests
 
     # First, index a document for RAG
@@ -162,6 +162,67 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
     )
 
     ```
+
+```javascript
+const axios = require('axios');
+
+// First, index a document for RAG
+async function enableRAG(documentId, agentId, apiKey) {
+  try {
+    // Start document indexing
+    let response = await axios.post(
+      `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
+      { model: 'e5_mistral_7b_instruct' },
+      { headers: { 'xi-api-key': apiKey } }
+    );
+
+    // Check indexing status
+    while (true) {
+      const status = response.data.status;
+      if (status === 'SUCCEEDED' || status === 'FAILED') {
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      response = await axios.get(
+        `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
+        { headers: { 'xi-api-key': apiKey } }
+      );
+    }
+
+    // Get agent configuration
+    const agentResponse = await axios.get(
+      `https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`,
+      { headers: { 'xi-api-key': apiKey } }
+    );
+    const agentConfig = agentResponse.data;
+
+    // Enable RAG in the agent configuration
+    agentConfig.agent.prompt.rag = {
+      enabled: true,
+      embedding_model: 'e5_mistral_7b_instruct',
+      max_documents_length: 10000,
+    };
+
+    // Update document usage mode if needed
+    agentConfig.agent.prompt.knowledge_base.forEach((doc, index) => {
+      if (doc.id === documentId) {
+        agentConfig.agent.prompt.knowledge_base[index].usage_mode = 'auto';
+      }
+    });
+
+    // Update the agent configuration
+    await axios.put(
+      `https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`,
+      agentConfig,
+      { headers: { 'xi-api-key': apiKey } }
+    );
+
+    console.log('RAG configuration updated successfully');
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+```
 
 </CodeBlocks>
 
@@ -245,3 +306,7 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
 - Very large documents may take longer to index.
 - Response quality depends on both the quality of your knowledge base and the specificity of user queries.
 - Some documents may be too large to be included in "Prompt" mode. The size of extracted text from prompt documents can be 300KB total
+
+```
+
+```
