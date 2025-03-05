@@ -79,6 +79,10 @@ Note that overriding the chunk schedule to generate small amounts of text may re
         Defines the use speaker boost for voice settings. This parameter is available on V2+ models.
       </ParamField>
 
+      <ParamField path="speed" type="number">
+        Controls the speed of the generated speech. Values below 1.0 will slow down the speech, while values above 1.0 will speed it up. Must be above 0.7 and below 1.2. Extreme values may affect the quality of the generated speech.
+      </ParamField>
+
   </Expandable>
 </ParamField>
 
@@ -296,6 +300,13 @@ Defaults to `20` seconds, with a maximum allowed value of `180` seconds.
   This parameter focuses on reducing the latency by disabling the chunk schedule and all buffers. It
   is only recommended when sending full sentences or phrases, sending partial phrases will result in
   highly reduced quality. By default it's set to false.
+</ParamField>
+
+<ParamField query="apply_text_normalization" type="string">
+  This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to
+  'auto', the system will automatically decide whether to apply text normalization (e.g., spelling
+  out numbers). With 'on', text normalization will always be applied, while with 'off', it will be
+  skipped. Cannot be turned on for 'eleven_turbo_v2_5' model. Defaults to 'auto'
 </ParamField>
 
 ## Example - Voice streaming using ElevenLabs and OpenAI
