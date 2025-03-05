@@ -164,37 +164,43 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
     ```
 
 ```javascript
-const axios = require('axios');
-
 // First, index a document for RAG
 async function enableRAG(documentId, agentId, apiKey) {
   try {
     // Start document indexing
-    let response = await axios.post(
+    let response = await fetch(
       `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
-      { model: 'e5_mistral_7b_instruct' },
-      { headers: { 'xi-api-key': apiKey } }
+      {
+        method: 'POST',
+        headers: {
+          'xi-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model: 'e5_mistral_7b_instruct' }),
+      }
     );
+    let data = await response.json();
 
     // Check indexing status
     while (true) {
-      const status = response.data.status;
+      const status = data.status;
       if (status === 'SUCCEEDED' || status === 'FAILED') {
         break;
       }
       await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
-      response = await axios.get(
+      response = await fetch(
         `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
         { headers: { 'xi-api-key': apiKey } }
       );
+      data = await response.json();
     }
 
     // Get agent configuration
-    const agentResponse = await axios.get(
+    const agentResponse = await fetch(
       `https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`,
       { headers: { 'xi-api-key': apiKey } }
     );
-    const agentConfig = agentResponse.data;
+    const agentConfig = await agentResponse.json();
 
     // Enable RAG in the agent configuration
     agentConfig.agent.prompt.rag = {
@@ -211,102 +217,18 @@ async function enableRAG(documentId, agentId, apiKey) {
     });
 
     // Update the agent configuration
-    await axios.put(
-      `https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`,
-      agentConfig,
-      { headers: { 'xi-api-key': apiKey } }
-    );
+    await fetch(`https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`, {
+      method: 'PUT',
+      headers: {
+        'xi-api-key': apiKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(agentConfig),
+    });
 
     console.log('RAG configuration updated successfully');
   } catch (error) {
     console.error('Error:', error.message);
   }
 }
-```
-
-</CodeBlocks>
-
-## Supported embedding models
-
-<CardGroup cols={2}>
-  <Card title="e5_mistral_7b_instruct">
-    **Provider**: Microsoft/intfloat
-
-    A powerful embedding model based on Mistral 7B with strong semantic understanding.
-
-  </Card>
-  <Card title="gte_Qwen2_15B_instruct">
-    **Provider**: Alibaba
-
-    High-performance embedding model with excellent multilingual capabilities.
-
-  </Card>
-</CardGroup>
-
-## Best practices
-
-<AccordionGroup>
-  <Accordion title="Document preparation">
-    - Break large documents into logical sections before uploading
-    - Use clear headings and structure in your documents
-    - Include relevant keywords that users might search for
-  </Accordion>
-
-{' '}
-
-<Accordion title="Query formulation">
-  - Encourage users to ask specific questions - Include relevant context in follow-up questions -
-  Use clear, unambiguous language
-</Accordion>
-
-  <Accordion title="Performance optimization">
-    - Use the "Prompt" mode sparingly for critical information only
-    - Monitor response times and adjust maximum document chunks if needed
-    - Consider splitting very large knowledge bases across multiple agents
-  </Accordion>
-</AccordionGroup>
-
-## Troubleshooting
-
-<AccordionGroup>
-  <Accordion title="Document indexing fails">
-    If document indexing fails:
-
-    - Check that the document format is supported (PDF, TXT, DOCX, HTML)
-    - Ensure the document isn't corrupted
-    - Try re-uploading a simplified version of the document
-    - Check that the document size is within limits
-
-  </Accordion>
-
-  <Accordion title="Agent doesn't retrieve relevant information">
-    If your agent isn't finding relevant information:
-
-    - Verify that indexing has completed successfully
-    - Try reformulating your questions to be more specific
-    - Check if the information exists in your knowledge base
-    - Consider adjusting the maximum document chunks setting
-
-  </Accordion>
-
-  <Accordion title="Slow response times">
-    If responses are slow:
-
-    - Reduce the maximum document chunks setting
-    - Use more concise documents
-    - Consider using a different embedding model
-    - Split very large knowledge bases across multiple agents
-
-  </Accordion>
-</AccordionGroup>
-
-## Limitations
-
-- RAG works best with text-based information and may not effectively retrieve information from images or complex tables.
-- Very large documents may take longer to index.
-- Response quality depends on both the quality of your knowledge base and the specificity of user queries.
-- Some documents may be too large to be included in "Prompt" mode. The size of extracted text from prompt documents can be 300KB total
-
-```
-
 ```
