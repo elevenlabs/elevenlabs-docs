@@ -88,7 +88,8 @@ The curl response has the following format:
 Retrieve the server generated signed URL from the client and use the signed URL to connect to the websocket.
 
 <CodeBlocks>
-```python
+
+  ```python
 # Client-side code using the Python SDK
 from elevenlabs.conversational_ai.conversation import (
     Conversation,
@@ -103,32 +104,31 @@ api_key = os.getenv("ELEVENLABS_API_KEY")
 client = ElevenLabs(api_key=api_key)
 
 conversation = Conversation(
-client=client,
-agent_id=os.getenv("AGENT_ID"),
-requires_auth=True,
-audio_interface=AudioInterface(),
-config=ConversationInitiationData()
+  client=client,
+  agent_id=os.getenv("AGENT_ID"),
+  requires_auth=True,
+  audio_interface=AudioInterface(),
+  config=ConversationInitiationData()
 )
 
 async def start_conversation():
-try:
-signed_url = await get_signed_url()
-conversation = Conversation(
-client=client,
-url=signed_url,
-...
-)
+  try:
+    signed_url = await get_signed_url()
+    conversation = Conversation(
+      client=client,
+      url=signed_url,
+    )
 
-        conversation.start_session()
-    except Exception as error:
-        print(f"Failed to start conversation: {error}")
-        raise
+    conversation.start_session()
+  except Exception as error:
+    print(f"Failed to start conversation: {error}")
 
-````
+```
 
 ```javascript
 // Client-side code using the JavaScript SDK
 import { Conversation } from '@11labs/client';
+
 async function startConversation() {
   try {
     const signedUrl = await getSignedUrl();
@@ -195,6 +195,35 @@ agent = client.conversational_ai.create_agent(
 )
 ```
 
+```javascript
+async function createAuthenticatedAgent(client) {
+  try {
+    const agent = await client.conversationalAi.createAgent({
+      conversation_config: {
+        agent: {
+          first_message: "Hi. I'm an authenticated agent.",
+        },
+      },
+      platform_settings: {
+        auth: {
+          enable_auth: false,
+          allowlist: [
+            { hostname: 'example.com' },
+            { hostname: 'app.example.com' },
+            { hostname: 'localhost:3000' },
+          ],
+        },
+      },
+    });
+
+    return agent;
+  } catch (error) {
+    console.error('Error creating agent:', error);
+    throw error;
+  }
+}
+```
+
 </CodeBlocks>
 
 ## Combining authentication methods
@@ -234,6 +263,35 @@ agent = client.conversational_ai.create_agent(
     )
   )
 )
+```
+
+```javascript
+async function createAuthenticatedAgent(client) {
+  try {
+    const agent = await client.conversationalAi.createAgent({
+      conversation_config: {
+        agent: {
+          first_message: "Hi. I'm an authenticated agent.",
+        },
+      },
+      platform_settings: {
+        auth: {
+          enable_auth: true,
+          allowlist: [
+            { hostname: 'example.com' },
+            { hostname: 'app.example.com' },
+            { hostname: 'localhost:3000' },
+          ],
+        },
+      },
+    });
+
+    return agent;
+  } catch (error) {
+    console.error('Error creating agent:', error);
+    throw error;
+  }
+}
 ```
 
 </CodeBlocks>
