@@ -155,21 +155,21 @@ api_key = os.getenv("ELEVENLABS_API_KEY")
 client = ElevenLabs(api_key=api_key)
 
 agent = client.conversational_ai.create_agent(
-    conversation_config=ConversationalConfig(
-        agent=AgentConfig(
-            first_message="Hi. I'm an authenticated agent.",
-        )
-    ),
-    platform_settings=AgentPlatformSettingsRequestModel(
-        auth=AuthSettings(
-            enable_auth=False,
-            allowlist=[
-                AllowlistItem(hostname="example.com"),
-                AllowlistItem(hostname="app.example.com"),
-                AllowlistItem(hostname="localhost:3000")
-            ]
-        )
-    )
+conversation_config=ConversationalConfig(
+agent=AgentConfig(
+first_message="Hi. I'm an authenticated agent.",
+)
+),
+platform_settings=AgentPlatformSettingsRequestModel(
+auth=AuthSettings(
+enable_auth=False,
+allowlist=[
+AllowlistItem(hostname="example.com"),
+AllowlistItem(hostname="app.example.com"),
+AllowlistItem(hostname="localhost:3000")
+]
+)
+)
 )
 
 ````
@@ -225,8 +225,7 @@ auth_settings = AuthSettings(
     requesting the signed URL.
   </Accordion>
   <Accordion title="Is there a limit to how many signed URLs I can generate?">
-    There is no specific limit on the number of signed URLs you can generate, but standard API rate
-    limits apply to the endpoint that generates them.
+    There is no specific limit on the number of signed URLs you can generate.
   </Accordion>
   <Accordion title="How do allowlists handle subdomains?">
     Allowlists perform exact matching on hostnames. If you want to allow both a domain and its
