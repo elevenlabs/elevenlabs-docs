@@ -231,79 +231,12 @@ async function createAuthenticatedAgent(client) {
 
 </CodeBlocks>
 
-## Combining authentication methods
-
-For maximum security, you can combine both authentication methods:
-
-1. Use `enable_auth` to require signed URLs.
-2. Configure an allowlist to restrict which domains can request those signed URLs.
-
-This creates a two-layer authentication system where clients must:
-
-- Connect from an approved domain
-- Possess a valid signed URL
-
-<CodeBlocks>
-
-```python
-from elevenlabs.client import ElevenLabs
-import os
-from elevenlabs.types import *
-api_key = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(api_key=api_key)
-agent = client.conversational_ai.create_agent(
-  conversation_config=ConversationalConfig(
-    agent=AgentConfig(
-      first_message="Hi. I'm an authenticated agent that can only be called from certain domains.",
-    )
-  ),
-  platform_settings=AgentPlatformSettingsRequestModel(
-  auth=AuthSettings(
-    enable_auth=True,
-    allowlist=[
-      AllowlistItem(hostname="example.com"),
-      AllowlistItem(hostname="app.example.com"),
-      AllowlistItem(hostname="localhost:3000")
-      ]
-    )
-  )
-)
-```
-
-```javascript
-async function createAuthenticatedAgent(client) {
-  try {
-    const agent = await client.conversationalAi.createAgent({
-      conversation_config: {
-        agent: {
-          first_message: "Hi. I'm an authenticated agent.",
-        },
-      },
-      platform_settings: {
-        auth: {
-          enable_auth: true,
-          allowlist: [
-            { hostname: 'example.com' },
-            { hostname: 'app.example.com' },
-            { hostname: 'localhost:3000' },
-          ],
-        },
-      },
-    });
-
-    return agent;
-  } catch (error) {
-    console.error('Error creating agent:', error);
-    throw error;
-  }
-}
-```
-
-</CodeBlocks>
-
 ## FAQ
 
 <AccordionGroup>
+  <Accordion title="Can I combine the two authentication methods?">
+    No, it is not currently possible to combine both.
+  </Accordion>
   <Accordion title="Can I use the same signed URL for multiple users?">
     This is possible but we recommend generating a new signed URL for each user session.
   </Accordion>
@@ -329,8 +262,12 @@ async function createAuthenticatedAgent(client) {
     requirements. For highest security, we recommend using both.
   </Accordion>
   <Accordion title="What other security measures should I implement?">
-    Beyond signed URLs and allowlists, consider implementing: - User authentication before
-    requesting signed URLs - Rate limiting on API requests - Usage monitoring for suspicious
-    patterns - Proper error handling for auth failures
+    Beyond signed URLs and allowlists, consider implementing:
+
+    - User authentication before requesting signed URLs
+    - Rate limiting on API requests
+    - Usage monitoring for suspicious patterns
+    - Proper error handling for auth failures
+
   </Accordion>
 </AccordionGroup>
