@@ -41,6 +41,7 @@ To obtain a signed URL, make a request to the `get_signed_url` [endpoint](/docs/
 <CodeBlocks>
 ```python
 # Server-side code using the Python SDK
+from elevenlabs.client import ElevenLabs
 async def get_signed_url():
     try:
         client = ElevenLabs(api_key="your-api-key")
@@ -155,21 +156,21 @@ api_key = os.getenv("ELEVENLABS_API_KEY")
 client = ElevenLabs(api_key=api_key)
 
 agent = client.conversational_ai.create_agent(
-  conversation_config=ConversationalConfig(
-    agent=AgentConfig(
-      first_message="Hi. I'm an authenticated agent.",
-    )
-  ),
-  platform_settings=AgentPlatformSettingsRequestModel(
-  auth=AuthSettings(
-    enable_auth=False,
-    allowlist=[
-      AllowlistItem(hostname="example.com"),
-      AllowlistItem(hostname="app.example.com"),
-      AllowlistItem(hostname="localhost:3000")
-      ]
-    )
-  )
+conversation_config=ConversationalConfig(
+agent=AgentConfig(
+first_message="Hi. I'm an authenticated agent.",
+)
+),
+platform_settings=AgentPlatformSettingsRequestModel(
+auth=AuthSettings(
+enable_auth=False,
+allowlist=[
+AllowlistItem(hostname="example.com"),
+AllowlistItem(hostname="app.example.com"),
+AllowlistItem(hostname="localhost:3000")
+]
+)
+)
 )
 
 ````
@@ -206,8 +207,7 @@ auth_settings = AuthSettings(
 
 <AccordionGroup>
   <Accordion title="Can I use the same signed URL for multiple users?">
-    No, each signed URL is tied to a specific request and should not be shared between users.
-    Generate a new signed URL for each user session.
+    This is possible but we recommend generating a new signed URL for each user session.
   </Accordion>
   <Accordion title="What happens if the signed URL expires during a conversation?">
     If the signed URL expires (after 15 minutes), any WebSocket connection created with that signed
