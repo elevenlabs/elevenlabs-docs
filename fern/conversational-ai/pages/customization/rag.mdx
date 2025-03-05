@@ -108,60 +108,61 @@ This process ensures that relevant information to the user's query is passed to 
 You can also implement RAG through the [API](/docs/api-reference/knowledge-base/rag-index-status):
 
 <CodeBlocks>
-    ```python
-    import requests
 
-    # First, index a document for RAG
+```python
+import requests
 
-    document_id = "your-document-id"
-    response = requests.post(
-      f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
-      headers={"xi-api-key": "your-api-key"},
-      json={"model": "e5_mistral_7b_instruct"}
-    )
+# First, index a document for RAG
 
-    # Check indexing status
-    while True:
-      if response.json()["status"] in ["SUCCEEDED", "FAILED"]:
-          break
-      time.sleep(5) # wait 5 seconds before checking status again
-      response = requests.get(
-        f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
-        headers={"xi-api-key": "your-api-key"}
-      )
+document_id = "your-document-id"
+response = requests.post(
+  f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
+  headers={"xi-api-key": "your-api-key"},
+  json={"model": "e5_mistral_7b_instruct"}
+)
+
+# Check indexing status
+while True:
+  if response.json()["status"] in ["SUCCEEDED", "FAILED"]:
+      break
+  time.sleep(5) # wait 5 seconds before checking status again
+  response = requests.get(
+    f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
+    headers={"xi-api-key": "your-api-key"}
+  )
 
 
-    # Then update agent configuration to use RAG
+# Then update agent configuration to use RAG
 
-    agent_id = "your-agent-id"
-    agent_config = requests.get(
-      f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
-      headers={"xi-api-key": "your-api-key"}
-    ).json()
+agent_id = "your-agent-id"
+agent_config = requests.get(
+  f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
+  headers={"xi-api-key": "your-api-key"}
+).json()
 
-    # Enable RAG in the agent configuration
+# Enable RAG in the agent configuration
 
-    agent_config["agent"]["prompt"]["rag"] = {
-        "enabled": True,
-        "embedding_model": "e5_mistral_7b_instruct",
-        "max_documents_length": 10000
-    }
+agent_config["agent"]["prompt"]["rag"] = {
+    "enabled": True,
+    "embedding_model": "e5_mistral_7b_instruct",
+    "max_documents_length": 10000
+}
 
-    # Update document usage mode if needed
+# Update document usage mode if needed
 
-    for i, doc in enumerate(agent_config["agent"]["prompt"]["knowledge_base"]):
-        if doc["id"] == document_id:
-            agent_config["agent"]["prompt"]["knowledge_base"][i]["usage_mode"] = "auto"
+for i, doc in enumerate(agent_config["agent"]["prompt"]["knowledge_base"]):
+    if doc["id"] == document_id:
+        agent_config["agent"]["prompt"]["knowledge_base"][i]["usage_mode"] = "auto"
 
-    # Update the agent configuration
+# Update the agent configuration
 
-    requests.put(
-        f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
-        headers={"xi-api-key": "your-api-key"},
-        json=agent_config
-    )
+requests.put(
+    f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
+    headers={"xi-api-key": "your-api-key"},
+    json=agent_config
+)
 
-    ```
+```
 
 ```javascript
 // First, index a document for RAG
@@ -232,3 +233,5 @@ async function enableRAG(documentId, agentId, apiKey) {
   }
 }
 ```
+
+</CodeBlocks>
