@@ -103,27 +103,28 @@ api_key = os.getenv("ELEVENLABS_API_KEY")
 client = ElevenLabs(api_key=api_key)
 
 conversation = Conversation(
-    client=client,
-    agent_id=os.getenv("AGENT_ID"),
-    requires_auth=True,
-    audio_interface=AudioInterface(),
-    config=ConversationInitiationData()
+client=client,
+agent_id=os.getenv("AGENT_ID"),
+requires_auth=True,
+audio_interface=AudioInterface(),
+config=ConversationInitiationData()
 )
 
 async def start_conversation():
-    try:
-        signed_url = await get_signed_url()
-        conversation = Conversation(
-            client=client,
-            url=signed_url,
-            ...
-        )
-        
+try:
+signed_url = await get_signed_url()
+conversation = Conversation(
+client=client,
+url=signed_url,
+...
+)
+
         conversation.start_session()
     except Exception as error:
         print(f"Failed to start conversation: {error}")
         raise
-```
+
+````
 
 ```javascript
 // Client-side code using the JavaScript SDK
@@ -141,7 +142,7 @@ async function startConversation() {
     throw error;
   }
 }
-```
+````
 
 </CodeBlocks>
 
@@ -166,6 +167,7 @@ Allowlists are configured as part of your agent's authentication settings. You c
 ### Example: setting up an allowlist
 
 <CodeBlocks>
+
 ```python
 from elevenlabs.client import ElevenLabs
 import os
@@ -191,7 +193,8 @@ agent = client.conversational_ai.create_agent(
     )
   )
 )
-````
+```
+
 </CodeBlocks>
 
 ## Combining authentication methods
@@ -207,16 +210,31 @@ This creates a two-layer authentication system where clients must:
 - Possess a valid signed URL
 
 <CodeBlocks>
+
 ```python
-# Example of combining both authentication methods
-auth_settings = AuthSettings(
-    enable_auth=True,  # Require signed URLs
+from elevenlabs.client import ElevenLabs
+import os
+from elevenlabs.types import *
+api_key = os.getenv("ELEVENLABS_API_KEY")
+client = ElevenLabs(api_key=api_key)
+agent = client.conversational_ai.create_agent(
+  conversation_config=ConversationalConfig(
+    agent=AgentConfig(
+      first_message="Hi. I'm an authenticated agent that can only be called from certain domains.",
+    )
+  ),
+  platform_settings=AgentPlatformSettingsRequestModel(
+  auth=AuthSettings(
+    enable_auth=True,
     allowlist=[
-        AllowlistItem(hostname="example.com"),
-        AllowlistItem(hostname="app.example.com")
-    ]
+      AllowlistItem(hostname="example.com"),
+      AllowlistItem(hostname="app.example.com"),
+      AllowlistItem(hostname="localhost:3000")
+      ]
+    )
+  )
 )
-````
+```
 
 </CodeBlocks>
 
