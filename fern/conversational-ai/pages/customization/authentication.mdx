@@ -32,47 +32,15 @@ Signed URLs are the recommended approach for client-side applications. This meth
 3. Your client application uses this signed URL to establish a WebSocket connection.
 4. The signed URL expires after 15 minutes.
 
-<Warning>
-  Never expose your ElevenLabs API key on the client side. Always use signed URLs for client
-  applications.
-</Warning>
+<Warning>Never expose your ElevenLabs API key client-side.</Warning>
 
 ### Requesting a signed URL
 
 To obtain a signed URL, make a GET request to the `get_signed_url` [endpoint](/docs/conversational-ai/api-reference/conversations/get-signed-url) with your agent ID:
 
+<EndpointRequestSnippet endpoint="POST /v1/convai/conversation/get_signed_url" />
+
 <CodeBlocks>
-```python
-import requests
-
-API_KEY = "your-api-key"
-AGENT_ID = "your-agent-id"
-
-url = f"https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id={AGENT_ID}"
-headers = {
-"xi-api-key": API_KEY
-}
-
-response = requests.get(url, headers=headers)
-signed_url = response.json()["signed_url"]
-print(signed_url)
-
-```javascript
-const API_KEY = 'your-api-key';
-const AGENT_ID = 'your-agent-id';
-
-fetch(`https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${AGENT_ID}`, {
-  headers: {
-    'xi-api-key': API_KEY,
-  },
-})
-  .then((response) => response.json())
-  .then((data) => {
-    const signedUrl = data.signed_url;
-    console.log(signedUrl);
-  });
-```
-
 ```bash
 curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=your-agent-id" \
 -H "xi-api-key: your-api-key"
@@ -80,15 +48,13 @@ curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?age
 
 </CodeBlocks>
 
-### Response format
+The response has the following format:
 
 ```json
 {
   "signed_url": "wss://api.elevenlabs.io/v1/convai/conversation?agent_id=your-agent-id&conversation_signature=your-token"
 }
 ```
-
-### Request the signed URL from your client
 
 Your client application requests the signed URL from your server.
 
@@ -98,7 +64,7 @@ Your client application requests the signed URL from your server.
 async def get_signed_url():
     try:
         client = ElevenLabs(api_key="your-api-key")
-        response = await client.conversational.get_signed_url(agent_id="your-agent-id")
+        response = await client.conversational_ai.get_signed_url(agent_id="your-agent-id")
         return response.signed_url
     except Exception as error:
         print(f"Error getting signed URL: {error}")
@@ -106,15 +72,14 @@ async def get_signed_url():
 ```
 
 ```javascript
-// Client-side code using the JavaScript SDK
+// Server-side code using the JavaScript SDK
 async function getSignedUrl() {
   try {
-    const response = await fetch('/get-conversation-url');
-    if (!response.ok) {
-      throw new Error('Failed to get signed URL');
-    }
-    const { signedUrl } = await response.json();
-    return signedUrl;
+    const response = await client.conversationalAi.getSignedUrl({
+      agent_id: 'your-agent-id',
+    });
+
+    return response.signed_url;
   } catch (error) {
     console.error('Error getting signed URL:', error);
     throw error;
@@ -126,11 +91,11 @@ async function getSignedUrl() {
 
 ### Connect to the websocket
 
-Use the signed URL with our SDK to establish a connection.
+On the client side, use the signed URL returned from your server to connect tot he websocket.
 
 <CodeBlocks>
 ```python
-# Server-side code using the Python SDK
+# Client-side code using the Python SDK
 async def start_conversation():
     try:
         signed_url = await get_signed_url()
@@ -166,18 +131,9 @@ async function startConversation() {
 
 </CodeBlocks>
 
-## Token expiration
+### Token expiration
 
 Signed URLs are valid for 15 minutes. The session can last longer, but the conversation must be initiated within the 15 minute window.
-
-## Additional security considerations
-
-- Implement user authentication in your application before requesting signed URLs
-- Consider rate limiting to prevent abuse
-- Monitor usage patterns for suspicious activity
-- Implement proper error handling for authentication failures
-
-## API Reference
 
 For more details on the signed URL endpoint, see the [Get Signed URL API Reference](https://elevenlabs.io/docs/api-reference/conversations/get-signed-url).
 
@@ -185,11 +141,11 @@ For more details on the signed URL endpoint, see the [Get Signed URL API Referen
 
 Allowlists provide a way to restrict access to your conversational AI agents based on the origin domain. This ensures that only requests from approved domains can connect to your agent.
 
-### How allowlists Work
+### How allowlists work
 
-1. You configure a list of approved hostnames for your agent
-2. When a client attempts to connect, ElevenLabs checks if the request's origin matches an allowed hostname
-3. If the origin is on the allowlist, the connection is permitted; otherwise, it's rejected
+1. You configure a list of approved hostnames for your agent.
+2. When a client attempts to connect, ElevenLabs checks if the request's origin matches an allowed hostname.
+3. If the origin is on the allowlist, the connection is permitted; otherwise, it's rejected.
 
 ### Configuring allowlists
 
@@ -221,8 +177,8 @@ agent.platform_settings.auth = auth_settings
 
 For maximum security, you can combine both authentication methods:
 
-1. Enable `enable_auth` to require signed URLs
-2. Configure an allowlist to restrict which domains can request those signed URLs
+1. Enable `enable_auth` to require signed URLs.
+2. Configure an allowlist to restrict which domains can request those signed URLs.
 
 This creates a two-layer authentication system where clients must:
 
@@ -256,8 +212,9 @@ auth_settings = AuthSettings(
     Generate a new signed URL for each user session.
   </Accordion>
   <Accordion title="What happens if the signed URL expires during a conversation?">
-    If the signed URL expires (after 15 minutes), the WebSocket connection will be closed. Your
-    application should handle this by requesting a new signed URL and reconnecting.
+    If the signed URL expires (after 15 minutes), any WebSocket connection created with that signed
+    url will **not** be closed, but trying to create a new connection with that signed URL will
+    fail.
   </Accordion>
   <Accordion title="Can I restrict access to specific users?">
     The signed URL mechanism only verifies that the request came from an authorized source. To
@@ -275,5 +232,10 @@ auth_settings = AuthSettings(
   <Accordion title="Do I need to use both authentication methods?">
     No, you can use either signed URLs or allowlists independently based on your security
     requirements. For highest security, use both.
+  </Accordion>
+  <Accordion title="What other security measures should I implement?">
+    Beyond signed URLs and allowlists, consider implementing: - User authentication before
+    requesting signed URLs - Rate limiting on API requests - Usage monitoring for suspicious
+    patterns - Proper error handling for auth failures
   </Accordion>
 </AccordionGroup>
