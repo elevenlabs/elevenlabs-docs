@@ -34,9 +34,9 @@ Signed URLs are the recommended approach for client-side applications. This meth
 
 <Warning>Never expose your ElevenLabs API key client-side.</Warning>
 
-### Requesting a signed URL
+### Generate a signed URL via the API
 
-To obtain a signed URL, make a GET request to the `get_signed_url` [endpoint](/docs/conversational-ai/api-reference/conversations/get-signed-url) with your agent ID:
+To obtain a signed URL, make a request to the `get_signed_url` [endpoint](/docs/conversational-ai/api-reference/conversations/get-signed-url) with your agent ID:
 
 <CodeBlocks>
 ```python
@@ -82,11 +82,9 @@ The curl response has the following format:
 }
 ```
 
-Your client application requests the signed URL from your server.
+### Connecting to your agent using a signed URL
 
-### Connect to the websocket
-
-On the client side, use the signed URL returned from your server to connect tot he websocket.
+Retrieve the server generated signed URL from the client and use the signed URL to connect to the websocket.
 
 <CodeBlocks>
 ```python
@@ -126,11 +124,9 @@ async function startConversation() {
 
 </CodeBlocks>
 
-### Token expiration
+### Signed URL expiration
 
-Signed URLs are valid for 15 minutes. The session can last longer, but the conversation must be initiated within the 15 minute window.
-
-For more details on the signed URL endpoint, see the [Get Signed URL API Reference](https://elevenlabs.io/docs/api-reference/conversations/get-signed-url).
+Signed URLs are valid for 15 minutes. The conversation session can last longer, but the conversation must be initiated within the 15 minute window.
 
 ## Using allowlists
 
@@ -150,19 +146,31 @@ Allowlists are configured as part of your agent's authentication settings. You c
 
 <CodeBlocks>
 ```python
-# Example of configuring an allowlist for your agent
-auth_settings = AuthSettings(
-    enable_auth=False,  # No signed URL required
-    allowlist=[
-        AllowlistItem(hostname="example.com"),
-        AllowlistItem(hostname="app.example.com"),
-        AllowlistItem(hostname="localhost:3000")
-    ]
+from elevenlabs.client import ElevenLabs
+import os
+from elevenlabs.types import *
+
+api_key = os.getenv("ELEVENLABS_API_KEY")
+
+client = ElevenLabs(api_key=api_key)
+
+agent = client.conversational_ai.create_agent(
+    conversation_config=ConversationalConfig(
+        agent=AgentConfig(
+            first_message="Hi. I'm an authenticated agent.",
+        )
+    ),
+    platform_settings=AgentPlatformSettingsRequestModel(
+        auth=AuthSettings(
+            enable_auth=False,
+            allowlist=[
+                AllowlistItem(hostname="example.com"),
+                AllowlistItem(hostname="app.example.com"),
+                AllowlistItem(hostname="localhost:3000")
+            ]
+        )
+    )
 )
-
-# Update your agent with these settings
-
-agent.platform_settings.auth = auth_settings
 
 ````
 
@@ -172,7 +180,7 @@ agent.platform_settings.auth = auth_settings
 
 For maximum security, you can combine both authentication methods:
 
-1. Enable `enable_auth` to require signed URLs.
+1. Use `enable_auth` to require signed URLs.
 2. Configure an allowlist to restrict which domains can request those signed URLs.
 
 This creates a two-layer authentication system where clients must:
