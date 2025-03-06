@@ -82,12 +82,6 @@ paths:
       parameters:
         - required: true
           description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
-        - {} # enable logging
-        - {} # optimize streaming latency
-        - schema:
-            $ref: '#/components/schemas/OutputFormat'
-          required: false
-          description: The output format of the generated audio.
   /v1/text-to-speech/{voice_id}/with-timestamps:
     post:
       summary: Create speech with timing
@@ -108,12 +102,6 @@ paths:
       parameters:
         - required: true
           description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
-        - {} # enable logging
-        - {} # optimize streaming latency
-        - schema:
-            $ref: '#/components/schemas/OutputFormat'
-          required: false
-          description: The output format of the generated audio.
       responses:
         '200':
           content:
@@ -136,12 +124,6 @@ paths:
       parameters:
         - required: true
           description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
-        - {} # enable logging
-        - {} # optimize streaming latency
-        - schema:
-            $ref: '#/components/schemas/OutputFormat'
-          required: false
-          description: The output format of the generated audio.
       responses:
         '200':
           description: 'Stream of JSON objects containing audio chunks and character timing information'
@@ -207,12 +189,6 @@ paths:
       parameters:
         - required: true
           description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
-        - {} # enable logging
-        - {} # optimize streaming latency
-        - schema:
-            $ref: '#/components/schemas/OutputFormat'
-          required: false
-          description: The output format of the generated audio.
   /v1/speech-to-speech/{voice_id}/stream:
     post:
       summary: Voice changer stream
@@ -227,12 +203,6 @@ paths:
       parameters:
         - required: true
           description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
-        - {} # enable logging
-        - {} # optimize streaming latency
-        - schema:
-            $ref: '#/components/schemas/OutputFormat'
-          required: false
-          description: The output format of the generated audio.
       responses:
         '200':
           content:
@@ -1132,49 +1102,6 @@ components:
           $ref: '#/components/schemas/ConversationalConfig'
         platform_settings:
           $ref: '#/components/schemas/AgentPlatformSettings'
-    OutputFormat:
-      type: string
-      enum:
-        - mp3_22050_32
-        - mp3_44100_32
-        - mp3_44100_64
-        - mp3_44100_96
-        - mp3_44100_128
-        - mp3_44100_192
-        - pcm_16000
-        - pcm_22050
-        - pcm_24000
-        - pcm_44100
-        - ulaw_8000
-      x-fern-enum:
-        mp3_22050_32:
-          description: Output format, mp3 with 22.05kHz sample rate at 32kbps
-        mp3_44100_32:
-          description: Output format, mp3 with 44.1kHz sample rate at 32kbps
-        mp3_44100_64:
-          description: Output format, mp3 with 44.1kHz sample rate at 64kbps
-        mp3_44100_96:
-          description: Output format, mp3 with 44.1kHz sample rate at 96kbps
-        mp3_44100_128:
-          description: Default output format, mp3 with 44.1kHz sample rate at 128kbps
-        mp3_44100_192:
-          description: |
-            Output format, mp3 with 44.1kHz sample rate at 192kbps.
-        pcm_16000:
-          description: |
-            PCM format (S16LE) with 16kHz sample rate.
-        pcm_22050:
-          description: |
-            PCM format (S16LE) with 22.05kHz sample rate.
-        pcm_24000:
-          description: |
-            PCM format (S16LE) with 24kHz sample rate.
-        pcm_44100:
-          description: |
-            PCM format (S16LE) with 44.1kHz sample rate. Requires you to be subscribed to Independent Publisher tier or above.
-        ulaw_8000:
-          description: |
-            μ-law format (sometimes written mu-law, often approximated as u-law) with 8kHz sample rate. Note that this format is commonly used for Twilio audio inputs.
     ExtendedSubscriptionResponseModel:
       x-fern-type-name: Subscription
       properties:
