@@ -76,7 +76,7 @@ async def receive_message(request: Request):
         msg=full_payload_to_sign.encode("utf-8"),
         digestmod=sha256,
     )
-    digest = v0=' + mac.hexdigest()
+    digest = 'v0=' + mac.hexdigest()
     if hmac_signature != digest:
         return
 
