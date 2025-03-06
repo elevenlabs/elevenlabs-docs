@@ -14,6 +14,10 @@ The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.re
 ```javascript
 const crypto = require('crypto');
 const secret = process.env.WEBHOOK_SECRET;
+const bodyParser = require('body-parser');
+
+// Ensure express js is parsing the raw body through instead of applying it's own encoding
+app.use(bodyParser.raw({ type: '*/*' }));
 
 // Example webhook handler
 app.post('/webhook/elevenlabs', async (req, res) => {
@@ -41,4 +45,42 @@ app.post('/webhook/elevenlabs', async (req, res) => {
 
   res.status(200).send();
 });
+```
+
+Or in python:
+
+```python
+import time
+import hmac
+from hashlib import sha256
+
+# Example webhook handler
+@app.post("/webhook")
+async def receive_message(request: Request):
+    payload = await request.body()
+    headers = request.headers.get("elevenlabs-signature")
+    if headers is None:
+        return
+    timestamp = headers.split(",")[0][2:]
+    hmac_signature = headers.split(",")[1]
+
+    # Validate timestamp
+    tolerance = int(time.time()) - 30 * 60
+    if int(timestamp) < tolerance
+        return
+
+    # Validate signature
+    full_payload_to_sign = f"{timestamp}.{payload.decode('utf-8')}"
+    mac = hmac.new(
+        key=secret.encode("utf-8"),
+        msg=full_payload_to_sign.encode("utf-8"),
+        digestmod=sha256,
+    )
+    digest = v0=' + mac.hexdigest()
+    if hmac_signature != digest:
+        return
+
+    # Continue processing
+
+    return {"status": "received"}
 ```
