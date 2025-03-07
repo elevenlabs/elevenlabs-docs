@@ -55,7 +55,9 @@ npm install elevenlabs
 
         load_dotenv()
 
-        client = ElevenLabs()
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
 
         audio = client.text_to_speech.convert(
             text="The first move is what sets everything in motion.",
@@ -68,6 +70,33 @@ npm install elevenlabs
         ```
 
       </Tab>
+      <Tab title="Speech to Text">
+        ```python Convert spoken audio into text
+        from dotenv import load_dotenv
+        from io import BytesIO
+        import requests
+        from elevenlabs.client import ElevenLabs
+
+        load_dotenv()
+
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        response = requests.get(audio_url)
+        audio_data = BytesIO(response.content)
+
+        transcription = client.speech_to_text.convert(
+          file=audio_data,
+          model_id="scribe_v1",
+        )
+
+        print(transcription)
+        ```
+      </Tab>
       <Tab title="Voice changer">
 
         ```python Transform audio from one voice to another
@@ -79,7 +108,9 @@ npm install elevenlabs
 
         load_dotenv()
 
-        client = ElevenLabs()
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
         voice_id = "JBFqnCBsd6RMkjVDRZzb"
 
         audio_url = (
@@ -108,7 +139,9 @@ npm install elevenlabs
 
         load_dotenv()
 
-        client = ElevenLabs()
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
         audio = client.text_to_sound_effects.convert(text="Cinematic Braam, Horror")
 
         play(audio)
@@ -126,7 +159,9 @@ npm install elevenlabs
 
         load_dotenv()
 
-        client = ElevenLabs()
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
 
         audio_url = "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/fin.mp3"
         response = requests.get(audio_url)
@@ -148,7 +183,9 @@ npm install elevenlabs
 
         load_dotenv()
 
-        client = ElevenLabs()
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
 
         voices = client.text_to_voice.create_previews(
             voice_description="A sassy squeaky mouse",
@@ -174,7 +211,9 @@ npm install elevenlabs
 
         load_dotenv()
 
-        client = ElevenLabs()
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
 
         target_lang = "es"  # Spanish
 
@@ -230,6 +269,25 @@ npm install elevenlabs
         await play(audio);
         ```
 
+      </Tab>
+      <Tab title="Speech to Text">
+        ```javascript Convert spoken audio into text
+        import { ElevenLabsClient } from "elevenlabs";
+
+        const client = new ElevenLabsClient();
+
+        const response = await fetch(
+          "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        );
+        const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
+
+        const transcription = await client.speechToText.convert({
+          file: audioBlob,
+          model_id: "scribe_v1",
+        });
+
+        console.log(transcription);
+        ```
       </Tab>
       <Tab title="Voice changer">
 

@@ -5,6 +5,21 @@ subtitle: Build an outbound calling AI agent with Twilio and ElevenLabs.
 
 In this guide you will learn how to build an integration with Twilio to initialise outbound calls to your prospects and customers.
 
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube-nocookie.com/embed/fmIvK0Na_IU"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+<Tip title="Prefer to jump straight to the code?" icon="lightbulb">
+  Find the [example project on
+  GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/twilio/javascript).
+</Tip>
+
 ## What You'll Need
 
 - An [ElevenLabs account](https://elevenlabs.io).
@@ -229,6 +244,10 @@ fastify.register(async (fastifyInstance) => {
           // Send initial configuration with prompt and first message
           const initialConfig = {
             type: 'conversation_initiation_client_data',
+            dynamic_variables: {
+              user_name: 'Angelo',
+              user_id: 1234,
+            },
             conversation_config_override: {
               agent: {
                 prompt: {

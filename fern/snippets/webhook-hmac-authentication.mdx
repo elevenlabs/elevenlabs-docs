@@ -1,0 +1,171 @@
+It is important for the listener to validate all incoming webhooks. Webhooks currently support authentication via HMAC signatures. Set up HMAC authentication by:
+
+- Securely storing the shared secret generated upon creation of the webhook
+- Verifying the ElevenLabs-Signature header in your endpoint using the shared secret
+
+The ElevenLabs-Signature takes the following format:
+
+```json
+t=timestamp,v0=hash
+```
+
+The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.request_body`. Both the hash and timestamp should be validated, an example is shown here:
+
+<Tabs>
+  <Tab title="Python">
+    Example python webhook handler using FastAPI:
+
+    ```python
+    from fastapi import FastAPI, Request
+    import time
+    import hmac
+    from hashlib import sha256
+
+    app = FastAPI()
+
+    # Example webhook handler
+    @app.post("/webhook")
+    async def receive_message(request: Request):
+        payload = await request.body()
+        headers = request.headers.get("elevenlabs-signature")
+        if headers is None:
+            return
+        timestamp = headers.split(",")[0][2:]
+        hmac_signature = headers.split(",")[1]
+
+        # Validate timestamp
+        tolerance = int(time.time()) - 30 * 60
+        if int(timestamp) < tolerance
+            return
+
+        # Validate signature
+        full_payload_to_sign = f"{timestamp}.{payload.decode('utf-8')}"
+        mac = hmac.new(
+            key=secret.encode("utf-8"),
+            msg=full_payload_to_sign.encode("utf-8"),
+            digestmod=sha256,
+        )
+        digest = 'v0=' + mac.hexdigest()
+        if hmac_signature != digest:
+            return
+
+        # Continue processing
+
+        return {"status": "received"}
+    ```
+
+  </Tab>
+  <Tab title="JavaScript">
+    <Tabs>
+      <Tab title="Express">
+        Example javascript webhook handler using node express framework:
+
+        ```javascript
+        const crypto = require('crypto');
+        const secret = process.env.WEBHOOK_SECRET;
+        const bodyParser = require('body-parser');
+
+        // Ensure express js is parsing the raw body through instead of applying it's own encoding
+        app.use(bodyParser.raw({ type: '*/*' }));
+
+        // Example webhook handler
+        app.post('/webhook/elevenlabs', async (req, res) => {
+          const headers = req.headers['ElevenLabs-Signature'].split(',');
+          const timestamp = headers.find((e) => e.startsWith('t=')).substring(2);
+          const signature = headers.find((e) => e.startsWith('v0='));
+
+          // Validate timestamp
+          const reqTimestamp = timestamp * 1000;
+          const tolerance = Date.now() - 30 * 60 * 1000;
+          if (reqTimestamp < tolerance) {
+            res.status(403).send('Request expired');
+            return;
+          } else {
+            // Validate hash
+            const message = `${timestamp}.${req.body}`;
+            const digest = 'v0=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
+            if (signature !== digest) {
+              res.status(401).send('Request unauthorized');
+              return;
+            }
+          }
+
+          // Validation passed, continue processing ...
+
+          res.status(200).send();
+        });
+        ```
+      </Tab>
+      <Tab title="Next.js">
+        Example javascript webhook handler using Next.js API route:
+
+        ```javascript app/api/convai-webhook/route.js
+        import { NextResponse } from "next/server";
+        import type { NextRequest } from "next/server";
+        import crypto from "crypto";
+
+        export async function GET() {
+          return NextResponse.json({ status: "webhook listening" }, { status: 200 });
+        }
+
+        export async function POST(req: NextRequest) {
+          const secret = process.env.ELEVENLABS_CONVAI_WEBHOOK_SECRET; // Add this to your env variables
+          const { event, error } = await constructWebhookEvent(req, secret);
+          if (error) {
+            return NextResponse.json({ error: error }, { status: 401 });
+          }
+
+          if (event.type === "post_call_transcription") {
+            console.log("event data", JSON.stringify(event.data, null, 2));
+          }
+
+          return NextResponse.json({ received: true }, { status: 200 });
+        }
+
+        const constructWebhookEvent = async (req: NextRequest, secret?: string) => {
+          const body = await req.text();
+          const signature_header = req.headers.get("ElevenLabs-Signature");
+          console.log(signature_header);
+
+          if (!signature_header) {
+            return { event: null, error: "Missing signature header" };
+          }
+
+          const headers = signature_header.split(",");
+          const timestamp = headers.find((e) => e.startsWith("t="))?.substring(2);
+          const signature = headers.find((e) => e.startsWith("v0="));
+
+          if (!timestamp || !signature) {
+            return { event: null, error: "Invalid signature format" };
+          }
+
+          // Validate timestamp
+          const reqTimestamp = Number(timestamp) * 1000;
+          const tolerance = Date.now() - 30 * 60 * 1000;
+          if (reqTimestamp < tolerance) {
+            return { event: null, error: "Request expired" };
+          }
+
+          // Validate hash
+          const message = `${timestamp}.${body}`;
+
+          if (!secret) {
+            return { event: null, error: "Webhook secret not configured" };
+          }
+
+          const digest =
+            "v0=" + crypto.createHmac("sha256", secret).update(message).digest("hex");
+          console.log({ digest, signature });
+          if (signature !== digest) {
+            return { event: null, error: "Invalid signature" };
+          }
+
+          const event = JSON.parse(body);
+          return { event, error: null };
+        };
+        ```
+      </Tab>
+    </Tabs>
+
+  </Tab>
+</Tabs>

@@ -1,0 +1,237 @@
+---
+title: Retrieval-Augmented Generation
+subtitle: Enhance your agent with large knowledge bases using RAG.
+---
+
+## Overview
+
+**Retrieval-Augmented Generation (RAG)** enables your agent to access and use large knowledge bases during conversations. Instead of loading entire documents into the context window, RAG retrieves only the most relevant information for each user query, allowing your agent to:
+
+- Access much larger knowledge bases than would fit in a prompt
+- Provide more accurate, knowledge-grounded responses
+- Reduce hallucinations by referencing source material
+- Scale knowledge without creating multiple specialized agents
+
+RAG is ideal for agents that need to reference large documents, technical manuals, or extensive
+knowledge bases that would exceed the context window limits of traditional prompting.
+RAG adds on slight latency to the response time of your agent, around 500ms.
+
+## How RAG works
+
+When RAG is enabled, your agent processes user queries through these steps:
+
+1. **Query processing**: The user's question is analyzed and reformulated for optimal retrieval.
+2. **Embedding generation**: The processed query is converted into a vector embedding that represents the user's question.
+3. **Retrieval**: The system finds the most semantically similar content from your knowledge base.
+4. **Response generation**: The agent generates a response using both the conversation context and the retrieved information.
+
+This process ensures that relevant information to the user's query is passed to the LLM to generate a factually correct answer.
+
+<Note>
+  When RAG is enabled, the size of knowledge base items that can be assigned to an agent is
+  increased from 300KB to 10MB
+</Note>
+
+## Guide
+
+### Prerequisites
+
+- An [ElevenLabs account](https://elevenlabs.io)
+- A configured ElevenLabs [Conversational Agent](/docs/conversational-ai/quickstart)
+- At least one document added to your agent's knowledge base
+
+<Steps>
+    <Step title="Enable RAG for your agent">
+        In your agent's settings, navigate to the **Knowledge Base** section and toggle on the **Use RAG** option.
+        
+        <Frame background="subtle">
+        <img src="/assets/images/conversational-ai/rag-enabled.png" alt="Toggle switch to enable RAG in the agent settings" />
+        </Frame>
+    </Step>
+
+    <Step title="Configure RAG settings">
+    After enabling RAG, you'll see additional configuration options:
+    - **Embedding model**: Select the model that will convert text into vector embeddings
+    - **Maximum document chunks**: Set the maximum amount of retrieved content per query
+    - **Maximum vector distance**: Set the maximum distance between the query and the retrieved chunks
+
+    These parameters could impact latency. They also could impact LLM cost which in the future will be passed on to you.
+    For example, retrieving more chunks increases cost.
+    Increasing vector distance allows for more context to be passed, but potentially less relevant context.
+    This may affect quality and you should experiment with different parameters to find the best results.
+
+    <Frame background="subtle">
+        <img
+        src="/assets/images/conversational-ai/rag-config.png"
+        alt="RAG configuration options including embedding model selection"
+        />
+    </Frame>
+    </Step>
+
+    <Step title="Index your knowledge base">
+    Each document in your knowledge base needs to be indexed before it can be used with RAG. This
+    process happens automatically when a document is added to an agent with RAG enabled.
+    <Info>
+        Indexing may take a few minutes for large documents. You can check the indexing status in the
+        knowledge base list.
+    </Info>
+    </Step>
+
+    <Step title="Configure document usage modes">
+        For each document in your knowledge base, you can choose how it's used:
+
+        - **Auto (default)**: The document is only retrieved when relevant to the query
+        - **Prompt**: The document is always included in the system prompt, regardless of relevance, but can also be retrieved by RAG
+
+        <Frame background="subtle">
+            <img
+                src="/assets/images/conversational-ai/rag-prompt.png"
+                alt="Document usage mode options in the knowledge base"
+            />
+        </Frame>
+
+        <Warning>
+            Setting too many documents to "Prompt" mode may exceed context limits. Use this option sparingly
+            for critical information.
+        </Warning>
+    </Step>
+
+    <Step title="Test your RAG-enabled agent">
+      After saving your configuration, test your agent by asking questions related to your knowledge base. The agent should now be able to retrieve and reference specific information from your documents.
+
+    </Step>
+
+</Steps>
+
+## API implementation
+
+You can also implement RAG through the [API](/docs/api-reference/knowledge-base/rag-index-status):
+
+<CodeBlocks>
+
+```python
+import requests
+
+# First, index a document for RAG
+
+document_id = "your-document-id"
+response = requests.post(
+  f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
+  headers={"xi-api-key": "your-api-key"},
+  json={"model": "e5_mistral_7b_instruct"}
+)
+
+# Check indexing status
+while True:
+  if response.json()["status"] in ["SUCCEEDED", "FAILED"]:
+      break
+  time.sleep(5) # wait 5 seconds before checking status again
+  response = requests.get(
+    f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
+    headers={"xi-api-key": "your-api-key"}
+  )
+
+
+# Then update agent configuration to use RAG
+
+agent_id = "your-agent-id"
+agent_config = requests.get(
+  f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
+  headers={"xi-api-key": "your-api-key"}
+).json()
+
+# Enable RAG in the agent configuration
+
+agent_config["agent"]["prompt"]["rag"] = {
+    "enabled": True,
+    "embedding_model": "e5_mistral_7b_instruct",
+    "max_documents_length": 10000
+}
+
+# Update document usage mode if needed
+
+for i, doc in enumerate(agent_config["agent"]["prompt"]["knowledge_base"]):
+    if doc["id"] == document_id:
+        agent_config["agent"]["prompt"]["knowledge_base"][i]["usage_mode"] = "auto"
+
+# Update the agent configuration
+
+requests.put(
+    f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
+    headers={"xi-api-key": "your-api-key"},
+    json=agent_config
+)
+
+```
+
+```javascript
+// First, index a document for RAG
+async function enableRAG(documentId, agentId, apiKey) {
+  try {
+    // Start document indexing
+    let response = await fetch(
+      `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
+      {
+        method: 'POST',
+        headers: {
+          'xi-api-key': apiKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model: 'e5_mistral_7b_instruct' }),
+      }
+    );
+    let data = await response.json();
+
+    // Check indexing status
+    while (true) {
+      const status = data.status;
+      if (status === 'SUCCEEDED' || status === 'FAILED') {
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      response = await fetch(
+        `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
+        { headers: { 'xi-api-key': apiKey } }
+      );
+      data = await response.json();
+    }
+
+    // Get agent configuration
+    const agentResponse = await fetch(
+      `https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`,
+      { headers: { 'xi-api-key': apiKey } }
+    );
+    const agentConfig = await agentResponse.json();
+
+    // Enable RAG in the agent configuration
+    agentConfig.agent.prompt.rag = {
+      enabled: true,
+      embedding_model: 'e5_mistral_7b_instruct',
+      max_documents_length: 10000,
+    };
+
+    // Update document usage mode if needed
+    agentConfig.agent.prompt.knowledge_base.forEach((doc, index) => {
+      if (doc.id === documentId) {
+        agentConfig.agent.prompt.knowledge_base[index].usage_mode = 'auto';
+      }
+    });
+
+    // Update the agent configuration
+    await fetch(`https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`, {
+      method: 'PUT',
+      headers: {
+        'xi-api-key': apiKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(agentConfig),
+    });
+
+    console.log('RAG configuration updated successfully');
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+```
+
+</CodeBlocks>

@@ -1,5 +1,5 @@
 ---
-title: Websocket
+title: WebSockets
 headline: Text to speech WebSocket API
 ---
 
@@ -7,19 +7,19 @@ This API provides real-time [text-to-speech](https://elevenlabs.io/text-to-speec
 
 ## When to use
 
-The Text-to-Speech Websockets API is designed to generate audio from partial text input while ensuring consistency throughout the generated audio. Although highly flexible, the Websockets API isn't a one-size-fits-all solution. It's well-suited for scenarios where:
+The Text-to-Speech WebSockets API is designed to generate audio from partial text input while ensuring consistency throughout the generated audio. Although highly flexible, the WebSockets API isn't a one-size-fits-all solution. It's well-suited for scenarios where:
 
 - The input text is being streamed or generated in chunks.
 - Word-to-audio alignment information is required.
 
-For a practical demonstration of using ElevenLabs Text to Speech Websockets API, refer to the [Websockets Cookbook](/docs/cookbooks/text-to-speech/websockets).
+For a practical demonstration of using ElevenLabs Text to Speech WebSockets API, refer to the [WebSockets Cookbook](/docs/cookbooks/text-to-speech/websockets).
 
 ## When not to use
 
 However, it may not be the best choice when:
 
 - The entire input text is available upfront. Given that the generations are partial, some buffering is involved, which could potentially result in slightly higher latency compared to a standard HTTP request.
-- You want to quickly experiment or prototype. Working with Websockets can be harder and more complex than using a standard HTTP API, which might slow down rapid development and testing.
+- You want to quickly experiment or prototype. Working with WebSockets can be harder and more complex than using a standard HTTP API, which might slow down rapid development and testing.
 
 In these cases, use the [Text to Speech API](/docs/api-reference/text-to-speech) instead.
 
@@ -79,6 +79,10 @@ Note that overriding the chunk schedule to generate small amounts of text may re
         Defines the use speaker boost for voice settings. This parameter is available on V2+ models.
       </ParamField>
 
+      <ParamField path="speed" type="number">
+        Controls the speed of the generated speech. Values below 1.0 will slow down the speech, while values above 1.0 will speed it up. Must be above 0.7 and below 1.2. Extreme values may affect the quality of the generated speech.
+      </ParamField>
+
   </Expandable>
 </ParamField>
 
@@ -105,11 +109,11 @@ Note that overriding the chunk schedule to generate small amounts of text may re
 </ParamField>
 
 <ParamField path="flush" type="boolean">
-    Flush forces the generation of audio. Set this value to `true` when you have finished sending text, but want to keep the websocket connection open.
+    Flush forces the generation of audio. Set this value to `true` when you have finished sending text, but want to keep the WebSocket connection open.
 
     This is useful when you want to ensure that the last chunk of audio is generated even when the length of text sent is smaller than the value set in `chunk_length_schedule` (e.g. 120 or 50).
 
-    To understand more about how our websockets buffer text before audio is generated, please refer to [this](#understanding-how-our-websockets-buffer-text) section.
+    To understand more about how our WebSockets buffer text before audio is generated, please refer to [this](#understanding-how-our-websockets-buffer-text) section.
 
 </ParamField>
 
@@ -246,7 +250,7 @@ The server will always respond with a message containing the following fields:
 </ParamField>
 <ParamField query="enable_ssml_parsing" type="boolean">
     Whether to enable/disable parsing of SSML tags within the provided text. For best results, we recommend
-    sending SSML tags as fully contained messages to the websockets endpoint, otherwise this may result in additional latency.
+    sending SSML tags as fully contained messages to the WebSockets endpoint, otherwise this may result in additional latency.
     Please note that rendered text, in normalizedAlignment, will be altered in support of SSML tags. The
     rendered text will use a . as a placeholder for breaks, and syllables will be reported using the CMU arpabet alphabet where SSML phoneme tags are used to specify pronunciation.
     Disabled by default.
@@ -298,9 +302,16 @@ Defaults to `20` seconds, with a maximum allowed value of `180` seconds.
   highly reduced quality. By default it's set to false.
 </ParamField>
 
+<ParamField query="apply_text_normalization" type="string">
+  This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to
+  'auto', the system will automatically decide whether to apply text normalization (e.g., spelling
+  out numbers). With 'on', text normalization will always be applied, while with 'off', it will be
+  skipped. Cannot be turned on for 'eleven_turbo_v2_5' model. Defaults to 'auto'
+</ParamField>
+
 ## Example - Voice streaming using ElevenLabs and OpenAI
 
-The following example demonstrates how to leverage the ElevenLabs Websockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
+The following example demonstrates how to leverage the ElevenLabs WebSockets API to stream input from OpenAI's GPT model, while the answer is being generated, thereby minimizing the overall latency of the operation.
 
 ```python
 import asyncio
@@ -423,9 +434,9 @@ if __name__ == "__main__":
 
 ```
 
-## Example - Other examples for interacting with our Websocket API
+## Example - Other examples for interacting with our WebSocket API
 
-Some examples for interacting with the Websocket API in different ways are provided below
+Some examples for interacting with the WebSocket API in different ways are provided below
 
 <CodeGroup>
 
@@ -679,10 +690,10 @@ if __name__ == "__main__":
     asyncio.run(text_to_speech_alignment_example(VOICE_ID, text_to_send))
 ```
 
-## Understanding how our websockets buffer text
+## Understanding how our WebSockets buffer text
 
-Our websocket service incorporates a buffer system designed to optimize the Time To First Byte (TTFB) while maintaining high-quality streaming.
+Our WebSocket service incorporates a buffer system designed to optimize the Time To First Byte (TTFB) while maintaining high-quality streaming.
 
-All text sent to the websocket endpoint is added to this buffer and only when that buffer reaches a certain size is an audio generation attempted. This is because our model provides higher quality audio when the model has longer inputs, and can deduce more context about how the text should be delivered.
+All text sent to the WebSocket endpoint is added to this buffer and only when that buffer reaches a certain size is an audio generation attempted. This is because our model provides higher quality audio when the model has longer inputs, and can deduce more context about how the text should be delivered.
 
 The buffer ensures smooth audio data delivery and is automatically emptied with a final audio generation either when the stream is closed, or upon sending a `flush` command. We have advanced settings for changing the chunk schedule, which can improve latency at the cost of quality by generating audio more frequently with smaller text inputs.
