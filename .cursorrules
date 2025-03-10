@@ -319,3 +319,62 @@ Simply input text in any of our supported languages and select a matching voice 
 </AccordionGroup>
 
 ```
+
+# Changelog Generation
+
+The changelog files follow a specific structure and generation process:
+
+## File Structure
+
+- Create new files in `/fern/docs/pages/changelog/` with format `YYYY-MM-DD.md`
+- Each file contains product sections (Conversational AI, Scribe, Text to Speech, etc.)
+- Changes are grouped by product area with bullet points
+- API changes are placed in an expandable Accordion at the end
+
+## Generation Process
+
+1. Product Changes
+
+   - Pull changes from merged PRs for the release period
+   - Group by product area
+   - Format as bullet points with bold titles: `- **Title**: Description`
+
+2. API Changes
+   - Generate by diffing OpenAPI specs between releases
+   - Use docs.yml to map routes to documentation sections
+   - Structure API changes into sections:
+     - New Endpoints (with doc links)
+     - Updated Endpoints (grouped by area)
+     - Removed Endpoints
+   - Place all API changes in an Accordion component
+
+Example format:
+
+```markdown
+### Product Area
+
+- **Change Title**: Description of the change
+- **Another Change**: Description of another change
+
+### API
+
+<Accordion title="View API changes">
+
+## New Endpoints
+
+- Added X new endpoints:
+  - [Endpoint summary (don't include GET POST etc)](/docs/api-reference/path/to/docs)
+
+## Updated Endpoints
+
+### Group Name
+
+- Updated endpoints with changes:
+  - [Endpoint summary (don't include GET POST etc)](/docs/api-reference/path/to/docs) - Description of changes
+
+## Removed Endpoints
+
+- List of removed endpoints
+
+</Accordion>
+```
