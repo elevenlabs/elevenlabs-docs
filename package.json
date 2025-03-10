@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "fern docs dev",
     "fmt": "prettier \"**/*.{css,js,ts,tsx,md,mdx,yml,yaml,json}\" --write && pnpm run fmt:openapi",
-    "fmt:check": "prettier \"**/*.{css,js,ts,tsx,md,mdx,yml,yaml,json}\" --check",
+    "fmt:check": "prettier \"**/*.{css,js,ts,tsx,md,mdx,yml,yaml,json}\" --check && pnpm run fmt:openapi",
     "fmt:openapi": "openapi-format ./fern/apis/api/openapi.json -o ./fern/apis/api/openapi.json",
     "fern:upgrade": "fern upgrade",
     "fern:check": "fern check",
@@ -15,7 +15,7 @@
     "sdk:preview": "fern generate --group python-sdk --preview --api api && fern generate --group typescript-sdk --preview --api api",
     "openapi:update": "curl -o ./fern/apis/api/openapi.json https://api.elevenlabs.io/openapi.json && pnpm run fmt:openapi",
     "openapi:lint": "pnpm lint-openapi ./fern/apis/api/openapi.json",
-    "ci": "pnpm run fern:check && pnpm run fmt:check"
+    "ci": "pnpm run fmt:check && pnpm run fmt:openapi && pnpm run fern:check"
   },
   "keywords": [
     "elevenlabs",
