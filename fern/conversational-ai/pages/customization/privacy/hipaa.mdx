@@ -1,0 +1,125 @@
+---
+title: HIPAA Compliance
+subtitle: Learn how ElevenLabs Conversational AI supports HIPAA compliance for healthcare applications
+---
+
+## Overview
+
+ElevenLabs Conversational AI now supports HIPAA compliance, allowing healthcare organizations to build voice agents that handle protected health information (PHI) while maintaining regulatory compliance. This feature ensures that sensitive patient data is properly protected throughout the conversation lifecycle.
+
+## How HIPAA Compliance Works
+
+When HIPAA compliance is enabled for a workspace:
+
+1. **Zero Data Retention (ZDR)** - All sensitive data from conversations is automatically redacted before storage
+2. **LLM Restrictions** - Only HIPAA-compliant LLMs are available for use
+3. **Storage Limitations** - Raw audio files and transcripts containing PHI are not persisted
+
+This implementation ensures that PHI is not inadvertently stored or logged in any system components, including:
+
+- Conversation transcripts
+- Audio recordings
+- Tool calls and results
+- BigQuery analytics
+- System logs
+
+## HIPAA-Compliant LLMs
+
+When operating in HIPAA mode, only the following LLMs are available:
+
+<AccordionGroup>
+  <Accordion title="Google Models">
+    - Gemini 2.0 Flash - Gemini 2.0 Flash Lite - Gemini 1.5 Flash - Gemini 1.5 Pro - Gemini 1.0 Pro
+  </Accordion>
+  <Accordion title="Anthropic Models">
+    - Claude 3.7 Sonnet - Claude 3.5 Sonnet - Claude 3.5 Sonnet V1 - Claude 3.0 Haiku
+  </Accordion>
+  <Accordion title="Custom LLMs">
+    - Custom LLM (always compliant as we don't process the data)
+  </Accordion>
+</AccordionGroup>
+
+## Enabling HIPAA Compliance
+
+HIPAA compliance is controlled at the workspace level through the `force_logging_disabled` flag in your workspace subscription settings. When enabled:
+
+1. Non-compliant LLMs will be disabled in the UI with a tooltip explanation
+2. Attempts to use non-compliant LLMs via API will return an HTTP error
+3. All conversation data will be automatically redacted before storage
+
+<Note>
+  HIPAA compliance is only available on Enterprise tier subscriptions. Contact your account
+  representative to enable this feature.
+</Note>
+
+## Data Redaction
+
+When HIPAA compliance is enabled, the following data is automatically redacted:
+
+- User messages (replaced with `<REDACTED>`)
+- Agent responses containing PHI
+- Tool call parameters and results
+- Conversation analysis and summaries
+- Client-provided data via conversation initiation
+
+## Technical Implementation
+
+The HIPAA compliance feature implements several safeguards:
+
+1. **LLM Allowlist** - Prevents use of non-compliant LLMs
+2. **PII Redaction** - Automatically redacts sensitive fields before storage
+3. **Storage Prevention** - Disables uploading of raw audio files to GCS
+4. **Comprehensive Coverage** - Redacts data from all potential storage locations
+
+## Developer Experience
+
+When working with HIPAA-compliant agents:
+
+- The UI will disable non-compliant LLMs with a tooltip explanation
+- API calls attempting to use non-compliant LLMs will receive an HTTP 400 error
+- Conversation history will show redacted content with `<REDACTED>` placeholders
+- Analytics data will be limited to non-sensitive metrics
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can I use any LLM with HIPAA compliance enabled?">
+    No. When HIPAA compliance is enabled, you can only use LLMs from the approved list. Attempts to
+    use non-compliant LLMs will be blocked. You can always use a custom LLM if you need a specific
+    model not on the allowlist.
+  </Accordion>
+  <Accordion title="How do I know if my workspace has HIPAA compliance enabled?">
+    HIPAA compliance is controlled by the `force_logging_disabled` flag in your workspace
+    subscription settings. Non-compliant LLMs will be disabled in the UI with a tooltip explanation
+    when this feature is active.
+  </Accordion>
+  <Accordion title="Does HIPAA compliance affect conversation quality?">
+    No. HIPAA compliance only affects how data is stored and which LLMs can be used. It does not
+    impact the quality or functionality of conversations while they are active.
+  </Accordion>
+  <Accordion title="Can I still analyze conversation data with HIPAA enabled?">
+    Yes, but with limitations. Conversation analytics will only include non-sensitive metadata like
+    call duration and success rates. Specific content from conversations will be redacted.
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+When building HIPAA-compliant voice agents:
+
+1. **Use Custom LLMs** when possible for maximum control over data processing
+2. **Implement proper authentication** for all healthcare applications
+3. **Minimize PHI collection** to only what's necessary for the application
+4. **Test thoroughly** to ensure no PHI is inadvertently exposed
+5. **Review conversation logs** to verify proper redaction is occurring
+
+## Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Conversational AI Security" href="/docs/capabilities/security">
+    Learn about general security features in Conversational AI
+  </Card>
+  <Card title="Custom LLM Integration" href="/docs/developer-guides/custom-llm">
+    Set up your own LLM for maximum control and compliance
+  </Card>
+</CardGroup>
