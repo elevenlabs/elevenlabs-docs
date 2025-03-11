@@ -33,41 +33,30 @@ This implementation ensures that PHI is not inadvertently stored or logged in an
 - Data analytics
 - System logs
 
+### Enabling HIPAA compliance
+
+<Note>
+  HIPAA compliance is only available on Enterprise tier subscriptions and requires proper BAAs to be
+  in place. Contact your account representative to discuss enabling this feature for your
+  organization.
+</Note>
+
 ## HIPAA-Compliant LLMs
 
 When operating in HIPAA mode, only the following LLMs are available:
 
 <AccordionGroup>
   <Accordion title="Google Models">
-    - Gemini 2.0 Flash 
-    - Gemini 2.0 Flash Lite
-    - Gemini 1.5 Flash 
-    - Gemini 1.5 Pro 
-    - Gemini 1.0 Pro
+    - Gemini 2.0 Flash - Gemini 2.0 Flash Lite - Gemini 1.5 Flash - Gemini 1.5 Pro - Gemini 1.0 Pro
   </Accordion>
   <Accordion title="Anthropic Models">
-    - Claude 3.7 Sonnet 
-    - Claude 3.5 Sonnet 
-    - Claude 3.5 Sonnet V1 
-    - Claude 3.0 Haiku
+    - Claude 3.7 Sonnet - Claude 3.5 Sonnet - Claude 3.5 Sonnet V1 - Claude 3.0 Haiku
   </Accordion>
   <Accordion title="Custom LLMs">
     - Custom LLM (always compliant as we don't process the data)
   </Accordion>
 </AccordionGroup>
 
-## Enabling HIPAA Compliance
-
-HIPAA compliance is controlled at the workspace level through the `force_logging_disabled` flag in your workspace subscription settings. When enabled:
-
-1. Non-compliant LLMs will be disabled in the UI with a tooltip explanation
-2. Attempts to use non-compliant LLMs via API will return an HTTP error
-3. All conversation data will be automatically redacted before storage
-
-<Note>
-  HIPAA compliance is only available on Enterprise tier subscriptions. Contact your account
-  representative to enable this feature.
-</Note>
 
 ## Data Redaction
 
