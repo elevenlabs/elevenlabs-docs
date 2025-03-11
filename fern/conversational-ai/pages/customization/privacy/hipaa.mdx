@@ -59,17 +59,24 @@ When operating in HIPAA mode, only the following LLMs are available:
 
 <AccordionGroup>
   <Accordion title="Google Models">
-    - Gemini 2.0 Flash - Gemini 2.0 Flash Lite - Gemini 1.5 Flash - Gemini 1.5 Pro - Gemini 1.0 Pro
+    - Gemini 2.0 Flash 
+    - Gemini 2.0 Flash Lite 
+    - Gemini 1.5 Flash 
+    - Gemini 1.5 Pro 
+    - Gemini 1.0 Pro
   </Accordion>
   <Accordion title="Anthropic Models">
-    - Claude 3.7 Sonnet - Claude 3.5 Sonnet - Claude 3.5 Sonnet V1 - Claude 3.0 Haiku
+    - Claude 3.7 Sonnet 
+    - Claude 3.5 Sonnet 
+    - Claude 3.5 Sonnet V1 
+    - Claude 3.0 Haiku
   </Accordion>
   <Accordion title="Custom LLMs">
     - Custom LLM (always compliant as we don't process the data)
   </Accordion>
 </AccordionGroup>
 
-## Data Redaction
+## Data redaction
 
 When HIPAA compliance is enabled, the following data is automatically redacted:
 
@@ -79,7 +86,7 @@ When HIPAA compliance is enabled, the following data is automatically redacted:
 - Conversation analysis and summaries
 - Client-provided data via conversation initiation
 
-## Technical Implementation
+## Technical implementation
 
 The HIPAA compliance feature implements several safeguards including but not limited to:
 
@@ -87,14 +94,41 @@ The HIPAA compliance feature implements several safeguards including but not lim
 2. **PII Redaction** - Automatically redacts sensitive fields before storage
 3. **Storage Prevention** - Disables uploading of raw audio files to cloud
 
-## Developer Experience
+## Developer experience
 
 When working with HIPAA-compliant agents:
 
-- The UI will disable non-compliant LLMs with a tooltip explanation
-- API calls attempting to use non-compliant LLMs will receive an HTTP 400 error
-- Conversation history will show redacted content with `<REDACTED>` placeholders
-- Analytics data will be limited to non-sensitive metrics
+<Steps>
+  ### Non-compliant LLMs are disabled in the UI
+  <Frame
+    background="subtle"
+    caption="The UI shows disabled LLM options with tooltip explanations"
+  >
+    ![Redacted conversation analysis showing HIPAA compliance in action](/assets/images/conversational-ai/hipaa-model.png)
+  </Frame>
+
+### Content is redacted from content history
+
+<Frame background="subtle" caption="All sensitive information is redacted and not stored">
+  ![Redacted conversation history showing HIPAA compliance in
+  action](/assets/images/conversational-ai/redacted.png)
+</Frame>
+
+### Conversation analysis is limited
+
+<Frame
+  background="subtle"
+  caption="Analysis and summaries maintain HIPAA compliance through redaction"
+>
+  ![Redacted conversation analysis showing HIPAA compliance in
+  action](/assets/images/conversational-ai/redacted-summary.png)
+</Frame>
+
+### API restrictions are enforced
+
+API calls attempting to use non-compliant LLMs will receive an HTTP 400 error. Analytics data will be limited to non-sensitive metrics only.
+
+</Steps>
 
 ## FAQ
 
@@ -118,7 +152,7 @@ When working with HIPAA-compliant agents:
   </Accordion>
 </AccordionGroup>
 
-## Best Practices
+## Best pngractices
 
 When building HIPAA-compliant voice agents:
 
@@ -127,7 +161,7 @@ When building HIPAA-compliant voice agents:
 3. **Minimize PHI collection** to only what's necessary for the application
 4. **Validate configuration** is correct by checking redaction before launching + passing PHI
 
-## Related Resources
+## Related resources
 
 <CardGroup cols={2}>
   <Card
