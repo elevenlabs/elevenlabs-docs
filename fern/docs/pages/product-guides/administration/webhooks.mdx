@@ -7,10 +7,12 @@ subtitle: Enable external integrations by receiving webhook events.
 
 Certain events within ElevenLabs can be configured to trigger webhooks, allowing external applications and systems to receive and process these events as they occur. Currently supported event types include:
 
-| Event type                | Description                                                    |
-| ------------------------- | -------------------------------------------------------------- |
-| `post_call_transcription` | A conversational AI call has finished and analysis is complete |
-| `voice_removal_notice`    | A shared voice is scheduled to be removed                      |
+| Event type                       | Description                                                    |
+| -------------------------------- | -------------------------------------------------------------- |
+| `post_call_transcription`        | A conversational AI call has finished and analysis is complete |
+| `voice_removal_notice`           | A shared voice is scheduled to be removed                      |
+| `voice_removal_notice_withdrawn` | A shared voice is no longer scheduled for removal              |
+| `voice_removed`                  | A shared voice has been removed and is no longer useable       |
 
 ## Configuration
 
@@ -22,7 +24,7 @@ Webhooks can be created, disabled and deleted from the general settings page. Fo
 
 After creation, the webhook can be selected to listen for events within product settings such as [Conversational AI](/docs/conversational-ai/customization/personalization/post-call-webhooks).
 
-Webhooks can be disabled from the general settings page at any time. Webhooks that repeatedly fail are auto disabled after 10 consecutive failures over 7 or more days and require re-enabling from the settings page. Webhooks can be deleted if not in use by any products.
+Webhooks can be disabled from the general settings page at any time. Webhooks that repeatedly fail are auto disabled if there are 10 or more consecutive failures and the last successful delivery was more than 7 days ago or has never been successfully delivered. Auto-disabled webhooks require re-enabling from the settings page. Webhooks can be deleted if not in use by any products.
 
 ## Integration
 

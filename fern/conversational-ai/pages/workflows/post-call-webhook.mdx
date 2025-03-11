@@ -17,9 +17,9 @@ Post-call webhooks can be enabled for all agents in your workspace through the C
 </Frame>
 
 <Warning>
-  Post call webhooks must return a 200 status code to be considered successful. The webhook will
-  automatically be disabled after 10 consecutive failures over more than 7 days, or failed 10 times
-  in a row and never succeeded.
+  Post call webhooks must return a 200 status code to be considered successful. Webhooks that
+  repeatedly fail are auto disabled if there are 10 or more consecutive failures and the last
+  successful delivery was more than 7 days ago or has never been successfully delivered.
 </Warning>
 
 <Note>For HIPAA compliance, if a webhook fails we can not retry the webhook.</Note>
