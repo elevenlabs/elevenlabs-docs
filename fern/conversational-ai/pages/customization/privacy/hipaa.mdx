@@ -12,8 +12,14 @@ ElevenLabs Conversational AI now supports HIPAA compliance, allowing healthcare 
 When HIPAA compliance is enabled for a workspace, the following policies are enabled:
 
 1. **Zero Data Retention (ZDR)** - All sensitive data from conversations is automatically redacted before storage
-2. **LLM Restrictions** - Only HIPAA-compliant LLMs are available for use
+2. **LLM Provider Restrictions** - Only LLMs from providers with signed Business Associate Agreements (BAAs) are available as preconfigured options
 3. **Storage Limitations** - Raw audio files and transcripts containing PHI are not retained
+
+<Note>
+  If you need to use LLMs that aren't pre-configured in ZDR mode (e.g., OpenAI's GPT-4o mini), you can still do so by:
+  1. Obtaining a BAA directly from the provider
+  2. Using their API key with our Custom LLM integration
+</Note>
 
 This implementation ensures that PHI is not inadvertently stored or logged in any system components, including:
 
