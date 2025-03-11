@@ -102,7 +102,7 @@ paths:
   /v1/text-to-speech/{voice_id}/stream/with-timestamps:
     post:
       summary: Stream speech with timing
-      x-fern-request-name: StreamTextToSpeechWithTimstampsRequest
+      x-fern-request-name: StreamTextToSpeechWithTimestampsRequest
       x-fern-examples:
         - path-parameters:
             voice_id: JBFqnCBsd6RMkjVDRZzb
@@ -163,97 +163,28 @@ paths:
   /v1/history:
     get:
       summary: Get generated items
-      x-fern-examples:
-        - query-parameters:
-          response:
-            body:
-              history:
-                [
-                  {
-                    history_item_id: 'ja9xsmfGhxYcymxGcOGB',
-                    request_id: 'BF0BZg4IwLGBlaVjv9Im',
-                    voice_id: '21m00Tcm4TlvDq8ikWAM',
-                    model_id: 'eleven_multilingual_v2',
-                    voice_name: 'Rachel',
-                    voice_category: 'premade',
-                    text: 'This is an example sentence with streaming',
-                    date_unix: 1714650306,
-                    character_count_change_from: 17189,
-                    character_count_change_to: 17231,
-                    content_type: 'audio/mpeg',
-                    state: 'created',
-                    settings:
-                      { similarity_boost: 0.5, stability: 0.71, style: 0, use_speaker_boost: true },
-                    feedback: null,
-                    share_link_id: null,
-                    source: 'TTS',
-                  },
-                ]
-              last_history_item_id: 'ja9xsmfGhxYcymxGcOGB'
-              has_more: true
       parameters:
         - {} # page_size
         - {} # start_after_history_item_id
         - description: ID of the voice to be filtered for. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
         - description: Search term used for filtering history items. If provided, source becomes required.
-        - description: Source of the history items. If search parameter is provided, source becomes required. Otherwise this parameter is optional.
   /v1/history/{history_item_id}:
     get:
       summary: Get history item
-      x-fern-examples:
-        - path-parameters:
-            history_item_id: 'HISTORY_ITEM_ID'
-          response:
-            body:
-              history_item_id: 'ja9xsmfGhxYcymxGcOGB'
-              request_id: 'BF0BZg4IwLGBlaVjv9Im'
-              voice_id: '21m00Tcm4TlvDq8ikWAM'
-              model_id: 'eleven_multilingual_v2'
-              voice_name: 'Rachel'
-              voice_category: 'premade'
-              text: 'This is an example sentence with streaming'
-              date_unix: 1714650306
-              character_count_change_from: 17189
-              character_count_change_to: 17231
-              content_type: 'audio/mpeg'
-              state: 'created'
-              settings:
-                {
-                  'stability': 0.71,
-                  'similarity_boost': 0.5,
-                  'style': 0,
-                  'use_speaker_boost': true,
-                }
-              feedback: null
-              share_link_id: null
-              source: 'TTS'
       parameters:
         - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
     delete:
       summary: Delete history item
-
-      x-fern-examples:
-        - path-parameters:
-            history_item_id: 'HISTORY_ITEM_ID'
-          response:
-            body:
-              status: 'ok'
       parameters:
         - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/history/{history_item_id}/audio:
     get:
       summary: Get audio from history item
-      x-fern-examples:
-        - path-parameters:
-            history_item_id: 'HISTORY_ITEM_ID'
       parameters:
         - description: ID of the history item to be used. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/history/download:
     post:
       summary: Download history items
-      x-fern-examples:
-        - request:
-            history_item_ids: ['HISTORY_ITEM_ID']
       properties:
         - description: IDs of the history items to be downloaded. You can use the [Get generated items](/docs/api-reference/history/get-all) endpoint to retrieve a list of history items.
   /v1/voices/{voice_id}/samples/{sample_id}:
@@ -611,36 +542,6 @@ components:
           $ref: '#/components/schemas/ConversationalConfig'
         platform_settings:
           $ref: '#/components/schemas/AgentPlatformSettings'
-    FineTuningResponseModel:
-      x-fern-type-name: FineTuningResponse
-      properties:
-        finetuning_state:
-          x-fern-type-name: FinetuningState
-      required: []
-    HistoryItemResponseModel:
-      x-fern-type-name: HistoryItem
-      required:
-        [
-          history_item_id,
-          voice_id,
-          text,
-          date_unix,
-          character_count_change_from,
-          character_count_change_to,
-          content_type,
-        ]
-      properties:
-        state:
-          x-fern-type-name: HistoryItemState
-        voice_category:
-          x-fern-type-name: VoiceCategory
-    SpeechHistoryItemResponseModel:
-      x-fern-type-name: SpeechHistoryItemResponse
-      properties:
-        state:
-          - x-fern-type-name: SpeechHistoryState
-      required:
-        - history_item_id
   securitySchemes:
     api-key:
       type: apiKey
@@ -648,4 +549,4 @@ components:
       optional: true
       env: ELEVENLABS_API_KEY
       in: header
-      description: Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.
+      description: Your API key. This is required by most endpoints to access our API programmatically. You can view your xi-api-key using the 'Profile' tab on the website.
