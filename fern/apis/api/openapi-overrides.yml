@@ -102,7 +102,7 @@ paths:
   /v1/text-to-speech/{voice_id}/stream/with-timestamps:
     post:
       summary: Stream speech with timing
-      x-fern-request-name: StreamTextToSpeechWithTimstampsRequest
+      x-fern-request-name: StreamTextToSpeechWithTimestampsRequest
       x-fern-examples:
         - path-parameters:
             voice_id: JBFqnCBsd6RMkjVDRZzb
@@ -542,36 +542,6 @@ components:
           $ref: '#/components/schemas/ConversationalConfig'
         platform_settings:
           $ref: '#/components/schemas/AgentPlatformSettings'
-    FineTuningResponseModel:
-      x-fern-type-name: FineTuningResponse
-      properties:
-        finetuning_state:
-          x-fern-type-name: FinetuningState
-      required: []
-    HistoryItemResponseModel:
-      x-fern-type-name: HistoryItem
-      required:
-        [
-          history_item_id,
-          voice_id,
-          text,
-          date_unix,
-          character_count_change_from,
-          character_count_change_to,
-          content_type,
-        ]
-      properties:
-        state:
-          x-fern-type-name: HistoryItemState
-        voice_category:
-          x-fern-type-name: VoiceCategory
-    SpeechHistoryItemResponseModel:
-      x-fern-type-name: SpeechHistoryItemResponse
-      properties:
-        state:
-          - x-fern-type-name: SpeechHistoryState
-      required:
-        - history_item_id
   securitySchemes:
     api-key:
       type: apiKey
@@ -579,4 +549,4 @@ components:
       optional: true
       env: ELEVENLABS_API_KEY
       in: header
-      description: Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.
+      description: Your API key. This is required by most endpoints to access our API programmatically. You can view your xi-api-key using the 'Profile' tab on the website.
