@@ -117,6 +117,22 @@ Note that overriding the chunk schedule to generate small amounts of text may re
 
 </ParamField>
 
+<ParamField path="pronunciation_dictionary_locators" type="array">
+  Optional list of pronunciation dictionary locators. If provided, these dictionaries will be used to modify pronunciation of matching text. Must only be provided in the first message.
+  <Expandable title="properties" defaultOpen>
+
+    <ParamField path="dictionary_id" type="string" required>
+        The unique identifier of the pronunciation dictionary
+    </ParamField>
+
+    <ParamField path="version_id" type="string" required>
+        The version identifier of the pronunciation dictionary
+    </ParamField>
+
+  </Expandable>
+  Note: Pronunciation dictionary matches will only be respected within a provided chunk.
+</ParamField>
+
 <ParamField path="xi_api_key" type="string">
   Provide the XI API Key in the first message if it's not in the header.
 </ParamField>
