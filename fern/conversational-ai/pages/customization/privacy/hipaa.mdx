@@ -16,13 +16,13 @@ ElevenLabs Conversational AI is part of the eligible services we can sign a Busi
 
 When HIPAA compliance is enabled for a workspace, the following policies are enabled:
 
-1. **Zero Data Retention (ZDR)** - All sensitive data from conversations is automatically redacted before storage. This also applies to derivative data like LLM-produced transcript summaries, and tool call parameters and results.
-2. **LLM Provider Restrictions** - Only LLMs from providers that ElevenLabs has signed a Business Associate Agreement (BAA) with are available as preconfigured options to ensure compliance
+1. **Zero Retention Mode** - All sensitive data from conversations is automatically redacted before storage. This also applies to derivative data like LLM-produced transcript summaries, and tool call parameters and results.
+2. **LLM Provider Restrictions** - Only LLM from providers with whom we have a BAA in place are available as preconfigured options
 3. **Storage Limitations** - Raw audio files and transcripts containing PHI are not retained
 
 <Note>
 
-If you want to use LLMs that aren't available preconfigured in ZDR mode (e.g., OpenAI's GPT-4o mini), you
+If you want to use LLMs that aren't available preconfigured in Zero Retention Mode (e.g., OpenAI's GPT-4o mini), you
 can still use them in Conversational AI by:
 
 1. Arranging to sign a BAA directly with the LLM provider you'd like to use
@@ -53,7 +53,7 @@ ElevenLabs' platform ensures that PHI shared as part of a conversation is not in
 
 ## HIPAA-Compliant LLMs
 
-When operating in HIPAA mode, only the following LLMs are available:
+When operating in Zero Retention Mode, only the following LLMs are available:
 
 <AccordionGroup>
 
@@ -77,7 +77,7 @@ When operating in HIPAA mode, only the following LLMs are available:
 
 ## Technical implementation
 
-The HIPAA compliance feature implements several safeguards including but not limited to:
+Zero Retention Mode implements several safeguards including but not limited to:
 
 1. **LLM Allowlist** - Prevents use of non-compliant LLMs
 2. **PII Redaction** - Automatically redacts sensitive fields before storage
@@ -85,7 +85,7 @@ The HIPAA compliance feature implements several safeguards including but not lim
 
 ## Developer experience
 
-When working with HIPAA-compliant agents:
+When working with Zero Retention Mode agents:
 
 <Steps>
   <Step title="Non-compliant LLMs are disabled in the UI">
