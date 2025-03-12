@@ -10,11 +10,12 @@ subtitle: Learn how ElevenLabs Conversational AI supports HIPAA compliance for h
 
 ## Overview
 
-ElevenLabs Conversational AI is part of the eligible services we can sign a Business Associate Agreement for that is in line with HIPAA compliance, allowing healthcare organizations to build voice agents that handle protected health information (PHI) while maintaining regulatory compliance. This feature ensures that sensitive patient data is properly protected throughout the conversation lifecycle.
+ElevenLabs Conversational AI is one of ElevenLabs’ HIPAA-eligible services, and we offer Business Associate Agreements (BAAs) to eligible customers. This service enables Covered Entities and Business Associates, as defined under HIPAA, to develop AI-powered voice agents capable of handling Protected Health Information (PHI) while ensuring regulatory compliance.
+Once a BAA is in place and Zero Retention Mode is enabled, PHI remains securely protected throughout the entire conversation lifecycle, ensuring full compliance with HIPAA’s data protection requirements.
 
 ## How HIPAA compliance works
 
-When HIPAA compliance is enabled for a workspace, the following policies are enabled:
+When HIPAA compliance is required for a workspace, the following policies are enabled:
 
 1. **Zero Retention Mode** - All sensitive data from conversations is automatically redacted before storage. This also applies to derivative data like LLM-produced transcript summaries, and tool call parameters and results.
 2. **LLM Provider Restrictions** - Only LLM from providers with whom we have a BAA in place are available as preconfigured options
@@ -70,7 +71,7 @@ When operating in Zero Retention Mode, only the following LLMs are available:
     - Claude 3.0 Haiku
   </Accordion>
   <Accordion title="Custom LLMs">
-    - [Custom LLM](/docs/conversational-ai/customization/custom-llm) (supports any OpenAI-API compatible provider, requires you to bring your own API keys)
+    - [Custom LLM](/docs/conversational-ai/customization/custom-llm) (supports any OpenAI-API compatible provider and requires you to bring your own API keys)
   </Accordion>
   
 </AccordionGroup>
@@ -93,20 +94,20 @@ When working with Zero Retention Mode agents:
       background="subtle"
       caption="The UI shows disabled LLM options with tooltip explanations"
     >
-      ![Redacted conversation analysis showing HIPAA compliance in
+      ![Redacted conversation analysis showing Zero Retention Mode in
       action](/assets/images/conversational-ai/hipaa-model.png)
     </Frame>
   </Step>
   <Step title="Content is redacted from content history">
     <Frame background="subtle" caption="All sensitive information is redacted and not stored">
-      ![Redacted conversation history showing HIPAA compliance in
+      ![Redacted conversation history showing Zero Retention Mode in
       action](/assets/images/conversational-ai/redacted.png)
     </Frame>
   </Step>
   <Step title="Conversation analysis is limited">
     <Frame
       background="subtle"
-      caption="Analysis and summaries maintain HIPAA compliance through redaction"
+      caption="Analysis and summaries maintain HIPAA compliance through Zero Retention Mode"
     >
       ![Redacted conversation analysis showing HIPAA compliance in
       action](/assets/images/conversational-ai/redacted-summary.png)
@@ -121,12 +122,12 @@ API calls attempting to use non-compliant LLMs will receive an HTTP 400 error. A
 ## FAQ
 
 <AccordionGroup>
-  <Accordion title="Can I use any LLM with HIPAA compliance enabled?">
-    No. When HIPAA compliance is enabled, you can only use LLMs from the approved list. Attempts to
+  <Accordion title="Can I use any LLM if HIPAA compliance is required?">
+    No. When HIPAA compliance is required, you can only use LLMs from the approved list. Attempts to
     use non-compliant LLMs will produce an error. You can always use a custom LLM if you need a
     specific model not on the allowlist.
   </Accordion>
-  <Accordion title="How do I know if my workspace has HIPAA compliance enabled?">
+  <Accordion title="How do I know if my workspace is HIPAA compliant?">
     HIPAA compliance is only available to enterprise customers. Please refer to your account
     executive to check if this is enabled.
   </Accordion>
@@ -134,7 +135,7 @@ API calls attempting to use non-compliant LLMs will receive an HTTP 400 error. A
     No. HIPAA compliance only affects how data is stored and which LLMs can be used. It does not
     impact the quality or functionality of conversations while they are active.
   </Accordion>
-  <Accordion title="Can I still analyze conversation data with HIPAA enabled?">
+  <Accordion title="Can I still analyze conversation data if my agent is HIPAA compliant?">
     Yes, but with limitations. Conversation analytics will only include non-sensitive metadata like
     call duration and success rates. Specific content from conversations will be redacted.
   </Accordion>
