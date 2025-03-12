@@ -1,0 +1,525 @@
+---
+title: Cross-platfrom Voice Agents with Expo React Native
+subtitle: Build conversational AI agents that work across iOS, Android, and web using Expo React Native and the ElevenLabs Conversational AI SDK.
+---
+
+## Introduction
+
+In this tutorial you will learn how to build a voice agent that works across iOS, Android, and web using [Expo React Native](https://expo.dev/) and the ElevenLabs Conversational AI SDK.
+
+TODO: set video ID once published.
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube-nocookie.com/embed/"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+<Tip title="Prefer to jump straight to the code?" icon="lightbulb">
+  Find the [example project on
+  GitHub](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/conversational-ai/react-native/elevenlabs-conversational-ai-expo-react-native).
+</Tip>
+
+## Requirements
+
+- An ElevenLabs account with an [API key](/app/settings/api-keys).
+- Node.js v18 or higher installed on your machine.
+
+## Setup
+
+### Create a new Expo project
+
+Using `create-expo-app`, create a new blank Expo project:
+
+```bash
+npx create-expo-app@latest --template blank-typescript
+```
+
+### Enable microphone permissions
+
+In the `app.json` file, add the following permissions:
+
+```json app.json
+{
+  "expo": {
+    "scheme": "elevenlabs",
+    // ...
+    "ios": {
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app uses the microphone to record audio."
+      },
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.elevenlabs-conversational-ai-expo-react-native"
+    }
+    // ...
+  }
+}
+```
+
+This will allow the React Native web view to prompt for microphone permissions when the conversation is started.
+
+### Install dependencies
+
+This approach relies on [Expo DOM components](https://docs.expo.dev/guides/dom-components/) to make the conversational AI agent work across platforms. There is a couple of dependencies you need to install to make this work.
+
+```bash
+npx expo install @11labs/react
+npx expo install expo-dev-client # tunnel support
+npx expo install react-native-webview # DOM components support
+npx expo install react-dom react-native-web @expo/metro-runtime # RN web support
+# Cool client tools
+npx expo install expo-battery
+npx expo install expo-brightness
+```
+
+## Expo DOM components
+
+Expo offers a [novel approach](https://docs.expo.dev/guides/dom-components/) to work with modern web code directly in a native app via the `use dom` directive. This approach means that you can use our [Conversational AI React SDK](https://elevenlabs.io/docs/conversational-ai/libraries/react) across all platforms using the same code.
+
+Under the hood, Expo uses `react-native-webview` to render the web code in a native component. To allow the webview to access the microphone, you need to make sure to use `npx expo start --tunnel` to start the Expo development server locally so that the webview is served over https.
+
+### Create the conversational AI DOM component
+
+Create a new file in the components folder: `./components/ConvAI.tsx` and add the following code:
+
+```tsx /components/ConvAI.tsx {10-19,33-40,51-65}
+'use dom';
+
+import { useConversation } from '@11labs/react';
+import { Mic } from 'lucide-react-native';
+import { useCallback } from 'react';
+import { View, Pressable, StyleSheet } from 'react-native';
+
+import tools from '../utils/tools';
+
+async function requestMicrophonePermission() {
+  try {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+    return true;
+  } catch (error) {
+    console.log(error);
+    console.error('Microphone permission denied');
+    return false;
+  }
+}
+
+export default function ConvAiDOMComponent({
+  platform,
+  get_battery_level,
+  change_brightness,
+  flash_screen,
+}: {
+  dom?: import('expo/dom').DOMProps;
+  platform: string;
+  get_battery_level: typeof tools.get_battery_level;
+  change_brightness: typeof tools.change_brightness;
+  flash_screen: typeof tools.flash_screen;
+}) {
+  const conversation = useConversation({
+    onConnect: () => console.log('Connected'),
+    onDisconnect: () => console.log('Disconnected'),
+    onMessage: (message) => {
+      console.log(message);
+    },
+    onError: (error) => console.error('Error:', error),
+  });
+  const startConversation = useCallback(async () => {
+    try {
+      // Request microphone permission
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        alert('No permission');
+        return;
+      }
+
+      // Start the conversation with your agent
+      await conversation.startSession({
+        agentId: 'YOUR_AGENT_ID', // Replace with your agent ID
+        dynamicVariables: {
+          platform,
+        },
+        clientTools: {
+          get_battery_level,
+          change_brightness,
+          flash_screen,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+    }
+  }, [conversation]);
+
+  const stopConversation = useCallback(async () => {
+    await conversation.endSession();
+  }, [conversation]);
+
+  return (
+    <Pressable
+      style={[styles.callButton, conversation.status === 'connected' && styles.callButtonActive]}
+      onPress={conversation.status === 'disconnected' ? startConversation : stopConversation}
+    >
+      <View
+        style={[
+          styles.buttonInner,
+          conversation.status === 'connected' && styles.buttonInnerActive,
+        ]}
+      >
+        <Mic size={32} color="#E2E8F0" strokeWidth={1.5} style={styles.buttonIcon} />
+      </View>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  callButton: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  callButtonActive: {
+    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+  },
+  buttonInner: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#3B82F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#3B82F6',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    elevation: 5,
+  },
+  buttonInnerActive: {
+    backgroundColor: '#EF4444',
+    shadowColor: '#EF4444',
+  },
+  buttonIcon: {
+    transform: [{ translateY: 2 }],
+  },
+});
+```
+
+### Native client tools
+
+A big part of building conversational AI agents is allowing the agent access and execute functionality dynamically. This can be done via [client tools](https://elevenlabs.io/docs/conversational-ai/customization/tools-events/client-tools).
+
+In order for DOM components to exectute native actions, you can send type-safe native functions to DOM components by passing asynchronous functions as top-level props to the DOM component.
+
+Create a new file to hold your client tools: `./utils/tools.ts` and add the following code:
+
+```ts ./utils/tools.ts
+import * as Battery from 'expo-battery';
+import * as Brightness from 'expo-brightness';
+
+const get_battery_level = async () => {
+  const batteryLevel = await Battery.getBatteryLevelAsync();
+  console.log('batteryLevel', batteryLevel);
+  if (batteryLevel === -1) {
+    return 'Error: Device does not support retrieving the battery level.';
+  }
+  return batteryLevel;
+};
+
+const change_brightness = ({ brightness }: { brightness: number }) => {
+  console.log('change_brightness', brightness);
+  Brightness.setSystemBrightnessAsync(brightness);
+  return brightness;
+};
+
+const flash_screen = () => {
+  Brightness.setSystemBrightnessAsync(1);
+  setTimeout(() => {
+    Brightness.setSystemBrightnessAsync(0);
+  }, 200);
+  return 'Successfully flashed the screen.';
+};
+
+const tools = {
+  get_battery_level,
+  change_brightness,
+  flash_screen,
+};
+
+export default tools;
+```
+
+### Dynamic variables
+
+In addition to the client tools, we're also injecting the platform (web, iOS, Android) as a [dynamic variable](https://elevenlabs.io/docs/conversational-ai/customization/personalization/dynamic-variables) both into the first message, and the prompt. To do this, we pass the platform as a top-level prop to the DOM component, and then in our DOM component pass it to the `startConversation` configuration:
+
+```tsx ./components/ConvAI.tsx {3,34-36}
+// ...
+export default function ConvAiDOMComponent({
+  platform,
+  get_battery_level,
+  change_brightness,
+  flash_screen,
+}: {
+  dom?: import('expo/dom').DOMProps;
+  platform: string;
+  get_battery_level: typeof tools.get_battery_level;
+  change_brightness: typeof tools.change_brightness;
+  flash_screen: typeof tools.flash_screen;
+}) {
+  const conversation = useConversation({
+    onConnect: () => console.log('Connected'),
+    onDisconnect: () => console.log('Disconnected'),
+    onMessage: (message) => {
+      console.log(message);
+    },
+    onError: (error) => console.error('Error:', error),
+  });
+  const startConversation = useCallback(async () => {
+    try {
+      // Request microphone permission
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        alert('No permission');
+        return;
+      }
+
+      // Start the conversation with your agent
+      await conversation.startSession({
+        agentId: 'YOUR_AGENT_ID', // Replace with your agent ID
+        dynamicVariables: {
+          platform,
+        },
+        clientTools: {
+          get_battery_level,
+          change_brightness,
+          flash_screen,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+    }
+  }, [conversation]);
+  //...
+}
+// ...
+```
+
+### Add the component to your app
+
+Add the component to your app by adding the following code to your `./App.tsx` file:
+
+```tsx ./App.tsx {44-52}
+import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { Platform } from 'react-native';
+
+import ConvAiDOMComponent from './components/ConvAI';
+import tools from './utils/tools';
+
+export default function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <LinearGradient colors={['#0F172A', '#1E293B']} style={StyleSheet.absoluteFill} />
+
+      <View style={styles.topContent}>
+        <Text style={styles.description}>
+          Cross-platform conversational AI agents with ElevenLabs and Expo React Native.
+        </Text>
+
+        <View style={styles.toolsList}>
+          <Text style={styles.toolsTitle}>Available Client Tools:</Text>
+          <View style={styles.toolItem}>
+            <Text style={styles.toolText}>Get battery level</Text>
+            <View style={styles.platformTags}>
+              <Text style={styles.platformTag}>web</Text>
+              <Text style={styles.platformTag}>ios</Text>
+              <Text style={styles.platformTag}>android</Text>
+            </View>
+          </View>
+          <View style={styles.toolItem}>
+            <Text style={styles.toolText}>Change screen brightness</Text>
+            <View style={styles.platformTags}>
+              <Text style={styles.platformTag}>ios</Text>
+              <Text style={styles.platformTag}>android</Text>
+            </View>
+          </View>
+          <View style={styles.toolItem}>
+            <Text style={styles.toolText}>Flash screen</Text>
+            <View style={styles.platformTags}>
+              <Text style={styles.platformTag}>ios</Text>
+              <Text style={styles.platformTag}>android</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.domComponentContainer}>
+          <ConvAiDOMComponent
+            dom={{ style: styles.domComponent }}
+            platform={Platform.OS}
+            get_battery_level={tools.get_battery_level}
+            change_brightness={tools.change_brightness}
+            flash_screen={tools.flash_screen}
+          />
+        </View>
+      </View>
+      <StatusBar style="light" />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  topContent: {
+    paddingTop: 40,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  description: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    color: '#E2E8F0',
+    textAlign: 'center',
+    maxWidth: 300,
+    lineHeight: 24,
+    marginBottom: 24,
+  },
+  toolsList: {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 16,
+    padding: 20,
+    width: '100%',
+    maxWidth: 400,
+    marginBottom: 24,
+  },
+  toolsTitle: {
+    fontFamily: 'Inter-Bold',
+    fontSize: 18,
+    color: '#E2E8F0',
+    marginBottom: 16,
+  },
+  toolItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  toolText: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    color: '#E2E8F0',
+  },
+  platformTags: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  platformTag: {
+    fontSize: 12,
+    color: '#94A3B8',
+    backgroundColor: 'rgba(148, 163, 184, 0.1)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    overflow: 'hidden',
+    fontFamily: 'Inter-Regular',
+  },
+  domComponentContainer: {
+    width: 120,
+    height: 120,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  domComponent: {
+    width: 120,
+    height: 120,
+  },
+});
+```
+
+## Agent configuration
+
+<Steps>
+  <Step title="Sign in to ElevenLabs">
+    Go to [elevenlabs.io](https://elevenlabs.io/sign-up) and sign in to your account.
+  </Step>
+  <Step title="Create a new agent">
+    Navigate to [Conversational AI > Agents](https://elevenlabs.io/app/conversational-ai/agents) and
+    create a new agent from the blank template.
+  </Step>
+  <Step title="Set the first message">
+    Set the first message and specify the dynamic variable for the platform.
+
+    ```txt
+    Hi there, woah, so cool that I'm running on {{platform}}. What can I help you with?
+    ```
+
+  </Step>
+  <Step title="Set the system prompt">
+    Set the system prompt. You can also include dynamic variables here.
+
+    ```txt
+    You are a helpful assistant running on {{platform}}. You have access to certain tools that allow you to check the user device battery level and change the display brightness. Use these tools if the user asks about them. Otherwise, just answer the question.
+    ```
+
+  </Step>
+  <Step title="Set up the client tools">
+    Set up the following client tools:
+
+    - Name: `get_battery_level`
+        - Description: Gets the device battery level as decimal point percentage.
+        - Wait for response: `true`
+        - Response timeout (seconds): 3
+    - Name: `change_brightness`
+        - Description: Changes the brightness of the device screen.
+        - Wait for response: `true`
+        - Response timeout (seconds): 3
+        - Parameters:
+            - Data Type: `number`
+            - Identifier: `brightness`
+            - Required: `true`
+            - Value Type: `LLM Prompt`
+            - Description: A number between 0 and 1, inclusive, representing the desired screen brightness.
+    - Name: `flash_screen`
+        - Description: Quickly flashes the screen on and off.
+        - Wait for response: `true`
+        - Response timeout (seconds): 3
+
+  </Step>
+</Steps>
+
+## Run the app
+
+Modyfing the brightness is not supported within Expo Go, therefore you will need to prebuild the app and then run it on a native device.
+
+- Terminal 1:
+  - Run `npx expo prebuild --clean`
+
+```bash
+npx expo prebuild --clean
+```
+
+- Run `npx expo start --tunnel` to start the Expo development server over https.
+
+```bash
+npx expo start --tunnel
+```
+
+- Terminal 2:
+  - Run `npx expo run:ios --device` to run the app on your iOS device.
+
+```bash
+npx expo run:ios --device
+```
