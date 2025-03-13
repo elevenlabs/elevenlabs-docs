@@ -24,6 +24,8 @@ The ElevenLabs API offers a range of audio models optimized for different use ca
 | `eleven_english_sts_v2`      | English-only voice changer model (Speech to Speech)                  | `en`                                                                                                                                                                          |
 | `scribe_v1`                  | State-of-the-art speech recognition model                            | [99 languages](/docs/capabilities/speech-to-text#supported-languages)                                                                                                         |
 
+<small>† Excluding application & network latency</small>
+
 <Accordion title="Older Models">
 
 <Warning>
@@ -74,6 +76,18 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
 
 <Markdown src="/snippets/v2-5-model-languages.mdx" />
 
+### Considerations
+
+<AccordionGroup>
+  <Accordion title="Text normalization with numbers">
+    When using Flash v2.5, numbers aren't normalized in a way you might expect. For example, phone numbers might be read out in way that isn't clear for the user. Dates and currencies are affected in a similar manner.
+
+    The Multilingual v2 model does a better job of normalizing numbers, so we recommend using it for phone numbers and other cases where number normalization is important.
+
+    When using the API you can mitigate this by using the `apply_text_normalization` [parameter](/api-reference/text-to-speech/convert#request.body.apply_text_normalization).
+  </Accordion>
+</AccordionGroup>
+
 ## Model selection guide
 
 <AccordionGroup>
@@ -81,7 +95,7 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
     <CardGroup cols={1}>
       <Card title="Quality">
         Use `eleven_multilingual_v2`
-        
+
         Best for high-fidelity audio output with rich emotional expression
       </Card>
       <Card title="Low-latency">
@@ -102,7 +116,7 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
     <CardGroup cols={1}>
       <Card title="Content creation">
         Use `eleven_multilingual_v2`
-      
+
         Ideal for professional content, audiobooks & video narration.
       </Card>
 
@@ -180,5 +194,3 @@ Enterprise customers can request a higher concurrency limit by contacting their 
 </Note>
 
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
-
-<small>† Excluding application & network latency</small>
