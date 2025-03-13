@@ -1,0 +1,73 @@
+---
+title: NVIDIA AI Foundation
+subtitle: Connect an agent to a custom LLM on NVIDIA AI Foundation.
+---
+
+## Overview
+
+[NVIDIA Discover](https://build.nvidia.com/) provides access to state-of-the-art language models through their API platform, allowing you to integrate powerful AI models into your ElevenLabs Conversational AI agents.
+
+Use leading models like Gemma and others as the brain for your ElevenLabs Conversational AI agents in a few easy steps.
+
+## Choosing a model
+
+To make use of the full power of ElevenLabs Conversational AI you need to use a model that supports tool use and structured outputs. NVIDIA AI Foundation offers several models, including:
+
+- google/gemma-3-1b-it
+- google/gemma-7b-it
+- mistralai/mixtral-8x7b-instruct-v0.1
+
+For optimal performance with ElevenLabs Conversational AI, we recommend using `google/gemma-3-1b-it` for its balance of capabilities and performance.
+
+## Set up Gemma hosted by NVIDIA
+
+<Steps>
+  <Step>
+    Obtain your API key from the NVIDIA platform, for example on the [gemma model page](https://build.nvidia.com/google/gemma-3-1b-it).
+
+  </Step>
+  <Step>
+    Once you have your API key, you can test it by running the following curl command:
+
+    ```bash
+    curl https://integrate.api.nvidia.com/v1/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer API_KEY" \
+      -d '{
+        "model": "google/gemma-3-1b-it",
+        "messages": [{"role":"user","content":"Hello, how are you?"}],
+        "temperature": 0.1,
+        "top_p": 0.9,
+        "max_tokens": 512,
+        "stream": true
+      }'
+    ```
+
+  </Step>
+  <Step>
+    Navigate to your [AI Agent](https://elevenlabs.io/app/conversational-ai), scroll down to the "Secrets" section and select "Add Secret". After adding the secret, make sure to hit "Save" to make the secret available to your agent.
+
+    <Frame background="subtle">
+      ![Add Secret](/assets/images/conversational-ai/nvidia-secret.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Choose "Custom LLM" from the dropdown menu.
+    
+    <Frame background="subtle">
+      ![Choose custom llm](/assets/images/conversational-ai/byollm-2.png)
+    </Frame>
+  </Step>
+  <Step>
+    For the Server URL, specify NVIDIA's API endpoint: `https://integrate.api.nvidia.com/v1`. For the Model ID, specify `google/gemma-3-1b-it`, and select your API key from the dropdown menu.
+
+    <Frame background="subtle">
+      ![Enter url](/assets/images/conversational-ai/nvidia-custom-llm.png)
+    </Frame>
+
+  </Step>
+  <Step>
+   Now you can go ahead and click "Test AI Agent" to chat with your custom Gemma model.
+  </Step>
+</Steps>
