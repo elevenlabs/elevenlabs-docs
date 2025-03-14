@@ -585,13 +585,18 @@ socket.onclose = function (event) {
 ```
 
 ```python elevenlabs-python
-from elevenlabs import generate, stream
+from elevenlabs.client import ElevenLabs
+from elevenlabs import stream
+
+client = ElevenLabs(
+  api_key="YOUR_API_KEY", # Defaults to ELEVENLABS_API_KEY
+)
 
 def text_stream():
     yield "Hi there, I'm Eleven "
     yield "I'm a text to speech API "
 
-audio_stream = generate(
+audio_stream = client.generate(
     text=text_stream(),
     voice="Nicole",
     model="eleven_flash_v2_5",
