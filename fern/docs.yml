@@ -74,7 +74,7 @@ navigation:
                 contents:
                   - page: Streaming
                     path: docs/pages/cookbooks/legacy/text-to-speech/streaming.mdx
-                  - page: Websockets
+                  - page: WebSockets
                     path: docs/pages/cookbooks/legacy/text-to-speech/websockets.mdx
                   - page: Request stitching
                     path: docs/pages/cookbooks/legacy/text-to-speech/request-stitching.mdx
@@ -103,6 +103,11 @@ navigation:
                 contents:
                   - page: Python/Node.js guide
                     path: docs/pages/cookbooks/legacy/dubbing/basics.mdx
+              - section: Conversational AI
+                icon: duotone comments
+                contents:
+                  - page: Expo React Native
+                    path: docs/pages/cookbooks/conversational-ai/expo-react-native.mdx
           - link: Example projects
             icon: brands github
             href: https://github.com/elevenlabs/elevenlabs-examples
@@ -210,6 +215,9 @@ navigation:
               - page: Billing
                 icon: duotone file-invoice-dollar
                 path: docs/pages/product-guides/administration/billing.mdx
+              - page: Usage analytics
+                icon: duotone list-timeline
+                path: docs/pages/product-guides/administration/analytics.mdx
               - section: Workspaces
                 icon: duotone users
                 contents:
@@ -278,12 +286,15 @@ navigation:
                     icon: duotone square-phone-hangup
                     path: conversational-ai/pages/customization/tools/end-call.mdx
           - section: Knowledge base
-            icon: duotone book-open
+            icon: duotone file-magnifying-glass
             path: conversational-ai/pages/customization/knowledge-base.mdx
             contents:
               - page: Dashboard
                 icon: duotone books
                 path: conversational-ai/pages/customization/knowledge-base/ui.mdx
+              - page: RAG
+                icon: duotone magnifying-glass-waveform
+                path: conversational-ai/pages/customization/rag.mdx
           - section: Personalization
             icon: duotone user-gear
             contents:
@@ -296,9 +307,6 @@ navigation:
               - page: Twilio personalization
                 icon: duotone phone-arrow-down-left
                 path: conversational-ai/pages/customization/dynamic-variables/twilio-inbound-integration.mdx
-              - page: Post-call webhooks
-                icon: duotone bell-ring
-                path: conversational-ai/pages/customization/post-call-webhook.mdx
           - section: Voice
             icon: duotone waveform-lines
             path: conversational-ai/pages/customization/voice.mdx
@@ -313,7 +321,7 @@ navigation:
             icon: duotone language
             path: conversational-ai/pages/customization/language.mdx
           - section: Custom LLM
-            icon: duotone brain
+            icon: duotone brain-circuit
             path: conversational-ai/pages/customization/custom-llm/overview.mdx
             contents:
               - page: Cloudflare
@@ -331,8 +339,12 @@ navigation:
           - page: Conversation flow
             icon: duotone comments
             path: conversational-ai/pages/customization/conversation-flow.mdx
+          - page: Authentication
+            icon: duotone fingerprint
+            path: conversational-ai/pages/customization/authentication.mdx
+
           - section: Privacy
-            icon: duotone lock
+            icon: duotone shield-halved
             path: conversational-ai/pages/customization/privacy.mdx
             contents:
               - page: Retention
@@ -341,6 +353,15 @@ navigation:
               - page: Audio saving
                 icon: duotone microphone
                 path: conversational-ai/pages/customization/audio-saving.mdx
+          - page: HIPAA compliance
+            icon: duotone hospital-user
+            path: conversational-ai/pages/customization/privacy/hipaa.mdx
+      - section: WORKFLOWS
+        skip-slug: false
+        contents:
+          - page: Post-call webhooks
+            icon: duotone bell-ring
+            path: conversational-ai/pages/workflows/post-call-webhook.mdx
 
       - section: GUIDES
         skip-slug: false
@@ -393,6 +414,9 @@ navigation:
           - section: Integrations
             icon: duotone link
             contents:
+              - page: Expo React Native
+                path: docs/pages/cookbooks/conversational-ai/expo-react-native.mdx
+                icon: duotone mobile-screen-button
               - page: Cal.com
                 icon: duotone calendar
                 path: conversational-ai/pages/guides/cal.com.mdx
@@ -417,7 +441,7 @@ navigation:
               - page: Swift
                 icon: brands swift
                 path: conversational-ai/pages/libraries/swift.mdx
-              - page: WebSocket
+              - page: WebSockets
                 icon: duotone arrow-right-arrow-left
                 path: conversational-ai/pages/api-reference/websocket.mdx
       - section: API REFERENCE
@@ -428,7 +452,7 @@ navigation:
             paginated: true
             layout:
               - endpoint: GET /v1/convai/conversation
-                title: Agent WebSocket
+                title: Agent WebSockets
                 slug: websocket
           - api: API Reference
             api-name: api
@@ -523,8 +547,8 @@ navigation:
             path: api-reference/pages/authentication.mdx
           - page: Streaming
             path: api-reference/pages/streaming.mdx
-          - page: Websocket
-            path: api-reference/pages/websocket.mdx
+          - page: WebSockets
+            path: api-reference/pages/websockets.mdx
       - api: API REFERENCE
         paginated: true
         flattened: true
@@ -695,11 +719,6 @@ navigation:
           - section: LEGACY
             skip-slug: true
             contents:
-              - section: Voice Generation (Deprecated)
-                contents:
-                  - POST /v1/voice-generation/generate-voice
-                  - GET /v1/voice-generation/generate-voice/parameters
-                  - POST /v1/voice-generation/create-voice
               - projects:
                   title: Projects
 
@@ -762,6 +781,8 @@ analytics:
     measurement-id: G-82RG1PXYVW
 
 redirects:
+  - source: /docs/conversational-ai/customization/personalization/post-call-webhooks
+    destination: /docs/conversational-ai/workflows/post-call-webhooks
   - source: /docs/voices/voice-lab/professional-voice-cloning
     destination: /docs/product-guides/voices/voice-cloning/professional-voice-cloning
   - source: /docs/welcome/introduction
@@ -814,10 +835,6 @@ redirects:
     destination: /docs/api-reference/voices/edit
   - source: /docs/api-reference/edit-voice-settings
     destination: /docs/api-reference/voices/edit-settings
-  - source: /docs/api-reference/generate-voice
-    destination: /docs/api-reference/voice-generation-deprecated/generate
-  - source: /docs/api-reference/generate-voice-parameters
-    destination: /docs/api-reference/voice-generation-deprecated/generate-parameters
   - source: /docs/api-reference/get-audio-from-history-item
     destination: /docs/api-reference/history/get-audio
   - source: /docs/api-reference/get-audio-from-sample
