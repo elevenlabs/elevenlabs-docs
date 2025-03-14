@@ -1,0 +1,122 @@
+---
+title: Real-time audio streaming with WebRTC
+subtitle: Learn how to convert text to speech via a WebRTC connection.
+---
+
+## Introduction
+
+WebRTC is a technology that enables real-time communication between web browsers and servers. It allows for low-latency, high-quality audio and video communication, and is supported by most modern browsers.
+
+In this guide, we'll build a simple WebRTC application entirely in Python.
+Our application will continuously listen for incoming audio from a microphone and then repeat the audio back to the user but in a different voice.
+We'll use the `fastrtc` library to handle the WebRTC connection and the `elevenlabs` library to handle the speech-to-text and text-to-speech conversion.
+
+This is a preview of what we'll build:
+
+<video
+  controls
+  className="w-full"
+  src="https://github.com/user-attachments/assets/149bcda7-7381-4a15-bc63-e7c244e61f75"
+></video>
+
+
+## Setup
+
+Install dotenv and fastrtc packages to manage your environmental variables and handle the WebRTC connection:
+
+
+```bash Python
+pip install python-dotenv
+pip install fastrtc[vad]
+pip install elevenlabs
+```
+
+Next, create a `.env` file in your project directory and fill it with your credentials like so:
+
+```bash .env
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+Last, create a new file to write the code in. You can name it `webrtc-streaming.py`.
+
+## Initialize the client
+
+We'll initialize the ElevenLabs client with the API key from the `.env` file.
+
+```python
+import os
+
+from elevenlabs import ElevenLabs
+
+load_dotenv()
+
+elvenlabs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+```
+
+## Define the Echo function
+
+The `echo` function will take as input the user's audio and the desired voice ID.
+It will then convert the incoming audio to text and then to speech with the ElevenLabs client.
+
+```python
+def echo(audio: tuple[int, NDArray[np.int16]], voice_id: str):
+    transcription = elvenlabs_client.speech_to_text.convert(
+        file=audio_to_bytes(audio),
+        model_id="scribe_v1",
+        tag_audio_events=True,
+        language_code="eng",
+    )
+    for chunk in elvenlabs_client.text_to_speech.convert_as_stream(
+        text=transcription.text,  # type: ignore
+        voice_id=voice_id,
+        model_id="eleven_multilingual_v2",
+        output_format="pcm_24000",
+    ):
+        audio_array = np.frombuffer(chunk, dtype=np.int16).reshape(1, -1)
+        yield (24000, audio_array)
+```
+
+## Define the FastRTC Application
+
+We'll create a FastRTC `Stream` object which will turn our echo function into a WebRTC stream.
+We will wrap the `echo` function with `ReplyOnPause` to let FastRTC handle the turn-taking between the client and the server as well as the voice activity detection.
+We'll also add a dropdown to the UI to allow the user to select the voice ID.
+
+```python
+import gradio as gr
+from fastrtc import ReplyOnPause, Stream
+
+stream = Stream(
+    ReplyOnPause(echo),
+    modality="audio",
+    mode="send-receive",
+    additional_inputs=[
+        gr.Dropdown(
+            choices=[
+                ("Alice", "Xb7hH8MSUJpSbSDYk0k2"),
+                ("Aria", "9BWtsMINqrJLrRacOk9x"),
+                ("Bill", "pqHfZKP75CvOlQylNhV4"),
+                ("Brian", "nPczCjzI2devNBz1zQrb"),
+            ]
+        )
+    ],
+    ui_args={
+        "title": "Echo Audio with ElevenLabs",
+        "subtitle": "Choose a voice and speak naturally. The model will echo it back in a different voice.",
+    },
+)
+
+stream.ui.launch()
+```
+
+## Run the application
+
+```bash
+python webrtc-streaming.py
+```
+
+You can see the full code [here](https://gist.github.com/freddyaboulton/2a50928337b177205264112531d7552c)
+
+## Conclusion
+You have implement a WebRTC streaming application in 50 lines of Python!
+You can check out the [fastrtc docs](https://fastrtc.readthedocs.io/en/latest/) for more information on how to customize your WebRTC application.
