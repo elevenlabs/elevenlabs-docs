@@ -59,6 +59,7 @@ It will then convert the incoming audio to text and then to speech with the Elev
 ```python
 import numpy as np
 from numpy.typing import NDArray
+from fastrtc import audio_to_bytes
 
 def echo(audio: tuple[int, NDArray[np.int16]], voice_id: str):
     transcription = elevenlabs_client.speech_to_text.convert(
@@ -91,6 +92,7 @@ stream = Stream(
     mode="send-receive",
     additional_inputs=[
         gr.Dropdown(
+            value="Xb7hH8MSUJpSbSDYk0k2",
             choices=[
                 ("Alice", "Xb7hH8MSUJpSbSDYk0k2"),
                 ("Aria", "9BWtsMINqrJLrRacOk9x"),
