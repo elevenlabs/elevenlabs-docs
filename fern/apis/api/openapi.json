@@ -8,9 +8,9 @@
   "paths": {
     "/v1/history": {
       "get": {
-        "operationId": "Get_generated_items_v1_history_get",
-        "summary": "Get Generated Items",
-        "description": "Returns metadata about all your generated audio.",
+        "operationId": "List_generated_items_v1_history_get",
+        "summary": "List Generated Items",
+        "description": "Returns a list of your generated audio.",
         "parameters": [
           {
             "name": "page_size",
@@ -121,9 +121,9 @@
     },
     "/v1/history/{history_item_id}": {
       "get": {
-        "operationId": "Get_history_item_by_ID_v1_history__history_item_id__get",
-        "summary": "Get History Item By Id",
-        "description": "Returns information about an history item by its ID.",
+        "operationId": "Get_history_item_v1_history__history_item_id__get",
+        "summary": "Get History Item",
+        "description": "Retrieves a history item.",
         "parameters": [
           {
             "name": "history_item_id",
@@ -215,7 +215,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteHistoryItemResponse"
+                }
               }
             }
           },
@@ -271,9 +273,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "The audio file of the history item.",
             "content": {
-              "audio/mpeg": {}
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
             }
           },
           "422": {
@@ -324,7 +331,27 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response"
+            "description": "The requested audio file, or a zip file containing multiple audio files when multiple history items are requested.",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "description": "ZIP file containing multiple audio files when multiple history items are requested"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "invalid_output_format",
+                  "message": "output_format must be wav or none"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -6854,8 +6881,8 @@
     },
     "/v1/usage/character-stats": {
       "get": {
-        "operationId": "Get_characters_usage_metrics_v1_usage_character_stats_get",
-        "summary": "Get Characters Usage Metrics",
+        "operationId": "Get_character_usage_metrics_v1_usage_character_stats_get",
+        "summary": "Get Character Usage Metrics",
         "description": "Returns the credit usage metrics for the current user or the entire workspace they are part of. The response will return a time axis with unix timestamps for each day and daily usage along that axis. The usage will be broken down by the specified breakdown type. For example, breakdown type \"voice\" will return the usage of each voice along the time axis.",
         "parameters": [
           {
@@ -11348,7 +11375,7 @@
             "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
             "type": "string",
             "examples": [
-              "Joe Rogan"
+              "John Smith"
             ],
             "title": "New Name"
           }
@@ -11431,7 +11458,7 @@
             "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
             "type": "string",
             "examples": [
-              "Joe Rogan"
+              "John Smith"
             ],
             "title": "Name"
           },
@@ -12583,7 +12610,7 @@
             "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
             "type": "string",
             "examples": [
-              "Joe Rogan"
+              "John Smith"
             ],
             "title": "Name"
           },
@@ -13019,6 +13046,14 @@
             "type": "boolean",
             "default": false,
             "title": "Diarize"
+          },
+          "biased_keywords": {
+            "description": "A list of keywords and their biases.          The keywords are the words that you want to bias the transcription towards.           The biases decide how much the model should boost or suppress the keyword.           The biases should be numbers between -10 and 10. The number of keywords cannot exceed 100.          The length of each keyword must be less than 50 characters.          Each keyword-bias pair must be separated by a colon.          For example [\"keyword_a:0.42\", \"keyword_b:-0.5\"]",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Biased Keywords"
           }
         },
         "required": [
@@ -15296,6 +15331,23 @@
         ],
         "title": "DeleteDubbingResponseModel"
       },
+      "DeleteHistoryItemResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the deletion request. If the request was successful, the status will be 'ok'. Otherwise an error message with http code 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "DeleteHistoryItemResponse"
+      },
       "DeleteProjectResponseModel": {
         "type": "object",
         "properties": {
@@ -16111,38 +16163,56 @@
         "type": "object",
         "properties": {
           "thumbs_up": {
+            "description": "Whether the user liked the generated item.",
             "type": "boolean",
             "title": "Thumbs Up"
           },
           "feedback": {
+            "description": "The feedback text provided by the user.",
             "type": "string",
             "title": "Feedback"
           },
           "emotions": {
+            "description": "Whether the user provided emotions.",
             "type": "boolean",
             "title": "Emotions"
           },
           "inaccurate_clone": {
+            "description": "Whether the user thinks the clone is inaccurate.",
             "type": "boolean",
             "title": "Inaccurate Clone"
           },
           "glitches": {
+            "description": "Whether the user thinks there are glitches in the audio.",
             "type": "boolean",
             "title": "Glitches"
           },
           "audio_quality": {
+            "description": "Whether the user thinks the audio quality is good.",
             "type": "boolean",
             "title": "Audio Quality"
           },
           "other": {
+            "description": "Whether the user provided other feedback.",
             "type": "boolean",
             "title": "Other"
           },
           "review_status": {
+            "description": "The review status of the item. Defaults to 'not_reviewed'.",
             "type": "string",
             "default": "not_reviewed",
             "title": "Review Status"
           }
+        },
+        "example": {
+          "thumbs_up": true,
+          "feedback": "This is an example of test feedback.",
+          "emotions": true,
+          "inaccurate_clone": false,
+          "glitches": true,
+          "audio_quality": true,
+          "other": false,
+          "review_status": "not_reviewed"
         },
         "required": [
           "thumbs_up",
@@ -16938,6 +17008,7 @@
         "type": "object",
         "properties": {
           "history": {
+            "description": "A list of speech history items.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SpeechHistoryItemResponseModel"
@@ -16945,17 +17016,45 @@
             "title": "History"
           },
           "last_history_item_id": {
+            "description": "The ID of the last history item.",
             "type": "string",
             "title": "Last History Item Id"
           },
           "has_more": {
+            "description": "Whether there are more history items to fetch.",
             "type": "boolean",
             "title": "Has More"
           }
         },
+        "example": {
+          "history": [
+            {
+              "history_item_id": "ja9xsmfGhxYcymxGcOGB",
+              "request_id": "BF0BZg4IwLGBlaVjv9Im",
+              "voice_id": "21m00Tcm4TlvDq8ikWAM",
+              "model_id": "eleven_multilingual_v2",
+              "voice_name": "Rachel",
+              "voice_category": "premade",
+              "text": "Hello, world!",
+              "date_unix": 1714650306,
+              "character_count_change_from": 17189,
+              "character_count_change_to": 17231,
+              "content_type": "audio/mpeg",
+              "state": "created",
+              "settings": {
+                "similarity_boost": 0.5,
+                "stability": 0.71,
+                "style": 0,
+                "use_speaker_boost": true
+              },
+              "source": "TTS"
+            }
+          ],
+          "last_history_item_id": "ja9xsmfGhxYcymxGcOGB",
+          "has_more": true
+        },
         "required": [
           "history",
-          "last_history_item_id",
           "has_more"
         ],
         "title": "GetSpeechHistoryResponseModel"
@@ -17145,6 +17244,7 @@
         "type": "object",
         "properties": {
           "characters": {
+            "description": "The characters in the alignment.",
             "type": "array",
             "items": {
               "type": "string"
@@ -17152,6 +17252,7 @@
             "title": "Characters"
           },
           "character_start_times_seconds": {
+            "description": "The start times of the characters in seconds.",
             "type": "array",
             "items": {
               "type": "number"
@@ -17159,6 +17260,7 @@
             "title": "Character Start Times Seconds"
           },
           "character_end_times_seconds": {
+            "description": "The end times of the characters in seconds.",
             "type": "array",
             "items": {
               "type": "number"
@@ -17177,10 +17279,22 @@
         "type": "object",
         "properties": {
           "alignment": {
-            "$ref": "#/components/schemas/HistoryAlignmentResponseModel"
+            "description": "The alignment of the text.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HistoryAlignmentResponseModel"
+              }
+            ],
+            "title": "Alignment"
           },
           "normalized_alignment": {
-            "$ref": "#/components/schemas/HistoryAlignmentResponseModel"
+            "description": "The normalized alignment of the text.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HistoryAlignmentResponseModel"
+              }
+            ],
+            "title": "Normalized Alignment"
           }
         },
         "required": [
@@ -19933,26 +20047,32 @@
         "type": "object",
         "properties": {
           "history_item_id": {
+            "description": "The ID of the history item.",
             "type": "string",
             "title": "History Item Id"
           },
           "request_id": {
+            "description": "The ID of the request.",
             "type": "string",
             "title": "Request Id"
           },
           "voice_id": {
+            "description": "The ID of the voice used.",
             "type": "string",
             "title": "Voice Id"
           },
           "model_id": {
+            "description": "The ID of the model.",
             "type": "string",
             "title": "Model Id"
           },
           "voice_name": {
+            "description": "The name of the voice.",
             "type": "string",
             "title": "Voice Name"
           },
           "voice_category": {
+            "description": "The category of the voice. Either 'premade', 'cloned', 'generated' or 'professional'.",
             "type": "string",
             "enum": [
               "premade",
@@ -19963,26 +20083,32 @@
             "title": "Voice Category"
           },
           "text": {
+            "description": "The text used to generate the audio item.",
             "type": "string",
             "title": "Text"
           },
           "date_unix": {
+            "description": "Unix timestamp of when the item was created.",
             "type": "integer",
             "title": "Date Unix"
           },
           "character_count_change_from": {
+            "description": "The character count change from.",
             "type": "integer",
             "title": "Character Count Change From"
           },
           "character_count_change_to": {
+            "description": "The character count change to.",
             "type": "integer",
             "title": "Character Count Change To"
           },
           "content_type": {
+            "description": "The content type of the generated item.",
             "type": "string",
             "title": "Content Type"
           },
           "state": {
+            "description": "The state of the history item.",
             "type": "string",
             "enum": [
               "created",
@@ -19992,45 +20118,75 @@
             "title": "State"
           },
           "settings": {
+            "description": "The settings of the history item.",
             "type": "object",
             "title": "Settings"
           },
           "feedback": {
-            "$ref": "#/components/schemas/FeedbackResponseModel"
+            "description": "Feedback associated with the generated item. Returns null if no feedback has been provided.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FeedbackResponseModel"
+              }
+            ],
+            "title": "Feedback"
           },
           "share_link_id": {
+            "description": "The ID of the share link.",
             "type": "string",
             "title": "Share Link Id"
           },
           "source": {
+            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text) or STT (speech to text).",
             "type": "string",
             "enum": [
               "TTS",
-              "STS"
+              "STS",
+              "STT"
             ],
             "title": "Source"
           },
           "alignments": {
-            "$ref": "#/components/schemas/HistoryAlignmentsResponseModel"
+            "description": "The alignments of the history item.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HistoryAlignmentsResponseModel"
+              }
+            ],
+            "title": "Alignments"
           }
+        },
+        "example": {
+          "history_item_id": "ja9xsmfGhxYcymxGcOGB",
+          "request_id": "BF0BZg4IwLGBlaVjv9Im",
+          "voice_id": "21m00Tcm4TlvDq8ikWAM",
+          "model_id": "eleven_multilingual_v2",
+          "voice_name": "Rachel",
+          "voice_category": "premade",
+          "text": "Hello, world!",
+          "date_unix": 1714650306,
+          "character_count_change_from": 17189,
+          "character_count_change_to": 17231,
+          "content_type": "audio/mpeg",
+          "state": "created",
+          "settings": {
+            "similarity_boost": 0.5,
+            "stability": 0.71,
+            "style": 0,
+            "use_speaker_boost": true
+          },
+          "source": "TTS"
         },
         "required": [
           "history_item_id",
-          "request_id",
           "voice_id",
-          "model_id",
           "voice_name",
-          "voice_category",
           "text",
           "date_unix",
           "character_count_change_from",
           "character_count_change_to",
           "content_type",
-          "state",
-          "settings",
-          "feedback",
-          "share_link_id",
-          "source"
+          "state"
         ],
         "title": "SpeechHistoryItemResponseModel"
       },
@@ -20833,6 +20989,7 @@
         "type": "object",
         "properties": {
           "time": {
+            "description": "The time axis with unix timestamps for each day.",
             "type": "array",
             "items": {
               "type": "integer"
@@ -20840,6 +20997,7 @@
             "title": "Time"
           },
           "usage": {
+            "description": "The usage of each breakdown type along the time axis.",
             "type": "object",
             "additionalProperties": {
               "items": {
@@ -20848,6 +21006,18 @@
               "type": "array"
             },
             "title": "Usage"
+          }
+        },
+        "example": {
+          "time": [
+            1738252091000,
+            1739404800000
+          ],
+          "usage": {
+            "All": [
+              49,
+              1053
+            ]
           }
         },
         "required": [
@@ -21285,6 +21455,49 @@
             "type": "boolean",
             "default": false,
             "title": "Auto Generate Text"
+          },
+          "loudness": {
+            "description": "Controls the volume level of the generated voice. -1 is quietest, 1 is loudest, 0 corresponds to roughly -24 LUFS.",
+            "type": "number",
+            "default": 0.5,
+            "examples": [
+              0.5
+            ],
+            "maximum": 1,
+            "minimum": -1,
+            "title": "Loudness"
+          },
+          "quality": {
+            "description": "Higher quality results in better voice output but less variety.",
+            "type": "number",
+            "default": 0.9,
+            "examples": [
+              0.9
+            ],
+            "maximum": 1,
+            "minimum": -1,
+            "title": "Quality"
+          },
+          "seed": {
+            "description": "Random number that controls the voice generation. Same seed with same inputs produces same voice.",
+            "type": "integer",
+            "examples": [
+              11
+            ],
+            "maximum": 2147483647,
+            "minimum": 0,
+            "title": "Seed"
+          },
+          "guidance_scale": {
+            "description": "Controls how closely the AI follows the prompt. Lower numbers give the AI more freedom to be creative, while higher numbers force it to stick more to the prompt. High numbers can cause voice to sound artificial or robotic. We recommend to use longer, more detailed prompts at lower Guidance Scale.",
+            "type": "number",
+            "default": 5,
+            "examples": [
+              5
+            ],
+            "maximum": 100,
+            "minimum": 0,
+            "title": "Guidance Scale"
           }
         },
         "required": [

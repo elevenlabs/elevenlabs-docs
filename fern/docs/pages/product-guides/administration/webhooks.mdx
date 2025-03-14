@@ -7,10 +7,12 @@ subtitle: Enable external integrations by receiving webhook events.
 
 Certain events within ElevenLabs can be configured to trigger webhooks, allowing external applications and systems to receive and process these events as they occur. Currently supported event types include:
 
-| Event type                | Description                                                    |
-| ------------------------- | -------------------------------------------------------------- |
-| `post_call_transcription` | A conversational AI call has finished and analysis is complete |
-| `voice_removal_notice`    | A shared voice is scheduled to be removed                      |
+| Event type                       | Description                                                    |
+| -------------------------------- | -------------------------------------------------------------- |
+| `post_call_transcription`        | A conversational AI call has finished and analysis is complete |
+| `voice_removal_notice`           | A shared voice is scheduled to be removed                      |
+| `voice_removal_notice_withdrawn` | A shared voice is no longer scheduled for removal              |
+| `voice_removed`                  | A shared voice has been removed and is no longer useable       |
 
 ## Configuration
 
@@ -22,7 +24,7 @@ Webhooks can be created, disabled and deleted from the general settings page. Fo
 
 After creation, the webhook can be selected to listen for events within product settings such as [Conversational AI](/docs/conversational-ai/customization/personalization/post-call-webhooks).
 
-Webhooks can be disabled from the general settings page at any time. Webhooks that repeatedly fail are auto disabled after 10 consecutive failures over 7 or more days and require re-enabling from the settings page. Webhooks can be deleted if not in use by any products.
+Webhooks can be disabled from the general settings page at any time. Webhooks that repeatedly fail are auto disabled if there are 10 or more consecutive failures and the last successful delivery was more than 7 days ago or has never been successfully delivered. Auto-disabled webhooks require re-enabling from the settings page. Webhooks can be deleted if not in use by any products.
 
 ## Integration
 
@@ -48,8 +50,86 @@ Each webhook event is dispatched only once, refer to the [API](/docs/api-referen
     "conversation_id": "abc",
     "status": "done",
     "transcript": [
-      ...
-    ]
+      {
+        "role": "agent",
+        "message": "Hey there angelo. How are you?",
+        "tool_calls": null,
+        "tool_results": null,
+        "feedback": null,
+        "time_in_call_secs": 0,
+        "conversation_turn_metrics": null
+      },
+      {
+        "role": "user",
+        "message": "Hey, can you tell me, like, a fun fact about 11 Labs?",
+        "tool_calls": null,
+        "tool_results": null,
+        "feedback": null,
+        "time_in_call_secs": 2,
+        "conversation_turn_metrics": null
+      },
+      {
+        "role": "agent",
+        "message": "I do not have access to fun facts about Eleven Labs. However, I can share some general information about the company. Eleven Labs is an AI voice technology platform that specializes in voice cloning and text-to-speech...",
+        "tool_calls": null,
+        "tool_results": null,
+        "feedback": null,
+        "time_in_call_secs": 9,
+        "conversation_turn_metrics": {
+          "convai_llm_service_ttfb": {
+            "elapsed_time": 0.3704247010173276
+          },
+          "convai_llm_service_ttf_sentence": {
+            "elapsed_time": 0.5551181449554861
+          }
+        }
+      }
+    ],
+    "metadata": {
+      "start_time_unix_secs": 1739537297,
+      "call_duration_secs": 22,
+      "cost": 296,
+      "deletion_settings": {
+        "deletion_time_unix_secs": 1802609320,
+        "deleted_logs_at_time_unix_secs": null,
+        "deleted_audio_at_time_unix_secs": null,
+        "deleted_transcript_at_time_unix_secs": null,
+        "delete_transcript_and_pii": true,
+        "delete_audio": true
+      },
+      "feedback": {
+        "overall_score": null,
+        "likes": 0,
+        "dislikes": 0
+      },
+      "authorization_method": "authorization_header",
+      "charging": {
+        "dev_discount": true
+      },
+      "termination_reason": ""
+    },
+    "analysis": {
+      "evaluation_criteria_results": {},
+      "data_collection_results": {},
+      "call_successful": "success",
+      "transcript_summary": "The conversation begins with the agent asking how Angelo is, but Angelo redirects the conversation by requesting a fun fact about 11 Labs. The agent acknowledges they don't have specific fun facts about Eleven Labs but offers to provide general information about the company. They briefly describe Eleven Labs as an AI voice technology platform specializing in voice cloning and text-to-speech technology. The conversation is brief and informational, with the agent adapting to the user's request despite not having the exact information asked for."
+    },
+    "conversation_initiation_client_data": {
+      "conversation_config_override": {
+        "agent": {
+          "prompt": null,
+          "first_message": null,
+          "language": "en"
+        },
+        "tts": {
+          "voice_id": null
+        }
+      },
+      "custom_llm_extra_body": {},
+      "dynamic_variables": {
+        "user_name": "angelo"
+      }
+    }
   }
 }
 ```

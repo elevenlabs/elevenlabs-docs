@@ -77,6 +77,15 @@ channels:
               description: This parameter focuses on reducing the latency by disabling the chunk schedule and all buffers. It is only recommended when sending full sentences or phrases, sending partial phrases will result in highly reduced quality. By default it's set to false.
               type: boolean
               default: false
+            apply_text_normalization:
+              description: >-
+                This parameter controls text normalization with three modes - 'auto', 'on', and 'off'. When set to 'auto', 
+                the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', 
+                text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 
+                'eleven_turbo_v2_5' model. Defaults to 'auto'.
+              type: string
+              enum: ['auto', 'on', 'off']
+              default: false
     publish:
       description: Send messages to the WebSocket
       operationId: sendMessage
@@ -151,7 +160,16 @@ components:
           $ref: '#/components/schemas/RealtimeVoiceSettings'
         generation_config:
           $ref: '#/components/schemas/GenerationConfig'
-          description: 'This property should only be provided in the first message you send. '
+          description: 'This property should only be provided in the first message you send.'
+        pronunciation_dictionary_locators:
+          type: array
+          items:
+            $ref: '#/components/schemas/PronunciationDictionaryLocator'
+          description: |
+            Optional list of pronunciation dictionary locators. If provided, these dictionaries will be used to 
+            modify pronunciation of matching text. Must only be provided in the first message.
+
+            Note: Pronunciation dictionary matches will only be respected within a provided chunk.
         xi-api-key:
           type: string
           description: |
@@ -377,3 +395,17 @@ components:
             A list of characters in the text sequence. For instance, the first character is 'H'.
             Note that this list may contain spaces, punctuation, and other special characters.
             The length of this list should be the same as the lengths of `char_start_times_ms` and `chars_durations_ms`.
+
+    PronunciationDictionaryLocator:
+      type: object
+      description: Identifies a specific pronunciation dictionary to use
+      properties:
+        dictionary_id:
+          type: string
+          description: The unique identifier of the pronunciation dictionary
+        version_id:
+          type: string
+          description: The version identifier of the pronunciation dictionary
+      required:
+        - dictionary_id
+        - version_id
