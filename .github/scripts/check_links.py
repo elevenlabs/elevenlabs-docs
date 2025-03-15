@@ -9,9 +9,7 @@ import sys
 
 def slugify(text):
     """Convert text to URL-friendly slug format."""
-    # Replace non-alphanumeric characters with hyphens
     slug = re.sub(r'[^a-zA-Z0-9]+', '-', text.lower())
-    # Remove leading/trailing hyphens
     slug = slug.strip('-')
     return slug
 
@@ -28,11 +26,9 @@ def extract_valid_paths(nav_data):
         if not isinstance(item, dict):
             return
             
-        # Initialize section paths if not provided
         if section_paths is None:
             section_paths = []
             
-        # Handle direct path definitions
         if 'path' in item:
             direct_path = item['path'].replace('docs/pages/', '/docs/').replace('.mdx', '')
             valid_paths.add(direct_path)
@@ -42,24 +38,20 @@ def extract_valid_paths(nav_data):
             for i in range(3, len(parts)):  # Start from /docs/something
                 valid_paths.add('/'.join(parts[:i]))
         
-        # Handle page definitions (this is where most paths will come from)
         if 'page' in item:
             page_title = item['page']
             page_slug = item.get('slug', slugify(page_title))
             
             # Add the path for this page based on tab and section context
             if tab_path:
-                # Build path with section context if available
                 full_path = tab_path
                 if section_paths:
-                    # Add the section path itself as valid
                     for i in range(1, len(section_paths) + 1):
                         section_path = f"{tab_path}/{'/'.join(section_paths[:i])}"
                         valid_paths.add(section_path)
                     
                     full_path = f"{tab_path}/{'/'.join(section_paths)}"
                 
-                # Add the page slug
                 full_path = f"{full_path}/{page_slug}"
                 valid_paths.add(full_path)
         
@@ -72,26 +64,21 @@ def extract_valid_paths(nav_data):
             if not item.get('skip-slug', False):
                 new_section_paths = section_paths + [section_slug]
                 
-                # Add this section path as valid
                 if tab_path:
                     section_path = f"{tab_path}/{'/'.join(new_section_paths)}"
                     valid_paths.add(section_path)
             else:
                 new_section_paths = section_paths
                 
-            # Process contents of the section with updated section path
             if 'contents' in item and isinstance(item['contents'], list):
                 for content in item['contents']:
                     process_item(content, tab_path, new_section_paths)
-            # Handle case where contents is a dictionary
             elif 'contents' in item and isinstance(item['contents'], dict):
                 process_item(item['contents'], tab_path, new_section_paths)
         
-        # Process non-section content items
         elif 'contents' in item and isinstance(item['contents'], list):
             for content in item['contents']:
                 process_item(content, tab_path, section_paths)
-        # Handle case where contents is a dictionary
         elif 'contents' in item and isinstance(item['contents'], dict):
             process_item(item['contents'], tab_path, section_paths)
                 
@@ -141,11 +128,13 @@ def find_doc_links(content):
         'Warning',
         'Info',
         'CardGroup',
+        'Step',
+        'Steps'
     ]
     
     # Add patterns for MDX components
     for component in mdx_components:
-        patterns.append(f'<{component}[^>]*?href="(\/docs\/[^"\'\s\)]+)"')
+        patterns.append(fr'<{component}[^>]*?href="(/docs/[^"\'\s\)]+)"')
     
     # Find all matches
     for pattern in patterns:
