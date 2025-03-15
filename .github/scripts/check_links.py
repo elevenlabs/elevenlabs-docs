@@ -4,8 +4,16 @@ import re
 import os
 import sys
 
-# this script checks that all links in the docs that are internal link to valid docs pages 
-# this currently ignores paths that are /docs/api-reference/... , v2 should check those as well. 
+# This script checks that all links in the docs that are internal links point to valid docs pages 
+# This currently ignores paths that are /docs/api-reference/... , v2 should check those as well.
+
+def slugify(text):
+    """Convert text to URL-friendly slug format."""
+    # Replace non-alphanumeric characters with hyphens
+    slug = re.sub(r'[^a-zA-Z0-9]+', '-', text.lower())
+    # Remove leading/trailing hyphens
+    slug = slug.strip('-')
+    return slug
 
 def load_docs_yml(yaml_path):
     """Load and parse the docs.yml file."""
@@ -16,31 +24,70 @@ def extract_valid_paths(nav_data):
     """Extract all valid documentation paths from the navigation structure."""
     valid_paths = set()
     
-    def process_item(item):
-        if isinstance(item, dict):
-            # Handle direct page definitions
-            if 'path' in item:
-                # Convert MDX path to docs URL path
-                path = item['path'].replace('docs/pages/', '/docs/').replace('.mdx', '')
-                valid_paths.add(path)
+    def process_item(item, tab_path=None, section_paths=None):
+        if not isinstance(item, dict):
+            return
             
-            # Handle sections and their contents
-            for value in item.values():
-                if isinstance(value, (list, dict)):
-                    process_items(value)
-                    
-    def process_items(items):
-        if isinstance(items, list):
-            for item in items:
-                process_item(item)
-        elif isinstance(items, dict):
-            process_item(items)
-
-    # Process navigation structure
+        # Initialize section paths if not provided
+        if section_paths is None:
+            section_paths = []
+            
+        # Handle direct path definitions
+        if 'path' in item:
+            direct_path = item['path'].replace('docs/pages/', '/docs/').replace('.mdx', '')
+            valid_paths.add(direct_path)
+        
+        # Handle page definitions (this is where most paths will come from)
+        if 'page' in item:
+            page_title = item['page']
+            page_slug = item.get('slug', slugify(page_title))
+            
+            # Add the path for this page based on tab and section context
+            if tab_path:
+                # Build path with section context if available
+                full_path = f"{tab_path}"
+                if section_paths:
+                    full_path = f"{full_path}/{'/'.join(section_paths)}"
+                
+                # Add the page slug
+                full_path = f"{full_path}/{page_slug}"
+                valid_paths.add(full_path)
+        
+        # Handle section definitions
+        if 'section' in item:
+            section_title = item['section']
+            section_slug = item.get('slug', slugify(section_title))
+            
+            # Skip adding the section to path if skip-slug is true
+            if not item.get('skip-slug', False):
+                new_section_paths = section_paths + [section_slug]
+            else:
+                new_section_paths = section_paths
+                
+            # Process contents of the section with updated section path
+            if 'contents' in item and isinstance(item['contents'], list):
+                for content in item['contents']:
+                    process_item(content, tab_path, new_section_paths)
+        
+        # Process non-section content items
+        elif 'contents' in item and isinstance(item['contents'], list):
+            for content in item['contents']:
+                process_item(content, tab_path, section_paths)
+                
+    # Process navigation structure for each tab
     for tab in nav_data.get('navigation', []):
-        if 'layout' in tab:
-            process_items(tab['layout'])
+        tab_name = tab.get('tab')
+        
+        if 'layout' in tab and tab_name and isinstance(tab['layout'], list):
+            tab_path = f"/docs/{tab_name}"
             
+            # Add the base tab path
+            valid_paths.add(tab_path)
+            
+            # Process all items under this tab
+            for item in tab['layout']:
+                process_item(item, tab_path)
+    
     # Add redirects to valid paths
     redirects = nav_data.get('redirects', [])
     for redirect in redirects:
@@ -107,6 +154,10 @@ def validate_links(docs_dir, valid_paths):
                     for link in links:
                         # Skip links that start with /docs/api-reference
                         if link.startswith('/docs/api-reference'):
+                            continue
+                        
+                        # Skip non-docs links
+                        if not link.startswith('/docs/'):
                             continue
                             
                         # Remove any anchor tags from the link
