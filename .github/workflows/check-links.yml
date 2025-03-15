@@ -1,0 +1,31 @@
+name: Check Documentation Links
+
+on:
+  pull_request:
+    paths:
+      - 'fern/**'
+      - '.github/workflows/check-links.yml'
+      - '.github/scripts/check_links.py'
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Make script executable
+        run: chmod +x .github/scripts/check_links.py
+
+      - name: Check documentation links
+        run: python .github/scripts/check_links.py
