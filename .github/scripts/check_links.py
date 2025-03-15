@@ -36,6 +36,11 @@ def extract_valid_paths(nav_data):
         if 'path' in item:
             direct_path = item['path'].replace('docs/pages/', '/docs/').replace('.mdx', '')
             valid_paths.add(direct_path)
+            
+            # Add parent paths as valid too
+            parts = direct_path.split('/')
+            for i in range(3, len(parts)):  # Start from /docs/something
+                valid_paths.add('/'.join(parts[:i]))
         
         # Handle page definitions (this is where most paths will come from)
         if 'page' in item:
@@ -45,9 +50,14 @@ def extract_valid_paths(nav_data):
             # Add the path for this page based on tab and section context
             if tab_path:
                 # Build path with section context if available
-                full_path = f"{tab_path}"
+                full_path = tab_path
                 if section_paths:
-                    full_path = f"{full_path}/{'/'.join(section_paths)}"
+                    # Add the section path itself as valid
+                    for i in range(1, len(section_paths) + 1):
+                        section_path = f"{tab_path}/{'/'.join(section_paths[:i])}"
+                        valid_paths.add(section_path)
+                    
+                    full_path = f"{tab_path}/{'/'.join(section_paths)}"
                 
                 # Add the page slug
                 full_path = f"{full_path}/{page_slug}"
@@ -61,6 +71,11 @@ def extract_valid_paths(nav_data):
             # Skip adding the section to path if skip-slug is true
             if not item.get('skip-slug', False):
                 new_section_paths = section_paths + [section_slug]
+                
+                # Add this section path as valid
+                if tab_path:
+                    section_path = f"{tab_path}/{'/'.join(new_section_paths)}"
+                    valid_paths.add(section_path)
             else:
                 new_section_paths = section_paths
                 
@@ -68,11 +83,17 @@ def extract_valid_paths(nav_data):
             if 'contents' in item and isinstance(item['contents'], list):
                 for content in item['contents']:
                     process_item(content, tab_path, new_section_paths)
+            # Handle case where contents is a dictionary
+            elif 'contents' in item and isinstance(item['contents'], dict):
+                process_item(item['contents'], tab_path, new_section_paths)
         
         # Process non-section content items
         elif 'contents' in item and isinstance(item['contents'], list):
             for content in item['contents']:
                 process_item(content, tab_path, section_paths)
+        # Handle case where contents is a dictionary
+        elif 'contents' in item and isinstance(item['contents'], dict):
+            process_item(item['contents'], tab_path, section_paths)
                 
     # Process navigation structure for each tab
     for tab in nav_data.get('navigation', []):
@@ -93,6 +114,8 @@ def extract_valid_paths(nav_data):
     for redirect in redirects:
         if 'destination' in redirect:
             valid_paths.add(redirect['destination'])
+        if 'source' in redirect:
+            valid_paths.add(redirect['source'])
 
     return valid_paths
 
@@ -147,21 +170,27 @@ def validate_links(docs_dir, valid_paths):
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
                         
-                    # Find all /docs/ links in the file
                     links = find_doc_links(content)
                     
-                    # Check each link against valid paths
                     for link in links:
                         # Skip links that start with /docs/api-reference
                         if link.startswith('/docs/api-reference'):
                             continue
+                        # Skip links that start with /docs/conversational-ai/api-reference
+                        if link.startswith('/docs/conversational-ai/api-reference'):
+                            continue
                         
                         # Skip non-docs links
-                        if not link.startswith('/docs/'):
+                        if not link.startswith('/docs/') and not (link.startswith('https://elevenlabs.io/docs/') or link.startswith('http://elevenlabs.io/docs/')):
                             continue
                             
-                        # Remove any anchor tags from the link
-                        base_link = link.split('#')[0]
+                        # Remove domain part from absolute URLs
+                        if link.startswith(('https://elevenlabs.io', 'http://elevenlabs.io')):
+                            base_link = link.replace('https://elevenlabs.io', '').replace('http://elevenlabs.io', '').split('#')[0]
+                        else:
+                            # Remove any anchor tags from the link
+                            base_link = link.split('#')[0]
+                            
                         if base_link not in valid_paths:
                             invalid_links.append({
                                 'file': file_path,
