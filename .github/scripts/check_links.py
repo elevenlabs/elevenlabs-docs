@@ -110,13 +110,13 @@ def find_doc_links(content):
     """Find all /docs/ links in the content."""
     links = set()
     
-    # Pattern for standard markdown links and href attributes
+    # Pattern for standard markdown links and href attributes - improved to handle escaped quotes
     patterns = [
-        r'(?:href=["\'])(\/docs\/[^"\'\s\)]+)',  # href="..." or href='...'
-        r'(?:destination:\s*)(\/docs\/[^"\'\s\)]+)',  # destination: ...
-        r'\[.*?\]\((\/docs\/[^"\'\s\)]+)\)',  # [...](...) markdown links
-        r'(?:title=".*?" href=")(\/docs\/[^"\'\s\)]+)',  # Component href attributes
-        r'(?:href=")(\/docs\/[^"\'\s\)]+)(?:".*?title=")',  # Reverse order of title and href
+        r'(?:href=["\'"])(\/docs\/[^"\'"\s\)]+)',  # href="..." or href='...' with escaped quotes
+        r'(?:destination:\s*)(\/docs\/[^"\'"\s\)]+)',  # destination: ...
+        r'\[.*?\]\((\/docs\/[^"\'"\s\)]+)\)',  # [...](...) markdown links
+        r'(?:title=".*?" href=")(\/docs\/[^"\'"\s\)]+)',  # Component href attributes
+        r'(?:href=")(\/docs\/[^"\'"\s\)]+)(?:".*?title=")',  # Reverse order of title and href
     ]
     
     # Special handling for MDX components
@@ -149,6 +149,7 @@ def find_doc_links(content):
 def validate_links(docs_dir, valid_paths):
     """Validate all /docs/ links in the documentation files."""
     invalid_links = []
+    file_errors = []
     
     # Walk through all files in the docs directory
     for root, _, files in os.walk(docs_dir):
@@ -186,10 +187,13 @@ def validate_links(docs_dir, valid_paths):
                                 'link': link
                             })
                 except Exception as e:
-                    print(f"Error processing file {file_path}: {str(e)}")
-                    sys.exit(1)
+                    # Collect errors instead of exiting
+                    file_errors.append({
+                        'file': file_path,
+                        'error': str(e)
+                    })
     
-    return invalid_links
+    return invalid_links, file_errors
 
 def main():
     # Paths configuration
@@ -205,19 +209,32 @@ def main():
         sys.exit(1)
     
     # Validate links
-    invalid_links = validate_links(docs_dir, valid_paths)
+    invalid_links, file_errors = validate_links(docs_dir, valid_paths)
     
     # Report results
+    has_errors = False
+    
+    if file_errors:
+        has_errors = True
+        print("\n⚠️ Encountered errors processing these files:")
+        for item in file_errors:
+            print(f"\nFile: {item['file']}")
+            print(f"Error: {item['error']}")
+        print(f"\nTotal file errors: {len(file_errors)}")
+    
     if invalid_links:
+        has_errors = True
         print("\n❌ Found broken internal links:")
         for item in invalid_links:
             print(f"\nFile: {item['file']}")
             print(f"Invalid link: {item['link']}")
         print(f"\nTotal broken links found: {len(invalid_links)}")
-        sys.exit(1)
-    else:
+    
+    if not has_errors:
         print("✅ All internal links are valid!")
         sys.exit(0)
+    else:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
