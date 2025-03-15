@@ -19,11 +19,28 @@ Here are a few examples where dynamic variables are useful:
 - **Including account details** in responses
 - **Passing data** to tool calls
 - **Customizing behavior** based on subscription tiers
+- **Accessing system information** like conversation ID or call duration
 
 <Info>
   Dynamic variables are ideal for injecting user-specific data that shouldn't be hardcoded into your
   agent's configuration.
 </Info>
+
+## System Variables
+
+The following system variables are automatically available in your agent:
+
+- `system__agent_id` - The unique identifier of the agent
+- `system__caller_id` - The phone number of the caller (for voice calls)
+- `system__called_number` - The phone number that was called (for voice calls)
+- `system__call_duration_secs` - Duration of the call in seconds
+- `system__time_utc` - Current UTC time in ISO format
+- `system__conversation_id` - Unique identifier for the conversation
+
+<Warning>
+  Custom dynamic variables cannot start with `system__` as this prefix is reserved for system
+  variables.
+</Warning>
 
 ## Guide
 
