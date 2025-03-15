@@ -331,7 +331,10 @@ components:
           description: |
             A generated partial audio chunk, encoded using the selected output_format, by default this
             is MP3 encoded as a base64 string.
-
+        normalizedAlignment:
+          $ref: '#/components/schemas/NormalizedAlignment'
+        alignment:
+          $ref: '#/components/schemas/Alignment'
     FinalOutput:
       type: object
       properties:
@@ -339,10 +342,6 @@ components:
           x-fern-type: literal<true>
           description: |
             Indicates if the generation is complete. If set to `True`, `audio` will be null.
-        normalizedAlignment:
-          $ref: '#/components/schemas/NormalizedAlignment'
-        alignment:
-          $ref: '#/components/schemas/Alignment'
 
     NormalizedAlignment:
       type: object
