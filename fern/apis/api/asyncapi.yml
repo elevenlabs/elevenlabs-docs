@@ -216,11 +216,11 @@ components:
       properties:
         text:
           type: string
-          description: The text to be sent to the API for audio generation. SHould always end with a single space string.
+          description: The text to be sent to the API for audio generation. Should always end with a single space string.
         try_trigger_generation:
           description: |
             This is an advanced setting that most users shouldn't need to use. It relates to our generation schedule
-            explained [here](#understanding-how-our-websockets-buffer-text).
+            explained [here](/docs/api-reference/web-sockets#understanding-how-our-websockets-buffer-text).
 
             Use this to attempt to immediately trigger the generation of audio, overriding the `chunk_length_schedule`.
             Unlike flush, `try_trigger_generation` will only generate audio if our
@@ -232,8 +232,10 @@ components:
             really need text to be processed immediately. We generally recommend keeping the default value of
             `false` and adjusting the `chunk_length_schedule` in the `generation_config` instead.
           type: boolean
+          default: false
         voice_settings:
           type: object
+          description: The voice settings field can be provided in the first `InitializeConnection` message and then must either be not provided or not changed.
           properties:
             stability:
               type: number
@@ -257,6 +259,7 @@ components:
               default: 1.0
         generator_config:
           type: object
+          description: The generator config field can be provided in the first `InitializeConnection` message and then must either be not provided or not changed.
           properties:
             chunk_length_schedule:
               type: array
@@ -264,7 +267,7 @@ components:
                 type: number
               description: |
                 This is an advanced setting that most users shouldn't need to use. It relates to our
-                generation schedule explained [here](https://elevenlabs.io/docs/api-reference/websockets#understanding-how-our-websockets-buffer-text).
+                generation schedule explained [here](/docs/api-reference/web-sockets#understanding-how-our-websockets-buffer-text).
 
                 Determines the minimum amount of text that needs to be sent and present in our
                 buffer before audio starts being generated. This is to maximise the amount of context available to
@@ -288,6 +291,7 @@ components:
             Flush forces the generation of audio. Set this value to true when you have finished sending text, but want to keep the websocket connection open.
 
             This is useful when you want to ensure that the last chunk of audio is generated even when the length of text sent is smaller than the value set in chunk_length_schedule (e.g. 120 or 50).
+          default: false
     RealtimeVoiceSettings:
       properties:
         stability:
@@ -325,7 +329,7 @@ components:
             type: number
           description: |
             This is an advanced setting that most users shouldn't need to use. It relates to our
-            generation schedule explained [here](https://elevenlabs.io/docs/api-reference/websockets#understanding-how-our-websockets-buffer-text).
+            generation schedule explained [here](/docs/api-reference/web-sockets#understanding-how-our-websockets-buffer-text).
 
             Determines the minimum amount of text that needs to be sent and present in our
             buffer before audio starts being generated. This is to maximise the amount of context available to
