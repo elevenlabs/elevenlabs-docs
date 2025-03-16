@@ -192,11 +192,13 @@ components:
         xi-api-key:
           type: string
           description: |
-            Your ElevenLabs API key. This is a required parameter that should be provided in the first message you send.
-            You can find your API key in the [API Keys section](https://elevenlabs.io/docs/api-reference/websockets#api-keys).
+            Your ElevenLabs API key. This can only be included in the first message and is not needed if present in the header.
+        authorization:
+          type: string
+          description: |
+            Your authorization bearer token. This can only be included in the first message and is not needed if present in the header.
       required:
         - text
-        - xi-api-key
 
     CloseConnection:
       type: object
