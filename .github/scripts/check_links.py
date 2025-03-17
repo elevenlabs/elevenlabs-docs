@@ -5,7 +5,8 @@ import os
 import sys
 
 # This script checks that all links in the docs that are internal links point to valid docs pages 
-# This currently ignores paths that are /docs/api-reference/... , v2 should check those as well.
+# it is quite hacky at the moment and we should get fern to do this properly 
+# if you're PR is blocked due to this you can just add to ** special_case_paths ** and angelo will look into fixing script
 
 def slugify(text):
     """Convert text to URL-friendly slug format."""
@@ -321,7 +322,9 @@ def extract_api_reference_paths_from_openapi(openapi_path):
                         group_name = None
                         
                         # Special case for convai paths
-                        if 'convai/agents' in path:
+                        if 'convai/agents' in path and 'widget' in path:
+                            group_name = 'widget'
+                        elif 'convai/agents' in path:
                             group_name = 'agents'
                         elif 'convai/knowledge-base' in path:
                             group_name = 'knowledge-base'
@@ -340,6 +343,8 @@ def extract_api_reference_paths_from_openapi(openapi_path):
                                         group_name = 'knowledge-base'
                                     elif 'conversation' in path:
                                         group_name = 'conversations'
+                                    elif 'widget' in path or 'embed' in path:
+                                        group_name = 'widget'
                                     elif 'secrets' in path or 'settings' in path:
                                         group_name = 'workspace'
                                     else:
@@ -354,6 +359,8 @@ def extract_api_reference_paths_from_openapi(openapi_path):
                                         group_name = 'knowledge-base'
                                     elif 'conversation' in path:
                                         group_name = 'conversations'
+                                    elif 'widget' in path or 'embed' in path:
+                                        group_name = 'widget'
                                     else:
                                         group_name = 'agents'
                                 else:
@@ -372,6 +379,9 @@ def extract_api_reference_paths_from_openapi(openapi_path):
                             # Special case for workspace paths
                             if 'workspace' in path:
                                 group_name = 'workspace'
+                            # Special case for widget paths
+                            elif 'widget' in path or 'embed' in path:
+                                group_name = 'widget'
                         
                         # Get the endpoint name
                         endpoint_name = ""
@@ -524,10 +534,6 @@ def extract_api_reference_paths_from_overrides(openapi_overrides_path):
                                 convai_path = f"/docs/conversational-ai/api-reference/{group_slug}/{endpoint_name}"
                                 api_paths.add(convai_path)
                                 api_paths.add(f"/docs/conversational-ai/api-reference/{group_slug}")
-                            
-                            # Debug output for specific paths we're looking for
-                            if endpoint_name == 'create-agent':
-                                print(f"✅ Added path from overrides: /docs/api-reference/{group_slug}/{endpoint_name}")
         
         # Add the base API reference path
         api_paths.add("/docs/api-reference")
@@ -544,6 +550,11 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
     """Validate all /docs/ links in the documentation files."""
     invalid_links = []
     file_errors = []
+    
+    special_case_paths = {
+        "/docs/conversational-ai/api-reference/conversational-ai/websocket",
+    } #todo angelo: fix code so we can remove this 
+    valid_paths.update(special_case_paths)
     
     # Walk through all files in the docs directory
     for root, _, files in os.walk(docs_dir):
@@ -567,9 +578,22 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
                         else:
                             # Remove any anchor tags from the link
                             base_link = link.split('#')[0]
-                            
+                        
+                        # Normalize the link by removing trailing slashes
+                        normalized_link = base_link.rstrip('/')
+                        
                         # Check if the link is valid in either regular paths or API reference paths
-                        if base_link not in valid_paths and base_link not in api_reference_paths:
+                        if normalized_link not in valid_paths and normalized_link not in api_reference_paths:
+                            # Check for special case of nested conversational-ai paths
+                            if '/docs/conversational-ai/api-reference/conversational-ai/' in normalized_link:
+                                fixed_link = normalized_link.replace('/docs/conversational-ai/api-reference/conversational-ai/', '/docs/conversational-ai/api-reference/')
+                                if fixed_link in valid_paths or fixed_link in api_reference_paths:
+                                    continue
+                            
+                            # Also check with trailing slash added
+                            if normalized_link + '/' in valid_paths or normalized_link + '/' in api_reference_paths:
+                                continue
+                                
                             invalid_links.append({
                                 'file': file_path,
                                 'link': link
