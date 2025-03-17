@@ -407,10 +407,6 @@ def extract_api_reference_paths_from_openapi(openapi_path):
                                 convai_path = f"/docs/conversational-ai/api-reference/{group_slug}/{endpoint_name}"
                                 api_paths.add(convai_path)
                                 api_paths.add(f"/docs/conversational-ai/api-reference/{group_slug}")
-                                
-                            # Debug output for specific paths
-                            if 'speech-to-text' in path:
-                                print(f"✅ Added speech-to-text path: /docs/api-reference/{group_slug}/{endpoint_name}")
         
         # Add base paths
         api_paths.add("/docs/api-reference")
