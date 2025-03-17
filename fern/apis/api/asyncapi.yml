@@ -179,7 +179,6 @@ components:
           $ref: '#/components/schemas/RealtimeVoiceSettings'
         generation_config:
           $ref: '#/components/schemas/GenerationConfig'
-          description: 'This property should only be provided in the first message you send.'
         pronunciation_dictionary_locators:
           type: array
           items:
@@ -234,57 +233,11 @@ components:
           type: boolean
           default: false
         voice_settings:
-          type: object
+          $ref: '#/components/schemas/RealtimeVoiceSettings'
           description: The voice settings field can be provided in the first `InitializeConnection` message and then must either be not provided or not changed.
-          properties:
-            stability:
-              type: number
-              description: Defines the stability for voice settings.
-              default: 0.5
-            similarity_boost:
-              type: number
-              description: Defines the similarity boost for voice settings.
-              default: 0.5
-            style:
-              type: number
-              description: Defines the style for voice settings. Available on V2+ models.
-              default: 0.0
-            use_speaker_boost:
-              type: boolean
-              description: Defines whether to use speaker boost for voice settings. Available on V2+ models.
-              default: true
-            speed:
-              type: number
-              description: Controls the speed of the generated speech. Values range from 0.7 to 1.2, with 1.0 being the default speed.
-              default: 1.0
         generator_config:
-          type: object
-          description: The generator config field can be provided in the first `InitializeConnection` message and then must either be not provided or not changed.
-          properties:
-            chunk_length_schedule:
-              type: array
-              items:
-                type: number
-              description: |
-                This is an advanced setting that most users shouldn't need to use. It relates to our
-                generation schedule explained [here](/docs/api-reference/web-sockets#understanding-how-our-websockets-buffer-text).
-
-                Determines the minimum amount of text that needs to be sent and present in our
-                buffer before audio starts being generated. This is to maximise the amount of context available to
-                the model to improve audio quality, whilst balancing latency of the returned audio chunks.
-
-                The default value is: [120, 160, 250, 290].
-
-                This means that the first chunk of audio will not be generated until you send text that
-                totals at least 120 characters long. The next chunk of audio will only be generated once a
-                further 160 characters have been sent. The third audio chunk will be generated after the
-                next 250 characters. Then the fourth, and beyond, will be generated in sets of at least 290 characters.
-
-                Customize this array to suit your needs. If you want to generate audio more frequently
-                to optimise latency, you can reduce the values in the array. Note that setting the values
-                too low may result in lower quality audio. Please test and adjust as needed.
-
-                Each item should be in the range 50-500.
+          $ref: '#/components/schemas/GenerationConfig'
+          description: 'This property can be set in the first message you send and if it is provided must not be different.'
         flush:
           type: boolean
           description: |
@@ -329,13 +282,19 @@ components:
             type: number
           description: |
             This is an advanced setting that most users shouldn't need to use. It relates to our
-            generation schedule explained [here](/docs/api-reference/web-sockets#understanding-how-our-websockets-buffer-text).
+            generation schedule.
 
-            Determines the minimum amount of text that needs to be sent and present in our
+            Our WebSocket service incorporates a buffer system designed to optimize the Time To First Byte (TTFB) while maintaining high-quality streaming.
+
+            All text sent to the WebSocket endpoint is added to this buffer and only when that buffer reaches a certain size is an audio generation attempted. This is because our model provides higher quality audio when the model has longer inputs, and can deduce more context about how the text should be delivered.
+
+            The buffer ensures smooth audio data delivery and is automatically emptied with a final audio generation either when the stream is closed, or upon sending a `flush` command. We have advanced settings for changing the chunk schedule, which can improve latency at the cost of quality by generating audio more frequently with smaller text inputs.
+
+            The `chunk_length_schedule` determines the minimum amount of text that needs to be sent and present in our
             buffer before audio starts being generated. This is to maximise the amount of context available to
             the model to improve audio quality, whilst balancing latency of the returned audio chunks.
 
-            The default value is: [120, 160, 250, 290].
+            The default value for `chunk_length_schedule` is: [120, 160, 250, 290].
 
             This means that the first chunk of audio will not be generated until you send text that
             totals at least 120 characters long. The next chunk of audio will only be generated once a
