@@ -85,7 +85,17 @@ channels:
                 'eleven_turbo_v2_5' model. Defaults to 'auto'.
               type: string
               enum: ['auto', 'on', 'off']
-              default: false
+              default: 'auto'
+            seed:
+              description: >-
+                If specified, our system will make a best effort to sample deterministically, such that repeated requests 
+                with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be an
+                integer between 0 and 4294967295.
+              type: integer
+              minimum: 0
+              maximum: 4294967295
+              example: 12345
+
     publish:
       description: Send messages to the WebSocket
       operationId: sendMessage
@@ -127,6 +137,15 @@ channels:
             messageId: AudioOutput
             value:
               audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
+              isFinal: false
+              normalizedAlignment:
+                char_start_times_ms: [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21]
+                chars_durations_ms: [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+                chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+              alignment:
+                char_start_times_ms: [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21]
+                chars_durations_ms: [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+                chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
 components:
   messages:
     SendText:
@@ -160,7 +179,6 @@ components:
           $ref: '#/components/schemas/RealtimeVoiceSettings'
         generation_config:
           $ref: '#/components/schemas/GenerationConfig'
-          description: 'This property should only be provided in the first message you send.'
         pronunciation_dictionary_locators:
           type: array
           items:
@@ -173,11 +191,13 @@ components:
         xi-api-key:
           type: string
           description: |
-            Your ElevenLabs API key. This is a required parameter that should be provided in the first message you send.
-            You can find your API key in the [API Keys section](https://elevenlabs.io/docs/api-reference/websockets#api-keys).
+            Your ElevenLabs API key. This can only be included in the first message and is not needed if present in the header.
+        authorization:
+          type: string
+          description: |
+            Your authorization bearer token. This can only be included in the first message and is not needed if present in the header.
       required:
         - text
-        - xi-api-key
 
     CloseConnection:
       type: object
@@ -195,11 +215,10 @@ components:
       properties:
         text:
           type: string
-          description: The text to be sent to the API for audio generation. SHould always end with a single space string.
+          description: The text to be sent to the API for audio generation. Should always end with a single space string.
         try_trigger_generation:
           description: |
-            This is an advanced setting that most users shouldn't need to use. It relates to our generation schedule
-            explained [here](#understanding-how-our-websockets-buffer-text).
+            This is an advanced setting that most users shouldn't need to use. It relates to our generation schedule.
 
             Use this to attempt to immediately trigger the generation of audio, overriding the `chunk_length_schedule`.
             Unlike flush, `try_trigger_generation` will only generate audio if our
@@ -211,87 +230,48 @@ components:
             really need text to be processed immediately. We generally recommend keeping the default value of
             `false` and adjusting the `chunk_length_schedule` in the `generation_config` instead.
           type: boolean
+          default: false
         voice_settings:
-          type: object
-          properties:
-            stability:
-              type: number
-              description: Defines the stability for voice settings.
-            similarity_boost:
-              type: number
-              description: Defines the similarity boost for voice settings.
-            style:
-              type: number
-              description: Defines the style for voice settings. Available on V2+ models.
-            use_speaker_boost:
-              type: boolean
-              description: Defines whether to use speaker boost for voice settings. Available on V2+ models.
-            speed:
-              type: number
-              description: Controls the speed of the generated speech. Values range from 0.7 to 1.2, with 1.0 being the default speed.
-          required:
-            - stability
-            - similarity_boost
+          $ref: '#/components/schemas/RealtimeVoiceSettings'
+          description: The voice settings field can be provided in the first `InitializeConnection` message and then must either be not provided or not changed.
         generator_config:
-          type: object
-          properties:
-            chunk_length_schedule:
-              type: array
-              items:
-                type: number
-              description: |
-                This is an advanced setting that most users shouldn't need to use. It relates to our
-                generation schedule explained [here](https://elevenlabs.io/docs/api-reference/websockets#understanding-how-our-websockets-buffer-text).
-
-                Determines the minimum amount of text that needs to be sent and present in our
-                buffer before audio starts being generated. This is to maximise the amount of context available to
-                the model to improve audio quality, whilst balancing latency of the returned audio chunks.
-
-                The default value is: [120, 160, 250, 290].
-
-                This means that the first chunk of audio will not be generated until you send text that
-                totals at least 120 characters long. The next chunk of audio will only be generated once a
-                further 160 characters have been sent. The third audio chunk will be generated after the
-                next 250 characters. Then the fourth, and beyond, will be generated in sets of at least 290 characters.
-
-                Customize this array to suit your needs. If you want to generate audio more frequently
-                to optimise latency, you can reduce the values in the array. Note that setting the values
-                too low may result in lower quality audio. Please test and adjust as needed.
-
-                Each item should be in the range 50-500.
+          $ref: '#/components/schemas/GenerationConfig'
+          description: The generator config field can be provided in the first `InitializeConnection` message and then must either be not provided or not changed.
         flush:
           type: boolean
           description: |
             Flush forces the generation of audio. Set this value to true when you have finished sending text, but want to keep the websocket connection open.
 
             This is useful when you want to ensure that the last chunk of audio is generated even when the length of text sent is smaller than the value set in chunk_length_schedule (e.g. 120 or 50).
+          default: false
     RealtimeVoiceSettings:
       properties:
         stability:
           type: number
           title: Stability
           description: Defines the stability for voice settings.
+          default: 0.5
         similarity_boost:
           type: number
           title: Similarity Boost
           description: Defines the similarity boost for voice settings.
+          default: 0.75
         style:
           type: number
           title: Style
-          default: 0
+          default: 0.0
           description: Defines the style for voice settings. This parameter is available on V2+ models.
         use_speaker_boost:
           type: boolean
           title: Use Speaker Boost
           description: Defines the use speaker boost for voice settings. This parameter is available on V2+ models.
+          default: true
         speed:
           type: number
           title: Speed
           description: Controls the speed of the generated speech. Values range from 0.7 to 1.2, with 1.0 being the default speed.
+          default: 1.0
       type: object
-      required:
-        - stability
-        - similarity_boost
 
     GenerationConfig:
       properties:
@@ -301,13 +281,19 @@ components:
             type: number
           description: |
             This is an advanced setting that most users shouldn't need to use. It relates to our
-            generation schedule explained [here](https://elevenlabs.io/docs/api-reference/websockets#understanding-how-our-websockets-buffer-text).
+            generation schedule.
 
-            Determines the minimum amount of text that needs to be sent and present in our
+            Our WebSocket service incorporates a buffer system designed to optimize the Time To First Byte (TTFB) while maintaining high-quality streaming.
+
+            All text sent to the WebSocket endpoint is added to this buffer and only when that buffer reaches a certain size is an audio generation attempted. This is because our model provides higher quality audio when the model has longer inputs, and can deduce more context about how the text should be delivered.
+
+            The buffer ensures smooth audio data delivery and is automatically emptied with a final audio generation either when the stream is closed, or upon sending a `flush` command. We have advanced settings for changing the chunk schedule, which can improve latency at the cost of quality by generating audio more frequently with smaller text inputs.
+
+            The `chunk_length_schedule` determines the minimum amount of text that needs to be sent and present in our
             buffer before audio starts being generated. This is to maximise the amount of context available to
             the model to improve audio quality, whilst balancing latency of the returned audio chunks.
 
-            The default value is: [120, 160, 250, 290].
+            The default value for `chunk_length_schedule` is: [120, 160, 250, 290].
 
             This means that the first chunk of audio will not be generated until you send text that
             totals at least 120 characters long. The next chunk of audio will only be generated once a
