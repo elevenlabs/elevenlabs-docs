@@ -26,7 +26,7 @@ Here are a few examples where dynamic variables are useful:
   agent's configuration.
 </Info>
 
-## System Variables
+## System dynamic variables
 
 The following system variables are automatically available in your agent:
 
@@ -36,6 +36,10 @@ The following system variables are automatically available in your agent:
 - `system__call_duration_secs` - Duration of the call in seconds
 - `system__time_utc` - Current UTC time in ISO format
 - `system__conversation_id` - Unique identifier for the conversation
+
+These dynamic variables can be used in system prompts and tools and do not need to be passed in at runtime.
+System dynamic variables in the system prompt do not change during the conversation to reduce the chance of hallucinations and are set when the conversation begins.
+However, system dynamic variables that are parameters in a tool call are populated at call time and so can have different values.
 
 <Warning>
   Custom dynamic variables cannot start with `system__` as this prefix is reserved for system
