@@ -82,8 +82,11 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
   <Accordion title="Text normalization with numbers">
     When using Flash v2.5, numbers aren't normalized in a way you might expect. For example, phone numbers might be read out in way that isn't clear for the user. Dates and currencies are affected in a similar manner.
 
+    This is expected as normalization is disabled for Flash v2.5 to maintain the low latency.
+
     The Multilingual v2 model does a better job of normalizing numbers, so we recommend using it for phone numbers and other cases where number normalization is important.
 
+    For Conversational AI applications, best practice is to have your LLM [normalize the text](/docs/best-practices/prompting/normalization) before passing it to the TTS model.
   </Accordion>
 </AccordionGroup>
 
