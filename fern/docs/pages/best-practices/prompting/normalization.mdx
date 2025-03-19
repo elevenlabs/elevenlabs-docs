@@ -114,25 +114,40 @@ def normalize_text(text: str) -> str:
     def money_replacer(match):
         currency_map = {"$": "dollars", "£": "pounds", "€": "euros", "¥": "yen"}
         currency_symbol, num = match.groups()
-        num_in_words = p.number_to_words(int(num))
-        return f"{num_in_words} {currency_map.get(currency_symbol, 'currency')}"
 
-    text = re.sub(r"([$£€¥])(\d+)", money_replacer, text)
+        # Remove commas before parsing
+        num_without_commas = num.replace(',', '')
+
+        # Check for decimal points to handle cents
+        if '.' in num_without_commas:
+            dollars, cents = num_without_commas.split('.')
+            dollars_in_words = p.number_to_words(int(dollars))
+            cents_in_words = p.number_to_words(int(cents))
+            return f"{dollars_in_words} {currency_map.get(currency_symbol, 'currency')} and {cents_in_words} cents"
+        else:
+            # Handle whole numbers
+            num_in_words = p.number_to_words(int(num_without_commas))
+            return f"{num_in_words} {currency_map.get(currency_symbol, 'currency')}"
+
+    # Regex to handle commas and decimals
+    text = re.sub(r"([$£€¥])(\d+(?:,\d{3})*(?:\.\d{2})?)", money_replacer, text)
 
     # Convert phone numbers
     def phone_replacer(match):
-        return ", ".join(" ".join(group) for group in match.groups())
+        return ", ".join(" ".join(p.number_to_words(int(digit)) for digit in group) for group in match.groups())
 
     text = re.sub(r"(\d{3})-(\d{3})-(\d{4})", phone_replacer, text)
 
     return text
 
 # Example usage
-print(normalize_text("$1000")) # "one thousand dollars"
-print(normalize_text("£1000")) # "one thousand pounds"
-print(normalize_text("€1000")) # "one thousand euros"
-print(normalize_text("¥1000")) # "one thousand yen"
-print(normalize_text("555-555-5555")) # "five five five, five five five, five five five five"
+print(normalize_text("$1,000"))   # "one thousand dollars"
+print(normalize_text("£1000"))   # "one thousand pounds"
+print(normalize_text("€1000"))   # "one thousand euros"
+print(normalize_text("¥1000"))   # "one thousand yen"
+print(normalize_text("$1,234.56"))   # "one thousand two hundred thirty-four dollars and fifty-six cents"
+print(normalize_text("555-555-5555"))  # "five five five, five five five, five five five five"
+
 ```
 
 ```typescript title="normalizeText.ts" maxLines=0
@@ -142,19 +157,29 @@ import { toWords } from 'number-to-words';
 function normalizeText(text: string): string {
   return (
     text
-      // Convert monetary values
-      .replace(/([$£€¥])(\d+)/g, (_, currency, num) => {
-        const n = Number.parseInt(num, 10);
+      // Convert monetary values (e.g., "$1000" → "one thousand dollars", "£1000" → "one thousand pounds")
+      .replace(/([$£€¥])(\d+(?:,\d{3})*(?:\.\d{2})?)/g, (_, currency, num) => {
+        // Remove commas before parsing
+        const numWithoutCommas = num.replace(/,/g, '');
+
         const currencyMap: { [key: string]: string } = {
           $: 'dollars',
           '£': 'pounds',
           '€': 'euros',
           '¥': 'yen',
         };
-        return `${toWords(n)} ${currencyMap[currency] || 'currency'}`;
+
+        // Check for decimal points to handle cents
+        if (numWithoutCommas.includes('.')) {
+          const [dollars, cents] = numWithoutCommas.split('.');
+          return `${toWords(Number.parseInt(dollars))} ${currencyMap[currency] || 'currency'}${cents ? ` and ${toWords(Number.parseInt(cents))} cents` : ''}`;
+        }
+
+        // Handle whole numbers
+        return `${toWords(Number.parseInt(numWithoutCommas))} ${currencyMap[currency] || 'currency'}`;
       })
 
-      // Convert phone numbers
+      // Convert phone numbers (e.g., "555-555-5555" → "five five five, five five five, five five five five")
       .replace(/(\d{3})-(\d{3})-(\d{4})/g, (_, p1, p2, p3) => {
         return `${spellOutDigits(p1)}, ${spellOutDigits(p2)}, ${spellOutDigits(p3)}`;
       })
@@ -170,10 +195,11 @@ function spellOutDigits(num: string): string {
 }
 
 // Example usage
-console.log(normalizeText('$1000')); // "one thousand dollars"
+console.log(normalizeText('$1,000')); // "one thousand dollars"
 console.log(normalizeText('£1000')); // "one thousand pounds"
 console.log(normalizeText('€1000')); // "one thousand euros"
 console.log(normalizeText('¥1000')); // "one thousand yen"
+console.log(normalizeText('$1,234.56')); // "one thousand two hundred thirty-four dollars and fifty-six cents"
 console.log(normalizeText('555-555-5555')); // "five five five, five five five, five five five five"
 ```
 
