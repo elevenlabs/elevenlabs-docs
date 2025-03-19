@@ -92,6 +92,7 @@ In the case of using an LLM to generate the text for TTS, you can add normalizat
 
         If you need a specific format, explicitly state it in the prompt.
     </Step>
+
 </Steps>
 
 ### Use Regular Expressions for preprocessing
@@ -136,40 +137,44 @@ print(normalize_text("555-555-5555")) # "five five five, five five five, five fi
 
 ```typescript title="normalizeText.ts" maxLines=0
 // Be sure to install the number-to-words library before running this code
-import { toWords } from "number-to-words";
+import { toWords } from 'number-to-words';
 
 function normalizeText(text: string): string {
-    return text
-        // Convert monetary values
-        .replace(/([$£€¥])(\d+)/g, (_, currency, num) => {
-            const n = Number.parseInt(num, 10);
-            const currencyMap: { [key: string]: string } = {
-                "$": "dollars",
-                "£": "pounds",
-                "€": "euros",
-                "¥": "yen"
-            };
-            return `${toWords(n)} ${currencyMap[currency] || "currency"}`;
-        })
+  return (
+    text
+      // Convert monetary values
+      .replace(/([$£€¥])(\d+)/g, (_, currency, num) => {
+        const n = Number.parseInt(num, 10);
+        const currencyMap: { [key: string]: string } = {
+          $: 'dollars',
+          '£': 'pounds',
+          '€': 'euros',
+          '¥': 'yen',
+        };
+        return `${toWords(n)} ${currencyMap[currency] || 'currency'}`;
+      })
 
-        // Convert phone numbers
-        .replace(/(\d{3})-(\d{3})-(\d{4})/g, (_, p1, p2, p3) => {
-            return `${spellOutDigits(p1)}, ${spellOutDigits(p2)}, ${spellOutDigits(p3)}`;
-        });
+      // Convert phone numbers
+      .replace(/(\d{3})-(\d{3})-(\d{4})/g, (_, p1, p2, p3) => {
+        return `${spellOutDigits(p1)}, ${spellOutDigits(p2)}, ${spellOutDigits(p3)}`;
+      })
+  );
 }
 
 // Helper function to spell out individual digits as words (for phone numbers)
 function spellOutDigits(num: string): string {
-    return num.split("").map(digit => toWords(Number.parseInt(digit))).join(" ");
+  return num
+    .split('')
+    .map((digit) => toWords(Number.parseInt(digit)))
+    .join(' ');
 }
 
 // Example usage
-console.log(normalizeText("$1000"));   // "one thousand dollars"
-console.log(normalizeText("£1000"));   // "one thousand pounds"
-console.log(normalizeText("€1000"));   // "one thousand euros"
-console.log(normalizeText("¥1000"));   // "one thousand yen"
-console.log(normalizeText("555-555-5555")); // "five five five, five five five, five five five five"
-
+console.log(normalizeText('$1000')); // "one thousand dollars"
+console.log(normalizeText('£1000')); // "one thousand pounds"
+console.log(normalizeText('€1000')); // "one thousand euros"
+console.log(normalizeText('¥1000')); // "one thousand yen"
+console.log(normalizeText('555-555-5555')); // "five five five, five five five, five five five five"
 ```
 
 </CodeBlocks>
