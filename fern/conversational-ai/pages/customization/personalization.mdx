@@ -1,0 +1,113 @@
+---
+title: Personalization
+subtitle: Learn how to personalize your agent's behavior using dynamic variables and overrides.
+---
+
+## Overview
+
+Personalization allows you to adapt your agent's behavior for each individual user, enabling more natural and contextually relevant conversations. ElevenLabs offers multiple approaches to personalization:
+
+1. **Dynamic Variables** - Inject runtime values into prompts and messages
+2. **Overrides** - Completely replace system prompts or messages
+3. **Twilio Integration** - Personalize inbound call experiences via webhooks
+
+## Personalization Methods
+
+<CardGroup cols={3}>
+  <Card
+    title="Dynamic Variables"
+    icon="duotone lambda"
+    href="/docs/conversational-ai/customization/personalization/dynamic-variables"
+  >
+    Define runtime values using `{{var_name}}` syntax to personalize your agent's messages, system
+    prompts, and tools.
+  </Card>
+  <Card
+    title="Overrides"
+    icon="duotone sliders"
+    href="/docs/conversational-ai/customization/personalization/overrides"
+  >
+    Completely replace system prompts, first messages, language, or voice settings for each
+    conversation.
+  </Card>
+  <Card
+    title="Twilio Integration"
+    icon="duotone phone-arrow-down-left"
+    href="/docs/conversational-ai/customization/personalization/twilio-personalization"
+  >
+    Dynamically personalize inbound Twilio calls using webhook data.
+  </Card>
+</CardGroup>
+
+## Conversation Initiation Client Data Structure
+
+The `conversation_initiation_client_data` object defines what can be customized when starting a conversation:
+
+```json
+{
+  "type": "conversation_initiation_client_data",
+  "conversation_config_override": {
+    "agent": {
+      "prompt": {
+        "prompt": "string" // Custom system prompt
+      },
+      "first_message": "string", // Initial message
+      "language": "string" // Language code
+    },
+    "tts": {
+      "voice_id": "string" // Voice ID
+    },
+    "custom_llm_extra_body": {
+      "temperature": 0.7, // Response randomness (0-1)
+      "max_tokens": 100 // Max tokens in responses
+    }
+  },
+  "dynamic_variables": {
+    "string_var": "text value",
+    "number_var": 1.2,
+    "integer_var": 123,
+    "boolean_var": true
+  }
+}
+```
+
+## Choosing the Right Approach
+
+<Table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Best For</th>
+      <th>Implementation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**Dynamic Variables**</td>
+      <td>
+        - Inserting user-specific data into templated content 
+        - Maintaining consistent agent behavior with personalized details 
+        - Personalizing tool parameters
+      </td>
+      <td>Define variables with `{{variable_name}}` and pass values at runtime</td>
+    </tr>
+    <tr>
+      <td>**Overrides**</td>
+      <td>
+        - Completely changing agent behavior per user 
+        - Switching languages or voices 
+        - Legacy applications (consider migrating to Dynamic Variables)
+      </td>
+      <td>
+        Enable specific override permissions in security settings and pass complete replacement
+        content
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+## Learn More
+
+- [Dynamic Variables Documentation](/docs/conversational-ai/customization/dynamic-variables)
+- [Overrides Documentation](/docs/conversational-ai/customization/overrides)
+- [Twilio Integration Documentation](/docs/conversational-ai/customization/dynamic-variables/twilio-inbound-integration)
