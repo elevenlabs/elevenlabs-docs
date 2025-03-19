@@ -28,23 +28,23 @@ Here are a few examples where dynamic variables are useful:
 
 ## System dynamic variables
 
-The following system variables are automatically available in your agent:
+Your agent has access to these automatically available system variables:
 
-- `system__agent_id` - The unique identifier of the agent
-- `system__caller_id` - The phone number of the caller (for voice calls)
-- `system__called_number` - The phone number that was called (for voice calls)
-- `system__call_duration_secs` - Duration of the call in seconds
-- `system__time_utc` - Current UTC time in ISO format
-- `system__conversation_id` - Unique identifier for the conversation
+- `system__agent_id` - Unique agent identifier
+- `system__caller_id` - Caller's phone number (voice calls only)
+- `system__called_number` - Destination phone number (voice calls only)
+- `system__call_duration_secs` - Call duration in seconds
+- `system__time_utc` - Current UTC time (ISO format)
+- `system__conversation_id` - Unique conversation identifier
 
-These dynamic variables can be used in system prompts and tools and do not need to be passed in at runtime.
-System dynamic variables in the system prompt do not change during the conversation to reduce the chance of hallucinations and are set when the conversation begins.
-However, system dynamic variables that are parameters in a tool call are populated at call time and so can have different values.
+System variables:
 
-<Warning>
-  Custom dynamic variables cannot start with `system__` as this prefix is reserved for system
-  variables.
-</Warning>
+- Are available without runtime configuration
+- Are prefixed with `system__` (reserved prefix)
+- In system prompts: Set once at conversation start (value remains static)
+- In tool calls: Updated at execution time (value reflects current state)
+
+<Warning>Custom dynamic variables cannot use the reserved `system__` prefix.</Warning>
 
 ## Guide
 
