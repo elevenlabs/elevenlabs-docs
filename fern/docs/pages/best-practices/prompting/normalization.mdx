@@ -3,13 +3,13 @@ title: Normalization
 subtitle: Learn how to normalize text for Text to Speech.
 ---
 
-When using Text to Speech with complex items like phone numbers, zip codes and emails they might be mispronounced. This is often due to the model seeing the item for the first time. This guide will clarify when those discrepancies happen and how to have them pronounced correctly.
+When using Text to Speech with complex items like phone numbers, zip codes and emails they might be mispronounced. This is often due to the specific items not being in the training set and smaller models failing to generalize how they should be pronounced. This guide will clarify when those discrepancies happen and how to have them pronounced correctly.
 
 ## Why do models read out inputs differently?
 
 Certain models are trained to read out numbers and phrases in a more human way. For instance, the phrase "$1,000,000" is correctly read out as "one million dollars" by the Eleven Multilingual v2 model. However, the same phrase is read out as "one thousand thousand dollars" by the Eleven Flash v2.5 model.
 
-The reason for this is that the Multilingual v2 model has been trained to recognize and read out numbers in a way that is more natural for human listeners, whereas the Flash v2.5 model is a much smaller model which has not.
+The reason for this is that the Multilingual v2 model is a larger model and can better generalize the reading out of numbers in a way that is more natural for human listeners, whereas the Flash v2.5 model is a much smaller model and so cannot.
 
 ### Common examples
 
