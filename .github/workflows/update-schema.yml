@@ -3,20 +3,25 @@ name: Update OpenAPI Schema
 on:
   workflow_dispatch:
     inputs:
-        commitType:
-            description: 'Commit type'
-            required: true
-            default: 'main'
-            type: choice
-            options:
-            - main
-            - PR
+      commitType:
+        description: 'Commit type'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - PR
 
 jobs:
   update-schema:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
+          pnpm install
 
       - name: Install jq
         run: |
@@ -25,7 +30,11 @@ jobs:
 
       - name: Fetch OpenAPI Schema
         run: |
-          curl -s https://api.elevenlabs.io/openapi.json | jq > openapi.json
+          curl -s https://api.elevenlabs.io/openapi.json | jq > ./fern/apis/api/openapi.json
+
+      - name: Format OpenAPI Schema
+        run: |
+          pnpm run fmt:openapi
 
       - name: Commit and Push Changes
         env:
@@ -35,7 +44,7 @@ jobs:
           if [ "${{ inputs.commitType }}" = "MAIN" ]; then
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git add openapi.json
+            git add ./fern/apis/api/openapi.json
 
             # Only commit if there are changes
             if git diff --staged --quiet; then
@@ -51,7 +60,7 @@ jobs:
 
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git add openapi.json
+            git add ./fern/apis/api/openapi.json
 
             # Only create PR if there are changes
             if git diff --staged --quiet; then
