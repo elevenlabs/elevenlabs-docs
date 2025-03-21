@@ -11,7 +11,7 @@ This system tool is not enabled automatically. Its description can be customized
 <iframe
   width="100%"
   height="400"
-  src="https://www.youtube-nocookie.com/embed/angelo-to-update"
+  src="https://www.youtube-nocookie.com/embed/Bq-KYatAIU4"
   title="YouTube video player"
   frameborder="0"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -76,8 +76,8 @@ from elevenlabs import (
 # Initialize the client
 client = ElevenLabs(api_key="YOUR_API_KEY")
 
-# Create the end call tool
-end_call_tool = PromptAgentToolsItem_System(
+# Create the language detection tool
+language_detection_tool = PromptAgentToolsItem_System(
     name="language_detection",
     description=""  # Optional: Customize when the tool should be triggered
 )
@@ -86,7 +86,7 @@ end_call_tool = PromptAgentToolsItem_System(
 conversation_config = ConversationalConfig(
     agent=AgentConfig(
         prompt=PromptAgent(
-            tools=[end_call_tool]
+            tools=[language_detection_tool]
         )
     )
 )
@@ -105,7 +105,7 @@ const client = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
-// Create the agent with end call tool
+// Create the agent with language detection tool
 await client.conversationalAi.createAgent({
   conversation_config: {
     agent: {
