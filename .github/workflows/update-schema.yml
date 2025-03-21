@@ -1,0 +1,70 @@
+name: Update OpenAPI Schema
+
+on:
+  workflow_dispatch:
+    inputs:
+        commitType:
+            description: 'Commit type'
+            required: true
+            default: 'main'
+            type: choice
+            options:
+            - main
+            - PR
+
+jobs:
+  update-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Fetch OpenAPI Schema
+        run: |
+          curl -s https://api.elevenlabs.io/openapi.json | jq > openapi.json
+
+      - name: Commit and Push Changes
+        env:
+          GH_TOKEN: ${{ secrets.WRITE_GITHUB }}
+          COMMIT_TYPE: ${{ inputs.commitType }}
+        run: |
+          if [ "${{ inputs.commitType }}" = "MAIN" ]; then
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add openapi.json
+
+            # Only commit if there are changes
+            if git diff --staged --quiet; then
+              echo "No changes to commit"
+            else
+              git commit -m "Update OpenAPI schema from api.elevenlabs.io"
+              git push
+            fi
+          else
+            # Create a new branch with a timestamp
+            BRANCH_NAME="update-openapi-schema-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b $BRANCH_NAME
+
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add openapi.json
+
+            # Only create PR if there are changes
+            if git diff --staged --quiet; then
+              echo "No changes to commit"
+            else
+              git commit -m "Update OpenAPI schema from api.elevenlabs.io"
+              git push origin $BRANCH_NAME
+
+              # Create PR using GitHub CLI
+              gh pr create \
+                --title "Update OpenAPI schema" \
+                --body "Automated PR to update OpenAPI schema from api.elevenlabs.io" \
+                --base main \
+                --head $BRANCH_NAME
+            fi
+          fi
