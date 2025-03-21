@@ -1,0 +1,149 @@
+---
+title: Language detection
+subtitle: Let your agent automatically switch to the language
+---
+
+## Overview
+
+The `language detection` system tool allows your Conversational AI agent to switch its output language to any the agent supports.
+This system tool is not enabled automatically. Its description can be customized to accommodate your specific use case.
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube-nocookie.com/embed/Bq-KYatAIU4"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+<Note>
+  Where possible, we recommend enabling all languages for an agent and enabling the language
+  detection system tool.
+</Note>
+
+Our language detection tool triggers language switching in two cases, both based on the received audio's detected language and content:
+
+- `detection` if a user speaks a different language than the current output language, a switch will be triggered
+- `content` if the user asks in the current language to change to a new language, a switch will be triggered
+
+## Enabling language detection
+
+<Steps>
+    <Step title="Configure supported languages">
+        The languages that the agent can switch to must be defined in the `Agent` settings tab.
+        
+        <Frame background="subtle">
+            ![Agent languages](/assets/images/conversational-ai/agent-languages.png)
+        </Frame>
+    </Step>
+
+    <Step title="Add the language detection tool">
+        Enable language detection by selecting the pre-configured system tool to your agent's tools in the `Agent` tab.
+        This is automatically available as an option when selecting `add tool`.
+
+        <Frame background="subtle">
+            ![System tool](/assets/images/conversational-ai/language-detection-preconfig.png)
+        </Frame>
+    </Step>
+
+    <Step title="Configure tool description">
+        Add a description that specifies when to call the tool
+
+        <Frame background="subtle">
+            ![Description](/assets/images/conversational-ai/language_detection.png)
+        </Frame>
+    </Step>
+
+</Steps>
+
+### API Implementation
+
+When creating an agent via API, you can add the `language detection` tool to your agent configuration. It should be defined as a system tool:
+
+<CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentToolsItem_System
+)
+
+# Initialize the client
+client = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create the language detection tool
+language_detection_tool = PromptAgentToolsItem_System(
+    name="language_detection",
+    description=""  # Optional: Customize when the tool should be triggered
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            tools=[language_detection_tool]
+        )
+    )
+)
+
+# Create the agent
+response = client.conversational_ai.create_agent(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from 'elevenlabs';
+
+// Initialize the client
+const client = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with language detection tool
+await client.conversationalAi.createAgent({
+  conversation_config: {
+    agent: {
+      prompt: {
+        tools: [
+          {
+            type: 'system',
+            name: 'language_detection',
+            description: '', // Optional: Customize when the tool should be triggered
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+```bash
+curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
+     -H "xi-api-key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+  "conversation_config": {
+    "agent": {
+      "prompt": {
+        "tools": [
+          {
+            "type": "system",
+            "name": "language_detection",
+            "description": ""
+          }
+        ]
+      }
+    }
+  }
+}'
+```
+
+</CodeBlocks>
+
+<Tip>Leave the description blank to use the default language detection prompt.</Tip>
