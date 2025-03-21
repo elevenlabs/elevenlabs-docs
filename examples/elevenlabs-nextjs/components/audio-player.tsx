@@ -2,7 +2,8 @@
 
 import WavesurferPlayer from '@wavesurfer/react';
 import { PlayIcon, PauseIcon, Download } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
 import { Button } from '@/components/ui/button';
@@ -35,23 +36,32 @@ export function AudioPlayer({ audioBase64, className, autoplay }: AudioPlayerPro
     link.click();
   };
 
-  const handlePlay = () => {
+  const handlePlay = useCallback(() => {
     if (wavesurfer && !isPlaying) {
       wavesurfer.play().catch(() => {
         console.log('Error playing audio');
       });
     }
-  };
+  }, [wavesurfer, isPlaying]);
+
+  // Fixed autoplay effect to prevent infinite loops
+  // Using a ref to track if we've already autoplayed for this audioBase64
+  const hasAutoplayedRef = React.useRef<string | null>(null);
 
   useEffect(() => {
-    if (wavesurfer && autoplay) {
+    // Only autoplay if:
+    // 1. We have a wavesurfer instance
+    // 2. Autoplay is enabled
+    // 3. We haven't already autoplayed this exact audio (by comparing audioBase64)
+    if (wavesurfer && autoplay && hasAutoplayedRef.current !== audioBase64) {
+      hasAutoplayedRef.current = audioBase64;
       handlePlay();
     }
-  }, [audioBase64, autoplay, wavesurfer]);
+  }, [audioBase64, autoplay, wavesurfer, handlePlay]);
 
   return (
     <div className={cn('space-y-4', className)}>
-      <div className="h-[120px] w-full overflow-hidden rounded-lg bg-black/20">
+      <div className="bg-card h-[120px] w-full overflow-hidden rounded-lg">
         <div id="timeline"></div>
         <WavesurferPlayer
           height={120}

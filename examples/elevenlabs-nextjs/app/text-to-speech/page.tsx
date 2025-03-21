@@ -3,62 +3,73 @@
 import { formatDistanceToNow } from 'date-fns';
 import { nanoid } from 'nanoid';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { AudioPlayer } from '@/components/audio-player';
-import { SoundEffectPrompt } from '@/components/prompt-bar';
+import { TextToSpeechPrompt } from '@/components/prompt-bar/text-to-speech';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import type { GeneratedSoundEffect } from '@/types';
 
-export default function Page() {
-  const [soundEffects, setSoundEffects] = useState<GeneratedSoundEffect[]>([]);
-  const [selectedEffect, setSelectedEffect] = useState<GeneratedSoundEffect | null>(null);
+interface GeneratedSpeech {
+  id: string;
+  text: string;
+  audioBase64: string;
+  createdAt: Date;
+  status: 'loading' | 'complete' | 'error';
+}
+
+export default function TextToSpeechPage() {
+  const [speeches, setSpeeches] = useState<GeneratedSpeech[]>([]);
+  const [selectedSpeech, setSelectedSpeech] = useState<GeneratedSpeech | null>(null);
   const [autoplay, setAutoplay] = useState(true);
 
-  const handlePendingSoundEffect = (prompt: string) => {
-    const pendingEffect: GeneratedSoundEffect = {
+  const handleGenerateStart = useCallback((text: string) => {
+    const pendingSpeech: GeneratedSpeech = {
       id: nanoid(),
-      prompt,
+      text,
       audioBase64: '',
       createdAt: new Date(),
       status: 'loading',
     };
-    setSoundEffects((prev) => [pendingEffect, ...prev]);
-    setSelectedEffect(pendingEffect);
-    return pendingEffect.id;
-  };
 
-  const updatePendingEffect = (id: string, effect: GeneratedSoundEffect) => {
-    setSoundEffects((prev) =>
-      prev.map((item) => (item.id === id ? { ...effect, status: 'complete' as const } : item))
+    setSpeeches((prev) => [pendingSpeech, ...prev]);
+    setSelectedSpeech(pendingSpeech);
+    return pendingSpeech.id;
+  }, []);
+
+  const handleGenerateComplete = useCallback((id: string, text: string, audioBase64: string) => {
+    setSpeeches((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, text, audioBase64, status: 'complete' as const } : item
+      )
     );
-    setSelectedEffect((current) =>
-      current?.id === id ? { ...effect, status: 'complete' as const } : current
+
+    setSelectedSpeech((current) =>
+      current?.id === id ? { ...current, text, audioBase64, status: 'complete' as const } : current
     );
-  };
+  }, []);
 
   return (
     <div>
       <div className="container mx-auto">
         <div className="grid h-[600px] grid-cols-[1fr_auto_300px]">
           <div className="bg-card flex flex-col rounded-lg p-6">
-            <h1 className="text-2xl font-bold">Sound effects</h1>
+            <h1 className="text-2xl font-bold">Text to speech</h1>
             <div className="flex flex-1 flex-col justify-center">
-              {selectedEffect ? (
+              {selectedSpeech ? (
                 <div className="space-y-4">
-                  {selectedEffect.status === 'complete' && (
-                    <p className="text-muted-foreground text-sm">{selectedEffect.prompt}</p>
+                  {selectedSpeech.status === 'complete' && (
+                    <p className="text-muted-foreground text-sm">{selectedSpeech.text}</p>
                   )}
-                  {selectedEffect.status === 'loading' ? (
+                  {selectedSpeech.status === 'loading' ? (
                     <div className="flex items-center justify-center p-8">
                       <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-white" />
                     </div>
                   ) : (
-                    <AudioPlayer audioBase64={selectedEffect.audioBase64} autoplay={autoplay} />
+                    <AudioPlayer audioBase64={selectedSpeech.audioBase64} autoplay={autoplay} />
                   )}
                 </div>
               ) : (
@@ -80,27 +91,27 @@ export default function Page() {
               </div>
             </div>
             <div>
-              {soundEffects.map((effect) => (
+              {speeches.map((speech) => (
                 <Card
-                  key={effect.id}
+                  key={speech.id}
                   className={cn(
                     'hover:bg-accent relative cursor-pointer rounded-none border-0 transition-colors',
-                    selectedEffect?.id === effect.id && 'bg-accent',
-                    effect.status === 'loading' &&
+                    selectedSpeech?.id === speech.id && 'bg-accent',
+                    speech.status === 'loading' &&
                       'cursor-not-allowed opacity-70 hover:bg-transparent'
                   )}
-                  onClick={() => effect.status === 'complete' && setSelectedEffect(effect)}
+                  onClick={() => speech.status === 'complete' && setSelectedSpeech(speech)}
                 >
                   <CardContent className="px-3 py-3">
-                    <p className="mb-1 max-w-[250px] truncate font-medium">{effect.prompt}</p>
-                    {effect.status === 'loading' ? (
+                    <p className="mb-1 max-w-[250px] truncate font-medium">{speech.text}</p>
+                    {speech.status === 'loading' ? (
                       <div className="text-muted-foreground flex items-center gap-2 text-xs">
                         <div className="h-3 w-3 animate-spin rounded-full border-b-2 border-current" />
                         <span>Generating...</span>
                       </div>
                     ) : (
                       <p className="text-muted-foreground text-xs">
-                        {formatDistanceToNow(effect.createdAt, {
+                        {formatDistanceToNow(speech.createdAt, {
                           addSuffix: true,
                         })}
                       </p>
@@ -112,29 +123,29 @@ export default function Page() {
           </ScrollArea>
         </div>
       </div>
+
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <div className="mx-auto max-w-4xl">
-          <SoundEffectPrompt
-            onPendingEffect={handlePendingSoundEffect}
-            onUpdatePendingEffect={updatePendingEffect}
+          <TextToSpeechPrompt
+            onGenerateStart={handleGenerateStart}
+            onGenerateComplete={handleGenerateComplete}
           />
         </div>
       </div>
     </div>
   );
 }
+
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center gap-4">
     <Image
       src="/empty-folder.png"
-      alt="Sound effect placeholder"
+      alt="Speech placeholder"
       width={160}
       height={160}
       className="select-none"
       draggable={false}
     />
-    <p className="text-muted-foreground font-medium">
-      Select a sound effect to play or create a new one
-    </p>
+    <p className="text-muted-foreground font-medium">Select a speech to play or create a new one</p>
   </div>
 );

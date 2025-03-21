@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+import { Mic, Sparkles } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 export type Item = {
@@ -18,6 +18,12 @@ export const demos: { name: string; items: Item[] }[] = [
         icon: Sparkles,
         slug: 'sound-effects',
         description: 'Turn text into cinematic sound effects.',
+      },
+      {
+        name: 'Text to speech',
+        icon: Mic,
+        slug: 'text-to-speech',
+        description: 'Convert text to natural-sounding speech.',
       },
     ],
   },
