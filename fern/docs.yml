@@ -468,7 +468,7 @@ navigation:
             paginated: true
             audiences:
               - convai
-            layout:
+            layout: &convai-endpoints
               - section: Agents
                 contents:
                   - endpoint: POST /v1/convai/agents/create
@@ -486,7 +486,7 @@ navigation:
               - section: Conversations
                 contents:
                   - endpoint: GET /v1/convai/conversations
-                    title: Get conversations
+                    title: Let conversations
                   - endpoint: GET /v1/convai/conversations/{conversation_id}
                     title: Get conversation details
                   - endpoint: DELETE /v1/convai/conversations/{conversation_id}
@@ -507,8 +507,14 @@ navigation:
                     title: Get knowledge base document
                   - endpoint: POST /v1/convai/knowledge-base
                     title: Create knowledge base document
+                  - endpoint: POST /v1/convai/knowledge-base/{documentation_id}/rag-index
+                    title: Compute RAG index
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/dependent-agents
                     title: Get dependent agents
+                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/content
+                    title: Get document content
+                  - endpoint: GET /v1/convai/knowledge-base/:documentation_id/chunk/:chunk_id
+                    title: Get document chunk
               - section: Phone Numbers
                 contents:
                   - endpoint: POST /v1/convai/phone-numbers/create
@@ -537,6 +543,8 @@ navigation:
                     title: Get secrets
                   - endpoint: POST /v1/convai/secrets
                     title: Create secret
+                  - endpoint: DELETE /v1/convai/secrets/{secret_id}
+                    title: Delete secret
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -648,84 +656,7 @@ navigation:
               - workspace
           - section: CONVERSATIONAL AI
             skip-slug: true
-            contents:
-              - section: Agents
-                contents:
-                  - endpoint: POST /v1/convai/agents/create
-                    title: Create agent
-                  - endpoint: GET /v1/convai/agents/{agent_id}
-                    title: Get agent
-                  - endpoint: GET /v1/convai/agents
-                    title: List agents
-                  - endpoint: PATCH /v1/convai/agents/{agent_id}
-                    title: Update agent
-                  - endpoint: DELETE /v1/convai/agents/{agent_id}
-                    title: Delete agent
-                  - endpoint: GET /v1/convai/agents/{agent_id}/link
-                    title: Get link
-              - section: Conversations
-                contents:
-                  - endpoint: GET /v1/convai/conversations
-                    title: List conversations
-                  - endpoint: GET /v1/convai/conversations/{conversation_id}
-                    title: Get conversation
-                  - endpoint: DELETE /v1/convai/conversations/{conversation_id}
-                    title: Delete conversation
-                  - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
-                    title: Get conversation audio
-                  - endpoint: GET /v1/convai/conversation/get_signed_url
-                    title: Get signed URL
-                  - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
-                    title: Send conversation feedback
-              - section: Knowledge Base
-                contents:
-                  - endpoint: GET /v1/convai/knowledge-base
-                    title: List knowledge base documents
-                  - endpoint: DELETE /v1/convai/knowledge-base/{documentation_id}
-                    title: Delete knowledge base document
-                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}
-                    title: Get knowledge base document
-                  - endpoint: POST /v1/convai/knowledge-base
-                    title: Create knowledge base document
-                  - endpoint: POST /v1/convai/knowledge-base/{documentation_id}/rag-index
-                    title: Compute RAG index
-                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/dependent-agents
-                    title: Get dependent agents
-              - section: Phone Numbers
-                contents:
-                  - endpoint: POST /v1/convai/phone-numbers/create
-                    title: Create phone number
-                  - endpoint: GET /v1/convai/phone-numbers/
-                    title: List phone numbers
-                  - endpoint: GET /v1/convai/phone-numbers/{phone_number_id}
-                    title: Get phone number
-                  - endpoint: PATCH /v1/convai/phone-numbers/{phone_number_id}
-                    title: Update phone number
-                  - endpoint: DELETE /v1/convai/phone-numbers/{phone_number_id}
-                    title: Delete phone number
-              - section: Widget
-                contents:
-                  - endpoint: GET /v1/convai/agents/{agent_id}/widget
-                    title: Get widget
-                  - endpoint: POST /v1/convai/agents/{agent_id}/avatar
-                    title: Create widget avatar
-              - section: Workspace
-                contents:
-                  - endpoint: GET /v1/convai/settings
-                    title: Get settings
-                  - endpoint: PATCH /v1/convai/settings
-                    title: Update settings
-                  - endpoint: GET /v1/convai/secrets
-                    title: Get secrets
-                  - endpoint: POST /v1/convai/secrets
-                    title: Create secret
-                  - endpoint: DELETE /v1/convai/secrets/{secret_id}
-                    title: Delete secret
-          - section: LEGACY
-            skip-slug: true
-            contents:
-              - projects:
-                  title: Projects
+            contents: *convai-endpoints
 
 navbar-links:
   - type: minimal
@@ -804,8 +735,6 @@ redirects:
     destination: /docs/api-reference/introduction
   - source: /docs/api-reference/add-chapter
     destination: /docs/api-reference/chapters/add-chapter
-  - source: /docs/api-reference/add-project
-    destination: /docs/api-reference/projects/add-project
   - source: /docs/api-reference/add-shared-voice
     destination: /docs/api-reference/voice-library/add-sharing-voice
   - source: /docs/api-reference/add-voice
@@ -816,8 +745,6 @@ redirects:
     destination: /docs/api-reference/audio-isolation/stream
   - source: /docs/api-reference/convert-chapter
     destination: /docs/api-reference/chapters/convert-chapter
-  - source: /docs/api-reference/convert-project
-    destination: /docs/api-reference/projects/convert
   - source: /docs/api-reference/create-dub
     destination: /docs/api-reference/dubbing/dub-a-video-or-an-audio-file
   - source: /docs/api-reference/creates-audionative-enabled-project
@@ -828,8 +755,6 @@ redirects:
     destination: /docs/api-reference/dubbing/delete-dubbing-project
   - source: /docs/api-reference/delete-history-item
     destination: /docs/api-reference/history/delete
-  - source: /docs/api-reference/delete-project
-    destination: /docs/api-reference/projects/delete
   - source: /docs/api-reference/delete-sample
     destination: /docs/api-reference/samples/delete
   - source: /docs/api-reference/delete-voice
@@ -864,12 +789,6 @@ redirects:
     destination: /docs/api-reference/history/get
   - source: /docs/api-reference/get-models
     destination: /docs/api-reference/models/get-all
-  - source: /docs/api-reference/get-project-by-id
-    destination: /docs/api-reference/projects/get
-  - source: /docs/api-reference/get-project-snapshots
-    destination: /docs/api-reference/projects/get-all-snapshots
-  - source: /docs/api-reference/get-projects
-    destination: /docs/api-reference/projects/get-all
   - source: /docs/api-reference/get-user-info
     destination: /docs/api-reference/user/get
   - source: /docs/api-reference/get-user-subscription-info
@@ -902,8 +821,6 @@ redirects:
     destination: /docs/api-reference/speech-to-speech/convert-as-stream
   - source: /docs/api-reference/stream-chapter-audio
     destination: /docs/api-reference/chapters/stream-snapshot
-  - source: /docs/api-reference/stream-project-audio
-    destination: /docs/api-reference/projects/stream-audio
   - source: /docs/api-reference/streaming-with-timestamps
     destination: /docs/api-reference/text-to-speech/stream-with-timestamps
   - source: /docs/api-reference/text-to-speech
@@ -914,8 +831,6 @@ redirects:
     destination: /docs/api-reference/text-to-voice/create-previews
   - source: /docs/api-reference/ttv-create-voice-from-preview
     destination: /docs/api-reference/text-to-voice/create-voice-from-preview
-  - source: /docs/api-reference/update-pronunciation-dictionaries
-    destination: /docs/api-reference/projects/update-pronunciation-dictionaries
   - source: /docs/api-reference/usage-get-character-stats
     destination: /docs/api-reference/usage/get-characters-usage-metrics
   - source: /docs/api-reference/websockets

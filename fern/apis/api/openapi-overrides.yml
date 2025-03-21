@@ -468,11 +468,27 @@ paths:
   /v1/convai/add-to-knowledge-base:
     post:
       x-fern-ignore: true
+  /v1/convai/knowledge-base/{documentation_id}/content:
+    get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base/{documentation_id}/chunk/{chunk_id}:
+    get:
+      x-fern-audiences:
+        - convai
   /v1/convai/settings:
     get:
       x-fern-audiences:
         - convai
     patch:
+      x-fern-audiences:
+        - convai
+  /v1/convai/secrets/{secret_id}:
+    delete:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base/{documentation_id}/rag-index:
+    post:
       x-fern-audiences:
         - convai
   /v1/audio-native:
@@ -516,6 +532,65 @@ paths:
     post:
       description: Removes background noise from audio.
       summary: Audio isolation stream
+  # ==========================
+  # Projects, remove this when it's removed upstream
+  # ==========================
+  /v1/projects/podcast/create:
+    post:
+      x-fern-ignore: true
+  /v1/projects:
+    get:
+      x-fern-ignore: true
+  /v1/projects/add:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}:
+    get:
+      x-fern-ignore: true
+    post:
+      x-fern-ignore: true
+    delete:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/content:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/convert:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/snapshots:
+    get:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/chapters:
+    get:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/chapters/{chapter_id}:
+    get:
+      x-fern-ignore: true
+    patch:
+      x-fern-ignore: true
+    delete:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/chapters/add:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/chapters/{chapter_id}/convert:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/chapters/{chapter_id}/snapshots:
+    get:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream:
+    post:
+      x-fern-ignore: true
+  /v1/projects/{project_id}/update-pronunciation-dictionaries:
+    post:
+      x-fern-ignore: true
   # ==========================
   # Voice Design (Text to voice)
   # ==========================
