@@ -23,14 +23,9 @@ jobs:
           npm install -g pnpm
           pnpm install
 
-      - name: Install jq
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-
       - name: Fetch OpenAPI Schema
         run: |
-          curl -s https://api.elevenlabs.io/openapi.json | jq > ./fern/apis/api/openapi.json
+          curl -s https://api.elevenlabs.io/openapi.json > ./fern/apis/api/openapi.json
 
       - name: Format OpenAPI Schema
         run: |
