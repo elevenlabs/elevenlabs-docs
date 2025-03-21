@@ -1,0 +1,115 @@
+---
+title: Language detection
+subtitle: Let your agent automatically switch to the language
+---
+
+## Overview
+
+The `language detection` system tool allows your Conversational AI agent to switch its output language to any the agent supports. 
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube-nocookie.com/embed/angelo-to-update"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+We recommend enabling all languages for an agent and enabling the language detection system tool. 
+This system tool needs to be enabled and its description can be customized to accommodate your specific use case.
+
+Our language detection tool triggers language switching in two cases, both based on the received audio's language and meaning:
+- in the first case, if a user speaks a different language than the current output language, a switch will be triggered
+- in the second case, if the user asks in the current language to change to a new language, a switch will be triggered
+
+### API Implementation
+
+When creating an agent via API, you can add the `language detection` tool to your agent configuration. It should be defined as a system tool:
+
+<CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentToolsItem_System
+)
+
+# Initialize the client
+client = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create the end call tool
+end_call_tool = PromptAgentToolsItem_System(
+    name="language_detection",
+    description=""  # Optional: Customize when the tool should be triggered
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            tools=[end_call_tool]
+        )
+    )
+)
+
+# Create the agent
+response = client.conversational_ai.create_agent(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from 'elevenlabs';
+
+// Initialize the client
+const client = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with end call tool
+await client.conversationalAi.createAgent({
+  conversation_config: {
+    agent: {
+      prompt: {
+        tools: [
+          {
+            type: 'system',
+            name: 'language_detection',
+            description: '', // Optional: Customize when the tool should be triggered
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+```bash
+curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
+     -H "xi-api-key: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+  "conversation_config": {
+    "agent": {
+      "prompt": {
+        "tools": [
+          {
+            "type": "system",
+            "name": "language_detection",
+            "description": ""
+          }
+        ]
+      }
+    }
+  }
+}'
+```
+
+</CodeBlocks>
+
+<Tip>Leave the description blank to use the default language detection prompt.</Tip>
