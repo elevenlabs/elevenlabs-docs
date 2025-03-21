@@ -18,7 +18,7 @@ function injectElevenLabsWidget() {
 
   const widget = document.createElement('elevenlabs-convai');
   widget.id = ID;
-  widget.setAttribute('agent-id', 'OZmXb9pmFsSkDE5dukJv');
+  widget.setAttribute('agent-id', 'q6EtujId97WBxLEUlEgQ');
   widget.setAttribute('variant', 'full');
 
   // Set initial colors and variant based on current theme and device
