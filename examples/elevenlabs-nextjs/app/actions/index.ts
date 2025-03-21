@@ -72,7 +72,7 @@ export async function generateSpeech(data: TtsInput): Promise<Result<{ audioBase
       stability: data.stability,
       clarity: data.clarity,
       style: data.style,
-      speed: data.speed || 1.0,
+      speed: data.speed ?? 1.0,
     };
 
     const audio = await client.textToSpeech.convert(data.voice_id, {
