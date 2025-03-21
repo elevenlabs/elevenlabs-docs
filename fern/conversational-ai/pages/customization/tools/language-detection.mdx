@@ -5,7 +5,8 @@ subtitle: Let your agent automatically switch to the language
 
 ## Overview
 
-The `language detection` system tool allows your Conversational AI agent to switch its output language to any the agent supports. 
+The `language detection` system tool allows your Conversational AI agent to switch its output language to any the agent supports.
+This system tool is not enabled automatically. Its description can be customized to accommodate your specific use case.
 
 <iframe
   width="100%"
@@ -17,12 +18,44 @@ The `language detection` system tool allows your Conversational AI agent to swit
   allowfullscreen
 ></iframe>
 
-We recommend enabling all languages for an agent and enabling the language detection system tool. 
-This system tool needs to be enabled and its description can be customized to accommodate your specific use case.
+<Note>
+  Where possible, we recommend enabling all languages for an agent and enabling the language
+  detection system tool.
+</Note>
 
-Our language detection tool triggers language switching in two cases, both based on the received audio's language and meaning:
-- in the first case, if a user speaks a different language than the current output language, a switch will be triggered
-- in the second case, if the user asks in the current language to change to a new language, a switch will be triggered
+Our language detection tool triggers language switching in two cases, both based on the received audio's detected language and content:
+
+- `detection` if a user speaks a different language than the current output language, a switch will be triggered
+- `content` if the user asks in the current language to change to a new language, a switch will be triggered
+
+## Enabling language detection
+
+<Steps>
+    <Step title="Configure supported languages">
+        The languages that the agent can switch to must be defined in the `Agent` settings tab.
+        
+        <Frame background="subtle">
+            ![Agent languages](/assets/images/conversational-ai/agent-languages.png)
+        </Frame>
+    </Step>
+
+    <Step title="Add the language detection tool">
+        Enable language detection by adding the pre-configured system tool to your agent's tools in the `Agent` tab.
+
+        <Frame background="subtle">
+            ![System tool](/assets/images/conversational-ai/language-detection-preconfig.png)
+        </Frame>
+    </Step>
+
+    <Step title="Configure tool description">
+        Add a description that specifies when to call the tool
+
+        <Frame background="subtle">
+            ![Description](/assets/images/conversational-ai/language-detection-preconfig.png)
+        </Frame>
+    </Step>
+
+</Steps>
 
 ### API Implementation
 
