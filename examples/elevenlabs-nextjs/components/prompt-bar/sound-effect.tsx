@@ -1,10 +1,10 @@
 'use client';
 
-import { ClockIcon, DiamondIcon, HelpCircleIcon } from 'lucide-react';
+import { ClockIcon, DiamondIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { generateSoundEffect } from '@/app/actions';
+import { generateSoundEffect } from '@/app/actions/elevenlabs';
 import { PromptBar, PromptControlsProps } from '@/components/prompt-bar/base';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,14 +18,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Slider } from '@/components/ui/slider';
 import { SoundEffectInput as SoundEffectInputType, soundEffectSchema } from '@/lib/schemas';
-import type { GeneratedSoundEffect } from '@/types';
 
 export type SoundEffectPromptProps = {
   onPendingEffect: (prompt: string) => string;
-  onUpdatePendingEffect: (id: string, effect: GeneratedSoundEffect) => void;
+  onUpdatePendingEffect: (id: string, effect: SoundEffect) => void;
 };
 
-export function SoundEffectPrompt({
+export function SoundEffectPromptBar({
   onPendingEffect,
   onUpdatePendingEffect,
 }: SoundEffectPromptProps) {
@@ -40,7 +39,7 @@ export function SoundEffectPrompt({
 
       if (result.ok) {
         const pendingId = onPendingEffect(data.text);
-        const effect: GeneratedSoundEffect = {
+        const effect: SoundEffect = {
           id: pendingId,
           prompt: data.text,
           audioBase64: result.value.audioBase64,
@@ -60,9 +59,7 @@ export function SoundEffectPrompt({
     }
   };
 
-  // Render the left controls for the input
   const renderLeftControls = ({ form }: PromptControlsProps<SoundEffectInputType>) => {
-    // Use watch to properly subscribe to form value changes
     const duration = form.watch('duration_seconds');
     const promptInfluence = form.watch('prompt_influence');
 
@@ -153,14 +150,6 @@ export function SoundEffectPrompt({
             </div>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-[36px] w-[36px] rounded-full border border-white/10 bg-transparent p-1.5 text-white/50 hover:bg-white/20 hover:text-white"
-        >
-          <HelpCircleIcon className="h-4 w-4" />
-        </Button>
       </div>
     );
   };
@@ -182,3 +171,10 @@ export function SoundEffectPrompt({
     />
   );
 }
+export type SoundEffect = {
+  id: string;
+  prompt: string;
+  audioBase64: string;
+  createdAt: Date;
+  status: 'loading' | 'complete';
+};

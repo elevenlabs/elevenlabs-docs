@@ -6,20 +6,12 @@ import Image from 'next/image';
 import { useCallback, useState } from 'react';
 
 import { AudioPlayer } from '@/components/audio-player';
-import { TextToSpeechPrompt } from '@/components/prompt-bar/text-to-speech';
+import { TextToSpeechPromptBar } from '@/components/prompt-bar/text-to-speech';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-
-interface GeneratedSpeech {
-  id: string;
-  text: string;
-  audioBase64: string;
-  createdAt: Date;
-  status: 'loading' | 'complete' | 'error';
-}
 
 export default function TextToSpeechPage() {
   const [speeches, setSpeeches] = useState<GeneratedSpeech[]>([]);
@@ -126,7 +118,7 @@ export default function TextToSpeechPage() {
 
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <div className="mx-auto max-w-4xl">
-          <TextToSpeechPrompt
+          <TextToSpeechPromptBar
             onGenerateStart={handleGenerateStart}
             onGenerateComplete={handleGenerateComplete}
           />
@@ -149,3 +141,11 @@ const EmptyState = () => (
     <p className="text-muted-foreground font-medium">Select a speech to play or create a new one</p>
   </div>
 );
+
+interface GeneratedSpeech {
+  id: string;
+  text: string;
+  audioBase64: string;
+  createdAt: Date;
+  status: 'loading' | 'complete' | 'error';
+}

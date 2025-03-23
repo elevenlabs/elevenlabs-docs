@@ -6,21 +6,20 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import { AudioPlayer } from '@/components/audio-player';
-import { SoundEffectPrompt } from '@/components/prompt-bar';
+import { SoundEffectPromptBar, type SoundEffect } from '@/components/prompt-bar/sound-effect';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import type { GeneratedSoundEffect } from '@/types';
 
 export default function Page() {
-  const [soundEffects, setSoundEffects] = useState<GeneratedSoundEffect[]>([]);
-  const [selectedEffect, setSelectedEffect] = useState<GeneratedSoundEffect | null>(null);
+  const [soundEffects, setSoundEffects] = useState<SoundEffect[]>([]);
+  const [selectedEffect, setSelectedEffect] = useState<SoundEffect | null>(null);
   const [autoplay, setAutoplay] = useState(true);
 
   const handlePendingSoundEffect = (prompt: string) => {
-    const pendingEffect: GeneratedSoundEffect = {
+    const pendingEffect: SoundEffect = {
       id: nanoid(),
       prompt,
       audioBase64: '',
@@ -32,7 +31,7 @@ export default function Page() {
     return pendingEffect.id;
   };
 
-  const updatePendingEffect = (id: string, effect: GeneratedSoundEffect) => {
+  const updatePendingEffect = (id: string, effect: SoundEffect) => {
     setSoundEffects((prev) =>
       prev.map((item) => (item.id === id ? { ...effect, status: 'complete' as const } : item))
     );
@@ -114,7 +113,7 @@ export default function Page() {
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <div className="mx-auto max-w-4xl">
-          <SoundEffectPrompt
+          <SoundEffectPromptBar
             onPendingEffect={handlePendingSoundEffect}
             onUpdatePendingEffect={updatePendingEffect}
           />

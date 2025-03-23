@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { getApiKey } from '@/app/actions';
+import { getApiKey } from '@/app/actions/api-key-store';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Byline } from '@/components/by-line';
 import { KeyProvider } from '@/components/key-provider';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { setApiKey } from '@/app/actions';
+import { setApiKey } from '@/app/actions/api-key-store';
 
 const KeyContext = React.createContext<
   [string | null, React.Dispatch<React.SetStateAction<string | null>>] | undefined

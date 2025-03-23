@@ -1,10 +1,11 @@
 'use client';
 
+import { TextToSpeechRequest } from 'elevenlabs/api';
 import { BoltIcon, MicIcon, SparklesIcon, SpeakerIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { generateSpeech, getVoices } from '@/app/actions';
+import { generateSpeech, getVoices } from '@/app/actions/elevenlabs';
 import { PromptBar, PromptControlsProps } from '@/components/prompt-bar/base';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,171 +20,87 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Slider } from '@/components/ui/slider';
-import { FEATURED_VOICES, TTS_MODEL_INFO, TTS_MODELS, TtsInput, ttsSchema } from '@/lib/schemas';
+import { TtsInput, ttsSchema, TTS_MODELS } from '@/lib/schemas';
 
 export type TextToSpeechPromptProps = {
   onGenerateStart: (text: string) => string;
   onGenerateComplete: (id: string, text: string, audioBase64: string) => void;
 };
 
-const DEFAULT_VALUES: TtsInput = {
-  text: '',
-  voice_id: FEATURED_VOICES[0].id,
-  model_id: TTS_MODELS.MULTILINGUAL,
-  stability: 0.5,
-  clarity: 0.75,
-  style: 0.35,
-  speed: 1.0,
-};
-
-// Simple utility for localStorage with proper typing
-const storage = {
-  get: <T,>(key: string, defaultValue: T): T => {
-    try {
-      const value = localStorage.getItem(key);
-      return value !== null ? JSON.parse(value) : defaultValue;
-    } catch {
-      return defaultValue;
-    }
-  },
-  set: <T,>(key: string, value: T): void => {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error('Failed to save to localStorage', error);
-    }
-  },
-};
-
-export function TextToSpeechPrompt({
+export function TextToSpeechPromptBar({
   onGenerateStart,
   onGenerateComplete,
 }: TextToSpeechPromptProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [voices, setVoices] = useState<Array<{ voice_id: string; name: string }>>([]);
-
-  // Speed measurement state
   const [generationTime, setGenerationTime] = useState<number | null>(null);
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
-  // Main settings state - only one state object for all settings
-  const [settings, setSettings] = useState<{
-    voice_id: string;
-    model_id: typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH;
-    stability: number;
-    clarity: number;
-    style: number;
-    speed: number;
-  }>({
-    voice_id: DEFAULT_VALUES.voice_id,
-    model_id: DEFAULT_VALUES.model_id,
-    stability: DEFAULT_VALUES.stability,
-    clarity: DEFAULT_VALUES.clarity,
-    style: DEFAULT_VALUES.style,
-    speed: DEFAULT_VALUES.speed,
-  });
-
-  // Load initial data
   useEffect(() => {
-    async function init() {
+    async function loadVoices() {
       try {
-        // Load saved settings from localStorage
-        const savedVoiceId = storage.get<string>('tts_voice_id', DEFAULT_VALUES.voice_id);
-        const savedModelId = storage.get<string>('tts_model_id', DEFAULT_VALUES.model_id);
-        const savedStability = storage.get<number>('tts_stability', DEFAULT_VALUES.stability);
-        const savedClarity = storage.get<number>('tts_clarity', DEFAULT_VALUES.clarity);
-        const savedStyle = storage.get<number>('tts_style', DEFAULT_VALUES.style);
-        const savedSpeed = storage.get<number>('tts_speed', DEFAULT_VALUES.speed);
-
-        // Make sure model_id is valid
-        let validModelId: typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH =
-          DEFAULT_VALUES.model_id;
-        if (savedModelId === TTS_MODELS.MULTILINGUAL || savedModelId === TTS_MODELS.FLASH) {
-          validModelId = savedModelId;
-        }
-
-        // Update state with saved settings
-        setSettings({
-          voice_id: savedVoiceId,
-          model_id: validModelId,
-          stability: savedStability,
-          clarity: savedClarity,
-          style: savedStyle,
-          speed: savedSpeed,
-        });
-
-        // Load voices
         const result = await getVoices();
         if (result.ok) {
-          setVoices(result.value);
+          const voiceList = result.value.voices.map((v) => ({
+            voice_id: v.voice_id,
+            name: v.name ?? 'Unknown Voice',
+          }));
+          setVoices(voiceList);
         } else {
-          // Fallback to featured voices
           setVoices(FEATURED_VOICES.map((v) => ({ voice_id: v.id, name: v.name })));
         }
       } catch (error) {
-        console.error('Error loading initial data:', error);
+        console.error('Error loading voices:', error);
+        setVoices(FEATURED_VOICES.map((v) => ({ voice_id: v.id, name: v.name })));
       } finally {
         setIsLoading(false);
       }
     }
 
-    init();
+    loadVoices();
   }, []);
 
-  // Save settings to localStorage whenever they change
-  useEffect(() => {
-    // Don't save during initial loading
-    if (isLoading) return;
-
-    storage.set('tts_voice_id', settings.voice_id);
-    storage.set('tts_model_id', settings.model_id);
-    storage.set('tts_stability', settings.stability);
-    storage.set('tts_clarity', settings.clarity);
-    storage.set('tts_style', settings.style);
-    storage.set('tts_speed', settings.speed);
-  }, [settings, isLoading]);
-
-  // Get voice name from ID
   const getVoiceName = (voiceId: string): string => {
-    // Check available voices
     const voice = voices.find((v) => v.voice_id === voiceId);
     if (voice) return voice.name;
 
-    // Check featured voices
     const featuredVoice = FEATURED_VOICES.find((v) => v.id === voiceId);
     if (featuredVoice) return featuredVoice.name;
 
     return 'Select Voice';
   };
 
-  // Update a single setting
-  const updateSetting = (key: keyof typeof settings, value: string | number) => {
+  const updateSetting = <K extends keyof typeof settings>(key: K, value: (typeof settings)[K]) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,
     }));
   };
 
-  const handleSubmit = async (data: TtsInput) => {
+  const handleSubmit = async (data: { text: string }) => {
     try {
       setIsGenerating(true);
-
-      // Start timing the generation
-      const startTime = performance.now();
       setGenerationTime(null);
 
-      // Use the latest settings for generation, but take the text from the form
-      const generateData = {
-        ...settings,
+      const startTime = performance.now();
+
+      const requestData: TextToSpeechRequest = {
         text: data.text,
+        model_id: settings.model_id,
+        voice_settings: {
+          stability: settings.stability,
+          similarity_boost: settings.clarity,
+          style: settings.style,
+          use_speaker_boost: true,
+          speed: settings.speed,
+        },
       };
 
       const pendingId = onGenerateStart(data.text);
-      const result = await generateSpeech(generateData);
+      const result = await generateSpeech(settings.voice_id, requestData);
 
-      // Measure end time and calculate elapsed time
-      const endTime = performance.now();
-      const elapsed = endTime - startTime;
+      const elapsed = performance.now() - startTime;
       setGenerationTime(elapsed);
 
       if (result.ok) {
@@ -200,35 +117,28 @@ export function TextToSpeechPrompt({
     }
   };
 
-  // Function to sync form values with settings
   function syncFormWithSettings(form: PromptControlsProps<TtsInput>['form']) {
     if (!isLoading) {
-      form.setValue('voice_id', settings.voice_id);
-      form.setValue('model_id', settings.model_id);
-      form.setValue('stability', settings.stability);
-      form.setValue('clarity', settings.clarity);
-      form.setValue('style', settings.style);
-      form.setValue('speed', settings.speed);
+      if (settings.voice_id) form.setValue('voice_id', settings.voice_id);
+      if (settings.model_id) form.setValue('model_id', settings.model_id);
+      if (settings.stability !== undefined) form.setValue('stability', settings.stability);
+      if (settings.clarity !== undefined) form.setValue('clarity', settings.clarity);
+      if (settings.style !== undefined) form.setValue('style', settings.style);
+      if (settings.speed !== undefined) form.setValue('speed', settings.speed);
     }
   }
 
-  // Sync form values with settings whenever the form changes
   const renderControls = ({ form }: PromptControlsProps<TtsInput>) => {
-    // Using a custom hook would be better, but for now, we'll just use a ref to track the form
-    // This avoids the React Hook rule violation
     const modelInfo = TTS_MODEL_INFO[settings.model_id as keyof typeof TTS_MODEL_INFO];
     const voiceName = getVoiceName(settings.voice_id);
 
-    // Sync form values with settings (without hooks)
     if (!isLoading) {
-      // This is safe to call during render as it just updates form values
       syncFormWithSettings(form);
     }
 
     if (isLoading) {
       return (
         <div className="flex flex-wrap gap-1.5">
-          {/* Loading indicators */}
           <Button
             size="icon"
             variant="ghost"
@@ -302,7 +212,6 @@ export function TextToSpeechPrompt({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Model Selection */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -362,7 +271,6 @@ export function TextToSpeechPrompt({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Voice Settings */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -462,19 +370,13 @@ export function TextToSpeechPrompt({
   };
 
   const renderRightControls = ({ isSubmitting }: PromptControlsProps<TtsInput>) => {
-    return (
-      <>
-        {/* Generation time display */}
-        {generationTime !== null && !isSubmitting && (
-          <div className="flex items-center text-xs text-white/70">
-            <span>{Math.round(generationTime)}ms</span>
-          </div>
-        )}
-      </>
-    );
+    return generationTime !== null && !isSubmitting ? (
+      <div className="flex items-center text-xs text-white/70">
+        <span>{Math.round(generationTime)}ms</span>
+      </div>
+    ) : null;
   };
 
-  // Form default values, using current settings
   const defaultValues = {
     text: '',
     ...settings,
@@ -494,3 +396,41 @@ export function TextToSpeechPrompt({
     />
   );
 }
+
+const FEATURED_VOICES = [
+  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', accent: 'American' },
+  { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', accent: 'American' },
+  { id: 'IKne3meq5aSn9XLyUdCD', name: 'Adam', accent: 'American' },
+  { id: 'pNInz6obpgDQGcFmaJgB', name: 'Nicole', accent: 'American' },
+  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni', accent: 'American' },
+  { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli', accent: 'American' },
+  { id: 'jBpfuIE2acCO8z3wKNLl', name: 'Callum', accent: 'British' },
+  { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Charlotte', accent: 'British' },
+];
+
+const TTS_MODEL_INFO = {
+  [TTS_MODELS.MULTILINGUAL]: {
+    name: 'High Quality',
+    description: 'Superior quality, slower generation',
+  },
+  [TTS_MODELS.FLASH]: {
+    name: 'Flash',
+    description: 'Faster generation at 50% off, good quality',
+  },
+};
+
+const DEFAULT_SETTINGS: Omit<TextToSpeechRequest, 'text'> & {
+  voice_id: string;
+  model_id: typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH;
+  stability: number;
+  clarity: number;
+  style: number;
+  speed: number;
+} = {
+  voice_id: FEATURED_VOICES[0].id,
+  model_id: TTS_MODELS.MULTILINGUAL,
+  stability: 0.5,
+  clarity: 0.75,
+  style: 0.35,
+  speed: 1.0,
+};

@@ -12,11 +12,3 @@ export const Ok = <T>(value?: T extends void ? void : T): Ok<T> => {
   return (typeof value === 'undefined' ? { ok: true } : { ok: true, value }) as Ok<T>;
 };
 export const Err = <E>(error: E): Err<E> => ({ ok: false, error });
-
-export type GeneratedSoundEffect = {
-  id: string;
-  prompt: string;
-  audioBase64: string;
-  createdAt: Date;
-  status: 'loading' | 'complete';
-};
