@@ -51,8 +51,6 @@ jobs:
           DRY_RUN: ${{ inputs.dryRun }}
         run: |
           # Set up git config regardless of dry run mode
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
           git add ./fern/apis/api/openapi.json
 
           # Check for changes
@@ -69,7 +67,6 @@ jobs:
             exit 0
           fi
 
-          # Normal execution continues here...
           if [ "${{ inputs.commitType }}" = "MAIN" ]; then
             git commit -m "Update OpenAPI schema from api.elevenlabs.io"
             git push
