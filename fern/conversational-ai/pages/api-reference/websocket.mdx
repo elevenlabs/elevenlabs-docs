@@ -63,7 +63,9 @@ curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?age
 This example demonstrates how to implement a WebSocket-based conversational AI client in Next.js using the ElevenLabs WebSocket API.
 
 <Note>
-  While this example uses the `voice-stream` package for microphone input handling, you can implement your own solution for capturing and encoding audio. The focus here is on demonstrating the WebSocket connection and event handling with the ElevenLabs API.
+  While this example uses the `voice-stream` package for microphone input handling, you can
+  implement your own solution for capturing and encoding audio. The focus here is on demonstrating
+  the WebSocket connection and event handling with the ElevenLabs API.
 </Note>
 
 <Steps>
@@ -75,6 +77,7 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
     ```
 
     The `voice-stream` package handles microphone access and audio streaming, automatically encoding the audio in base64 format as required by the ElevenLabs API.
+
   </Step>
 
   <Step title="Create WebSocket types">
@@ -129,6 +132,7 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
       | InterruptionEvent
       | PingEvent;
     ```
+
   </Step>
 
   <Step title="Create WebSocket hook">
@@ -151,7 +155,7 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
     export const useAgentConversation = () => {
       const websocketRef = useRef<WebSocket>(null);
       const [isConnected, setIsConnected] = useState<boolean>(false);
-      
+
       const { startStreaming, stopStreaming } = useVoiceStream({
         onAudioChunked: (audioData) => {
           if (!websocketRef.current) return;
@@ -238,6 +242,7 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
       };
     };
     ```
+
   </Step>
 
   <Step title="Create the conversation component">
@@ -286,6 +291,7 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
       );
     }
     ```
+
   </Step>
 </Steps>
 
