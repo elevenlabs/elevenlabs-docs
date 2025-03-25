@@ -48,6 +48,39 @@ curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?age
 
 ## WebSocket events
 
+### Client to Server Events
+
+The following events can be sent from the client to the server:
+
+<AccordionGroup>
+  <Accordion title="Contextual Updates">
+    Send non-interrupting contextual information to update the conversation state. This allows you to provide additional context without disrupting the ongoing conversation flow.
+
+    ```javascript
+    {
+      "type": "contextual_update",
+      "text": "User clicked on pricing page"
+    }
+    ```
+
+    **Use cases:**
+    - Updating user status or preferences
+    - Providing environmental context
+    - Adding background information
+    - Tracking user interface interactions
+
+    **Key points:**
+    - Does not interrupt current conversation flow
+    - Updates are incorporated as tool calls in conversation history
+    - Helps maintain context without breaking the natural dialogue
+
+    <Note>
+      Contextual updates are processed asynchronously and do not require a direct response from the server.
+    </Note>
+
+  </Accordion>
+</AccordionGroup>
+
 <Card
   title="WebSocket API Reference"
   icon="code"
