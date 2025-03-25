@@ -42,6 +42,7 @@ channels:
           - $ref: '#/components/messages/Pong'
           - $ref: '#/components/messages/ConversationInitiationClientData'
           - $ref: '#/components/messages/ClientToolResult'
+          - $ref: '#/components/messages/ContextualUpdate'
     subscribe:
       summary: Messages sent from the server to the client.
       description: Defines the message types that can be received by the client from the server
@@ -55,6 +56,7 @@ channels:
           - $ref: '#/components/messages/Interruption'
           - $ref: '#/components/messages/Ping'
           - $ref: '#/components/messages/ClientToolCall'
+          - $ref: '#/components/messages/ContextualUpdate'
           - $ref: '#/components/messages/InternalVadScore'
           - $ref: '#/components/messages/InternalTurnProbability'
           - $ref: '#/components/messages/InternalTentativeAgentResponse'
@@ -181,6 +183,13 @@ channels:
               result: 'Account is active and in good standing'
               is_error: false
 
+          # 14) Client => ServerL: Contextual update
+          - type: publish
+            messageId: ContextualUpdate
+            value:
+              type: 'contextual_update'
+              text: 'User is viewing the pricing page'
+
 components:
   messages:
     UserAudioChunk:
@@ -258,6 +267,11 @@ components:
       description: Preliminary response from the agent before final confirmation.
       payload:
         $ref: '#/components/schemas/InternalTentativeAgentResponse'
+    ContextualUpdate:
+      name: Contextual Update
+      description: Non-interrupting content sent to update the conversation state without disrupting the flow.
+      payload:
+        $ref: '#/components/schemas/ContextualUpdate'
   schemas:
     UserAudioChunk:
       type: object
@@ -544,3 +558,15 @@ components:
             tentative_agent_response:
               type: string
               description: Preliminary text from the agent
+    ContextualUpdate:
+      type: object
+      description: Schema for non-interrupting contextual updates
+      required:
+        - type
+        - text
+      properties:
+        type:
+          x-fern-type: literal<"contextual_update">
+        text:
+          type: string
+          description: Contextual information to be added to the conversation state.
