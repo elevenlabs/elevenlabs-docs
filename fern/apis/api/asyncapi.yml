@@ -79,16 +79,16 @@ channels:
               default: false
             apply_text_normalization:
               description: >-
-                This parameter controls text normalization with three modes - 'auto', 'on', and 'off'. When set to 'auto', 
-                the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', 
-                text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 
-                'eleven_turbo_v2_5' model. Defaults to 'auto'.
+                This parameter controls text normalization with three modes - 'auto', 'on', and 'off'. When set to 'auto',
+                the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on',
+                text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for
+                'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models. Defaults to 'auto'.
               type: string
               enum: ['auto', 'on', 'off']
               default: 'auto'
             seed:
               description: >-
-                If specified, our system will make a best effort to sample deterministically, such that repeated requests 
+                If specified, our system will make a best effort to sample deterministically, such that repeated requests
                 with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be an
                 integer between 0 and 4294967295.
               type: integer
@@ -184,7 +184,7 @@ components:
           items:
             $ref: '#/components/schemas/PronunciationDictionaryLocator'
           description: |
-            Optional list of pronunciation dictionary locators. If provided, these dictionaries will be used to 
+            Optional list of pronunciation dictionary locators. If provided, these dictionaries will be used to
             modify pronunciation of matching text. Must only be provided in the first message.
 
             Note: Pronunciation dictionary matches will only be respected within a provided chunk.
