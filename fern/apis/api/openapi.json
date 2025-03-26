@@ -2123,6 +2123,222 @@
         "x-fern-sdk-method-name": "get_all"
       }
     },
+    "/v2/voices": {
+      "get": {
+        "operationId": "Get_voices_v2_v2_voices_get",
+        "summary": "Get Voices V2",
+        "description": "Gets a list of all available voices for a user with search, filtering and pagination.",
+        "parameters": [
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "description": "The next page token to use for pagination. Returned from the previous request.",
+            "required": false,
+            "schema": {
+              "description": "The next page token to use for pagination. Returned from the previous request.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "0"
+              ],
+              "title": "Next Page Token"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "How many voices to return at maximum. Can not exceed 100, defaults to 10. Page 0 may include more voices due to default voices being included.",
+            "required": false,
+            "schema": {
+              "description": "How many voices to return at maximum. Can not exceed 100, defaults to 10. Page 0 may include more voices due to default voices being included.",
+              "type": "integer",
+              "default": 10,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search term to filter voices by. Searches in name, description, labels, category.",
+            "required": false,
+            "schema": {
+              "description": "Search term to filter voices by. Searches in name, description, labels, category.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Which field to sort by, one of 'created_at_unix' or 'name'. 'created_at_unix' may not be available for older voices.",
+            "required": false,
+            "schema": {
+              "description": "Which field to sort by, one of 'created_at_unix' or 'name'. 'created_at_unix' may not be available for older voices.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "created_at_unix"
+              ],
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "sort_direction",
+            "in": "query",
+            "description": "Which direction to sort the voices in. 'asc' or 'desc'.",
+            "required": false,
+            "schema": {
+              "description": "Which direction to sort the voices in. 'asc' or 'desc'.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "desc"
+              ],
+              "title": "Sort Direction"
+            }
+          },
+          {
+            "name": "voice_type",
+            "in": "query",
+            "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace'.",
+            "required": false,
+            "schema": {
+              "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace'.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Voice Type"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category of the voice to filter by. One of 'premade', 'cloned', 'generated', 'professional'",
+            "required": false,
+            "schema": {
+              "description": "Category of the voice to filter by. One of 'premade', 'cloned', 'generated', 'professional'",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "name": "fine_tuning_state",
+            "in": "query",
+            "description": "State of the voice's fine tuning to filter by. Applicable only to professional voices clones. One of 'draft', 'not_verified', 'not_started', 'queued', 'fine_tuning', 'fine_tuned', 'failed', 'delayed'",
+            "required": false,
+            "schema": {
+              "description": "State of the voice's fine tuning to filter by. Applicable only to professional voices clones. One of 'draft', 'not_verified', 'not_started', 'queued', 'fine_tuning', 'fine_tuned', 'failed', 'delayed'",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fine Tuning State"
+            }
+          },
+          {
+            "name": "include_total_count",
+            "in": "query",
+            "description": "Whether to include the total count of voices found in the response. Incurs a performance cost.",
+            "required": false,
+            "schema": {
+              "description": "Whether to include the total count of voices found in the response. Incurs a performance cost.",
+              "type": "boolean",
+              "default": true,
+              "examples": [
+                true
+              ],
+              "title": "Include Total Count"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVoicesV2ResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "voices"
+        ],
+        "x-fern-sdk-group-name": "voices",
+        "x-fern-sdk-method-name": "search"
+      }
+    },
     "/v1/voices/settings/default": {
       "get": {
         "operationId": "Get_default_voice_settings__v1_voices_settings_default_get",
@@ -7817,6 +8033,70 @@
         "x-fern-sdk-method-name": "add_from_file"
       }
     },
+    "/v1/pronunciation-dictionaries/add-from-rules": {
+      "post": {
+        "operationId": "Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post",
+        "summary": "Add A Pronunciation Dictionary",
+        "description": "Creates a new pronunciation dictionary from provided rules.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddPronunciationDictionaryResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pronunciation Dictionary"
+        ],
+        "x-fern-sdk-group-name": "pronunciation_dictionary",
+        "x-fern-sdk-method-name": "add_from_rules"
+      }
+    },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
       "post": {
         "operationId": "Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post",
@@ -8168,6 +8448,54 @@
               "maximum": 100,
               "minimum": 1,
               "title": "Page Size"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Which field to sort by, one of 'created_at_unix' or 'name'.",
+            "required": false,
+            "schema": {
+              "description": "Which field to sort by, one of 'created_at_unix' or 'name'.",
+              "default": "creation_time_unix",
+              "anyOf": [
+                {
+                  "enum": [
+                    "creation_time_unix",
+                    "name"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "creation_time_unix"
+              ],
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "sort_direction",
+            "in": "query",
+            "description": "Which direction to sort the voices in. 'ascending' or 'descending'.",
+            "required": false,
+            "schema": {
+              "description": "Which direction to sort the voices in. 'ascending' or 'descending'.",
+              "default": "DESCENDING",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "descending"
+              ],
+              "title": "Sort Direction"
             }
           },
           {
@@ -8735,7 +9063,7 @@
       "post": {
         "operationId": "Share_workspace_resource_v1_workspace_resources__resource_id__share_post",
         "summary": "Share Workspace Resource",
-        "description": "Grants a role on a workspace resource to a user or a group. It overrides any existing role this user/group has on the resource. To target a user, pass only the user email. To target a group, pass only the group id. The user must be in your workspace. You must have admin access to the resource to share it.",
+        "description": "Grants a role on a workspace resource to a user or a group. It overrides any existing role this user/group/workspace api key has on the resource. To target a user, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. You must have admin access to the resource to share it.",
         "parameters": [
           {
             "name": "resource_id",
@@ -8806,7 +9134,7 @@
       "post": {
         "operationId": "Unshare_workspace_resource_v1_workspace_resources__resource_id__unshare_post",
         "summary": "Unshare Workspace Resource",
-        "description": "Removes any existing role on a workspace resource from a user or a group. To target a user, pass only the user email. To target a group, pass only the group id. The user must be in your workspace. You must have admin access to the resource to unshare it. You cannot remove permissions from the user who created the resource.",
+        "description": "Removes any existing role on a workspace resource from a user or a group. To target a user, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. You must have admin access to the resource to unshare it. You cannot remove permissions from the user who created the resource.",
         "parameters": [
           {
             "name": "resource_id",
@@ -9065,6 +9393,70 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "get_signed_url"
+      }
+    },
+    "/v1/convai/twilio/outbound_call": {
+      "post": {
+        "operationId": "Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post",
+        "summary": "Handle An Outbound Call Via Twilio",
+        "description": "Handle an outbound call via Twilio",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwilioOutboundCallResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "twilio_outbound_call"
       }
     },
     "/v1/convai/agents/create": {
@@ -10170,7 +10562,7 @@
       "post": {
         "operationId": "Import_phone_number_v1_convai_phone_numbers_create_post",
         "summary": "Import Phone Number",
-        "description": "Import Phone Number from Twilio configuration",
+        "description": "Import Phone Number from provider configuration (Twilio or SIP trunk)",
         "parameters": [
           {
             "name": "xi-api-key",
@@ -10197,7 +10589,15 @@
             "application/json": {
               "schema": {
                 "description": "Create Phone Request Information",
-                "$ref": "#/components/schemas/CreatePhoneNumberRequest"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/CreateTwilioPhoneNumberRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CreateSIPTrunkPhoneNumberRequest"
+                  }
+                ],
+                "title": "Phone Request"
               }
             }
           }
@@ -10835,18 +11235,6 @@
                 "21m00Tcm4TlvDq8ikWAM"
               ],
               "title": "Documentation Id"
-            }
-          },
-          {
-            "name": "force_reindex",
-            "in": "query",
-            "description": "In case the document is indexed and for some reason you want to reindex it, set this param as true.",
-            "required": false,
-            "schema": {
-              "description": "In case the document is indexed and for some reason you want to reindex it, set this param as true.",
-              "type": "boolean",
-              "default": false,
-              "title": "Force Reindex"
             }
           },
           {
@@ -11836,6 +12224,11 @@
             "type": "string",
             "title": "Version Id"
           },
+          "version_rules_num": {
+            "description": "The number of rules in the version of the pronunciation dictionary.",
+            "type": "integer",
+            "title": "Version Rules Num"
+          },
           "description": {
             "description": "The description of the pronunciation dictionary.",
             "anyOf": [
@@ -11862,7 +12255,8 @@
           "name",
           "created_by",
           "creation_time_unix",
-          "version_id"
+          "version_id",
+          "version_rules_num"
         ],
         "title": "AddPronunciationDictionaryResponseModel"
       },
@@ -11878,6 +12272,11 @@
             "description": "The version ID of the pronunciation dictionary.",
             "type": "string",
             "title": "Version Id"
+          },
+          "version_rules_num": {
+            "description": "The number of rules in the version of the pronunciation dictionary.",
+            "type": "integer",
+            "title": "Version Rules Num"
           }
         },
         "example": {
@@ -11886,7 +12285,8 @@
         },
         "required": [
           "id",
-          "version_id"
+          "version_id",
+          "version_rules_num"
         ],
         "title": "AddPronunciationDictionaryRulesResponseModel"
       },
@@ -12744,6 +13144,77 @@
           "name"
         ],
         "title": "Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_file_post"
+      },
+      "Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post": {
+        "type": "object",
+        "properties": {
+          "rules": {
+            "description": "List of pronunciation rules. Rule can be either:\n    an alias rule: {'string_to_replace': 'a', 'type': 'alias', 'alias': 'b', }\n    or a phoneme rule: {'string_to_replace': 'a', 'type': 'phoneme', 'phoneme': 'b', 'alphabet': 'ipa' }",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/PronunciationDictionaryAliasRuleRequestModel"
+                },
+                {
+                  "$ref": "#/components/schemas/PronunciationDictionaryPhonemeRuleRequestModel"
+                }
+              ]
+            },
+            "examples": [
+              "\n    [\n        {'string_to_replace': 'a', 'type': 'alias', 'alias': 'b' },\n        {'string_to_replace': 'c', 'type': 'phoneme', 'phoneme': 'd', 'alphabet': 'ipa' }\n    ]"
+            ],
+            "title": "Rules"
+          },
+          "name": {
+            "description": "The name of the pronunciation dictionary, used for identification only.",
+            "type": "string",
+            "examples": [
+              "My Dictionary"
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "description": "A description of the pronunciation dictionary, used for identification only.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Contains pronunciation's of our character names"
+            ],
+            "title": "Description"
+          },
+          "workspace_access": {
+            "description": "Should be one of 'admin', 'editor' or 'viewer'. If not provided, defaults to no access.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "viewer"
+            ],
+            "title": "Workspace Access"
+          }
+        },
+        "required": [
+          "rules",
+          "name"
+        ],
+        "title": "Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post"
       },
       "Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post": {
         "type": "object",
@@ -14533,6 +15004,45 @@
             ],
             "title": "File"
           },
+          "csv_file": {
+            "description": "CSV file containing transcription/translation metadata",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csv File"
+          },
+          "foreground_audio_file": {
+            "description": "For use only with csv input",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Foreground Audio File"
+          },
+          "background_audio_file": {
+            "description": "For use only with csv input",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background Audio File"
+          },
           "name": {
             "description": "Name of the dubbing project.",
             "anyOf": [
@@ -14646,6 +15156,19 @@
             "type": "boolean",
             "default": false,
             "title": "Use Replacement Voices From Library"
+          },
+          "mode": {
+            "description": "automatic or manual. Manual mode is only supported when creating a dubbing studio project",
+            "default": "automatic",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mode"
           }
         },
         "title": "Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
@@ -15008,6 +15531,39 @@
         },
         "title": "Body_Get_similar_library_voices_v1_similar_voices_post"
       },
+      "Body_Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "agent_phone_number_id": {
+            "type": "string",
+            "title": "Agent Phone Number Id"
+          },
+          "to_number": {
+            "type": "string",
+            "title": "To Number"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "agent_id",
+          "agent_phone_number_id",
+          "to_number"
+        ],
+        "title": "Body_Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post"
+      },
       "Body_Invite_multiple_users_v1_workspace_invites_add_bulk_post": {
         "type": "object",
         "properties": {
@@ -15224,6 +15780,18 @@
               }
             ],
             "title": "Group Id"
+          },
+          "workspace_api_key_id": {
+            "description": "The ID of the target workspace API key. This isn't the same as the key itself that would you pass in the header for authentication. Workspace admins can find this in the workspace settings UI.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspace Api Key Id"
           }
         },
         "required": [
@@ -15669,7 +16237,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -15851,7 +16419,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -16033,7 +16601,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -16194,7 +16762,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' model.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -16293,6 +16861,18 @@
               }
             ],
             "title": "Group Id"
+          },
+          "workspace_api_key_id": {
+            "description": "The ID of the target workspace API key. This isn't the same as the key itself that would you pass in the header for authentication. Workspace admins can find this in the workspace settings UI.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspace Api Key Id"
           }
         },
         "required": [
@@ -17962,7 +18542,43 @@
         },
         "title": "ConversationInitiationClientDataConfig"
       },
-      "ConversationInitiationClientDataRequest": {
+      "ConversationInitiationClientDataRequest-Input": {
+        "type": "object",
+        "properties": {
+          "conversation_config_override": {
+            "$ref": "#/components/schemas/ConversationConfigClientOverride-Input"
+          },
+          "custom_llm_extra_body": {
+            "type": "object",
+            "title": "Custom Llm Extra Body"
+          },
+          "dynamic_variables": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
+          }
+        },
+        "title": "ConversationInitiationClientDataRequest"
+      },
+      "ConversationInitiationClientDataRequest-Output": {
         "type": "object",
         "properties": {
           "conversation_config_override": {
@@ -18254,43 +18870,6 @@
         ],
         "title": "CreateAgentResponseModel"
       },
-      "CreatePhoneNumberRequest": {
-        "type": "object",
-        "properties": {
-          "phone_number": {
-            "description": "Phone number",
-            "type": "string",
-            "title": "Phone Number"
-          },
-          "provider": {
-            "description": "Phone provider",
-            "$ref": "#/components/schemas/TelephonyProvider"
-          },
-          "label": {
-            "description": "Label for the phone number",
-            "type": "string",
-            "title": "Label"
-          },
-          "sid": {
-            "description": "Twilio Account SID",
-            "type": "string",
-            "title": "Sid"
-          },
-          "token": {
-            "description": "Twilio Auth Token",
-            "type": "string",
-            "title": "Token"
-          }
-        },
-        "required": [
-          "phone_number",
-          "provider",
-          "label",
-          "sid",
-          "token"
-        ],
-        "title": "CreatePhoneNumberRequest"
-      },
       "CreatePhoneNumberResponseModel": {
         "type": "object",
         "properties": {
@@ -18321,6 +18900,84 @@
           "status"
         ],
         "title": "CreatePronunciationDictionaryResponseModel"
+      },
+      "CreateSIPTrunkPhoneNumberRequest": {
+        "description": "SIP trunk phone number request\n\nIncludes termination URI and optional digest authentication credentials.\nIf credentials are provided, both username and password must be included.\nIf credentials are not provided, ACL authentication is assumed. (user needs to add our ips in their settings)",
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "description": "Phone number",
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "provider": {
+            "default": "sip_trunk",
+            "$ref": "#/components/schemas/TelephonyProvider"
+          },
+          "label": {
+            "description": "Label for the phone number",
+            "type": "string",
+            "title": "Label"
+          },
+          "termination_uri": {
+            "description": "SIP trunk termination URI",
+            "type": "string",
+            "title": "Termination Uri"
+          },
+          "credentials": {
+            "description": "Optional digest authentication credentials (username/password). If not provided, ACL authentication is assumed.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SIPTrunkCredentials"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "phone_number",
+          "label",
+          "termination_uri"
+        ],
+        "title": "CreateSIPTrunkPhoneNumberRequest"
+      },
+      "CreateTwilioPhoneNumberRequest": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "description": "Phone number",
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "provider": {
+            "default": "twilio",
+            "$ref": "#/components/schemas/TelephonyProvider"
+          },
+          "label": {
+            "description": "Label for the phone number",
+            "type": "string",
+            "title": "Label"
+          },
+          "sid": {
+            "description": "Twilio Account SID",
+            "type": "string",
+            "title": "Sid"
+          },
+          "token": {
+            "description": "Twilio Auth Token",
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "required": [
+          "phone_number",
+          "label",
+          "sid",
+          "token"
+        ],
+        "title": "CreateTwilioPhoneNumberRequest"
       },
       "CustomLLM": {
         "type": "object",
@@ -19074,7 +19731,8 @@
         "type": "string",
         "enum": [
           "e5_mistral_7b_instruct",
-          "gte_Qwen2_15B_instruct"
+          "gte_Qwen2_15B_instruct",
+          "multilingual_e5_large_instruct"
         ],
         "title": "EmbeddingModelEnum"
       },
@@ -19775,7 +20433,7 @@
             ]
           },
           "conversation_initiation_client_data": {
-            "$ref": "#/components/schemas/ConversationInitiationClientDataRequest"
+            "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Output"
           }
         },
         "required": [
@@ -20341,6 +20999,11 @@
             "type": "string",
             "title": "Latest Version Id"
           },
+          "latest_version_rules_num": {
+            "description": "The number of rules in the latest version of the pronunciation dictionary.",
+            "type": "integer",
+            "title": "Latest Version Rules Num"
+          },
           "name": {
             "description": "The name of the pronunciation dictionary.",
             "type": "string",
@@ -20355,6 +21018,18 @@
             "description": "The creation time of the pronunciation dictionary in Unix timestamp.",
             "type": "integer",
             "title": "Creation Time Unix"
+          },
+          "archived_time_unix": {
+            "description": "The archive time of the pronunciation dictionary in Unix timestamp.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived Time Unix"
           },
           "description": {
             "description": "The description of the pronunciation dictionary.",
@@ -20380,9 +21055,11 @@
         "required": [
           "id",
           "latest_version_id",
+          "latest_version_rules_num",
           "name",
           "created_by",
-          "creation_time_unix"
+          "creation_time_unix",
+          "archived_time_unix"
         ],
         "title": "GetPronunciationDictionaryMetadataResponseModel"
       },
@@ -20599,6 +21276,43 @@
           "voices"
         ],
         "title": "GetVoicesResponseModel"
+      },
+      "GetVoicesV2ResponseModel": {
+        "type": "object",
+        "properties": {
+          "voices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VoiceResponseModel"
+            },
+            "title": "Voices"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          },
+          "total_count": {
+            "type": "integer",
+            "title": "Total Count"
+          },
+          "next_page_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page Token"
+          }
+        },
+        "required": [
+          "voices",
+          "has_more",
+          "total_count"
+        ],
+        "title": "GetVoicesV2ResponseModel"
       },
       "GetWorkspaceSecretsResponseModel": {
         "type": "object",
@@ -22871,26 +23585,28 @@
             "title": "Name"
           },
           "audio_upload": {
-            "description": "The audio upload of the project snapshot.",
+            "description": "(Deprecated)",
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ProjectSnapshotUploadResponseModel"
+                "type": "object"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Audio Upload"
           },
           "zip_upload": {
-            "description": "The zip upload of the project snapshot.",
+            "description": "(Deprecated)",
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ProjectSnapshotUploadResponseModel"
+                "type": "object"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Zip Upload"
           },
           "character_alignments": {
             "type": "array",
@@ -22901,18 +23617,10 @@
           }
         },
         "example": {
-          "audio_upload": {
-            "acx_volume_normalization": true,
-            "status": "success"
-          },
           "created_at_unix": 1714204800,
           "name": "My Project Snapshot",
           "project_id": "aw1NgEzBg83R7vgmiJt6",
-          "project_snapshot_id": "aw1NgEzBg83R7vgmiJt6",
-          "zip_upload": {
-            "acx_volume_normalization": true,
-            "status": "success"
-          }
+          "project_snapshot_id": "aw1NgEzBg83R7vgmiJt6"
         },
         "required": [
           "project_snapshot_id",
@@ -22947,41 +23655,35 @@
             "title": "Name"
           },
           "audio_upload": {
-            "description": "The audio upload of the project snapshot.",
+            "description": "(Deprecated)",
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ProjectSnapshotUploadResponseModel"
+                "type": "object"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Audio Upload"
           },
           "zip_upload": {
-            "description": "The zip upload of the project snapshot.",
+            "description": "(Deprecated)",
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ProjectSnapshotUploadResponseModel"
+                "type": "object"
               },
               {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Zip Upload"
           }
         },
         "example": {
-          "audio_upload": {
-            "acx_volume_normalization": true,
-            "status": "success"
-          },
           "created_at_unix": 1714204800,
           "name": "My Project Snapshot",
           "project_id": "aw1NgEzBg83R7vgmiJt6",
-          "project_snapshot_id": "aw1NgEzBg83R7vgmiJt6",
-          "zip_upload": {
-            "acx_volume_normalization": true,
-            "status": "success"
-          }
+          "project_snapshot_id": "aw1NgEzBg83R7vgmiJt6"
         },
         "required": [
           "project_snapshot_id",
@@ -22990,42 +23692,6 @@
           "name"
         ],
         "title": "ProjectSnapshotResponseModel"
-      },
-      "ProjectSnapshotUploadResponseModel": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "description": "The status of the snapshot upload.",
-            "type": "string",
-            "enum": [
-              "success",
-              "in_queue",
-              "pending",
-              "failed"
-            ],
-            "title": "Status"
-          },
-          "acx_volume_normalization": {
-            "description": "Whether volume normalization was applied to the snapshot.",
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Acx Volume Normalization"
-          }
-        },
-        "example": {
-          "acx_volume_normalization": true,
-          "status": "success"
-        },
-        "required": [
-          "status"
-        ],
-        "title": "ProjectSnapshotUploadResponseModel"
       },
       "ProjectSnapshotsResponseModel": {
         "type": "object",
@@ -23042,18 +23708,10 @@
         "example": {
           "snapshots": [
             {
-              "audio_upload": {
-                "acx_volume_normalization": true,
-                "status": "success"
-              },
               "created_at_unix": 1714204800,
               "name": "My Project Snapshot",
               "project_id": "aw1NgEzBg83R7vgmiJt6",
-              "project_snapshot_id": "aw1NgEzBg83R7vgmiJt6",
-              "zip_upload": {
-                "acx_volume_normalization": true,
-                "status": "success"
-              }
+              "project_snapshot_id": "aw1NgEzBg83R7vgmiJt6"
             }
           ]
         },
@@ -23133,6 +23791,18 @@
               }
             ]
           },
+          "ignore_default_personality": {
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
+          },
           "rag": {
             "$ref": "#/components/schemas/RagConfig"
           }
@@ -23209,6 +23879,18 @@
                 "type": "null"
               }
             ]
+          },
+          "ignore_default_personality": {
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
           },
           "rag": {
             "$ref": "#/components/schemas/RagConfig"
@@ -23352,7 +24034,14 @@
             "title": "Pronunciation Dictionary Id"
           },
           "version_id": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Version Id"
           }
         },
@@ -23368,6 +24057,10 @@
           "version_id": {
             "type": "string",
             "title": "Version Id"
+          },
+          "version_rules_num": {
+            "type": "integer",
+            "title": "Version Rules Num"
           },
           "pronunciation_dictionary_id": {
             "type": "string",
@@ -23388,10 +24081,22 @@
           "creation_time_unix": {
             "type": "integer",
             "title": "Creation Time Unix"
+          },
+          "archived_time_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived Time Unix"
           }
         },
         "required": [
           "version_id",
+          "version_rules_num",
           "pronunciation_dictionary_id",
           "dictionary_name",
           "version_name",
@@ -23409,7 +24114,14 @@
             "title": "Pronunciation Dictionary Id"
           },
           "version_id": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Version Id"
           }
         },
@@ -23657,6 +24369,11 @@
             "description": "The version ID of the pronunciation dictionary.",
             "type": "string",
             "title": "Version Id"
+          },
+          "version_rules_num": {
+            "description": "The number of rules in the version of the pronunciation dictionary.",
+            "type": "integer",
+            "title": "Version Rules Num"
           }
         },
         "example": {
@@ -23665,7 +24382,8 @@
         },
         "required": [
           "id",
-          "version_id"
+          "version_id",
+          "version_rules_num"
         ],
         "title": "RemovePronunciationDictionaryRulesResponseModel"
       },
@@ -23787,6 +24505,26 @@
           "share_options"
         ],
         "title": "ResourceMetadataResponseModel"
+      },
+      "SIPTrunkCredentials": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "description": "SIP trunk username",
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "description": "SIP trunk password",
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "SIPTrunkCredentials"
       },
       "SafetyCommonModel": {
         "description": "Safety object that has the information of safety evaluations based on used voice.",
@@ -25312,7 +26050,8 @@
       "TelephonyProvider": {
         "type": "string",
         "enum": [
-          "twilio"
+          "twilio",
+          "sip_trunk"
         ],
         "title": "TelephonyProvider"
       },
@@ -25338,6 +26077,36 @@
           "turn"
         ],
         "title": "TurnMode"
+      },
+      "TwilioOutboundCallResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "callSid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Callsid"
+          }
+        },
+        "required": [
+          "success",
+          "message",
+          "callSid"
+        ],
+        "title": "TwilioOutboundCallResponse"
       },
       "URLAvatar": {
         "type": "object",
