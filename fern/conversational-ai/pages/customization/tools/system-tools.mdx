@@ -33,76 +33,77 @@ System tools provide this capability by allowing the assistant to perform action
 
 When creating an agent via API, you can add system tools to your agent configuration. Here's how to implement both the end call and language detection tools:
 
-<CodeBlocks>
+<CodeGroup>
 
-```python
-from elevenlabs import (
-    ConversationalConfig,
-    ElevenLabs,
-    AgentConfig,
-    PromptAgent,
-    PromptAgentToolsItem_System
-)
+  ```python
+  from elevenlabs import (
+      ConversationalConfig,
+      ElevenLabs,
+      AgentConfig,
+      PromptAgent,
+      PromptAgentToolsItem_System
+  )
 
-# Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+  # Initialize the client
+  client = ElevenLabs(api_key="YOUR_API_KEY")
 
-# Create system tools
-end_call_tool = PromptAgentToolsItem_System(
-    name="end_call",
-    description=""  # Optional: Customize when the tool should be triggered
-)
+  # Create system tools
+  end_call_tool = PromptAgentToolsItem_System(
+      name="end_call",
+      description=""  # Optional: Customize when the tool should be triggered
+  )
 
-language_detection_tool = PromptAgentToolsItem_System(
-    name="language_detection",
-    description=""  # Optional: Customize when the tool should be triggered
-)
+  language_detection_tool = PromptAgentToolsItem_System(
+      name="language_detection",
+      description=""  # Optional: Customize when the tool should be triggered
+  )
 
-# Create the agent configuration with both tools
-conversation_config = ConversationalConfig(
-    agent=AgentConfig(
-        prompt=PromptAgent(
-            tools=[end_call_tool, language_detection_tool]
-        )
-    )
-)
+  # Create the agent configuration with both tools
+  conversation_config = ConversationalConfig(
+      agent=AgentConfig(
+          prompt=PromptAgent(
+              tools=[end_call_tool, language_detection_tool]
+          )
+      )
+  )
 
-# Create the agent
-response = client.conversational_ai.create_agent(
-    conversation_config=conversation_config
-)
-```
+  # Create the agent
+  response = client.conversational_ai.create_agent(
+      conversation_config=conversation_config
+  )
+  ```
 
-```javascript
-import { ElevenLabs } from 'elevenlabs';
+  ```javascript
+  import { ElevenLabs } from 'elevenlabs';
 
-// Initialize the client
-const client = new ElevenLabs({
-  apiKey: 'YOUR_API_KEY',
-});
+  // Initialize the client
+  const client = new ElevenLabs({
+    apiKey: 'YOUR_API_KEY',
+  });
 
-// Create the agent with system tools
-await client.conversationalAi.createAgent({
-  conversation_config: {
-    agent: {
-      prompt: {
-        tools: [
-          {
-            type: 'system',
-            name: 'end_call',
-            description: '',
-          },
-          {
-            type: 'system',
-            name: 'language_detection',
-            description: '',
-          },
-        ],
+  // Create the agent with system tools
+  await client.conversationalAi.createAgent({
+    conversation_config: {
+      agent: {
+        prompt: {
+          tools: [
+            {
+              type: 'system',
+              name: 'end_call',
+              description: '',
+            },
+            {
+              type: 'system',
+              name: 'language_detection',
+              description: '',
+            },
+          ],
+        },
       },
     },
-  },
-});
-</CodeBlocks>
+  });
+  ```
+</CodeGroup>
 
 ## FAQ
 
