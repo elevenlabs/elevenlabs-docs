@@ -235,9 +235,13 @@ paths:
       parameters:
         - {} # public_user_id
         - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+  /v2/voices:
+    get:
+      summary: List voices
   /v1/voices:
     get:
       summary: List voices
+      deprecated: true
   /v1/voice-generation/generate-voice/parameters:
     get:
       x-fern-ignore: true
@@ -444,6 +448,10 @@ paths:
         - convai
   /v1/convai/phone-numbers/:
     get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/twilio/outbound_call:
+    post:
       x-fern-audiences:
         - convai
   /v1/convai/knowledge-base:
