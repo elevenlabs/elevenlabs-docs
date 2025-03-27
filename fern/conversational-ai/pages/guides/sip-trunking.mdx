@@ -38,34 +38,32 @@ Before setting up SIP trunking, ensure you have:
 ## Setting Up SIP Trunking
 
 <Steps>
-  ### Navigate to Phone Numbers
-  Go to Conversational AI → Phone Numbers in the ElevenLabs dashboard.
+  <Step title="Navigate to Phone Numbers">
+    Go to Conversational AI → Phone Numbers in the ElevenLabs dashboard.
+  </Step>
+  <Step title="Import SIP Trunk">
+    Click on "Import a phone number from SIP trunk" button to open the configuration dialog.
+  </Step>
+  <Step title="Enter Configuration Details">
+    Complete the form with the following information:
 
-### Import SIP Trunk
+    - **Label**: A descriptive name for the phone number
+    - **Phone Number**: The E.164 formatted phone number to connect (e.g., +15551234567)
+    - **Termination URI**: Your SIP trunk's termination URI (where ElevenLabs will send outbound calls)
 
-Click on "Import a phone number from SIP trunk" button to open the configuration dialog.
+  </Step>
+  <Step title="Configure Authentication (Optional)">
+    If your SIP provider requires digest authentication:
 
-### Enter Configuration Details
+    - Enter the username for SIP digest authentication
+    - Enter the password for SIP digest authentication
 
-Complete the form with the following information:
+    If left empty, ACL authentication will be used (you'll need to allowlist ElevenLabs IPs in your provider's settings).
 
-- **Label**: A descriptive name for the phone number
-- **Phone Number**: The E.164 formatted phone number to connect (e.g., +15551234567)
-- **Termination URI**: Your SIP trunk's termination URI (where ElevenLabs will send outbound calls)
-
-### Configure Authentication (Optional)
-
-If your SIP provider requires digest authentication:
-
-- Enter the username for SIP digest authentication
-- Enter the password for SIP digest authentication
-
-If left empty, ACL authentication will be used (you'll need to allowlist ElevenLabs IPs in your provider's settings).
-
-### Complete Setup
-
-Click "Import" to finalize the configuration.
-
+  </Step>
+  <Step title="Complete Setup">
+    Click "Import" to finalize the configuration.
+  </Step>
 </Steps>
 
 ## Inbound Configuration
@@ -83,8 +81,6 @@ For outbound calls (calls from ElevenLabs back to your system), you need to prov
 - **Authentication Credentials** (Optional): If your SIP trunk requires digest authentication, provide the username and password. Otherwise, ACL authentication will be used.
 
 ## Authentication Methods
-
-ElevenLabs supports two authentication methods for SIP trunking:
 
 <Tabs>
   <Tab title="Digest Authentication">
@@ -112,13 +108,15 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 
 <AccordionGroup>
   <Accordion title="Connection Issues">
-    If you're experiencing connection problems: 1. Verify your SIP trunk configuration on both the
-    ElevenLabs side and your provider side 2. Check that your firewall allows SIP traffic on port
-    5060 3. Confirm that your termination URI is correctly formatted 4. Test with and without
-    authentication credentials
+    If you're experiencing connection problems:
+    1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side
+    2. Check that your firewall allows SIP traffic on port 5060
+    3. Confirm that your termination URI is correctly formatted
+    4. Test with and without authentication credentials
   </Accordion>
 
 {' '}
+
 <Accordion title="Authentication Failures">
   If calls are failing due to authentication issues: 1. Double-check your username and password if
   using digest authentication 2. Verify that ElevenLabs' IP addresses are allowlisted if using ACL
@@ -148,18 +146,21 @@ After importing your SIP trunk phone number, you can assign it to a conversation
   </Accordion>
 
 {' '}
+
 <Accordion title="What SIP trunk providers are compatible with ElevenLabs?">
   ElevenLabs is compatible with most standard SIP trunk providers including Twilio, Vonage,
   RingCentral, and others that support SIP protocol standards.
 </Accordion>
 
 {' '}
+
 <Accordion title="How many concurrent calls are supported?">
   The number of concurrent calls depends on your subscription plan. Enterprise plans typically allow
   for higher volumes of concurrent calls.
 </Accordion>
 
 {' '}
+
 <Accordion title="Is call encryption supported?">
   Yes, ElevenLabs supports encrypted SIP communications (SIPS) for enhanced security. Contact
   support for specific configuration requirements.
@@ -173,6 +174,4 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 
 ## Next Steps
 
-- [Learn about creating conversational AI agents](/docs/capabilities/conversational-ai)
-- [Explore agent capabilities](/docs/capabilities/convai-agent-capabilities)
-- [Understand voice customization options](/docs/capabilities/voices)
+- [Learn about creating conversational AI agents](/docs/conversational-ai/quickstart)
