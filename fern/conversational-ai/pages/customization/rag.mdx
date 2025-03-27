@@ -120,56 +120,52 @@ You can also implement RAG through the [API](/docs/api-reference/knowledge-base/
 <CodeBlocks>
 
 ```python
-import requests
+from elevenlabs import ElevenLabs, EmbeddingModelEnum
+import time
+
+# Initialize the ElevenLabs client
+client = ElevenLabs(api_key="your-api-key")
 
 # First, index a document for RAG
-
 document_id = "your-document-id"
-response = requests.post(
-  f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
-  headers={"xi-api-key": "your-api-key"},
-  json={"model": "e5_mistral_7b_instruct"}
+embedding_model = EmbeddingModelEnum.E5_MISTRAL_7B_INSTRUCT
+
+# Trigger RAG indexing
+response = client.conversational_ai.rag_index_status(
+    documentation_id=document_id,
+    model=embedding_model
 )
 
 # Check indexing status
-while True:
-  if response.json()["status"] in ["SUCCEEDED", "FAILED"]:
-      break
-  time.sleep(5) # wait 5 seconds before checking status again
-  response = requests.get(
-    f"https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/{document_id}/rag-index",
-    headers={"xi-api-key": "your-api-key"}
-  )
-
+while response.status not in ["SUCCEEDED", "FAILED"]:
+    time.sleep(5)  # Wait 5 seconds before checking status again
+    response = client.conversational_ai.rag_index_status(
+        documentation_id=document_id,
+        model=embedding_model
+    )
 
 # Then update agent configuration to use RAG
-
 agent_id = "your-agent-id"
-agent_config = requests.get(
-  f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
-  headers={"xi-api-key": "your-api-key"}
-).json()
+
+# Get the current agent configuration
+agent_config = client.conversational_ai.get_agent(agent_id=agent_id)
 
 # Enable RAG in the agent configuration
-
-agent_config["agent"]["prompt"]["rag"] = {
+agent_config.agent.prompt.rag = {
     "enabled": True,
     "embedding_model": "e5_mistral_7b_instruct",
     "max_documents_length": 10000
 }
 
 # Update document usage mode if needed
-
-for i, doc in enumerate(agent_config["agent"]["prompt"]["knowledge_base"]):
-    if doc["id"] == document_id:
-        agent_config["agent"]["prompt"]["knowledge_base"][i]["usage_mode"] = "auto"
+for i, doc in enumerate(agent_config.agent.prompt.knowledge_base):
+    if doc.id == document_id:
+        agent_config.agent.prompt.knowledge_base[i].usage_mode = "auto"
 
 # Update the agent configuration
-
-requests.put(
-    f"https://api.elevenlabs.io/v1/conversational-ai/agents/{agent_id}",
-    headers={"xi-api-key": "your-api-key"},
-    json=agent_config
+client.conversational_ai.update_agent(
+    agent_id=agent_id,
+    conversation_config=agent_config.agent
 )
 
 ```
@@ -178,70 +174,71 @@ requests.put(
 // First, index a document for RAG
 async function enableRAG(documentId, agentId, apiKey) {
   try {
-    // Start document indexing
-    let response = await fetch(
-      `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
-      {
-        method: 'POST',
-        headers: {
-          'xi-api-key': apiKey,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ model: 'e5_mistral_7b_instruct' }),
-      }
-    );
-    let data = await response.json();
+    // Initialize the ElevenLabs client
+    const { ElevenLabs } = require('elevenlabs');
+    const client = new ElevenLabs({
+      apiKey: apiKey,
+    });
 
-    // Check indexing status
-    while (true) {
-      const status = data.status;
-      if (status === 'SUCCEEDED' || status === 'FAILED') {
-        break;
-      }
+    // Start document indexing for RAG
+    let response = await client.conversationalAi.ragIndexStatus(documentId, {
+      model: 'e5_mistral_7b_instruct',
+    });
+
+    // Check indexing status until completion
+    while (response.status !== 'SUCCEEDED' && response.status !== 'FAILED') {
       await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
-      response = await fetch(
-        `https://api.elevenlabs.io/v1/conversational-ai/knowledge-base/${documentId}/rag-index`,
-        { headers: { 'xi-api-key': apiKey } }
-      );
-      data = await response.json();
+      response = await client.conversationalAi.ragIndexStatus(documentId, {
+        model: 'e5_mistral_7b_instruct',
+      });
     }
 
-    // Get agent configuration
-    const agentResponse = await fetch(
-      `https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`,
-      { headers: { 'xi-api-key': apiKey } }
-    );
-    const agentConfig = await agentResponse.json();
+    if (response.status === 'FAILED') {
+      throw new Error('RAG indexing failed');
+    }
+
+    // Get current agent configuration
+    const agentConfig = await client.conversationalAi.getAgent(agentId);
 
     // Enable RAG in the agent configuration
-    agentConfig.agent.prompt.rag = {
-      enabled: true,
-      embedding_model: 'e5_mistral_7b_instruct',
-      max_documents_length: 10000,
+    const updatedConfig = {
+      conversation_config: {
+        ...agentConfig.agent,
+        prompt: {
+          ...agentConfig.agent.prompt,
+          rag: {
+            enabled: true,
+            embedding_model: 'e5_mistral_7b_instruct',
+            max_documents_length: 10000,
+          },
+        },
+      },
     };
 
     // Update document usage mode if needed
-    agentConfig.agent.prompt.knowledge_base.forEach((doc, index) => {
-      if (doc.id === documentId) {
-        agentConfig.agent.prompt.knowledge_base[index].usage_mode = 'auto';
-      }
-    });
+    if (agentConfig.agent.prompt.knowledge_base) {
+      agentConfig.agent.prompt.knowledge_base.forEach((doc, index) => {
+        if (doc.id === documentId) {
+          updatedConfig.conversation_config.prompt.knowledge_base[index].usage_mode = 'auto';
+        }
+      });
+    }
 
     // Update the agent configuration
-    await fetch(`https://api.elevenlabs.io/v1/conversational-ai/agents/${agentId}`, {
-      method: 'PUT',
-      headers: {
-        'xi-api-key': apiKey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(agentConfig),
-    });
+    await client.conversationalAi.updateAgent(agentId, updatedConfig);
 
     console.log('RAG configuration updated successfully');
+    return true;
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('Error configuring RAG:', error);
+    throw error;
   }
 }
+
+// Example usage
+// enableRAG('your-document-id', 'your-agent-id', 'your-api-key')
+//   .then(() => console.log('RAG setup complete'))
+//   .catch(err => console.error('Error:', err));
 ```
 
 </CodeBlocks>
