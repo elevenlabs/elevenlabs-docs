@@ -461,7 +461,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -887,7 +892,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -1024,7 +1034,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -1160,7 +1175,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -1298,7 +1318,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -1435,7 +1460,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -1572,7 +1602,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -1748,7 +1783,12 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
-                "ulaw_8000"
+                "ulaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
               ],
               "title": "Output format of the generated audio."
             }
@@ -7582,6 +7622,27 @@
             }
           },
           {
+            "name": "locale",
+            "in": "query",
+            "description": "Locale used for filtering",
+            "required": false,
+            "schema": {
+              "description": "Locale used for filtering",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "en-US"
+              ],
+              "title": "Locale"
+            }
+          },
+          {
             "name": "search",
             "in": "query",
             "description": "Search term used for filtering",
@@ -9732,12 +9793,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            "description": "Successful Response"
+          },
+          "204": {
+            "description": "Agent successfully deleted"
           },
           "422": {
             "description": "Validation Error",
@@ -10073,9 +10132,9 @@
     },
     "/v1/convai/agents": {
       "get": {
-        "operationId": "Get_agents_page_v1_convai_agents_get",
-        "summary": "Get Agents Page",
-        "description": "Returns a page of your agents and their metadata.",
+        "operationId": "List_agents_v1_convai_agents_get",
+        "summary": "List Agents",
+        "description": "Returns a list of your agents and their metadata.",
         "parameters": [
           {
             "name": "cursor",
@@ -12089,24 +12148,37 @@
         "type": "object",
         "properties": {
           "quality": {
+            "description": "The quality of the transcription",
             "default": "high",
             "$ref": "#/components/schemas/ASRQuality"
           },
           "provider": {
+            "description": "The provider of the transcription service",
             "default": "elevenlabs",
             "$ref": "#/components/schemas/ASRProvider"
           },
           "user_input_audio_format": {
+            "description": "The format of the audio to be transcribed",
             "default": "pcm_16000",
             "$ref": "#/components/schemas/ASRInputFormat"
           },
           "keywords": {
+            "description": "Keywords to boost prediction probability for",
             "type": "array",
             "items": {
               "type": "string"
             },
             "title": "Keywords"
           }
+        },
+        "example": {
+          "keywords": [
+            "hello",
+            "world"
+          ],
+          "provider": "elevenlabs",
+          "quality": "high",
+          "user_input_audio_format": "pcm_16000"
         },
         "title": "ASRConversationalConfig"
       },
@@ -12397,15 +12469,21 @@
         "type": "object",
         "properties": {
           "agent_concurrency_limit": {
+            "description": "The maximum number of concurrent conversations. -1 indicates that there is no maximum",
             "type": "integer",
             "default": -1,
             "title": "Agent Concurrency Limit"
           },
           "daily_limit": {
+            "description": "The maximum number of conversations per day",
             "type": "integer",
             "default": 100000,
             "title": "Daily Limit"
           }
+        },
+        "example": {
+          "agent_concurrency_limit": -1,
+          "daily_limit": 100000
         },
         "title": "AgentCallLimits"
       },
@@ -12413,19 +12491,23 @@
         "type": "object",
         "properties": {
           "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
             "type": "string",
             "default": "",
             "title": "First Message"
           },
           "language": {
+            "description": "Language of the agent - used for ASR and TTS",
             "type": "string",
             "default": "en",
             "title": "Language"
           },
           "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
             "$ref": "#/components/schemas/DynamicVariablesConfig"
           },
           "prompt": {
+            "description": "The prompt for the agent",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/PromptAgent-Input"
@@ -12436,25 +12518,33 @@
             ]
           }
         },
+        "example": {
+          "first_message": "Hello, how can I help you today?",
+          "language": "en"
+        },
         "title": "AgentConfigAPIModel"
       },
       "AgentConfigAPIModel-Output": {
         "type": "object",
         "properties": {
           "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
             "type": "string",
             "default": "",
             "title": "First Message"
           },
           "language": {
+            "description": "Language of the agent - used for ASR and TTS",
             "type": "string",
             "default": "en",
             "title": "Language"
           },
           "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
             "$ref": "#/components/schemas/DynamicVariablesConfig"
           },
           "prompt": {
+            "description": "The prompt for the agent",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/PromptAgent-Output"
@@ -12465,12 +12555,17 @@
             ]
           }
         },
+        "example": {
+          "first_message": "Hello, how can I help you today?",
+          "language": "en"
+        },
         "title": "AgentConfigAPIModel"
       },
       "AgentConfigOverride": {
         "type": "object",
         "properties": {
           "prompt": {
+            "description": "The overrides for the prompt configuration",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/PromptAgentOverride"
@@ -12481,6 +12576,7 @@
             ]
           },
           "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion",
             "anyOf": [
               {
                 "type": "string"
@@ -12492,6 +12588,7 @@
             "title": "First Message"
           },
           "language": {
+            "description": "The language of the agent, used for ASR and TTS",
             "anyOf": [
               {
                 "type": "string"
@@ -12503,23 +12600,37 @@
             "title": "Language"
           }
         },
+        "example": {
+          "first_message": "Hello, how can I help you today?",
+          "language": "en"
+        },
         "title": "AgentConfigOverride"
       },
       "AgentConfigOverrideConfig": {
         "type": "object",
         "properties": {
           "prompt": {
+            "description": "Overrides for the prompt configuration",
             "$ref": "#/components/schemas/PromptAgentOverrideConfig"
           },
           "first_message": {
+            "description": "Whether to allow overriding the first message",
             "type": "boolean",
             "default": false,
             "title": "First Message"
           },
           "language": {
+            "description": "Whether to allow overriding the language",
             "type": "boolean",
             "default": false,
             "title": "Language"
+          }
+        },
+        "example": {
+          "first_message": false,
+          "language": false,
+          "prompt": {
+            "prompt": false
           }
         },
         "title": "AgentConfigOverrideConfig"
@@ -12528,6 +12639,7 @@
         "type": "object",
         "properties": {
           "created_at_unix_secs": {
+            "description": "The creation time of the agent in unix seconds",
             "type": "integer",
             "title": "Created At Unix Secs"
           }
@@ -12541,15 +12653,19 @@
         "type": "object",
         "properties": {
           "auth": {
+            "description": "Settings for authentication",
             "$ref": "#/components/schemas/AuthSettings"
           },
           "evaluation": {
+            "description": "Settings for evaluation",
             "$ref": "#/components/schemas/EvaluationSettings"
           },
           "widget": {
+            "description": "Configuration for the widget",
             "$ref": "#/components/schemas/WidgetConfig"
           },
           "data_collection": {
+            "description": "Data collection settings",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/LiteralJsonSchemaProperty"
@@ -12557,29 +12673,20 @@
             "title": "Data Collection"
           },
           "overrides": {
+            "description": "Additional overrides for the agent during conversation initiation",
             "$ref": "#/components/schemas/ConversationInitiationClientDataConfig-Input"
           },
           "call_limits": {
+            "description": "Call limits for the agent",
             "$ref": "#/components/schemas/AgentCallLimits"
           },
-          "ban": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AgentBan"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "privacy": {
+            "description": "Privacy settings for the agent",
             "$ref": "#/components/schemas/PrivacyConfig"
           },
           "workspace_overrides": {
+            "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Input"
-          },
-          "safety": {
-            "$ref": "#/components/schemas/SafetyCommonModel"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -12588,15 +12695,19 @@
         "type": "object",
         "properties": {
           "auth": {
+            "description": "Settings for authentication",
             "$ref": "#/components/schemas/AuthSettings"
           },
           "evaluation": {
+            "description": "Settings for evaluation",
             "$ref": "#/components/schemas/EvaluationSettings"
           },
           "widget": {
+            "description": "Configuration for the widget",
             "$ref": "#/components/schemas/WidgetConfig"
           },
           "data_collection": {
+            "description": "Data collection settings",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/LiteralJsonSchemaProperty"
@@ -12604,25 +12715,19 @@
             "title": "Data Collection"
           },
           "overrides": {
+            "description": "Additional overrides for the agent during conversation initiation",
             "$ref": "#/components/schemas/ConversationInitiationClientDataConfig-Output"
           },
           "call_limits": {
+            "description": "Call limits for the agent",
             "$ref": "#/components/schemas/AgentCallLimits"
           },
-          "ban": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AgentBan"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "privacy": {
+            "description": "Privacy settings for the agent",
             "$ref": "#/components/schemas/PrivacyConfig"
           },
           "workspace_overrides": {
+            "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Output"
           },
           "safety": {
@@ -12635,20 +12740,29 @@
         "type": "object",
         "properties": {
           "agent_id": {
+            "description": "The ID of the agent",
             "type": "string",
             "title": "Agent Id"
           },
           "name": {
+            "description": "The name of the agent",
             "type": "string",
             "title": "Name"
           },
           "created_at_unix_secs": {
+            "description": "The creation time of the agent in unix seconds",
             "type": "integer",
             "title": "Created At Unix Secs"
           },
           "access_info": {
+            "description": "The access information of the agent",
             "$ref": "#/components/schemas/ResourceAccessInfo"
           }
+        },
+        "example": {
+          "agent_id": "J3Pbu5gP6NNKBscdCdwB",
+          "created_at_unix_secs": 1716153600,
+          "name": "My Agent"
         },
         "required": [
           "agent_id",
@@ -12662,6 +12776,7 @@
         "type": "object",
         "properties": {
           "conversation_initiation_client_data_webhook": {
+            "description": "The webhook to send conversation initiation client data to",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationInitiationClientDataWebhook"
@@ -12678,6 +12793,7 @@
         "type": "object",
         "properties": {
           "conversation_initiation_client_data_webhook": {
+            "description": "The webhook to send conversation initiation client data to",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationInitiationClientDataWebhook"
@@ -12694,6 +12810,7 @@
         "type": "object",
         "properties": {
           "hostname": {
+            "description": "The hostname of the allowed origin",
             "type": "string",
             "title": "Hostname"
           }
@@ -13016,11 +13133,13 @@
         "type": "object",
         "properties": {
           "enable_auth": {
+            "description": "If set to true, starting a conversation with an agent will require a signed token",
             "type": "boolean",
             "default": false,
             "title": "Enable Auth"
           },
           "allowlist": {
+            "description": "A list of hosts that are allowed to start conversations with the agent",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AllowlistItem"
@@ -13028,6 +13147,7 @@
             "title": "Allowlist"
           },
           "shareable_token": {
+            "description": "A shareable token that can be used to start a conversation with the agent",
             "anyOf": [
               {
                 "type": "string"
@@ -13038,6 +13158,15 @@
             ],
             "title": "Shareable Token"
           }
+        },
+        "example": {
+          "allowlist": [
+            {
+              "hostname": "https://example.com"
+            }
+          ],
+          "enable_auth": true,
+          "shareable_token": "1234567890"
         },
         "title": "AuthSettings"
       },
@@ -15151,11 +15280,11 @@
             "default": false,
             "title": "Dubbing Studio"
           },
-          "use_replacement_voices_from_library": {
-            "description": "[BETA] Whether the dub should use replacement voices from the voice library instead of cloning.",
+          "disable_voice_cloning": {
+            "description": "[BETA] Instead of using a voice clone in dubbing, use a similar voice from the ElevenLabs Voice Library.",
             "type": "boolean",
             "default": false,
-            "title": "Use Replacement Voices From Library"
+            "title": "Disable Voice Cloning"
           },
           "mode": {
             "description": "automatic or manual. Manual mode is only supported when creating a dubbing studio project",
@@ -16249,6 +16378,15 @@
               true
             ],
             "title": "Apply Text Normalization"
+          },
+          "apply_language_text_normalization": {
+            "description": "This parameter controls language text normalization. This helps with proper pronunciation of text in some supported languages. WARNING: This parameter can heavily increase the latency of the request. Currently only supported for Japanese.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Apply Language Text Normalization"
           }
         },
         "required": [
@@ -16431,6 +16569,15 @@
               true
             ],
             "title": "Apply Text Normalization"
+          },
+          "apply_language_text_normalization": {
+            "description": "This parameter controls language text normalization. This helps with proper pronunciation of text in some supported languages. WARNING: This parameter can heavily increase the latency of the request. Currently only supported for Japanese.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Apply Language Text Normalization"
           }
         },
         "required": [
@@ -16613,6 +16760,15 @@
               true
             ],
             "title": "Apply Text Normalization"
+          },
+          "apply_language_text_normalization": {
+            "description": "This parameter controls language text normalization. This helps with proper pronunciation of text in some supported languages. WARNING: This parameter can heavily increase the latency of the request. Currently only supported for Japanese.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Apply Language Text Normalization"
           }
         },
         "required": [
@@ -16774,6 +16930,15 @@
               true
             ],
             "title": "Apply Text Normalization"
+          },
+          "apply_language_text_normalization": {
+            "description": "This parameter controls language text normalization. This helps with proper pronunciation of text in some supported languages. WARNING: This parameter can heavily increase the latency of the request. Currently only supported for Japanese.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Apply Language Text Normalization"
           }
         },
         "required": [
@@ -17756,7 +17921,9 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of tool",
             "type": "string",
+            "default": "client",
             "const": "client",
             "title": "Type"
           },
@@ -17772,6 +17939,7 @@
             "title": "Description"
           },
           "parameters": {
+            "description": "Schema for any parameters to pass to the client",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Input"
@@ -17782,11 +17950,13 @@
             ]
           },
           "expects_response": {
+            "description": "If true, calling this tool should block the conversation until the client responds with some response which is passed to the llm. If false then we will continue the conversation without waiting for the client to respond, this is useful to show content to a user but not block the conversation",
             "type": "boolean",
             "default": false,
             "title": "Expects Response"
           },
           "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for a response from the client. Should only be set if expects_response is true",
             "anyOf": [
               {
                 "type": "integer",
@@ -17800,11 +17970,15 @@
             "title": "Response Timeout Secs"
           },
           "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
             "$ref": "#/components/schemas/DynamicVariablesConfig"
           }
         },
+        "example": {
+          "expects_response": false,
+          "type": "client"
+        },
         "required": [
-          "type",
           "name",
           "description"
         ],
@@ -17815,7 +17989,9 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of tool",
             "type": "string",
+            "default": "client",
             "const": "client",
             "title": "Type"
           },
@@ -17831,6 +18007,7 @@
             "title": "Description"
           },
           "parameters": {
+            "description": "Schema for any parameters to pass to the client",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Output"
@@ -17841,11 +18018,13 @@
             ]
           },
           "expects_response": {
+            "description": "If true, calling this tool should block the conversation until the client responds with some response which is passed to the llm. If false then we will continue the conversation without waiting for the client to respond, this is useful to show content to a user but not block the conversation",
             "type": "boolean",
             "default": false,
             "title": "Expects Response"
           },
           "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for a response from the client. Should only be set if expects_response is true",
             "anyOf": [
               {
                 "type": "integer",
@@ -17859,11 +18038,15 @@
             "title": "Response Timeout Secs"
           },
           "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
             "$ref": "#/components/schemas/DynamicVariablesConfig"
           }
         },
+        "example": {
+          "expects_response": false,
+          "type": "client"
+        },
         "required": [
-          "type",
           "name",
           "description"
         ],
@@ -18010,11 +18193,13 @@
         "type": "object",
         "properties": {
           "max_duration_seconds": {
+            "description": "The maximum duration of a conversation in seconds",
             "type": "integer",
             "default": 600,
             "title": "Max Duration Seconds"
           },
           "client_events": {
+            "description": "The events that will be sent to the client",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ClientEvent"
@@ -18022,12 +18207,20 @@
             "title": "Client Events"
           }
         },
+        "example": {
+          "client_events": [
+            "audio",
+            "interruption"
+          ],
+          "max_duration_seconds": 600
+        },
         "title": "ConversationConfig"
       },
       "ConversationConfigClientOverride-Input": {
         "type": "object",
         "properties": {
           "agent": {
+            "description": "The overrides for the agent configuration",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/AgentConfigOverride"
@@ -18038,6 +18231,7 @@
             ]
           },
           "tts": {
+            "description": "The overrides for the TTS configuration",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/TTSConversationalConfigOverride"
@@ -18054,6 +18248,7 @@
         "type": "object",
         "properties": {
           "agent": {
+            "description": "The overrides for the agent configuration",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/AgentConfigOverride"
@@ -18064,6 +18259,7 @@
             ]
           },
           "tts": {
+            "description": "The overrides for the TTS configuration",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/TTSConversationalConfigOverride"
@@ -18080,9 +18276,11 @@
         "type": "object",
         "properties": {
           "agent": {
+            "description": "Overrides for the agent configuration",
             "$ref": "#/components/schemas/AgentConfigOverrideConfig"
           },
           "tts": {
+            "description": "Overrides for the TTS configuration",
             "$ref": "#/components/schemas/TTSConversationalConfigOverrideConfig"
           }
         },
@@ -18092,9 +18290,11 @@
         "type": "object",
         "properties": {
           "agent": {
+            "description": "Overrides for the agent configuration",
             "$ref": "#/components/schemas/AgentConfigOverrideConfig"
           },
           "tts": {
+            "description": "Overrides for the TTS configuration",
             "$ref": "#/components/schemas/TTSConversationalConfigOverrideConfig"
           }
         },
@@ -18508,18 +18708,25 @@
         "type": "object",
         "properties": {
           "conversation_config_override": {
+            "description": "Overrides for the conversation configuration",
             "$ref": "#/components/schemas/ConversationConfigClientOverrideConfig-Input"
           },
           "custom_llm_extra_body": {
+            "description": "Whether to include custom LLM extra body",
             "type": "boolean",
             "default": false,
             "title": "Custom Llm Extra Body"
           },
           "enable_conversation_initiation_client_data_from_webhook": {
+            "description": "Whether to enable conversation initiation client data from webhooks",
             "type": "boolean",
             "default": false,
             "title": "Enable Conversation Initiation Client Data From Webhook"
           }
+        },
+        "example": {
+          "custom_llm_extra_body": true,
+          "enable_conversation_initiation_client_data_from_webhook": true
         },
         "title": "ConversationInitiationClientDataConfig"
       },
@@ -18527,18 +18734,25 @@
         "type": "object",
         "properties": {
           "conversation_config_override": {
+            "description": "Overrides for the conversation configuration",
             "$ref": "#/components/schemas/ConversationConfigClientOverrideConfig-Output"
           },
           "custom_llm_extra_body": {
+            "description": "Whether to include custom LLM extra body",
             "type": "boolean",
             "default": false,
             "title": "Custom Llm Extra Body"
           },
           "enable_conversation_initiation_client_data_from_webhook": {
+            "description": "Whether to enable conversation initiation client data from webhooks",
             "type": "boolean",
             "default": false,
             "title": "Enable Conversation Initiation Client Data From Webhook"
           }
+        },
+        "example": {
+          "custom_llm_extra_body": true,
+          "enable_conversation_initiation_client_data_from_webhook": true
         },
         "title": "ConversationInitiationClientDataConfig"
       },
@@ -18618,10 +18832,12 @@
         "type": "object",
         "properties": {
           "url": {
+            "description": "The URL to send the webhook to",
             "type": "string",
             "title": "Url"
           },
           "request_headers": {
+            "description": "The headers to send with the webhook request",
             "type": "object",
             "additionalProperties": {
               "anyOf": [
@@ -18635,6 +18851,12 @@
             },
             "title": "Request Headers"
           }
+        },
+        "example": {
+          "request_headers": {
+            "Content-Type": "application/json"
+          },
+          "url": "https://example.com/webhook"
         },
         "required": [
           "url",
@@ -18717,14 +18939,17 @@
         "type": "object",
         "properties": {
           "agent_id": {
+            "description": "The ID of the agent",
             "type": "string",
             "title": "Agent Id"
           },
           "conversation_token": {
+            "description": "The token for the agent",
             "type": "string",
             "title": "Conversation Token"
           },
           "expiration_time_unix_secs": {
+            "description": "The expiration time of the token in unix seconds",
             "anyOf": [
               {
                 "type": "integer"
@@ -18736,9 +18961,16 @@
             "title": "Expiration Time Unix Secs"
           },
           "purpose": {
+            "description": "The purpose of the token",
             "default": "signed_url",
             "$ref": "#/components/schemas/ConversationTokenPurpose"
           }
+        },
+        "example": {
+          "agent_id": "J3Pbu5gP6NNKBscdCdwB",
+          "conversation_token": "1234567890",
+          "expiration_time_unix_secs": 1716153600,
+          "purpose": "signed_url"
         },
         "required": [
           "agent_id",
@@ -18771,18 +19003,23 @@
         "type": "object",
         "properties": {
           "asr": {
+            "description": "Configuration for conversational transcription",
             "$ref": "#/components/schemas/ASRConversationalConfig"
           },
           "turn": {
+            "description": "Configuration for turn detection",
             "$ref": "#/components/schemas/TurnConfig"
           },
           "tts": {
+            "description": "Configuration for conversational text to speech",
             "$ref": "#/components/schemas/TTSConversationalConfig"
           },
           "conversation": {
+            "description": "Configuration for conversational events",
             "$ref": "#/components/schemas/ConversationConfig"
           },
           "language_presets": {
+            "description": "Language presets for conversations",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/LanguagePreset-Input"
@@ -18790,6 +19027,7 @@
             "title": "Language Presets"
           },
           "agent": {
+            "description": "Agent specific configuration",
             "$ref": "#/components/schemas/AgentConfigAPIModel-Input"
           }
         },
@@ -18799,18 +19037,23 @@
         "type": "object",
         "properties": {
           "asr": {
+            "description": "Configuration for conversational transcription",
             "$ref": "#/components/schemas/ASRConversationalConfig"
           },
           "turn": {
+            "description": "Configuration for turn detection",
             "$ref": "#/components/schemas/TurnConfig"
           },
           "tts": {
+            "description": "Configuration for conversational text to speech",
             "$ref": "#/components/schemas/TTSConversationalConfig"
           },
           "conversation": {
+            "description": "Configuration for conversational events",
             "$ref": "#/components/schemas/ConversationConfig"
           },
           "language_presets": {
+            "description": "Language presets for conversations",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/LanguagePreset-Output"
@@ -18818,6 +19061,7 @@
             "title": "Language Presets"
           },
           "agent": {
+            "description": "Agent specific configuration",
             "$ref": "#/components/schemas/AgentConfigAPIModel-Output"
           }
         },
@@ -18861,9 +19105,13 @@
         "type": "object",
         "properties": {
           "agent_id": {
+            "description": "ID of the created agent",
             "type": "string",
             "title": "Agent Id"
           }
+        },
+        "example": {
+          "agent_id": "J3Pbu5gP6NNKBscdCdwB"
         },
         "required": [
           "agent_id"
@@ -18874,7 +19122,7 @@
         "type": "object",
         "properties": {
           "phone_number_id": {
-            "description": "Phone entity id",
+            "description": "Phone entity ID",
             "type": "string",
             "title": "Phone Number Id"
           }
@@ -18983,10 +19231,12 @@
         "type": "object",
         "properties": {
           "url": {
+            "description": "The URL of the Chat Completions compatible endpoint",
             "type": "string",
             "title": "Url"
           },
           "model_id": {
+            "description": "The model ID to be used if URL serves multiple models",
             "anyOf": [
               {
                 "type": "string"
@@ -18998,6 +19248,7 @@
             "title": "Model Id"
           },
           "api_key": {
+            "description": "The API key for authentication",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConvAISecretLocator"
@@ -19638,6 +19889,7 @@
         "type": "object",
         "properties": {
           "dynamic_variable_placeholders": {
+            "description": "A dictionary of dynamic variable placeholders and their values",
             "type": "object",
             "additionalProperties": {
               "anyOf": [
@@ -19656,6 +19908,11 @@
               ]
             },
             "title": "Dynamic Variable Placeholders"
+          }
+        },
+        "example": {
+          "dynamic_variable_placeholders": {
+            "user_name": "John Doe"
           }
         },
         "title": "DynamicVariablesConfig"
@@ -19731,7 +19988,6 @@
         "type": "string",
         "enum": [
           "e5_mistral_7b_instruct",
-          "gte_Qwen2_15B_instruct",
           "multilingual_e5_large_instruct"
         ],
         "title": "EmbeddingModelEnum"
@@ -19741,6 +19997,7 @@
         "type": "object",
         "properties": {
           "criteria": {
+            "description": "Individual criteria that the agent should be evaluated against",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PromptEvaluationCriteria"
@@ -20218,10 +20475,12 @@
         "type": "object",
         "properties": {
           "agent_id": {
+            "description": "The ID of the agent",
             "type": "string",
             "title": "Agent Id"
           },
           "token": {
+            "description": "The token data for the agent",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationTokenDBModel"
@@ -20232,6 +20491,9 @@
             ]
           }
         },
+        "example": {
+          "agent_id": "J3Pbu5gP6NNKBscdCdwB"
+        },
         "required": [
           "agent_id"
         ],
@@ -20241,29 +20503,39 @@
         "type": "object",
         "properties": {
           "agent_id": {
+            "description": "The ID of the agent",
             "type": "string",
             "title": "Agent Id"
           },
           "name": {
+            "description": "The name of the agent",
             "type": "string",
             "title": "Name"
           },
           "conversation_config": {
+            "description": "The conversation configuration of the agent",
             "$ref": "#/components/schemas/ConversationalConfigAPIModel-Output"
           },
           "metadata": {
+            "description": "The metadata of the agent",
             "$ref": "#/components/schemas/AgentMetadataResponseModel"
           },
           "platform_settings": {
+            "description": "The platform settings of the agent",
             "$ref": "#/components/schemas/AgentPlatformSettingsResponseModel"
           },
           "phone_numbers": {
+            "description": "The phone numbers of the agent",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GetPhoneNumberResponseModel"
             },
             "title": "Phone Numbers"
           }
+        },
+        "example": {
+          "agent_id": "J3Pbu5gP6NNKBscdCdwB",
+          "name": "My Agent"
         },
         "required": [
           "agent_id",
@@ -20277,6 +20549,7 @@
         "type": "object",
         "properties": {
           "agents": {
+            "description": "A list of agents and their metadata",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AgentSummaryResponseModel"
@@ -20284,6 +20557,7 @@
             "title": "Agents"
           },
           "next_cursor": {
+            "description": "The next cursor to paginate through the agents",
             "anyOf": [
               {
                 "type": "string"
@@ -20295,9 +20569,14 @@
             "title": "Next Cursor"
           },
           "has_more": {
+            "description": "Whether there are more agents to paginate through",
             "type": "boolean",
             "title": "Has More"
           }
+        },
+        "example": {
+          "has_more": false,
+          "next_cursor": "123"
         },
         "required": [
           "agents",
@@ -20859,10 +21138,12 @@
             "title": "Label"
           },
           "phone_number_id": {
+            "description": "The ID of the phone number",
             "type": "string",
             "title": "Phone Number Id"
           },
           "assigned_agent": {
+            "description": "The agent that is assigned to the phone number",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/PhoneNumberAgentInfo"
@@ -20872,6 +21153,9 @@
               }
             ]
           }
+        },
+        "example": {
+          "phone_number_id": "X3Pbu5gP6NNKBscdCdwB"
         },
         "required": [
           "phone_number",
@@ -21400,12 +21684,14 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of the avatar",
             "type": "string",
             "default": "image",
             "const": "image",
             "title": "Type"
           },
           "url": {
+            "description": "The URL of the avatar",
             "type": "string",
             "default": "",
             "title": "Url"
@@ -21487,6 +21773,7 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of the knowledge base",
             "type": "string",
             "enum": [
               "file",
@@ -21495,17 +21782,26 @@
             "title": "Type"
           },
           "name": {
+            "description": "The name of the knowledge base",
             "type": "string",
             "title": "Name"
           },
           "id": {
+            "description": "The ID of the knowledge base",
             "type": "string",
             "title": "Id"
           },
           "usage_mode": {
+            "description": "The usage mode of the knowledge base",
             "default": "auto",
             "$ref": "#/components/schemas/DocumentUsageModeEnum"
           }
+        },
+        "example": {
+          "id": "123",
+          "name": "My Knowledge Base",
+          "type": "file",
+          "usage_mode": "auto"
         },
         "required": [
           "type",
@@ -21553,9 +21849,11 @@
         "type": "object",
         "properties": {
           "overrides": {
+            "description": "The overrides for the language preset",
             "$ref": "#/components/schemas/ConversationConfigClientOverride-Input"
           },
           "first_message_translation": {
+            "description": "The translation of the first message",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/LanguagePresetTranslation"
@@ -21575,9 +21873,11 @@
         "type": "object",
         "properties": {
           "overrides": {
+            "description": "The overrides for the language preset",
             "$ref": "#/components/schemas/ConversationConfigClientOverride-Output"
           },
           "first_message_translation": {
+            "description": "The translation of the first message",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/LanguagePresetTranslation"
@@ -21707,6 +22007,18 @@
               }
             ],
             "title": "Language"
+          },
+          "locale": {
+            "description": "The locale of the voice.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
           },
           "description": {
             "description": "The description of the voice.",
@@ -21937,16 +22249,19 @@
             "title": "Type"
           },
           "description": {
+            "description": "The description of the property",
             "type": "string",
             "default": "",
             "title": "Description"
           },
           "dynamic_variable": {
+            "description": "The dynamic variable of the property",
             "type": "string",
             "default": "",
             "title": "Dynamic Variable"
           },
           "constant_value": {
+            "description": "The constant value of the property",
             "default": "",
             "anyOf": [
               {
@@ -21964,6 +22279,11 @@
             ],
             "title": "Constant Value"
           }
+        },
+        "example": {
+          "constant_value": "Constant value",
+          "description": "My property",
+          "dynamic_variable": "Dynamic variable"
         },
         "required": [
           "type"
@@ -22409,21 +22729,29 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of the avatar",
             "type": "string",
             "default": "orb",
             "const": "orb",
             "title": "Type"
           },
           "color_1": {
+            "description": "The first color of the avatar",
             "type": "string",
             "default": "#2792dc",
             "title": "Color 1"
           },
           "color_2": {
+            "description": "The second color of the avatar",
             "type": "string",
             "default": "#9ce6e6",
             "title": "Color 2"
           }
+        },
+        "example": {
+          "color_1": "#2792dc",
+          "color_2": "#9ce6e6",
+          "type": "orb"
         },
         "title": "OrbAvatar"
       },
@@ -22450,13 +22778,19 @@
         "type": "object",
         "properties": {
           "agent_id": {
+            "description": "The ID of the agent",
             "type": "string",
             "title": "Agent Id"
           },
           "agent_name": {
+            "description": "The name of the agent",
             "type": "string",
             "title": "Agent Name"
           }
+        },
+        "example": {
+          "agent_id": "F3Pbu5gP6NNKBscdCdwB",
+          "agent_name": "My Agent"
         },
         "required": [
           "agent_id",
@@ -22697,30 +23031,42 @@
         "type": "object",
         "properties": {
           "record_voice": {
+            "description": "Whether to record the conversation",
             "type": "boolean",
             "default": true,
             "title": "Record Voice"
           },
           "retention_days": {
+            "description": "The number of days to retain the conversation. -1 indicates there is no retention limit",
             "type": "integer",
             "default": -1,
             "title": "Retention Days"
           },
           "delete_transcript_and_pii": {
+            "description": "Whether to delete the transcript and PII",
             "type": "boolean",
             "default": false,
             "title": "Delete Transcript And Pii"
           },
           "delete_audio": {
+            "description": "Whether to delete the audio",
             "type": "boolean",
             "default": false,
             "title": "Delete Audio"
           },
           "apply_to_existing_conversations": {
+            "description": "Whether to apply the privacy settings to existing conversations",
             "type": "boolean",
             "default": false,
             "title": "Apply To Existing Conversations"
           }
+        },
+        "example": {
+          "apply_to_existing_conversations": false,
+          "delete_audio": false,
+          "delete_transcript_and_pii": false,
+          "record_voice": true,
+          "retention_days": -1
         },
         "title": "PrivacyConfig"
       },
@@ -23724,25 +24070,30 @@
         "type": "object",
         "properties": {
           "prompt": {
+            "description": "The prompt for the agent",
             "type": "string",
             "default": "",
             "title": "Prompt"
           },
           "llm": {
+            "description": "The LLM to query with the prompt and the chat history",
             "default": "gemini-2.0-flash-001",
             "$ref": "#/components/schemas/LLM"
           },
           "temperature": {
+            "description": "The temperature for the LLM",
             "type": "number",
             "default": 0,
             "title": "Temperature"
           },
           "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
             "type": "integer",
             "default": -1,
             "title": "Max Tokens"
           },
           "tools": {
+            "description": "A list of tools that the agent can use over the course of the conversation",
             "type": "array",
             "items": {
               "oneOf": [
@@ -23756,6 +24107,7 @@
                   "$ref": "#/components/schemas/SystemToolConfig"
                 }
               ],
+              "description": "The type of tool",
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
@@ -23768,6 +24120,7 @@
             "title": "Tools"
           },
           "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
             "type": "array",
             "items": {
               "type": "string"
@@ -23775,6 +24128,7 @@
             "title": "Tool Ids"
           },
           "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/KnowledgeBaseLocator"
@@ -23782,6 +24136,7 @@
             "title": "Knowledge Base"
           },
           "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/CustomLLM"
@@ -23792,6 +24147,7 @@
             ]
           },
           "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
             "default": false,
             "anyOf": [
               {
@@ -23804,8 +24160,18 @@
             "title": "Ignore Default Personality"
           },
           "rag": {
+            "description": "Configuration for RAG",
             "$ref": "#/components/schemas/RagConfig"
           }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
         },
         "title": "PromptAgent"
       },
@@ -23813,25 +24179,30 @@
         "type": "object",
         "properties": {
           "prompt": {
+            "description": "The prompt for the agent",
             "type": "string",
             "default": "",
             "title": "Prompt"
           },
           "llm": {
+            "description": "The LLM to query with the prompt and the chat history",
             "default": "gemini-2.0-flash-001",
             "$ref": "#/components/schemas/LLM"
           },
           "temperature": {
+            "description": "The temperature for the LLM",
             "type": "number",
             "default": 0,
             "title": "Temperature"
           },
           "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
             "type": "integer",
             "default": -1,
             "title": "Max Tokens"
           },
           "tools": {
+            "description": "A list of tools that the agent can use over the course of the conversation",
             "type": "array",
             "items": {
               "oneOf": [
@@ -23845,6 +24216,7 @@
                   "$ref": "#/components/schemas/SystemToolConfig"
                 }
               ],
+              "description": "The type of tool",
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
@@ -23857,6 +24229,7 @@
             "title": "Tools"
           },
           "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
             "type": "array",
             "items": {
               "type": "string"
@@ -23864,6 +24237,7 @@
             "title": "Tool Ids"
           },
           "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/KnowledgeBaseLocator"
@@ -23871,6 +24245,7 @@
             "title": "Knowledge Base"
           },
           "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/CustomLLM"
@@ -23881,6 +24256,7 @@
             ]
           },
           "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
             "default": false,
             "anyOf": [
               {
@@ -23893,8 +24269,18 @@
             "title": "Ignore Default Personality"
           },
           "rag": {
+            "description": "Configuration for RAG",
             "$ref": "#/components/schemas/RagConfig"
           }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
         },
         "title": "PromptAgent"
       },
@@ -23902,10 +24288,14 @@
         "type": "object",
         "properties": {
           "prompt": {
+            "description": "The initial system message that defines the agent, e.g. “You are a German language teacher named Laura.”",
             "type": "string",
             "default": "",
             "title": "Prompt"
           }
+        },
+        "example": {
+          "prompt": "You are a German language teacher named Laura."
         },
         "title": "PromptAgentOverride"
       },
@@ -23913,6 +24303,7 @@
         "type": "object",
         "properties": {
           "prompt": {
+            "description": "Whether to allow prompt overriding",
             "type": "boolean",
             "default": false,
             "title": "Prompt"
@@ -23925,6 +24316,7 @@
         "type": "object",
         "properties": {
           "id": {
+            "description": "The unique identifier for the evaluation criteria",
             "type": "string",
             "title": "Id"
           },
@@ -23933,21 +24325,29 @@
             "title": "Name"
           },
           "type": {
+            "description": "The type of evaluation criteria",
             "type": "string",
             "default": "prompt",
             "const": "prompt",
             "title": "Type"
           },
           "conversation_goal_prompt": {
+            "description": "The prompt that the agent should use to evaluate the conversation",
             "type": "string",
             "maxLength": 800,
             "title": "Conversation Goal Prompt"
           },
           "use_knowledge_base": {
+            "description": "When evaluating the prompt, should the agent's knowledge base be used.",
             "type": "boolean",
             "default": false,
             "title": "Use Knowledge Base"
           }
+        },
+        "example": {
+          "conversation_goal_prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "id": "1234567890",
+          "use_knowledge_base": false
         },
         "required": [
           "id",
@@ -24110,10 +24510,12 @@
         "type": "object",
         "properties": {
           "pronunciation_dictionary_id": {
+            "description": "The ID of the pronunciation dictionary",
             "type": "string",
             "title": "Pronunciation Dictionary Id"
           },
           "version_id": {
+            "description": "The ID of the version of the pronunciation dictionary",
             "anyOf": [
               {
                 "type": "string"
@@ -24391,18 +24793,22 @@
         "type": "object",
         "properties": {
           "is_creator": {
+            "description": "Whether the user making the request is the creator of the agent",
             "type": "boolean",
             "title": "Is Creator"
           },
           "creator_name": {
+            "description": "Name of the agent's creator",
             "type": "string",
             "title": "Creator Name"
           },
           "creator_email": {
+            "description": "Email of the agent's creator",
             "type": "string",
             "title": "Creator Email"
           },
           "role": {
+            "description": "The role of the user making the request",
             "type": "string",
             "enum": [
               "admin",
@@ -24411,6 +24817,12 @@
             ],
             "title": "Role"
           }
+        },
+        "example": {
+          "creator_email": "john.doe@example.com",
+          "creator_name": "John Doe",
+          "is_creator": true,
+          "role": "admin"
         },
         "required": [
           "is_creator",
@@ -25911,7 +26323,9 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of tool",
             "type": "string",
+            "default": "system",
             "const": "system",
             "title": "Type"
           },
@@ -25927,8 +26341,10 @@
             "title": "Description"
           }
         },
+        "example": {
+          "type": "system"
+        },
         "required": [
-          "type",
           "name",
           "description"
         ],
@@ -25938,24 +26354,29 @@
         "type": "object",
         "properties": {
           "model_id": {
+            "description": "The model to use for TTS",
             "default": "eleven_turbo_v2",
             "$ref": "#/components/schemas/TTSConversationalModel"
           },
           "voice_id": {
+            "description": "The voice ID to use for TTS",
             "type": "string",
             "default": "cjVigY5qzO86Huf0OWal",
             "minLength": 0,
             "title": "Voice Id"
           },
           "agent_output_audio_format": {
+            "description": "The audio format to use for TTS",
             "default": "pcm_16000",
             "$ref": "#/components/schemas/TTSOutputFormat"
           },
           "optimize_streaming_latency": {
+            "description": "The optimization for streaming latency",
             "default": 3,
             "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
           },
           "stability": {
+            "description": "The stability of generated speech",
             "type": "number",
             "default": 0.5,
             "maximum": 1,
@@ -25963,6 +26384,7 @@
             "title": "Stability"
           },
           "speed": {
+            "description": "The speed of generated speech",
             "type": "number",
             "default": 1,
             "maximum": 1.2,
@@ -25970,6 +26392,7 @@
             "title": "Speed"
           },
           "similarity_boost": {
+            "description": "The similarity boost for generated speech",
             "type": "number",
             "default": 0.8,
             "maximum": 1,
@@ -25977,12 +26400,23 @@
             "title": "Similarity Boost"
           },
           "pronunciation_dictionary_locators": {
+            "description": "The pronunciation dictionary locators",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PydanticPronunciationDictionaryVersionLocator"
             },
             "title": "Pronunciation Dictionary Locators"
           }
+        },
+        "example": {
+          "agent_output_audio_format": "pcm_16000",
+          "model_id": "eleven_turbo_v2",
+          "optimize_streaming_latency": 3,
+          "pronunciation_dictionary_locators": [],
+          "similarity_boost": 0.8,
+          "speed": 1,
+          "stability": 0.5,
+          "voice_id": "cjVigY5qzO86Huf0OWal"
         },
         "title": "TTSConversationalConfig"
       },
@@ -26007,10 +26441,14 @@
         "type": "object",
         "properties": {
           "voice_id": {
+            "description": "Whether to allow overriding the voice ID",
             "type": "boolean",
             "default": false,
             "title": "Voice Id"
           }
+        },
+        "example": {
+          "voice_id": false
         },
         "title": "TTSConversationalConfigOverrideConfig"
       },
@@ -26059,14 +26497,20 @@
         "type": "object",
         "properties": {
           "turn_timeout": {
+            "description": "Maximum wait time for the user’s reply before re-engaging the user",
             "type": "number",
             "default": 7,
             "title": "Turn Timeout"
           },
           "mode": {
+            "description": "The mode of turn detection",
             "default": "turn",
             "$ref": "#/components/schemas/TurnMode"
           }
+        },
+        "example": {
+          "mode": "turn",
+          "turn_timeout": 7
         },
         "title": "TurnConfig"
       },
@@ -26112,12 +26556,14 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of the avatar",
             "type": "string",
             "default": "url",
             "const": "url",
             "title": "Type"
           },
           "custom_url": {
+            "description": "The custom URL of the avatar",
             "type": "string",
             "default": "",
             "title": "Custom Url"
@@ -27824,10 +28270,12 @@
         "type": "object",
         "properties": {
           "url": {
+            "description": "The URL that the webhook will be sent to. May include path parameters, e.g. https://example.com/agents/{agent_id}",
             "type": "string",
             "title": "Url"
           },
           "method": {
+            "description": "The HTTP method to use for the webhook",
             "type": "string",
             "default": "GET",
             "enum": [
@@ -27839,6 +28287,7 @@
             "title": "Method"
           },
           "path_params_schema": {
+            "description": "Schema for path parameters, if any. The keys should match the placeholders in the URL.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/LiteralJsonSchemaProperty"
@@ -27846,6 +28295,7 @@
             "title": "Path Params Schema"
           },
           "query_params_schema": {
+            "description": "Schema for any query params, if any. These will be added to end of the URL as query params. Note: properties in a query param must all be literal types",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/QueryParamsJsonSchema"
@@ -27856,6 +28306,7 @@
             ]
           },
           "request_body_schema": {
+            "description": "Schema for the body parameters, if any. Used for POST/PATCH requests. The schema should be an object which will be sent as the json body",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Input"
@@ -27866,6 +28317,7 @@
             ]
           },
           "request_headers": {
+            "description": "Headers that should be included in the request",
             "type": "object",
             "additionalProperties": {
               "anyOf": [
@@ -27879,6 +28331,28 @@
             },
             "title": "Request Headers"
           }
+        },
+        "example": {
+          "method": "GET",
+          "path_params_schema": {
+            "agent_id": {
+              "type": "string"
+            }
+          },
+          "query_params_schema": {
+            "param1": {
+              "type": "string"
+            }
+          },
+          "request_body_schema": {
+            "param1": {
+              "type": "string"
+            }
+          },
+          "request_headers": {
+            "Authorization": "Bearer {api_key}"
+          },
+          "url": "https://example.com/agents/{agent_id}"
         },
         "required": [
           "url"
@@ -27890,10 +28364,12 @@
         "type": "object",
         "properties": {
           "url": {
+            "description": "The URL that the webhook will be sent to. May include path parameters, e.g. https://example.com/agents/{agent_id}",
             "type": "string",
             "title": "Url"
           },
           "method": {
+            "description": "The HTTP method to use for the webhook",
             "type": "string",
             "default": "GET",
             "enum": [
@@ -27905,6 +28381,7 @@
             "title": "Method"
           },
           "path_params_schema": {
+            "description": "Schema for path parameters, if any. The keys should match the placeholders in the URL.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/LiteralJsonSchemaProperty"
@@ -27912,6 +28389,7 @@
             "title": "Path Params Schema"
           },
           "query_params_schema": {
+            "description": "Schema for any query params, if any. These will be added to end of the URL as query params. Note: properties in a query param must all be literal types",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/QueryParamsJsonSchema"
@@ -27922,6 +28400,7 @@
             ]
           },
           "request_body_schema": {
+            "description": "Schema for the body parameters, if any. Used for POST/PATCH requests. The schema should be an object which will be sent as the json body",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Output"
@@ -27932,6 +28411,7 @@
             ]
           },
           "request_headers": {
+            "description": "Headers that should be included in the request",
             "type": "object",
             "additionalProperties": {
               "anyOf": [
@@ -27946,6 +28426,28 @@
             "title": "Request Headers"
           }
         },
+        "example": {
+          "method": "GET",
+          "path_params_schema": {
+            "agent_id": {
+              "type": "string"
+            }
+          },
+          "query_params_schema": {
+            "param1": {
+              "type": "string"
+            }
+          },
+          "request_body_schema": {
+            "param1": {
+              "type": "string"
+            }
+          },
+          "request_headers": {
+            "Authorization": "Bearer {api_key}"
+          },
+          "url": "https://example.com/agents/{agent_id}"
+        },
         "required": [
           "url"
         ],
@@ -27956,7 +28458,9 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of tool",
             "type": "string",
+            "default": "webhook",
             "const": "webhook",
             "title": "Type"
           },
@@ -27972,14 +28476,18 @@
             "title": "Description"
           },
           "api_schema": {
+            "description": "The schema for the outgoing webhoook, including parameters and URL specification",
             "$ref": "#/components/schemas/WebhookToolApiSchemaConfig-Input"
           },
           "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
             "$ref": "#/components/schemas/DynamicVariablesConfig"
           }
         },
+        "example": {
+          "type": "webhook"
+        },
         "required": [
-          "type",
           "name",
           "description",
           "api_schema"
@@ -27991,7 +28499,9 @@
         "type": "object",
         "properties": {
           "type": {
+            "description": "The type of tool",
             "type": "string",
+            "default": "webhook",
             "const": "webhook",
             "title": "Type"
           },
@@ -28007,14 +28517,18 @@
             "title": "Description"
           },
           "api_schema": {
+            "description": "The schema for the outgoing webhoook, including parameters and URL specification",
             "$ref": "#/components/schemas/WebhookToolApiSchemaConfig-Output"
           },
           "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
             "$ref": "#/components/schemas/DynamicVariablesConfig"
           }
         },
+        "example": {
+          "type": "webhook"
+        },
         "required": [
-          "type",
           "name",
           "description",
           "api_schema"
@@ -28025,14 +28539,17 @@
         "type": "object",
         "properties": {
           "variant": {
+            "description": "The variant of the widget",
             "default": "full",
             "$ref": "#/components/schemas/EmbedVariant"
           },
           "expandable": {
+            "description": "Whether the widget is expandable",
             "default": "never",
             "$ref": "#/components/schemas/WidgetExpandable"
           },
           "avatar": {
+            "description": "The avatar of the widget",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/OrbAvatar"
@@ -28047,40 +28564,48 @@
             "title": "Avatar"
           },
           "feedback_mode": {
+            "description": "The feedback mode of the widget",
             "default": "none",
             "$ref": "#/components/schemas/WidgetFeedbackMode"
           },
           "bg_color": {
+            "description": "The background color of the widget",
             "type": "string",
             "default": "#ffffff",
             "title": "Bg Color"
           },
           "text_color": {
+            "description": "The text color of the widget",
             "type": "string",
             "default": "#000000",
             "title": "Text Color"
           },
           "btn_color": {
+            "description": "The button color of the widget",
             "type": "string",
             "default": "#000000",
             "title": "Btn Color"
           },
           "btn_text_color": {
+            "description": "The button text color of the widget",
             "type": "string",
             "default": "#ffffff",
             "title": "Btn Text Color"
           },
           "border_color": {
+            "description": "The border color of the widget",
             "type": "string",
             "default": "#e1e1e1",
             "title": "Border Color"
           },
           "focus_color": {
+            "description": "The focus color of the widget",
             "type": "string",
             "default": "#000000",
             "title": "Focus Color"
           },
           "border_radius": {
+            "description": "The border radius of the widget",
             "anyOf": [
               {
                 "type": "integer"
@@ -28092,6 +28617,7 @@
             "title": "Border Radius"
           },
           "btn_radius": {
+            "description": "The button radius of the widget",
             "anyOf": [
               {
                 "type": "integer"
@@ -28103,6 +28629,7 @@
             "title": "Btn Radius"
           },
           "action_text": {
+            "description": "The action text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28114,6 +28641,7 @@
             "title": "Action Text"
           },
           "start_call_text": {
+            "description": "The start call text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28125,6 +28653,7 @@
             "title": "Start Call Text"
           },
           "end_call_text": {
+            "description": "The end call text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28136,6 +28665,7 @@
             "title": "End Call Text"
           },
           "expand_text": {
+            "description": "The expand text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28147,6 +28677,7 @@
             "title": "Expand Text"
           },
           "listening_text": {
+            "description": "The text to display when the agent is listening",
             "anyOf": [
               {
                 "type": "string"
@@ -28158,6 +28689,7 @@
             "title": "Listening Text"
           },
           "speaking_text": {
+            "description": "The text to display when the agent is speaking",
             "anyOf": [
               {
                 "type": "string"
@@ -28169,6 +28701,7 @@
             "title": "Speaking Text"
           },
           "shareable_page_text": {
+            "description": "The text to display when sharing",
             "anyOf": [
               {
                 "type": "string"
@@ -28180,11 +28713,13 @@
             "title": "Shareable Page Text"
           },
           "shareable_page_show_terms": {
+            "description": "Whether to show terms and conditions on the shareable page",
             "type": "boolean",
             "default": true,
             "title": "Shareable Page Show Terms"
           },
           "terms_text": {
+            "description": "The text to display for terms and conditions",
             "anyOf": [
               {
                 "type": "string"
@@ -28196,6 +28731,7 @@
             "title": "Terms Text"
           },
           "terms_html": {
+            "description": "The HTML to display for terms and conditions",
             "anyOf": [
               {
                 "type": "string"
@@ -28207,6 +28743,7 @@
             "title": "Terms Html"
           },
           "terms_key": {
+            "description": "The key to display for terms and conditions",
             "anyOf": [
               {
                 "type": "string"
@@ -28218,6 +28755,7 @@
             "title": "Terms Key"
           },
           "show_avatar_when_collapsed": {
+            "description": "Whether to show the avatar when the widget is collapsed",
             "default": false,
             "anyOf": [
               {
@@ -28230,22 +28768,25 @@
             "title": "Show Avatar When Collapsed"
           },
           "disable_banner": {
-            "description": "Whether to disable the ConvAI widget banner",
+            "description": "Whether to disable the banner",
             "type": "boolean",
             "default": false,
             "title": "Disable Banner"
           },
           "mic_muting_enabled": {
+            "description": "Whether to enable mic muting",
             "type": "boolean",
             "default": false,
             "title": "Mic Muting Enabled"
           },
           "language_selector": {
+            "description": "Whether to show the language selector",
             "type": "boolean",
             "default": false,
             "title": "Language Selector"
           },
           "custom_avatar_path": {
+            "description": "The custom avatar path",
             "anyOf": [
               {
                 "type": "string"
@@ -28257,20 +28798,27 @@
             "title": "Custom Avatar Path"
           }
         },
+        "example": {
+          "custom_avatar_path": "https://example.com/avatar.png",
+          "language_selector": false
+        },
         "title": "WidgetConfig"
       },
       "WidgetConfigResponseModel": {
         "type": "object",
         "properties": {
           "variant": {
+            "description": "The variant of the widget",
             "default": "full",
             "$ref": "#/components/schemas/EmbedVariant"
           },
           "expandable": {
+            "description": "Whether the widget is expandable",
             "default": "never",
             "$ref": "#/components/schemas/WidgetExpandable"
           },
           "avatar": {
+            "description": "The avatar of the widget",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/OrbAvatar"
@@ -28285,40 +28833,48 @@
             "title": "Avatar"
           },
           "feedback_mode": {
+            "description": "The feedback mode of the widget",
             "default": "none",
             "$ref": "#/components/schemas/WidgetFeedbackMode"
           },
           "bg_color": {
+            "description": "The background color of the widget",
             "type": "string",
             "default": "#ffffff",
             "title": "Bg Color"
           },
           "text_color": {
+            "description": "The text color of the widget",
             "type": "string",
             "default": "#000000",
             "title": "Text Color"
           },
           "btn_color": {
+            "description": "The button color of the widget",
             "type": "string",
             "default": "#000000",
             "title": "Btn Color"
           },
           "btn_text_color": {
+            "description": "The button text color of the widget",
             "type": "string",
             "default": "#ffffff",
             "title": "Btn Text Color"
           },
           "border_color": {
+            "description": "The border color of the widget",
             "type": "string",
             "default": "#e1e1e1",
             "title": "Border Color"
           },
           "focus_color": {
+            "description": "The focus color of the widget",
             "type": "string",
             "default": "#000000",
             "title": "Focus Color"
           },
           "border_radius": {
+            "description": "The border radius of the widget",
             "anyOf": [
               {
                 "type": "integer"
@@ -28330,6 +28886,7 @@
             "title": "Border Radius"
           },
           "btn_radius": {
+            "description": "The button radius of the widget",
             "anyOf": [
               {
                 "type": "integer"
@@ -28341,6 +28898,7 @@
             "title": "Btn Radius"
           },
           "action_text": {
+            "description": "The action text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28352,6 +28910,7 @@
             "title": "Action Text"
           },
           "start_call_text": {
+            "description": "The start call text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28363,6 +28922,7 @@
             "title": "Start Call Text"
           },
           "end_call_text": {
+            "description": "The end call text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28374,6 +28934,7 @@
             "title": "End Call Text"
           },
           "expand_text": {
+            "description": "The expand text of the widget",
             "anyOf": [
               {
                 "type": "string"
@@ -28385,6 +28946,7 @@
             "title": "Expand Text"
           },
           "listening_text": {
+            "description": "The text to display when the agent is listening",
             "anyOf": [
               {
                 "type": "string"
@@ -28396,6 +28958,7 @@
             "title": "Listening Text"
           },
           "speaking_text": {
+            "description": "The text to display when the agent is speaking",
             "anyOf": [
               {
                 "type": "string"
@@ -28407,6 +28970,7 @@
             "title": "Speaking Text"
           },
           "shareable_page_text": {
+            "description": "The text to display when sharing",
             "anyOf": [
               {
                 "type": "string"
@@ -28418,11 +28982,13 @@
             "title": "Shareable Page Text"
           },
           "shareable_page_show_terms": {
+            "description": "Whether to show terms and conditions on the shareable page",
             "type": "boolean",
             "default": true,
             "title": "Shareable Page Show Terms"
           },
           "terms_text": {
+            "description": "The text to display for terms and conditions",
             "anyOf": [
               {
                 "type": "string"
@@ -28434,6 +29000,7 @@
             "title": "Terms Text"
           },
           "terms_html": {
+            "description": "The HTML to display for terms and conditions",
             "anyOf": [
               {
                 "type": "string"
@@ -28445,6 +29012,7 @@
             "title": "Terms Html"
           },
           "terms_key": {
+            "description": "The key to display for terms and conditions",
             "anyOf": [
               {
                 "type": "string"
@@ -28456,6 +29024,7 @@
             "title": "Terms Key"
           },
           "show_avatar_when_collapsed": {
+            "description": "Whether to show the avatar when the widget is collapsed",
             "default": false,
             "anyOf": [
               {
@@ -28468,12 +29037,13 @@
             "title": "Show Avatar When Collapsed"
           },
           "disable_banner": {
-            "description": "Whether to disable the ConvAI widget banner",
+            "description": "Whether to disable the banner",
             "type": "boolean",
             "default": false,
             "title": "Disable Banner"
           },
           "mic_muting_enabled": {
+            "description": "Whether to enable mic muting",
             "type": "boolean",
             "default": false,
             "title": "Mic Muting Enabled"
@@ -28496,6 +29066,32 @@
             ],
             "title": "Supported Language Overrides"
           }
+        },
+        "example": {
+          "action_text": "Call",
+          "bg_color": "#ffffff",
+          "border_color": "#e1e1e1",
+          "border_radius": 10,
+          "btn_color": "#000000",
+          "btn_radius": 10,
+          "btn_text_color": "#ffffff",
+          "disable_banner": false,
+          "end_call_text": "End Call",
+          "expand_text": "Expand",
+          "expandable": "never",
+          "feedback_mode": "none",
+          "focus_color": "#000000",
+          "listening_text": "Listening...",
+          "mic_muting_enabled": false,
+          "shareable_page_show_terms": true,
+          "shareable_page_text": "Share",
+          "speaking_text": "Speaking...",
+          "start_call_text": "Start Call",
+          "terms_html": "<p>Terms and Conditions</p>",
+          "terms_key": "terms",
+          "terms_text": "Terms and Conditions",
+          "text_color": "#000000",
+          "variant": "full"
         },
         "required": [
           "language"
