@@ -121,11 +121,31 @@ Currently we only support pronunciation dictionaries that specify replacements u
 
 Both phonemes and aliases are sets of rules that specify a word or phrase they are looking for, referred to as a grapheme, and what it will be replaced with. Please note that searches are case sensitive. When checking for a replacement word in a pronunciation dictionary, the dictionary is checked from start to end and only the very first replacement is used.
 
-### Pronunciation Dictionary Example
+### Pronunciation Dictionary examples
 
-Here is an example pronunciation dictionary that specifies in IPA the pronunciation of "Apple" with IPA of "ˈæpl̩" and "UN" with an alias of "United Nations":
+Here are examples of pronunciation dictionaries in both CMU Arpabet and IPA, including a phoneme to specify the pronunciation of "Apple" and an alias to replace "UN" with "United Nations":
 
+<CodeBlocks>
+```xml CMU Arpabet Example
+<?xml version="1.0" encoding="UTF-8"?>
+<lexicon version="1.0"
+      xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon
+        http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
+      alphabet="cmu-arpabet" xml:lang="en-GB">
+  <lexeme>
+    <grapheme>apple</grapheme>
+    <phoneme>AE P AH L</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>UN</grapheme>
+    <alias>United Nations</alias>
+  </lexeme>
+</lexicon>
 ```
+
+```xml IPA Example
 <?xml version="1.0" encoding="UTF-8"?>
 <lexicon version="1.0"
       xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
@@ -142,6 +162,12 @@ Here is an example pronunciation dictionary that specifies in IPA the pronunciat
     <alias>United Nations</alias>
   </lexeme>
 </lexicon>
+```
+
+</CodeBlocks>
+
+```
+
 ```
 
 To generate a pronunciation dictionary `.pls` file, there are a few open source tools available:
