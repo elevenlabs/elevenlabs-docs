@@ -70,7 +70,12 @@ from elevenlabs import (
     ElevenLabs,
     AgentConfig,
     PromptAgent,
-    PromptAgentToolsItem_System
+    PromptAgentToolsItem_System,
+    LanguagePreset,
+    ConversationConfigClientOverride,
+    AgentConfigOverride,
+    LanguagePresetTranslation,
+    PromptAgentOverride
 )
 
 # Initialize the client
@@ -82,13 +87,67 @@ language_detection_tool = PromptAgentToolsItem_System(
     description=""  # Optional: Customize when the tool should be triggered
 )
 
+# Create language presets
+language_presets = {
+    "nl": LanguagePreset(
+        overrides=ConversationConfigClientOverride(
+            agent=AgentConfigOverride(
+                prompt=None,
+                first_message="Hoi, hoe gaat het met je?",
+                language=None
+            ),
+            tts=None
+        ),
+        first_message_translation=None
+    ),
+    "fi": LanguagePreset(
+        overrides=ConversationConfigClientOverride(
+            agent=AgentConfigOverride(
+                first_message="Hei, kuinka voit?",
+            ),
+            tts=None
+        ),
+    ),
+    "tr": LanguagePreset(
+        overrides=ConversationConfigClientOverride(
+            agent=AgentConfigOverride(
+                prompt=None,
+                first_message="Merhaba, nasılsın?",
+                language=None
+            ),
+            tts=None
+        ),
+    ),
+    "ru": LanguagePreset(
+        overrides=ConversationConfigClientOverride(
+            agent=AgentConfigOverride(
+                prompt=None,
+                first_message="Привет, как ты?",
+                language=None
+            ),
+            tts=None
+        ),
+    ),
+    "pt": LanguagePreset(
+        overrides=ConversationConfigClientOverride(
+            agent=AgentConfigOverride(
+                prompt=None,
+                first_message="Oi, como você está?",
+                language=None
+            ),
+            tts=None
+        ),
+    )
+}
+
 # Create the agent configuration
 conversation_config = ConversationalConfig(
     agent=AgentConfig(
         prompt=PromptAgent(
             tools=[language_detection_tool]
         )
-    )
+    ),
+    language_presets=language_presets
 )
 
 # Create the agent
@@ -119,6 +178,72 @@ await client.conversationalAi.createAgent({
         ],
       },
     },
+    language_presets: {
+      nl: {
+        overrides: {
+          agent: {
+            prompt: null,
+            first_message: 'Hoi, hoe gaat het met je?',
+            language: null,
+          },
+          tts: null,
+        },
+      },
+      fi: {
+        overrides: {
+          agent: {
+            prompt: null,
+            first_message: 'Hei, kuinka voit?',
+            language: null,
+          },
+          tts: null,
+        },
+        first_message_translation: {
+          source_hash: '{"firstMessage":"Hi how are you?","language":"en"}',
+          text: 'Hei, kuinka voit?',
+        },
+      },
+      tr: {
+        overrides: {
+          agent: {
+            prompt: null,
+            first_message: 'Merhaba, nasılsın?',
+            language: null,
+          },
+          tts: null,
+        },
+      },
+      ru: {
+        overrides: {
+          agent: {
+            prompt: null,
+            first_message: 'Привет, как ты?',
+            language: null,
+          },
+          tts: null,
+        },
+      },
+      pt: {
+        overrides: {
+          agent: {
+            prompt: null,
+            first_message: 'Oi, como você está?',
+            language: null,
+          },
+          tts: null,
+        },
+      },
+      ar: {
+        overrides: {
+          agent: {
+            prompt: null,
+            first_message: 'مرحبًا كيف حالك؟',
+            language: null,
+          },
+          tts: null,
+        },
+      },
+    },
   },
 });
 ```
@@ -138,6 +263,68 @@ curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
             "description": ""
           }
         ]
+      }
+    },
+    "language_presets": {
+      "nl": {
+        "overrides": {
+          "agent": {
+            "prompt": null,
+            "first_message": "Hoi, hoe gaat het met je?",
+            "language": null
+          },
+          "tts": null
+        }
+      },
+      "fi": {
+        "overrides": {
+          "agent": {
+            "prompt": null,
+            "first_message": "Hei, kuinka voit?",
+            "language": null
+          },
+          "tts": null
+        }
+      },
+      "tr": {
+        "overrides": {
+          "agent": {
+            "prompt": null,
+            "first_message": "Merhaba, nasılsın?",
+            "language": null
+          },
+          "tts": null
+        }
+      },
+      "ru": {
+        "overrides": {
+          "agent": {
+            "prompt": null,
+            "first_message": "Привет, как ты?",
+            "language": null
+          },
+          "tts": null
+        }
+      },
+      "pt": {
+        "overrides": {
+          "agent": {
+            "prompt": null,
+            "first_message": "Oi, como você está?",
+            "language": null
+          },
+          "tts": null
+        }
+      },
+      "ar": {
+        "overrides": {
+          "agent": {
+            "prompt": null,
+            "first_message": "مرحبًا كيف حالك؟",
+            "language": null
+          },
+          "tts": null
+        }
       }
     }
   }
