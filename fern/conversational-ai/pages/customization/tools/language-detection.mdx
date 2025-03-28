@@ -145,6 +145,7 @@ conversation_config = ConversationalConfig(
     agent=AgentConfig(
         prompt=PromptAgent(
             tools=[language_detection_tool]
+            first_message="Hi how are you?"
         )
     ),
     language_presets=language_presets
@@ -176,6 +177,7 @@ await client.conversationalAi.createAgent({
             description: '', // Optional: Customize when the tool should be triggered
           },
         ],
+        first_message: 'Hi, how are you?',
       },
     },
     language_presets: {
@@ -256,6 +258,7 @@ curl -X POST https://api.elevenlabs.io/v1/convai/agents/create \
   "conversation_config": {
     "agent": {
       "prompt": {
+        "first_message": "Hi how are you?"
         "tools": [
           {
             "type": "system",
