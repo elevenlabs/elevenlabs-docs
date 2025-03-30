@@ -5,13 +5,13 @@ subtitle: Connect your existing phone system with ElevenLabs conversational AI a
 
 ## Overview
 
-SIP (Session Initiation Protocol) trunking allows you to connect your existing telephony infrastructure directly to ElevenLabs conversational AI agents. This integration enables enterprise customers to use their existing phone systems while leveraging ElevenLabs' advanced voice AI capabilities.
+SIP (Session Initiation Protocol) trunking allows you to connect your existing telephony infrastructure directly to ElevenLabs conversational AI agents.
+This integration enables enterprise customers to use their existing phone systems while leveraging ElevenLabs' advanced voice AI capabilities.
 
 With SIP trunking, you can:
 
 - Connect your PBX or SIP-enabled phone system to ElevenLabs' voice AI platform
 - Route calls to AI agents without changing your existing phone infrastructure
-- Maintain your current phone numbers while adding AI capabilities
 - Handle both inbound and outbound call scenarios
 
 ## How SIP Trunking Works
@@ -23,7 +23,10 @@ SIP trunking establishes a direct connection between your telephony infrastructu
 3. **Authentication**: Connection security is maintained through either digest authentication (username/password) or ACL (Access Control List) authentication.
 
 <Frame background="subtle">
-  <img src="/assets/images/sip-trunk-diagram.svg" alt="SIP Trunking Architecture Diagram" />
+  <img
+    src="/assets/images/conversational-ai/sip-trunk-diagram.svg"
+    alt="SIP Trunking Architecture Diagram"
+  />
 </Frame>
 
 ## Requirements
@@ -39,10 +42,19 @@ Before setting up SIP trunking, ensure you have:
 
 <Steps>
   <Step title="Navigate to Phone Numbers">
-    Go to Conversational AI → Phone Numbers in the ElevenLabs dashboard.
+    Go to the [Phone Numbers section](https://elevenlabs.io/app/conversational-ai/phone-numbers) in the ElevenLabs Conversational AI dashboard.
   </Step>
   <Step title="Import SIP Trunk">
     Click on "Import a phone number from SIP trunk" button to open the configuration dialog.
+
+    <Frame background="subtle">
+      <img src="/assets/images/conversational-ai/sip-trunk-select.png" alt="Select SIP trunk option" />
+    </Frame>
+
+    <Frame background="subtle">
+      <img src="/assets/images/conversational-ai/sip-trunk.png" alt="SIP trunk configuration dialog" />
+    </Frame>
+
   </Step>
   <Step title="Enter Configuration Details">
     Complete the form with the following information:
@@ -51,12 +63,21 @@ Before setting up SIP trunking, ensure you have:
     - **Phone Number**: The E.164 formatted phone number to connect (e.g., +15551234567)
     - **Termination URI**: Your SIP trunk's termination URI (where ElevenLabs will send outbound calls)
 
+    <Frame background="subtle">
+      <img src="/assets/images/conversational-ai/sip-trunk-inbound.png" alt="SIP trunk inbound configuration" />
+    </Frame>
+
   </Step>
   <Step title="Configure Authentication (Optional)">
+
     If your SIP provider requires digest authentication:
 
     - Enter the username for SIP digest authentication
     - Enter the password for SIP digest authentication
+
+    <Frame background="subtle">
+      <img src="/assets/images/conversational-ai/sip-trunk-outbound.png" alt="SIP trunk outbound configuration" />
+    </Frame>
 
     If left empty, ACL authentication will be used (you'll need to allowlist ElevenLabs IPs in your provider's settings).
 
@@ -85,8 +106,13 @@ For outbound calls (calls from ElevenLabs back to your system), you need to prov
 <Tabs>
   <Tab title="Digest Authentication">
     Provide a username and password when configuring your SIP trunk in ElevenLabs. This method is
-    more secure and simpler to set up. ``` Username: your-sip-username Password: your-sip-password
+    more secure and simpler to set up.
+
     ```
+    Username: your-sip-username
+    Password: your-sip-password
+    ```
+
   </Tab>
   <Tab title="ACL Authentication">
     If you don't provide authentication credentials, you'll need to allowlist ElevenLabs' IP
@@ -124,15 +150,15 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 </Accordion>
 
   <Accordion title="Audio Quality Issues">
-    If you experience poor audio quality: 1. Ensure your network has sufficient bandwidth (at least
-    100 Kbps per call) 2. Check for network congestion or packet loss 3. Verify that your SIP trunk
-    provider supports high-quality codecs
+    If you experience poor audio quality: 
+    1. Ensure your network has sufficient bandwidth (at least 100 Kbps per call) 
+    2. Check for network congestion or packet loss
+    3. Verify that your SIP trunk provider supports high-quality codecs
   </Accordion>
 </AccordionGroup>
 
 ## Limitations and Considerations
 
-- SIP trunking is currently available only to enterprise customers
 - Support for multiple concurrent calls depends on your subscription tier
 - Call recording and analytics features are available but may require additional configuration
 - Outbound calling capabilities may be limited by your SIP trunk provider
