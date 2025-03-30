@@ -5,12 +5,13 @@ subtitle: Learn how to configure inbound calls for your agent with Twilio.
 
 ## Overview
 
-This guide shows you how to connect a Twilio phone number to your conversational AI agent to handle inbound calls.
+This guide shows you how to connect a Twilio phone number to your conversational AI agent to handle both inbound and outbound calls.
 
 You will learn to:
 
 - Import an existing Twilio phone number.
 - Link it to your agent to handle inbound calls.
+- Initiate outbound calls using your agent.
 
 ## Guide
 
@@ -40,7 +41,7 @@ Next, fill in the following details:
 
 <Note>
 
-You can find your account SID and auth token [**in the Twilio admin console**](https://www.twilio.com/console).
+You can find your account SID and auth token [**in the Twilio admin console**](https://www.twilio.com/console).
 
 </Note>
 
@@ -91,3 +92,48 @@ Test the agent by giving the phone number a call. Your agent is now ready to han
   dashboard](https://elevenlabs.io/app/conversational-ai/history) to ensure everything is working as
   expected.
 </Tip>
+
+## Making Outbound Calls
+
+Your imported Twilio phone number can also be used to initiate outbound calls where your agent calls a specified phone number.
+
+<Steps>
+
+<Step title="Initiate an outbound call">
+
+From the [**Phone Numbers**](https://elevenlabs.io/app/conversational-ai/phone-numbers) tab, locate your imported Twilio number and click the **Outbound call** button.
+
+<Frame background="subtle">
+  ![Outbound call button](/assets/images/conversational-ai/outbound-button.png)
+</Frame>
+
+</Step>
+
+<Step title="Configure the call">
+
+In the Outbound Call modal:
+
+1. Select the agent that will handle the conversation
+2. Enter the phone number you want to call
+3. Click **Send Test Call** to initiate the call
+
+<Frame background="subtle">
+  ![Outbound call configuration](/assets/images/conversational-ai/outbound-modal.png)
+</Frame>
+
+</Step>
+
+</Steps>
+
+Once initiated, the recipient will receive a call from your Twilio number. When they answer, your agent will begin the conversation.
+
+<Tip>
+  Outbound calls appear in your [Calls History
+  dashboard](https://elevenlabs.io/app/conversational-ai/history) alongside inbound calls, allowing
+  you to review all conversations.
+</Tip>
+
+<Note>
+  When making outbound calls, your agent will be the initiator of the conversation, so ensure your
+  agent has appropriate initial messages configured to start the conversation effectively.
+</Note>
