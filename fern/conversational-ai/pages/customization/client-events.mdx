@@ -220,6 +220,28 @@ Client events are essential for maintaining the real-time nature of conversation
     ```
 
   </Accordion>
+  <Accordion title="contextual_update">
+    - Allows sending non-interrupting contextual information to update conversation state
+    - Updates are incorporated as tool calls in the conversation history
+    - Useful for adding background information without disrupting the flow
+
+    ```javascript
+    // Example contextual update event structure
+    {
+      "type": "contextual_update",
+      "text": "User appears to be looking at pricing page"
+    }
+    ```
+
+    ```javascript
+    // Example contextual update handler
+    websocket.send(JSON.stringify({
+      type: 'contextual_update',
+      text: 'Customer status: Premium tier'
+    }));
+    ```
+
+  </Accordion>
 </AccordionGroup>
 
 ## Event flow
