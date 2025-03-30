@@ -59,50 +59,14 @@ sendContextUpdate('Shopping cart contains 3 items');
 1. **Contextual updates**
 
    - Send relevant but concise contextual information
-   - Avoid overwhelming the AI with too many updates
-   - Focus on information that impacts the conversation flow
+   - Avoid overwhelming the LLM with too many updates
+   - Focus on information that impacts the conversation flow or is important context from activity in a UI not accessible to the voice agent
 
-2. **Tool result handling**
-
-   - Always respond to tool calls promptly
-   - Provide clear error messages when tools fail
-   - Structure result data consistently
-
-3. **Timing considerations**
+2. **Timing considerations**
 
    - Send updates at appropriate moments
    - Avoid rapid-fire sequential updates
    - Consider debouncing user interface state changes
-
-## Example flow
-
-Here's a typical sequence showing client-to-server events in a conversation:
-
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Server
-
-    Server->>Client: conversation_initiation_metadata
-    Note over Client,Server: Connection established
-    Server->>Client: ping
-    Client->>Server: pong
-    Server->>Client: audio
-    Note over Client: User navigates to pricing page
-    Client->>Server: contextual_update
-    Note over Client: User asks a question
-    Server->>Client: user_transcript
-    Server->>Client: agent_response
-    Server->>Client: audio
-    Server->>Client: client_tool_call
-    Note over Client: Client tool executes
-    Client->>Server: client_tool_result
-    Server->>Client: agent_response
-    Server->>Client: audio
-    Note over Client: User interrupts
-    Client->>Server: interrupt
-    Server->>Client: agent_response_correction
-```
 
 <Info>
   For detailed implementation examples, check our [SDK
