@@ -10,16 +10,16 @@ This integration enables enterprise customers to use their existing phone system
 
 With SIP trunking, you can:
 
-- Connect your PBX or SIP-enabled phone system to ElevenLabs' voice AI platform
+- Connect your Private Branch Exchange (PBX) or SIP-enabled phone system to ElevenLabs' voice AI platform
 - Route calls to AI agents without changing your existing phone infrastructure
 - Handle both inbound and outbound call scenarios
 
-## How SIP Trunking Works
+## How SIP Trunking works
 
 SIP trunking establishes a direct connection between your telephony infrastructure and the ElevenLabs platform:
 
-1. **Inbound Calls**: Calls from your SIP trunk are routed to the ElevenLabs platform using the provided origination URI.
-2. **Outbound Calls**: ElevenLabs routes calls back to your system using your configured termination URI.
+1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform our origination URI.
+2. **Outbound calls**: ElevenLabs routes calls back to your system using your configured termination URI.
 3. **Authentication**: Connection security is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication.
 
 ## Requirements
@@ -48,8 +48,13 @@ Before setting up SIP trunking, ensure you have:
       <img src="/assets/images/conversational-ai/sip-trunk.png" alt="SIP trunk configuration dialog" />
     </Frame>
 
+    When you import a SIP trunk, the system automatically configures the ElevenLabs origination URI for inbound calls:
+    `sip:sip.rtc.eleven2.dev:5060;transport=tcp`
+
+    This pre-populated URI cannot be modified and serves as the destination endpoint where your system should route all inbound calls (calls from your system to ElevenLabs).
+
   </Step>
-  <Step title="Enter Configuration Details">
+  <Step title="Enter configuration details">
     Complete the form with the following information:
 
     - **Label**: A descriptive name for the phone number
@@ -61,7 +66,7 @@ Before setting up SIP trunking, ensure you have:
     </Frame>
 
   </Step>
-  <Step title="Configure Authentication (Optional)">
+  <Step title="Configure authentication (optional)">
 
     If your SIP provider requires digest authentication:
 
@@ -79,40 +84,6 @@ Before setting up SIP trunking, ensure you have:
     Click "Import" to finalize the configuration.
   </Step>
 </Steps>
-
-## Inbound Configuration
-
-For inbound calls (calls coming from your system to ElevenLabs), you'll need to configure your SIP trunk to route calls to the ElevenLabs origination URI:
-`sip:sip.rtc.eleven2.dev:5060;transport=tcp`
-
-This URI is automatically populated and cannot be modified as it's the endpoint your system must use to reach ElevenLabs.
-
-## Outbound Configuration
-
-For outbound calls (calls from ElevenLabs back to your system), you need to provide:
-
-- **Termination URI**: The SIP URI where ElevenLabs should send calls for your phone number (e.g., `sip:your-sip-trunk-uri`)
-- **Authentication Credentials** (Optional): If your SIP trunk requires digest authentication, provide the username and password. Otherwise, ACL authentication will be used.
-
-## Authentication Methods
-
-<Tabs>
-  <Tab title="Digest Authentication">
-    Provide a username and password when configuring your SIP trunk in ElevenLabs. This method is
-    more secure and simpler to set up.
-
-    ```
-    Username: your-sip-username
-    Password: your-sip-password
-    ```
-
-  </Tab>
-  <Tab title="ACL Authentication">
-    If you don't provide authentication credentials, you'll need to allowlist ElevenLabs' IP
-    addresses in your SIP trunk provider's settings. Contact ElevenLabs support for the current list
-    of IP addresses to allowlist.
-  </Tab>
-</Tabs>
 
 ## Assigning Agents to Phone Numbers
 
