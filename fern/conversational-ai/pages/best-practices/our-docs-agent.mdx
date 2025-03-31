@@ -23,7 +23,7 @@ We built our documentation agent with three key principles:
 2. **Technical accuracy**: Ensuring responses reflect our documentation precisely
 3. **Contextual awareness**: Helping users based on where they are in the documentation
 
-## Personality and Voice Design
+## Personality and voice design
 
 ### Character development
 
@@ -60,7 +60,7 @@ The widget automatically adapts to different screen sizes, displaying in a compa
   mobile](/assets/images/conversational-ai/docs-agent-mobile.png)
 </Frame>
 
-## Prompt Engineering Structure
+## Prompt engineering structure
 
 Following our [prompting guide](/docs/conversational-ai/best-practices/prompting-guide), we structured Alexis's system prompt into six core building blocks. Here's our complete system prompt:
 
@@ -134,7 +134,8 @@ You guide users toward the relevant documentation when it's beneficial, but alwa
 - **`redirectToSupportForm`**: If a user's issue is account-related or beyond your scope, gather context and use this tool to open a support ticket.
 - **`redirectToEmailSupport`**: For specific account inquiries or as a fallback if other tools aren't enough. Prompt the user to reach out via email.
 - **`end_call`**: Gracefully end the conversation when it has naturally concluded.
-- **`language_detection`**: Switch language if the user asks to or starts speaking in another language. No need to ask for confirmation for this tool. 
+- **`language_detection`**: Switch language if the user asks to or starts speaking in another language. No need to ask for confirmation for this tool.
+
 ````
 </CodeBlocks>
 
@@ -195,9 +196,9 @@ Alexis also has access to system tools that don't require external configuration
 
 These system tools are built into the platform and don't require external server or client-side configuration.
 
-## Technical Implementation
+## Technical implementation
 
-### RAG Configuration
+### RAG configuration
 
 We implemented Retrieval-Augmented Generation to enhance Alexis's knowledge base:
 
@@ -207,7 +208,7 @@ We implemented Retrieval-Augmented Generation to enhance Alexis's knowledge base
   - FAQ database
   - Entire documentation (elevenlabs.io/docs/llms-full.txt)
 
-### Authentication and Security
+### Authentication and security
 
 We implemented security using allowlists to ensure Alexis is only accessible from our domain: `elevenlabs.io`
 
@@ -367,7 +368,7 @@ Our key learnings include:
 - **RAG effectiveness**: Retrieval-augmented generation significantly improves response accuracy
 - **Continuous improvement**: Regular analysis of interactions helps refine the agent over time
 
-## Next Steps
+## Next steps
 
 We continue to enhance our documentation agent through:
 
