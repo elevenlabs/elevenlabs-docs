@@ -7,7 +7,14 @@ subtitle: Learn how we built our documentation assistant using ElevenLabs Conver
 
 Our documentation agent Alexis serves as an interactive assistant on the ElevenLabs documentation website, helping users navigate our product offerings and technical documentation. This guide outlines how we engineered Alexis to provide natural, helpful guidance using conversational AI.
 
-## Agent Design Philosophy
+<Frame
+  background="subtle"
+  caption="Users can call Alexis through the widget in the bottom right whenever they have an issue"
+>
+  ![ElevenLabs documentation agent Alexis](/assets/images/conversational-ai/docs-agent.png)
+</Frame>
+
+## Agent design philosophy
 
 We built our documentation agent with three key principles:
 
@@ -18,7 +25,7 @@ We built our documentation agent with three key principles:
 
 ## Personality and Voice Design
 
-### Character Development
+### Character development
 
 Alexis was designed with a distinct personality - warm, witty, and intelligent with a strong engineering background. Her character balances:
 
@@ -26,7 +33,7 @@ Alexis was designed with a distinct personality - warm, witty, and intelligent w
 - **Professionalism** with conversational warmth
 - **Helpfulness** with natural conversational flow
 
-### Voice Selection
+### Voice selection
 
 After extensive testing, we selected a voice that reinforces Alexis's character traits:
 
@@ -36,17 +43,22 @@ Voice ID: P7x743VjyZEOihNNygQ9 (Dakota H)
 
 This voice provides a warm, natural quality with subtle speech disfluencies that make interactions feel authentic and human.
 
-### Voice Settings Optimization
-
-<Frame background="subtle">
-  ![Voice settings configuration](/assets/images/conversational-ai/voice-parameters.png)
-</Frame>
+### Voice settings optimization
 
 We fine-tuned the voice parameters to match Alexis's personality:
 
 - **Stability**: Set to 0.45 to allow emotional range while maintaining clarity
 - **Similarity**: 0.75 to ensure consistent voice characteristics
 - **Speed**: 1.0 to maintain natural conversation pacing
+
+## Widget structure
+
+The widget automatically adapts to different screen sizes, displaying in a compact format on mobile devices to conserve screen space while maintaining full functionality. This responsive design ensures users can access AI assistance regardless of their device.
+
+<Frame background="subtle" caption="The widget displays in a compact format on mobile devices">
+  ![ElevenLabs documentation agent Alexis on
+  mobile](/assets/images/conversational-ai/docs-agent-mobile.png)
+</Frame>
 
 ## Prompt Engineering Structure
 
@@ -326,11 +338,11 @@ if (document.readyState === 'loading') {
 
 The widget automatically adapts to the site theme and device type, providing a consistent experience across all documentation pages.
 
-## Evaluation Framework
+## Evaluation framework
 
 To continuously improve Alexis's performance, we implemented comprehensive evaluation criteria:
 
-### Agent Performance Metrics
+### Agent performance metrics
 
 We track several key metrics for each interaction:
 
@@ -339,7 +351,7 @@ We track several key metrics for each interaction:
 - `solved_user_inquiry`: Was the agent able to answer all queries or redirect appropriately?
 - `hallucination_kb`: Did the agent provide accurate information from the knowledge base?
 
-### Data Collection
+### Data collection
 
 We also collect structured data from each conversation to analyze patterns:
 
@@ -350,7 +362,7 @@ We also collect structured data from each conversation to analyze patterns:
 
 This evaluation framework allows us to continually refine Alexis's behavior, knowledge, and communication style.
 
-## Results and Learnings
+## Results and learnings
 
 Since implementing our documentation agent, we've observed several key benefits:
 
@@ -369,7 +381,7 @@ Our key learnings include:
 We continue to enhance our documentation agent through:
 
 1. **Expanding knowledge**: Adding new products and features to the knowledge base
-2. **Refining responses**: Improving explanation quality for complex topics
+2. **Refining responses**: Improving explanation quality for complex topics by reviewing flagged conversations
 3. **Adding capabilities**: Integrating new tools to better assist users
 
 ## FAQ
