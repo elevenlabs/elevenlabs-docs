@@ -10538,7 +10538,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response"
+            "description": "Successful Response",
+            "content": {
+              "audio/mpeg": {}
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -10555,7 +10558,8 @@
           "Conversational AI"
         ],
         "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversation_audio"
+        "x-fern-sdk-method-name": "get_conversation_audio",
+        "x-fern-streaming": true
       }
     },
     "/v1/convai/conversations/{conversation_id}/feedback": {
@@ -11731,7 +11735,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Streaming document content",
             "content": {
               "text/html": {}
             }
@@ -11751,7 +11755,8 @@
           "Conversational AI"
         ],
         "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_document_content"
+        "x-fern-sdk-method-name": "get_knowledge_base_document_content",
+        "x-fern-sdk-streaming": true
       }
     },
     "/v1/convai/knowledge-base/{documentation_id}/chunk/{chunk_id}": {
@@ -12785,6 +12790,9 @@
                 "type": "null"
               }
             ]
+          },
+          "webhooks": {
+            "$ref": "#/components/schemas/ConvAIWebhooks"
           }
         },
         "title": "AgentWorkspaceOverrides"
@@ -12802,6 +12810,9 @@
                 "type": "null"
               }
             ]
+          },
+          "webhooks": {
+            "$ref": "#/components/schemas/ConvAIWebhooks"
           }
         },
         "title": "AgentWorkspaceOverrides"
@@ -18598,6 +18609,17 @@
       "ConversationHistoryTranscriptToolCallCommonModel": {
         "type": "object",
         "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
           "request_id": {
             "type": "string",
             "title": "Request Id"
@@ -18626,6 +18648,17 @@
       "ConversationHistoryTranscriptToolResultCommonModel": {
         "type": "object",
         "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
           "request_id": {
             "type": "string",
             "title": "Request Id"
@@ -21252,17 +21285,7 @@
         },
         "example": {
           "has_more": false,
-          "next_cursor": "5xM3yVvZQKV0EfqQpLr2",
-          "pronunciation_dictionaries": [
-            {
-              "created_by": "ar6633Es2kUjFXBdR1iVc9ztsXl1",
-              "creation_time_unix": 1714156800,
-              "description": "This is a test dictionary",
-              "id": "5xM3yVvZQKV0EfqQpLrJ",
-              "latest_version_id": "5xM3yVvZQKV0EfqQpLr2",
-              "name": "My Dictionary"
-            }
-          ]
+          "next_cursor": "5xM3yVvZQKV0EfqQpLr2"
         },
         "required": [
           "pronunciation_dictionaries",
@@ -21334,6 +21357,7 @@
           "description": "This is a test dictionary",
           "id": "5xM3yVvZQKV0EfqQpLrJ",
           "latest_version_id": "5xM3yVvZQKV0EfqQpLr2",
+          "latest_version_rules_num": 2,
           "name": "My Dictionary"
         },
         "required": [
@@ -26989,6 +27013,18 @@
               }
             ],
             "title": "Accent"
+          },
+          "locale": {
+            "description": "The voice's locale, if applicable.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
           },
           "preview_url": {
             "description": "The voice's preview URL, if applicable.",
