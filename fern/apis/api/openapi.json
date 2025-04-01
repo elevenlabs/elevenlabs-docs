@@ -9388,6 +9388,70 @@
         "x-fern-sdk-method-name": "convert"
       }
     },
+    "/v1/forced-alignment": {
+      "post": {
+        "operationId": "Forced_alignment_v1_forced_alignment_post",
+        "summary": "Forced Alignment",
+        "description": "Force align an audio file to text. Use this endpoint to get the timing information for each character and word in an audio file based on a provided text transcript.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Forced_alignment_v1_forced_alignment_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForcedAlignmentResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "forced-alignment"
+        ],
+        "x-fern-sdk-group-name": "forced_alignment",
+        "x-fern-sdk-method-name": "create"
+      }
+    },
     "/v1/convai/conversation/get_signed_url": {
       "get": {
         "operationId": "Get_Signed_Url_v1_convai_conversation_get_signed_url_get",
@@ -10049,85 +10113,6 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "post_agent_avatar"
-      }
-    },
-    "/v1/convai/agents/{agent_id}/add-secret": {
-      "post": {
-        "operationId": "Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post",
-        "summary": "Add A Secret To The Agent Which Can Be Referenced In Tool Calls",
-        "description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
-        "parameters": [
-          {
-            "name": "agent_id",
-            "in": "path",
-            "description": "The id of an agent. This is returned on agent creation.",
-            "required": true,
-            "schema": {
-              "description": "The id of an agent. This is returned on agent creation.",
-              "type": "string",
-              "embed": true,
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Agent Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddAgentSecretResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Conversational AI"
-        ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "add_agent_secret"
       }
     },
     "/v1/convai/agents": {
@@ -12129,22 +12114,6 @@
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "delete_secret"
       }
-    },
-    "/docs": {
-      "get": {
-        "operationId": "redirect_to_mintlify_docs_get",
-        "summary": "Redirect To Mintlify",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -12212,24 +12181,6 @@
           "high"
         ],
         "title": "ASRQuality"
-      },
-      "AddAgentSecretResponseModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          }
-        },
-        "required": [
-          "id",
-          "name"
-        ],
-        "title": "AddAgentSecretResponseModel"
       },
       "AddChapterResponseModel": {
         "type": "object",
@@ -13355,32 +13306,6 @@
           "name"
         ],
         "title": "Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post"
-      },
-      "Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "A name to help identify a particular agent secret",
-            "type": "string",
-            "examples": [
-              "MY API KEY"
-            ],
-            "title": "Name"
-          },
-          "secret_value": {
-            "description": "A value to be encrypted and used by the agent",
-            "type": "string",
-            "examples": [
-              "sk_api_12354abc"
-            ],
-            "title": "Secret Value"
-          }
-        },
-        "required": [
-          "name",
-          "secret_value"
-        ],
-        "title": "Body_Add_a_secret_to_the_Agent_which_can_be_referenced_in_tool_calls_v1_convai_agents__agent_id__add_secret_post"
       },
       "Body_Add_chapter_to_a_project_v1_projects__project_id__chapters_add_post": {
         "type": "object",
@@ -15568,6 +15493,27 @@
           "name"
         ],
         "title": "Body_Edit_voice_v1_voices__voice_id__edit_post"
+      },
+      "Body_Forced_alignment_v1_forced_alignment_post": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "description": "The file to align. All major audio and video formats are supported. The file size must be less than 1GB.",
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "text": {
+            "description": "The text to align with the audio or video.",
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "required": [
+          "file",
+          "text"
+        ],
+        "title": "Body_Forced_alignment_v1_forced_alignment_post"
       },
       "Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post": {
         "type": "object",
@@ -20094,6 +20040,11 @@
             "type": "integer",
             "title": "Voice Slots Used"
           },
+          "professional_voice_slots_used": {
+            "description": "The number of professional voice slots used by the workspace/user if single seat.",
+            "type": "integer",
+            "title": "Professional Voice Slots Used"
+          },
           "voice_limit": {
             "description": "The maximum number of voice slots allowed for the user.",
             "type": "integer",
@@ -20230,6 +20181,7 @@
           "can_extend_character_limit",
           "allowed_to_extend_character_limit",
           "voice_slots_used",
+          "professional_voice_slots_used",
           "voice_limit",
           "voice_add_edit_counter",
           "professional_voice_limit",
@@ -20486,6 +20438,97 @@
           "manual_verification_requested"
         ],
         "title": "FineTuningResponseModel"
+      },
+      "ForcedAlignmentCharacterResponseModel": {
+        "description": "Model representing a single character with its timing information from the aligner.",
+        "type": "object",
+        "properties": {
+          "text": {
+            "description": "The character that was transcribed.",
+            "type": "string",
+            "title": "Text"
+          },
+          "start": {
+            "description": "The start time of the character in seconds.",
+            "type": "number",
+            "title": "Start"
+          },
+          "end": {
+            "description": "The end time of the character in seconds.",
+            "type": "number",
+            "title": "End"
+          }
+        },
+        "example": {
+          "end": 0.02,
+          "start": 0,
+          "text": "H"
+        },
+        "required": [
+          "text",
+          "start",
+          "end"
+        ],
+        "title": "ForcedAlignmentCharacterResponseModel"
+      },
+      "ForcedAlignmentResponseModel": {
+        "description": "Model representing the response from the aligner service.",
+        "type": "object",
+        "properties": {
+          "characters": {
+            "description": "List of characters with their timing information.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ForcedAlignmentCharacterResponseModel"
+            },
+            "title": "Characters"
+          },
+          "words": {
+            "description": "List of words with their timing information.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ForcedAlignmentWordResponseModel"
+            },
+            "title": "Words"
+          }
+        },
+        "required": [
+          "characters",
+          "words"
+        ],
+        "title": "ForcedAlignmentResponseModel"
+      },
+      "ForcedAlignmentWordResponseModel": {
+        "description": "Model representing a single word with its timing information from the aligner.",
+        "type": "object",
+        "properties": {
+          "text": {
+            "description": "The word that was transcribed.",
+            "type": "string",
+            "title": "Text"
+          },
+          "start": {
+            "description": "The start time of the word in seconds.",
+            "type": "number",
+            "title": "Start"
+          },
+          "end": {
+            "description": "The end time of the word in seconds.",
+            "type": "number",
+            "title": "End"
+          }
+        },
+        "example": {
+          "end": 1.02,
+          "start": 0,
+          "text": "Hello"
+        },
+        "required": [
+          "text",
+          "start",
+          "end"
+        ],
+        "title": "ForcedAlignmentWordResponseModel"
       },
       "GetAgentEmbedResponseModel": {
         "type": "object",
@@ -26133,6 +26176,11 @@
             "type": "integer",
             "title": "Voice Slots Used"
           },
+          "professional_voice_slots_used": {
+            "description": "The number of professional voice slots used by the workspace/user if single seat.",
+            "type": "integer",
+            "title": "Professional Voice Slots Used"
+          },
           "voice_limit": {
             "description": "The maximum number of voice slots allowed for the user.",
             "type": "integer",
@@ -26266,6 +26314,7 @@
           "can_extend_character_limit",
           "allowed_to_extend_character_limit",
           "voice_slots_used",
+          "professional_voice_slots_used",
           "voice_limit",
           "voice_add_edit_counter",
           "professional_voice_limit",
