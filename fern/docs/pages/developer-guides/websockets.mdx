@@ -8,7 +8,8 @@ WebSocket streaming is a method of sending and receiving data over a single, lon
 If you want to quickly test out the latency (time to first byte) of a websocket connection to the ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
 
 <Note>
-  WebSockets can be used with the Text to Speech and Conversational AI products. This guide will demonstrate how to use them with the Text to Speech API.
+  WebSockets can be used with the Text to Speech and Conversational AI products. This guide will
+  demonstrate how to use them with the Text to Speech API.
 </Note>
 
 ## Requirements
@@ -101,6 +102,7 @@ const writeStream = fs.createWriteStream(outputDir + '/test.mp3', {
   flags: 'a',
 });
 ```
+
 </CodeBlock>
 
 ## Send the input text
@@ -234,9 +236,10 @@ You can run the script by executing the following command in your terminal. An m
   python text-to-speech-websocket.py
   ```
 
-  ```typescript TypeScript
-  npx tsx text-to-speech-websocket.ts
-  ```
+```typescript TypeScript
+npx tsx text-to-speech-websocket.ts
+```
+
 </CodeBlock>
 
 ## Advanced configuration
@@ -272,13 +275,16 @@ await websocket.send(json.dumps({
 ```
 
 ```typescript
-websocket.send(JSON.stringify({
+websocket.send(
+  JSON.stringify({
     text: text,
     // Generate audio after 50, 120, 160, and 290 characters have been sent
     generation_config: { chunk_length_schedule: [50, 120, 160, 290] },
     xi_api_key: ELEVENLABS_API_KEY,
-}));
+  })
+);
 ```
+
 </CodeBlock>
 
 In the case that you want force the immediate return of the audio, you can use `flush: true` to clear out the buffer and force generate any buffered text. This can be useful, for example, when you have reached the end of a document and want to generate audio for the final section.
@@ -294,7 +300,7 @@ await websocket.send(json.dumps({"text": "Generate this audio immediately.", "fl
 ```
 
 ```typescript
-websocket.send(JSON.stringify({ text: "Generate this audio immediately.", flush: true }));
+websocket.send(JSON.stringify({ text: 'Generate this audio immediately.', flush: true }));
 ```
 
 </CodeBlock>
@@ -314,16 +320,16 @@ await websocket.send(json.dumps({
 }))
 ```
 
-
 ```typescript
-websocket.send(JSON.stringify({
+websocket.send(
+  JSON.stringify({
     text: text,
     voice_settings: { stability: 0.5, similarity_boost: 0.8, use_speaker_boost: false },
-}));
+  })
+);
 ```
 
 </CodeBlock>
-
 
 This can be overridden on a per-message basis by specifying a different `voice_settings` in the message.
 
