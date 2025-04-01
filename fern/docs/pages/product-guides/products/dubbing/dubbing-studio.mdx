@@ -55,3 +55,48 @@ In Dubbing Studio, all regenerations made to the text are "Fixed" generations by
 This is where "Dynamic" generation can help. You can access this by right clicking on a clip and selecting "Generate Audio (Dynamic Duration). You'll notice now that the length of the clip will more appropriately match the text spoken for that section. For example, the phrase **"I'm doing well!"** should only occupy a small clip - if the clip was very long, the speech would be slurred and drawn out. This is where Dynamic generation can be helpful.
 
 Just note, though, that this could affect the syncing and timing of your video. Additionally, if you choose "Dynamic Duration" for a clip that has many words, the clip will need to lengthen - if there is a clip directly in front of it, it will not have enough room to generate properly, so make sure you leave some space between your clips!
+
+## Manual dubbing
+
+When creating your dub, you have a special option during the creation process that is only available to the dubbing studio: manual dubbing. This option allows you to create a manual dub where you upload all of the files individually. You can upload the video file, the background audio, and the audio of only the speakers. Additionally, you need to include a CSV file indicating the names of the speakers, the start and end time of when they are speaking, the original text, and the translated text. It's similar to a subtitle file but with a lot more information. This file needs to adhere to a very strict format to work correctly.
+
+Supported timecodes:
+
+- seconds
+- hours:minutes:seconds:frame
+- hours:minutes:seconds,milliseconds
+
+### Example CSV files
+
+<CodeBlocks>
+```csv seconds
+speaker,start_time,end_time,transcription,translation
+Adam,"0.10000","1.15000","Hello, how are you?","Hola, ¿cómo estás?"
+Adam,"1.50000","3.50000","I'm fine, thank you.","Estoy bien, gracias."
+
+````
+```csv hours:minutes:seconds:frame
+speaker,start_time,end_time,transcription,translation
+Adam,"0:00:01:01","0:00:05:01","Hello, how are you?","Hola, ¿cómo estás?"
+Adam,"0:00:06:01","0:00:10:01","I'm fine, thank you.","Estoy bien, gracias."
+
+````
+
+```csv hours:minutes:seconds,milliseconds
+speaker,start_time,end_time,transcription,translation
+Adam,"0:00:01,000","0:00:05,000","Hello, how are you?","Hola, ¿cómo estás?"
+Adam,"0:00:06,000","0:00:10,000","I'm fine, thank you.","Estoy bien, gracias."
+
+```
+
+</CodeBlocks>
+
+| speaker | start_time  | end_time    | transcription                     | translation                                  |
+| ------- | ----------- | ----------- | --------------------------------- | -------------------------------------------- |
+| Joe     | 0:00:00.000 | 0:00:02.000 | Hey!                              | Hallo!                                       |
+| Maria   | 0:00:02.000 | 0:00:06.000 | Oh, hi, Joe. It has been a while. | Oh, hallo, Joe. Es ist schon eine Weile her. |
+| Joe     | 0:00:06.000 | 0:00:11.000 | Yeah, I know. Been busy.          | Ja, ich weiß. War beschäftigt.               |
+| Maria   | 0:00:11.000 | 0:00:17.000 | Yeah? What have you been up to?   | Ja? Was hast du gemacht?                     |
+| Joe     | 0:00:17.000 | 0:00:23.000 | Traveling mostly.                 | Hauptsächlich gereist.                       |
+| Maria   | 0:00:23.000 | 0:00:30.000 | Oh, anywhere I would know?        | Oh, irgendwo, das ich kenne?                 |
+| Joe     | 0:00:30.000 | 0:00:36.000 | Spain.                            | Spanien.                                     |
