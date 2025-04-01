@@ -1,0 +1,52 @@
+---
+title: Forced Alignment
+subtitle: Learn how to turn spoken audio and text into a time-aligned transcript with ElevenLabs.
+---
+
+## Overview
+
+The ElevenLabs [Forced Alignment](/docs/api-reference/forced-alignment) API turns spoken audio and text into a time-aligned transcript. This is useful for cases where you have audio recording and a transcript, but need exact timestamps for each word or phrase in the transcript. This can be used for:
+
+- Matching subtitles to a video recording
+- Generating timings for an audiobook recording of an ebook
+
+## Usage
+
+The Forced Alignment API can be used by interfacing with the ElevenLabs API directly.
+
+<CardGroup cols={1}>
+  <Card title="Developer quickstart" icon="duotone book-sparkles" href="/docs/quickstart">
+    Learn how to integrate Forced Alignment into your application.
+  </Card>
+</CardGroup>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What is forced alignment?">
+    Forced alignment is a technique used to align spoken audio with text. It's useful for cases where you have audio recording and a transcript, but need exact timestamps for each word or phrase in the transcript.
+  </Accordion>
+  <Accordion title="What text input formats are supported?">
+    The input text should be a string with no special formatting i.e. JSON.
+
+    Example of good input text:
+
+    ```
+    "Hello, how are you?"
+    ```
+
+    Example of bad input text:
+
+    ```
+    {
+        "text": "Hello, how are you?"
+    }
+    ```
+  </Accordion>
+  <Accordion title="Does Forced Alignment support diarization?">
+    Forced Alignment does not support diarization. If you provide diarized text, the API will likely return unwanted results.
+  </Accordion>
+  <Accordion title="What is the maximum audio or video file size for Forced Alignment?">
+    The maximum file size for Forced Alignment is 1GB.
+  </Accordion>
+</AccordionGroup>
