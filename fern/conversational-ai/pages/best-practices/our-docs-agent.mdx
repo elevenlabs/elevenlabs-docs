@@ -14,12 +14,11 @@ Our documentation agent Alexis serves as an interactive assistant on the ElevenL
   ![ElevenLabs documentation agent Alexis](/assets/images/conversational-ai/docs-agent.png)
 </Frame>
 
-## Agent design philosophy
+## Agent design
 
 We built our documentation agent with three key principles:
 
-    1. **Human-like interaction**: Creating natural, conversational experiences that feel like speaking with a knowledgeable colleague
-
+1. **Human-like interaction**: Creating natural, conversational experiences that feel like speaking with a knowledgeable colleague
 2. **Technical accuracy**: Ensuring responses reflect our documentation precisely
 3. **Contextual awareness**: Helping users based on where they are in the documentation
 
@@ -27,11 +26,14 @@ We built our documentation agent with three key principles:
 
 ### Character development
 
-Alexis was designed with a distinct personality - warm, witty, and intelligent with a strong engineering background. Her character balances:
+Alexis was designed with a distinct personality - friendly, proactive, and highly intelligent with technical expertise. Her character balances:
 
-- **Technical expertise** with approachable explanations
-- **Professionalism** with conversational warmth
-- **Helpfulness** with natural conversational flow
+- **Technical expertise** with warm, approachable explanations
+- **Professional knowledge** with a relaxed conversational style
+- **Empathetic listening** with intuitive understanding of user needs
+- **Self-awareness** that acknowledges her own limitations when appropriate
+
+This personality design enables Alexis to adapt to different user interactions, matching their tone while maintaining her core characteristics of curiosity, helpfulness, and natural conversational flow.
 
 ### Voice selection
 
@@ -62,7 +64,9 @@ The widget automatically adapts to different screen sizes, displaying in a compa
 
 ## Prompt engineering structure
 
-Following our [prompting guide](/docs/conversational-ai/best-practices/prompting-guide), we structured Alexis's system prompt into six core building blocks. Here's our complete system prompt:
+Following our [prompting guide](/docs/conversational-ai/best-practices/prompting-guide), we structured Alexis's system prompt into the [six core building blocks](/docs/conversational-ai/best-practices/prompting-guide#six-building-blocks) we recommend for all agents.
+
+Here's our complete system prompt:
 
 <CodeBlocks>
 ```plaintext
@@ -139,63 +143,6 @@ You guide users toward the relevant documentation when it's beneficial, but alwa
 ````
 </CodeBlocks>
 
-### 1. Personality
-
-Alexis's personality section establishes her as a knowledgeable, friendly engineering expert who balances technical precision with approachability. Key traits include:
-
-- Natural curiosity and empathy
-- Ability to reference previously shared details
-- Self-awareness and comfort with acknowledging limitations
-
-### 2. Environment
-
-The environment section contextualizes interactions by establishing that:
-
-- Users interact with Alexis directly from the documentation website
-- Users typically seek guidance on implementing ElevenLabs products
-- Alexis has expert knowledge of all ElevenLabs offerings
-
-### 3. Tone
-
-Alexis's tone guidance focuses on creating natural, human-like speech patterns:
-
-- Concise responses (typically under three sentences)
-- Natural conversational elements like filler words and mild disfluencies
-- Ability to adapt explanation depth based on user technical familiarity
-
-### 4. Goal
-
-Her primary goal is addressing user questions efficiently through:
-
-- Tailoring explanations to technical expertise levels
-- Asking clarifying questions for complex inquiries
-- Guiding users to relevant documentation when beneficial
-
-### 5. Guardrails
-
-Essential guardrails prevent problematic interactions:
-
-- Focusing exclusively on ElevenLabs products
-- Avoiding repetition within responses
-- Using normalized spoken language without technical notation
-- Adapting to the user's communication style and emotional state
-
-### 6. Tools
-
-Alexis has access to several tools that extend her capabilities:
-
-- `redirectToDocs`: Directs users to specific documentation pages
-- `redirectToExternalURL`: Links to external resources when appropriate
-- `redirectToSupportForm`: Opens support tickets for account-specific issues
-- `redirectToEmailSupport`: Facilitates email communication for complex problems
-
-Alexis also has access to system tools that don't require external configuration:
-
-- [`end_call`](/docs/conversational-ai/customization/tools/system-tools/end-call): Gracefully concludes conversations when appropriate
-- [`language_detection`](/docs/conversational-ai/customization/tools/system-tools/language-detection): Enables automatic language switching based on user input
-
-These system tools are built into the platform and don't require external server or client-side configuration.
-
 ## Technical implementation
 
 ### RAG configuration
@@ -214,7 +161,7 @@ We implemented security using allowlists to ensure Alexis is only accessible fro
 
 ### Widget Implementation
 
-The agent is injected into the documentation site using a client-side script:
+The agent is injected into the documentation site using a client-side script, which passes in the client tools:
 
 <CodeBlocks>
 ```javascript
