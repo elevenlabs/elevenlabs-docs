@@ -5,7 +5,7 @@ subtitle: Learn how to generate audio in real-time via a WebSocket connection.
 
 WebSocket streaming is a method of sending and receiving data over a single, long-lived connection. This method is useful for real-time applications where you need to stream audio data as it becomes available.
 
-If you want to quickly test out the latency (time to first byte) of a websocket connection to the ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
+If you want to quickly test out the latency (time to first byte) of a WebSocket connection to the ElevenLabs text-to-speech API, you can install `elevenlabs-latency` via `npm` and follow the instructions [here](https://www.npmjs.com/package/elevenlabs-latency?activeTab=readme).
 
 <Note>
   WebSockets can be used with the Text to Speech and Conversational AI products. This guide will
@@ -44,7 +44,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
 ## Initiate the websocket connection
 
-After choosing a voice from the Voice Library and the text to speech model you wish to use, initiate a websocket connection to the text to speech API.
+After choosing a voice from the Voice Library and the text to speech model you wish to use, initiate a WebSocket connection to the text to speech API.
 
 <CodeBlock>
 
@@ -107,7 +107,7 @@ const writeStream = fs.createWriteStream(outputDir + '/test.mp3', {
 
 ## Send the input text
 
-Once the websocket connection is open, set up voice settings first. Next, send the text message to the API.
+Once the WebSocket connection is open, set up voice settings first. Next, send the text message to the API.
 
 <CodeBlock>
 
@@ -126,7 +126,7 @@ async def text_to_speech_ws_streaming(voice_id, model_id):
         text = "The twilight sun cast its warm golden hues upon the vast rolling fields, saturating the landscape with an ethereal glow. Silently, the meandering brook continued its ceaseless journey, whispering secrets only the trees seemed privy to."
         await websocket.send(json.dumps({"text": text}))
 
-        // Send empty string to indicate the end of the text sequence which will close the websocket connection
+        // Send empty string to indicate the end of the text sequence which will close the WebSocket connection
         await websocket.send(json.dumps({"text": ""}))
 ```
 
@@ -158,7 +158,7 @@ websocket.on('open', async () => {
 
 ## Save the audio to file
 
-Read the incoming message from the websocket connection and write the audio chunks to a local file.
+Read the incoming message from the WebSocket connection and write the audio chunks to a local file.
 
 <CodeBlock>
 
@@ -347,6 +347,6 @@ Unlike `voice_settings` and `generation_config`, pronunciation dictionaries must
 
 ## Tips
 
-- The websocket connection will automatically close after 20 seconds of inactivity. To keep the connection open, you can send a single space character `" "`. Please note that this string must include a space, as sending a fully empty string, `""`, will close the websocket.
-- Send an empty string to close the websocket connection after sending the last text message.
+- The WebSocket connection will automatically close after 20 seconds of inactivity. To keep the connection open, you can send a single space character `" "`. Please note that this string must include a space, as sending a fully empty string, `""`, will close the WebSocket.
+- Send an empty string to close the WebSocket connection after sending the last text message.
 - You can use `alignment` to get the word-level timestamps for each word in the text. This can be useful for aligning the audio with the text in a video or for other applications that require precise timing. See the [API Reference](/docs/api-reference/text-to-speech/v-1-text-to-speech-voice-id-stream-input#receive.Audio%20Output.alignment) for more information.
