@@ -1,0 +1,75 @@
+---
+title: Sound Effects quickstart
+subtitle: Learn how to generate sound effects using the Sound Effects API.
+---
+
+This guide will show you how to generate sound effects using the Sound Effects API.
+
+## Using the Sound Effects API
+
+<Steps>
+    <Step title="Create an API key">
+        <Markdown src="/snippets/quickstart-api-key.mdx" />
+    </Step>
+    <Step title="Install the SDK">
+        <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+
+        <Note>
+            To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/)
+            and/or [ffmpeg](https://ffmpeg.org/).
+        </Note>
+    </Step>
+    <Step title="Make the API request">
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+
+        <CodeBlock>
+        ```python maxLines=0
+        # example.py
+        import os
+        from dotenv import load_dotenv
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+
+        load_dotenv()
+
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+        audio = client.text_to_sound_effects.convert(text="Cinematic Braam, Horror")
+
+        play(audio)
+        ```
+
+        ```typescript
+        // example.mts
+        import { ElevenLabsClient, play } from "elevenlabs";
+        import "dotenv/config";
+
+        const client = new ElevenLabsClient();
+
+        const audio = await client.textToSoundEffects.convert({
+          text: "Cinematic Braam, Horror",
+        });
+
+        await play(audio);
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="Execute the code">
+        <CodeBlock>
+            ```python
+            python example.py
+            ```
+
+            ```typescript
+            npx tsx example.mts
+            ```
+        </CodeBlock>
+
+        You should hear your generated sound effect playing through your speakers.
+    </Step>
+</Steps>
+
+## Next steps
+
+Explore the [API reference](/docs/api-reference/speech-to-text/convert) for more information on the Speech to Text API and its options.
