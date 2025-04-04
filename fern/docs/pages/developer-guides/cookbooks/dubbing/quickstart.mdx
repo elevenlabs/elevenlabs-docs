@@ -1,0 +1,128 @@
+---
+title: Dubbing quickstart
+subtitle: Learn how to dub audio and video files across languages using the Dubbing API.
+---
+
+This guide will show you how to dub an audio file across languages. In this example we'll dub an audio file from English to Spanish.
+
+## Using the Dubbing API
+
+<Steps>
+    <Step title="Create an API key">
+        <Markdown src="/snippets/quickstart-api-key.mdx" />
+    </Step>
+    <Step title="Install the SDK">
+        <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+
+        <Note>
+            To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/)
+            and/or [ffmpeg](https://ffmpeg.org/).
+        </Note>
+    </Step>
+    <Step title="Make the API request">
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+
+        <CodeBlock>
+        ```python maxLines=0
+        # example.py
+        import os
+        from dotenv import load_dotenv
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+        import requests
+        from io import BytesIO
+        import time
+
+        load_dotenv()
+
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        target_lang = "es"  # Spanish
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        response = requests.get(audio_url)
+
+        audio_data = BytesIO(response.content)
+        audio_data.name = "audio.mp3"
+
+        # Start dubbing
+        dubbed = client.dubbing.dub_a_video_or_an_audio_file(
+            file=audio_data, target_lang=target_lang
+        )
+
+        while True:
+            status = client.dubbing.get_dubbing_project_metadata(dubbed.dubbing_id).status
+            if status == "dubbed":
+                dubbed_file = client.dubbing.get_dubbed_file(dubbed.dubbing_id, target_lang)
+                play(dubbed_file)
+                break
+            else:
+                print("Audio is still being dubbed...")
+                time.sleep(5)
+        ```
+
+        ```typescript maxLines=0
+        // example.mts
+        import { ElevenLabsClient, play } from "elevenlabs";
+        import "dotenv/config";
+
+        const client = new ElevenLabsClient();
+
+        const targetLang = "es"; // spanish
+        const sourceAudio = await fetch(
+          "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        );
+        const audioBlob = new Blob([await sourceAudio.arrayBuffer()], {
+          type: "audio/mp3",
+        });
+
+        // Start dubbing
+        const dubbed = await client.dubbing.dubAVideoOrAnAudioFile({
+          file: audioBlob,
+          target_lang: targetLang,
+        });
+
+        while (true) {
+          const { status } = await client.dubbing.getDubbingProjectMetadata(
+            dubbed.dubbing_id
+          );
+          if (status === "dubbed") {
+            const dubbedFile = await client.dubbing.getDubbedFile(
+              dubbed.dubbing_id,
+              targetLang
+            );
+            await play(dubbedFile);
+            break;
+          } else {
+            console.log("Audio is still being dubbed...");
+          }
+
+          // Wait 5 seconds between checks
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+        }
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="Execute the code">
+        <CodeBlock>
+            ```python
+            python example.py
+            ```
+
+            ```typescript
+            npx tsx example.mts
+            ```
+        </CodeBlock>
+
+        You should hear the dubbed audio file playing through your speakers.
+    </Step>
+
+</Steps>
+
+## Next steps
+
+Explore the [API reference](/docs/api-reference/dubbing/dub-a-video-or-an-audio-file) for more information on the Dubbing API and its options.
