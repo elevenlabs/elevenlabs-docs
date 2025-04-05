@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import { TextToSpeechRequest } from "elevenlabs/api";
-import { BoltIcon, MicIcon, SparklesIcon, SpeakerIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { TextToSpeechRequest } from 'elevenlabs/api';
+import { BoltIcon, MicIcon, SparklesIcon, SpeakerIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import { getVoices } from "@/app/actions/manage-voices";
-import { useSpeech } from "@/hooks/use-speech";
-import { PromptBar, PromptControlsProps } from "@/components/prompt-bar/base";
-import { Button } from "@/components/ui/button";
+import { getVoices } from '@/app/actions/manage-voices';
+import { PromptBar, PromptControlsProps } from '@/components/prompt-bar/base';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,10 +18,11 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
-import { TtsInput, ttsSchema, TTS_MODELS } from "@/lib/schemas";
+} from '@/components/ui/dropdown-menu';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { useSpeech } from '@/hooks/use-speech';
+import { TtsInput, ttsSchema, TTS_MODELS } from '@/lib/schemas';
 
 export type TextToSpeechPromptProps = {
   onGenerateStart: (text: string) => string;
@@ -35,9 +35,7 @@ export function TextToSpeechPromptBar({
 }: TextToSpeechPromptProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [voices, setVoices] = useState<
-    Array<{ voice_id: string; name: string }>
-  >([]);
+  const [voices, setVoices] = useState<Array<{ voice_id: string; name: string }>>([]);
   const [generationTime, setGenerationTime] = useState<number | null>(null);
   const [settings, setSettings] = useState<{
     voice_id: string;
@@ -70,19 +68,15 @@ export function TextToSpeechPromptBar({
         if (result.ok) {
           const voiceList = result.value.voices.map((v) => ({
             voice_id: v.voice_id,
-            name: v.name ?? "Unknown Voice",
+            name: v.name ?? 'Unknown Voice',
           }));
           setVoices(voiceList);
         } else {
-          setVoices(
-            FEATURED_VOICES.map((v) => ({ voice_id: v.id, name: v.name }))
-          );
+          setVoices(FEATURED_VOICES.map((v) => ({ voice_id: v.id, name: v.name })));
         }
       } catch (error) {
-        console.error("Error loading voices:", error);
-        setVoices(
-          FEATURED_VOICES.map((v) => ({ voice_id: v.id, name: v.name }))
-        );
+        console.error('Error loading voices:', error);
+        setVoices(FEATURED_VOICES.map((v) => ({ voice_id: v.id, name: v.name })));
       } finally {
         setIsLoading(false);
       }
@@ -98,13 +92,10 @@ export function TextToSpeechPromptBar({
     const featuredVoice = FEATURED_VOICES.find((v) => v.id === voiceId);
     if (featuredVoice) return featuredVoice.name;
 
-    return "Select Voice";
+    return 'Select Voice';
   };
 
-  const updateSetting = <K extends keyof typeof settings>(
-    key: K,
-    value: (typeof settings)[K]
-  ) => {
+  const updateSetting = <K extends keyof typeof settings>(key: K, value: (typeof settings)[K]) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,
@@ -140,7 +131,7 @@ export function TextToSpeechPromptBar({
       if (audioUrl) {
         // Pass the complete URL to the callback
         onGenerateComplete(pendingId, data.text, audioUrl);
-        toast.success("Generated speech");
+        toast.success('Generated speech');
       }
     } catch (err) {
       toast.error(`An unexpected error occurred: ${err}`);
@@ -150,24 +141,22 @@ export function TextToSpeechPromptBar({
     }
   };
 
-  function syncFormWithSettings(form: PromptControlsProps<TtsInput>["form"]) {
+  function syncFormWithSettings(form: PromptControlsProps<TtsInput>['form']) {
     if (!isLoading) {
-      if (settings.voice_id) form.setValue("voice_id", settings.voice_id);
-      if (settings.model_id) form.setValue("model_id", settings.model_id);
-      if (settings.stability !== undefined)
-        form.setValue("stability", settings.stability);
+      if (settings.voice_id) form.setValue('voice_id', settings.voice_id);
+      if (settings.model_id) form.setValue('model_id', settings.model_id);
+      if (settings.stability !== undefined) form.setValue('stability', settings.stability);
       if (settings.similarity_boost !== undefined)
-        form.setValue("similarity_boost", settings.similarity_boost);
-      if (settings.style !== undefined) form.setValue("style", settings.style);
-      if (settings.speed !== undefined) form.setValue("speed", settings.speed);
+        form.setValue('similarity_boost', settings.similarity_boost);
+      if (settings.style !== undefined) form.setValue('style', settings.style);
+      if (settings.speed !== undefined) form.setValue('speed', settings.speed);
       if (settings.use_speaker_boost !== undefined)
-        form.setValue("use_speaker_boost", settings.use_speaker_boost);
+        form.setValue('use_speaker_boost', settings.use_speaker_boost);
     }
   }
 
   const renderControls = ({ form }: PromptControlsProps<TtsInput>) => {
-    const modelInfo =
-      TTS_MODEL_INFO[settings.model_id as keyof typeof TTS_MODEL_INFO];
+    const modelInfo = TTS_MODEL_INFO[settings.model_id as keyof typeof TTS_MODEL_INFO];
     const voiceName = getVoiceName(settings.voice_id);
 
     if (!isLoading) {
@@ -213,15 +202,13 @@ export function TextToSpeechPromptBar({
                   <DropdownMenuItem
                     key={voice.id}
                     className={`flex cursor-pointer items-center gap-2 focus:bg-white/10 ${
-                      settings.voice_id === voice.id ? "bg-white/20" : ""
+                      settings.voice_id === voice.id ? 'bg-white/20' : ''
                     }`}
-                    onClick={() => updateSetting("voice_id", voice.id)}
+                    onClick={() => updateSetting('voice_id', voice.id)}
                   >
                     <SpeakerIcon className="h-4 w-4" />
                     <span>{voice.name}</span>
-                    <span className="text-muted-foreground ml-auto text-xs">
-                      {voice.accent}
-                    </span>
+                    <span className="text-muted-foreground ml-auto text-xs">{voice.accent}</span>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuGroup>
@@ -233,21 +220,14 @@ export function TextToSpeechPromptBar({
                   <DropdownMenuSeparator className="bg-white/10" />
                   <DropdownMenuGroup>
                     {voices
-                      .filter(
-                        (voice) =>
-                          !FEATURED_VOICES.some((f) => f.id === voice.voice_id)
-                      )
+                      .filter((voice) => !FEATURED_VOICES.some((f) => f.id === voice.voice_id))
                       .map((voice) => (
                         <DropdownMenuItem
                           key={voice.voice_id}
                           className={`flex cursor-pointer items-center gap-2 focus:bg-white/10 ${
-                            settings.voice_id === voice.voice_id
-                              ? "bg-white/20"
-                              : ""
+                            settings.voice_id === voice.voice_id ? 'bg-white/20' : ''
                           }`}
-                          onClick={() =>
-                            updateSetting("voice_id", voice.voice_id)
-                          }
+                          onClick={() => updateSetting('voice_id', voice.voice_id)}
                         >
                           <SpeakerIcon className="h-4 w-4" />
                           <span>{voice.name}</span>
@@ -281,10 +261,8 @@ export function TextToSpeechPromptBar({
                 value={settings.model_id}
                 onValueChange={(value) =>
                   updateSetting(
-                    "model_id",
-                    value as
-                      | typeof TTS_MODELS.MULTILINGUAL
-                      | typeof TTS_MODELS.FLASH
+                    'model_id',
+                    value as typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH
                   )
                 }
               >
@@ -295,9 +273,7 @@ export function TextToSpeechPromptBar({
                   <div className="flex items-center gap-2">
                     <SparklesIcon className="h-4 w-4 text-purple-400" />
                     <div className="flex flex-col">
-                      <span>
-                        {TTS_MODEL_INFO[TTS_MODELS.MULTILINGUAL].name}
-                      </span>
+                      <span>{TTS_MODEL_INFO[TTS_MODELS.MULTILINGUAL].name}</span>
                       <span className="text-muted-foreground text-xs">
                         {TTS_MODEL_INFO[TTS_MODELS.MULTILINGUAL].description}
                       </span>
@@ -344,9 +320,7 @@ export function TextToSpeechPromptBar({
                   </div>
                   <Slider
                     value={[settings.stability]}
-                    onValueChange={(values) =>
-                      updateSetting("stability", values[0])
-                    }
+                    onValueChange={(values) => updateSetting('stability', values[0])}
                     max={1}
                     min={0}
                     step={0.01}
@@ -361,15 +335,12 @@ export function TextToSpeechPromptBar({
                 <div className="mb-4">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="text-sm font-medium">
-                      Similarity Boost:{" "}
-                      {(settings.similarity_boost * 100).toFixed(0)}%
+                      Similarity Boost: {(settings.similarity_boost * 100).toFixed(0)}%
                     </span>
                   </div>
                   <Slider
                     value={[settings.similarity_boost]}
-                    onValueChange={(values) =>
-                      updateSetting("similarity_boost", values[0])
-                    }
+                    onValueChange={(values) => updateSetting('similarity_boost', values[0])}
                     max={1}
                     min={0}
                     step={0.01}
@@ -389,9 +360,7 @@ export function TextToSpeechPromptBar({
                   </div>
                   <Slider
                     value={[settings.style]}
-                    onValueChange={(values) =>
-                      updateSetting("style", values[0])
-                    }
+                    onValueChange={(values) => updateSetting('style', values[0])}
                     max={1}
                     min={0}
                     step={0.01}
@@ -405,15 +374,11 @@ export function TextToSpeechPromptBar({
 
                 <div className="mt-4">
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="text-sm font-medium">
-                      Speed: {settings.speed.toFixed(1)}x
-                    </span>
+                    <span className="text-sm font-medium">Speed: {settings.speed.toFixed(1)}x</span>
                   </div>
                   <Slider
                     value={[settings.speed]}
-                    onValueChange={(values) =>
-                      updateSetting("speed", values[0])
-                    }
+                    onValueChange={(values) => updateSetting('speed', values[0])}
                     max={1.2}
                     min={0.7}
                     step={0.1}
@@ -428,15 +393,13 @@ export function TextToSpeechPromptBar({
                 <div className="mt-6 flex items-center justify-between">
                   <div>
                     <span className="text-sm font-medium">Speaker Boost</span>
-                    <p className="text-muted-foreground text-xs mt-1">
+                    <p className="text-muted-foreground mt-1 text-xs">
                       Enhances voice similarity with slight latency increase
                     </p>
                   </div>
                   <Switch
                     checked={settings.use_speaker_boost}
-                    onCheckedChange={(checked) =>
-                      updateSetting("use_speaker_boost", checked)
-                    }
+                    onCheckedChange={(checked) => updateSetting('use_speaker_boost', checked)}
                     className="data-[state=checked]:bg-white data-[state=checked]:text-black"
                   />
                 </div>
@@ -448,9 +411,7 @@ export function TextToSpeechPromptBar({
     );
   };
 
-  const renderRightControls = ({
-    isSubmitting,
-  }: PromptControlsProps<TtsInput>) => {
+  const renderRightControls = ({ isSubmitting }: PromptControlsProps<TtsInput>) => {
     return generationTime !== null && !isSubmitting ? (
       <div className="flex items-center text-xs text-white/70">
         <span>{Math.round(generationTime)}ms</span>
@@ -459,7 +420,7 @@ export function TextToSpeechPromptBar({
   };
 
   const defaultValues = {
-    text: "",
+    text: '',
     ...settings,
   };
 
@@ -479,24 +440,24 @@ export function TextToSpeechPromptBar({
 }
 
 const FEATURED_VOICES = [
-  { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel", accent: "American" },
-  { id: "AZnzlk1XvdvUeBnXmlld", name: "Domi", accent: "American" },
-  { id: "IKne3meq5aSn9XLyUdCD", name: "Adam", accent: "American" },
-  { id: "pNInz6obpgDQGcFmaJgB", name: "Nicole", accent: "American" },
-  { id: "ErXwobaYiN019PkySvjV", name: "Antoni", accent: "American" },
-  { id: "MF3mGyEYCl7XYWbV9V6O", name: "Elli", accent: "American" },
-  { id: "jBpfuIE2acCO8z3wKNLl", name: "Callum", accent: "British" },
-  { id: "onwK4e9ZLuTAKqWW03F9", name: "Charlotte", accent: "British" },
+  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', accent: 'American' },
+  { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', accent: 'American' },
+  { id: 'IKne3meq5aSn9XLyUdCD', name: 'Adam', accent: 'American' },
+  { id: 'pNInz6obpgDQGcFmaJgB', name: 'Nicole', accent: 'American' },
+  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni', accent: 'American' },
+  { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli', accent: 'American' },
+  { id: 'jBpfuIE2acCO8z3wKNLl', name: 'Callum', accent: 'British' },
+  { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Charlotte', accent: 'British' },
 ];
 
 const TTS_MODEL_INFO = {
   [TTS_MODELS.MULTILINGUAL]: {
-    name: "High Quality",
-    description: "Superior quality, slower generation",
+    name: 'High Quality',
+    description: 'Superior quality, slower generation',
   },
   [TTS_MODELS.FLASH]: {
-    name: "Flash",
-    description: "Faster generation at 50% off, good quality",
+    name: 'Flash',
+    description: 'Faster generation at 50% off, good quality',
   },
 };
 

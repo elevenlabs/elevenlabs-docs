@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Image from 'next/image';
+
+import { Button } from '@/components/ui/button';
 
 export default function EmptyState() {
   return (
@@ -21,9 +22,7 @@ export default function EmptyState() {
           Create an agent in the ElevenLabs dashboard
         </p>
         <Button
-          onClick={() =>
-            window.open("https://elevenlabs.io/app/conversational-ai", "_blank")
-          }
+          onClick={() => window.open('https://elevenlabs.io/app/conversational-ai', '_blank')}
           className="mt-6"
         >
           Create Agent

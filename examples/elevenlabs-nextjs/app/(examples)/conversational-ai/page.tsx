@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { Separator } from "@/components/ui/separator";
-import AgentSelector from "./components/agent-selector";
-import ConversationUI from "./components/conversation-ui";
-import EmptyState from "./components/empty-state";
-import { useConversationalAI } from "./components/conversational-ai-provider";
+import { Separator } from '@/components/ui/separator';
+
+import AgentSelector from './components/agent-selector';
+import ConversationUI from './components/conversation-ui';
+import { useConversationalAI } from './components/conversational-ai-provider';
+import EmptyState from './components/empty-state';
 
 export default function Page() {
   const { agents, error } = useConversationalAI();
@@ -13,9 +14,7 @@ export default function Page() {
     return (
       <div className="container mx-auto p-6">
         <h1 className="mb-4 text-2xl font-bold">Conversational AI</h1>
-        <p className="text-muted-foreground">
-          Error loading agents: {error || "Unknown error"}
-        </p>
+        <p className="text-muted-foreground">Error loading agents: {error || 'Unknown error'}</p>
       </div>
     );
   }
@@ -31,9 +30,7 @@ export default function Page() {
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Conversational AI</h1>
-          <p className="text-muted-foreground">
-            Build life-like conversational agents
-          </p>
+          <p className="text-muted-foreground">Build life-like conversational agents</p>
         </div>
         <AgentSelector defaultAgent={defaultAgent} />
       </div>

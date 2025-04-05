@@ -1,11 +1,10 @@
-"use server";
+'use server';
 
-import type { TextToSpeechRequest } from "elevenlabs/api";
-import { PassThrough } from "stream";
+import type { TextToSpeechRequest } from 'elevenlabs/api';
+import { PassThrough } from 'stream';
 
-import { Err, Ok, Result } from "@/types";
-
-import { getElevenLabsClient, handleError } from "@/app/actions/utils";
+import { getElevenLabsClient, handleError } from '@/app/actions/utils';
+import { Err, Ok, Result } from '@/types';
 
 export async function streamSpeech(
   voiceId: string,
@@ -16,10 +15,7 @@ export async function streamSpeech(
 
   try {
     const client = clientResult.value;
-    const nodeStream = await client.textToSpeech.convertAsStream(
-      voiceId,
-      request
-    );
+    const nodeStream = await client.textToSpeech.convertAsStream(voiceId, request);
 
     const passThrough = new PassThrough();
 
@@ -31,22 +27,20 @@ export async function streamSpeech(
         }
         passThrough.end();
       } catch (err) {
-        passThrough.destroy(
-          err instanceof Error ? err : new Error(String(err))
-        );
+        passThrough.destroy(err instanceof Error ? err : new Error(String(err)));
       }
     })();
 
     // TODO: fix this, it's a hack to get around the fact that the SDK response is not a web stream
     const webStream = new ReadableStream<Uint8Array>({
       start(controller) {
-        passThrough.on("data", (chunk: Buffer) => {
+        passThrough.on('data', (chunk: Buffer) => {
           controller.enqueue(new Uint8Array(chunk));
         });
-        passThrough.on("end", () => {
+        passThrough.on('end', () => {
           controller.close();
         });
-        passThrough.on("error", (err) => {
+        passThrough.on('error', (err) => {
           controller.error(err);
         });
       },
@@ -57,6 +51,6 @@ export async function streamSpeech(
 
     return Ok(webStream);
   } catch (error) {
-    return handleError(error, "stream text to speech error");
+    return handleError(error, 'stream text to speech error');
   }
 }

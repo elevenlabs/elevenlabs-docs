@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
 
 interface AudioPlayerProps {
   audioBase64: string;
@@ -9,17 +10,13 @@ interface AudioPlayerProps {
   className?: string;
 }
 
-export function AudioPlayer({
-  audioBase64,
-  autoplay = true,
-  className,
-}: AudioPlayerProps) {
+export function AudioPlayer({ audioBase64, autoplay = true, className }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!audioBase64) {
-      setError("No audio source provided");
+      setError('No audio source provided');
       return;
     }
 
@@ -32,9 +29,7 @@ export function AudioPlayer({
         const isUrl = /^(http|https|blob:|data:)/.test(audioBase64);
 
         // If it's not a URL, assume it's base64 data and create a data URL
-        const srcUrl = isUrl
-          ? audioBase64
-          : `data:audio/wav;base64,${audioBase64}`;
+        const srcUrl = isUrl ? audioBase64 : `data:audio/wav;base64,${audioBase64}`;
 
         // Only update if the URL has changed
         if (audio.src !== srcUrl) {
@@ -47,24 +42,22 @@ export function AudioPlayer({
 
           if (playPromise !== undefined) {
             playPromise.catch((err) => {
-              console.error("Failed to autoplay audio:", err);
-              setError("Failed to play audio");
+              console.error('Failed to autoplay audio:', err);
+              setError('Failed to play audio');
             });
           }
         }
       } catch (err) {
-        console.error("Error setting audio source:", err);
-        setError("Error loading audio");
+        console.error('Error setting audio source:', err);
+        setError('Error loading audio');
       }
     }
   }, [audioBase64, autoplay]);
 
   return (
-    <div
-      className={cn("flex w-full flex-col items-center space-y-2", className)}
-    >
+    <div className={cn('flex w-full flex-col items-center space-y-2', className)}>
       {error ? (
-        <div className="text-red-500 text-sm">{error}</div>
+        <div className="text-sm text-red-500">{error}</div>
       ) : (
         <audio ref={audioRef} controls className="w-full" />
       )}

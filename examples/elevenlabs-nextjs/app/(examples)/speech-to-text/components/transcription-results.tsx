@@ -1,14 +1,17 @@
-"use client";
+'use client';
 
-import * as ElevenLabs from "elevenlabs/api";
-import { UserIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { TranscriptionOptions } from "./advanced-settings";
-import { cn } from "@/lib/utils";
+import * as ElevenLabs from 'elevenlabs/api';
+import { UserIcon } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+import { TranscriptionOptions } from './advanced-settings';
+
 export type TranscriptionResult = Omit<
   ElevenLabs.SpeechToTextChunkResponseModel,
-  "language_code" | "language_probability"
+  'language_code' | 'language_probability'
 > & {
   processingTimeMs?: number;
   language_code?: string;
@@ -60,7 +63,7 @@ export function TranscriptionResults({
 
       <TranscriptionBadges data={data} options={options} />
 
-      {options.timestamps_granularity !== "none" && wordGroups.length > 0 ? (
+      {options.timestamps_granularity !== 'none' && wordGroups.length > 0 ? (
         <div className="mt-6 space-y-6">
           {wordGroups.map((group) => (
             <SpeakerGroup
@@ -74,9 +77,7 @@ export function TranscriptionResults({
         </div>
       ) : data.text ? (
         <div className="bg-card/50 border-muted/30 mt-4 rounded-lg border p-4 text-sm leading-relaxed">
-          {options.timestamps_granularity !== "none" &&
-          data.words &&
-          data.words.length > 0 ? (
+          {options.timestamps_granularity !== 'none' && data.words && data.words.length > 0 ? (
             <div className="space-y-2">
               <p className="text-muted-foreground mb-3 text-xs">
                 Click on words to jump to their position in the audio
@@ -137,11 +138,7 @@ function TranscriptionBadges({
             <span className="ml-1">
               Auto-detected (
               {data.words?.some((w) => w.speaker_id)
-                ? new Set(
-                    data.words
-                      .filter((w) => w.speaker_id)
-                      .map((w) => w.speaker_id)
-                  ).size
+                ? new Set(data.words.filter((w) => w.speaker_id).map((w) => w.speaker_id)).size
                 : 1}
               )
             </span>
@@ -150,18 +147,15 @@ function TranscriptionBadges({
       )}
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-        Diarization: {options.diarize ? "Enabled" : "Disabled"}
+        Diarization: {options.diarize ? 'Enabled' : 'Disabled'}
       </Badge>
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-        Audio Events: {options.tag_audio_events ? "Enabled" : "Disabled"}
+        Audio Events: {options.tag_audio_events ? 'Enabled' : 'Disabled'}
       </Badge>
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-        Granularity:{" "}
-        <span className="ml-1 capitalize">
-          {options.timestamps_granularity}
-        </span>
+        Granularity: <span className="ml-1 capitalize">{options.timestamps_granularity}</span>
       </Badge>
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
@@ -172,14 +166,14 @@ function TranscriptionBadges({
 }
 
 const SPEAKER_COLORS = [
-  "bg-blue-500/90",
-  "bg-emerald-500/90",
-  "bg-amber-500/90",
-  "bg-rose-500/90",
-  "bg-purple-500/90",
-  "bg-cyan-500/90",
-  "bg-indigo-500/90",
-  "bg-teal-500/90",
+  'bg-blue-500/90',
+  'bg-emerald-500/90',
+  'bg-amber-500/90',
+  'bg-rose-500/90',
+  'bg-purple-500/90',
+  'bg-cyan-500/90',
+  'bg-indigo-500/90',
+  'bg-teal-500/90',
 ];
 
 interface SpeakerGroupProps {
@@ -189,13 +183,8 @@ interface SpeakerGroupProps {
   options: TranscriptionOptions;
 }
 
-function SpeakerGroup({
-  group,
-  currentTime,
-  onSeekToTime,
-  options,
-}: SpeakerGroupProps) {
-  const speakerId = group.speaker_id.replace("speaker_", "");
+function SpeakerGroup({ group, currentTime, onSeekToTime, options }: SpeakerGroupProps) {
+  const speakerId = group.speaker_id.replace('speaker_', '');
   const colorIndex = parseInt(speakerId, 10) % SPEAKER_COLORS.length;
   const speakerColor = SPEAKER_COLORS[colorIndex];
 
@@ -215,12 +204,8 @@ function SpeakerGroup({
 
       <div className="flex-1">
         <div className="text-foreground/70 mb-1.5 flex items-center gap-2 text-sm">
-          <span className="font-medium">
-            Speaker {parseInt(speakerId, 10) + 1}
-          </span>
-          <span className="text-muted-foreground text-xs">
-            {formatTime(group.start)}
-          </span>
+          <span className="font-medium">Speaker {parseInt(speakerId, 10) + 1}</span>
+          <span className="text-muted-foreground text-xs">{formatTime(group.start)}</span>
         </div>
         <div className="bg-card/50 shadow-xs border-muted/30 rounded-lg border p-4 text-sm leading-relaxed">
           {group.words.map((word, wordIndex) => (
@@ -258,25 +243,23 @@ function TranscriptWord({
   options,
 }: TranscriptWordProps) {
   if (isNaN(word.start ?? NaN) || isNaN(word.end ?? NaN)) {
-    if (word.type === "spacing")
-      return <span key={`${groupId}-word-${wordIndex}`}> </span>;
+    if (word.type === 'spacing') return <span key={`${groupId}-word-${wordIndex}`}> </span>;
     return <span key={`${groupId}-word-${wordIndex}`}>{word.text}</span>;
   }
 
   const hasBeenPlayed = word.end !== undefined && currentTime > word.end;
 
-  const hoverEffect =
-    "hover:bg-primary/10 hover:rounded-md hover:px-1 hover:-mx-1";
+  const hoverEffect = 'hover:bg-primary/10 hover:rounded-md hover:px-1 hover:-mx-1';
 
-  const activeHighlight = "text-foreground";
-  const inactiveHighlight = "text-muted-foreground";
+  const activeHighlight = 'text-foreground';
+  const inactiveHighlight = 'text-muted-foreground';
 
   switch (word.type) {
-    case "spacing":
+    case 'spacing':
       return <span key={`${groupId}-word-${wordIndex}`}> </span>;
-    case "word": {
+    case 'word': {
       const useCharacterHighlighting =
-        options.timestamps_granularity === "character" &&
+        options.timestamps_granularity === 'character' &&
         word.characters &&
         word.characters.length > 0;
 
@@ -285,17 +268,16 @@ function TranscriptWord({
           <>
             <span className="relative inline-flex items-baseline">
               {word.characters!.map((char, charIndex) => {
-                const hasCharBeenPlayed =
-                  char.end !== undefined && currentTime > char.end;
+                const hasCharBeenPlayed = char.end !== undefined && currentTime > char.end;
 
                 return (
                   <span
                     key={`${groupId}-word-${wordIndex}-char-${charIndex}`}
                     className={cn(
-                      "cursor-pointer",
+                      'cursor-pointer',
                       hasCharBeenPlayed ? activeHighlight : inactiveHighlight,
                       hoverEffect,
-                      "hover:text-primary"
+                      'hover:text-primary'
                     )}
                     onClick={() => {
                       if (char.start !== undefined) onSeekToTime(char.start);
@@ -315,14 +297,12 @@ function TranscriptWord({
             <span
               key={`${groupId}-word-${wordIndex}`}
               className={cn(
-                "cursor-pointer",
+                'cursor-pointer',
                 hasBeenPlayed ? activeHighlight : inactiveHighlight,
                 hoverEffect,
-                "hover:text-primary"
+                'hover:text-primary'
               )}
-              onClick={() =>
-                word.start !== undefined ? onSeekToTime(word.start) : null
-              }
+              onClick={() => (word.start !== undefined ? onSeekToTime(word.start) : null)}
               data-time-start={word.start}
               data-time-end={word.end}
             >
@@ -333,14 +313,12 @@ function TranscriptWord({
         );
       }
     }
-    case "audio_event":
+    case 'audio_event':
       return (
         <span
           key={`${groupId}-word-${wordIndex}`}
           className="mx-1 cursor-pointer rounded-md bg-amber-50 px-1.5 py-0.5 italic text-amber-800 hover:bg-amber-100"
-          onClick={() =>
-            word.start !== undefined ? onSeekToTime(word.start) : null
-          }
+          onClick={() => (word.start !== undefined ? onSeekToTime(word.start) : null)}
         >
           {word.text}
         </span>
@@ -353,7 +331,5 @@ function TranscriptWord({
 const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
-  return `${mins.toString().padStart(2, "0")}:${secs
-    .toString()
-    .padStart(2, "0")}`;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };

@@ -1,50 +1,37 @@
-"use client";
+'use client';
 
-import { useConversation } from "@11labs/react";
-import * as ElevenLabs from "elevenlabs/api";
-import {
-  AlertCircle,
-  Info,
-  Loader2,
-  Mic,
-  PhoneOff,
-  Terminal,
-} from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useConversation } from '@11labs/react';
+import * as ElevenLabs from 'elevenlabs/api';
+import { AlertCircle, Info, Loader2, Mic, PhoneOff, Terminal } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import { useConversationalAI } from "@/app/(examples)/conversational-ai/components/conversational-ai-provider";
-import { getAgent, getAgentSignedUrl } from "@/app/actions/manage-agents";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { toast } from "sonner";
+import { useConversationalAI } from '@/app/(examples)/conversational-ai/components/conversational-ai-provider';
+import { getAgent, getAgentSignedUrl } from '@/app/actions/manage-agents';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function ConversationUI() {
   const { agents } = useConversationalAI();
   const searchParams = useSearchParams();
-  const agentIdFromUrl = searchParams.get("agent_id");
+  const agentIdFromUrl = searchParams.get('agent_id');
 
   const [selectedAgent, setSelectedAgent] = useState<string | null>(
     agentIdFromUrl || (agents.length > 0 ? agents[0].agent_id : null)
   );
 
-  const [agentDetails, setAgentDetails] =
-    useState<ElevenLabs.GetAgentResponseModel | null>(null);
+  const [agentDetails, setAgentDetails] = useState<ElevenLabs.GetAgentResponseModel | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [editablePrompt, setEditablePrompt] = useState<string>("");
-  const [editableFirstMessage, setEditableFirstMessage] = useState<string>("");
+  const [editablePrompt, setEditablePrompt] = useState<string>('');
+  const [editableFirstMessage, setEditableFirstMessage] = useState<string>('');
 
   const conversation = useConversation({
-    onConnect: () => toast.info("Connected to agent"),
-    onDisconnect: () => toast.info("Disconnected from agent"),
+    onConnect: () => toast.info('Connected to agent'),
+    onDisconnect: () => toast.info('Disconnected from agent'),
     onMessage: (message) => toast.info(`Message: ${message.message}`),
     onError: (error) => toast.error(`Error: ${error}`),
   });
@@ -68,22 +55,18 @@ export default function ConversationUI() {
 
           if (result.ok) {
             setAgentDetails(result.value);
-            setEditablePrompt(
-              result.value.conversation_config?.agent?.prompt?.prompt || ""
-            );
-            setEditableFirstMessage(
-              result.value.conversation_config?.agent?.first_message || ""
-            );
+            setEditablePrompt(result.value.conversation_config?.agent?.prompt?.prompt || '');
+            setEditableFirstMessage(result.value.conversation_config?.agent?.first_message || '');
             setLoadError(null);
           } else {
-            console.error("Failed to load agent details:", result.error);
-            setLoadError(result.error || "Failed to load agent details");
+            console.error('Failed to load agent details:', result.error);
+            setLoadError(result.error || 'Failed to load agent details');
           }
         })
         .catch((error) => {
           if (!isMounted) return;
-          setLoadError("An unexpected error occurred");
-          console.error("Error loading agent:", error);
+          setLoadError('An unexpected error occurred');
+          console.error('Error loading agent:', error);
         })
         .finally(() => {
           if (isMounted) {
@@ -108,7 +91,7 @@ export default function ConversationUI() {
       });
 
       if (!signedUrlResult.ok) {
-        console.error("Failed to get signed URL:", signedUrlResult.error);
+        console.error('Failed to get signed URL:', signedUrlResult.error);
         return;
       }
 
@@ -124,7 +107,7 @@ export default function ConversationUI() {
         },
       });
     } catch (error) {
-      console.error("Failed to start conversation:", error);
+      console.error('Failed to start conversation:', error);
     }
   }, [conversation, selectedAgent, editablePrompt, editableFirstMessage]);
 
@@ -134,7 +117,7 @@ export default function ConversationUI() {
 
   if (isLoadingDetails) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 space-y-4">
+      <div className="flex flex-col items-center justify-center space-y-4 py-8">
         <Loader2 className="h-8 w-8 animate-spin" />
         <p className="text-muted-foreground">Loading agent details...</p>
       </div>
@@ -157,14 +140,12 @@ export default function ConversationUI() {
             getAgent(selectedAgent as string).then((result) => {
               if (result.ok) {
                 setAgentDetails(result.value);
-                setEditablePrompt(
-                  result.value.conversation_config?.agent?.prompt?.prompt || ""
-                );
+                setEditablePrompt(result.value.conversation_config?.agent?.prompt?.prompt || '');
                 setEditableFirstMessage(
-                  result.value.conversation_config?.agent?.first_message || ""
+                  result.value.conversation_config?.agent?.first_message || ''
                 );
               } else {
-                setLoadError(result.error || "Failed to load agent details");
+                setLoadError(result.error || 'Failed to load agent details');
               }
               setIsLoadingDetails(false);
             });
@@ -178,8 +159,8 @@ export default function ConversationUI() {
 
   if (!agentDetails) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 space-y-4">
-        <AlertCircle className="h-8 w-8 text-muted-foreground" />
+      <div className="flex flex-col items-center justify-center space-y-4 py-8">
+        <AlertCircle className="text-muted-foreground h-8 w-8" />
         <p className="text-muted-foreground">No agent details available</p>
         <Button variant="outline" onClick={() => window.location.reload()}>
           Refresh Page
@@ -192,9 +173,7 @@ export default function ConversationUI() {
     <>
       <div className="mb-6">
         <h3 className="text-xl font-bold">{agentDetails.name}</h3>
-        {agentDetails.agent_id && (
-          <p className="text-muted-foreground">{agentDetails.agent_id}</p>
-        )}
+        {agentDetails.agent_id && <p className="text-muted-foreground">{agentDetails.agent_id}</p>}
       </div>
 
       {loadError && (
@@ -216,10 +195,7 @@ export default function ConversationUI() {
                 <Info className="text-muted-foreground h-4 w-4 cursor-help" />
               </TooltipTrigger>
               <TooltipContent className="max-w-80">
-                <p>
-                  The first message the agent will say when the conversation
-                  starts.
-                </p>
+                <p>The first message the agent will say when the conversation starts.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -242,8 +218,8 @@ export default function ConversationUI() {
               </TooltipTrigger>
               <TooltipContent className="max-w-80">
                 <p>
-                  If the conversation fails, ensure prompt overrides are enabled
-                  for this agent in the ElevenLabs security settings dashboard.
+                  If the conversation fails, ensure prompt overrides are enabled for this agent in
+                  the ElevenLabs security settings dashboard.
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -259,23 +235,17 @@ export default function ConversationUI() {
 
       <div className="flex flex-col items-center gap-4">
         <Button
-          onClick={
-            conversation.status === "connected"
-              ? stopConversation
-              : startConversation
-          }
-          disabled={conversation.status === "connecting"}
-          variant={
-            conversation.status === "connected" ? "secondary" : "default"
-          }
+          onClick={conversation.status === 'connected' ? stopConversation : startConversation}
+          disabled={conversation.status === 'connecting'}
+          variant={conversation.status === 'connected' ? 'secondary' : 'default'}
           className="cursor-pointer"
         >
-          {conversation.status === "connecting" ? (
+          {conversation.status === 'connecting' ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Connecting...
             </>
-          ) : conversation.status === "connected" ? (
+          ) : conversation.status === 'connected' ? (
             <>
               <PhoneOff className="mr-2 h-4 w-4" />
               End Call
@@ -292,11 +262,9 @@ export default function ConversationUI() {
           <p className="text-sm font-medium">
             Status: <span className="capitalize">{conversation.status}</span>
           </p>
-          {conversation.status === "connected" && (
+          {conversation.status === 'connected' && (
             <p className="text-muted-foreground text-sm">
-              {conversation.isSpeaking
-                ? "Agent is speaking"
-                : "Agent is listening"}
+              {conversation.isSpeaking ? 'Agent is speaking' : 'Agent is listening'}
             </p>
           )}
         </div>
@@ -309,8 +277,8 @@ export default function ConversationUI() {
           If the conversation ends unexpectedly:
           <ul className="mt-1 list-disc pl-5">
             <li>
-              Make sure System Prompt & First Message overrides are enabled for
-              this agent in the agent security tab
+              Make sure System Prompt & First Message overrides are enabled for this agent in the
+              agent security tab
             </li>
             <li>Check your microphone permissions are granted</li>
             <li>Try refreshing the page and connecting again</li>

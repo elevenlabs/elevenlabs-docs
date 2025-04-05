@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import type {
   GetVoicesResponse,
@@ -9,11 +9,10 @@ import type {
   BodyAddVoiceV1VoicesAddPost,
   BodyEditVoiceV1VoicesVoiceIdEditPost,
   VoiceSettings,
-} from "elevenlabs/api";
+} from 'elevenlabs/api';
 
-import { Err, Ok, Result } from "@/types";
-
-import { getElevenLabsClient, handleError } from "@/app/actions/utils";
+import { getElevenLabsClient, handleError } from '@/app/actions/utils';
+import { Err, Ok, Result } from '@/types';
 
 export async function getVoices(): Promise<Result<GetVoicesResponse>> {
   const clientResult = await getElevenLabsClient();
@@ -24,7 +23,7 @@ export async function getVoices(): Promise<Result<GetVoicesResponse>> {
     const response = await client.voices.getAll();
     return Ok(response);
   } catch (error) {
-    return handleError(error, "voice retrieval");
+    return handleError(error, 'voice retrieval');
   }
 }
 
@@ -55,7 +54,7 @@ export async function addVoice(
 
     return Ok(response);
   } catch (error) {
-    return handleError(error, "voice creation");
+    return handleError(error, 'voice creation');
   }
 }
 
@@ -76,9 +75,7 @@ export async function editVoice(
   }
 }
 
-export async function deleteVoice(
-  voiceId: string
-): Promise<Result<DeleteVoiceResponseModel>> {
+export async function deleteVoice(voiceId: string): Promise<Result<DeleteVoiceResponseModel>> {
   const clientResult = await getElevenLabsClient();
   if (!clientResult.ok) return Err(clientResult.error);
 
@@ -91,9 +88,7 @@ export async function deleteVoice(
   }
 }
 
-export async function getDefaultVoiceSettings(): Promise<
-  Result<VoiceSettings>
-> {
+export async function getDefaultVoiceSettings(): Promise<Result<VoiceSettings>> {
   const clientResult = await getElevenLabsClient();
   if (!clientResult.ok) return Err(clientResult.error);
 
@@ -102,6 +97,6 @@ export async function getDefaultVoiceSettings(): Promise<
     const response = await client.voices.getDefaultSettings();
     return Ok(response);
   } catch (error) {
-    return handleError(error, "default voice settings retrieval");
+    return handleError(error, 'default voice settings retrieval');
   }
 }

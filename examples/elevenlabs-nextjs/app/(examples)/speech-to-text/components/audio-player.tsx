@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface AudioPlayerProps {
   url: string | null;
@@ -40,28 +40,20 @@ export function AudioPlayer({
       onTimeUpdate(audioElement.currentTime);
     };
 
-    audioElement.addEventListener("play", handlePlay);
-    audioElement.addEventListener("pause", handlePause);
-    audioElement.addEventListener("ended", handleEnded);
-    audioElement.addEventListener("timeupdate", handleTimeUpdate);
+    audioElement.addEventListener('play', handlePlay);
+    audioElement.addEventListener('pause', handlePause);
+    audioElement.addEventListener('ended', handleEnded);
+    audioElement.addEventListener('timeupdate', handleTimeUpdate);
 
     return () => {
-      audioElement.removeEventListener("play", handlePlay);
-      audioElement.removeEventListener("pause", handlePause);
-      audioElement.removeEventListener("ended", handleEnded);
-      audioElement.removeEventListener("timeupdate", handleTimeUpdate);
+      audioElement.removeEventListener('play', handlePlay);
+      audioElement.removeEventListener('pause', handlePause);
+      audioElement.removeEventListener('ended', handleEnded);
+      audioElement.removeEventListener('timeupdate', handleTimeUpdate);
     };
   }, [onPlayStateChange, onTimeUpdate, onAudioRef]);
 
   if (!url) return null;
 
-  return (
-    <audio
-      ref={audioRef}
-      src={url}
-      className="w-full"
-      controls={true}
-      preload="auto"
-    />
-  );
+  return <audio ref={audioRef} src={url} className="w-full" controls={true} preload="auto" />;
 }

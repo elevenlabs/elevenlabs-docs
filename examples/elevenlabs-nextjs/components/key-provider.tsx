@@ -1,12 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { setApiKey } from "@/app/actions/manage-api-key";
+import { setApiKey } from '@/app/actions/manage-api-key';
 
 const KeyContext = React.createContext<
-  | [string | null, React.Dispatch<React.SetStateAction<string | null>>]
-  | undefined
+  [string | null, React.Dispatch<React.SetStateAction<string | null>>] | undefined
 >(undefined);
 
 export function KeyProvider({
@@ -24,15 +23,13 @@ export function KeyProvider({
     }
   }, [key, apiKey]);
 
-  return (
-    <KeyContext.Provider value={[key, setKey]}>{children}</KeyContext.Provider>
-  );
+  return <KeyContext.Provider value={[key, setKey]}>{children}</KeyContext.Provider>;
 }
 
 export function useKey() {
   const context = React.useContext(KeyContext);
   if (context === undefined) {
-    throw new Error("useKey must be used within a KeyProvider");
+    throw new Error('useKey must be used within a KeyProvider');
   }
   return context;
 }

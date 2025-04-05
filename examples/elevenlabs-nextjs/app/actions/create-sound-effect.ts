@@ -1,10 +1,9 @@
-"use server";
+'use server';
 
-import type { BodySoundGenerationV1SoundGenerationPost } from "elevenlabs/api";
+import type { BodySoundGenerationV1SoundGenerationPost } from 'elevenlabs/api';
 
-import { Err, Ok, Result } from "@/types";
-
-import { getElevenLabsClient, handleError } from "@/app/actions/utils";
+import { getElevenLabsClient, handleError } from '@/app/actions/utils';
+import { Err, Ok, Result } from '@/types';
 
 export async function createSoundEffect(
   request: BodySoundGenerationV1SoundGenerationPost
@@ -26,16 +25,14 @@ export async function createSoundEffect(
       processingTimeMs,
     });
   } catch (error) {
-    return handleError(error, "sound effect generation");
+    return handleError(error, 'sound effect generation');
   }
 }
 
-async function streamToBase64(
-  audioStream: NodeJS.ReadableStream
-): Promise<string> {
+async function streamToBase64(audioStream: NodeJS.ReadableStream): Promise<string> {
   const chunks: Buffer[] = [];
   for await (const chunk of audioStream) {
     chunks.push(Buffer.from(chunk));
   }
-  return Buffer.concat(chunks).toString("base64");
+  return Buffer.concat(chunks).toString('base64');
 }

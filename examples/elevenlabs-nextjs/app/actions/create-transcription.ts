@@ -1,19 +1,16 @@
-"use server";
+'use server';
 
 import type {
   BodySpeechToTextV1SpeechToTextPost,
   SpeechToTextChunkResponseModel,
-} from "elevenlabs/api";
+} from 'elevenlabs/api';
 
-import { Err, Ok, Result } from "@/types";
-
-import { getElevenLabsClient, handleError } from "@/app/actions/utils";
+import { getElevenLabsClient, handleError } from '@/app/actions/utils';
+import { Err, Ok, Result } from '@/types';
 
 export async function createTranscription(
   request: BodySpeechToTextV1SpeechToTextPost
-): Promise<
-  Result<SpeechToTextChunkResponseModel & { processingTimeMs: number }>
-> {
+): Promise<Result<SpeechToTextChunkResponseModel & { processingTimeMs: number }>> {
   const startTime = performance.now();
   const clientResult = await getElevenLabsClient();
   if (!clientResult.ok) return Err(clientResult.error);
@@ -27,6 +24,6 @@ export async function createTranscription(
       processingTimeMs: performance.now() - startTime,
     });
   } catch (error) {
-    return handleError(error, "audio transcription");
+    return handleError(error, 'audio transcription');
   }
 }

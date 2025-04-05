@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { CalendarIcon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { CalendarIcon } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import {
   Select,
@@ -10,8 +10,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useConversationalAI } from "./conversational-ai-provider";
+} from '@/components/ui/select';
+
+import { useConversationalAI } from './conversational-ai-provider';
 
 interface AgentSelectorProps {
   defaultAgent: string;
@@ -24,13 +25,13 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
   const searchParams = useSearchParams();
 
   const [selectedAgent, setSelectedAgent] = useState<string | null>(
-    searchParams.get("agent_id") || defaultAgent || null
+    searchParams.get('agent_id') || defaultAgent || null
   );
 
   useEffect(() => {
     if (selectedAgent) {
       const params = new URLSearchParams(searchParams);
-      params.set("agent_id", selectedAgent);
+      params.set('agent_id', selectedAgent);
 
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
@@ -42,10 +43,10 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
 
   const formatDate = (unixTimestamp: number) => {
     const date = new Date(unixTimestamp * 1000);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
     });
   };
 
@@ -54,16 +55,11 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
   };
 
   return (
-    <Select
-      value={selectedAgent || undefined}
-      onValueChange={handleAgentChange}
-    >
+    <Select value={selectedAgent || undefined} onValueChange={handleAgentChange}>
       <SelectTrigger className="w-64">
         {selectedAgent ? (
           <div className="flex flex-col items-start overflow-hidden">
-            <div className="w-full truncate font-medium">
-              {getSelectedAgentData()?.name}
-            </div>
+            <div className="w-full truncate font-medium">{getSelectedAgentData()?.name}</div>
           </div>
         ) : (
           <SelectValue placeholder="Select an agent" />
@@ -71,11 +67,7 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
       </SelectTrigger>
       <SelectContent className="max-h-80">
         {agents.map((agent) => (
-          <SelectItem
-            key={agent.agent_id}
-            value={agent.agent_id}
-            className="py-2 pl-2 pr-6"
-          >
+          <SelectItem key={agent.agent_id} value={agent.agent_id} className="py-2 pl-2 pr-6">
             <div className="flex flex-col">
               <div className="font-medium">{agent.name}</div>
               <div className="text-muted-foreground mt-1 flex items-center text-xs">

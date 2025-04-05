@@ -1,12 +1,11 @@
-import * as ElevenLabs from "elevenlabs/api";
-import { WordGroup } from "../components/transcription-results";
+import * as ElevenLabs from 'elevenlabs/api';
+
+import { WordGroup } from '../components/transcription-results';
 
 export const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
-  return `${mins.toString().padStart(2, "0")}:${secs
-    .toString()
-    .padStart(2, "0")}`;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
 export const groupWordsBySpeaker = (
@@ -19,16 +18,13 @@ export const groupWordsBySpeaker = (
     // Skip words with invalid timestamps
     if (isNaN(word.start ?? NaN) || isNaN(word.end ?? NaN)) return;
 
-    if (
-      !currentGroup ||
-      currentGroup.speaker_id !== (word.speaker_id || "unknown")
-    ) {
+    if (!currentGroup || currentGroup.speaker_id !== (word.speaker_id || 'unknown')) {
       currentGroup = {
         id: `group-${index}`,
-        speaker_id: word.speaker_id || "unknown",
+        speaker_id: word.speaker_id || 'unknown',
         start: word.start || 0,
         end: word.end || 0,
-        text: "",
+        text: '',
         words: [],
       };
       groups.push(currentGroup);

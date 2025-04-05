@@ -1,22 +1,19 @@
-"use client";
+'use client';
 
-import * as ElevenLabs from "elevenlabs/api";
-import { createContext, ReactNode, useContext } from "react";
+import * as ElevenLabs from 'elevenlabs/api';
+import { createContext, ReactNode, useContext } from 'react';
 
 interface ConversationalAIContextType {
   agents: ElevenLabs.AgentSummaryResponseModel[];
   error: string | null;
 }
 
-const ConversationalAIContext =
-  createContext<ConversationalAIContextType | null>(null);
+const ConversationalAIContext = createContext<ConversationalAIContextType | null>(null);
 
 export function useConversationalAI() {
   const context = useContext(ConversationalAIContext);
   if (!context) {
-    throw new Error(
-      "useConversationalAI must be used within a ConversationalAIProvider"
-    );
+    throw new Error('useConversationalAI must be used within a ConversationalAIProvider');
   }
   return context;
 }

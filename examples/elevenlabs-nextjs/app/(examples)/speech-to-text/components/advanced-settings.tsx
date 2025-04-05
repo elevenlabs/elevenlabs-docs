@@ -1,30 +1,24 @@
-"use client";
+'use client';
 
-import { ChevronDown, Settings2 } from "lucide-react";
-import { useState } from "react";
+import type { BodySpeechToTextV1SpeechToTextPost } from 'elevenlabs/api';
+import { ChevronDown, Settings2 } from 'lucide-react';
+import { useState } from 'react';
 
-import type { BodySpeechToTextV1SpeechToTextPost } from "elevenlabs/api";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
 
-export type TranscriptionOptions = Omit<
-  BodySpeechToTextV1SpeechToTextPost,
-  "file"
->;
+export type TranscriptionOptions = Omit<BodySpeechToTextV1SpeechToTextPost, 'file'>;
 
 interface AdvancedSettingsProps {
   options: TranscriptionOptions;
   onChange: (options: TranscriptionOptions) => void;
 }
 
-export default function AdvancedSettings({
-  options,
-  onChange,
-}: AdvancedSettingsProps) {
+export default function AdvancedSettings({ options, onChange }: AdvancedSettingsProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
@@ -34,15 +28,9 @@ export default function AdvancedSettings({
           <Settings2 className="text-primary h-5 w-5" />
           <h3 className="font-medium">Advanced Settings</h3>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <Button variant="outline" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
           <ChevronDown
-            className={`h-4 w-4 transition-transform ${
-              isExpanded ? "rotate-180" : ""
-            }`}
+            className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           />
         </Button>
       </div>
@@ -100,20 +88,16 @@ export default function AdvancedSettings({
                 min="1"
                 max="32"
                 placeholder="Auto-detect (default)"
-                value={options.num_speakers || ""}
+                value={options.num_speakers || ''}
                 onChange={(e) =>
                   onChange({
                     ...options,
-                    num_speakers: e.target.value
-                      ? parseInt(e.target.value)
-                      : undefined,
+                    num_speakers: e.target.value ? parseInt(e.target.value) : undefined,
                   })
                 }
                 className="max-w-full"
               />
-              <p className="text-muted-foreground text-xs">
-                Leave empty for auto-detection
-              </p>
+              <p className="text-muted-foreground text-xs">Leave empty for auto-detection</p>
             </div>
 
             <div className="space-y-2">
@@ -122,7 +106,7 @@ export default function AdvancedSettings({
                 id="language_code"
                 type="text"
                 placeholder="e.g., en, fr, es, de"
-                value={options.language_code || ""}
+                value={options.language_code || ''}
                 onChange={(e) =>
                   onChange({
                     ...options,
@@ -144,15 +128,12 @@ export default function AdvancedSettings({
               onValueChange={(value) =>
                 onChange({
                   ...options,
-                  timestamps_granularity: value as
-                    | "none"
-                    | "word"
-                    | "character",
+                  timestamps_granularity: value as 'none' | 'word' | 'character',
                 })
               }
               className="flex flex-wrap gap-4"
             >
-              {["none", "word", "character"].map((value) => (
+              {['none', 'word', 'character'].map((value) => (
                 <div key={value} className="flex items-center space-x-2">
                   <RadioGroupItem id={value} value={value} />
                   <Label htmlFor={value} className="font-normal capitalize">

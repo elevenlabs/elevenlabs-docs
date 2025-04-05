@@ -1,43 +1,35 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { getApiKey } from "@/app/actions/manage-api-key";
-import { AppSidebar } from "@/components/app-sidebar";
-import { ApiKeyBanner } from "@/components/api-key-banner";
-import { Byline } from "@/components/by-line";
-import { KeyProvider } from "@/components/key-provider";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Card } from "@/components/ui/card";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Toaster } from "@/components/ui/sonner";
+import { getApiKey } from '@/app/actions/manage-api-key';
+import { ApiKeyBanner } from '@/components/api-key-banner';
+import { AppSidebar } from '@/components/app-sidebar';
+import { Byline } from '@/components/by-line';
+import { KeyProvider } from '@/components/key-provider';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Card } from '@/components/ui/card';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Toaster } from '@/components/ui/sonner';
 
-import "./globals.css";
+import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: "ElevenLabs Next.js Playground",
-    template: "%s | ElevenLabs Next.js",
+    default: 'ElevenLabs Next.js Playground',
+    template: '%s | ElevenLabs Next.js',
   },
-  metadataBase: new URL("https://elevenlabs-playground.vercel.app"),
-  description: "A Next.JS playground to explore ElevenLabs capabilities.",
+  metadataBase: new URL('https://elevenlabs-playground.vercel.app'),
+  description: 'A Next.JS playground to explore ElevenLabs capabilities.',
   openGraph: {
-    title: "ElevenLabs Next.js Playground",
-    description: "A playground to explore ElevenLabs capabilities.",
+    title: 'ElevenLabs Next.js Playground',
+    description: 'A playground to explore ElevenLabs capabilities.',
     images: [`/api/og?title=ElevenLabs Next.js Playground`],
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
   },
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const apiKeyResult = await getApiKey();
   const apiKey = apiKeyResult.ok ? apiKeyResult.value : null;
 

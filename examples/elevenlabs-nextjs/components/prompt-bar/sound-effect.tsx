@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { ClockIcon, DiamondIcon } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { BodySoundGenerationV1SoundGenerationPost } from 'elevenlabs/api';
+import { ClockIcon, DiamondIcon } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
-import { createSoundEffect } from "@/app/actions/create-sound-effect";
-import { PromptBar, PromptControlsProps } from "@/components/prompt-bar/base";
-import { Button } from "@/components/ui/button";
+import { createSoundEffect } from '@/app/actions/create-sound-effect';
+import { PromptBar, PromptControlsProps } from '@/components/prompt-bar/base';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,13 +16,9 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Slider } from "@/components/ui/slider";
-import {
-  SoundEffectInput as SoundEffectInputType,
-  soundEffectSchema,
-} from "@/lib/schemas";
-import { BodySoundGenerationV1SoundGenerationPost } from "elevenlabs/api";
+} from '@/components/ui/dropdown-menu';
+import { Slider } from '@/components/ui/slider';
+import { SoundEffectInput as SoundEffectInputType, soundEffectSchema } from '@/lib/schemas';
 
 export type SoundEffectPromptProps = {
   onPendingEffect: (prompt: string) => string;
@@ -46,7 +43,7 @@ export function SoundEffectPromptBar({
       };
 
       // Only add duration_seconds if it's a number (not 'auto')
-      if (data.duration_seconds !== "auto") {
+      if (data.duration_seconds !== 'auto') {
         request.duration_seconds = data.duration_seconds;
       }
 
@@ -58,10 +55,10 @@ export function SoundEffectPromptBar({
           prompt: data.text,
           audioBase64: result.value.audioBase64,
           createdAt: new Date(),
-          status: "complete",
+          status: 'complete',
         };
         onUpdatePendingEffect(pendingId, effect);
-        toast.success("Generated sound effect");
+        toast.success('Generated sound effect');
         return;
       } else {
         toast.error(result.error);
@@ -73,11 +70,9 @@ export function SoundEffectPromptBar({
     }
   };
 
-  const renderLeftControls = ({
-    form,
-  }: PromptControlsProps<SoundEffectInputType>) => {
-    const duration = form.watch("duration_seconds");
-    const promptInfluence = form.watch("prompt_influence");
+  const renderLeftControls = ({ form }: PromptControlsProps<SoundEffectInputType>) => {
+    const duration = form.watch('duration_seconds');
+    const promptInfluence = form.watch('prompt_influence');
 
     return (
       <div className="flex flex-wrap gap-1.5">
@@ -89,9 +84,7 @@ export function SoundEffectPromptBar({
               className="flex h-9 w-9 min-w-[80px] items-center gap-1.5 rounded-full bg-white/10 p-0 hover:bg-white/20"
             >
               <ClockIcon className="h-[18px] w-[18px]" />
-              <span className="mr-2">
-                {duration === "auto" ? "Auto" : `${duration}s`}
-              </span>
+              <span className="mr-2">{duration === 'auto' ? 'Auto' : `${duration}s`}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="border border-white/10 bg-[#2B2B2B] text-white">
@@ -100,14 +93,10 @@ export function SoundEffectPromptBar({
             <DropdownMenuRadioGroup
               value={String(duration)}
               onValueChange={(value) =>
-                form.setValue(
-                  "duration_seconds",
-                  value === "auto" ? "auto" : parseFloat(value),
-                  {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  }
-                )
+                form.setValue('duration_seconds', value === 'auto' ? 'auto' : parseFloat(value), {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                })
               }
             >
               <DropdownMenuRadioItem className="focus:bg-white/10" value="auto">
@@ -143,9 +132,7 @@ export function SoundEffectPromptBar({
               className="flex h-9 w-9 min-w-[80px] items-center gap-1.5 rounded-full bg-white/10 p-0 hover:bg-white/20"
             >
               <DiamondIcon className="h-[18px] w-[18px]" />
-              <span className="mr-2">
-                {(promptInfluence * 100).toFixed(0)}%
-              </span>
+              <span className="mr-2">{(promptInfluence * 100).toFixed(0)}%</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-80 border border-white/10 bg-[#2B2B2B] text-white">
@@ -157,7 +144,7 @@ export function SoundEffectPromptBar({
               <Slider
                 value={[promptInfluence]}
                 onValueChange={(values) =>
-                  form.setValue("prompt_influence", values[0], {
+                  form.setValue('prompt_influence', values[0], {
                     shouldDirty: true,
                     shouldTouch: true,
                   })
@@ -182,8 +169,8 @@ export function SoundEffectPromptBar({
     <PromptBar
       schema={soundEffectSchema}
       defaultValues={{
-        text: "",
-        duration_seconds: "auto",
+        text: '',
+        duration_seconds: 'auto',
         prompt_influence: 0.3,
       }}
       promptFieldName="text"
@@ -200,5 +187,5 @@ export type SoundEffect = {
   prompt: string;
   audioBase64: string;
   createdAt: Date;
-  status: "loading" | "complete";
+  status: 'loading' | 'complete';
 };

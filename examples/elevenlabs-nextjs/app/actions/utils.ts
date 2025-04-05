@@ -1,8 +1,8 @@
-import { ElevenLabsClient } from "elevenlabs";
+import { ElevenLabsClient } from 'elevenlabs';
 
-import { getApiKey } from "@/app/actions/manage-api-key";
-import { env } from "@/env.mjs";
-import { Err, Ok, Result } from "@/types";
+import { getApiKey } from '@/app/actions/manage-api-key';
+import { env } from '@/env.mjs';
+import { Err, Ok, Result } from '@/types';
 
 export async function getElevenLabsClient(): Promise<Result<ElevenLabsClient>> {
   try {
@@ -13,7 +13,7 @@ export async function getElevenLabsClient(): Promise<Result<ElevenLabsClient>> {
 
     if (!apiKey) {
       return Err(
-        "API key is missing. Please set your API key in the app or configure the ELEVENLABS_API_KEY environment variable."
+        'API key is missing. Please set your API key in the app or configure the ELEVENLABS_API_KEY environment variable.'
       );
     }
 
