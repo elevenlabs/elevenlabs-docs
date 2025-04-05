@@ -1,10 +1,11 @@
 'use client';
 
+import { BodySoundGenerationV1SoundGenerationPost } from 'elevenlabs/api';
 import { ClockIcon, DiamondIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { generateSoundEffect } from '@/app/actions/elevenlabs';
+import { createSoundEffect } from '@/app/actions/create-sound-effect';
 import { PromptBar, PromptControlsProps } from '@/components/prompt-bar/base';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,11 +35,21 @@ export function SoundEffectPromptBar({
     try {
       setIsGenerating(true);
 
-      const duration = data.duration_seconds === 'auto' ? 'auto' : data.duration_seconds;
-      const result = await generateSoundEffect(data.text, duration, data.prompt_influence);
+      const pendingId = onPendingEffect(data.text);
+
+      const request: BodySoundGenerationV1SoundGenerationPost = {
+        text: data.text,
+        prompt_influence: data.prompt_influence,
+      };
+
+      // Only add duration_seconds if it's a number (not 'auto')
+      if (data.duration_seconds !== 'auto') {
+        request.duration_seconds = data.duration_seconds;
+      }
+
+      const result = await createSoundEffect(request);
 
       if (result.ok) {
-        const pendingId = onPendingEffect(data.text);
         const effect: SoundEffect = {
           id: pendingId,
           prompt: data.text,
