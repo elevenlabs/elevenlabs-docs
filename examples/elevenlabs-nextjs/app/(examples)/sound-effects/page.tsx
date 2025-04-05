@@ -1,30 +1,35 @@
-'use client';
+"use client";
 
-import { formatDistanceToNow } from 'date-fns';
-import { nanoid } from 'nanoid';
-import Image from 'next/image';
-import { useState } from 'react';
+import { formatDistanceToNow } from "date-fns";
+import { nanoid } from "nanoid";
+import Image from "next/image";
+import { useState } from "react";
 
-import { AudioPlayer } from '@/components/audio-player';
-import { SoundEffectPromptBar, type SoundEffect } from '@/components/prompt-bar/sound-effect';
-import { Card, CardContent } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
+import { AudioPlayer } from "@/app/(examples)/text-to-speech/components/audio-player";
+import {
+  SoundEffectPromptBar,
+  type SoundEffect,
+} from "@/components/prompt-bar/sound-effect";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 export default function Page() {
   const [soundEffects, setSoundEffects] = useState<SoundEffect[]>([]);
-  const [selectedEffect, setSelectedEffect] = useState<SoundEffect | null>(null);
+  const [selectedEffect, setSelectedEffect] = useState<SoundEffect | null>(
+    null
+  );
   const [autoplay, setAutoplay] = useState(true);
 
   const handlePendingSoundEffect = (prompt: string) => {
     const pendingEffect: SoundEffect = {
       id: nanoid(),
       prompt,
-      audioBase64: '',
+      audioBase64: "",
       createdAt: new Date(),
-      status: 'loading',
+      status: "loading",
     };
     setSoundEffects((prev) => [pendingEffect, ...prev]);
     setSelectedEffect(pendingEffect);
@@ -33,10 +38,12 @@ export default function Page() {
 
   const updatePendingEffect = (id: string, effect: SoundEffect) => {
     setSoundEffects((prev) =>
-      prev.map((item) => (item.id === id ? { ...effect, status: 'complete' as const } : item))
+      prev.map((item) =>
+        item.id === id ? { ...effect, status: "complete" as const } : item
+      )
     );
     setSelectedEffect((current) =>
-      current?.id === id ? { ...effect, status: 'complete' as const } : current
+      current?.id === id ? { ...effect, status: "complete" as const } : current
     );
   };
 
@@ -49,15 +56,20 @@ export default function Page() {
             <div className="flex flex-1 flex-col justify-center">
               {selectedEffect ? (
                 <div className="space-y-4">
-                  {selectedEffect.status === 'complete' && (
-                    <p className="text-muted-foreground text-sm">{selectedEffect.prompt}</p>
+                  {selectedEffect.status === "complete" && (
+                    <p className="text-muted-foreground text-sm">
+                      {selectedEffect.prompt}
+                    </p>
                   )}
-                  {selectedEffect.status === 'loading' ? (
+                  {selectedEffect.status === "loading" ? (
                     <div className="flex items-center justify-center p-8">
                       <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-white" />
                     </div>
                   ) : (
-                    <AudioPlayer audioBase64={selectedEffect.audioBase64} autoplay={autoplay} />
+                    <AudioPlayer
+                      audioBase64={selectedEffect.audioBase64}
+                      autoplay={autoplay}
+                    />
                   )}
                 </div>
               ) : (
@@ -75,7 +87,11 @@ export default function Page() {
                 <label htmlFor="autoplay" className="text-sm">
                   Autoplay
                 </label>
-                <Switch id="autoplay" checked={autoplay} onCheckedChange={setAutoplay} />
+                <Switch
+                  id="autoplay"
+                  checked={autoplay}
+                  onCheckedChange={setAutoplay}
+                />
               </div>
             </div>
             <div>
@@ -83,16 +99,20 @@ export default function Page() {
                 <Card
                   key={effect.id}
                   className={cn(
-                    'hover:bg-accent relative cursor-pointer rounded-none border-0 transition-colors',
-                    selectedEffect?.id === effect.id && 'bg-accent',
-                    effect.status === 'loading' &&
-                      'cursor-not-allowed opacity-70 hover:bg-transparent'
+                    "hover:bg-accent relative cursor-pointer rounded-none border-0 transition-colors",
+                    selectedEffect?.id === effect.id && "bg-accent",
+                    effect.status === "loading" &&
+                      "cursor-not-allowed opacity-70 hover:bg-transparent"
                   )}
-                  onClick={() => effect.status === 'complete' && setSelectedEffect(effect)}
+                  onClick={() =>
+                    effect.status === "complete" && setSelectedEffect(effect)
+                  }
                 >
                   <CardContent className="px-3 py-3">
-                    <p className="mb-1 max-w-[250px] truncate font-medium">{effect.prompt}</p>
-                    {effect.status === 'loading' ? (
+                    <p className="mb-1 max-w-[250px] truncate font-medium">
+                      {effect.prompt}
+                    </p>
+                    {effect.status === "loading" ? (
                       <div className="text-muted-foreground flex items-center gap-2 text-xs">
                         <div className="h-3 w-3 animate-spin rounded-full border-b-2 border-current" />
                         <span>Generating...</span>

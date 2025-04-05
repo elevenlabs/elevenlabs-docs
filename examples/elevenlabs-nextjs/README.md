@@ -10,7 +10,7 @@ This project is a minimal example to demonstrate how to run a Next.js applicatio
 cp .env.example .env
 ```
 
-Edit the `.env` file with your ElevenLabs API key.
+Update the `.env` file
 
 ```bash
 pnpm install
