@@ -12403,67 +12403,6 @@
         "x-fern-sdk-method-name": "create_batch_call"
       }
     },
-    "/v1/music/songs/{song_id}/status": {
-      "get": {
-        "operationId": "Get_Music_Generation_Status__SSE__v1_music_songs__song_id__status_get",
-        "summary": "Get Music Generation Status (Sse)",
-        "description": "Streams the status updates for a music generation task using Server-Sent Events (SSE).",
-        "parameters": [
-          {
-            "name": "song_id",
-            "in": "path",
-            "description": "The song_id of the song to get, delete, or get status updates for.",
-            "required": true,
-            "schema": {
-              "description": "The song_id of the song to get, delete, or get status updates for.",
-              "type": "string",
-              "title": "Song Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "music-generation"
-        ]
-      }
-    },
     "/docs": {
       "get": {
         "operationId": "redirect_to_mintlify_docs_get",
