@@ -1,0 +1,118 @@
+---
+title: System tools
+subtitle: Update the internal state of conversations without external requests.
+---
+
+**System tools** enable your assistant to update the internal state of a conversation. Unlike [server tools](/docs/conversational-ai/customization/tools/server-tools) or [client tools](/docs/conversational-ai/customization/tools/client-tools), system tools don't make external API calls or trigger client-side functions—they modify the internal state of the conversation without making external calls.
+
+## Overview
+
+Some applications require agents to control the flow or state of a conversation.
+System tools provide this capability by allowing the assistant to perform actions related to the state of the call that don't require communicating with external servers or the client.
+
+### Available system tools
+
+<CardGroup cols={2}>
+  <Card
+    title="End call"
+    icon="duotone square-phone-hangup"
+    href="docs/conversational-ai/customization/tools/system-tools/end-call"
+  >
+    Let your agent automatically terminate a conversation when appropriate conditions are met.
+  </Card>
+  <Card
+    title="Language detection"
+    icon="duotone earth-europe"
+    href="/docs/conversational-ai/customization/tools/system-tools/language-detection"
+  >
+    Enable your agent to automatically switch to the user's language during conversations.
+  </Card>
+</CardGroup>
+
+## Implementation
+
+When creating an agent via API, you can add system tools to your agent configuration. Here's how to implement both the end call and language detection tools:
+
+<CodeGroup>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentToolsItem_System
+)
+
+# Initialize the client
+client = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create system tools
+end_call_tool = PromptAgentToolsItem_System(
+    name="end_call",
+    description=""  # Optional: Customize when the tool should be triggered
+)
+
+language_detection_tool = PromptAgentToolsItem_System(
+    name="language_detection",
+    description=""  # Optional: Customize when the tool should be triggered
+)
+
+# Create the agent configuration with both tools
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            tools=[end_call_tool, language_detection_tool]
+        )
+    )
+)
+
+# Create the agent
+response = client.conversational_ai.create_agent(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from 'elevenlabs';
+
+// Initialize the client
+const client = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with system tools
+await client.conversationalAi.createAgent({
+  conversation_config: {
+    agent: {
+      prompt: {
+        tools: [
+          {
+            type: 'system',
+            name: 'end_call',
+            description: '',
+          },
+          {
+            type: 'system',
+            name: 'language_detection',
+            description: '',
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+</CodeGroup>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can system tools be combined with other tool types?">
+    Yes, system tools can be used alongside server tools and client tools in the same assistant.
+    This allows for comprehensive functionality that combines internal state management with
+    external interactions.
+  </Accordion>
+</AccordionGroup>
+```

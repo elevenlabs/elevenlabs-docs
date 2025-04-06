@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
-import { getApiKey } from '@/app/actions';
+import { getApiKey } from '@/app/actions/manage-api-key';
+import { ApiKeyBanner } from '@/components/api-key-banner';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Byline } from '@/components/by-line';
 import { KeyProvider } from '@/components/key-provider';
@@ -45,9 +46,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <KeyProvider apiKey={apiKey}>
             <SidebarProvider>
               <AppSidebar />
-              <SidebarInset className="background-gradient">
-                <header className="relative flex h-[60px] shrink-0 items-center justify-center">
-                  <SidebarTrigger className="absolute left-3" />
+              <SidebarInset className="background">
+                <header className="relative flex h-[60px] shrink-0 items-center justify-between px-3">
+                  <SidebarTrigger />
+                  <ApiKeyBanner />
                 </header>
                 <div className="p-4">
                   <div className="mx-auto max-w-4xl space-y-3 px-2 pt-20 lg:px-8 lg:py-8">

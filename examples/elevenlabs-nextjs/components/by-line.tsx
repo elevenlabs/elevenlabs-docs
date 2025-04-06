@@ -15,7 +15,7 @@ export function Byline() {
           <div className="text-sm text-gray-400">
             <a
               className="underline decoration-dotted underline-offset-4 transition-colors hover:text-gray-300"
-              href="https://github.com/elevenlabs/elevenlabs-examples"
+              href="https://github.com/elevenlabs/elevenlabs-docs/tree/main/examples/elevenlabs-nextjs"
               target="_blank"
               rel="noreferrer"
             >

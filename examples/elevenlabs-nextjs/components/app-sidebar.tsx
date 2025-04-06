@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
+import { ApiKeyBanner } from '@/components/api-key-banner';
 import { Logo } from '@/components/logo';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -51,6 +53,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter className="p-4">
+        <div className="flex w-full flex-col gap-2">
+          <div className="text-muted-foreground text-xs">API Configuration</div>
+          <ApiKeyBanner variant="sidebar" />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }

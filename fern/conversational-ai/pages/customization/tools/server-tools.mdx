@@ -1,0 +1,187 @@
+---
+title: Server tools
+subtitle: Connect your assistant to external data & systems.
+---
+
+**Tools** enable your assistant to connect to external data and systems. You can define a set of tools that the assistant has access to, and the assistant will use them where appropriate based on the conversation.
+
+## Overview
+
+Many applications require assistants to call external APIs to get real-time information. Tools give your assistant the ability to make external function calls to third party apps so you can get real-time information.
+
+Here are a few examples where tools can be useful:
+
+- **Fetching data**: enable an assistant to retrieve real-time data from any REST-enabled database or 3rd party integration before responding to the user.
+- **Taking action**: allow an assistant to trigger authenticated actions based on the conversation, like scheduling meetings or initiating order returns.
+
+<Info>
+  To interact with Application UIs or trigger client-side events use [client
+  tools](/docs/conversational-ai/customization/tools/client-tools) instead.
+</Info>
+
+## Tool configuration
+
+Conversational AI assistants can be equipped with tools to interact with external APIs. Unlike traditional requests, the assistant generates query, body, and path parameters dynamically based on the conversation and parameter descriptions you provide.
+
+All tool configurations and parameter descriptions help the assistant determine **when** and **how** to use these tools. To orchestrate tool usage effectively, update the assistant’s system prompt to specify the sequence and logic for making these calls. This includes:
+
+- **Which tool** to use and under what conditions.
+- **What parameters** the tool needs to function properly.
+- **How to handle** the responses.
+
+<br />
+
+<Tabs>
+
+<Tab title="Configuration">
+Define a high-level `Name` and `Description` to describe the tool's purpose. This helps the LLM understand the tool and know when to call it.
+
+<Info>
+  If the API requires path parameters, include variables in the URL path by wrapping them in curly
+  braces `{}`, for example: `/api/resource/{id}` where `id` is a path parameter.
+</Info>
+
+<Frame background="subtle">
+  ![Configuration](/assets/images/conversational-ai/tool-configuration.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Secrets">
+
+Assistant secrets can be used to add authentication headers to requests.
+
+<Frame background="subtle">
+  ![Tool secrets](/assets/images/conversational-ai/tool-secrets.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Headers">
+
+Specify any headers that need to be included in the request.
+
+<Frame background="subtle">![Headers](/assets/images/conversational-ai/tool-headers.jpg)</Frame>
+
+</Tab>
+
+<Tab title="Path parameters">
+
+Include variables in the URL path by wrapping them in curly braces `{}`:
+
+- **Example**: `/api/resource/{id}` where `id` is a path parameter.
+
+<Frame background="subtle">
+  ![Path parameters](/assets/images/conversational-ai/tool-path-parameters.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Body parameters">
+
+Specify any body parameters to be included in the request.
+
+<Frame background="subtle">
+  ![Body parameters](/assets/images/conversational-ai/tool-body-parameters.jpg)
+</Frame>
+
+</Tab>
+
+<Tab title="Query parameters">
+
+Specify any query parameters to be included in the request.
+
+<Frame background="subtle">
+  ![Query parameters](/assets/images/conversational-ai/tool-query-parameters.jpg)
+</Frame>
+
+</Tab>
+
+</Tabs>
+
+## Guide
+
+In this guide, we'll create a weather assistant that can provide real-time weather information for any location. The assistant will use its geographic knowledge to convert location names into coordinates and fetch accurate weather data.
+
+<div style="padding:104.25% 0 0 0;position:relative;">
+  <iframe
+    src="https://player.vimeo.com/video/1061374724?h=bd9bdb535e&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+    frameborder="0"
+    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+    title="weatheragent"
+  ></iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+
+<Steps>
+  <Step title="Configure the weather tool">
+    First, on the **Agent** section of your agent settings page, choose **Add Tool**. Select **Webhook** as the Tool Type, then configure the weather API integration:
+
+    <AccordionGroup>
+      <Accordion title="Weather Tool Configuration">
+
+      <Tabs>
+        <Tab title="Configuration">
+
+        | Field       | Value                                                                                                                                                                            |
+        | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+        | Name        | get_weather                                                                                                                                                                      |
+        | Description | Gets the current weather forecast for a location                                                                                                                                 |
+        | Method      | GET                                                                                                                                                                              |
+        | URL         | https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m |
+
+        </Tab>
+
+        <Tab title="Path Parameters">
+
+        | Data Type | Identifier | Value Type | Description                                         |
+        | --------- | ---------- | ---------- | --------------------------------------------------- |
+        | string    | latitude   | LLM Prompt | The latitude coordinate for the requested location  |
+        | string    | longitude  | LLM Prompt | The longitude coordinate for the requested location |
+
+        </Tab>
+
+      </Tabs>
+
+      </Accordion>
+    </AccordionGroup>
+
+    <Warning>
+      An API key is not required for this tool. If one is required, this should be passed in the headers and stored as a secret.
+    </Warning>
+
+  </Step>
+
+  <Step title="Orchestration">
+    Configure your assistant to handle weather queries intelligently with this system prompt:
+
+    ```plaintext System prompt
+    You are a helpful conversational AI assistant with access to a weather tool. When users ask about
+    weather conditions, use the get_weather tool to fetch accurate, real-time data. The tool requires
+    a latitude and longitude - use your geographic knowledge to convert location names to coordinates
+    accurately.
+
+    Never ask users for coordinates - you must determine these yourself. Always report weather
+    information conversationally, referring to locations by name only. For weather requests:
+
+    1. Extract the location from the user's message
+    2. Convert the location to coordinates and call get_weather
+    3. Present the information naturally and helpfully
+
+    For non-weather queries, provide friendly assistance within your knowledge boundaries. Always be
+    concise, accurate, and helpful.
+
+    First message: "Hey, how can I help you today?"
+    ```
+
+    <Success>
+      Test your assistant by asking about the weather in different locations. The assistant should
+      handle specific locations ("What's the weather in Tokyo?") and ask for clarification after general queries ("How's
+      the weather looking today?").
+    </Success>
+
+  </Step>
+</Steps>
+
+<Markdown src="/snippets/conversational-ai-tool-best-practices.mdx" />

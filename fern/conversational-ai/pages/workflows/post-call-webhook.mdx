@@ -28,6 +28,24 @@ Post-call webhooks can be enabled for all agents in your workspace through the C
 
 <Markdown src="/snippets/webhook-hmac-authentication.mdx" />
 
+### IP whitelisting
+
+For additional security, you can whitelist the following static egress IPs from which all ElevenLabs webhook requests originate:
+
+| Region       | IP Address     |
+| ------------ | -------------- |
+| US (Default) | 34.67.146.145  |
+| EU           | 35.204.38.71   |
+| Asia         | 35.185.187.110 |
+
+If your infrastructure requires strict IP-based access controls, adding these IPs to your firewall allowlist will ensure you only receive webhook requests from ElevenLabs' systems.
+
+<Note>
+  These static IPs are used across all ElevenLabs webhook services and will remain consistent. Using
+  IP whitelisting in combination with HMAC signature validation provides multiple layers of
+  security.
+</Note>
+
 ## Webhook response structure
 
 The webhook payload contains the same data you would receive from a GET request to the Conversation API endpoint, with additional fields for event timing and type information.
@@ -38,7 +56,7 @@ The webhook payload contains the same data you would receive from a GET request 
 | ----------------- | ------ | -------------------------------------------------------------- |
 | `type`            | string | Type of event (always `post_call_transcription` in this case)  |
 | `data`            | object | Data for the conversation, what would be returned from the API |
-| `event_timestamp` | string | When this event occurred                                       |
+| `event_timestamp` | number | When this event occurred in unix time UTC                      |
 
 ## Example webhook payload
 

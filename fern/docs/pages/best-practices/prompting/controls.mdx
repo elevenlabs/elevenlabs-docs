@@ -1,0 +1,246 @@
+---
+title: Controls
+subtitle: Learn how to control delivery, pronunciation & emotion of text to speech.
+---
+
+<Info>
+  We are actively working on _Director's Mode_ to give you even greater control over outputs.
+</Info>
+
+This guide provides techniques to enhance text-to-speech outputs using ElevenLabs models. Experiment with these methods to discover what works best for your needs. These techniques provide a practical way to achieve nuanced results until advanced features like _Director's Mode_ are rolled out.
+
+## Pauses
+
+Use `<break time="x.xs" />` for natural pauses up to 3 seconds.
+
+<Note>
+  Using too many break tags in a single generation can cause instability. The AI might speed up, or
+  introduce additional noises or audio artifacts. We are working on resolving this.
+</Note>
+
+```text Example
+"Hold on, let me think." <break time="1.5s" /> "Alright, I’ve got it."
+```
+
+- **Consistency:** Use `<break>` tags consistently to maintain natural speech flow. Excessive use can lead to instability.
+- **Voice-Specific Behavior:** Different voices may handle pauses differently, especially those trained with filler sounds like "uh" or "ah."
+
+Alternatives to `<break>` include dashes (- or --) for short pauses or ellipses (...) for hesitant tones. However, these are less consistent.
+
+```text Example
+
+"It… well, it might work." "Wait — what’s that noise?"
+
+```
+
+## Pronunciation
+
+### Phoneme Tags
+
+Specify pronunciation using [SSML phoneme tags](https://en.wikipedia.org/wiki/Speech_Synthesis_Markup_Language). Supported alphabets include [CMU](https://en.wikipedia.org/wiki/CMU_Pronouncing_Dictionary) Arpabet and the [International Phonetic Alphabet (IPA)](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet).
+
+<Note>
+  Phoneme tags are only compatible with "Eleven Flash v2", "Eleven Turbo v2" and "Eleven English v1"
+  [models](/docs/models).
+</Note>
+
+<CodeBlocks>
+```xml CMU Arpabet Example
+<phoneme alphabet="cmu-arpabet" ph="M AE1 D IH0 S AH0 N">
+  Madison
+</phoneme>
+```
+
+```xml IPA Example
+<phoneme alphabet="ipa" ph="ˈæktʃuəli">
+  actually
+</phoneme>
+```
+
+</CodeBlocks>
+
+We recommend using CMU Arpabet for consistent and predictable results with current AI models. While IPA can be effective, CMU Arpabet generally offers more reliable performance.
+
+Phoneme tags only work for individual words. If for example you have a name with a first and last name that you want to be pronounced a certain way, you will need to create a phoneme tag for each word.
+
+Ensure correct stress marking for multi-syllable words to maintain accurate pronunciation. For example:
+
+<CodeBlocks>
+
+```xml Correct usage
+<phoneme alphabet="cmu-arpabet" ph="P R AH0 N AH0 N S IY EY1 SH AH0 N">
+  pronunciation
+</phoneme>
+```
+
+```xml Incorrect usage
+<phoneme alphabet="cmu-arpabet" ph="P R AH N AH N S IY EY SH AH N">
+  pronunciation
+</phoneme>
+```
+
+</CodeBlocks>
+
+### Alias Tags
+
+For models that don't support phoneme tags, you can try writing words more phonetically. You can also employ various tricks such as capital letters, dashes, apostrophes, or even single quotation marks around a single letter or letters.
+
+As an example, a word like “trapezii” could be spelt “trapezIi” to put more emphasis on the “ii” of the word.
+
+You can either replace the word directly in your text, or if you want to specify pronunciation using other words or phrases when using a pronunciation dictionary, you can use alias tags for this. This can be useful if you're generating using Multilingual v2 or Turbo v2.5, which don't support phoneme tags. You can use pronunciation dictionaries with Studio, Dubbing Studio and Speech Synthesis via the API.
+
+For example, if your text includes a name that has an unusual pronunciation that the AI might struggle with, you could use an alias tag to specify how you would like it to be pronounced:
+
+```
+  <lexeme>
+    <grapheme>Claughton</grapheme>
+    <alias>Cloffton</alias>
+  </lexeme>
+```
+
+If you want to make sure that an acronym is always delivered in a certain way whenever it is incountered in your text, you can use an alias tag to specify this:
+
+```
+  <lexeme>
+    <grapheme>UN</grapheme>
+    <alias>United Nations</alias>
+  </lexeme>
+```
+
+### Pronunciation Dictionaries
+
+Some of our tools, such as Studio and Dubbing Studio, allow you to create and upload a pronunciation dictionary. These allow you to specify the pronunciation of certain words, such as character or brand names, or to specify how acronyms should be read.
+
+Pronunciation dictionaries allow this functionality by enabling you to upload a lexicon or dictionary file that specifies pairs of words and how they should be pronounced, either using a phonetic alphabet or word substitutions.
+
+Whenever one of these words is encountered in a project, the AI model will pronounce the word using the specified replacement.
+
+To provide a pronunciation dictionary file, open the settings for a project and upload a file in either TXT or the [.PLS format](https://www.w3.org/TR/pronunciation-lexicon/). When a dictionary is added to a project it will automatically recalculate which pieces of the project will need to be re-converted using the new dictionary file and mark these as unconverted.
+
+Currently we only support pronunciation dictionaries that specify replacements using phoneme or alias tags.
+
+Both phonemes and aliases are sets of rules that specify a word or phrase they are looking for, referred to as a grapheme, and what it will be replaced with. Please note that searches are case sensitive. When checking for a replacement word in a pronunciation dictionary, the dictionary is checked from start to end and only the very first replacement is used.
+
+### Pronunciation Dictionary examples
+
+Here are examples of pronunciation dictionaries in both CMU Arpabet and IPA, including a phoneme to specify the pronunciation of "Apple" and an alias to replace "UN" with "United Nations":
+
+<CodeBlocks>
+```xml CMU Arpabet Example
+<?xml version="1.0" encoding="UTF-8"?>
+<lexicon version="1.0"
+      xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon
+        http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
+      alphabet="cmu-arpabet" xml:lang="en-GB">
+  <lexeme>
+    <grapheme>apple</grapheme>
+    <phoneme>AE P AH L</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>UN</grapheme>
+    <alias>United Nations</alias>
+  </lexeme>
+</lexicon>
+```
+
+```xml IPA Example
+<?xml version="1.0" encoding="UTF-8"?>
+<lexicon version="1.0"
+      xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/2005/01/pronunciation-lexicon
+        http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
+      alphabet="ipa" xml:lang="en-GB">
+  <lexeme>
+    <grapheme>Apple</grapheme>
+    <phoneme>ˈæpl̩</phoneme>
+  </lexeme>
+  <lexeme>
+    <grapheme>UN</grapheme>
+    <alias>United Nations</alias>
+  </lexeme>
+</lexicon>
+```
+
+</CodeBlocks>
+
+To generate a pronunciation dictionary `.pls` file, there are a few open source tools available:
+
+    - [Sequitur G2P](https://github.com/sequitur-g2p/sequitur-g2p) - Open-source tool that learns pronunciation rules from data and can generate phonetic transcriptions.
+    - [Phonetisaurus](https://github.com/AdolfVonKleist/Phonetisaurus) - Open-source G2P system trained on existing dictionaries like CMUdict.
+    - [eSpeak](https://github.com/espeak-ng/espeak-ng) - Speech synthesizer that can generate phoneme transcriptions from text.
+    - [CMU Pronouncing Dictionary](https://github.com/cmusphinx/cmudict) - A pre-built English dictionary with phonetic transcriptions.
+
+## Emotion
+
+Convey emotions through narrative context or explicit dialogue tags. This approach helps the AI understand the tone and emotion to emulate.
+
+```text Example
+You’re leaving?" she asked, her voice trembling with sadness. "That’s it!" he exclaimed triumphantly.
+```
+
+Explicit dialogue tags yield more predictable results than relying solely on context, however the model will still speak out the emotional delivery guides. These can be removed in post-production using an audio editor if unwanted.
+
+## Pace
+
+The pacing of the audio is highly influenced by the audio used to create the voice. When creating your voice, we recommend using longer, continuous samples to avoid pacing issues like unnaturally fast speech.
+
+For control over the speed of the generated audio, you can use the speed setting. This allows you to either speed up or slow down the speed of the generated speech. The speed setting is available in Text to Speech via the website and API, as well as in Studio and Conversational AI. It can be found in the voice settings.
+
+The default value is 1.0, which means that the speed is not adjusted. Values below 1.0 will slow the voice down, to a minimum of 0.7. Values above 1.0 will speed up the voice, to a maximum of 1.2. Extreme values may affect the quality of the generated speech.
+
+Pacing can also be controlled by writing in a natural, narrative style.
+
+```text Example
+"I… I thought you’d understand," he said, his voice slowing with disappointment.
+```
+
+## Tips
+
+<AccordionGroup>
+  <Accordion title="Common Issues">
+    <ul>
+      <li>
+        Inconsistent pauses: Ensure <code>&lt;break time="x.xs" /&gt;</code> syntax is used for
+        pauses.
+      </li>
+      <li>Pronunciation errors: Use CMU Arpabet or IPA phoneme tags for precise pronunciation.</li>
+      <li>
+        Emotion mismatch: Add narrative context or explicit tags to guide emotion.{' '}
+        <strong>Remember to remove any emotional guidance text in post-production.</strong>
+      </li>
+    </ul>
+  </Accordion>
+  <Accordion title="Tips for Improving Output">
+    Experiment with alternative phrasing to achieve desired pacing or emotion. For complex sound
+    effects, break prompts into smaller, sequential elements and combine results manually.
+  </Accordion>
+</AccordionGroup>
+
+## Creative control
+
+While we are actively developing a "Director's Mode" to give users even greater control over outputs, here are some interim techniques to maximize creativity and precision:
+
+<Steps>
+    ### Narrative styling
+    Write prompts in a narrative style, similar to scriptwriting, to guide tone and pacing effectively.
+
+    ### Layered outputs
+
+    Generate sound effects or speech in segments and layer them together using audio editing software for more complex compositions.
+
+    ### Phonetic experimentation
+
+    If pronunciation isn't perfect, experiment with alternate spellings or phonetic approximations to achieve desired results.
+
+    ### Manual adjustments
+
+    Combine individual sound effects manually in post-production for sequences that require precise timing.
+
+    ### Feedback iteration
+
+    Iterate on results by tweaking descriptions, tags, or emotional cues.
+
+</Steps>

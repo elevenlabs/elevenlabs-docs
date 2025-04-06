@@ -19,16 +19,22 @@ ELEVENLABS_API_KEY = 'your_api_key_here';
 
 You can either use the [REST API](/docs/api-reference/introduction) directly with the HTTP client of your choice, or use one of our official SDKs as shown below. This guide will use the official SDKs to make requests.
 
-<CodeBlocks>
-```bash title="Python"
-pip install elevenlabs
-```
+<Tabs>
+  <Tab title="Python" language="python">
 
-```bash title="JavaScript"
-npm install elevenlabs
-```
+    ```bash
+    pip install elevenlabs
+    ```
 
-</CodeBlocks>
+  </Tab>
+  <Tab title="JavaScript" language="javascript">
+
+    ```bash
+    npm install elevenlabs
+    ```
+
+  </Tab>
+</Tabs>
 
 <Note>
   To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/)
@@ -36,7 +42,7 @@ npm install elevenlabs
 </Note>
 
 <Tabs>
-  <Tab title="Python">
+  <Tab title="Python" language="python">
     The environment variables are loaded automatically when using the SDK, but we need to install the `python-dotenv` package to load them.
 
     ```bash title="Install python-dotenv"
@@ -241,6 +247,39 @@ npm install elevenlabs
                 time.sleep(5)
         ```
       </Tab>
+      <Tab title="Forced alignment">
+        ```python Forced alignment
+        import os
+        from dotenv import load_dotenv
+        from io import BytesIO
+        import requests
+        from elevenlabs.client import ElevenLabs
+
+        load_dotenv()
+
+        client = ElevenLabs(
+            api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        transcript = """With a soft and whispery American accent.
+                        I'm an ideal choice to create an ASMR content,
+                        meditated guides or adding an intimate feel to
+                        your narrative projects."""
+
+        response = requests.get(audio_url)
+        audio_data = BytesIO(response.content)
+
+        aligned_transcript = client.forced_alignment.create(
+            file=audio_data,
+            text=transcript,
+        )
+
+        print(aligned_transcript)
+        ```
+      </Tab>
     </Tabs>
 
     Execute the code with the command below. Within a few seconds you should hear the audio play through your speaker.
@@ -250,7 +289,7 @@ npm install elevenlabs
     ```
 
   </Tab>
-  <Tab title="Javascript">
+  <Tab title="Javascript" language="javascript">
     With the ElevenLabs SDK installed, create a file called `example.mjs` and copy one of the following examples into it:
 
     <Tabs>
@@ -404,6 +443,32 @@ npm install elevenlabs
           }
           await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds between checks
         }
+        ```
+
+      </Tab>
+      <Tab title="Forced alignment">
+
+        ```javascript Forced alignment
+        import { ElevenLabsClient } from "elevenlabs";
+
+        const client = new ElevenLabsClient();
+
+        const response = await fetch(
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        );
+
+        const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
+        const transcript = `With a soft and whispery American accent.
+                            I'm an ideal choice to create an ASMR content,
+                            meditated guides or adding an intimate feel to
+                            your narrative projects.`;
+
+        const aligned_transcript = await client.forcedAlignment.create({
+            file: audioBlob,
+            text: transcript,
+        });
+
+        console.log(aligned_transcript);
         ```
 
       </Tab>

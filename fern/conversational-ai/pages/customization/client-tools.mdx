@@ -15,8 +15,8 @@ Here are a few examples where client tools can be useful:
 - **Interacting with the DOM**: Enable an assistant to manipulate the Document Object Model (DOM) for dynamic content updates or to guide users through complex interfaces.
 
 <Info>
-  To perform operations server-side, use [server-tools](/docs/conversational-ai/server-tools)
-  instead.
+  To perform operations server-side, use
+  [server-tools](/docs/conversational-ai/customization/tools/server-tools) instead.
 </Info>
 
 ## Guide
@@ -55,7 +55,7 @@ Then create a new parameter `message` with the following configuration:
 
     Use the following code to register the client tool:
 
-    <CodeBlock>
+    <CodeBlocks>
 
       ```python title="Python" focus={4-16}
       from elevenlabs import ElevenLabs
@@ -103,7 +103,7 @@ Then create a new parameter `message` with the following configuration:
           return message
       }
       ```
-    </CodeBlock>
+    </CodeBlocks>
 
     <Note>
     The tool and parameter names in the agent configuration are case-sensitive and **must** match those registered in your code.
@@ -143,7 +143,7 @@ When you want your agent to receive data back from a client tool, ensure that yo
 
 Once the client tool is added, when the function is called the agent will wait for its response and append the response to the conversation context.
 
-<CodeBlock>
+<CodeBlocks>
     ```python title="Python"
     def get_customer_details():
         # Fetch customer details (e.g., from an API or database)
@@ -186,7 +186,7 @@ Once the client tool is added, when the function is called the agent will wait f
     const conversation = await Conversation.startSession({ clientTools });
     ```
 
-</CodeBlock>
+</CodeBlocks>
 
 In this example, when the agent calls **getCustomerDetails**, the function will execute on the client and the agent will receive the returned data, which is then used as part of the conversation context.
 

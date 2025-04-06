@@ -1,0 +1,87 @@
+name: Update OpenAPI Schema
+
+on:
+  workflow_dispatch:
+    inputs:
+      commitType:
+        description: 'Commit new OpenAPI spec to main or create a PR'
+        required: true
+        default: 'PR'
+        type: choice
+        options:
+          - main
+          - PR
+      dryRun:
+        description: 'Test mode (no commits or PRs will be created)'
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    # Midnight UTC every weekday
+    - cron: '0 0 * * 1-5'
+
+jobs:
+  update-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Fetch OpenAPI Schema
+        run: |
+          curl -s https://api.elevenlabs.io/openapi.json > ./fern/apis/api/openapi.json
+
+      - name: Format OpenAPI Schema
+        run: |
+          pnpm install
+          pnpm run fmt:openapi
+
+      - name: Commit and Push Changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_TYPE: ${{ inputs.commitType }}
+          DRY_RUN: ${{ inputs.dryRun }}
+        run: |
+          # Set up git config regardless of dry run mode
+          git add ./fern/apis/api/openapi.json
+
+          # Check for changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          # In dry run mode, just show what would be committed
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN: Changes detected (showing first 20 lines):"
+            git diff --staged | head -n 20
+            echo "... (more changes not shown) ..."
+            exit 0
+          fi
+
+          if [ "${{ inputs.commitType }}" = "MAIN" ]; then
+            git commit -m "Update OpenAPI schema from api.elevenlabs.io"
+            git push
+          else
+            # Create a new branch with a timestamp
+            BRANCH_NAME="update-openapi-schema-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b $BRANCH_NAME
+
+            git commit -m "Update OpenAPI schema from api.elevenlabs.io"
+            git push origin $BRANCH_NAME
+
+            # Create PR using GitHub CLI
+            gh pr create \
+              --title "Update OpenAPI schema" \
+              --body "Automated PR to update OpenAPI schema from api.elevenlabs.io" \
+              --base main \
+              --head $BRANCH_NAME
+          fi

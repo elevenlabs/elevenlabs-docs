@@ -8,7 +8,7 @@ description: Learn about the models that power the ElevenLabs API.
 <Markdown src="/snippets/tts-models.mdx" />
 <Markdown src="/snippets/stt-models.mdx" />
 <div className="text-center">
-  <div>[Pricing](https://elevenlabs.io/pricing)</div>
+  <div>[Pricing](https://elevenlabs.io/pricing/api)</div>
 </div>
 
 ## Models overview
@@ -23,6 +23,8 @@ The ElevenLabs API offers a range of audio models optimized for different use ca
 | `eleven_multilingual_sts_v2` | State-of-the-art multilingual voice changer model (Speech to Speech) | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru` |
 | `eleven_english_sts_v2`      | English-only voice changer model (Speech to Speech)                  | `en`                                                                                                                                                                          |
 | `scribe_v1`                  | State-of-the-art speech recognition model                            | [99 languages](/docs/capabilities/speech-to-text#supported-languages)                                                                                                         |
+
+<small>† Excluding application & network latency</small>
 
 <Accordion title="Older Models">
 
@@ -74,6 +76,21 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
 
 <Markdown src="/snippets/v2-5-model-languages.mdx" />
 
+### Considerations
+
+<AccordionGroup>
+  <Accordion title="Text normalization with numbers">
+    When using Flash v2.5, numbers aren't normalized in a way you might expect. For example, phone numbers might be read out in way that isn't clear for the user. Dates and currencies are affected in a similar manner.
+
+    This is expected as normalization is disabled for Flash v2.5 to maintain the low latency.
+
+    The Multilingual v2 model does a better job of normalizing numbers, so we recommend using it for phone numbers and other cases where number normalization is important.
+
+    For low-latency or Conversational AI applications, best practice is to have your LLM [normalize the text](/docs/best-practices/prompting/normalization) before passing it to the TTS model.
+
+  </Accordion>
+</AccordionGroup>
+
 ## Model selection guide
 
 <AccordionGroup>
@@ -81,7 +98,7 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
     <CardGroup cols={1}>
       <Card title="Quality">
         Use `eleven_multilingual_v2`
-        
+
         Best for high-fidelity audio output with rich emotional expression
       </Card>
       <Card title="Low-latency">
@@ -102,7 +119,7 @@ With its lower price point and 75ms latency, Flash v2.5 is the cost-effective op
     <CardGroup cols={1}>
       <Card title="Content creation">
         Use `eleven_multilingual_v2`
-      
+
         Ideal for professional content, audiobooks & video narration.
       </Card>
 
@@ -160,25 +177,26 @@ Read more about Scribe v1 [here](/docs/capabilities/speech-to-text).
 ## Concurrency and priority
 
 Your subscription plan determines how many requests can be processed simultaneously and the priority level of your requests in the queue.
+Speech to Text has an elevated concurrency limit.
+Once the concurrency limit is met, subsequent requests are processed in a queue alongside lower-priority requests.
+In practice this typically only adds ~50ms of latency.
 
-| Plan       | Concurrency limit | Priority level |
-| ---------- | ----------------- | -------------- |
-| Free       | 2                 | 3              |
-| Starter    | 3                 | 4              |
-| Creator    | 5                 | 5              |
-| Pro        | 10                | 5              |
-| Scale      | 15                | 5              |
-| Business   | 15                | 5              |
-| Enterprise | Custom            | Highest        |
+| Plan       | Concurrency Limit | STT Concurrency Limit | Priority level |
+| ---------- | ----------------- | --------------------- | -------------- |
+| Free       | 4                 | 8                     | 3              |
+| Starter    | 6                 | 12                    | 4              |
+| Creator    | 10                | 20                    | 5              |
+| Pro        | 20                | 40                    | 5              |
+| Scale      | 30                | 60                    | 5              |
+| Business   | 30                | 60                    | 5              |
+| Enterprise | Elevated          | Elevated              | Highest        |
 
 <Note>
   To increase your concurrency limit & queue priority, [upgrade your subscription
-  plan](https://elevenlabs.io/pricing).
+  plan](https://elevenlabs.io/pricing/api).
 
 Enterprise customers can request a higher concurrency limit by contacting their account manager.
 
 </Note>
 
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
-
-<small>† Excluding application & network latency</small>

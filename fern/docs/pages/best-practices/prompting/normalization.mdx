@@ -1,0 +1,222 @@
+---
+title: Normalization
+subtitle: Learn how to normalize text for Text to Speech.
+---
+
+When using Text to Speech with complex items like phone numbers, zip codes and emails they might be mispronounced. This is often due to the specific items not being in the training set and smaller models failing to generalize how they should be pronounced. This guide will clarify when those discrepancies happen and how to have them pronounced correctly.
+
+## Why do models read out inputs differently?
+
+Certain models are trained to read out numbers and phrases in a more human way. For instance, the phrase "$1,000,000" is correctly read out as "one million dollars" by the Eleven Multilingual v2 model. However, the same phrase is read out as "one thousand thousand dollars" by the Eleven Flash v2.5 model.
+
+The reason for this is that the Multilingual v2 model is a larger model and can better generalize the reading out of numbers in a way that is more natural for human listeners, whereas the Flash v2.5 model is a much smaller model and so cannot.
+
+### Common examples
+
+Text to Speech models can struggle with the following:
+
+- Phone numbers ("123-456-7890")
+- Currencies ("$47,345.67")
+- Calendar events ("2024-01-01")
+- Time ("9:23 AM")
+- Addresses ("123 Main St, Anytown, USA")
+- URLs ("example.com/link/to/resource")
+- Abbreviations for units ("TB" instead of "Terabyte")
+- Shortcuts ("Ctrl + Z")
+
+## Mitigation
+
+### Use trained models
+
+The simplest way to mitigate this is to use a TTS model that is trained to read out numbers and phrases in a more human way, such as the Eleven Multilingual v2 model. This however might not always be possible, for instance if you have a use case where low latency is critical (e.g. Conversational AI).
+
+### Apply normalization in LLM prompts
+
+In the case of using an LLM to generate the text for TTS, you can add normalization instructions to the prompt.
+
+<Steps>
+    <Step title="Use clear and explicit prompts">
+        LLMs respond best to structured and explicit instructions. Your prompt should clearly specify that you want text converted into a readable format for speech.
+    </Step>
+    <Step title="Handle different number formats">
+        Not all numbers are read out in the same way. Consider how different number types should be spoken:
+
+        - Cardinal numbers: 123 → "one hundred twenty-three"
+        - Ordinal numbers: 2nd → "second"
+        - Monetary values: $45.67 → "forty-five dollars and sixty-seven cents"
+        - Phone numbers: "123-456-7890" → "one two three, four five six, seven eight nine zero"
+        - Decimals & Fractions: "3.5" → "three point five", "⅔" → "two-thirds"
+        - Roman numerals: "XIV" → "fourteen" (or "the fourteenth" if a title)
+    </Step>
+    <Step title="Remove or expand abbreviations">
+        Common abbreviations should be expanded for clarity:
+
+        - "Dr." → "Doctor"
+        - "Ave." → "Avenue"
+        - "St." → "Street" (but "St. Patrick" should remain)
+
+        You can request explicit expansion in your prompt:
+
+        > Expand all abbreviations to their full spoken forms.
+
+    </Step>
+    <Step title="Alphanumeric normalization">
+        Not all normalization is about numbers, certain alphanumeric phrases should also be normalized for clarity:
+
+        - Shortcuts: "Ctrl + Z" → "control z"
+        - Abbreviations for units: "100km" → "one hundred kilometers"
+        - Symbols: "100%" → "one hundred percent"
+        - URLs: "elevenlabs.io/docs" → "eleven labs dot io slash docs"
+        - Calendar events: "2024-01-01" → "January first, two-thousand twenty-four"
+    </Step>
+    <Step title="Consider edge cases">
+        Different contexts might require different conversions:
+
+        - Dates: "01/02/2023" → "January second, twenty twenty-three" or "the first of February, twenty twenty-three" (depending on locale)
+        - Time: "14:30" → "two thirty PM"
+
+        If you need a specific format, explicitly state it in the prompt.
+    </Step>
+
+</Steps>
+
+#### Putting it all together
+
+This prompt will act as a good starting point for most use cases:
+
+```text maxLines=0
+Convert the output text into a format suitable for text-to-speech. Ensure that numbers, symbols, and abbreviations are expanded for clarity when read aloud. Expand all abbreviations to their full spoken forms.
+
+Example input and output:
+
+"$42.50" → "forty-two dollars and fifty cents"
+"£1,001.32" → "one thousand and one pounds and thirty-two pence"
+"1234" → "one thousand two hundred thirty-four"
+"3.14" → "three point one four"
+"555-555-5555" → "five five five, five five five, five five five five"
+"2nd" → "second"
+"XIV" → "fourteen" - unless it's a title, then it's "the fourteenth"
+"3.5" → "three point five"
+"⅔" → "two-thirds"
+"Dr." → "Doctor"
+"Ave." → "Avenue"
+"St." → "Street" (but saints like "St. Patrick" should remain)
+"Ctrl + Z" → "control z"
+"100km" → "one hundred kilometers"
+"100%" → "one hundred percent"
+"elevenlabs.io/docs" → "eleven labs dot io slash docs"
+"2024-01-01" → "January first, two-thousand twenty-four"
+"123 Main St, Anytown, USA" → "one two three Main Street, Anytown, United States of America"
+"14:30" → "two thirty PM"
+"01/02/2023" → "January second, two-thousand twenty-three" or "the first of February, two-thousand twenty-three", depending on locale of the user
+```
+
+### Use Regular Expressions for preprocessing
+
+If using code to prompt an LLM, you can use regular expressions to normalize the text before providing it to the model. This is a more advanced technique and requires some knowledge of regular expressions. Here are some simple examples:
+
+<CodeBlocks>
+
+```python title="normalize_text.py" maxLines=0
+# Be sure to install the inflect library before running this code
+import inflect
+import re
+
+# Initialize inflect engine for number-to-word conversion
+p = inflect.engine()
+
+def normalize_text(text: str) -> str:
+    # Convert monetary values
+    def money_replacer(match):
+        currency_map = {"$": "dollars", "£": "pounds", "€": "euros", "¥": "yen"}
+        currency_symbol, num = match.groups()
+
+        # Remove commas before parsing
+        num_without_commas = num.replace(',', '')
+
+        # Check for decimal points to handle cents
+        if '.' in num_without_commas:
+            dollars, cents = num_without_commas.split('.')
+            dollars_in_words = p.number_to_words(int(dollars))
+            cents_in_words = p.number_to_words(int(cents))
+            return f"{dollars_in_words} {currency_map.get(currency_symbol, 'currency')} and {cents_in_words} cents"
+        else:
+            # Handle whole numbers
+            num_in_words = p.number_to_words(int(num_without_commas))
+            return f"{num_in_words} {currency_map.get(currency_symbol, 'currency')}"
+
+    # Regex to handle commas and decimals
+    text = re.sub(r"([$£€¥])(\d+(?:,\d{3})*(?:\.\d{2})?)", money_replacer, text)
+
+    # Convert phone numbers
+    def phone_replacer(match):
+        return ", ".join(" ".join(p.number_to_words(int(digit)) for digit in group) for group in match.groups())
+
+    text = re.sub(r"(\d{3})-(\d{3})-(\d{4})", phone_replacer, text)
+
+    return text
+
+# Example usage
+print(normalize_text("$1,000"))   # "one thousand dollars"
+print(normalize_text("£1000"))   # "one thousand pounds"
+print(normalize_text("€1000"))   # "one thousand euros"
+print(normalize_text("¥1000"))   # "one thousand yen"
+print(normalize_text("$1,234.56"))   # "one thousand two hundred thirty-four dollars and fifty-six cents"
+print(normalize_text("555-555-5555"))  # "five five five, five five five, five five five five"
+
+```
+
+```typescript title="normalizeText.ts" maxLines=0
+// Be sure to install the number-to-words library before running this code
+import { toWords } from 'number-to-words';
+
+function normalizeText(text: string): string {
+  return (
+    text
+      // Convert monetary values (e.g., "$1000" → "one thousand dollars", "£1000" → "one thousand pounds")
+      .replace(/([$£€¥])(\d+(?:,\d{3})*(?:\.\d{2})?)/g, (_, currency, num) => {
+        // Remove commas before parsing
+        const numWithoutCommas = num.replace(/,/g, '');
+
+        const currencyMap: { [key: string]: string } = {
+          $: 'dollars',
+          '£': 'pounds',
+          '€': 'euros',
+          '¥': 'yen',
+        };
+
+        // Check for decimal points to handle cents
+        if (numWithoutCommas.includes('.')) {
+          const [dollars, cents] = numWithoutCommas.split('.');
+          return `${toWords(Number.parseInt(dollars))} ${currencyMap[currency] || 'currency'}${cents ? ` and ${toWords(Number.parseInt(cents))} cents` : ''}`;
+        }
+
+        // Handle whole numbers
+        return `${toWords(Number.parseInt(numWithoutCommas))} ${currencyMap[currency] || 'currency'}`;
+      })
+
+      // Convert phone numbers (e.g., "555-555-5555" → "five five five, five five five, five five five five")
+      .replace(/(\d{3})-(\d{3})-(\d{4})/g, (_, p1, p2, p3) => {
+        return `${spellOutDigits(p1)}, ${spellOutDigits(p2)}, ${spellOutDigits(p3)}`;
+      })
+  );
+}
+
+// Helper function to spell out individual digits as words (for phone numbers)
+function spellOutDigits(num: string): string {
+  return num
+    .split('')
+    .map((digit) => toWords(Number.parseInt(digit)))
+    .join(' ');
+}
+
+// Example usage
+console.log(normalizeText('$1,000')); // "one thousand dollars"
+console.log(normalizeText('£1000')); // "one thousand pounds"
+console.log(normalizeText('€1000')); // "one thousand euros"
+console.log(normalizeText('¥1000')); // "one thousand yen"
+console.log(normalizeText('$1,234.56')); // "one thousand two hundred thirty-four dollars and fifty-six cents"
+console.log(normalizeText('555-555-5555')); // "five five five, five five five, five five five five"
+```
+
+</CodeBlocks>
