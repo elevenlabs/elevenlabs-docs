@@ -462,6 +462,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -893,6 +894,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1035,6 +1037,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1176,6 +1179,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1319,6 +1323,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1461,6 +1466,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1603,6 +1609,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1784,6 +1791,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -9609,18 +9617,6 @@
         "description": "Create an agent from a config object",
         "parameters": [
           {
-            "name": "use_tool_ids",
-            "in": "query",
-            "description": "Use tool ids instead of tools specs from request payload.",
-            "required": false,
-            "schema": {
-              "description": "Use tool ids instead of tools specs from request payload.",
-              "type": "boolean",
-              "default": false,
-              "title": "Use Tool Ids"
-            }
-          },
-          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -9764,18 +9760,6 @@
                 "21m00Tcm4TlvDq8ikWAM"
               ],
               "title": "Agent Id"
-            }
-          },
-          {
-            "name": "use_tool_ids",
-            "in": "query",
-            "description": "Use tool ids instead of tools specs from request payload.",
-            "required": false,
-            "schema": {
-              "description": "Use tool ids instead of tools specs from request payload.",
-              "type": "boolean",
-              "default": false,
-              "title": "Use Tool Ids"
             }
           },
           {
@@ -12355,6 +12339,70 @@
         "x-fern-sdk-method-name": "delete_secret"
       }
     },
+    "/v1/convai/batch-calling/submit": {
+      "post": {
+        "operationId": "Submit_a_batch_call_request__v1_convai_batch_calling_submit_post",
+        "summary": "Submit A Batch Call Request.",
+        "description": "Submit a batch call request to schedule calls for multiple recipients.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchCallResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "create_batch_call"
+      }
+    },
     "/docs": {
       "get": {
         "operationId": "redirect_to_mintlify_docs_get",
@@ -13458,6 +13506,75 @@
         ],
         "title": "BanReasonType"
       },
+      "BatchCallResponse": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallStatusResponseModel"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          }
+        },
+        "required": [
+          "batch_id",
+          "phone_number_id",
+          "agent_id",
+          "status",
+          "created_at_unix"
+        ],
+        "title": "BatchCallResponse"
+      },
+      "BatchCallStatisticsResponseModel": {
+        "type": "object",
+        "properties": {
+          "reported_at_unix": {
+            "type": "integer",
+            "title": "Reported At Unix"
+          }
+        },
+        "required": [
+          "reported_at_unix"
+        ],
+        "title": "BatchCallStatisticsResponseModel"
+      },
+      "BatchCallStatusResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "succeeded",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Status"
+          },
+          "statistics": {
+            "$ref": "#/components/schemas/BatchCallStatisticsResponseModel"
+          }
+        },
+        "required": [
+          "status",
+          "statistics"
+        ],
+        "title": "BatchCallStatusResponseModel"
+      },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
         "properties": {
@@ -14228,6 +14345,26 @@
             "type": "string",
             "format": "binary",
             "title": "Audio"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -14243,6 +14380,26 @@
             "type": "string",
             "format": "binary",
             "title": "Audio"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -16508,6 +16665,20 @@
                 }
               ]
             ]
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "type": "string",
+            "default": "other",
+            "enum": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -16563,6 +16734,38 @@
           }
         },
         "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
+      },
+      "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
+        "type": "object",
+        "properties": {
+          "call_name": {
+            "type": "string",
+            "title": "Call Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "agent_phone_number_id": {
+            "type": "string",
+            "title": "Agent Phone Number Id"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutboundCallRecipient"
+            },
+            "maxItems": 10000,
+            "title": "Recipients"
+          }
+        },
+        "required": [
+          "call_name",
+          "agent_id",
+          "agent_phone_number_id",
+          "recipients"
+        ],
+        "title": "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
       },
       "Body_Text_to_speech_streaming_v1_text_to_speech__voice_id__stream_post": {
         "type": "object",
@@ -18281,6 +18484,11 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -18349,6 +18557,11 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -18546,6 +18759,17 @@
             "type": "boolean",
             "default": false,
             "title": "Dev Discount"
+          },
+          "tier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier"
           }
         },
         "title": "ConversationChargingCommonModel"
@@ -18905,6 +19129,27 @@
                 "type": "null"
               }
             ]
+          },
+          "main_language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Main Language"
+          },
+          "rag_usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationHistoryRagUsageCommonModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -18912,6 +19157,24 @@
           "call_duration_secs"
         ],
         "title": "ConversationHistoryMetadataCommonModel"
+      },
+      "ConversationHistoryRagUsageCommonModel": {
+        "type": "object",
+        "properties": {
+          "usage_count": {
+            "type": "integer",
+            "title": "Usage Count"
+          },
+          "embedding_model": {
+            "type": "string",
+            "title": "Embedding Model"
+          }
+        },
+        "required": [
+          "usage_count",
+          "embedding_model"
+        ],
+        "title": "ConversationHistoryRagUsageCommonModel"
       },
       "ConversationHistoryTranscriptCommonModel": {
         "type": "object",
@@ -23543,6 +23806,29 @@
         },
         "title": "OrbAvatar"
       },
+      "OutboundCallRecipient": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "title": "OutboundCallRecipient"
+      },
       "PatchConvAISettingsRequest": {
         "type": "object",
         "properties": {
@@ -27328,6 +27614,11 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -29552,6 +29843,11 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -29593,6 +29889,11 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
