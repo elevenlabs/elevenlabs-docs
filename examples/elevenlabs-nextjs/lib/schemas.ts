@@ -7,6 +7,7 @@ export const TTS_MODELS = {
 
 export const STT_MODELS = {
   SCRIBE_V1: 'scribe_v1',
+  SCRIBE_V1_EXPERIMENTAL: 'scribe_v1_experimental',
 } as const;
 
 export const soundEffectSchema = z.object({

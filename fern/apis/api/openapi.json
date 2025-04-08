@@ -8239,7 +8239,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddPronunciationDictionaryRulesResponseModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryRulesResponseModel"
                 }
               }
             }
@@ -8317,7 +8317,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RemovePronunciationDictionaryRulesResponseModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryRulesResponseModel"
                 }
               }
             }
@@ -12513,6 +12513,23 @@
               }
             ],
             "title": "Description"
+          },
+          "permission_on_resource": {
+            "description": "The permission on the resource of the pronunciation dictionary.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission On Resource"
           }
         },
         "example": {
@@ -12529,39 +12546,10 @@
           "created_by",
           "creation_time_unix",
           "version_id",
-          "version_rules_num"
+          "version_rules_num",
+          "permission_on_resource"
         ],
         "title": "AddPronunciationDictionaryResponseModel"
-      },
-      "AddPronunciationDictionaryRulesResponseModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Id"
-          },
-          "version_id": {
-            "description": "The version ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Version Id"
-          },
-          "version_rules_num": {
-            "description": "The number of rules in the version of the pronunciation dictionary.",
-            "type": "integer",
-            "title": "Version Rules Num"
-          }
-        },
-        "example": {
-          "id": "5xM3yVvZQKV0EfqQpLrJ",
-          "version_id": "5xM3yVvZQKV0EfqQpLr2"
-        },
-        "required": [
-          "id",
-          "version_id",
-          "version_rules_num"
-        ],
-        "title": "AddPronunciationDictionaryRulesResponseModel"
       },
       "AddVoiceIVCResponseModel": {
         "type": "object",
@@ -13441,75 +13429,6 @@
           "manual"
         ],
         "title": "BanReasonType"
-      },
-      "BatchCallResponse": {
-        "type": "object",
-        "properties": {
-          "batch_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Batch Id"
-          },
-          "phone_number_id": {
-            "type": "string",
-            "title": "Phone Number Id"
-          },
-          "agent_id": {
-            "type": "string",
-            "title": "Agent Id"
-          },
-          "status": {
-            "$ref": "#/components/schemas/BatchCallStatusResponseModel"
-          },
-          "created_at_unix": {
-            "type": "integer",
-            "title": "Created At Unix"
-          }
-        },
-        "required": [
-          "batch_id",
-          "phone_number_id",
-          "agent_id",
-          "status",
-          "created_at_unix"
-        ],
-        "title": "BatchCallResponse"
-      },
-      "BatchCallStatisticsResponseModel": {
-        "type": "object",
-        "properties": {
-          "reported_at_unix": {
-            "type": "integer",
-            "title": "Reported At Unix"
-          }
-        },
-        "required": [
-          "reported_at_unix"
-        ],
-        "title": "BatchCallStatisticsResponseModel"
-      },
-      "BatchCallStatusResponseModel": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "pending",
-              "succeeded",
-              "failed",
-              "cancelled"
-            ],
-            "title": "Status"
-          },
-          "statistics": {
-            "$ref": "#/components/schemas/BatchCallStatisticsResponseModel"
-          }
-        },
-        "required": [
-          "status",
-          "statistics"
-        ],
-        "title": "BatchCallStatusResponseModel"
       },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
@@ -15012,13 +14931,13 @@
         "type": "object",
         "properties": {
           "file": {
-            "description": "The file to align. All major audio and video formats are supported. The file size must be less than 1GB.",
+            "description": "The file to align. All major audio formats are supported. The file size must be less than 1GB.",
             "type": "string",
             "format": "binary",
             "title": "File"
           },
           "text": {
-            "description": "The text to align with the audio or video. The input text can be in any format, however diarization is not supported at this time.",
+            "description": "The text to align with the audio. The input text can be in any format, however diarization is not supported at this time.",
             "type": "string",
             "title": "Text"
           }
@@ -16526,7 +16445,7 @@
         "type": "object",
         "properties": {
           "model_id": {
-            "description": "The ID of the model to use for transcription, currently only 'scribe_v1' is available.",
+            "description": "The ID of the model to use for transcription, currently only 'scribe_v1' and 'scribe_v1_experimental' are available.",
             "type": "string",
             "title": "Model Id"
           },
@@ -16670,38 +16589,6 @@
           }
         },
         "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
-      },
-      "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
-        "type": "object",
-        "properties": {
-          "call_name": {
-            "type": "string",
-            "title": "Call Name"
-          },
-          "agent_id": {
-            "type": "string",
-            "title": "Agent Id"
-          },
-          "agent_phone_number_id": {
-            "type": "string",
-            "title": "Agent Phone Number Id"
-          },
-          "recipients": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OutboundCallRecipient"
-            },
-            "maxItems": 10000,
-            "title": "Recipients"
-          }
-        },
-        "required": [
-          "call_name",
-          "agent_id",
-          "agent_phone_number_id",
-          "recipients"
-        ],
-        "title": "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
       },
       "Body_Text_to_speech_streaming_v1_text_to_speech__voice_id__stream_post": {
         "type": "object",
@@ -22218,6 +22105,23 @@
             "type": "string",
             "title": "Name"
           },
+          "permission_on_resource": {
+            "description": "The permission on the resource of the pronunciation dictionary.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission On Resource"
+          },
           "created_by": {
             "description": "The user ID of the creator of the pronunciation dictionary.",
             "type": "string",
@@ -22267,6 +22171,7 @@
           "latest_version_id",
           "latest_version_rules_num",
           "name",
+          "permission_on_resource",
           "created_by",
           "creation_time_unix",
           "archived_time_unix"
@@ -23741,29 +23646,6 @@
           "type": "orb"
         },
         "title": "OrbAvatar"
-      },
-      "OutboundCallRecipient": {
-        "type": "object",
-        "properties": {
-          "phone_number": {
-            "type": "string",
-            "title": "Phone Number"
-          },
-          "conversation_initiation_client_data": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "phone_number"
-        ],
-        "title": "OutboundCallRecipient"
       },
       "PatchConvAISettingsRequest": {
         "type": "object",
@@ -25493,6 +25375,36 @@
         ],
         "title": "PronunciationDictionaryPhonemeRuleRequestModel"
       },
+      "PronunciationDictionaryRulesResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The ID of the pronunciation dictionary.",
+            "type": "string",
+            "title": "Id"
+          },
+          "version_id": {
+            "description": "The version ID of the pronunciation dictionary.",
+            "type": "string",
+            "title": "Version Id"
+          },
+          "version_rules_num": {
+            "description": "The number of rules in the version of the pronunciation dictionary.",
+            "type": "integer",
+            "title": "Version Rules Num"
+          }
+        },
+        "example": {
+          "id": "5xM3yVvZQKV0EfqQpLrJ",
+          "version_id": "5xM3yVvZQKV0EfqQpLr2"
+        },
+        "required": [
+          "id",
+          "version_id",
+          "version_rules_num"
+        ],
+        "title": "PronunciationDictionaryRulesResponseModel"
+      },
       "PronunciationDictionaryVersionLocatorDBModel": {
         "type": "object",
         "properties": {
@@ -25541,6 +25453,22 @@
             "type": "string",
             "title": "Version Name"
           },
+          "permission_on_resource": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission On Resource"
+          },
           "created_by": {
             "type": "string",
             "title": "Created By"
@@ -25567,6 +25495,7 @@
           "pronunciation_dictionary_id",
           "dictionary_name",
           "version_name",
+          "permission_on_resource",
           "created_by",
           "creation_time_unix"
         ],
@@ -25825,36 +25754,6 @@
           "transcription"
         ],
         "title": "RecordingResponseModel"
-      },
-      "RemovePronunciationDictionaryRulesResponseModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Id"
-          },
-          "version_id": {
-            "description": "The version ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Version Id"
-          },
-          "version_rules_num": {
-            "description": "The number of rules in the version of the pronunciation dictionary.",
-            "type": "integer",
-            "title": "Version Rules Num"
-          }
-        },
-        "example": {
-          "id": "5xM3yVvZQKV0EfqQpLrJ",
-          "version_id": "5xM3yVvZQKV0EfqQpLr2"
-        },
-        "required": [
-          "id",
-          "version_id",
-          "version_rules_num"
-        ],
-        "title": "RemovePronunciationDictionaryRulesResponseModel"
       },
       "ResourceAccessInfo": {
         "type": "object",
