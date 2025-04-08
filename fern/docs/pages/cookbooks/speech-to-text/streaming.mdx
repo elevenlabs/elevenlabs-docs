@@ -80,7 +80,7 @@ audio_data = BytesIO(response.content)
 
 # Perform the text-to-speech conversion
 transcription = client.speech_to_text.convert_as_stream(
-    model_id="scribe_v1", # 'scribe_v1_experimental' is also available for new, experimental features
+    model_id="scribe_v1",
     file=audio_data
 )
 
@@ -107,7 +107,7 @@ const audioBlob = new Blob([await response.arrayBuffer()], { type: 'audio/mp3' }
 
 const transcription = await client.speechToText.convertAsStream({
   file: audioBlob,
-  model_id: 'scribe_v1', // 'scribe_v1_experimental' is also available for new, experimental features
+  model_id: 'scribe_v1',
   maximum_speakers: 1, // Number of speakers in the audio file
   tag_audio_events: true, // Tag audio events like laughter, applause, etc.
   speech_to_text_language_code: 'en', // Language of the audio file
