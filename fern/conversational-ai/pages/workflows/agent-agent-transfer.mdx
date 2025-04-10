@@ -1,13 +1,30 @@
 ---
-title: Agent-to-agent transfers
+title: Agent-agent transfer
 subtitle: Seamlessly transfer conversations between AI agents based on defined conditions.
 ---
 
 ## Overview
 
-Agent-to-agent transfer allows a Conversational AI agent to hand off the ongoing conversation to another designated agent when specific conditions are met. This enables the creation of sophisticated, multi-layered conversational workflows where different agents handle specific tasks or levels of complexity.
+Agent-agent transfer allows a Conversational AI agent to hand off the ongoing conversation to another designated agent when specific conditions are met. This enables the creation of sophisticated, multi-layered conversational workflows where different agents handle specific tasks or levels of complexity.
 
-For example, an initial customer service agent could handle general inquiries and then transfer the call to a specialized agent for billing issues or technical support based on the conversation's context.
+For example, an initial agent (Orchestrator) could handle general inquiries and then transfer the call to a specialized agent based on the conversation's context. Transfers can also be nested:
+
+<Frame background="subtle" caption="Example Agent Transfer Hierarchy">
+
+```text
+Orchestrator Agent (Initial Qualification)
+│
+├───> Agent 1 (e.g., Availability Inquiries)
+│
+├───> Agent 2 (e.g., Technical Support)
+│     │
+│     └───> Agent 2a (e.g., Advanced Technical Support)
+│
+└───> Agent 3 (e.g., Billing Issues)
+
+```
+
+</Frame>
 
 ## Enabling agent transfer
 
