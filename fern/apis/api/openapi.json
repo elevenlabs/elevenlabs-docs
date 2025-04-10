@@ -6813,6 +6813,94 @@
         "x-fern-sdk-method-name": "dub_segments"
       }
     },
+    "/v1/dubbing/resource/{dubbing_id}/render/{language}": {
+      "post": {
+        "operationId": "Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post",
+        "summary": "Render Audio Or Video For The Given Language",
+        "description": "Regenerate the dubs for either the entire resource or the specified segments/languages. Will automatically transcribe and translate any missing transcriptions and translations.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "description": "Render this language",
+            "required": true,
+            "schema": {
+              "description": "Render this language",
+              "type": "string",
+              "title": "Language"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DubbingRenderResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing",
+          "resource",
+          "segment"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "render_dub"
+      }
+    },
     "/v1/dubbing": {
       "post": {
         "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
@@ -13261,6 +13349,16 @@
               }
             ],
             "title": "Audio Url"
+          },
+          "status": {
+            "description": "Current state of the project",
+            "type": "string",
+            "default": "ready",
+            "enum": [
+              "processing",
+              "ready"
+            ],
+            "title": "Status"
           }
         },
         "example": {
@@ -13271,6 +13369,7 @@
           "image": "https://example.com/image.jpg",
           "sessionization": 1,
           "small": false,
+          "status": "ready",
           "text_color": "#000000",
           "title": "My Project"
         },
@@ -14203,6 +14302,7 @@
           },
           "file_format": {
             "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
             "anyOf": [
               {
                 "type": "string",
@@ -14238,6 +14338,7 @@
           },
           "file_format": {
             "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
             "anyOf": [
               {
                 "type": "string",
@@ -16209,6 +16310,19 @@
         ],
         "title": "Body_Remove_rules_from_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__remove_rules_post"
       },
+      "Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post": {
+        "type": "object",
+        "properties": {
+          "render_type": {
+            "description": "The type of the render. One of ['mp4', 'aac', 'mp3', 'wav', 'aaf', 'tracks_zip', 'clips_zip']",
+            "$ref": "#/components/schemas/RenderType"
+          }
+        },
+        "required": [
+          "render_type"
+        ],
+        "title": "Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post"
+      },
       "Body_Send_Conversation_Feedback_v1_convai_conversations__conversation_id__feedback_post": {
         "type": "object",
         "properties": {
@@ -16377,6 +16491,27 @@
               true
             ],
             "title": "Remove Background Noise"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -16434,6 +16569,27 @@
               true
             ],
             "title": "Remove Background Noise"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -16450,9 +16606,16 @@
             "title": "Model Id"
           },
           "file": {
-            "description": "The file to transcribe. All major audio and video formats are supported. The file size must be less than 1GB.",
-            "type": "string",
-            "format": "binary",
+            "description": "The file to transcribe. All major audio and video formats are supported. Exactly one of the file or cloud_storage_url parameters must be provided. The file size must be less than 1GB.",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "File"
           },
           "language_code": {
@@ -16534,11 +16697,26 @@
               "other"
             ],
             "title": "File Format"
+          },
+          "cloud_storage_url": {
+            "description": "The valid AWS S3 or Google Cloud Storage URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be a valid publicly accessible cloud storage URL. The file size must be less than 2GB. URL can be pre-signed.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "https://storage.googleapis.com/bucket-name/object-name",
+              "https://s3.amazonaws.com/bucket-name/object-name"
+            ],
+            "title": "Cloud Storage Url"
           }
         },
         "required": [
-          "model_id",
-          "file"
+          "model_id"
         ],
         "title": "Body_Speech_to_Text_v1_speech_to_text_post"
       },
@@ -20402,6 +20580,24 @@
         ],
         "title": "DubbingMetadataResponse"
       },
+      "DubbingRenderResponseModel": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "render_id": {
+            "type": "string",
+            "title": "Render Id"
+          }
+        },
+        "required": [
+          "version",
+          "render_id"
+        ],
+        "title": "DubbingRenderResponseModel"
+      },
       "DubbingResource": {
         "type": "object",
         "properties": {
@@ -20424,6 +20620,9 @@
             },
             "title": "Target Languages"
           },
+          "input": {
+            "$ref": "#/components/schemas/DubbingMediaReference"
+          },
           "background": {
             "$ref": "#/components/schemas/DubbingMediaReference"
           },
@@ -20443,6 +20642,13 @@
               "$ref": "#/components/schemas/SpeakerSegment"
             },
             "title": "Speaker Segments"
+          },
+          "renders": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Render"
+            },
+            "title": "Renders"
           }
         },
         "required": [
@@ -20450,10 +20656,12 @@
           "version",
           "source_language",
           "target_languages",
+          "input",
           "background",
           "foreground",
           "speaker_tracks",
-          "speaker_segments"
+          "speaker_segments",
+          "renders"
         ],
         "title": "DubbingResource"
       },
@@ -20563,6 +20771,18 @@
           "multilingual_e5_large_instruct"
         ],
         "title": "EmbeddingModelEnum"
+      },
+      "EndCallToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "end_call",
+            "const": "end_call",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "EndCallToolConfig"
       },
       "EvaluationSettings": {
         "description": "Settings to evaluate an agent's performance.\nAgents are evaluated against a set of criteria, with success being defined as meeting some combination of those criteria.",
@@ -21342,6 +21562,7 @@
             "image": "https://example.com/image.jpg",
             "sessionization": 1,
             "small": false,
+            "status": "ready",
             "text_color": "#000000",
             "title": "My Project"
           },
@@ -22736,6 +22957,18 @@
           "version"
         ],
         "title": "LanguageAddedResponse"
+      },
+      "LanguageDetectionToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "language_detection",
+            "const": "language_detection",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "LanguageDetectionToolConfig"
       },
       "LanguagePreset-Input": {
         "type": "object",
@@ -25053,7 +25286,7 @@
                   "$ref": "#/components/schemas/ClientToolConfig-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/SystemToolConfig"
+                  "$ref": "#/components/schemas/SystemToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -25061,7 +25294,7 @@
                 "propertyName": "type",
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
-                  "system": "#/components/schemas/SystemToolConfig",
+                  "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
               }
@@ -25162,7 +25395,7 @@
                   "$ref": "#/components/schemas/ClientToolConfig-Output"
                 },
                 {
-                  "$ref": "#/components/schemas/SystemToolConfig"
+                  "$ref": "#/components/schemas/SystemToolConfig-Output"
                 }
               ],
               "description": "The type of tool",
@@ -25170,7 +25403,7 @@
                 "propertyName": "type",
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Output",
-                  "system": "#/components/schemas/SystemToolConfig",
+                  "system": "#/components/schemas/SystemToolConfig-Output",
                   "webhook": "#/components/schemas/WebhookToolConfig-Output"
                 }
               }
@@ -25755,6 +25988,57 @@
         ],
         "title": "RecordingResponseModel"
       },
+      "Render": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RenderType"
+          },
+          "media_ref": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DubbingMediaReference"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "language",
+          "type",
+          "media_ref"
+        ],
+        "title": "Render"
+      },
+      "RenderType": {
+        "type": "string",
+        "enum": [
+          "mp4",
+          "aac",
+          "mp3",
+          "wav",
+          "aaf",
+          "tracks_zip",
+          "clips_zip"
+        ],
+        "title": "RenderType"
+      },
       "ResourceAccessInfo": {
         "type": "object",
         "properties": {
@@ -25958,6 +26242,11 @@
             "type": "boolean",
             "default": false,
             "title": "Is Blocked Non Ivc"
+          },
+          "ignore_safety_evaluation": {
+            "type": "boolean",
+            "default": false,
+            "title": "Ignore Safety Evaluation"
           }
         },
         "title": "SafetyResponseModel"
@@ -27445,7 +27734,7 @@
         ],
         "title": "SubscriptionUsageResponseModel"
       },
-      "SystemToolConfig": {
+      "SystemToolConfig-Input": {
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
@@ -27471,6 +27760,28 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "params": {
+            "discriminator": {
+              "propertyName": "system_tool_type",
+              "mapping": {
+                "end_call": "#/components/schemas/EndCallToolConfig",
+                "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EndCallToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/LanguageDetectionToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            ],
+            "title": "Params"
           }
         },
         "example": {
@@ -27478,7 +27789,68 @@
         },
         "required": [
           "name",
-          "description"
+          "description",
+          "params"
+        ],
+        "title": "SystemToolConfig"
+      },
+      "SystemToolConfig-Output": {
+        "description": "A system tool is a tool that is used to call a system method in the server",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "title": "Description"
+          },
+          "params": {
+            "discriminator": {
+              "propertyName": "system_tool_type",
+              "mapping": {
+                "end_call": "#/components/schemas/EndCallToolConfig",
+                "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EndCallToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/LanguageDetectionToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            ],
+            "title": "Params"
+          }
+        },
+        "example": {
+          "type": "system"
+        },
+        "required": [
+          "name",
+          "description",
+          "params"
         ],
         "title": "SystemToolConfig"
       },
@@ -27624,6 +27996,46 @@
           "sip_trunk"
         ],
         "title": "TelephonyProvider"
+      },
+      "Transfer": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "agent_id",
+          "condition"
+        ],
+        "title": "Transfer"
+      },
+      "TransferToAgentToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "transfer_to_agent",
+            "const": "transfer_to_agent",
+            "title": "System Tool Type"
+          },
+          "transfers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transfer"
+            },
+            "title": "Transfers"
+          }
+        },
+        "required": [
+          "transfers"
+        ],
+        "title": "TransferToAgentToolConfig"
       },
       "TurnConfig": {
         "type": "object",
