@@ -1,0 +1,111 @@
+---
+title: Plivo integration
+subtitle: Connect Plivo phone numbers to ElevenLabs agents via SIP trunking for inbound calls.
+---
+
+## Overview
+
+Integrate your Plivo phone numbers with ElevenLabs Conversational AI agents using Session Initiation Protocol (SIP) trunking. This allows you to route inbound calls from your Plivo Direct Inward Dialing (DID) numbers directly to your AI agents.
+
+This guide outlines the necessary steps, leveraging the standard [ElevenLabs SIP trunking functionality](/docs/conversational-ai/guides/sip-trunking). Plivo is a verified compatible provider for SIP trunking with ElevenLabs.
+
+## Prerequisites
+
+- An active Plivo account with administrative access.
+- A Plivo-provided phone number (DID) to integrate.
+- Access to the ElevenLabs Conversational AI dashboard.
+
+## Configuration
+
+The integration involves configuring both ElevenLabs and Plivo.
+
+<Steps>
+
+### Step 1: Configure ElevenLabs
+
+1.  Navigate to [**Phone Numbers**](https://elevenlabs.io/app/conversational-ai/phone-numbers) in the ElevenLabs Conversational AI dashboard.
+2.  Click **Import a phone number from SIP trunk**.
+3.  Enter the configuration details:
+    - **Label**: A descriptive name (e.g., `Plivo Support Line`).
+    - **Phone Number**: The Plivo DID in E.164 format (e.g., `+14155551234`).
+    - **Termination URI**: Your Plivo SIP trunk's termination URI (where ElevenLabs will send outbound calls, e.g., transfers). Obtain this from your Plivo account settings (often related to SIP Endpoints or Outbound settings).
+4.  Note the pre-filled **ElevenLabs Origination URI**:
+    `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`
+    This is the destination Plivo must send inbound calls to.
+5.  Configure **Authentication**:
+    - **For IP ACL (Recommended)**: Leave Username/Password blank. Obtain the source IP addresses/ranges from Plivo (refer to Plivo documentation for their signaling IPs) and configure them in your ElevenLabs IP allowlist settings (contact ElevenLabs support for specifics on inbound SIP ACL configuration if needed).
+    - **For Digest Authentication**: Enter the Username and Password that Plivo will be configured to send.
+6.  Click **Import**.
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/sip-trunk.png"
+    alt="ElevenLabs SIP trunk configuration dialog"
+  />
+</Frame>
+
+### Step 2: Configure Plivo
+
+1.  Log in to your Plivo account.
+2.  Navigate to the settings for your phone number or SIP trunking configuration. Plivo often uses "Applications" to handle call logic.
+3.  Create or modify a Plivo XML Application to handle incoming calls.
+4.  Configure the Application to forward inbound calls to the **ElevenLabs Origination URI**: `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`.
+    - Use Plivo's XML elements like `<Dial>` with a `<Sip>` noun, ensuring you specify the full URI.
+    - Example (conceptual - refer to Plivo docs for exact syntax):
+      ```xml
+      <Response>
+          <Dial callerId="[YourPlivoNumber]">
+              <Sip transport="tcp">sip:sip.rtc.elevenlabs.io:5060</Sip>
+          </Dial>
+      </Response>
+      ```
+5.  **Crucially, ensure the transport protocol is set to TCP and the port is 5060.** Check Plivo's documentation on specifying transport for SIP dialing.
+6.  Configure the authentication method in Plivo to match your ElevenLabs setup (Step 1.5):
+    - **For IP ACL**: Ensure calls originate from the Plivo IPs provided to ElevenLabs.
+    - **For Digest Authentication**: Configure Plivo's outbound SIP settings (if applicable within the Application or trunk settings) to send the exact Username and Password entered in ElevenLabs.
+7.  Ensure Plivo is configured to use compatible audio codecs (e.g., G.711 PCMU/PCMA). This is typically managed in trunk or endpoint settings.
+8.  Assign the Plivo Application to your Plivo phone number.
+9.  Save and activate the Plivo configuration.
+
+<Note>
+  Refer to Plivo's official documentation for the specific steps and XML syntax required for
+  forwarding calls to an external SIP URI using TCP.
+</Note>
+
+### Step 3: Assign agent in ElevenLabs
+
+1.  Return to the [**Phone Numbers**](https://elevenlabs.io/app/conversational-ai/phone-numbers) list in ElevenLabs.
+2.  Select the imported Plivo phone number.
+3.  Click **Assign Agent** and choose the AI agent that should handle calls to this number.
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/twilio-assigned-agent.png"
+    alt="Assign agent to phone number"
+  />
+</Frame>
+
+</Steps>
+
+## Testing
+
+After configuration:
+
+1.  Place test calls to your Plivo DID from an external phone.
+2.  Verify the call connects to the assigned ElevenLabs AI agent.
+3.  Check call quality and review logs in both ElevenLabs ([Calls History](https://elevenlabs.io/app/conversational-ai/history)) and Plivo's console.
+
+## Troubleshooting
+
+Refer to the troubleshooting section in the main [SIP trunking guide](/docs/conversational-ai/guides/sip-trunking#troubleshooting). Common issues include:
+
+- Incorrect SIP URI formatting in Plivo XML.
+- Transport protocol mismatches (ensure TCP is used).
+- Authentication failures (IP ACL mismatch or incorrect Digest credentials).
+- Codec incompatibility.
+- Firewall rules blocking TCP port 5060 or RTP media ports.
+
+## Next steps
+
+- Review the detailed [SIP trunking integration guide](/docs/conversational-ai/guides/sip-trunking).
+- [Learn about creating conversational AI agents](/docs/conversational-ai/quickstart).

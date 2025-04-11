@@ -1,0 +1,91 @@
+---
+title: Exotel integration
+subtitle: Connect Exotel phone numbers to ElevenLabs agents via SIP trunking for inbound calls.
+---
+
+## Overview
+
+Integrate your Exotel phone numbers with ElevenLabs Conversational AI agents using Session Initiation Protocol (SIP) trunking. This allows you to route inbound calls from your Exotel Direct Inward Dialing (DID) numbers directly to your AI agents.
+
+This guide outlines the necessary steps, leveraging the standard [ElevenLabs SIP trunking functionality](/docs/conversational-ai/guides/sip-trunking).
+
+## Prerequisites
+
+- An active Exotel account with administrative access.
+- An Exotel-provided phone number (DID) to integrate.
+- **Confirmation from Exotel** that they support the required SIP forwarding configuration (see Warning above).
+- Access to the ElevenLabs Conversational AI dashboard.
+
+## Configuration
+
+The integration involves configuring both ElevenLabs and Exotel.
+
+<Steps>
+
+### Step 1: Configure ElevenLabs
+
+1.  Navigate to [**Phone Numbers**](https://elevenlabs.io/app/conversational-ai/phone-numbers) in the ElevenLabs Conversational AI dashboard.
+2.  Click **Import a phone number from SIP trunk**.
+3.  Enter the configuration details:
+    - **Label**: A descriptive name (e.g., `Exotel Sales Line`).
+    - **Phone Number**: The Exotel DID in E.164 format (e.g., `+91XXXXXXXXXX`).
+    - **Termination URI**: The SIP URI provided by Exotel for sending calls _from_ ElevenLabs _to_ Exotel (if needed for transfers or outbound calls). Obtain this from Exotel.
+4.  Note the pre-filled **ElevenLabs Origination URI**:
+    `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`
+    This is the destination Exotel must send inbound calls to.
+5.  Configure **Authentication**:
+    - **For IP ACL (Recommended if supported by Exotel)**: Leave Username/Password blank. Obtain the source IP addresses/ranges from Exotel and configure them in your ElevenLabs IP allowlist settings (contact ElevenLabs support for specifics on inbound SIP ACL configuration if needed).
+    - **For Digest Authentication**: Enter the Username and Password that Exotel will be configured to send.
+6.  Click **Import**.
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/sip-trunk.png"
+    alt="ElevenLabs SIP trunk configuration dialog"
+  />
+</Frame>
+
+### Step 2: Configure Exotel (Requires Exotel Guidance)
+
+_(These steps are hypothetical and depend on confirmation and specific instructions from Exotel)_
+
+1.  Access your Exotel account and follow their specific process for configuring external SIP forwarding or trunking for your DID. This might involve their "Smart Cloud SIP Trunk" product or specific call flow settings.
+2.  Set the destination for inbound calls on your DID to the **ElevenLabs Origination URI**: `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`.
+3.  **Crucially, ensure the transport protocol is set to TCP and the port is 5060.**
+4.  Configure the authentication method to match your ElevenLabs setup (Step 1.5):
+    - **For IP ACL**: Ensure calls originate from the IPs provided to ElevenLabs.
+    - **For Digest Authentication**: Configure Exotel to send the exact Username and Password entered in ElevenLabs.
+5.  Ensure Exotel is configured to use compatible audio codecs (e.g., G.711 PCMU/PCMA).
+6.  Save and activate the Exotel configuration.
+
+### Step 3: Assign Agent in ElevenLabs
+
+1.  Return to the [**Phone Numbers**](https://elevenlabs.io/app/conversational-ai/phone-numbers) list in ElevenLabs.
+2.  Select the imported Exotel phone number.
+3.  Click **Assign Agent** and choose the AI agent that should handle calls to this number.
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/twilio-assigned-agent.png"
+    alt="Assign agent to phone number"
+  />
+</Frame>
+
+</Steps>
+
+## Testing
+
+After configuration:
+
+1.  Place test calls to your Exotel DID from an external phone.
+2.  Verify the call connects to the assigned ElevenLabs AI agent.
+3.  Check call quality and review logs in both ElevenLabs ([Calls History](https://elevenlabs.io/app/conversational-ai/history)) and Exotel (if available).
+
+## Troubleshooting
+
+Refer to the troubleshooting section in the main [SIP trunking guide](/docs/conversational-ai/guides/sip-trunking#troubleshooting), paying close attention to potential issues arising from transport protocol mismatches (TCP vs. TLS/UDP), authentication failures, or codec incompatibility, which require confirmation from Exotel.
+
+## Next steps
+
+- Review the detailed [SIP trunking integration guide](/docs/conversational-ai/guides/sip-trunking).
+- [Learn about creating conversational AI agents](/docs/conversational-ai/quickstart).
