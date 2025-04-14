@@ -12426,22 +12426,6 @@
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "delete_secret"
       }
-    },
-    "/docs": {
-      "get": {
-        "operationId": "redirect_to_mintlify_docs_get",
-        "summary": "Redirect To Mintlify",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -16087,6 +16071,27 @@
           "name"
         ],
         "title": "Body_Edit_voice_v1_voices__voice_id__edit_post"
+      },
+      "Body_Forced_alignment_v1_forced_alignment_post": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "description": "The file to align. All major audio and video formats are supported. The file size must be less than 1GB.",
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "text": {
+            "description": "The text to align with the audio or video.",
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "required": [
+          "file",
+          "text"
+        ],
+        "title": "Body_Forced_alignment_v1_forced_alignment_post"
       },
       "Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post": {
         "type": "object",
