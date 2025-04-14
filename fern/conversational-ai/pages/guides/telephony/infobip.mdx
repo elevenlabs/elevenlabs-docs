@@ -1,0 +1,83 @@
+---
+title: Infobip integration
+subtitle: Integrate Infobip with ElevenLabs via SIP trunking
+---
+
+This guide outlines the steps to connect your Infobip phone number to an ElevenLabs Conversational AI agent using SIP trunking, enabling AI-powered interactions for inbound calls.
+
+## Overview
+
+The integration uses Infobip's Static SIP Trunk and Call Routing features to forward calls from an Infobip DID number to a specific SIP endpoint provided by ElevenLabs. Authentication relies on whitelisting Infobip's IP addresses (ACL) within ElevenLabs.
+
+## Prerequisites
+
+- Administrative access to both Infobip and ElevenLabs accounts.
+- An active Infobip DID number and SIP Trunking enabled.
+- Access to ElevenLabs Conversational AI platform with SIP trunking enabled.
+- Basic understanding of SIP, IP networking, and E.164 number formatting.
+
+## Integration Steps
+
+<Steps>
+
+### Prepare ElevenLabs
+
+1.  Navigate to **Phone Numbers** in ElevenLabs.
+2.  Click **Import a phone number from SIP trunk**.
+3.  Note the provided **ElevenLabs Origination URI** (e.g., `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`). This is where Infobip will send calls.
+4.  Enter a **Label** for the trunk.
+5.  Enter the **Infobip DID Number** in E.164 format (e.g., `+16175551212`).
+6.  Leave **Username** and **Password** blank to enable IP Address (ACL) authentication.
+7.  Enter a placeholder for the **Termination URI** (used for outbound calls from ElevenLabs, less critical for this inbound flow).
+8.  Click **Import**.
+
+### Configure Infobip Static SIP Trunk
+
+1.  Navigate to **SIP Trunking** in Infobip.
+2.  Create a new **Static** SIP trunk with **Provider** set to **INFOBIP**.
+3.  Configure plan, channels, name, and select a **Datacenter Location**.
+4.  Set **Destination FQDN/Port** to the ElevenLabs host and port noted earlier (e.g., `sip.rtc.elevenlabs.io:5060`).
+5.  Configure essential settings:
+    - **Codec**: Prioritize `G.711µ` (PCMU) and `G.711a` (PCMA).
+    - **DTMF**: Select `RFC2833`.
+    - **Number Format**: Select `E.164`.
+    - **TLS Encryption**: Select `UDP` initially (see Warning below).
+6.  Confirm trunk creation and **carefully record the Primary and Backup Infobip SBC IP addresses** provided. These are needed for the ElevenLabs ACL.
+
+### Set Up Infobip Call Routing
+
+1.  Navigate to **Call Routing** in Infobip.
+2.  Create a new **Call Route**.
+3.  Add a destination with **Type** set to `SIP`.
+4.  Select the **SIP Trunk** created in the previous step.
+5.  Assign the **Infobip DID number** (the one imported into ElevenLabs) to trigger this Call Route.
+6.  (Optional but Recommended) Add a failover destination (e.g., a standard phone number) with a lower priority.
+
+### Implement IP Whitelisting (ACL) in ElevenLabs
+
+1.  Using the Infobip SBC IPs recorded in Step 2, configure the Access Control List (ACL) in ElevenLabs to allowlist these IPs for the imported number.
+    <Info>
+      The precise location for ACL configuration within the ElevenLabs dashboard requires
+      clarification. Consult ElevenLabs documentation or support for exact steps.
+    </Info>
+2.  Ensure _all_ relevant Infobip SBC IPs (Primary and Backup) for your chosen data center are added.
+
+### Assign the ElevenLabs AI Agent
+
+1.  Return to **Phone Numbers** in ElevenLabs.
+2.  Select the imported Infobip number.
+3.  Click **Assign Agent** and choose the desired Conversational AI agent.
+4.  Confirm the assignment.
+
+</Steps>
+
+## Key Challenges & Considerations
+
+- **Testing**: After configuration, place test calls to the Infobip DID to verify connection and interaction with the correct AI agent. Troubleshoot systematically, checking routing, trunk status, ACLs, codecs, and potential firewall issues.
+- **Scalability**: Ensure Infobip trunk channels and ElevenLabs concurrency limits meet peak volume needs. Upgrade to higher plans for higher concurrency allocations.
+- **Security**: Maintain the ACL with correct Infobip IPs. Consider TLS/SRTP if the transport protocol issue is resolved and security is paramount.
+
+## Conclusion
+
+This integration connects Infobip's robust telephony with ElevenLabs' advanced AI.
+Once set up, it enables sophisticated AI-driven voice interactions using your existing Infobip infrastructure.

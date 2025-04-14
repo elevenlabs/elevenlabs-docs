@@ -1,0 +1,188 @@
+---
+title: Telnyx integration
+subtitle: Connect your Telnyx phone numbers to ElevenLabs Conversational AI using Telnyx Call Control and SIP.
+---
+
+## Overview
+
+This guide details how to route inbound calls from a Telnyx phone number to your ElevenLabs Conversational AI agent using Telnyx Call Control and Session Initiation Protocol (SIP).
+
+The integration forwards calls arriving at your Telnyx number to the specific ElevenLabs Origination SIP URI: `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`. This requires using Telnyx's programmatic Call Control API, as standard SIP connection or number forwarding methods in Telnyx do not support forwarding to an arbitrary external SIP URI with a specific transport protocol (TCP).
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- An active Telnyx account with API access.
+- An active ElevenLabs account with access to Conversational AI features.
+- A phone number purchased or ported within your Telnyx account.
+- A publicly accessible HTTPS endpoint (webhook handler) to receive instructions from Telnyx Call Control. For development, you can use a tunneling service like [ngrok](https://ngrok.com/).
+
+## Integration steps
+
+Follow these steps to configure Telnyx and ElevenLabs.
+
+<Steps>
+
+### 1. Create a Telnyx Call Control Application
+
+This application acts as the trigger point within Telnyx to invoke your custom call handling logic.
+
+1.  Log in to the [Telnyx Mission Control Portal](https://portal.telnyx.com/).
+2.  Navigate to **Call Control** > **Applications**.
+3.  Click **Add new App**.
+4.  Configure the following fields:
+    - **Application Name**: A descriptive name (e.g., `ElevenLabs-Inbound-Forwarder`).
+    - **Webhook Event URL**: The publicly accessible HTTPS URL of your webhook handler application (e.g., `https://your-app.com/webhook/telnyx`). Telnyx will send call events (like `call.initiated`) to this URL.
+    - **Webhook API Version**: Select **V2**.
+    - **(Optional) AnchorSite® Override**: Leave as `Latency` (default) or select a specific Telnyx Point of Presence (PoP).
+    - **(Optional) DTMF Type**: Leave as `RFC 2833` unless specific requirements dictate otherwise.
+5.  Save the application. Note down the Application ID if needed.
+
+### 2. Assign Telnyx Number to the Call Control App
+
+Route inbound calls for your chosen Telnyx number to the Call Control Application.
+
+1.  Navigate to **Numbers** > **My Numbers** in the Telnyx portal.
+2.  Locate the phone number you want to use.
+3.  Click the edit icon (pencil) under the **Connection / App** column or navigate to the number's **Voice Settings** > **Routing**.
+4.  In the routing configuration, select the Call Control Application created in the previous step (e.g., `ElevenLabs-Inbound-Forwarder`) from the dropdown.
+5.  **Crucially, ensure the number is assigned to the Call Control Application, _not_ a standard SIP Connection.**
+6.  Save the changes.
+
+### 3. Implement the Webhook Handler
+
+Create a server-side application to receive webhooks from Telnyx and instruct it to transfer the call to ElevenLabs.
+
+1.  **Listen for Webhooks**: Your application must listen for incoming HTTP POST requests at the `Webhook Event URL` you configured in Step 1.
+2.  **Handle `call.initiated` Event**: Specifically process the `call.initiated` event type from Telnyx.
+3.  **Extract `call_control_id`**: Parse the JSON payload of the webhook to get the `data.payload.call_control_id`. This ID is necessary to target the specific call leg.
+4.  **Issue `transfer` Command**: Make an authenticated POST request to the Telnyx Call Control API's `transfer` endpoint:
+    `POST https://api.telnyx.com/v2/calls/{call_control_id}/actions/transfer`
+    Replace `{call_control_id}` with the extracted ID.
+5.  **Authenticate API Request**: Include your Telnyx API v2 Key as a Bearer token in the `Authorization` header of the request.
+6.  **Configure Request Body**: Construct a JSON payload for the `transfer` command including:
+    - `to` (string, required): Set to the ElevenLabs Origination URI: `"sip:sip.rtc.elevenlabs.io:5060;transport=tcp"`.
+    - `sip_transport_protocol` (string, required): Explicitly set to `"TCP"`.
+    - `from` (string, optional): The caller ID to present to ElevenLabs (must be E.164 format, e.g., `+12025550100`). If omitted, Telnyx defaults to the dialed Telnyx number. It's often best to pass the original caller's number, which can be extracted from the `data.payload.from` field of the `call.initiated` webhook.
+    - `sip_auth_username` (string, optional): Required if using Digest Authentication in ElevenLabs. Use the username configured in ElevenLabs.
+    - `sip_auth_password` (string, optional): Required if using Digest Authentication in ElevenLabs. Use the password configured in ElevenLabs.
+    - `(Optional)` Other parameters like `custom_headers`, `client_state`, etc., can be added as needed. Refer to the [Telnyx API documentation](https://developers.telnyx.com/docs/api/v2/call-control/Calls#transferCall) for details.
+
+**Conceptual Webhook Handler (Python/Flask Example)**
+
+```python title="webhook_handler.py" focus=14:36
+from flask import Flask, request, jsonify
+import requests
+import os
+
+app = Flask(__name__)
+
+TELNYX_API_KEY = os.environ.get("TELNYX_API_KEY") # Your Telnyx API v2 Key
+TELNYX_API_BASE = "https://api.telnyx.com/v2"
+ELEVENLABS_SIP_URI = "sip:sip.rtc.elevenlabs.io:5060;transport=tcp"
+# Set these if using Digest Authentication in ElevenLabs
+ELEVENLABS_SIP_USERNAME = os.environ.get("ELEVENLABS_SIP_USERNAME")
+ELEVENLABS_SIP_PASSWORD = os.environ.get("ELEVENLABS_SIP_PASSWORD")
+
+@app.route('/webhook/telnyx', methods=['POST']) # Ensure path matches Telnyx config
+def handle_telnyx_webhook():
+    try:
+        payload = request.json
+        event_type = payload.get('data', {}).get('event_type')
+
+        if event_type == 'call.initiated':
+            call_control_id = payload.get('data', {}).get('payload', {}).get('call_control_id')
+            original_caller_number = payload.get('data', {}).get('payload', {}).get('from') # E.164
+
+            if call_control_id:
+                transfer_payload = {
+                    "to": ELEVENLABS_SIP_URI,
+                    "sip_transport_protocol": "TCP",
+                    "from": original_caller_number # Present original caller ID
+                }
+
+                # Add Digest Auth credentials if configured
+                if ELEVENLABS_SIP_USERNAME and ELEVENLABS_SIP_PASSWORD:
+                    transfer_payload["sip_auth_username"] = ELEVENLABS_SIP_USERNAME
+                    transfer_payload["sip_auth_password"] = ELEVENLABS_SIP_PASSWORD
+
+                headers = {
+                    "Authorization": f"Bearer {TELNYX_API_KEY}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+
+                transfer_url = f"{TELNYX_API_BASE}/calls/{call_control_id}/actions/transfer"
+                response = requests.post(transfer_url, json=transfer_payload, headers=headers)
+
+                print(f"Transfer API call for {call_control_id}: Status {response.status_code}, Response: {response.text}")
+                if response.status_code >= 300:
+                     print(f"Error initiating transfer for call {call_control_id}")
+
+    except Exception as e:
+        print(f"Error processing webhook: {e}")
+        # Consider returning 500 for errors Telnyx should retry (if applicable)
+
+    # Always return 200 OK to Telnyx to acknowledge webhook receipt
+    return jsonify({"status": "received"}), 200
+
+if __name__ == '__main__':
+    # Use a production-ready WSGI server (like Gunicorn) instead of app.run for deployment
+    app.run(port=os.environ.get('PORT', 8080)) # Port needs to be accessible
+```
+
+<Info>
+  Deploy this handler application to a reliable hosting provider ensuring it's publicly accessible
+  via HTTPS at the URL specified in your Telnyx Call Control Application.
+</Info>
+
+### 4. Configure ElevenLabs
+
+Register the Telnyx number in ElevenLabs and set up authentication.
+
+1.  Navigate to the **Conversational AI** > **Phone Numbers** section in your ElevenLabs dashboard.
+2.  Click **Import a phone number from SIP trunk**.
+3.  Enter the details:
+    - **Label**: A descriptive name (e.g., `Telnyx-Inbound-Number`).
+    - **Phone Number**: The Telnyx number in E.164 format (e.g., `+12025550100`).
+    - **Termination URI**: The SIP URI where ElevenLabs should send outbound calls initiated _from_ the AI agent using this number (if needed). This would typically point back to your Telnyx infrastructure (e.g., `sip:your_number@your_telnyx_sip_domain` or `sip:your_telnyx_username@sip.telnyx.com`). Consult Telnyx documentation for setting up outbound SIP. If outbound calling from the agent via this number isn't required, consult ElevenLabs support or documentation for the appropriate placeholder.
+4.  **Configure Authentication**: Choose one method:
+    - **Digest Authentication**:
+      - Enter a secure **Username** and **Password** in the ElevenLabs import dialog.
+      - Ensure these exact credentials are set as `ELEVENLABS_SIP_USERNAME` and `ELEVENLABS_SIP_PASSWORD` environment variables (or equivalent configuration) in your webhook handler application (Step 3).
+    - **IP Address ACL**:
+      - Leave the **Username** and **Password** fields empty in ElevenLabs.
+      - Go to the **IP ACL** settings within ElevenLabs (under Conversational AI settings or general account settings).
+      - Add the required Telnyx Signaling IP addresses to the allowlist (see section below).
+      - Ensure `sip_auth_username` and `sip_auth_password` are _not_ sent in the Telnyx `transfer` command (Step 3).
+5.  Click **Import Number**.
+6.  **Assign Agent**: Once imported, select the number in the list and click **Assign Agent**. Choose the AI agent that should handle calls to this number.
+
+</Steps>
+
+## Telnyx Signaling IPs for ACL
+
+If using IP Address ACL authentication in ElevenLabs, you must whitelist the IP addresses from which Telnyx will send SIP INVITE requests. Calls can originate from either the primary or secondary IP for the relevant region. It is recommended to whitelist IPs for regions relevant to your operations.
+
+| Region    | FQDN                | Primary IP        | Secondary IP      |
+| :-------- | :------------------ | :---------------- | :---------------- |
+| US        | `sip.telnyx.com`    | `192.76.120.10`   | `64.16.250.10`    |
+| Europe    | `sip.telnyx.eu`     | `185.246.41.140`  | `185.246.41.141`  |
+| Australia | `sip.telnyx.com.au` | `103.115.244.145` | `103.115.244.146` |
+| Canada    | `sip.telnyx.ca`     | `192.76.120.31`   | `64.16.250.13`    |
+
+<Note>
+  These IPs are for SIP signaling. Network firewalls might also need to allow RTP (audio) traffic
+  from Telnyx media IP ranges. Refer to [Telnyx
+  documentation](https://developers.telnyx.com/docs/sip-trunking/ip-whitelisting) for the most
+  up-to-date list of signaling and media IPs.
+</Note>
+
+## Testing and Troubleshooting
+
+- Place test calls to your Telnyx number.
+- Monitor the logs of your webhook handler application for incoming requests and API calls to Telnyx.
+- Check the **Call Control Logs** within the Telnyx portal for details on webhook delivery and API command execution.
+- Verify the call appears in the ElevenLabs Conversational AI call history.
+- Ensure firewalls allow TCP traffic on port 5060 between Telnyx Signaling IPs and `sip.rtc.elevenlabs.io`.
