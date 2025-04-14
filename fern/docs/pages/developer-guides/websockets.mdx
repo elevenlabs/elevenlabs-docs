@@ -256,7 +256,7 @@ To manage this, you can use the `chunk_length_schedule` parameter when either in
 
 Here's an example of how this works with the default settings for `chunk_length_schedule`:
 
-<img src="/assets/images/developer-guides/buffering-explainer.png" />
+<img src="/assets/images/developer-guides/buffering-explainer.jpg" />
 
 In the above diagram, audio is only generated after the second message is sent to the server. This is because the first message is below the threshold of 120 characters, while the second message brings the total number of characters above the threshold. The third message is above the threshold of 160 characters, so audio is immediately generated and returned to the client.
 
@@ -289,7 +289,7 @@ websocket.send(
 
 In the case that you want force the immediate return of the audio, you can use `flush: true` to clear out the buffer and force generate any buffered text. This can be useful, for example, when you have reached the end of a document and want to generate audio for the final section.
 
-<img src="/assets/images/developer-guides/buffering-flush-explainer.png" />
+<img src="/assets/images/developer-guides/buffering-flush-explainer.jpg" />
 
 This can be specified on a per-message basis by setting `flush: true` in the message.
 
