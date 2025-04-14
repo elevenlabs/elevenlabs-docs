@@ -654,7 +654,56 @@ navigation:
               - textToVoice
               - dubbing
               - audioNative
-              - voices
+              - voices:
+                  contents:
+                    - section: PVC
+                      contents:
+                        - endpoint: POST /v1/voices/pvc
+                          title: Create PVC voice
+                          slug: /voices/pvc/create
+                        - endpoint: POST /v1/voices/pvc/{voice_id}
+                          title: Update PVC voice
+                          slug: /voices/pvc/update
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/train
+                          title: Train PVC voice
+                          slug: /voices/pvc/train
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/samples
+                          title: Add samples to PVC voice
+                          slug: /voices/pvc/samples/create
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/samples/{sample_id}
+                          title: Update PVC voice sample
+                          slug: /voices/pvc/samples/update
+                        - endpoint: DELETE /v1/voices/pvc/{voice_id}/samples/{sample_id}
+                          title: Delete PVC voice sample
+                          slug: /voices/pvc/samples/delete
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/audio
+                          title: Get PVC voice sample audio
+                          slug: /voices/pvc/samples/get-audio
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/waveform
+                          title: Get PVC voice sample waveform
+                          slug: /voices/pvc/samples/get-waveform
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/speakers
+                          title: Get PVC speaker separation status
+                          slug: /voices/pvc/samples/get-speaker-separation-status
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/samples/{sample_id}/separate-speakers
+                          title: Start speaker separation
+                          slug: /voices/pvc/samples/separate-speakers
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/speakers/{speaker_id}/audio
+                          title: Get separated speaker audio
+                          slug: /voices/pvc/samples/get-separated-speaker-audio
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/verification
+                          title: Request PVC manual verification
+                          slug: /voices/pvc/verification/request
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/captcha
+                          title: Get PVC verification captcha
+                          slug: /voices/pvc/verification/captcha
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/captcha
+                          title: Verify PVC verification captcha
+                          slug: /voices/pvc/verification/captcha/verify
+                    - section: IVC
+                      contents:
+                        - endpoint: POST /v1/voices/add
+                          title: Create IVC voice
               - forcedAlignment
           - section: ADMINISTRATION
             skip-slug: true
