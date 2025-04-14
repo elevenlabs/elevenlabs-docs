@@ -9,6 +9,9 @@ instances:
 
 title: ElevenLabs Documentation
 
+metadata:
+  og:image: https://elevenlabs.io/cover.png
+
 layout:
   searchbar-placement: header
   tabs-placement: header
@@ -61,6 +64,8 @@ navigation:
             path: docs/pages/capabilities/sound-effects.mdx
           - page: Voices
             path: docs/pages/capabilities/voices.mdx
+          - page: Forced Alignment
+            path: docs/pages/capabilities/forced-alignment.mdx
           - link: Conversational AI
             href: /docs/conversational-ai/overview
       - section: DEVELOPER GUIDES
@@ -107,6 +112,8 @@ navigation:
                 contents:
                   - page: Expo React Native
                     path: docs/pages/developer-guides/cookbooks/conversational-ai/expo-react-native.mdx
+                  - page: Post-call webhooks
+                    path: docs/pages/developer-guides/cookbooks/conversational-ai/nextjs-post-call-webhooks.mdx
           - page: Libraries & SDKs
             slug: libraries
             icon: duotone books
@@ -121,6 +128,9 @@ navigation:
           - link: Example projects
             icon: brands github
             href: https://github.com/elevenlabs/elevenlabs-examples
+          - link: Next.js template
+            icon: brands react
+            href: https://git.new/elevenlabs-nextjs
       - section: BEST PRACTICES
         skip-slug: false
         contents:
@@ -278,14 +288,12 @@ navigation:
       - section: CUSTOMIZATION
         skip-slug: false
         contents:
-          - section: Tools & Events
+          - section: Tools
             icon: duotone toolbox
+            path: conversational-ai/pages/customization/tools/overview.mdx
             contents:
-              - page: Client events
-                icon: duotone calendar-exclamation
-                path: conversational-ai/pages/customization/client-events.mdx
               - page: Client tools
-                icon: duotone webhook
+                icon: duotone rectangle-code
                 path: conversational-ai/pages/customization/client-tools.mdx
               - page: Server tools
                 icon: duotone server
@@ -300,6 +308,19 @@ navigation:
                   - page: Language detection
                     icon: duotone earth-europe
                     path: conversational-ai/pages/customization/tools/language-detection.mdx
+                  - page: Agent transfer
+                    icon: duotone arrows-turn-to-dots
+                    path: conversational-ai/pages/customization/tools/agent-transfer.mdx
+          - section: Events
+            icon: duotone signal-stream
+            path: conversational-ai/pages/customization/events.mdx
+            contents:
+              - page: Client events
+                icon: duotone cloud-arrow-down
+                path: conversational-ai/pages/customization/client-events.mdx
+              - page: Client to server events
+                icon: duotone cloud-arrow-up
+                path: conversational-ai/pages/customization/client-to-server-events.mdx
           - section: Knowledge base
             icon: duotone file-magnifying-glass
             path: conversational-ai/pages/customization/knowledge-base.mdx
@@ -377,6 +398,16 @@ navigation:
             icon: duotone hospital-user
             path: conversational-ai/pages/customization/privacy/hipaa.mdx
 
+      - section: WORKFLOWS
+        skip-slug: false
+        contents:
+          - page: Agent to agent transfer
+            icon: duotone arrows-turn-to-dots
+            path: conversational-ai/pages/customization/tools/agent-transfer.mdx
+          - page: Post-call webhooks
+            icon: duotone bell-ring
+            path: conversational-ai/pages/workflows/post-call-webhook.mdx
+
       - section: BEST PRACTICES
         contents:
           - page: Prompting guide
@@ -386,16 +417,15 @@ navigation:
             icon: duotone waveform-lines
             path: conversational-ai/pages/best-practices/voice-design.mdx
 
-      - section: WORKFLOWS
-        skip-slug: false
-        contents:
-          - page: Post-call webhooks
-            icon: duotone bell-ring
-            path: conversational-ai/pages/workflows/post-call-webhook.mdx
-
       - section: GUIDES
         skip-slug: false
         contents:
+          - page: SIP trunking
+            icon: duotone phone-office
+            path: conversational-ai/pages/guides/sip-trunking.mdx
+          - page: ElevenLabs' docs agent
+            icon: duotone message-bot
+            path: conversational-ai/pages/best-practices/our-docs-agent.mdx
           - section: Quickstarts
             icon: duotone code
             contents:
@@ -450,6 +480,9 @@ navigation:
               - page: Cal.com
                 icon: duotone calendar
                 path: conversational-ai/pages/guides/cal.com.mdx
+              - page: Upstash Redis
+                icon: duotone database
+                path: docs/pages/cookbooks/conversational-ai/nextjs-post-call-webhooks.mdx
               - page: Zendesk
                 icon: duotone z
                 path: conversational-ai/pages/guides/zendesk.mdx
@@ -536,8 +569,12 @@ navigation:
                     title: Delete knowledge base document
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}
                     title: Get knowledge base document
-                  - endpoint: POST /v1/convai/knowledge-base
-                    title: Create knowledge base document
+                  - endpoint: POST /v1/convai/knowledge-base/url
+                    title: Create knowledge base document from URL
+                  - endpoint: POST /v1/convai/knowledge-base/text
+                    title: Create knowledge base document from text
+                  - endpoint: POST /v1/convai/knowledge-base/file
+                    title: Create knowledge base document from file
                   - endpoint: POST /v1/convai/knowledge-base/{documentation_id}/rag-index
                     title: Compute RAG index
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/dependent-agents
@@ -621,6 +658,7 @@ navigation:
               - dubbing
               - audioNative
               - voices
+              - forcedAlignment
           - section: ADMINISTRATION
             skip-slug: true
             contents:
@@ -693,6 +731,9 @@ navigation:
               - section: Voices
                 contents:
                   - GET /v1/voices
+              - section: Knowledge Base
+                contents:
+                  - POST /v1/convai/knowledge-base
 
 navbar-links:
   - type: minimal
@@ -1110,3 +1151,5 @@ redirects:
     destination: /docs/api-reference/studio/create-pronunciation-dictionaries
   - source: /docs/api-reference/projects:slug*
     destination: /docs/api-reference/studio/slug*
+  - source: /docs/conversational-ai/workflows/agent-agent-transfers
+    destination: /docs/conversational-ai/customization/tools/system-tools/agent-transfer

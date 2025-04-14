@@ -97,7 +97,7 @@ You can either use the [REST API](/docs/api-reference/introduction) directly wit
 
         transcription = client.speech_to_text.convert(
           file=audio_data,
-          model_id="scribe_v1",
+          model_id="scribe_v1", # 'scribe_v1_experimental' is also available for new, experimental features
         )
 
         print(transcription)
@@ -247,6 +247,39 @@ You can either use the [REST API](/docs/api-reference/introduction) directly wit
                 time.sleep(5)
         ```
       </Tab>
+      <Tab title="Forced alignment">
+        ```python Forced alignment
+        import os
+        from dotenv import load_dotenv
+        from io import BytesIO
+        import requests
+        from elevenlabs.client import ElevenLabs
+
+        load_dotenv()
+
+        client = ElevenLabs(
+            api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        transcript = """With a soft and whispery American accent.
+                        I'm an ideal choice to create an ASMR content,
+                        meditated guides or adding an intimate feel to
+                        your narrative projects."""
+
+        response = requests.get(audio_url)
+        audio_data = BytesIO(response.content)
+
+        aligned_transcript = client.forced_alignment.create(
+            file=audio_data,
+            text=transcript,
+        )
+
+        print(aligned_transcript)
+        ```
+      </Tab>
     </Tabs>
 
     Execute the code with the command below. Within a few seconds you should hear the audio play through your speaker.
@@ -289,7 +322,7 @@ You can either use the [REST API](/docs/api-reference/introduction) directly wit
 
         const transcription = await client.speechToText.convert({
           file: audioBlob,
-          model_id: "scribe_v1",
+          model_id: "scribe_v1", // 'scribe_v1_experimental' is also available for new, experimental features
         });
 
         console.log(transcription);
@@ -410,6 +443,32 @@ You can either use the [REST API](/docs/api-reference/introduction) directly wit
           }
           await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds between checks
         }
+        ```
+
+      </Tab>
+      <Tab title="Forced alignment">
+
+        ```javascript Forced alignment
+        import { ElevenLabsClient } from "elevenlabs";
+
+        const client = new ElevenLabsClient();
+
+        const response = await fetch(
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        );
+
+        const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
+        const transcript = `With a soft and whispery American accent.
+                            I'm an ideal choice to create an ASMR content,
+                            meditated guides or adding an intimate feel to
+                            your narrative projects.`;
+
+        const aligned_transcript = await client.forcedAlignment.create({
+            file: audioBlob,
+            text: transcript,
+        });
+
+        console.log(aligned_transcript);
         ```
 
       </Tab>

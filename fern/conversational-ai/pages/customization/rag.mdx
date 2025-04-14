@@ -113,6 +113,27 @@ This process ensures that relevant information to the user's query is passed to 
 
 </Steps>
 
+## Usage limits
+
+To ensure fair resource allocation, ElevenLabs enforces limits on the total size of documents that can be indexed for RAG per workspace, based on subscription tier.
+
+The limits are as follows:
+
+| Subscription Tier | Total Document Size Limit | Notes                                       |
+| :---------------- | :------------------------ | :------------------------------------------ |
+| Free              | 1MB                       | Indexes may be deleted after inactivity.    |
+| Starter           | 2MB                       |                                             |
+| Creator           | 20MB                      |                                             |
+| Pro               | 100MB                     |                                             |
+| Scale             | 500MB                     |                                             |
+| Business          | 1GB                       |                                             |
+| Enterprise        | Custom                    | Higher limits available based on agreement. |
+
+**Note:**
+
+- These limits apply to the total **original file size** of documents indexed for RAG, not the internal storage size of the RAG index itself (which can be significantly larger).
+- Documents smaller than 500 bytes cannot be indexed for RAG and will automatically be used in the prompt instead.
+
 ## API implementation
 
 You can also implement RAG through the [API](/docs/api-reference/knowledge-base/rag-index-status):

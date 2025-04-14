@@ -1,0 +1,168 @@
+---
+title: Agent transfer
+subtitle: Seamlessly transfer the user between Conversational AI agents based on defined conditions.
+---
+
+## Overview
+
+Agent-agent transfer allows a Conversational AI agent to hand off the ongoing conversation to another designated agent when specific conditions are met. This enables the creation of sophisticated, multi-layered conversational workflows where different agents handle specific tasks or levels of complexity.
+
+For example, an initial agent (Orchestrator) could handle general inquiries and then transfer the call to a specialized agent based on the conversation's context. Transfers can also be nested:
+
+<Frame background="subtle" caption="Example Agent Transfer Hierarchy">
+
+```text
+Orchestrator Agent (Initial Qualification)
+│
+├───> Agent 1 (e.g., Availability Inquiries)
+│
+├───> Agent 2 (e.g., Technical Support)
+│     │
+│     └───> Agent 2a (e.g., Hardware Support)
+│
+└───> Agent 3 (e.g., Billing Issues)
+
+```
+
+</Frame>
+
+<Note>
+
+We recommend using the `gpt-4o` or `gpt-4o-mini` models when using agent-agent transfers due to better tool calling.
+
+</Note>
+
+## Enabling agent transfer
+
+Agent transfer is configured using the `transfer_to_agent` system tool.
+
+<Steps>
+    <Step title="Add the transfer tool">
+        Enable agent transfer by selecting the `transfer_to_agent` system tool in your agent's configuration within the `Agent` tab. Choose "Transfer to AI Agent" when adding a tool.
+
+        <Frame background="subtle">
+            <img src="/assets/images/conversational-ai/transfertool.png" alt="Add Transfer Tool" />
+        </Frame>
+    </Step>
+
+    <Step title="Configure tool description (optional)">
+        You can provide a custom description to guide the LLM on when to trigger a transfer. If left blank, a default description encompassing the defined transfer rules will be used.
+
+        <Frame background="subtle">
+             <img src="/assets/images/conversational-ai/transferconfig.png" alt="Transfer Tool Description" />
+        </Frame>
+    </Step>
+
+    <Step title="Define transfer rules">
+        Configure the specific rules for transferring to other agents. For each rule, specify:
+        - **Agent**: The target agent to transfer the conversation to.
+        - **Condition**: A natural language description of the circumstances under which the transfer should occur (e.g., "User asks about billing details", "User requests technical support for product X").
+
+        The LLM will use these conditions, along with the tool description, to decide when and to which agent (by number) to transfer.
+
+        <Frame background="subtle">
+            <img src="/assets/images/conversational-ai/transferrule.png" alt="Transfer Rules Configuration" />
+        </Frame>
+
+        <Note>
+            Ensure that the user account creating the agent has at least viewer permissions for any target agents specified in the transfer rules.
+        </Note>
+    </Step>
+
+</Steps>
+
+## API Implementation
+
+You can configure the `transfer_to_agent` system tool when creating or updating an agent via the API.
+
+<CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentToolsItem_System,
+    SystemToolConfig,
+    TransferToAgentToolConfig,
+    Transfer
+)
+
+# Initialize the client
+client = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Define transfer rules
+transfer_rules = [
+    Transfer(agent_id="AGENT_ID_1", condition="When the user asks for billing support."),
+    Transfer(agent_id="AGENT_ID_2", condition="When the user requests advanced technical help.")
+]
+
+# Create the transfer tool configuration
+transfer_tool = PromptAgentToolsItem_System(
+    type="system",
+    name="transfer_to_agent",
+    description="Transfer the user to a specialized agent based on their request.", # Optional custom description
+    params=SystemToolConfigInputParams_TransferToAgent(
+        transfers=transfer_rules
+    )
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            prompt="You are a helpful assistant.",
+            first_message="Hi, how can I help you today?",
+            tools=[transfer_tool],
+        )
+    )
+)
+
+# Create the agent
+response = client.conversational_ai.create_agent(
+    conversation_config=conversation_config
+)
+
+print(response)
+```
+
+```javascript
+import { ElevenLabs } from 'elevenlabs';
+
+// Initialize the client
+const client = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Define transfer rules
+const transferRules = [
+  { agent_id: 'AGENT_ID_1', condition: 'When the user asks for billing support.' },
+  { agent_id: 'AGENT_ID_2', condition: 'When the user requests advanced technical help.' },
+];
+
+// Create the agent with the transfer tool
+await client.conversationalAi.createAgent({
+  conversation_config: {
+    agent: {
+      prompt: {
+        prompt: 'You are a helpful assistant.',
+        first_message: 'Hi, how can I help you today?',
+        tools: [
+          {
+            type: 'system',
+            name: 'transfer_to_agent',
+            description: 'Transfer the user to a specialized agent based on their request.', // Optional custom description
+            params: {
+              system_tool_type: 'transfer_to_agent',
+              transfers: transferRules,
+            },
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+</CodeBlocks>
