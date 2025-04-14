@@ -53,7 +53,7 @@ Follow our [Next.js guide](/docs/conversational-ai/guides/quickstarts/next-js) f
     Set the first message and specify the dynamic variable for the platform.
 
     ```txt
-    Hi {{user_name}}, I'm Hope from the ElevenLabs team. I'm here to help you design your very own conversational AI agent! To kick things off, let me know what kind of agent you're looking to create. For example, do you want a support agent, to help your users answer questions, or a sales agent to sell your products, or just a friend to chat with?
+    Hi {{user_name}}, I'm Jess from the ElevenLabs team. I'm here to help you design your very own conversational AI agent! To kick things off, let me know what kind of agent you're looking to create. For example, do you want a support agent, to help your users answer questions, or a sales agent to sell your products, or just a friend to chat with?
     ```
 
   </Step>
@@ -61,7 +61,7 @@ Follow our [Next.js guide](/docs/conversational-ai/guides/quickstarts/next-js) f
     Set the system prompt. You can also include dynamic variables here.
 
     ```txt
-    You are Hope, a helpful agent helping {{user_name}} to design their very own conversational AI agent. The design process involves the following steps:
+    You are Jess, a helpful agent helping {{user_name}} to design their very own conversational AI agent. The design process involves the following steps:
 
     "initial": In the first step, collect the information about the kind of agent the user is looking to create. Summarize the user's needs back to them and ask if they are ready to continue to the next step. Only once they confirm proceed to the next step.
     "training": Tell the user to create the agent's knowledge base by uploading documents, or submitting URLs to public websites with information that should be available to the agent. Wait patiently without talking to the user. Only when the user confirms that they've provided everything then proceed to the next step.
@@ -79,7 +79,16 @@ Follow our [Next.js guide](/docs/conversational-ai/guides/quickstarts/next-js) f
         - Description: Use this client-side tool to navigate between the different UI states.
         - Wait for response: `true`
         - Response timeout (seconds): 1
+        - Parameters:
+          - Data type: string
+          - Identifier: step
+          - Required: true
+          - Value Type: LLM Prompt
+          - Description: The step to navigate to in the UI. Only use the steps that are defined in the system prompt!
 
+  </Step>
+  <Step title="Set your agent's voice">
+    Navigate to the `Voice` tab and set the voice for your agent. You can find a list of recommended voices for Conversational AI in the [Conversational Voice Design docs](/docs/conversational-ai/best-practices/conversational-voice-design#voices).
   </Step>
   <Step title="Set the evaluation criteria">
     Navigate to the `Analysis` tab and add a new evaluation criteria.
