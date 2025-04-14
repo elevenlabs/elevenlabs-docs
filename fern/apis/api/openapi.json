@@ -462,6 +462,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -893,6 +894,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1035,6 +1037,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1176,6 +1179,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1319,6 +1323,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1461,6 +1466,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1603,6 +1609,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -1784,6 +1791,7 @@
                 "pcm_24000",
                 "pcm_44100",
                 "ulaw_8000",
+                "alaw_8000",
                 "opus_48000_32",
                 "opus_48000_64",
                 "opus_48000_96",
@@ -2314,6 +2322,24 @@
                 }
               ],
               "title": "Fine Tuning State"
+            }
+          },
+          {
+            "name": "collection_id",
+            "in": "query",
+            "description": "Collection ID to filter voices by.",
+            "required": false,
+            "schema": {
+              "description": "Collection ID to filter voices by.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Collection Id"
             }
           },
           {
@@ -6145,6 +6171,445 @@
         ]
       }
     },
+    "/v1/dubbing": {
+      "post": {
+        "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
+        "summary": "Dub A Video Or An Audio File",
+        "description": "Dubs a provided audio or video file into given language.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoDubbingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}": {
+      "get": {
+        "operationId": "Get_dubbing_v1_dubbing__dubbing_id__get",
+        "summary": "Get Dubbing",
+        "description": "Returns metadata about a dubbing project, including whether it's still in progress or not",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DubbingMetadataResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
+      },
+      "delete": {
+        "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
+        "summary": "Delete Dubbing",
+        "description": "Deletes a dubbing project.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDubbingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "delete_dubbing_project"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
+      "get": {
+        "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
+        "summary": "Get Dubbed File",
+        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "path",
+            "description": "ID of the language.",
+            "required": true,
+            "schema": {
+              "description": "ID of the language.",
+              "type": "string",
+              "title": "Language Code"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The dubbed audio or video file",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "permission_denied",
+                  "message": "User does not have required permissions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dubbing not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_found",
+                  "message": "There is no dubbing for language {language_code}."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "425": {
+            "description": "Dubbing not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_dubbed",
+                  "message": "Dubbing has not finished yet."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_dubbed_file"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
+      "get": {
+        "operationId": "Get_dubbed_transcript_v1_dubbing__dubbing_id__transcript__language_code__get",
+        "summary": "Get Dubbed Transcript",
+        "description": "Returns transcript for the dub as an SRT or WEBVTT file.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "path",
+            "description": "ID of the language.",
+            "required": true,
+            "schema": {
+              "description": "ID of the language.",
+              "type": "string",
+              "title": "Language Code"
+            }
+          },
+          {
+            "name": "format_type",
+            "in": "query",
+            "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
+            "required": false,
+            "schema": {
+              "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
+              "type": "string",
+              "default": "srt",
+              "embed": true,
+              "enum": [
+                "srt",
+                "webvtt"
+              ],
+              "title": "Format Type"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "1\n00:00:01,000 --> 00:00:04,000\nHello, this is the first subtitle line\n\n2\n00:00:05,000 --> 00:00:07,000\nAnd here's the second subtitle line"
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Anonymous users cannot use this function",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "anonymous_not_allowed",
+                  "message": "Anonymous users cannot use this function"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dubbing or transcript not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "transcript_not_found",
+                  "message": "No transcript was found for the dub."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "425": {
+            "description": "Dubbing not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_dubbed",
+                  "message": "Dubbing has not finished yet."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_transcript_for_dub"
+      }
+    },
     "/v1/dubbing/resource/{dubbing_id}": {
       "get": {
         "operationId": "Get_the_dubbing_resource_for_an_ID__v1_dubbing_resource__dubbing_id__get",
@@ -6787,12 +7252,34 @@
         "x-fern-sdk-method-name": "dub_segments"
       }
     },
-    "/v1/dubbing": {
+    "/v1/dubbing/resource/{dubbing_id}/render/{language}": {
       "post": {
-        "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
-        "summary": "Dub A Video Or An Audio File",
-        "description": "Dubs a provided audio or video file into given language.",
+        "operationId": "Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post",
+        "summary": "Render Audio Or Video For The Given Language",
+        "description": "Regenerate the dubs for either the entire resource or the specified segments/languages. Will automatically transcribe and translate any missing transcriptions and translations.",
         "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "description": "Render this language",
+            "required": true,
+            "schema": {
+              "description": "Render this language",
+              "type": "string",
+              "title": "Language"
+            }
+          },
           {
             "name": "xi-api-key",
             "in": "header",
@@ -6813,10 +7300,11 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
+                "$ref": "#/components/schemas/Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post"
               }
             }
           }
@@ -6827,7 +7315,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DoDubbingResponseModel"
+                  "$ref": "#/components/schemas/DubbingRenderResponseModel"
                 }
               }
             }
@@ -6844,386 +7332,12 @@
           }
         },
         "tags": [
-          "dubbing"
+          "dubbing",
+          "resource",
+          "segment"
         ],
         "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}": {
-      "get": {
-        "operationId": "Get_dubbing_v1_dubbing__dubbing_id__get",
-        "summary": "Get Dubbing",
-        "description": "Returns metadata about a dubbing project, including whether it's still in progress or not",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DubbingMetadataResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
-      },
-      "delete": {
-        "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
-        "summary": "Delete Dubbing",
-        "description": "Deletes a dubbing project.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteDubbingResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "delete_dubbing_project"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
-      "get": {
-        "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
-        "summary": "Get Dubbed File",
-        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "language_code",
-            "in": "path",
-            "description": "ID of the language.",
-            "required": true,
-            "schema": {
-              "description": "ID of the language.",
-              "type": "string",
-              "title": "Language Code"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The dubbed audio or video file",
-            "content": {
-              "audio/mpeg": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "video/mp4": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission denied",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "permission_denied",
-                  "message": "User does not have required permissions"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Dubbing not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_found",
-                  "message": "There is no dubbing for language {language_code}."
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "425": {
-            "description": "Dubbing not ready",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_dubbed",
-                  "message": "Dubbing has not finished yet."
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbed_file"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
-      "get": {
-        "operationId": "Get_dubbed_transcript_v1_dubbing__dubbing_id__transcript__language_code__get",
-        "summary": "Get Dubbed Transcript",
-        "description": "Returns transcript for the dub as an SRT or WEBVTT file.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "language_code",
-            "in": "path",
-            "description": "ID of the language.",
-            "required": true,
-            "schema": {
-              "description": "ID of the language.",
-              "type": "string",
-              "title": "Language Code"
-            }
-          },
-          {
-            "name": "format_type",
-            "in": "query",
-            "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
-            "required": false,
-            "schema": {
-              "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
-              "type": "string",
-              "default": "srt",
-              "embed": true,
-              "enum": [
-                "srt",
-                "webvtt"
-              ],
-              "title": "Format Type"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": "1\n00:00:01,000 --> 00:00:04,000\nHello, this is the first subtitle line\n\n2\n00:00:05,000 --> 00:00:07,000\nAnd here's the second subtitle line"
-              },
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Anonymous users cannot use this function",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "anonymous_not_allowed",
-                  "message": "Anonymous users cannot use this function"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Dubbing or transcript not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "transcript_not_found",
-                  "message": "No transcript was found for the dub."
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "425": {
-            "description": "Dubbing not ready",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_dubbed",
-                  "message": "Dubbing has not finished yet."
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_transcript_for_dub"
+        "x-fern-sdk-method-name": "render_dub"
       }
     },
     "/v1/models": {
@@ -8213,7 +8327,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddPronunciationDictionaryRulesResponseModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryRulesResponseModel"
                 }
               }
             }
@@ -8291,7 +8405,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RemovePronunciationDictionaryRulesResponseModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryRulesResponseModel"
                 }
               }
             }
@@ -9591,18 +9705,6 @@
         "description": "Create an agent from a config object",
         "parameters": [
           {
-            "name": "use_tool_ids",
-            "in": "query",
-            "description": "Use tool ids instead of tools specs from request payload.",
-            "required": false,
-            "schema": {
-              "description": "Use tool ids instead of tools specs from request payload.",
-              "type": "boolean",
-              "default": false,
-              "title": "Use Tool Ids"
-            }
-          },
-          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -9746,18 +9848,6 @@
                 "21m00Tcm4TlvDq8ikWAM"
               ],
               "title": "Agent Id"
-            }
-          },
-          {
-            "name": "use_tool_ids",
-            "in": "query",
-            "description": "Use tool ids instead of tools specs from request payload.",
-            "required": false,
-            "schema": {
-              "description": "Use tool ids instead of tools specs from request payload.",
-              "type": "boolean",
-              "default": false,
-              "title": "Use Tool Ids"
             }
           },
           {
@@ -11005,6 +11095,7 @@
             }
           }
         },
+        "deprecated": true,
         "tags": [
           "Conversational AI"
         ],
@@ -11076,6 +11167,27 @@
               "type": "boolean",
               "default": false,
               "title": "Show Only Owned Documents"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "description": "If present, the endpoint will return only documents of the given types.",
+            "required": false,
+            "schema": {
+              "description": "If present, the endpoint will return only documents of the given types.",
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KnowledgeBaseDocumentType"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Types"
             }
           },
           {
@@ -11264,6 +11376,198 @@
         "x-fern-sdk-group-name": "conversational_ai"
       }
     },
+    "/v1/convai/knowledge-base/url": {
+      "post": {
+        "operationId": "Create_URL_document_v1_convai_knowledge_base_url_post",
+        "summary": "Create Url Document",
+        "description": "Create a knowledge base document generated by scraping the given webpage.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Create_URL_document_v1_convai_knowledge_base_url_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddKnowledgeBaseResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "create_knowledge_base_url_document"
+      }
+    },
+    "/v1/convai/knowledge-base/file": {
+      "post": {
+        "operationId": "Create_file_document_v1_convai_knowledge_base_file_post",
+        "summary": "Create File Document",
+        "description": "Create a knowledge base document generated form the uploaded file.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Create_file_document_v1_convai_knowledge_base_file_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddKnowledgeBaseResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "create_knowledge_base_file_document"
+      }
+    },
+    "/v1/convai/knowledge-base/text": {
+      "post": {
+        "operationId": "Create_text_document_v1_convai_knowledge_base_text_post",
+        "summary": "Create Text Document",
+        "description": "Create a knowledge base document containing the provided text.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Create_text_document_v1_convai_knowledge_base_text_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddKnowledgeBaseResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "create_knowledge_base_text_document"
+      }
+    },
     "/v1/convai/knowledge-base/{documentation_id}/rag-index": {
       "post": {
         "operationId": "Compute_RAG_index__v1_convai_knowledge_base__documentation_id__rag_index_post",
@@ -11394,7 +11698,8 @@
                     "propertyName": "type",
                     "mapping": {
                       "url": "#/components/schemas/GetKnowledgeBaseURLResponseModel",
-                      "file": "#/components/schemas/GetKnowledgeBaseFileResponseModel"
+                      "file": "#/components/schemas/GetKnowledgeBaseFileResponseModel",
+                      "text": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
                     }
                   },
                   "oneOf": [
@@ -11403,6 +11708,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/GetKnowledgeBaseFileResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
                     }
                   ],
                   "title": "Response Get Documentation From Knowledge Base V1 Convai Knowledge Base  Documentation Id  Get"
@@ -11543,7 +11851,8 @@
                     "propertyName": "type",
                     "mapping": {
                       "url": "#/components/schemas/GetKnowledgeBaseURLResponseModel",
-                      "file": "#/components/schemas/GetKnowledgeBaseFileResponseModel"
+                      "file": "#/components/schemas/GetKnowledgeBaseFileResponseModel",
+                      "text": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
                     }
                   },
                   "oneOf": [
@@ -11552,6 +11861,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/GetKnowledgeBaseFileResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
                     }
                   ],
                   "title": "Response Get Documentation From Knowledge Base V1 Convai Agents  Agent Id  Knowledge Base  Documentation Id  Get"
@@ -12201,6 +12513,10 @@
             "type": "string",
             "title": "Id"
           },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
           "prompt_injectable": {
             "type": "boolean",
             "title": "Prompt Injectable"
@@ -12208,6 +12524,7 @@
         },
         "required": [
           "id",
+          "name",
           "prompt_injectable"
         ],
         "title": "AddKnowledgeBaseResponseModel"
@@ -12268,6 +12585,23 @@
               }
             ],
             "title": "Description"
+          },
+          "permission_on_resource": {
+            "description": "The permission on the resource of the pronunciation dictionary.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission On Resource"
           }
         },
         "example": {
@@ -12284,39 +12618,10 @@
           "created_by",
           "creation_time_unix",
           "version_id",
-          "version_rules_num"
+          "version_rules_num",
+          "permission_on_resource"
         ],
         "title": "AddPronunciationDictionaryResponseModel"
-      },
-      "AddPronunciationDictionaryRulesResponseModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Id"
-          },
-          "version_id": {
-            "description": "The version ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Version Id"
-          },
-          "version_rules_num": {
-            "description": "The number of rules in the version of the pronunciation dictionary.",
-            "type": "integer",
-            "title": "Version Rules Num"
-          }
-        },
-        "example": {
-          "id": "5xM3yVvZQKV0EfqQpLrJ",
-          "version_id": "5xM3yVvZQKV0EfqQpLr2"
-        },
-        "required": [
-          "id",
-          "version_id",
-          "version_rules_num"
-        ],
-        "title": "AddPronunciationDictionaryRulesResponseModel"
       },
       "AddVoiceIVCResponseModel": {
         "type": "object",
@@ -13028,6 +13333,16 @@
               }
             ],
             "title": "Audio Url"
+          },
+          "status": {
+            "description": "Current state of the project",
+            "type": "string",
+            "default": "ready",
+            "enum": [
+              "processing",
+              "ready"
+            ],
+            "title": "Status"
           }
         },
         "example": {
@@ -13038,6 +13353,7 @@
           "image": "https://example.com/image.jpg",
           "sessionization": 1,
           "small": false,
+          "status": "ready",
           "text_color": "#000000",
           "title": "My Project"
         },
@@ -13181,6 +13497,7 @@
       "AuthorizationMethod": {
         "type": "string",
         "enum": [
+          "invalid",
           "public",
           "authorization_header",
           "signed_url",
@@ -13195,6 +13512,79 @@
           "manual"
         ],
         "title": "BanReasonType"
+      },
+      "BatchCallResponse": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "scheduled_time_unix": {
+            "type": "integer",
+            "title": "Scheduled Time Unix"
+          },
+          "total_calls_dispatched": {
+            "type": "integer",
+            "title": "Total Calls Dispatched"
+          },
+          "total_calls_scheduled": {
+            "type": "integer",
+            "title": "Total Calls Scheduled"
+          },
+          "last_updated_at_unix": {
+            "type": "integer",
+            "title": "Last Updated At Unix"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallStatus"
+          },
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          }
+        },
+        "required": [
+          "batch_id",
+          "phone_number_id",
+          "name",
+          "agent_id",
+          "created_at_unix",
+          "scheduled_time_unix",
+          "total_calls_dispatched",
+          "total_calls_scheduled",
+          "last_updated_at_unix",
+          "status",
+          "agent_name"
+        ],
+        "title": "BatchCallResponse"
+      },
+      "BatchCallStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BatchCallStatus"
       },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
@@ -13966,6 +14356,27 @@
             "type": "string",
             "format": "binary",
             "title": "Audio"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -13981,6 +14392,27 @@
             "type": "string",
             "format": "binary",
             "title": "Audio"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -14424,6 +14856,32 @@
         ],
         "title": "Body_Create_Studio_project_v1_studio_projects_post"
       },
+      "Body_Create_URL_document_v1_convai_knowledge_base_url_post": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "description": "URL to a page of documentation that the agent will have access to in order to interact with users.",
+            "type": "string",
+            "title": "Url"
+          },
+          "name": {
+            "description": "A custom, human-readable name for the document.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "Body_Create_URL_document_v1_convai_knowledge_base_url_post"
+      },
       "Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post": {
         "type": "object",
         "properties": {
@@ -14600,17 +15058,44 @@
         ],
         "title": "Body_Create_chapter_v1_studio_projects__project_id__chapters_post"
       },
+      "Body_Create_file_document_v1_convai_knowledge_base_file_post": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "description": "Documentation that the agent will have access to in order to interact with users.",
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "name": {
+            "description": "A custom, human-readable name for the document.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_Create_file_document_v1_convai_knowledge_base_file_post"
+      },
       "Body_Create_forced_alignment_v1_forced_alignment_post": {
         "type": "object",
         "properties": {
           "file": {
-            "description": "The file to align. All major audio and video formats are supported. The file size must be less than 1GB.",
+            "description": "The file to align. All major audio formats are supported. The file size must be less than 1GB.",
             "type": "string",
             "format": "binary",
             "title": "File"
           },
           "text": {
-            "description": "The text to align with the audio or video. The input text can be in any format, however diarization is not supported at this time.",
+            "description": "The text to align with the audio. The input text can be in any format, however diarization is not supported at this time.",
             "type": "string",
             "title": "Text"
           }
@@ -14934,6 +15419,32 @@
           "source"
         ],
         "title": "Body_Create_podcast_v1_studio_podcasts_post"
+      },
+      "Body_Create_text_document_v1_convai_knowledge_base_text_post": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "description": "Text content to be added to the knowledge base.",
+            "type": "string",
+            "title": "Text"
+          },
+          "name": {
+            "description": "A custom, human-readable name for the document.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "Body_Create_text_document_v1_convai_knowledge_base_text_post"
       },
       "Body_Creates_Audio_Native_enabled_project__v1_audio_native_post": {
         "type": "object",
@@ -15877,6 +16388,19 @@
         ],
         "title": "Body_Remove_rules_from_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__remove_rules_post"
       },
+      "Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post": {
+        "type": "object",
+        "properties": {
+          "render_type": {
+            "description": "The type of the render. One of ['mp4', 'aac', 'mp3', 'wav', 'aaf', 'tracks_zip', 'clips_zip']",
+            "$ref": "#/components/schemas/RenderType"
+          }
+        },
+        "required": [
+          "render_type"
+        ],
+        "title": "Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post"
+      },
       "Body_Send_Conversation_Feedback_v1_convai_conversations__conversation_id__feedback_post": {
         "type": "object",
         "properties": {
@@ -16045,6 +16569,27 @@
               true
             ],
             "title": "Remove Background Noise"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -16102,6 +16647,27 @@
               true
             ],
             "title": "Remove Background Noise"
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "default": "other",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pcm_s16le_16",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
           }
         },
         "required": [
@@ -16113,14 +16679,21 @@
         "type": "object",
         "properties": {
           "model_id": {
-            "description": "The ID of the model to use for transcription, currently only 'scribe_v1' is available.",
+            "description": "The ID of the model to use for transcription, currently only 'scribe_v1' and 'scribe_v1_experimental' are available.",
             "type": "string",
             "title": "Model Id"
           },
           "file": {
-            "description": "The file to transcribe. All major audio and video formats are supported. The file size must be less than 1GB.",
-            "type": "string",
-            "format": "binary",
+            "description": "The file to transcribe. All major audio and video formats are supported. Exactly one of the file or cloud_storage_url parameters must be provided. The file size must be less than 1GB.",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "File"
           },
           "language_code": {
@@ -16188,11 +16761,40 @@
                 }
               ]
             ]
+          },
+          "file_format": {
+            "description": "The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.",
+            "type": "string",
+            "default": "other",
+            "enum": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "examples": [
+              "pcm_s16le_16",
+              "other"
+            ],
+            "title": "File Format"
+          },
+          "cloud_storage_url": {
+            "description": "The valid AWS S3 or Google Cloud Storage URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be a valid publicly accessible cloud storage URL. The file size must be less than 2GB. URL can be pre-signed.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "https://storage.googleapis.com/bucket-name/object-name",
+              "https://s3.amazonaws.com/bucket-name/object-name"
+            ],
+            "title": "Cloud Storage Url"
           }
         },
         "required": [
-          "model_id",
-          "file"
+          "model_id"
         ],
         "title": "Body_Speech_to_Text_v1_speech_to_text_post"
       },
@@ -16243,6 +16845,50 @@
           }
         },
         "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
+      },
+      "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
+        "type": "object",
+        "properties": {
+          "call_name": {
+            "type": "string",
+            "title": "Call Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "agent_phone_number_id": {
+            "type": "string",
+            "title": "Agent Phone Number Id"
+          },
+          "scheduled_time_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scheduled Time Unix"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutboundCallRecipient"
+            },
+            "maxItems": 10000,
+            "title": "Recipients"
+          }
+        },
+        "required": [
+          "call_name",
+          "agent_id",
+          "agent_phone_number_id",
+          "scheduled_time_unix",
+          "recipients"
+        ],
+        "title": "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
       },
       "Body_Text_to_speech_streaming_v1_text_to_speech__voice_id__stream_post": {
         "type": "object",
@@ -17961,6 +18607,11 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -18029,6 +18680,11 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -18226,6 +18882,17 @@
             "type": "boolean",
             "default": false,
             "title": "Dev Discount"
+          },
+          "tier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier"
           }
         },
         "title": "ConversationChargingCommonModel"
@@ -18432,6 +19099,30 @@
         ],
         "title": "ConversationHistoryAnalysisCommonModel"
       },
+      "ConversationHistoryErrorCommonModel": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "ConversationHistoryErrorCommonModel"
+      },
       "ConversationHistoryEvaluationCriteriaResultCommonModel": {
         "type": "object",
         "properties": {
@@ -18487,6 +19178,17 @@
             "type": "integer",
             "title": "Start Time Unix Secs"
           },
+          "accepted_time_unix_secs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accepted Time Unix Secs"
+          },
           "call_duration_secs": {
             "type": "integer",
             "title": "Call Duration Secs"
@@ -18540,6 +19242,37 @@
             "type": "string",
             "default": "",
             "title": "Termination Reason"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationHistoryErrorCommonModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "main_language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Main Language"
+          },
+          "rag_usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationHistoryRagUsageCommonModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -18547,6 +19280,24 @@
           "call_duration_secs"
         ],
         "title": "ConversationHistoryMetadataCommonModel"
+      },
+      "ConversationHistoryRagUsageCommonModel": {
+        "type": "object",
+        "properties": {
+          "usage_count": {
+            "type": "integer",
+            "title": "Usage Count"
+          },
+          "embedding_model": {
+            "type": "string",
+            "title": "Embedding Model"
+          }
+        },
+        "required": [
+          "usage_count",
+          "embedding_model"
+        ],
+        "title": "ConversationHistoryRagUsageCommonModel"
       },
       "ConversationHistoryTranscriptCommonModel": {
         "type": "object",
@@ -18636,6 +19387,25 @@
         ],
         "title": "ConversationHistoryTranscriptCommonModel"
       },
+      "ConversationHistoryTranscriptToolCallClientDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
+          },
+          "parameters": {
+            "title": "Parameters",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parameters"
+        ],
+        "title": "ConversationHistoryTranscriptToolCallClientDetails"
+      },
       "ConversationHistoryTranscriptToolCallCommonModel": {
         "type": "object",
         "properties": {
@@ -18665,6 +19435,31 @@
           "tool_has_been_called": {
             "type": "boolean",
             "title": "Tool Has Been Called"
+          },
+          "tool_details": {
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallWebhookDetails"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallClientDetails"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "client": "#/components/schemas/ConversationHistoryTranscriptToolCallClientDetails",
+                    "webhook": "#/components/schemas/ConversationHistoryTranscriptToolCallWebhookDetails"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Details"
           }
         },
         "required": [
@@ -18674,6 +19469,62 @@
           "tool_has_been_called"
         ],
         "title": "ConversationHistoryTranscriptToolCallCommonModel"
+      },
+      "ConversationHistoryTranscriptToolCallWebhookDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Headers"
+          },
+          "path_params": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Path Params"
+          },
+          "query_params": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Query Params"
+          },
+          "body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
+          }
+        },
+        "required": [
+          "method",
+          "url"
+        ],
+        "title": "ConversationHistoryTranscriptToolCallWebhookDetails"
       },
       "ConversationHistoryTranscriptToolResultCommonModel": {
         "type": "object",
@@ -18977,6 +19828,7 @@
           "status": {
             "type": "string",
             "enum": [
+              "in-progress",
               "processing",
               "done",
               "failed"
@@ -19950,6 +20802,24 @@
         ],
         "title": "DubbingMetadataResponse"
       },
+      "DubbingRenderResponseModel": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "render_id": {
+            "type": "string",
+            "title": "Render Id"
+          }
+        },
+        "required": [
+          "version",
+          "render_id"
+        ],
+        "title": "DubbingRenderResponseModel"
+      },
       "DubbingResource": {
         "type": "object",
         "properties": {
@@ -19972,6 +20842,9 @@
             },
             "title": "Target Languages"
           },
+          "input": {
+            "$ref": "#/components/schemas/DubbingMediaReference"
+          },
           "background": {
             "$ref": "#/components/schemas/DubbingMediaReference"
           },
@@ -19991,6 +20864,13 @@
               "$ref": "#/components/schemas/SpeakerSegment"
             },
             "title": "Speaker Segments"
+          },
+          "renders": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Render"
+            },
+            "title": "Renders"
           }
         },
         "required": [
@@ -19998,10 +20878,12 @@
           "version",
           "source_language",
           "target_languages",
+          "input",
           "background",
           "foreground",
           "speaker_tracks",
-          "speaker_segments"
+          "speaker_segments",
+          "renders"
         ],
         "title": "DubbingResource"
       },
@@ -20111,6 +20993,18 @@
           "multilingual_e5_large_instruct"
         ],
         "title": "EmbeddingModelEnum"
+      },
+      "EndCallToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "end_call",
+            "const": "end_call",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "EndCallToolConfig"
       },
       "EvaluationSettings": {
         "description": "Settings to evaluate an agent's performance.\nAgents are evaluated against a set of criteria, with success being defined as meeting some combination of those criteria.",
@@ -20890,6 +21784,7 @@
             "image": "https://example.com/image.jpg",
             "sessionization": 1,
             "small": false,
+            "status": "ready",
             "text_color": "#000000",
             "title": "My Project"
           },
@@ -20949,6 +21844,7 @@
           "status": {
             "type": "string",
             "enum": [
+              "in-progress",
               "processing",
               "done",
               "failed"
@@ -21120,12 +22016,16 @@
                 },
                 {
                   "$ref": "#/components/schemas/GetKnowledgeBaseSummaryFileResponseModel"
+                },
+                {
+                  "$ref": "#/components/schemas/GetKnowledgeBaseSummaryTextResponseModel"
                 }
               ],
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
                   "file": "#/components/schemas/GetKnowledgeBaseSummaryFileResponseModel",
+                  "text": "#/components/schemas/GetKnowledgeBaseSummaryTextResponseModel",
                   "url": "#/components/schemas/GetKnowledgeBaseSummaryURLResponseModel"
                 }
               }
@@ -21213,6 +22113,65 @@
         ],
         "title": "GetKnowledgeBaseSummaryFileResponseModel"
       },
+      "GetKnowledgeBaseSummaryTextResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/KnowledgeBaseDocumentMetadataResponseModel"
+          },
+          "prompt_injectable": {
+            "type": "boolean",
+            "title": "Prompt Injectable"
+          },
+          "access_info": {
+            "$ref": "#/components/schemas/ResourceAccessInfo"
+          },
+          "dependent_agents": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependentAvailableAgentIdentifier"
+                },
+                {
+                  "$ref": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "available": "#/components/schemas/DependentAvailableAgentIdentifier",
+                  "unknown": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              }
+            },
+            "title": "Dependent Agents"
+          },
+          "type": {
+            "type": "string",
+            "const": "text",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "metadata",
+          "prompt_injectable",
+          "access_info",
+          "dependent_agents",
+          "type"
+        ],
+        "title": "GetKnowledgeBaseSummaryTextResponseModel"
+      },
       "GetKnowledgeBaseSummaryURLResponseModel": {
         "type": "object",
         "properties": {
@@ -21276,6 +22235,48 @@
           "url"
         ],
         "title": "GetKnowledgeBaseSummaryURLResponseModel"
+      },
+      "GetKnowledgeBaseTextResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/KnowledgeBaseDocumentMetadataResponseModel"
+          },
+          "prompt_injectable": {
+            "type": "boolean",
+            "title": "Prompt Injectable"
+          },
+          "access_info": {
+            "$ref": "#/components/schemas/ResourceAccessInfo"
+          },
+          "extracted_inner_html": {
+            "type": "string",
+            "title": "Extracted Inner Html"
+          },
+          "type": {
+            "type": "string",
+            "const": "text",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "metadata",
+          "prompt_injectable",
+          "access_info",
+          "extracted_inner_html",
+          "type"
+        ],
+        "title": "GetKnowledgeBaseTextResponseModel"
       },
       "GetKnowledgeBaseURLResponseModel": {
         "type": "object",
@@ -21547,6 +22548,23 @@
             "type": "string",
             "title": "Name"
           },
+          "permission_on_resource": {
+            "description": "The permission on the resource of the pronunciation dictionary.",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission On Resource"
+          },
           "created_by": {
             "description": "The user ID of the creator of the pronunciation dictionary.",
             "type": "string",
@@ -21596,6 +22614,7 @@
           "latest_version_id",
           "latest_version_rules_num",
           "name",
+          "permission_on_resource",
           "created_by",
           "creation_time_unix",
           "archived_time_unix"
@@ -22081,17 +23100,21 @@
         ],
         "title": "KnowledgeBaseDocumentMetadataResponseModel"
       },
+      "KnowledgeBaseDocumentType": {
+        "type": "string",
+        "enum": [
+          "file",
+          "url",
+          "text"
+        ],
+        "title": "KnowledgeBaseDocumentType"
+      },
       "KnowledgeBaseLocator": {
         "type": "object",
         "properties": {
           "type": {
             "description": "The type of the knowledge base",
-            "type": "string",
-            "enum": [
-              "file",
-              "url"
-            ],
-            "title": "Type"
+            "$ref": "#/components/schemas/KnowledgeBaseDocumentType"
           },
           "name": {
             "description": "The name of the knowledge base",
@@ -22156,6 +23179,18 @@
           "version"
         ],
         "title": "LanguageAddedResponse"
+      },
+      "LanguageDetectionToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "language_detection",
+            "const": "language_detection",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "LanguageDetectionToolConfig"
       },
       "LanguagePreset-Input": {
         "type": "object",
@@ -23066,6 +24101,29 @@
           "type": "orb"
         },
         "title": "OrbAvatar"
+      },
+      "OutboundCallRecipient": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "title": "OutboundCallRecipient"
       },
       "PatchConvAISettingsRequest": {
         "type": "object",
@@ -24473,7 +25531,7 @@
                   "$ref": "#/components/schemas/ClientToolConfig-Input"
                 },
                 {
-                  "$ref": "#/components/schemas/SystemToolConfig"
+                  "$ref": "#/components/schemas/SystemToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -24481,7 +25539,7 @@
                 "propertyName": "type",
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
-                  "system": "#/components/schemas/SystemToolConfig",
+                  "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
               }
@@ -24582,7 +25640,7 @@
                   "$ref": "#/components/schemas/ClientToolConfig-Output"
                 },
                 {
-                  "$ref": "#/components/schemas/SystemToolConfig"
+                  "$ref": "#/components/schemas/SystemToolConfig-Output"
                 }
               ],
               "description": "The type of tool",
@@ -24590,7 +25648,7 @@
                 "propertyName": "type",
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Output",
-                  "system": "#/components/schemas/SystemToolConfig",
+                  "system": "#/components/schemas/SystemToolConfig-Output",
                   "webhook": "#/components/schemas/WebhookToolConfig-Output"
                 }
               }
@@ -24795,6 +25853,36 @@
         ],
         "title": "PronunciationDictionaryPhonemeRuleRequestModel"
       },
+      "PronunciationDictionaryRulesResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The ID of the pronunciation dictionary.",
+            "type": "string",
+            "title": "Id"
+          },
+          "version_id": {
+            "description": "The version ID of the pronunciation dictionary.",
+            "type": "string",
+            "title": "Version Id"
+          },
+          "version_rules_num": {
+            "description": "The number of rules in the version of the pronunciation dictionary.",
+            "type": "integer",
+            "title": "Version Rules Num"
+          }
+        },
+        "example": {
+          "id": "5xM3yVvZQKV0EfqQpLrJ",
+          "version_id": "5xM3yVvZQKV0EfqQpLr2"
+        },
+        "required": [
+          "id",
+          "version_id",
+          "version_rules_num"
+        ],
+        "title": "PronunciationDictionaryRulesResponseModel"
+      },
       "PronunciationDictionaryVersionLocatorDBModel": {
         "type": "object",
         "properties": {
@@ -24843,6 +25931,22 @@
             "type": "string",
             "title": "Version Name"
           },
+          "permission_on_resource": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "admin",
+                  "editor",
+                  "viewer"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission On Resource"
+          },
           "created_by": {
             "type": "string",
             "title": "Created By"
@@ -24869,6 +25973,7 @@
           "pronunciation_dictionary_id",
           "dictionary_name",
           "version_name",
+          "permission_on_resource",
           "created_by",
           "creation_time_unix"
         ],
@@ -25128,35 +26233,56 @@
         ],
         "title": "RecordingResponseModel"
       },
-      "RemovePronunciationDictionaryRulesResponseModel": {
+      "Render": {
         "type": "object",
         "properties": {
           "id": {
-            "description": "The ID of the pronunciation dictionary.",
             "type": "string",
             "title": "Id"
           },
-          "version_id": {
-            "description": "The version ID of the pronunciation dictionary.",
-            "type": "string",
-            "title": "Version Id"
-          },
-          "version_rules_num": {
-            "description": "The number of rules in the version of the pronunciation dictionary.",
+          "version": {
             "type": "integer",
-            "title": "Version Rules Num"
+            "title": "Version"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RenderType"
+          },
+          "media_ref": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DubbingMediaReference"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
-        },
-        "example": {
-          "id": "5xM3yVvZQKV0EfqQpLrJ",
-          "version_id": "5xM3yVvZQKV0EfqQpLr2"
         },
         "required": [
           "id",
-          "version_id",
-          "version_rules_num"
+          "version",
+          "language",
+          "type",
+          "media_ref"
         ],
-        "title": "RemovePronunciationDictionaryRulesResponseModel"
+        "title": "Render"
+      },
+      "RenderType": {
+        "type": "string",
+        "enum": [
+          "mp4",
+          "aac",
+          "mp3",
+          "wav",
+          "aaf",
+          "tracks_zip",
+          "clips_zip"
+        ],
+        "title": "RenderType"
       },
       "ResourceAccessInfo": {
         "type": "object",
@@ -25361,6 +26487,11 @@
             "type": "boolean",
             "default": false,
             "title": "Is Blocked Non Ivc"
+          },
+          "ignore_safety_evaluation": {
+            "type": "boolean",
+            "default": false,
+            "title": "Ignore Safety Evaluation"
           }
         },
         "title": "SafetyResponseModel"
@@ -25461,6 +26592,28 @@
                 "type": "null"
               }
             ]
+          },
+          "trim_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trim Start"
+          },
+          "trim_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trim End"
           }
         },
         "example": {
@@ -26756,6 +27909,7 @@
           "max_voice_add_edits": 230,
           "next_character_count_reset_unix": 1738356858,
           "professional_voice_limit": 1,
+          "professional_voice_slots_used": 0,
           "status": "free",
           "tier": "trial",
           "voice_add_edit_counter": 212,
@@ -26847,10 +28001,15 @@
         ],
         "title": "SubscriptionUsageResponseModel"
       },
-      "SystemToolConfig": {
+      "SystemToolConfig-Input": {
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -26868,6 +28027,28 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "params": {
+            "discriminator": {
+              "propertyName": "system_tool_type",
+              "mapping": {
+                "end_call": "#/components/schemas/EndCallToolConfig",
+                "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EndCallToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/LanguageDetectionToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            ],
+            "title": "Params"
           }
         },
         "example": {
@@ -26875,7 +28056,68 @@
         },
         "required": [
           "name",
-          "description"
+          "description",
+          "params"
+        ],
+        "title": "SystemToolConfig"
+      },
+      "SystemToolConfig-Output": {
+        "description": "A system tool is a tool that is used to call a system method in the server",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "title": "Description"
+          },
+          "params": {
+            "discriminator": {
+              "propertyName": "system_tool_type",
+              "mapping": {
+                "end_call": "#/components/schemas/EndCallToolConfig",
+                "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EndCallToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/LanguageDetectionToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolConfig"
+              }
+            ],
+            "title": "Params"
+          }
+        },
+        "example": {
+          "type": "system"
+        },
+        "required": [
+          "name",
+          "description",
+          "params"
         ],
         "title": "SystemToolConfig"
       },
@@ -27022,6 +28264,46 @@
         ],
         "title": "TelephonyProvider"
       },
+      "Transfer": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "agent_id",
+          "condition"
+        ],
+        "title": "Transfer"
+      },
+      "TransferToAgentToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "transfer_to_agent",
+            "const": "transfer_to_agent",
+            "title": "System Tool Type"
+          },
+          "transfers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transfer"
+            },
+            "title": "Transfers"
+          }
+        },
+        "required": [
+          "transfers"
+        ],
+        "title": "TransferToAgentToolConfig"
+      },
       "TurnConfig": {
         "type": "object",
         "properties": {
@@ -27031,6 +28313,12 @@
             "default": 7,
             "title": "Turn Timeout"
           },
+          "silence_end_call_timeout": {
+            "description": "Maximum wait time since the user last spoke before terminating the call",
+            "type": "number",
+            "default": -1,
+            "title": "Silence End Call Timeout"
+          },
           "mode": {
             "description": "The mode of turn detection",
             "default": "turn",
@@ -27039,6 +28327,7 @@
         },
         "example": {
           "mode": "turn",
+          "silence_end_call_timeout": -1,
           "turn_timeout": 7
         },
         "title": "TurnConfig"
@@ -27400,6 +28689,7 @@
             "max_voice_add_edits": 230,
             "next_character_count_reset_unix": 1738356858,
             "professional_voice_limit": 1,
+            "professional_voice_slots_used": 0,
             "status": "free",
             "tier": "trial",
             "voice_add_edit_counter": 212,
@@ -29067,6 +30357,11 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -29108,6 +30403,11 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -29727,6 +31027,40 @@
         ],
         "title": "WidgetFeedbackMode"
       },
+      "WorkspaceBatchCallsResponse": {
+        "type": "object",
+        "properties": {
+          "batch_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchCallResponse"
+            },
+            "title": "Batch Calls"
+          },
+          "next_doc": {
+            "description": "The next document, used to paginate through the batch calls",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Doc"
+          },
+          "has_more": {
+            "description": "Whether there are more batch calls to paginate through",
+            "type": "boolean",
+            "default": false,
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "batch_calls"
+        ],
+        "title": "WorkspaceBatchCallsResponse"
+      },
       "WorkspaceGroupByNameResponseModel": {
         "type": "object",
         "properties": {
@@ -29769,6 +31103,7 @@
         "type": "string",
         "enum": [
           "voice",
+          "voice_collection",
           "pronunciation_dictionary",
           "dubbing",
           "project",
@@ -29778,7 +31113,8 @@
           "convai_settings",
           "convai_secrets",
           "music_latent",
-          "convai_phone_numbers"
+          "convai_phone_numbers",
+          "convai_batch_calls"
         ],
         "title": "WorkspaceResourceType"
       }

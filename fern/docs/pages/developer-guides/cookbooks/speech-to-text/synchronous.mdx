@@ -1,0 +1,121 @@
+---
+title: Synchronous Speech to Text
+subtitle: Learn how to transcribe audio with ElevenLabs synchronously
+---
+
+In this tutorial, you'll learn how to transcribe audio with the ElevenLabs SDK synchronously.
+
+## Requirements
+
+- An ElevenLabs account with an [API key](/docs/developer-guides/quickstart#authentication).
+- Python or Node installed on your machine
+
+## Setup
+
+### Installing the SDK
+
+Before you begin, make sure you have installed the ElevenLabs SDK.
+
+<CodeBlocks>
+    ```python title="Python"
+    pip install elevenlabs
+    ```
+
+    ```javascript title="JavaScript"
+    npm install elevenlabs
+    ```
+
+</CodeBlocks>
+
+Additionally, install necessary packages to manage your environmental variables:
+
+<CodeBlocks>
+    ```python title="Python"
+    pip install python-dotenv
+    ```
+
+    ```javascript title="JavaScript"
+    npm install dotenv
+    ```
+
+</CodeBlocks>
+
+Next, create a `.env` file in your project directory and fill it with your credentials like so:
+
+```python .env
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+To convert the audio of a file to text, we'll use the `convert` method of the ElevenLabs SDK.
+
+## Convert speech to text
+
+<CodeGroup>
+    ```python title="speech_to_text.py" maxLines=0
+    from dotenv import load_dotenv
+    from io import BytesIO
+    import requests
+    from elevenlabs.client import ElevenLabs
+    import os
+
+    load_dotenv()
+
+    client = ElevenLabs(
+        api_key=os.getenv("ELEVENLABS_API_KEY"),
+    )
+
+    audio_url = (
+        "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+    )
+    response = requests.get(audio_url)
+    audio_data = BytesIO(response.content)
+
+    transcription = client.speech_to_text.convert(
+        file=audio_data,
+        model_id="scribe_v1", # 'scribe_v1_experimental' is also available for new, experimental features
+        tag_audio_events=True, # Tag audio events like laughter, applause, etc.
+        language_code="eng", # Language of the audio file. If set to None, the model will detect the language automatically.
+        diarize=True, # Whether to annotate who is speaking
+    )
+
+    print(transcription.text)
+
+    ```
+
+    ```javascript title="speechToText.mjs" maxLines=0
+    import "dotenv/config";
+    import { ElevenLabsClient } from "elevenlabs";
+
+    const client = new ElevenLabsClient();
+
+    const response = await fetch(
+        "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+    );
+    const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
+
+    const transcription = await client.speechToText.convert({
+        file: audioBlob,
+        model_id: "scribe_v1", // 'scribe_v1_experimental' is also available for new, experimental features
+        tag_audio_events: true, // Tag audio events like laughter, applause, etc.
+        language_code: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
+        diarize: true, // Whether to annotate who is speaking
+    });
+
+    console.log(transcription.text);
+
+    ```
+
+</CodeGroup>
+
+Run the script with:
+
+<CodeBlocks>
+    ```python
+    python speech_to_text.py
+    ```
+
+    ```node
+    node speechToText.mjs
+    ```
+
+</CodeBlocks>
