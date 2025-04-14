@@ -6171,6 +6171,445 @@
         ]
       }
     },
+    "/v1/dubbing": {
+      "post": {
+        "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
+        "summary": "Dub A Video Or An Audio File",
+        "description": "Dubs a provided audio or video file into given language.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoDubbingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}": {
+      "get": {
+        "operationId": "Get_dubbing_v1_dubbing__dubbing_id__get",
+        "summary": "Get Dubbing",
+        "description": "Returns metadata about a dubbing project, including whether it's still in progress or not",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DubbingMetadataResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
+      },
+      "delete": {
+        "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
+        "summary": "Delete Dubbing",
+        "description": "Deletes a dubbing project.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDubbingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "delete_dubbing_project"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
+      "get": {
+        "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
+        "summary": "Get Dubbed File",
+        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "path",
+            "description": "ID of the language.",
+            "required": true,
+            "schema": {
+              "description": "ID of the language.",
+              "type": "string",
+              "title": "Language Code"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The dubbed audio or video file",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "permission_denied",
+                  "message": "User does not have required permissions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dubbing not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_found",
+                  "message": "There is no dubbing for language {language_code}."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "425": {
+            "description": "Dubbing not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_dubbed",
+                  "message": "Dubbing has not finished yet."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_dubbed_file"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
+      "get": {
+        "operationId": "Get_dubbed_transcript_v1_dubbing__dubbing_id__transcript__language_code__get",
+        "summary": "Get Dubbed Transcript",
+        "description": "Returns transcript for the dub as an SRT or WEBVTT file.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "path",
+            "description": "ID of the language.",
+            "required": true,
+            "schema": {
+              "description": "ID of the language.",
+              "type": "string",
+              "title": "Language Code"
+            }
+          },
+          {
+            "name": "format_type",
+            "in": "query",
+            "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
+            "required": false,
+            "schema": {
+              "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
+              "type": "string",
+              "default": "srt",
+              "embed": true,
+              "enum": [
+                "srt",
+                "webvtt"
+              ],
+              "title": "Format Type"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "1\n00:00:01,000 --> 00:00:04,000\nHello, this is the first subtitle line\n\n2\n00:00:05,000 --> 00:00:07,000\nAnd here's the second subtitle line"
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Anonymous users cannot use this function",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "anonymous_not_allowed",
+                  "message": "Anonymous users cannot use this function"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dubbing or transcript not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "transcript_not_found",
+                  "message": "No transcript was found for the dub."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "425": {
+            "description": "Dubbing not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_dubbed",
+                  "message": "Dubbing has not finished yet."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_transcript_for_dub"
+      }
+    },
     "/v1/dubbing/resource/{dubbing_id}": {
       "get": {
         "operationId": "Get_the_dubbing_resource_for_an_ID__v1_dubbing_resource__dubbing_id__get",
@@ -6899,445 +7338,6 @@
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "render_dub"
-      }
-    },
-    "/v1/dubbing": {
-      "post": {
-        "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
-        "summary": "Dub A Video Or An Audio File",
-        "description": "Dubs a provided audio or video file into given language.",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DoDubbingResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}": {
-      "get": {
-        "operationId": "Get_dubbing_v1_dubbing__dubbing_id__get",
-        "summary": "Get Dubbing",
-        "description": "Returns metadata about a dubbing project, including whether it's still in progress or not",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DubbingMetadataResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
-      },
-      "delete": {
-        "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
-        "summary": "Delete Dubbing",
-        "description": "Deletes a dubbing project.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteDubbingResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "delete_dubbing_project"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
-      "get": {
-        "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
-        "summary": "Get Dubbed File",
-        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "language_code",
-            "in": "path",
-            "description": "ID of the language.",
-            "required": true,
-            "schema": {
-              "description": "ID of the language.",
-              "type": "string",
-              "title": "Language Code"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The dubbed audio or video file",
-            "content": {
-              "audio/mpeg": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "video/mp4": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission denied",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "permission_denied",
-                  "message": "User does not have required permissions"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Dubbing not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_found",
-                  "message": "There is no dubbing for language {language_code}."
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "425": {
-            "description": "Dubbing not ready",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_dubbed",
-                  "message": "Dubbing has not finished yet."
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbed_file"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
-      "get": {
-        "operationId": "Get_dubbed_transcript_v1_dubbing__dubbing_id__transcript__language_code__get",
-        "summary": "Get Dubbed Transcript",
-        "description": "Returns transcript for the dub as an SRT or WEBVTT file.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "language_code",
-            "in": "path",
-            "description": "ID of the language.",
-            "required": true,
-            "schema": {
-              "description": "ID of the language.",
-              "type": "string",
-              "title": "Language Code"
-            }
-          },
-          {
-            "name": "format_type",
-            "in": "query",
-            "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
-            "required": false,
-            "schema": {
-              "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
-              "type": "string",
-              "default": "srt",
-              "embed": true,
-              "enum": [
-                "srt",
-                "webvtt"
-              ],
-              "title": "Format Type"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": "1\n00:00:01,000 --> 00:00:04,000\nHello, this is the first subtitle line\n\n2\n00:00:05,000 --> 00:00:07,000\nAnd here's the second subtitle line"
-              },
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Anonymous users cannot use this function",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "anonymous_not_allowed",
-                  "message": "Anonymous users cannot use this function"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Dubbing or transcript not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "transcript_not_found",
-                  "message": "No transcript was found for the dub."
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "425": {
-            "description": "Dubbing not ready",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_dubbed",
-                  "message": "Dubbing has not finished yet."
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_transcript_for_dub"
       }
     },
     "/v1/models": {
@@ -13529,6 +13529,79 @@
         ],
         "title": "BanReasonType"
       },
+      "BatchCallResponse": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "scheduled_time_unix": {
+            "type": "integer",
+            "title": "Scheduled Time Unix"
+          },
+          "total_calls_dispatched": {
+            "type": "integer",
+            "title": "Total Calls Dispatched"
+          },
+          "total_calls_scheduled": {
+            "type": "integer",
+            "title": "Total Calls Scheduled"
+          },
+          "last_updated_at_unix": {
+            "type": "integer",
+            "title": "Last Updated At Unix"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallStatus"
+          },
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          }
+        },
+        "required": [
+          "batch_id",
+          "phone_number_id",
+          "name",
+          "agent_id",
+          "created_at_unix",
+          "scheduled_time_unix",
+          "total_calls_dispatched",
+          "total_calls_scheduled",
+          "last_updated_at_unix",
+          "status",
+          "agent_name"
+        ],
+        "title": "BatchCallResponse"
+      },
+      "BatchCallStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BatchCallStatus"
+      },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
         "properties": {
@@ -16768,6 +16841,50 @@
         },
         "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
       },
+      "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
+        "type": "object",
+        "properties": {
+          "call_name": {
+            "type": "string",
+            "title": "Call Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "agent_phone_number_id": {
+            "type": "string",
+            "title": "Agent Phone Number Id"
+          },
+          "scheduled_time_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scheduled Time Unix"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutboundCallRecipient"
+            },
+            "maxItems": 10000,
+            "title": "Recipients"
+          }
+        },
+        "required": [
+          "call_name",
+          "agent_id",
+          "agent_phone_number_id",
+          "scheduled_time_unix",
+          "recipients"
+        ],
+        "title": "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
+      },
       "Body_Text_to_speech_streaming_v1_text_to_speech__voice_id__stream_post": {
         "type": "object",
         "properties": {
@@ -19265,6 +19382,25 @@
         ],
         "title": "ConversationHistoryTranscriptCommonModel"
       },
+      "ConversationHistoryTranscriptToolCallClientDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
+          },
+          "parameters": {
+            "title": "Parameters",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parameters"
+        ],
+        "title": "ConversationHistoryTranscriptToolCallClientDetails"
+      },
       "ConversationHistoryTranscriptToolCallCommonModel": {
         "type": "object",
         "properties": {
@@ -19294,6 +19430,31 @@
           "tool_has_been_called": {
             "type": "boolean",
             "title": "Tool Has Been Called"
+          },
+          "tool_details": {
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallWebhookDetails"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallClientDetails"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "client": "#/components/schemas/ConversationHistoryTranscriptToolCallClientDetails",
+                    "webhook": "#/components/schemas/ConversationHistoryTranscriptToolCallWebhookDetails"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Details"
           }
         },
         "required": [
@@ -19303,6 +19464,62 @@
           "tool_has_been_called"
         ],
         "title": "ConversationHistoryTranscriptToolCallCommonModel"
+      },
+      "ConversationHistoryTranscriptToolCallWebhookDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Headers"
+          },
+          "path_params": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Path Params"
+          },
+          "query_params": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Query Params"
+          },
+          "body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
+          }
+        },
+        "required": [
+          "method",
+          "url"
+        ],
+        "title": "ConversationHistoryTranscriptToolCallWebhookDetails"
       },
       "ConversationHistoryTranscriptToolResultCommonModel": {
         "type": "object",
@@ -23880,6 +24097,29 @@
         },
         "title": "OrbAvatar"
       },
+      "OutboundCallRecipient": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "title": "OutboundCallRecipient"
+      },
       "PatchConvAISettingsRequest": {
         "type": "object",
         "properties": {
@@ -26347,6 +26587,28 @@
                 "type": "null"
               }
             ]
+          },
+          "trim_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trim Start"
+          },
+          "trim_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trim End"
           }
         },
         "example": {
@@ -30760,6 +31022,40 @@
         ],
         "title": "WidgetFeedbackMode"
       },
+      "WorkspaceBatchCallsResponse": {
+        "type": "object",
+        "properties": {
+          "batch_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchCallResponse"
+            },
+            "title": "Batch Calls"
+          },
+          "next_doc": {
+            "description": "The next document, used to paginate through the batch calls",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Doc"
+          },
+          "has_more": {
+            "description": "Whether there are more batch calls to paginate through",
+            "type": "boolean",
+            "default": false,
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "batch_calls"
+        ],
+        "title": "WorkspaceBatchCallsResponse"
+      },
       "WorkspaceGroupByNameResponseModel": {
         "type": "object",
         "properties": {
@@ -30812,7 +31108,8 @@
           "convai_settings",
           "convai_secrets",
           "music_latent",
-          "convai_phone_numbers"
+          "convai_phone_numbers",
+          "convai_batch_calls"
         ],
         "title": "WorkspaceResourceType"
       }
