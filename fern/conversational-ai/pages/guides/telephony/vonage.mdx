@@ -1,0 +1,88 @@
+---
+title: Vonage Integration
+subtitle: Integrate ElevenLabs Conversational AI with Vonage voice calls using a WebSocket connector.
+---
+
+## Overview
+
+Connect ElevenLabs Conversational AI Agents to Vonage Voice API or Video API calls using a [WebSocket connector application](https://github.com/nexmo-se/elevenlabs-agent-ws-connector). This enables real-time, bi-directional audio streaming for use cases like PSTN calls, SIP trunks, and WebRTC clients.
+
+## How it works
+
+The Node.js connector bridges Vonage and ElevenLabs:
+
+1.  Vonage initiates a WebSocket connection to the connector for an active call.
+2.  The connector establishes a WebSocket connection to the ElevenLabs Conversational AI endpoint.
+3.  Audio is relayed: Vonage (L16) -> Connector -> ElevenLabs (base64) and vice-versa.
+4.  The connector manages conversation events (`user_transcript`, `agent_response`, `interruption`).
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/11l-agent-ws-overview-diagram.png"
+    alt="Architecture diagram showing Vonage connecting via WebSocket to the Connector, which connects via WebSocket to ElevenLabs AI."
+  />
+</Frame>
+
+## Setup
+
+<Steps>
+
+### 1. Get ElevenLabs Credentials
+
+- **API Key**: From "My Account" -> "API Keys" on the [ElevenLabs dashboard](https://elevenlabs.io/app).
+- **Agent ID**: From "Conversational AI" -> "Agents" -> (...) -> "Copy Agent ID".
+
+### 2. Configure the Connector
+
+Clone the repository and set up the environment file.
+
+```bash
+git clone https://github.com/nexmo-se/elevenlabs-agent-ws-connector.git
+cd elevenlabs-agent-ws-connector
+cp .env.example .env
+```
+
+Add your credentials to `.env`:
+
+```.env title=".env" focus=2,3
+ELEVENLABS_API_KEY=YOUR_API_KEY
+ELEVENLABS_AGENT_ID=YOUR_AGENT_ID
+# Optional: ELEVENLABS_VOICE_ID, ELEVENLABS_MODEL
+```
+
+Install dependencies: `npm install`.
+
+### 3. Expose the Connector (Local Development)
+
+Use ngrok to create a public URL for the connector (default port 6000).
+
+```bash
+ngrok http 6000
+```
+
+Note the public `Forwarding` URL (e.g., `xxxxxxxx.ngrok-free.app`). **Do not include `https://`** when configuring Vonage.
+
+### 4. Run the Connector
+
+Start the application:
+
+```bash
+node elevenlabs-agent-ws-connector.cjs
+```
+
+### 5. Configure Vonage Voice Application
+
+Your Vonage app needs to connect to the connector's WebSocket endpoint (`wss://YOUR_CONNECTOR_HOSTNAME/socket`).
+
+- **Use Sample App**: Configure the [sample Vonage app](https://github.com/nexmo-se/voice-to-ai-engines) with `PROCESSOR_SERVER` set to your connector's hostname.
+- **Update Existing App**: Modify your NCCO to include a `connect` action targeting the connector's WebSocket URI (`wss://...`) with `content-type: audio/l16;rate=16000`. Pass necessary query parameters like `peer_uuid` and `webhook_url`.
+
+### 6. Test
+
+Make an inbound or outbound call via your Vonage application to interact with the ElevenLabs agent.
+
+</Steps>
+
+## Cloud Deployment
+
+For production, deploy the connector to a stable hosting provider (e.g., Vonage Cloud Runtime) with a public hostname.
