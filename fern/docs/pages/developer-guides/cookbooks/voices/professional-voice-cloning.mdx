@@ -1,0 +1,158 @@
+---
+title: Professional Voice Cloning
+subtitle: Learn how to clone a voice using the Clone Voice API.
+---
+
+This guide will show you how to create a Professional Voice Clone (PVC) using the PVC API. To create a PVC via the dashboard, refer to the [Professional Voice Clone](/docs/product-guides/voices/voice-cloning/professional-voice-cloning) product guide.
+
+<Info>
+    Creating a PVC requires you to be on the [Creator plan](https://elevenlabs.io/pricing) or above.
+</Info>
+
+
+For an outline of the differences between Instant Voice Clones and Professional Voice Clones, refer to the [Voices capability](/docs/capabilities/voices) guide.
+
+In terms of creating a PVC via the API, it contains considerably more steps than creating an Instant Voice Clone. This is due to the fact that PVCs are more complex and require more data and fine-tuning to create a high quality clone.
+
+## Using the Professional Voice Clone API
+
+<Steps>
+    <Step title="Create an API key">
+        <Markdown src="/snippets/quickstart-api-key.mdx" />
+    </Step>
+    <Step title="Install the SDK">
+        <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+    </Step>
+    <Step title="Create a PVC voice">
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+
+        <CodeBlock>
+        ```python maxLines=0
+        # example.py
+        import os
+        from dotenv import load_dotenv
+        from elevenlabs.client import ElevenLabs
+        from io import BytesIO
+
+        load_dotenv()
+
+        client = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        voice = client.voices.pvc.create(
+            name="My Professional Voice Clone",
+            language="en",
+            description="A professional voice clone of my voice",
+        )
+
+        print(voice.voice_id)
+        ```
+
+        ```typescript maxLines=0
+        // example.mts
+        import { ElevenLabsClient } from "elevenlabs";
+        import "dotenv/config";
+
+        const client = new ElevenLabsClient();
+
+        const voice = await client.voices.pvc.create({
+            name: "My Professional Voice Clone",
+            language: "en",
+            description: "A professional voice clone of my voice",
+        });
+
+        console.log(voice.voice_id);
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="Upload audio files">
+        Next we'll upload the audio sample files that will be used to train the PVC.
+
+        <CodeBlock>
+        ```python
+        ```
+
+        ```typescript
+        const samples = await elevenlabs.voices.pvc.samples.create(voice.voice_id, {
+            // Replace with the paths to your audio and/or video files.
+            // The more files you add, the better the clone will be.
+            files: [fs.createReadStream("/path/to/your/audio/file.mp3")],
+        })
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="Begin speaker separation">
+        This step will attempt to separate the audio files into individual speakers. This is required if you are uploading audio with multiple speakers.
+
+        <CodeBlock>
+        ```python
+        ```
+
+        ```typescript
+        // Trigger the speaker separation action, this will take some time to complete
+        for (const sample of samples) {
+            if (sample.sample_id) {
+                await elevenlabs.voices.pvc.samples.speakers.separate(voice.voice_id, sample.sample_id);
+            }
+        }
+
+        // Check the status of the speaker separation action
+        const ids = samples.map((sample) => sample.sample_id);
+        const interval = setInterval(async () => {
+            // Poll the status of the speaker separation action
+            for (const id of ids) {
+                if (!id) continue;
+
+                const { status } = await elevenlabs.voices.pvc.samples.speakers.get(voice.voice_id, id);
+                console.log(status);
+                if (status === "completed") {
+                    ids.splice(ids.indexOf(id), 1);
+                }
+
+                if (ids.length === 0) {
+                    clearInterval(interval);
+                    console.log("All samples have been processed");
+                }
+            }
+        }, 5000);
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="Retrieve speaker audio">
+        Once speaker separation is complete, you will have a list of speakers for each sample. In the case of samples with multiple speakers, you will have to pick the speaker you want to use for the PVC. To identify the speaker, you can retrieve the audio for each speaker and listen to them.
+
+        <CodeBlock>
+        ```python
+        ```
+    </Step>
+    <Step title="(Optional) Modify samples">
+        Once speaker separation is complete, you
+    </Step>
+    <Step title="Train the PVC">
+    </Step>
+    <Step title="Verify the PVC">
+    </Step>
+    <Step title="(Optional) Request manual verification">
+    </Step>
+    <Step title="Use the newly created voice">
+    </Step>
+    <Step title="Execute the code">
+        <CodeBlock>
+            ```python
+            python example.py
+            ```
+
+            ```typescript
+            npx tsx example.mts
+            ```
+        </CodeBlock>
+
+        You should see the voice ID printed to the console.
+    </Step>
+
+</Steps>
+
+## Next steps
+
+Explore the [API reference](/docs/api-reference/voices/add) for more information on creating a voice clone.
