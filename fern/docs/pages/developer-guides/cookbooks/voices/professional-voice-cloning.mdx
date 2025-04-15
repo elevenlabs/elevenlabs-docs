@@ -24,7 +24,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         <Markdown src="/snippets/quickstart-install-sdk.mdx" />
     </Step>
     <Step title="Create a PVC voice">
-        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code to create a PVC voice:
 
         <CodeBlock>
         ```python maxLines=0
@@ -89,7 +89,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         ```python
         ```
 
-        ```typescript
+        ```typescript maxLines=0
         // Trigger the speaker separation action, this will take some time to complete
         for (const sample of samples) {
             if (sample.sample_id) {
@@ -120,37 +120,102 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         </CodeBlock>
     </Step>
     <Step title="Retrieve speaker audio">
+        <Warning>
+            Since the previous step will take some time to complete, you'd do this step in a separate process after the previous step has completed.
+        </Warning>
+
         Once speaker separation is complete, you will have a list of speakers for each sample. In the case of samples with multiple speakers, you will have to pick the speaker you want to use for the PVC. To identify the speaker, you can retrieve the audio for each speaker and listen to them.
 
         <CodeBlock>
         ```python
         ```
+
+        ```typescript
+        // After separation is completed, get the list of speakers and their audio
+        for (const sample of samples) {
+            if (!sample.sample_id) continue;
+
+            const { speakers } = await elevenlabs.voices.pvc.samples.speakers.get(voice.voice_id, sample.sample_id)
+
+            if (speakers) {
+                for (const speaker of Object.values(speakers)) {
+                    if (!speaker || !speaker.speaker_id) continue;
+                    const { audio_base_64: audioBase64 } = await elevenlabs.voices.pvc.samples.speakers.audio.get(voice.voice_id, sample.sample_id, speaker.speaker_id);
+                    const audioBuffer = Buffer.from(audioBase64, 'base64');
+
+                    // Write the audio to a file
+                    // Note which speaker ID you wish to use for the PVC
+                    fs.writeFileSync(`path/to/speakers/${speaker.speaker_id}.mp3`, audioBuffer);
+                }
+            }
+        }
+        ```
+        </CodeBlock>
     </Step>
-    <Step title="(Optional) Modify samples">
-        Once speaker separation is complete, you
-    </Step>
-    <Step title="Train the PVC">
+    <Step title="Update samples with speaker IDs">
+        Once speaker separation is complete, you can update the samples to select which speaker you want to use for the PVC.
+
+        <CodeBlock>
+        ```typescript
+        const voice = await elevenlabs.voices.pvc.samples.update(voice.voice_id, samples.sample_id, {
+            selected_speaker_ids: [speaker.speaker_id],
+        })
+        ```
+
+        Repeat this process for each sample for better results.
+        </CodeBlock>
     </Step>
     <Step title="Verify the PVC">
-    </Step>
-    <Step title="(Optional) Request manual verification">
-    </Step>
-    <Step title="Use the newly created voice">
-    </Step>
-    <Step title="Execute the code">
-        <CodeBlock>
-            ```python
-            python example.py
-            ```
+        Before training can begin, a verification step is required to ensure you have permission to use the voice. First request the verification CAPTCHA.
 
-            ```typescript
-            npx tsx example.mts
-            ```
+        <CodeBlock>
+        ```typescript
+        const captchaResponse =await elevenlabs.voices.pvc.verification.captcha.get(voice.voice_id);
+
+        // Save captcha image to file
+        const captchaBuffer = Buffer.from(captchaResponse, 'base64');
+        fs.writeFileSync('path/to/captcha.png', captchaBuffer);
+        ```
         </CodeBlock>
 
-        You should see the voice ID printed to the console.
+        The image contains several lines of text that the voice owner will need to read out loud and record. Once done, submit the recording to verify the identity of the voice's owner.
+
+        <CodeBlock>
+        ```typescript
+        await elevenlabs.voices.pvc.verification.captcha.verify(voice.voice_id, {
+        	recording: fs.createReadStream("/path/to/recording.mp3"),
+        })
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="(Optional) Request manual verification">
+        If you are unable to verify the CAPTCHA, you can request manual verification. Note that this will take longer to process.
+
+        This should only be used if the previous verification steps have failed or are not possible, for instance if the voice owner is visually impaired.
+
+        <CodeBlock>
+        ```typescript
+        await elevenlabs.voices.pvc.verification.request(voice.voice_id, {
+            files: [fs.createReadStream("/path/to/recording.mp3")],
+            extra_text: "Extra text used to verify the voice's owner",
+        });
+        ```
+        </CodeBlock>
+    </Step>
+    <Step title="Train the PVC">
+        Next, begin the training process. This will take some time to complete based on the length and number of samples provided.
+
+        <CodeBlock>
+        ```typescript
+        await elevenlabs.voices.pvc.train(voice.voice_id);
+        ```
+        </CodeBlock>
     </Step>
 
+    <Step title="Use the newly created voice">
+        Once the PVC is verified, you can use it in the same way as any other voice. See the [Speech to Text quickstart](/docs/quickstart) for more information on how to use a voice.
+
+    </Step>
 </Steps>
 
 ## Next steps
