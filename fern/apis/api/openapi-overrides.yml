@@ -80,7 +80,7 @@ paths:
             model_id: eleven_multilingual_v2
       parameters:
         - required: true
-          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/text-to-speech/{voice_id}/with-timestamps:
     post:
       summary: Create speech with timing
@@ -98,7 +98,7 @@ paths:
             model_id: eleven_multilingual_v2
       parameters:
         - required: true
-          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/text-to-speech/{voice_id}/stream/with-timestamps:
     post:
       summary: Stream speech with timing
@@ -113,7 +113,7 @@ paths:
             model_id: eleven_multilingual_v2
       parameters:
         - required: true
-          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/speech-to-speech/{voice_id}:
     post:
       summary: Voice changer
@@ -126,7 +126,7 @@ paths:
             model_id: eleven_multilingual_sts_v2
       parameters:
         - required: true
-          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/speech-to-speech/{voice_id}/stream:
     post:
       summary: Voice changer stream
@@ -139,7 +139,7 @@ paths:
             model_id: eleven_multilingual_sts_v2
       parameters:
         - required: true
-          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+          description: ID of the voice to be used. Use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
 
   # ==============
   # SPEECH TO TEXT
@@ -166,7 +166,7 @@ paths:
       parameters:
         - {} # page_size
         - {} # start_after_history_item_id
-        - description: ID of the voice to be filtered for. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be filtered for. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
         - description: Search term used for filtering history items. If provided, source becomes required.
   /v1/history/{history_item_id}:
     get:
@@ -191,13 +191,13 @@ paths:
     delete:
       summary: Delete voice sample
       parameters:
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
         - description: ID of the sample to be used. You can use the [Get voices](/docs/api-reference/voices/get) endpoint list all the available samples for a voice.
   /v1/voices/{voice_id}/samples/{sample_id}/audio:
     get:
       summary: Get audio from sample
       parameters:
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
         - description: ID of the sample to be used. You can use the [Get voices](/docs/api-reference/voices/get) endpoint list all the available samples for a voice.
   /v1/voices/settings/default:
     get:
@@ -209,16 +209,16 @@ paths:
     get:
       summary: Get voice
       parameters:
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
     delete:
       summary: Delete voice
       parameters:
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/voices/{voice_id}/settings/edit:
     post:
       summary: Edit voice settings
       parameters:
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/voices/add:
     post:
       description: Create a voice clone and add it to your Voices
@@ -227,14 +227,14 @@ paths:
     post:
       summary: Edit voice
       parameters:
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v1/voices/add/{public_user_id}/{voice_id}:
     post:
       description: Add a shared voice to your collection of Voices
       summary: Add shared voice
       parameters:
         - {} # public_user_id
-        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/get-all) endpoint list all the available voices.
+        - description: ID of the voice to be used. You can use the [Get voices](/docs/api-reference/voices/search) endpoint list all the available voices.
   /v2/voices:
     get:
       summary: List voices
