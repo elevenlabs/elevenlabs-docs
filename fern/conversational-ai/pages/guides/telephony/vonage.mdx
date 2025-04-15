@@ -1,5 +1,5 @@
 ---
-title: Vonage Integration
+title: Vonage integration
 subtitle: Integrate ElevenLabs Conversational AI with Vonage voice calls using a WebSocket connector.
 ---
 
@@ -20,12 +20,12 @@ The Node.js connector bridges Vonage and ElevenLabs:
 
 <Steps>
 
-### 1. Get ElevenLabs Credentials
+### 1. Get ElevenLabs credentials
 
 - **API Key**: on the [ElevenLabs dashboard](https://elevenlabs.io/app), click "My Account" and then "API Keys" in the popup that appears.
 - **Agent ID**: Find the agent in the [Conversational AI dashboard](https://elevenlabs.io/app/conversational-ai/agents/). Once you have selected the agent click on the settings button and select "Copy Agent ID".
 
-### 2. Configure the Connector
+### 2. Configure the connector
 
 Clone the repository and set up the environment file.
 
@@ -44,7 +44,7 @@ ELEVENLABS_AGENT_ID=YOUR_AGENT_ID
 
 Install dependencies: `npm install`.
 
-### 3. Expose the Connector (Local Development)
+### 3. Expose the connector (local development)
 
 Use ngrok to create a public URL for the connector (default port 6000).
 
@@ -54,7 +54,7 @@ ngrok http 6000
 
 Note the public `Forwarding` URL (e.g., `xxxxxxxx.ngrok-free.app`). **Do not include `https://`** when configuring Vonage.
 
-### 4. Run the Connector
+### 4. Run the connector
 
 Start the application:
 
@@ -62,7 +62,7 @@ Start the application:
 node elevenlabs-agent-ws-connector.cjs
 ```
 
-### 5. Configure Vonage Voice Application
+### 5. Configure Vonage voice application
 
 Your Vonage app needs to connect to the connector's WebSocket endpoint (`wss://YOUR_CONNECTOR_HOSTNAME/socket`).
 
@@ -75,6 +75,6 @@ Make an inbound or outbound call via your Vonage application to interact with th
 
 </Steps>
 
-## Cloud Deployment
+## Cloud deployment
 
 For production, deploy the connector to a stable hosting provider (e.g., Vonage Cloud Runtime) with a public hostname.
