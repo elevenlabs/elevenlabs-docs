@@ -57,8 +57,7 @@ channels:
           - $ref: '#/components/messages/Ping'
           - $ref: '#/components/messages/ClientToolCall'
           - $ref: '#/components/messages/ContextualUpdate'
-          - $ref: '#/components/messages/InternalVadScore'
-          - $ref: '#/components/messages/InternalTurnProbability'
+          - $ref: '#/components/messages/VadScore'
           - $ref: '#/components/messages/InternalTentativeAgentResponse'
     x-fern-examples:
       - messages:
@@ -100,19 +99,11 @@ channels:
 
           # 4) Server => Client: Voice activity detection score
           - type: subscribe
-            messageId: InternalVadScore
+            messageId: VadScore
             value:
-              type: 'internal_vad_score'
-              vad_event:
-                score: 0.95
-
-          # 5) Server => Client: Turn probability
-          - type: subscribe
-            messageId: InternalTurnProbability
-            value:
-              type: 'internal_turn_probability'
-              turn_event:
-                probability: 0.75
+              type: 'vad_score'
+              vad_score_event:
+                vad_score: 0.95
 
           # 6) Server => Client: User speech transcript
           - type: subscribe
@@ -252,16 +243,11 @@ components:
       description: Correction to a previous agent response.
       payload:
         $ref: '#/components/schemas/AgentResponseCorrection'
-    InternalVadScore:
-      name: Internal VAD Score
+    VadScore:
+      name: VAD Score
       description: Voice Activity Detection scoring information.
       payload:
-        $ref: '#/components/schemas/InternalVadScore'
-    InternalTurnProbability:
-      name: Internal Turn Probability
-      description: Probability scores for conversation turn-taking.
-      payload:
-        $ref: '#/components/schemas/InternalTurnProbability'
+        $ref: '#/components/schemas/VadScore'
     InternalTentativeAgentResponse:
       name: Internal Tentative Agent Response
       description: Preliminary response from the agent before final confirmation.
@@ -503,42 +489,23 @@ components:
             corrected_response:
               type: string
               description: The corrected text content replacing the previous response
-    InternalVadScore:
+    VadScore:
       type: object
       description: Schema for Voice Activity Detection scoring data
       required:
         - type
       properties:
         type:
-          x-fern-type: literal<"internal_vad_score">
-        vad_event:
+          x-fern-type: literal<"vad_score">
+        vad_score_event:
           type: object
           description: VAD event data
           required:
-            - score
+            - vad_score
           properties:
-            score:
+            vad_score:
               type: number
               description: Voice activity detection confidence score between 0 and 1
-              minimum: 0
-              maximum: 1
-    InternalTurnProbability:
-      type: object
-      description: Schema for turn-taking probability data
-      required:
-        - type
-      properties:
-        type:
-          x-fern-type: literal<"internal_turn_probability">
-        turn_event:
-          type: object
-          description: Turn probability event data
-          required:
-            - probability
-          properties:
-            probability:
-              type: number
-              description: Probability score for conversation turn changes between 0 and 1
               minimum: 0
               maximum: 1
     InternalTentativeAgentResponse:
