@@ -102,8 +102,8 @@ channels:
             messageId: VadScore
             value:
               type: 'vad_score'
-              vad_event:
-                score: 0.95
+              vad_score_event:
+                vad_score: 0.95
 
           # 6) Server => Client: User speech transcript
           - type: subscribe
@@ -497,13 +497,13 @@ components:
       properties:
         type:
           x-fern-type: literal<"vad_score">
-        vad_event:
+        vad_score_event:
           type: object
           description: VAD event data
           required:
-            - score
+            - vad_score
           properties:
-            score:
+            vad_score:
               type: number
               description: Voice activity detection confidence score between 0 and 1
               minimum: 0
