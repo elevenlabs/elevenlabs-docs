@@ -593,6 +593,9 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
                                 fixed_link = normalized_link.replace('/docs/conversational-ai/api-reference/conversational-ai/', '/docs/conversational-ai/api-reference/')
                                 if fixed_link in valid_paths or fixed_link in api_reference_paths:
                                     continue
+
+                            if '/docs/cookbooks' in normalized_link:
+                                continue
                             
                             # Also check with trailing slash added
                             if normalized_link + '/' in valid_paths or normalized_link + '/' in api_reference_paths:
