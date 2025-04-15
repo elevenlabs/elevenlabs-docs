@@ -40,7 +40,6 @@ Add your credentials to `.env`:
 ```.env title=".env" focus=2,3
 ELEVENLABS_API_KEY=YOUR_API_KEY
 ELEVENLABS_AGENT_ID=YOUR_AGENT_ID
-# Optional: ELEVENLABS_VOICE_ID, ELEVENLABS_MODEL
 ```
 
 Install dependencies: `npm install`.
@@ -68,7 +67,7 @@ node elevenlabs-agent-ws-connector.cjs
 Your Vonage app needs to connect to the connector's WebSocket endpoint (`wss://YOUR_CONNECTOR_HOSTNAME/socket`).
 
 - **Use Sample App**: Configure the [sample Vonage app](https://github.com/nexmo-se/voice-to-ai-engines) with `PROCESSOR_SERVER` set to your connector's hostname.
-- **Update Existing App**: Modify your NCCO to include a `connect` action targeting the connector's WebSocket URI (`wss://...`) with `content-type: audio/l16;rate=16000`. Pass necessary query parameters like `peer_uuid` and `webhook_url`.
+- **Update Existing App**: Modify your [Nexmo Call Control Object](https://developer.vonage.com/en/voice/voice-api/ncco-reference) to include a `connect` action targeting the connector's WebSocket URI (`wss://...`) with `content-type: audio/l16;rate=16000`. Pass necessary query parameters like `peer_uuid` and `webhook_url`.
 
 ### 6. Test
 
