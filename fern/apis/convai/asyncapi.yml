@@ -100,9 +100,9 @@ channels:
 
           # 4) Server => Client: Voice activity detection score
           - type: subscribe
-            messageId: InternalVadScore
+            messageId: VadScore
             value:
-              type: 'internal_vad_score'
+              type: 'vad_score'
               vad_event:
                 score: 0.95
 
@@ -510,7 +510,7 @@ components:
         - type
       properties:
         type:
-          x-fern-type: literal<"internal_vad_score">
+          x-fern-type: literal<"vad_score">
         vad_event:
           type: object
           description: VAD event data
