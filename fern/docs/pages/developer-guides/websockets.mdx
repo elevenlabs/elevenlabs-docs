@@ -21,7 +21,7 @@ If you want to quickly test out the latency (time to first byte) of a WebSocket 
 
 Install required dependencies:
 
-<CodeBlock>
+<CodeBlocks>
 
 ```python Python
 pip install python-dotenv
@@ -34,7 +34,7 @@ npm install @types/dotenv --save-dev
 npm install ws
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 Next, create a `.env` file in your project directory and add your API key:
 
@@ -46,7 +46,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
 After choosing a voice from the Voice Library and the text to speech model you wish to use, initiate a WebSocket connection to the text to speech API.
 
-<CodeBlock>
+<CodeBlocks>
 
 ```python text-to-speech-websocket.py
 import os
@@ -103,13 +103,13 @@ const writeStream = fs.createWriteStream(outputDir + '/test.mp3', {
 });
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 ## Send the input text
 
 Once the WebSocket connection is open, set up voice settings first. Next, send the text message to the API.
 
-<CodeBlock>
+<CodeBlocks>
 
 ```python text-to-speech-websocket.py
 async def text_to_speech_ws_streaming(voice_id, model_id):
@@ -154,13 +154,13 @@ websocket.on('open', async () => {
 });
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 ## Save the audio to file
 
 Read the incoming message from the WebSocket connection and write the audio chunks to a local file.
 
-<CodeBlock>
+<CodeBlocks>
 
 ```python text-to-speech-websocket.py
 import asyncio
@@ -225,13 +225,13 @@ websocket.on('close', () => {
 });
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 ## Run the script
 
 You can run the script by executing the following command in your terminal. An mp3 audio file will be saved in the `output` directory.
 
-<CodeBlock>
+<CodeBlocks>
   ```python Python
   python text-to-speech-websocket.py
   ```
@@ -240,7 +240,7 @@ You can run the script by executing the following command in your terminal. An m
 npx tsx text-to-speech-websocket.ts
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 ## Advanced configuration
 
@@ -262,7 +262,7 @@ In the above diagram, audio is only generated after the second message is sent t
 
 You can specify a custom value for `chunk_length_schedule` when initializing the WebSocket connection or when sending text.
 
-<CodeBlock>
+<CodeBlocks>
 ```python
 await websocket.send(json.dumps({
     "text": text,
@@ -285,7 +285,7 @@ websocket.send(
 );
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 In the case that you want force the immediate return of the audio, you can use `flush: true` to clear out the buffer and force generate any buffered text. This can be useful, for example, when you have reached the end of a document and want to generate audio for the final section.
 
@@ -293,7 +293,7 @@ In the case that you want force the immediate return of the audio, you can use `
 
 This can be specified on a per-message basis by setting `flush: true` in the message.
 
-<CodeBlock>
+<CodeBlocks>
 
 ```python
 await websocket.send(json.dumps({"text": "Generate this audio immediately.", "flush": True}))
@@ -303,7 +303,7 @@ await websocket.send(json.dumps({"text": "Generate this audio immediately.", "fl
 websocket.send(JSON.stringify({ text: 'Generate this audio immediately.', flush: true }));
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 In addition, closing the websocket will automatically force generate any buffered text.
 
@@ -311,7 +311,7 @@ In addition, closing the websocket will automatically force generate any buffere
 
 When initializing the WebSocket connections, you can specify the voice settings for the subsequent generations. This allows you to control the speed, stability, and other voice characteristics of the generated audio.
 
-<CodeBlock>
+<CodeBlocks>
 
 ```python
 await websocket.send(json.dumps({
@@ -329,7 +329,7 @@ websocket.send(
 );
 ```
 
-</CodeBlock>
+</CodeBlocks>
 
 This can be overridden on a per-message basis by specifying a different `voice_settings` in the message.
 
