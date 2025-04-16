@@ -556,7 +556,8 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
         "/docs/api-reference/phone-numbers/twilio-outbound-call",
         "/docs/api-reference/phone-numbers/create-phone-number",
         "/docs/product-guides/administration/workspaces/sharing-resources",
-        "/docs/api-reference/conversations/create-batch-call"
+        "/docs/api-reference/conversations/create-batch-call",
+        "/docs/api-reference/voices/pvc/create"
     } #todo angelo: fix code so we can remove this 
     valid_paths.update(special_case_paths)
     
