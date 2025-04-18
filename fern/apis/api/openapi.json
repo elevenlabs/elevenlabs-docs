@@ -6171,445 +6171,6 @@
         ]
       }
     },
-    "/v1/dubbing": {
-      "post": {
-        "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
-        "summary": "Dub A Video Or An Audio File",
-        "description": "Dubs a provided audio or video file into given language.",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DoDubbingResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}": {
-      "get": {
-        "operationId": "Get_dubbing_v1_dubbing__dubbing_id__get",
-        "summary": "Get Dubbing",
-        "description": "Returns metadata about a dubbing project, including whether it's still in progress or not",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DubbingMetadataResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
-      },
-      "delete": {
-        "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
-        "summary": "Delete Dubbing",
-        "description": "Deletes a dubbing project.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteDubbingResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "delete_dubbing_project"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
-      "get": {
-        "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
-        "summary": "Get Dubbed File",
-        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "language_code",
-            "in": "path",
-            "description": "ID of the language.",
-            "required": true,
-            "schema": {
-              "description": "ID of the language.",
-              "type": "string",
-              "title": "Language Code"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The dubbed audio or video file",
-            "content": {
-              "audio/mpeg": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "video/mp4": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Permission denied",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "permission_denied",
-                  "message": "User does not have required permissions"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Dubbing not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_found",
-                  "message": "There is no dubbing for language {language_code}."
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "425": {
-            "description": "Dubbing not ready",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_dubbed",
-                  "message": "Dubbing has not finished yet."
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbed_file"
-      }
-    },
-    "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
-      "get": {
-        "operationId": "Get_dubbed_transcript_v1_dubbing__dubbing_id__transcript__language_code__get",
-        "summary": "Get Dubbed Transcript",
-        "description": "Returns transcript for the dub as an SRT or WEBVTT file.",
-        "parameters": [
-          {
-            "name": "dubbing_id",
-            "in": "path",
-            "description": "ID of the dubbing project.",
-            "required": true,
-            "schema": {
-              "description": "ID of the dubbing project.",
-              "type": "string",
-              "title": "Dubbing Id"
-            }
-          },
-          {
-            "name": "language_code",
-            "in": "path",
-            "description": "ID of the language.",
-            "required": true,
-            "schema": {
-              "description": "ID of the language.",
-              "type": "string",
-              "title": "Language Code"
-            }
-          },
-          {
-            "name": "format_type",
-            "in": "query",
-            "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
-            "required": false,
-            "schema": {
-              "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
-              "type": "string",
-              "default": "srt",
-              "embed": true,
-              "enum": [
-                "srt",
-                "webvtt"
-              ],
-              "title": "Format Type"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": "1\n00:00:01,000 --> 00:00:04,000\nHello, this is the first subtitle line\n\n2\n00:00:05,000 --> 00:00:07,000\nAnd here's the second subtitle line"
-              },
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Anonymous users cannot use this function",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "anonymous_not_allowed",
-                  "message": "Anonymous users cannot use this function"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Dubbing or transcript not found",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "transcript_not_found",
-                  "message": "No transcript was found for the dub."
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "425": {
-            "description": "Dubbing not ready",
-            "content": {
-              "application/json": {
-                "example": {
-                  "error": "dubbing_not_dubbed",
-                  "message": "Dubbing has not finished yet."
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "dubbing"
-        ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_transcript_for_dub"
-      }
-    },
     "/v1/dubbing/resource/{dubbing_id}": {
       "get": {
         "operationId": "Get_the_dubbing_resource_for_an_ID__v1_dubbing_resource__dubbing_id__get",
@@ -7338,6 +6899,440 @@
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "render_dub"
+      }
+    },
+    "/v1/dubbing": {
+      "post": {
+        "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
+        "summary": "Dub A Video Or An Audio File",
+        "description": "Dubs a provided audio or video file into given language.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoDubbingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}": {
+      "get": {
+        "operationId": "Get_dubbing_v1_dubbing__dubbing_id__get",
+        "summary": "Get Dubbing",
+        "description": "Returns metadata about a dubbing project, including whether it's still in progress or not",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DubbingMetadataResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
+      },
+      "delete": {
+        "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
+        "summary": "Delete Dubbing",
+        "description": "Deletes a dubbing project.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDubbingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "delete_dubbing_project"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
+      "get": {
+        "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
+        "summary": "Get Dubbed File",
+        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "path",
+            "description": "ID of the language.",
+            "required": true,
+            "schema": {
+              "description": "ID of the language.",
+              "type": "string",
+              "title": "Language Code"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The dubbed audio or video file",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "permission_denied",
+                  "message": "User does not have required permissions"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dubbing not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_found",
+                  "message": "There is no dubbing for language {language_code}."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "425": {
+            "description": "Dubbing not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_dubbed",
+                  "message": "Dubbing has not finished yet."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_dubbed_file"
+      }
+    },
+    "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
+      "get": {
+        "operationId": "Get_dubbed_transcript_v1_dubbing__dubbing_id__transcript__language_code__get",
+        "summary": "Get Dubbed Transcript",
+        "description": "Returns transcript for the dub as an SRT or WEBVTT file.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "language_code",
+            "in": "path",
+            "description": "ID of the language.",
+            "required": true,
+            "schema": {
+              "description": "ID of the language.",
+              "type": "string",
+              "title": "Language Code"
+            }
+          },
+          {
+            "name": "format_type",
+            "in": "query",
+            "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
+            "required": false,
+            "schema": {
+              "description": "Format to use for the subtitle file, either 'srt' or 'webvtt'",
+              "type": "string",
+              "default": "srt",
+              "embed": true,
+              "enum": [
+                "srt",
+                "webvtt"
+              ],
+              "title": "Format Type"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "1\n00:00:01,000 --> 00:00:04,000\nHello, this is the first subtitle line\n\n2\n00:00:05,000 --> 00:00:07,000\nAnd here's the second subtitle line"
+              }
+            }
+          },
+          "403": {
+            "description": "Anonymous users cannot use this function",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "anonymous_not_allowed",
+                  "message": "Anonymous users cannot use this function"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dubbing or transcript not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "transcript_not_found",
+                  "message": "No transcript was found for the dub."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "425": {
+            "description": "Dubbing not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "dubbing_not_dubbed",
+                  "message": "Dubbing has not finished yet."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "get_transcript_for_dub"
       }
     },
     "/v1/models": {
@@ -12426,6 +12421,1202 @@
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "delete_secret"
       }
+    },
+    "/v1/voices/pvc": {
+      "post": {
+        "operationId": "Create_PVC_voice_v1_voices_pvc_post",
+        "summary": "Create Pvc Voice",
+        "description": "Creates a new PVC voice with metadata but no samples",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Create_PVC_voice_v1_voices_pvc_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddVoiceResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc"
+        ],
+        "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}": {
+      "post": {
+        "operationId": "Edit_PVC_voice_v1_voices_pvc__voice_id__post",
+        "summary": "Edit Pvc Voice",
+        "description": "Edit PVC voice metadata",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Edit_PVC_voice_v1_voices_pvc__voice_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddVoiceResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc"
+        ],
+        "x-fern-sdk-method-name": "update"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples": {
+      "post": {
+        "operationId": "Add_samples_to_PVC_voice_v1_voices_pvc__voice_id__samples_post",
+        "summary": "Add Samples To Pvc Voice",
+        "description": "Add audio samples to a PVC voice",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Add_samples_to_PVC_voice_v1_voices_pvc__voice_id__samples_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SampleResponseModel"
+                  },
+                  "title": "Response Add Samples To Pvc Voice V1 Voices Pvc  Voice Id  Samples Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples"
+        ],
+        "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples/{sample_id}": {
+      "post": {
+        "operationId": "Update_PVC_voice_sample_v1_voices_pvc__voice_id__samples__sample_id__post",
+        "summary": "Update Pvc Voice Sample",
+        "description": "Update a PVC voice sample - apply noise removal, or select speaker.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Update_PVC_voice_sample_v1_voices_pvc__voice_id__samples__sample_id__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddVoiceResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples"
+        ],
+        "x-fern-sdk-method-name": "update"
+      },
+      "delete": {
+        "operationId": "Delete_PVC_voice_sample_v1_voices_pvc__voice_id__samples__sample_id__delete",
+        "summary": "Delete Pvc Voice Sample",
+        "description": "Delete a sample from a PVC voice.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVoiceSampleResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples"
+        ],
+        "x-fern-sdk-method-name": "delete"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples/{sample_id}/audio": {
+      "get": {
+        "operationId": "Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get",
+        "summary": "Retrieve Voice Sample Audio",
+        "description": "Retrieve the first 30 seconds of voice sample audio with or without noise removal.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceSamplePreviewResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples",
+          "audio"
+        ],
+        "x-fern-sdk-method-name": "get"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples/{sample_id}/waveform": {
+      "get": {
+        "operationId": "Retrieve_voice_sample_visual_waveform_v1_voices_pvc__voice_id__samples__sample_id__waveform_get",
+        "summary": "Retrieve Voice Sample Visual Waveform",
+        "description": "Retrieve the visual waveform of a voice sample.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceSampleVisualWaveformResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples",
+          "waveform"
+        ],
+        "x-fern-sdk-method-name": "get"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples/{sample_id}/speakers": {
+      "get": {
+        "operationId": "Retrieve_speaker_separation_status_v1_voices_pvc__voice_id__samples__sample_id__speakers_get",
+        "summary": "Retrieve Speaker Separation Status",
+        "description": "Retrieve the status of the speaker separation process and the list of detected speakers if complete.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerSeparationResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples",
+          "speakers"
+        ],
+        "x-fern-sdk-method-name": "get"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples/{sample_id}/separate-speakers": {
+      "post": {
+        "operationId": "Start_speaker_separation_v1_voices_pvc__voice_id__samples__sample_id__separate_speakers_post",
+        "summary": "Start Speaker Separation",
+        "description": "Start speaker separation process for a sample",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerSeparationResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples",
+          "speakers"
+        ],
+        "x-fern-sdk-method-name": "separate"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/samples/{sample_id}/speakers/{speaker_id}/audio": {
+      "get": {
+        "operationId": "Retrieve_separated_speaker_audio_v1_voices_pvc__voice_id__samples__sample_id__speakers__speaker_id__audio_get",
+        "summary": "Retrieve Separated Speaker Audio",
+        "description": "Retrieve the separated audio for a specific speaker.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "sample_id",
+            "in": "path",
+            "description": "Sample ID to be used",
+            "required": true,
+            "schema": {
+              "description": "Sample ID to be used",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sample Id"
+            }
+          },
+          {
+            "name": "speaker_id",
+            "in": "path",
+            "description": "Speaker ID to be used, you can use GET https://api.elevenlabs.io/v1/voices/{voice_id}/samples/{sample_id}/speakers to list all the available speakers for a sample.",
+            "required": true,
+            "schema": {
+              "description": "Speaker ID to be used, you can use GET https://api.elevenlabs.io/v1/voices/{voice_id}/samples/{sample_id}/speakers to list all the available speakers for a sample.",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Speaker Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerAudioResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "samples",
+          "speakers",
+          "audio"
+        ],
+        "x-fern-sdk-method-name": "get"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/captcha": {
+      "get": {
+        "operationId": "Get_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_get",
+        "summary": "Get Pvc Voice Captcha",
+        "description": "Get captcha for PVC voice verification.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "verification",
+          "captcha"
+        ],
+        "x-fern-sdk-method-name": "get"
+      },
+      "post": {
+        "operationId": "Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post",
+        "summary": "Verify Pvc Voice Captcha",
+        "description": "Submit captcha verification for PVC voice.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyPVCVoiceCaptchaResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "verification",
+          "captcha"
+        ],
+        "x-fern-sdk-method-name": "verify"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/train": {
+      "post": {
+        "operationId": "Run_PVC_training_v1_voices_pvc__voice_id__train_post",
+        "summary": "Run Pvc Training",
+        "description": "Start PVC training process for a voice.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Run_PVC_training_v1_voices_pvc__voice_id__train_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartPVCVoiceTrainingResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc"
+        ],
+        "x-fern-sdk-method-name": "train"
+      }
+    },
+    "/v1/voices/pvc/{voice_id}/verification": {
+      "post": {
+        "operationId": "Request_manual_verification_v1_voices_pvc__voice_id__verification_post",
+        "summary": "Request Manual Verification",
+        "description": "Request manual verification for a PVC voice.",
+        "parameters": [
+          {
+            "name": "voice_id",
+            "in": "path",
+            "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+            "required": true,
+            "schema": {
+              "description": "Voice ID to be used, you can use https://api.elevenlabs.io/v1/voices to list all the available voices.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Request_manual_verification_v1_voices_pvc__voice_id__verification_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestPVCManualVerificationResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pvc-voices"
+        ],
+        "x-fern-sdk-group-name": [
+          "voices",
+          "pvc",
+          "verification"
+        ],
+        "x-fern-sdk-method-name": "request"
+      }
+    },
+    "/docs": {
+      "get": {
+        "operationId": "redirect_to_mintlify_docs_get",
+        "summary": "Redirect To Mintlify",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -13513,79 +14704,6 @@
         ],
         "title": "BanReasonType"
       },
-      "BatchCallResponse": {
-        "type": "object",
-        "properties": {
-          "batch_id": {
-            "type": "string",
-            "title": "Batch Id"
-          },
-          "phone_number_id": {
-            "type": "string",
-            "title": "Phone Number Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "agent_id": {
-            "type": "string",
-            "title": "Agent Id"
-          },
-          "created_at_unix": {
-            "type": "integer",
-            "title": "Created At Unix"
-          },
-          "scheduled_time_unix": {
-            "type": "integer",
-            "title": "Scheduled Time Unix"
-          },
-          "total_calls_dispatched": {
-            "type": "integer",
-            "title": "Total Calls Dispatched"
-          },
-          "total_calls_scheduled": {
-            "type": "integer",
-            "title": "Total Calls Scheduled"
-          },
-          "last_updated_at_unix": {
-            "type": "integer",
-            "title": "Last Updated At Unix"
-          },
-          "status": {
-            "$ref": "#/components/schemas/BatchCallStatus"
-          },
-          "agent_name": {
-            "type": "string",
-            "title": "Agent Name"
-          }
-        },
-        "required": [
-          "batch_id",
-          "phone_number_id",
-          "name",
-          "agent_id",
-          "created_at_unix",
-          "scheduled_time_unix",
-          "total_calls_dispatched",
-          "total_calls_scheduled",
-          "last_updated_at_unix",
-          "status",
-          "agent_name"
-        ],
-        "title": "BatchCallResponse"
-      },
-      "BatchCallStatus": {
-        "type": "string",
-        "enum": [
-          "pending",
-          "in_progress",
-          "completed",
-          "failed",
-          "cancelled"
-        ],
-        "title": "BatchCallStatus"
-      },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
         "properties": {
@@ -14181,6 +15299,33 @@
         ],
         "title": "Body_Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post"
       },
+      "Body_Add_samples_to_PVC_voice_v1_voices_pvc__voice_id__samples_post": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "description": "Audio files used to create the voice.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "title": "Files"
+          },
+          "remove_background_noise": {
+            "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Remove Background Noise"
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "title": "Body_Add_samples_to_PVC_voice_v1_voices_pvc__voice_id__samples_post"
+      },
       "Body_Add_shared_voice_v1_voices_add__public_user_id___voice_id__post": {
         "type": "object",
         "properties": {
@@ -14459,6 +15604,64 @@
           "conversation_config"
         ],
         "title": "Body_Create_Agent_v1_convai_agents_create_post"
+      },
+      "Body_Create_PVC_voice_v1_voices_pvc_post": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
+            "type": "string",
+            "examples": [
+              "John Smith"
+            ],
+            "maxLength": 100,
+            "title": "Name"
+          },
+          "language": {
+            "description": "Language used in the samples.",
+            "type": "string",
+            "examples": [
+              "en"
+            ],
+            "title": "Language"
+          },
+          "description": {
+            "description": "Description to use for the created voice.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "An old American male voice with a slight hoarseness in his throat. Perfect for news."
+            ],
+            "title": "Description"
+          },
+          "labels": {
+            "description": "Serialized labels dictionary for the voice.",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Labels"
+          }
+        },
+        "required": [
+          "name",
+          "language"
+        ],
+        "title": "Body_Create_PVC_voice_v1_voices_pvc_post"
       },
       "Body_Create_Pronunciation_Dictionaries_v1_studio_projects__project_id__pronunciation_dictionaries_post": {
         "type": "object",
@@ -15098,6 +16301,12 @@
             "description": "The text to align with the audio. The input text can be in any format, however diarization is not supported at this time.",
             "type": "string",
             "title": "Text"
+          },
+          "enabled_spooled_file": {
+            "description": "If true, the file will be streamed to the server and processed in chunks. This is useful for large files that cannot be loaded into memory. The default is false.",
+            "type": "boolean",
+            "default": false,
+            "title": "Enabled Spooled File"
           }
         },
         "required": [
@@ -15849,6 +17058,60 @@
         ],
         "title": "Body_Dubs_all_or_some_segments_and_languages_v1_dubbing_resource__dubbing_id__dub_post"
       },
+      "Body_Edit_PVC_voice_v1_voices_pvc__voice_id__post": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name that identifies this voice. This will be displayed in the dropdown of the website.",
+            "type": "string",
+            "examples": [
+              "John Smith"
+            ],
+            "maxLength": 100,
+            "title": "Name"
+          },
+          "language": {
+            "description": "Language used in the samples.",
+            "type": "string",
+            "examples": [
+              "en"
+            ],
+            "title": "Language"
+          },
+          "description": {
+            "description": "Description to use for the created voice.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "An old American male voice with a slight hoarseness in his throat. Perfect for news."
+            ],
+            "title": "Description"
+          },
+          "labels": {
+            "description": "Serialized labels dictionary for the voice.",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Labels"
+          }
+        },
+        "title": "Body_Edit_PVC_voice_v1_voices_pvc__voice_id__post"
+      },
       "Body_Edit_basic_project_info_v1_projects__project_id__post": {
         "type": "object",
         "properties": {
@@ -16071,27 +17334,6 @@
           "name"
         ],
         "title": "Body_Edit_voice_v1_voices__voice_id__edit_post"
-      },
-      "Body_Forced_alignment_v1_forced_alignment_post": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "description": "The file to align. All major audio and video formats are supported. The file size must be less than 1GB.",
-            "type": "string",
-            "format": "binary",
-            "title": "File"
-          },
-          "text": {
-            "description": "The text to align with the audio or video.",
-            "type": "string",
-            "title": "Text"
-          }
-        },
-        "required": [
-          "file",
-          "text"
-        ],
-        "title": "Body_Forced_alignment_v1_forced_alignment_post"
       },
       "Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post": {
         "type": "object",
@@ -16400,6 +17642,72 @@
           "render_type"
         ],
         "title": "Body_Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post"
+      },
+      "Body_Request_manual_verification_v1_voices_pvc__voice_id__verification_post": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "description": "Verification documents",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "title": "Files"
+          },
+          "extra_text": {
+            "description": "Extra text to be used in the manual verification process.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Text"
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "title": "Body_Request_manual_verification_v1_voices_pvc__voice_id__verification_post"
+      },
+      "Body_Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get": {
+        "type": "object",
+        "properties": {
+          "remove_background_noise": {
+            "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Remove Background Noise"
+          }
+        },
+        "title": "Body_Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get"
+      },
+      "Body_Run_PVC_training_v1_voices_pvc__voice_id__train_post": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "description": "The model ID to use for the conversion.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "eleven_turbo_v2"
+            ],
+            "title": "Model Id"
+          }
+        },
+        "title": "Body_Run_PVC_training_v1_voices_pvc__voice_id__train_post"
       },
       "Body_Send_Conversation_Feedback_v1_convai_conversations__conversation_id__feedback_post": {
         "type": "object",
@@ -16845,50 +18153,6 @@
           }
         },
         "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
-      },
-      "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
-        "type": "object",
-        "properties": {
-          "call_name": {
-            "type": "string",
-            "title": "Call Name"
-          },
-          "agent_id": {
-            "type": "string",
-            "title": "Agent Id"
-          },
-          "agent_phone_number_id": {
-            "type": "string",
-            "title": "Agent Phone Number Id"
-          },
-          "scheduled_time_unix": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Scheduled Time Unix"
-          },
-          "recipients": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OutboundCallRecipient"
-            },
-            "maxItems": 10000,
-            "title": "Recipients"
-          }
-        },
-        "required": [
-          "call_name",
-          "agent_id",
-          "agent_phone_number_id",
-          "scheduled_time_unix",
-          "recipients"
-        ],
-        "title": "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
       },
       "Body_Text_to_speech_streaming_v1_text_to_speech__voice_id__stream_post": {
         "type": "object",
@@ -17732,6 +18996,69 @@
         ],
         "title": "Body_Unshare_workspace_resource_v1_workspace_resources__resource_id__unshare_post"
       },
+      "Body_Update_PVC_voice_sample_v1_voices_pvc__voice_id__samples__sample_id__post": {
+        "type": "object",
+        "properties": {
+          "remove_background_noise": {
+            "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Remove Background Noise"
+          },
+          "selected_speaker_ids": {
+            "description": "Speaker IDs to be used for PVC training. Make sure you send all the speaker IDs you want to use for PVC training in one request because the last request will override the previous ones.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "speaker_0"
+            ],
+            "title": "Selected Speaker Ids"
+          },
+          "trim_start_time": {
+            "description": "The start time of the audio to be used for PVC training. Time should be in milliseconds",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              0
+            ],
+            "title": "Trim Start Time"
+          },
+          "trim_end_time": {
+            "description": "The end time of the audio to be used for PVC training. Time should be in milliseconds",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              10
+            ],
+            "title": "Trim End Time"
+          }
+        },
+        "title": "Body_Update_PVC_voice_sample_v1_voices_pvc__voice_id__samples__sample_id__post"
+      },
       "Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post": {
         "type": "object",
         "properties": {
@@ -17989,6 +19316,21 @@
           "email"
         ],
         "title": "Body_Update_member_v1_workspace_members_post"
+      },
+      "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post": {
+        "type": "object",
+        "properties": {
+          "recording": {
+            "description": "Audio recording of the user",
+            "type": "string",
+            "format": "binary",
+            "title": "Recording"
+          }
+        },
+        "required": [
+          "recording"
+        ],
+        "title": "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post"
       },
       "BreakdownTypes": {
         "description": "How to break down the information. Cannot be \"user\" or \"api_key\" if include_workspace_metrics is False.",
@@ -20299,7 +21641,7 @@
         "type": "object",
         "properties": {
           "status": {
-            "description": "The status of the voice deletion. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "description": "The status of the voice deletion request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
             "type": "string",
             "title": "Status"
           }
@@ -20311,6 +21653,23 @@
           "status"
         ],
         "title": "DeleteVoiceResponseModel"
+      },
+      "DeleteVoiceSampleResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the voice sample deletion request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "DeleteVoiceSampleResponseModel"
       },
       "DeleteWorkspaceGroupMemberResponseModel": {
         "type": "object",
@@ -21873,6 +23232,18 @@
           },
           "conversation_initiation_client_data": {
             "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Output"
+          },
+          "has_audio": {
+            "type": "boolean",
+            "title": "Has Audio"
+          },
+          "has_user_audio": {
+            "type": "boolean",
+            "title": "Has User Audio"
+          },
+          "has_response_audio": {
+            "type": "boolean",
+            "title": "Has Response Audio"
           }
         },
         "required": [
@@ -21880,7 +23251,10 @@
           "conversation_id",
           "status",
           "transcript",
-          "metadata"
+          "metadata",
+          "has_audio",
+          "has_user_audio",
+          "has_response_audio"
         ],
         "title": "GetConversationResponseModel"
       },
@@ -24102,29 +25476,6 @@
         },
         "title": "OrbAvatar"
       },
-      "OutboundCallRecipient": {
-        "type": "object",
-        "properties": {
-          "phone_number": {
-            "type": "string",
-            "title": "Phone Number"
-          },
-          "conversation_initiation_client_data": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "phone_number"
-        ],
-        "title": "OutboundCallRecipient"
-      },
       "PatchConvAISettingsRequest": {
         "type": "object",
         "properties": {
@@ -25761,7 +27112,7 @@
           "conversation_goal_prompt": {
             "description": "The prompt that the agent should use to evaluate the conversation",
             "type": "string",
-            "maxLength": 800,
+            "maxLength": 1000,
             "title": "Conversation Goal Prompt"
           },
           "use_knowledge_base": {
@@ -26245,11 +27596,25 @@
             "title": "Version"
           },
           "language": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Language"
           },
           "type": {
-            "$ref": "#/components/schemas/RenderType"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RenderType"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "media_ref": {
             "anyOf": [
@@ -26283,6 +27648,23 @@
           "clips_zip"
         ],
         "title": "RenderType"
+      },
+      "RequestPVCManualVerificationResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the request PVC manual verification request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "RequestPVCManualVerificationResponseModel"
       },
       "ResourceAccessInfo": {
         "type": "object",
@@ -26868,18 +28250,52 @@
         ],
         "title": "ShareOptionResponseModel"
       },
+      "SpeakerAudioResponseModel": {
+        "type": "object",
+        "properties": {
+          "audio_base_64": {
+            "description": "The base64 encoded audio.",
+            "type": "string",
+            "title": "Audio Base 64"
+          },
+          "media_type": {
+            "description": "The media type of the audio.",
+            "type": "string",
+            "title": "Media Type"
+          },
+          "duration_secs": {
+            "description": "The duration of the audio in seconds.",
+            "type": "number",
+            "title": "Duration Secs"
+          }
+        },
+        "example": {
+          "audio_base_64": "audio_base_64",
+          "duration_secs": 5,
+          "media_type": "audio/mpeg"
+        },
+        "required": [
+          "audio_base_64",
+          "media_type",
+          "duration_secs"
+        ],
+        "title": "SpeakerAudioResponseModel"
+      },
       "SpeakerResponseModel": {
         "type": "object",
         "properties": {
           "speaker_id": {
+            "description": "The ID of the speaker.",
             "type": "string",
             "title": "Speaker Id"
           },
           "duration_secs": {
+            "description": "The duration of the speaker segment in seconds.",
             "type": "number",
             "title": "Duration Secs"
           },
           "utterances": {
+            "description": "The utterances of the speaker.",
             "anyOf": [
               {
                 "items": {
@@ -26893,6 +28309,10 @@
             ],
             "title": "Utterances"
           }
+        },
+        "example": {
+          "duration_secs": 5,
+          "speaker_id": "DCwhRBWXzGAHq8TQ4Fs18"
         },
         "required": [
           "speaker_id",
@@ -26940,14 +28360,17 @@
         "type": "object",
         "properties": {
           "voice_id": {
+            "description": "The ID of the voice.",
             "type": "string",
             "title": "Voice Id"
           },
           "sample_id": {
+            "description": "The ID of the sample.",
             "type": "string",
             "title": "Sample Id"
           },
           "status": {
+            "description": "The status of the speaker separation.",
             "type": "string",
             "enum": [
               "not_started",
@@ -26958,6 +28381,7 @@
             "title": "Status"
           },
           "speakers": {
+            "description": "The speakers of the sample.",
             "anyOf": [
               {
                 "additionalProperties": {
@@ -26972,6 +28396,7 @@
             "title": "Speakers"
           },
           "selected_speaker_ids": {
+            "description": "The IDs of the selected speakers.",
             "anyOf": [
               {
                 "items": {
@@ -26985,6 +28410,11 @@
             ],
             "title": "Selected Speaker Ids"
           }
+        },
+        "example": {
+          "sample_id": "DCwhRBWXzGAHq8TQ4Fs18",
+          "status": "not_started",
+          "voice_id": "DCwhRBWXzGAHq8TQ4Fs18"
         },
         "required": [
           "voice_id",
@@ -27154,14 +28584,17 @@
             "title": "Share Link Id"
           },
           "source": {
-            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text) or STT (speech to text).",
+            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing or PlayAPI.",
             "anyOf": [
               {
                 "type": "string",
                 "enum": [
                   "TTS",
                   "STS",
-                  "STT"
+                  "Projects",
+                  "AN",
+                  "Dubbing",
+                  "PlayAPI"
                 ]
               },
               {
@@ -27527,6 +28960,23 @@
           "format"
         ],
         "title": "SrtExportOptions"
+      },
+      "StartPVCVoiceTrainingResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the start PVC voice training request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "StartPVCVoiceTrainingResponseModel"
       },
       "StreamingAudioChunkWithTimestampsResponseModel": {
         "type": "object",
@@ -28743,13 +30193,19 @@
         "type": "object",
         "properties": {
           "start": {
+            "description": "The start time of the utterance in seconds.",
             "type": "number",
             "title": "Start"
           },
           "end": {
+            "description": "The end time of the utterance in seconds.",
             "type": "number",
             "title": "End"
           }
+        },
+        "example": {
+          "end": 1,
+          "start": 0
         },
         "required": [
           "start",
@@ -28913,6 +30369,23 @@
           "model_id"
         ],
         "title": "VerifiedVoiceLanguageResponseModel"
+      },
+      "VerifyPVCVoiceCaptchaResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the verify PVC captcha request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "VerifyPVCVoiceCaptchaResponseModel"
       },
       "VoiceGenerationParameterOptionResponseModel": {
         "type": "object",
@@ -29485,6 +30958,90 @@
           "high_quality_base_model_ids"
         ],
         "title": "VoiceResponseModel"
+      },
+      "VoiceSamplePreviewResponseModel": {
+        "type": "object",
+        "properties": {
+          "audio_base_64": {
+            "description": "The base64 encoded audio.",
+            "type": "string",
+            "title": "Audio Base 64"
+          },
+          "voice_id": {
+            "description": "The ID of the voice.",
+            "type": "string",
+            "title": "Voice Id"
+          },
+          "sample_id": {
+            "description": "The ID of the sample.",
+            "type": "string",
+            "title": "Sample Id"
+          },
+          "media_type": {
+            "description": "The media type of the audio.",
+            "type": "string",
+            "title": "Media Type"
+          },
+          "duration_secs": {
+            "description": "The duration of the audio in seconds.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Secs"
+          }
+        },
+        "example": {
+          "audio_base_64": "audio_base_64",
+          "duration_secs": 5,
+          "media_type": "audio/mpeg",
+          "sample_id": "DCwhRBWXzGAHq8TQ4Fs18",
+          "voice_id": "DCwhRBWXzGAHq8TQ4Fs18"
+        },
+        "required": [
+          "audio_base_64",
+          "voice_id",
+          "sample_id",
+          "media_type"
+        ],
+        "title": "VoiceSamplePreviewResponseModel"
+      },
+      "VoiceSampleVisualWaveformResponseModel": {
+        "type": "object",
+        "properties": {
+          "sample_id": {
+            "description": "The ID of the sample.",
+            "type": "string",
+            "title": "Sample Id"
+          },
+          "visual_waveform": {
+            "description": "The visual waveform of the sample, represented as a list of floats.",
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "title": "Visual Waveform"
+          }
+        },
+        "example": {
+          "sample_id": "DCwhRBWXzGAHq8TQ4Fs18",
+          "visual_waveform": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5
+          ]
+        },
+        "required": [
+          "sample_id",
+          "visual_waveform"
+        ],
+        "title": "VoiceSampleVisualWaveformResponseModel"
       },
       "VoiceSettingsResponseModel": {
         "type": "object",
@@ -31026,40 +32583,6 @@
           "end"
         ],
         "title": "WidgetFeedbackMode"
-      },
-      "WorkspaceBatchCallsResponse": {
-        "type": "object",
-        "properties": {
-          "batch_calls": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BatchCallResponse"
-            },
-            "title": "Batch Calls"
-          },
-          "next_doc": {
-            "description": "The next document, used to paginate through the batch calls",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Next Doc"
-          },
-          "has_more": {
-            "description": "Whether there are more batch calls to paginate through",
-            "type": "boolean",
-            "default": false,
-            "title": "Has More"
-          }
-        },
-        "required": [
-          "batch_calls"
-        ],
-        "title": "WorkspaceBatchCallsResponse"
       },
       "WorkspaceGroupByNameResponseModel": {
         "type": "object",

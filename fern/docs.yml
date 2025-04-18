@@ -114,8 +114,10 @@ navigation:
               - section: Voices
                 icon: duotone album-collection
                 contents:
-                  - page: Clone voice
-                    path: docs/pages/developer-guides/cookbooks/voices/clone-voice.mdx
+                  - page: Instant voice cloning
+                    path: docs/pages/developer-guides/cookbooks/voices/instant-voice-cloning.mdx
+                  - page: Professional voice cloning
+                    path: docs/pages/developer-guides/cookbooks/voices/professional-voice-cloning.mdx
                   - page: Voice design
                     path: docs/pages/developer-guides/cookbooks/voices/voice-design.mdx
               - page: Forced Alignment
@@ -679,7 +681,56 @@ navigation:
               - textToVoice
               - dubbing
               - audioNative
-              - voices
+              - voices:
+                  contents:
+                    - section: PVC
+                      contents:
+                        - endpoint: POST /v1/voices/pvc
+                          title: Create PVC voice
+                          slug: /create
+                        - endpoint: POST /v1/voices/pvc/{voice_id}
+                          title: Update PVC voice
+                          slug: /update
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/train
+                          title: Train PVC voice
+                          slug: /train
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/samples
+                          title: Add samples to PVC voice
+                          slug: /samples/create
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/samples/{sample_id}
+                          title: Update PVC voice sample
+                          slug: /samples/update
+                        - endpoint: DELETE /v1/voices/pvc/{voice_id}/samples/{sample_id}
+                          title: Delete PVC voice sample
+                          slug: /samples/delete
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/audio
+                          title: Get PVC voice sample audio
+                          slug: /samples/get-audio
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/waveform
+                          title: Get PVC voice sample waveform
+                          slug: /samples/get-waveform
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/speakers
+                          title: Get PVC speaker separation status
+                          slug: /samples/get-speaker-separation-status
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/samples/{sample_id}/separate-speakers
+                          title: Start speaker separation
+                          slug: /samples/separate-speakers
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/samples/{sample_id}/speakers/{speaker_id}/audio
+                          title: Get separated speaker audio
+                          slug: /samples/get-separated-speaker-audio
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/verification
+                          title: Request PVC manual verification
+                          slug: /verification/request
+                        - endpoint: GET /v1/voices/pvc/{voice_id}/captcha
+                          title: Get PVC verification captcha
+                          slug: /verification/captcha
+                        - endpoint: POST /v1/voices/pvc/{voice_id}/captcha
+                          title: Verify PVC verification captcha
+                          slug: /verification/captcha/verify
+                    - section: IVC
+                      contents:
+                        - endpoint: POST /v1/voices/add
+                          title: Create IVC voice
               - forcedAlignment
           - section: ADMINISTRATION
             skip-slug: true

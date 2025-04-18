@@ -421,6 +421,9 @@ paths:
               status: 'processing'
               transcript: [{ role: 'user', message: 'Hello, how are you?', time_in_call_secs: 10 }]
               metadata: { 'start_time_unix_secs': 1714423232, 'call_duration_secs': 10 }
+              has_audio: true
+              has_user_audio: true
+              has_response_audio: true
     delete:
       x-fern-audiences:
         - convai
@@ -627,6 +630,12 @@ paths:
   /v1/usage/character-stats:
     get:
       summary: Get character usage metrics
+  # ==========================
+  # PVC
+  # ==========================
+  /v1/voices/pvc:
+    post:
+      summary: Create PVC voice
 components:
   schemas:
     Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:
