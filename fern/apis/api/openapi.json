@@ -9154,6 +9154,46 @@
         "tags": [
           "workspace"
         ]
+      },
+      "delete": {
+        "operationId": "Delete_member_v1_workspace_members_delete",
+        "summary": "Delete Member",
+        "description": "Deletes a workspace member. This endpoint may only be called by workspace administrators.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Delete_member_v1_workspace_members_delete"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteWorkspaceMemberResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ]
       }
     },
     "/v1/workspace/resources/{resource_id}": {
@@ -13163,7 +13203,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SpeakerSeparationResponseModel"
+                  "$ref": "#/components/schemas/StartSpeakerSeparationResponseModel"
                 }
               }
             }
@@ -16811,6 +16851,20 @@
         ],
         "title": "Body_Delete_member_from_user_group_v1_workspace_groups__group_id__members_remove_post"
       },
+      "Body_Delete_member_v1_workspace_members_delete": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "description": "Email of the target user.",
+            "type": "string",
+            "title": "Email"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "Body_Delete_member_v1_workspace_members_delete"
+      },
       "Body_Download_history_items_v1_history_download_post": {
         "type": "object",
         "properties": {
@@ -18085,7 +18139,7 @@
             "title": "File Format"
           },
           "cloud_storage_url": {
-            "description": "The valid AWS S3 or Google Cloud Storage URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be a valid publicly accessible cloud storage URL. The file size must be less than 2GB. URL can be pre-signed.",
+            "description": "The valid AWS S3, Cloudflare R2 or Google Cloud Storage URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be a valid publicly accessible cloud storage URL. The file size must be less than 2GB. URL can be pre-signed.",
             "anyOf": [
               {
                 "type": "string"
@@ -18095,8 +18149,9 @@
               }
             ],
             "examples": [
-              "https://storage.googleapis.com/bucket-name/object-name",
-              "https://s3.amazonaws.com/bucket-name/object-name"
+              "https://storage.googleapis.com/my-bucket/folder/audio.mp3",
+              "https://my-bucket.s3.us-west-2.amazonaws.com/folder/audio.mp3",
+              "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3"
             ],
             "title": "Cloud Storage Url"
           }
@@ -19939,7 +19994,7 @@
           "agent_response",
           "agent_response_correction",
           "client_tool_call",
-          "internal_vad_score",
+          "vad_score",
           "internal_turn_probability",
           "internal_tentative_agent_response"
         ],
@@ -21704,6 +21759,23 @@
           "status"
         ],
         "title": "DeleteWorkspaceInviteResponseModel"
+      },
+      "DeleteWorkspaceMemberResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the workspace member deletion request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "DeleteWorkspaceMemberResponseModel"
       },
       "DependentAvailableAgentIdentifier": {
         "type": "object",
@@ -24526,6 +24598,9 @@
           "gpt-4o",
           "gpt-4",
           "gpt-4-turbo",
+          "gpt-4.1",
+          "gpt-4.1-mini",
+          "gpt-4.1-nano",
           "gpt-3.5-turbo",
           "gemini-1.5-pro",
           "gemini-1.5-flash",
@@ -27112,7 +27187,7 @@
           "conversation_goal_prompt": {
             "description": "The prompt that the agent should use to evaluate the conversation",
             "type": "string",
-            "maxLength": 1000,
+            "maxLength": 2000,
             "title": "Conversation Goal Prompt"
           },
           "use_knowledge_base": {
@@ -27625,6 +27700,15 @@
                 "type": "null"
               }
             ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "processing",
+              "failed"
+            ],
+            "title": "Status"
           }
         },
         "required": [
@@ -27632,7 +27716,8 @@
           "version",
           "language",
           "type",
-          "media_ref"
+          "media_ref",
+          "status"
         ],
         "title": "Render"
       },
@@ -28175,6 +28260,16 @@
       "SegmentedJsonExportOptions": {
         "type": "object",
         "properties": {
+          "include_speakers": {
+            "type": "boolean",
+            "default": true,
+            "title": "Include Speakers"
+          },
+          "include_timestamps": {
+            "type": "boolean",
+            "default": true,
+            "title": "Include Timestamps"
+          },
           "format": {
             "type": "string",
             "const": "segmented_json",
@@ -28978,6 +29073,23 @@
         ],
         "title": "StartPVCVoiceTrainingResponseModel"
       },
+      "StartSpeakerSeparationResponseModel": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the start speaker seperation request. If the request was successful, the status will be 'ok'. Otherwise an error message with status 500 will be returned.",
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "example": {
+          "status": "ok"
+        },
+        "required": [
+          "status"
+        ],
+        "title": "StartSpeakerSeparationResponseModel"
+      },
       "StreamingAudioChunkWithTimestampsResponseModel": {
         "type": "object",
         "properties": {
@@ -29758,7 +29870,7 @@
         "type": "object",
         "properties": {
           "turn_timeout": {
-            "description": "Maximum wait time for the user’s reply before re-engaging the user",
+            "description": "Maximum wait time for the user's reply before re-engaging the user",
             "type": "number",
             "default": 7,
             "title": "Turn Timeout"
