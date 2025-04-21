@@ -1,0 +1,45 @@
+---
+title: LLM Cascading
+subtitle: Learn how Conversational AI ensures reliable LLM responses using a cascading fallback mechanism.
+---
+
+## Overview
+
+Conversational AI employs an LLM cascading mechanism to enhance the reliability and resilience of its text generation capabilities. This system automatically attempts to use backup Large Language Models (LLMs) if the primary configured LLM fails, ensuring a smoother and more consistent user experience.
+
+Failures can include API errors, timeouts, or empty responses from the LLM provider. The cascade logic handles these situations gracefully.
+
+## How it Works
+
+The cascading process follows a defined sequence:
+
+1.  **Preferred LLM Attempt:** The system first attempts to generate a response using the LLM selected in the agent's configuration.
+
+2.  **Backup LLM Sequence:** If the preferred LLM fails, the system automatically falls back to a predefined sequence of backup LLMs. This sequence is curated based on model performance, speed, and reliability.
+
+3.  **HIPAA Compliance:** If the agent operates in a mode requiring strict data privacy (HIPAA compliance / zero data retention), the backup list is filtered to include only compliant models.
+
+4.  **Retries:** The system retries the generation process multiple times (at least 3 attempts) across the sequence of available LLMs (preferred + backups). If a backup LLM also fails, it proceeds to the next one in the sequence. If it runs out of unique backup LLMs within the retry limit, it may retry previously failed backup models.
+
+5.  **Lazy Initialization:** Backup LLM connections are initialized only when needed, optimizing resource usage.
+
+<Info>
+  The specific list and order of backup LLMs are managed internally by ElevenLabs and optimized for
+  performance and availability.
+</Info>
+
+## Custom LLMs
+
+When you configure a [Custom LLM](/conversational-ai/customization/custom-llm/overview), the standard cascading logic to _other_ models is bypassed. The system will attempt to use your specified Custom LLM.
+
+If your Custom LLM fails, the system will retry the request with the _same_ Custom LLM multiple times (matching the standard minimum retry count) before considering the request failed. It will not fall back to ElevenLabs-hosted models, ensuring your specific configuration is respected.
+
+## Benefits
+
+- **Increased Reliability:** Reduces the impact of temporary issues with a specific LLM provider.
+- **Higher Availability:** Increases the likelihood of successfully generating a response even during partial LLM outages.
+- **Seamless Operation:** The fallback mechanism is automatic and transparent to the end-user.
+
+## Configuration
+
+LLM cascading is an automatic background process. The only configuration required is selecting your **Preferred LLM** in the agent's settings. The system handles the rest to ensure robust performance.
