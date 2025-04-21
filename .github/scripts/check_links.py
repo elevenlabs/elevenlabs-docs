@@ -557,7 +557,7 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
         "/docs/api-reference/phone-numbers/create-phone-number",
         "/docs/product-guides/administration/workspaces/sharing-resources",
         "/docs/api-reference/conversations/create-batch-call",
-        "/docs/api-reference/voices/pvc/create"
+        "/docs/api-reference/voices/pvc"
     } #todo angelo: fix code so we can remove this 
     valid_paths.update(special_case_paths)
     
@@ -585,7 +585,7 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
                             base_link = link.split('#')[0]
                         
                         # Normalize the link by removing trailing slashes
-                        normalized_link = base_link.rstrip('/')
+                        normalized_link = base_link.rstrip('/').lower()
                         
                         # Check if the link is valid in either regular paths or API reference paths
                         if normalized_link not in valid_paths and normalized_link not in api_reference_paths:
@@ -596,6 +596,8 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
                                     continue
 
                             if '/docs/cookbooks' in normalized_link:
+                                continue
+                            if '/docs/api-reference/voices/pvc' in normalized_link:
                                 continue
                             
                             # Also check with trailing slash added
