@@ -15,9 +15,19 @@ The cascading process follows a defined sequence:
 
 1.  **Preferred LLM Attempt:** The system first attempts to generate a response using the LLM selected in the agent's configuration.
 
-2.  **Backup LLM Sequence:** If the preferred LLM fails, the system automatically falls back to a predefined sequence of backup LLMs. This sequence is curated based on model performance, speed, and reliability.
+2.  **Backup LLM Sequence:** If the preferred LLM fails, the system automatically falls back to a predefined sequence of backup LLMs. This sequence is curated based on model performance, speed, and reliability. The current default sequence (subject to change) is:
 
-3.  **HIPAA Compliance:** If the agent operates in a mode requiring strict data privacy (HIPAA compliance / zero data retention), the backup list is filtered to include only compliant models.
+    1.  Gemini 2.5 Flash
+    2.  Gemini 2.0 Flash
+    3.  Gemini 2.0 Flash Lite
+    4.  Claude 3.7 Sonnet
+    5.  Claude 3.5 Sonnet v2
+    6.  Claude 3.5 Sonnet v1
+    7.  GPT-4o
+    8.  Gemini 1.5 Pro
+    9.  Gemini 1.5 Flash
+
+3.  **HIPAA Compliance:** If the agent operates in a mode requiring strict data privacy (HIPAA compliance / zero data retention), the backup list is filtered to include only compliant models from the sequence above.
 
 4.  **Retries:** The system retries the generation process multiple times (at least 3 attempts) across the sequence of available LLMs (preferred + backups). If a backup LLM also fails, it proceeds to the next one in the sequence. If it runs out of unique backup LLMs within the retry limit, it may retry previously failed backup models.
 
@@ -25,7 +35,8 @@ The cascading process follows a defined sequence:
 
 <Info>
   The specific list and order of backup LLMs are managed internally by ElevenLabs and optimized for
-  performance and availability.
+  performance and availability. The sequence listed above represents the current default but may be
+  updated without notice.
 </Info>
 
 ## Custom LLMs
