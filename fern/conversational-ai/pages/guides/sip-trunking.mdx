@@ -19,7 +19,8 @@ With SIP trunking, you can:
 SIP trunking establishes a direct connection between your telephony infrastructure and the ElevenLabs platform:
 
 1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform our origination URI.
-2. **Authentication**: Connection security is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication.
+2. **Authentication**: Connection security for the signaling is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication.
+3. **Media Stream**: Once the call is established, the actual audio data (RTP stream) is transmitted over UDP for low latency.
 
 ## Requirements
 
@@ -51,6 +52,10 @@ Before setting up SIP trunking, ensure you have:
     `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`
 
     This pre-populated URI cannot be modified and serves as the destination endpoint where your system should route all inbound calls (calls from your system to ElevenLabs).
+
+    <Note>
+      The `transport=tcp` parameter specifies that the initial SIP signaling connection uses TCP. However, the actual audio data (RTP stream) is transmitted over UDP for low latency performance, which is standard for real-time communication.
+    </Note>
 
   </Step>
   <Step title="Enter configuration details">
