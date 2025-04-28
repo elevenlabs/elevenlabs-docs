@@ -8,21 +8,55 @@ We welcome contributions to the ElevenLabs docs, however do ask that you read th
 
 Clear, direct and helpful - without being too casual or too stiff.
 
-❌ **Bad:**
+**Bad:**
 "ElevenLabs has many awesome audio tools!"
 
-✅ **Good**
+**Good**
 "ElevenLabs provides a comprehensive suite of audio AI products."
 
 ### User-centric
 
 Always assume you're guiding a user who might be new to the platform.
 
-❌ **Bad:**
+**Bad:**
 "Use your API key to make requests"
 
-✅ **Good**
+**Good**
 "First, generate an API key in the Dashboard, then use it to authenticate your requests."
+
+### Use consistent terminology
+
+Once defined, use the same terminology throughout.
+
+**Bad:**
+Mixing terms like "Voice Settings", "Voice Options" and "Audio Config".
+
+**Good**
+Always use "Voice Settings"
+
+### Be concise and clear
+
+**Bad**
+"You may want to generate a sample, which you can do by using the Generate Voice option, located somewhere on the interface."
+
+**Good**
+"Click 'Generate Voice' to create a new sample."
+
+### Avoid ambiguity.
+
+**Bad**
+"Use the feature to improve quality."
+
+**Good**
+"Use the 'Enhancement' setting to make voices sound clearer and more natural."
+
+### Refrain from overloading with information
+
+**Bad**
+Long paragraph combining setup, troubleshooting, and advanced usage.
+
+**Good**
+Break into three small sections: "Setup," "Troubleshooting," "Advanced Settings."
 
 ## Grammar & Punctuation
 
@@ -30,39 +64,39 @@ Always assume you're guiding a user who might be new to the platform.
 
 Always use the active voice when describing user actions.
 
-❌ **Bad:**
-"The save button should be clicked."
+**Bad:**
+"The voice is selected by the user."
 
-✅ **Good**
-"Click the 'Save' button."
+**Good**
+"Select your desired voice from the dropdown menu."
 
 ### Consistent punctuation
 
-End full sentences in lists with periods. Keep lists and steps crisp. Don't use exclamation points.
+End full sentences in lists with periods. Keep lists and steps crisp. Don't use exclamation points or emojis.
 
-❌ **Bad:**
+**Bad:**
 
-- First item in a list
+- first item with no punctuation
 - Second item in a list, which is a long paragraph of text describing how to perform an action in detail, that also is a run-on sentence which makes it hard to read, or understand what information is being conveyed
-- Third item!
+- ✍️ Third item with emoji and exclamation point!
 
-✅ **Good**
+**Good**
 
 - First item in a list.
 - Second item in a list, with a short descriptor.
-- Third item.
+- Third item in a list.
 
 ## Branding
 
-Use the ElevenLabs name and brand consistently.
+Use the ElevenLabs name and brand correctly.
 
-❌ **Bad:**
+**Bad:**
 Eleven Labs
 elevenlabs
 11 labs
 eleven
 
-✅ **Good**
+**Good**
 ElevenLabs
 
 ## Structure & Formatting
@@ -72,23 +106,3 @@ ElevenLabs
 - **Step-by-step guides**: Numbered steps for processes, short and focused.
 - **Code snippets**: Always use formatted code blocks, not inline code for long examples.
 - **Visual aids**: Include screenshots or illustrations when they help clarify a concept.
-
-# Do's
-
-| Do                             | Example                                                                                                                                                                                                |
-| :----------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Be concise and clear**       | **Good**: "Click 'Generate Voice' to create a new sample." <br> **Bad**: "You may want to generate a sample, which you can do by using the Generate Voice option, located somewhere on the interface." |
-| **Use consistent terminology** | Always call it "**Voice Settings**" — don't mix terms like "**Voice Options**" or "**Audio Config**".                                                                                                  |
-| **Provide context**            | "Use 'Stability' to control how consistently your generated voice sounds across different texts."                                                                                                      |
-| **Encourage exploration**      | "Feel free to experiment with the 'Clarity + Similarity Enhancement' slider to achieve the sound you prefer."                                                                                          |
-
-# Don'ts
-
-| Don't                                         | Example                                                                                                                                                                            |
-| :-------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Avoid ambiguity**                           | **Bad**: "Use the feature to improve quality." <br> → **Better**: "Use the 'Enhancement' setting to make voices sound clearer and more natural."                                   |
-| **Don't assume prior knowledge**              | **Bad**: "Configure your API to authenticate." <br> → **Better**: "First, generate an API key in the Dashboard, then use it to authenticate your requests."                        |
-| **Refrain from overloading with information** | **Bad**: Long paragraph combining setup, troubleshooting, and advanced usage. <br> → **Better**: Break into three small sections: "Setup," "Troubleshooting," "Advanced Settings." |
-| **Avoid passive language**                    | **Bad**: "The voice is selected by the user." <br> → **Better**: "Select your desired voice from the dropdown menu."                                                               |
-
----
