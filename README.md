@@ -4,6 +4,10 @@
 
 Our documentation is hosted at https://elevenlabs.io/docs and all of the content lives inside the `fern/` folder.
 
+## Contributing
+
+We welcome contributions to the ElevenLabs documentation, but ask that you first read through the [style guide](./fern/docs/contributing-style-guide.md) before submitting pull requests.
+
 ## Running the docs
 
 The [Fern CLI](https://www.npmjs.com/package/fern-api) is what builds the documentation.
