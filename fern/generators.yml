@@ -1,0 +1,78 @@
+api:
+  specs:
+    - openapi: ./apis/api/openapi.json
+      overrides: ./apis/api/openapi-overrides.yml
+      settings:
+        title-as-schema-name: false
+        # TODO: Set this to true for SDK v2
+        use-bytes-for-binary-response: false
+    - asyncapi: ./apis/api/asyncapi.yml
+groups:
+  python-sdk:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 4.4.0
+        output:
+          location: pypi
+          package-name: elevenlabs
+          token: ${PYPI_TOKEN}
+        github:
+          mode: pull-request
+          repository: elevenlabs/elevenlabs-python
+          license: MIT
+        config:
+          default_bytes_stream_chunk_size: 1024
+          inline_request_params: false
+          follow_redirects_by_default: true
+          pydantic_config:
+            skip_validation: true
+          client:
+            class_name: BaseElevenLabs
+            filename: base_client.py
+            exported_class_name: ElevenLabs
+            exported_filename: client.py
+          extra_dependencies:
+            requests: '>=2.20'
+            websockets: '>=11.0'
+            pyaudio:
+              version: '>=0.2.14'
+              optional: true
+          extra_dev_dependencies:
+            types-pyaudio: ^0.2.16.20240516
+          extras:
+            pyaudio:
+              - pyaudio
+          additional_init_exports:
+            - from: play
+              imports:
+                - play
+                - save
+                - stream
+  typescript-sdk:
+    generators:
+      - name: fernapi/fern-typescript-node-sdk
+        version: 0.48.5
+        github:
+          repository: elevenlabs/elevenlabs-js
+          mode: pull-request
+          license: MIT
+        output:
+          location: npm
+          package-name: elevenlabs
+          token: ${NPM_TOKEN}
+        config:
+          noSerdeLayer: true
+          inlineFileProperties: true
+          namespaceExport: ElevenLabs
+          extraDependencies:
+            command-exists: ^1.2.9
+            execa: ^5.1.1
+          extraDevDependencies:
+            jest: ^29.7.0
+            '@types/jest': ^29.5.5
+            ts-jest: ^29.1.1
+            '@types/command-exists': ^1.2.3
+          packageJson:
+            browser:
+              command-exists: false
+              execa: false
