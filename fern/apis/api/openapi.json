@@ -461,6 +461,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -893,6 +894,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -1036,6 +1038,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -1178,6 +1181,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -1322,6 +1326,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -1465,6 +1470,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -1608,6 +1614,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -1790,6 +1797,7 @@
                 "pcm_22050",
                 "pcm_24000",
                 "pcm_44100",
+                "pcm_48000",
                 "ulaw_8000",
                 "alaw_8000",
                 "opus_48000_32",
@@ -2273,10 +2281,10 @@
           {
             "name": "voice_type",
             "in": "query",
-            "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace'.",
+            "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace', 'non-default'. 'non-default' is equal to 'personal' plus 'community'.",
             "required": false,
             "schema": {
-              "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace'.",
+              "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace', 'non-default'. 'non-default' is equal to 'personal' plus 'community'.",
               "anyOf": [
                 {
                   "type": "string"
@@ -6231,6 +6239,7 @@
         },
         "tags": [
           "dubbing",
+          "dubbing",
           "resource",
           "segment"
         ],
@@ -6307,6 +6316,7 @@
           }
         },
         "tags": [
+          "dubbing",
           "dubbing",
           "resource",
           "segment"
@@ -6396,6 +6406,7 @@
           }
         },
         "tags": [
+          "dubbing",
           "dubbing",
           "resource",
           "segment"
@@ -6497,6 +6508,7 @@
         },
         "tags": [
           "dubbing",
+          "dubbing",
           "resource",
           "segment"
         ],
@@ -6575,6 +6587,7 @@
         },
         "tags": [
           "dubbing",
+          "dubbing",
           "resource",
           "segment"
         ],
@@ -6651,6 +6664,7 @@
           }
         },
         "tags": [
+          "dubbing",
           "dubbing",
           "resource",
           "segment"
@@ -6729,6 +6743,7 @@
         },
         "tags": [
           "dubbing",
+          "dubbing",
           "resource",
           "segment"
         ],
@@ -6805,6 +6820,7 @@
           }
         },
         "tags": [
+          "dubbing",
           "dubbing",
           "resource",
           "segment"
@@ -6894,6 +6910,7 @@
         },
         "tags": [
           "dubbing",
+          "dubbing",
           "resource",
           "segment"
         ],
@@ -6958,6 +6975,8 @@
           }
         },
         "tags": [
+          "dubbing",
+          "dubbing",
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
@@ -7023,6 +7042,8 @@
           }
         },
         "tags": [
+          "dubbing",
+          "dubbing",
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
@@ -7086,6 +7107,8 @@
           }
         },
         "tags": [
+          "dubbing",
+          "dubbing",
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
@@ -7202,6 +7225,8 @@
           }
         },
         "tags": [
+          "dubbing",
+          "dubbing",
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
@@ -7329,6 +7354,8 @@
           }
         },
         "tags": [
+          "dubbing",
+          "dubbing",
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
@@ -8089,6 +8116,28 @@
               "description": "How to break down the information. Cannot be \"user\" if include_workspace_metrics is False.",
               "default": "none",
               "$ref": "#/components/schemas/BreakdownTypes"
+            }
+          },
+          {
+            "name": "aggregation_interval",
+            "in": "query",
+            "description": "How to aggregate usage data over time. Can be \"hour\", \"day\", \"week\", \"month\", or \"cumulative\".",
+            "required": false,
+            "schema": {
+              "description": "How to aggregate usage data over time. Can be \"hour\", \"day\", \"week\", \"month\", or \"cumulative\".",
+              "default": "day",
+              "$ref": "#/components/schemas/UsageAggregationInterval"
+            }
+          },
+          {
+            "name": "metric",
+            "in": "query",
+            "description": "Which metric to aggregate.",
+            "required": false,
+            "schema": {
+              "description": "Which metric to aggregate.",
+              "default": "credits",
+              "$ref": "#/components/schemas/MetricType"
             }
           },
           {
@@ -10411,6 +10460,24 @@
             }
           },
           {
+            "name": "call_start_before_unix",
+            "in": "query",
+            "description": "Unix timestamp (in seconds) to filter conversations up to this start date.",
+            "required": false,
+            "schema": {
+              "description": "Unix timestamp (in seconds) to filter conversations up to this start date.",
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Call Start Before Unix"
+            }
+          },
+          {
             "name": "page_size",
             "in": "query",
             "description": "How many conversations to return at maximum. Can not exceed 100, defaults to 30.",
@@ -12292,6 +12359,123 @@
         "x-fern-sdk-method-name": "update_settings"
       }
     },
+    "/v1/convai/settings/dashboard": {
+      "get": {
+        "operationId": "Get_Convai_dashboard_settings_v1_convai_settings_dashboard_get",
+        "summary": "Get Convai Dashboard Settings",
+        "description": "Retrieve Convai dashboard settings for the workspace",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetConvAIDashboardSettingsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "get_dashboard_settings"
+      },
+      "patch": {
+        "operationId": "Update_Convai_dashboard_settings_v1_convai_settings_dashboard_patch",
+        "summary": "Update Convai Dashboard Settings",
+        "description": "Update Convai dashboard settings for the workspace",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Convai dashboard settings to update",
+                "$ref": "#/components/schemas/PatchConvAIDashboardSettingsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetConvAIDashboardSettingsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "update_dashboard_settings"
+      }
+    },
     "/v1/convai/secrets": {
       "post": {
         "operationId": "Create_ConvAI_workspace_secret_v1_convai_secrets_post",
@@ -13707,6 +13891,7 @@
           "pcm_22050",
           "pcm_24000",
           "pcm_44100",
+          "pcm_48000",
           "ulaw_8000"
         ],
         "title": "ASRInputFormat"
@@ -14046,14 +14231,7 @@
           },
           "prompt": {
             "description": "The prompt for the agent",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/PromptAgent-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "$ref": "#/components/schemas/PromptAgent-Input"
           }
         },
         "example": {
@@ -14083,14 +14261,7 @@
           },
           "prompt": {
             "description": "The prompt for the agent",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/PromptAgent-Output"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "$ref": "#/components/schemas/PromptAgent-Output"
           }
         },
         "example": {
@@ -14309,6 +14480,24 @@
           "access_info"
         ],
         "title": "AgentSummaryResponseModel"
+      },
+      "AgentTransfer": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "agent_id",
+          "condition"
+        ],
+        "title": "AgentTransfer"
       },
       "AgentWorkspaceOverrides-Input": {
         "type": "object",
@@ -19400,7 +19589,8 @@
           "all_api_keys",
           "product_type",
           "model",
-          "resource"
+          "resource",
+          "request_queue"
         ],
         "title": "BreakdownTypes"
       },
@@ -20146,6 +20336,98 @@
         ],
         "title": "ClientToolConfig"
       },
+      "CollectionContentItem": {
+        "type": "object",
+        "properties": {
+          "added_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Added At"
+          },
+          "added_by": {
+            "type": "string",
+            "title": "Added By"
+          },
+          "_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskDescriptionContentItem"
+              },
+              {
+                "$ref": "#/components/schemas/NestedCollectionContentItem"
+              }
+            ],
+            "title": "Data"
+          }
+        },
+        "required": [
+          "added_at",
+          "added_by",
+          "_id",
+          "data"
+        ],
+        "title": "CollectionContentItem"
+      },
+      "CollectionModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "contents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectionContentItem"
+            },
+            "title": "Contents"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "contents"
+        ],
+        "title": "CollectionModel"
+      },
+      "CollectionsList": {
+        "type": "object",
+        "properties": {
+          "collections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectionModel"
+            },
+            "title": "Collections"
+          }
+        },
+        "required": [
+          "collections"
+        ],
+        "title": "CollectionsList"
+      },
       "ConvAISecretLocator": {
         "description": "Used to reference a secret from the agent's secret store.",
         "type": "object",
@@ -20290,6 +20572,20 @@
               }
             ],
             "title": "Tier"
+          },
+          "llm_usage": {
+            "$ref": "#/components/schemas/LLMCategoryUsage"
+          },
+          "llm_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Price"
           }
         },
         "title": "ConversationChargingCommonModel"
@@ -20776,6 +21072,16 @@
                 "type": "null"
               }
             ]
+          },
+          "llm_usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LLMUsage"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -20956,6 +21262,11 @@
           "tool_has_been_called": {
             "type": "boolean",
             "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
           }
         },
         "required": [
@@ -21444,6 +21755,30 @@
         ],
         "title": "CreatePhoneNumberResponseModel"
       },
+      "CreateProjectRequestBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CreateProjectRequestBody"
+      },
       "CreatePronunciationDictionaryResponseModel": {
         "type": "object",
         "properties": {
@@ -21575,6 +21910,49 @@
           "url"
         ],
         "title": "CustomLLM"
+      },
+      "DashboardCallSuccessChartModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "default": "call_success",
+            "const": "call_success",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "DashboardCallSuccessChartModel"
+      },
+      "DashboardCriteriaChartModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "default": "criteria",
+            "const": "criteria",
+            "title": "Type"
+          },
+          "criteria_id": {
+            "type": "string",
+            "title": "Criteria Id"
+          }
+        },
+        "required": [
+          "name",
+          "criteria_id"
+        ],
+        "title": "DashboardCriteriaChartModel"
       },
       "DataCollectionResultCommonModel": {
         "type": "object",
@@ -23120,6 +23498,17 @@
               "$ref": "#/components/schemas/GetPhoneNumberResponseModel"
             },
             "title": "Phone Numbers"
+          },
+          "access_info": {
+            "description": "The access information of the agent for the user",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResourceAccessInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "example": {
@@ -23241,6 +23630,34 @@
           "chapters"
         ],
         "title": "GetChaptersResponseModel"
+      },
+      "GetConvAIDashboardSettingsResponseModel": {
+        "type": "object",
+        "properties": {
+          "charts": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DashboardCallSuccessChartModel"
+                },
+                {
+                  "$ref": "#/components/schemas/DashboardCriteriaChartModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "call_success": "#/components/schemas/DashboardCallSuccessChartModel",
+                  "criteria": "#/components/schemas/DashboardCriteriaChartModel"
+                }
+              }
+            },
+            "maxItems": 4,
+            "title": "Charts"
+          }
+        },
+        "title": "GetConvAIDashboardSettingsResponseModel"
       },
       "GetConvAISettingsResponseModel": {
         "type": "object",
@@ -24606,6 +25023,7 @@
           "gemini-1.5-flash",
           "gemini-2.0-flash-001",
           "gemini-2.0-flash-lite",
+          "gemini-2.5-flash",
           "gemini-1.0-pro",
           "claude-3-7-sonnet",
           "claude-3-5-sonnet",
@@ -24615,6 +25033,68 @@
           "custom-llm"
         ],
         "title": "LLM"
+      },
+      "LLMCategoryUsage": {
+        "type": "object",
+        "properties": {
+          "irreversible_generation": {
+            "$ref": "#/components/schemas/LLMUsage"
+          },
+          "initiated_generation": {
+            "$ref": "#/components/schemas/LLMUsage"
+          }
+        },
+        "title": "LLMCategoryUsage"
+      },
+      "LLMInputOutputTokensUsage": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "$ref": "#/components/schemas/LLMTokensCategoryUsage"
+          },
+          "input_cache_read": {
+            "$ref": "#/components/schemas/LLMTokensCategoryUsage"
+          },
+          "input_cache_write": {
+            "$ref": "#/components/schemas/LLMTokensCategoryUsage"
+          },
+          "output_total": {
+            "$ref": "#/components/schemas/LLMTokensCategoryUsage"
+          }
+        },
+        "title": "LLMInputOutputTokensUsage"
+      },
+      "LLMTokensCategoryUsage": {
+        "type": "object",
+        "properties": {
+          "tokens": {
+            "type": "integer",
+            "default": 0,
+            "title": "Tokens"
+          },
+          "price": {
+            "type": "number",
+            "default": 0,
+            "title": "Price"
+          }
+        },
+        "title": "LLMTokensCategoryUsage"
+      },
+      "LLMUsage": {
+        "type": "object",
+        "properties": {
+          "model_usage": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LLMInputOutputTokensUsage"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/LLM"
+            },
+            "title": "Model Usage"
+          }
+        },
+        "title": "LLMUsage"
       },
       "LanguageAddedResponse": {
         "type": "object",
@@ -25186,6 +25666,18 @@
         ],
         "title": "MetricRecord"
       },
+      "MetricType": {
+        "type": "string",
+        "enum": [
+          "credits",
+          "minutes_used",
+          "request_count",
+          "ttfb_avg",
+          "ttfb_p95",
+          "fiat_units_spent"
+        ],
+        "title": "MetricType"
+      },
       "ModelRatesResponseModel": {
         "type": "object",
         "properties": {
@@ -25437,6 +25929,26 @@
         ],
         "title": "ModerationStatusResponseModel"
       },
+      "NestedCollectionContentItem": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "subproject",
+            "title": "Kind"
+          },
+          "ref_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Ref Id"
+          }
+        },
+        "required": [
+          "kind",
+          "ref_id"
+        ],
+        "title": "NestedCollectionContentItem"
+      },
       "ObjectJsonSchemaProperty-Input": {
         "type": "object",
         "properties": {
@@ -25551,6 +26063,34 @@
         },
         "title": "OrbAvatar"
       },
+      "PatchConvAIDashboardSettingsRequest": {
+        "type": "object",
+        "properties": {
+          "charts": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DashboardCallSuccessChartModel"
+                },
+                {
+                  "$ref": "#/components/schemas/DashboardCriteriaChartModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "call_success": "#/components/schemas/DashboardCallSuccessChartModel",
+                  "criteria": "#/components/schemas/DashboardCriteriaChartModel"
+                }
+              }
+            },
+            "maxItems": 4,
+            "title": "Charts"
+          }
+        },
+        "title": "PatchConvAIDashboardSettingsRequest"
+      },
       "PatchConvAISettingsRequest": {
         "type": "object",
         "properties": {
@@ -25650,6 +26190,24 @@
           "agent_name"
         ],
         "title": "PhoneNumberAgentInfo"
+      },
+      "PhoneNumberTransfer": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "phone_number",
+          "condition"
+        ],
+        "title": "PhoneNumberTransfer"
       },
       "PodcastBulletinMode": {
         "type": "object",
@@ -26348,6 +26906,14 @@
             },
             "title": "Pronunciation Dictionary Versions"
           },
+          "pronunciation_dictionary_locators": {
+            "description": "List of pronunciation dictionary locators.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PronunciationDictionaryLocatorResponseModel"
+            },
+            "title": "Pronunciation Dictionary Locators"
+          },
           "apply_text_normalization": {
             "description": "Whether text normalization is applied to the project.",
             "type": "string",
@@ -26416,6 +26982,7 @@
           "quality_preset",
           "chapters",
           "pronunciation_dictionary_versions",
+          "pronunciation_dictionary_locators",
           "apply_text_normalization",
           "experimental"
         ],
@@ -27240,6 +27807,31 @@
         ],
         "title": "PronunciationDictionaryAliasRuleRequestModel"
       },
+      "PronunciationDictionaryLocatorResponseModel": {
+        "type": "object",
+        "properties": {
+          "pronunciation_dictionary_id": {
+            "type": "string",
+            "title": "Pronunciation Dictionary Id"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          }
+        },
+        "required": [
+          "pronunciation_dictionary_id",
+          "version_id"
+        ],
+        "title": "PronunciationDictionaryLocatorResponseModel"
+      },
       "PronunciationDictionaryPhonemeRuleRequestModel": {
         "type": "object",
         "properties": {
@@ -27658,6 +28250,19 @@
           "transcription"
         ],
         "title": "RecordingResponseModel"
+      },
+      "RenameProjectRequestBody": {
+        "type": "object",
+        "properties": {
+          "new_name": {
+            "type": "string",
+            "title": "New Name"
+          }
+        },
+        "required": [
+          "new_name"
+        ],
+        "title": "RenameProjectRequestBody"
       },
       "Render": {
         "type": "object",
@@ -29596,7 +30201,8 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
-                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig"
+                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
+                "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
               }
             },
             "oneOf": [
@@ -29608,6 +30214,9 @@
               },
               {
                 "$ref": "#/components/schemas/TransferToAgentToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TransferToNumberToolConfig"
               }
             ],
             "title": "Params"
@@ -29656,7 +30265,8 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
-                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig"
+                "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
+                "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
               }
             },
             "oneOf": [
@@ -29668,6 +30278,9 @@
               },
               {
                 "$ref": "#/components/schemas/TransferToAgentToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/TransferToNumberToolConfig"
               }
             ],
             "title": "Params"
@@ -29814,9 +30427,30 @@
           "pcm_22050",
           "pcm_24000",
           "pcm_44100",
+          "pcm_48000",
           "ulaw_8000"
         ],
         "title": "TTSOutputFormat"
+      },
+      "TaskDescriptionContentItem": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "task_description",
+            "title": "Kind"
+          },
+          "ref_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Ref Id"
+          }
+        },
+        "required": [
+          "kind",
+          "ref_id"
+        ],
+        "title": "TaskDescriptionContentItem"
       },
       "TelephonyProvider": {
         "type": "string",
@@ -29825,24 +30459,6 @@
           "sip_trunk"
         ],
         "title": "TelephonyProvider"
-      },
-      "Transfer": {
-        "type": "object",
-        "properties": {
-          "agent_id": {
-            "type": "string",
-            "title": "Agent Id"
-          },
-          "condition": {
-            "type": "string",
-            "title": "Condition"
-          }
-        },
-        "required": [
-          "agent_id",
-          "condition"
-        ],
-        "title": "Transfer"
       },
       "TransferToAgentToolConfig": {
         "type": "object",
@@ -29856,7 +30472,7 @@
           "transfers": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Transfer"
+              "$ref": "#/components/schemas/AgentTransfer"
             },
             "title": "Transfers"
           }
@@ -29865,6 +30481,28 @@
           "transfers"
         ],
         "title": "TransferToAgentToolConfig"
+      },
+      "TransferToNumberToolConfig": {
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "transfer_to_number",
+            "const": "transfer_to_number",
+            "title": "System Tool Type"
+          },
+          "transfers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneNumberTransfer"
+            },
+            "title": "Transfers"
+          }
+        },
+        "required": [
+          "transfers"
+        ],
+        "title": "TransferToNumberToolConfig"
       },
       "TurnConfig": {
         "type": "object",
@@ -30054,6 +30692,18 @@
         ],
         "title": "UpdateWorkspaceMemberResponseModel"
       },
+      "UsageAggregationInterval": {
+        "description": "The time interval over which to aggregate the usage data.",
+        "type": "string",
+        "enum": [
+          "hour",
+          "day",
+          "week",
+          "month",
+          "cumulative"
+        ],
+        "title": "UsageAggregationInterval"
+      },
       "UsageCharactersResponseModel": {
         "type": "object",
         "properties": {
@@ -30070,7 +30720,7 @@
             "type": "object",
             "additionalProperties": {
               "items": {
-                "type": "integer"
+                "type": "number"
               },
               "type": "array"
             },
@@ -31850,6 +32500,7 @@
             "enum": [
               "GET",
               "POST",
+              "PUT",
               "PATCH",
               "DELETE"
             ],
@@ -31944,6 +32595,7 @@
             "enum": [
               "GET",
               "POST",
+              "PUT",
               "PATCH",
               "DELETE"
             ],

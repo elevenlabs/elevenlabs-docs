@@ -1,15 +1,17 @@
 api:
   specs:
-    - openapi: ./openapi.json
-      overrides: ./openapi-overrides.yml
+    - openapi: ./apis/api/openapi.json
+      overrides: ./apis/api/openapi-overrides.yml
       settings:
         title-as-schema-name: false
-    - asyncapi: ./asyncapi.yml
+        # TODO: Set this to true for SDK v2
+        use-bytes-for-binary-response: false
+    - asyncapi: ./apis/api/asyncapi.yml
 groups:
   python-sdk:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 4.16.1
+        version: 4.4.0
         output:
           location: pypi
           package-name: elevenlabs
@@ -74,14 +76,3 @@ groups:
             browser:
               command-exists: false
               execa: false
-  postman:
-    generators:
-      - name: fernapi/fern-postman
-        config:
-          api-key: ${POSTMAN_API_KEY}
-        version: 0.4.0
-        output:
-          location: postman
-          api-key: ${POSTMAN_API_KEY}
-          workspace-id: aba04735-4c3b-48d5-8c88-02950e29ab07
-          collection-id: 39903018-a616f825-c439-40d9-8333-0da88d97973d
