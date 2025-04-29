@@ -23,41 +23,41 @@ The Conversational AI API provides two ways to simulate conversations:
 
 The simulation API expects a JSON object with the following fields:
 
-| Field                       | Required | Type                | Description                                                                                  |
-|-----------------------------|----------|---------------------|----------------------------------------------------------------------------------------------|
-| `simulation_specification`   | Yes      | object              | Configuration for the simulation (see below).                                                |
-| `extra_evaluation_criteria`  | No       | array of objects    | Additional evaluation criteria (see below).                                                  |
+| Field                       | Required | Type             | Description                                   |
+| --------------------------- | -------- | ---------------- | --------------------------------------------- |
+| `simulation_specification`  | Yes      | object           | Configuration for the simulation (see below). |
+| `extra_evaluation_criteria` | No       | array of objects | Additional evaluation criteria (see below).   |
 
 ### `simulation_specification` Fields
 
-| Field                  | Required | Type   | Description                                                                                  |
-|------------------------|----------|--------|----------------------------------------------------------------------------------------------|
-| `simulated_user_config`| Yes      | object | Configuration for the simulated user. **Must not include tools, knowledge base, or custom LLM.** |
-| `tool_mock_config`     | No       | object | Mock responses for tools (tool name → mock config).                                          |
+| Field                   | Required | Type   | Description                                                                                      |
+| ----------------------- | -------- | ------ | ------------------------------------------------------------------------------------------------ |
+| `simulated_user_config` | Yes      | object | Configuration for the simulated user. **Must not include tools, knowledge base, or custom LLM.** |
+| `tool_mock_config`      | No       | object | Mock responses for tools (tool name → mock config).                                              |
 
 #### `simulated_user_config` (object)
 
-- `prompt` *(required)*: An object with a `prompt` string describing the simulated user's persona and goals.
-- `first_message` *(optional)*: The user's first message. If omitted, the system will generate one based on the prompt.
-- `language` *(optional)*: Language code (e.g., "en").
+- `prompt` _(required)_: An object with a `prompt` string describing the simulated user's persona and goals.
+- `first_message` _(optional)_: The user's first message. If omitted, the system will generate one based on the prompt.
+- `language` _(optional)_: Language code (e.g., "en").
 - **Note:** The simulated user config **must not** include any tools, knowledge bases, or custom LLMs. These features are not yet supported for simulated users and will result in validation errors.
 
 #### `tool_mock_config` (object, optional)
 
 A dictionary mapping tool names to mock configurations:
 
-- `default_return_value` *(optional, string)*: The value returned when the tool is called. Default: `"Tool Called."`
-- `default_is_error` *(optional, boolean)*: Whether the tool call should be treated as an error. Default: `false`
+- `default_return_value` _(optional, string)_: The value returned when the tool is called. Default: `"Tool Called."`
+- `default_is_error` _(optional, boolean)_: Whether the tool call should be treated as an error. Default: `false`
 
 #### `extra_evaluation_criteria` (array, optional)
 
 An array of custom evaluation criteria objects:
 
-- `id` *(required)*: Unique identifier for the criteria.
-- `name` *(optional)*: Human-readable name.
-- `type` *(optional, should be `"prompt"`)*: Type of evaluation.
-- `conversation_goal_prompt` *(required)*: The goal to evaluate against.
-- `use_knowledge_base` *(optional, boolean)*: Whether to use the knowledge base for evaluation.
+- `id` _(required)_: Unique identifier for the criteria.
+- `name` _(optional)_: Human-readable name.
+- `type` _(optional, should be `"prompt"`)_: Type of evaluation.
+- `conversation_goal_prompt` _(required)_: The goal to evaluate against.
+- `use_knowledge_base` _(optional, boolean)_: Whether to use the knowledge base for evaluation.
 
 ---
 
@@ -149,6 +149,7 @@ Evaluation criteria allow you to define custom goals for the conversation. Each 
                ]
              }'
     ```
+
   </Step>
 
   <Step title="Handle the response">
@@ -185,6 +186,7 @@ Evaluation criteria allow you to define custom goals for the conversation. Each 
       }
     }
     ```
+
   </Step>
 </Steps>
 
@@ -218,6 +220,7 @@ Evaluation criteria allow you to define custom goals for the conversation. Each 
                ]
              }'
     ```
+
   </Step>
 
   <Step title="Process the stream">
@@ -260,6 +263,7 @@ Evaluation criteria allow you to define custom goals for the conversation. Each 
       }
     }
     ```
+
   </Step>
 </Steps>
 
