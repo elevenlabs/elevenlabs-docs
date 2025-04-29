@@ -1,0 +1,271 @@
+---
+title: Simulate Conversations
+subtitle: Learn how to test and evaluate your Conversational AI agent with simulated conversations
+---
+
+This guide will show you how to use the ElevenLabs Conversational AI API to simulate and evaluate conversations with your agent. You'll learn how to run both complete conversations and stream conversations in real time for testing and analysis.
+
+## What You'll Need
+
+- An [ElevenLabs account](https://elevenlabs.io)
+- An agent configured in ElevenLabs Conversational AI ([create one here](/docs/conversational-ai/quickstart))
+- Your agent's `agent_id`
+- API Key
+
+## Overview
+
+The Conversational AI API provides two ways to simulate conversations:
+
+1. **Complete Simulation**: Run a full conversation and receive the transcript and analysis.
+2. **Streamed Simulation**: Stream the conversation in real time with live feedback.
+
+## Input Specification
+
+The simulation API expects a JSON object with the following fields:
+
+| Field                       | Required | Type                | Description                                                                                  |
+|-----------------------------|----------|---------------------|----------------------------------------------------------------------------------------------|
+| `simulation_specification`   | Yes      | object              | Configuration for the simulation (see below).                                                |
+| `extra_evaluation_criteria`  | No       | array of objects    | Additional evaluation criteria (see below).                                                  |
+
+### `simulation_specification` Fields
+
+| Field                  | Required | Type   | Description                                                                                  |
+|------------------------|----------|--------|----------------------------------------------------------------------------------------------|
+| `simulated_user_config`| Yes      | object | Configuration for the simulated user. **Must not include tools, knowledge base, or custom LLM.** |
+| `tool_mock_config`     | No       | object | Mock responses for tools (tool name → mock config).                                          |
+
+#### `simulated_user_config` (object)
+
+- `prompt` *(required)*: An object with a `prompt` string describing the simulated user's persona and goals.
+- `first_message` *(optional)*: The user's first message. If omitted, the system will generate one based on the prompt.
+- `language` *(optional)*: Language code (e.g., "en").
+- **Note:** The simulated user config **must not** include any tools, knowledge bases, or custom LLMs. These features are not yet supported for simulated users and will result in validation errors.
+
+#### `tool_mock_config` (object, optional)
+
+A dictionary mapping tool names to mock configurations:
+
+- `default_return_value` *(optional, string)*: The value returned when the tool is called. Default: `"Tool Called."`
+- `default_is_error` *(optional, boolean)*: Whether the tool call should be treated as an error. Default: `false`
+
+#### `extra_evaluation_criteria` (array, optional)
+
+An array of custom evaluation criteria objects:
+
+- `id` *(required)*: Unique identifier for the criteria.
+- `name` *(optional)*: Human-readable name.
+- `type` *(optional, should be `"prompt"`)*: Type of evaluation.
+- `conversation_goal_prompt` *(required)*: The goal to evaluate against.
+- `use_knowledge_base` *(optional, boolean)*: Whether to use the knowledge base for evaluation.
+
+---
+
+### Minimal Example
+
+```json
+{
+  "simulation_specification": {
+    "simulated_user_config": {
+      "prompt": {
+        "prompt": "You are a user who wants to buy a flapjack."
+      }
+    }
+  }
+}
+```
+
+---
+
+### Full Example
+
+```json
+{
+  "simulation_specification": {
+    "simulated_user_config": {
+      "prompt": {
+        "prompt": "You are a user that is desperately trying to buy a flapjack."
+      }
+    },
+    "tool_mock_config": {
+      "some_tool": {
+        "default_return_value": "called with error.",
+        "default_is_error": true
+      }
+    }
+  },
+  "extra_evaluation_criteria": [
+    {
+      "id": "criteria1",
+      "name": "Should not sell speedboat",
+      "type": "prompt",
+      "conversation_goal_prompt": "The agent did not sell the user a speedboat",
+      "use_knowledge_base": false
+    }
+  ]
+}
+```
+
+---
+
+> **Note:**
+> The `simulated_user_config` **must not** include any tools, knowledge bases, or custom LLMs. These features are not yet supported for simulated users and will result in validation errors.
+
+---
+
+## Evaluation Criteria
+
+Evaluation criteria allow you to define custom goals for the conversation. Each criterion is a prompt that the system uses to judge whether the conversation achieved a specific outcome (e.g., "The agent did not sell the user a speedboat"). The analysis section of the response will include the result and rationale for each criterion.
+
+---
+
+## Run a Complete Simulation
+
+<Steps>
+  <Step title="Prepare your request">
+    Create a POST request to the simulation endpoint with your agent ID and configuration:
+
+    ```bash
+    curl -X POST "https://api.elevenlabs.io/v1/convai/agents/{agent_id}/simulate_conversation" \
+         -H "xi-api-key: YOUR_API_KEY" \
+         -H "Content-Type: application/json" \
+         -d '{
+               "simulation_specification": {
+                 "simulated_user_config": {
+                   "prompt": {
+                     "prompt": "You are a friendly customer who wants to buy a product"
+                   }
+                 },
+                 "tool_mock_config": {}
+               },
+               "extra_evaluation_criteria": [
+                 {
+                   "id": "test1",
+                   "name": "test1",
+                   "type": "prompt",
+                   "conversation_goal_prompt": "Check if the conversation was polite",
+                   "use_knowledge_base": false
+                 }
+               ]
+             }'
+    ```
+  </Step>
+
+  <Step title="Handle the response">
+    The API will return a single JSON object containing the complete conversation transcript and analysis:
+
+    ```json
+    {
+      "simulated_conversation": [
+        {
+          "role": "agent",
+          "message": "Hey there, I'm Alexis from ElevenLabs support. How can I help you today?",
+          "tool_calls": [],
+          "tool_results": [],
+          "feedback": null,
+          "llm_override": null,
+          "time_in_call_secs": 0,
+          "conversation_turn_metrics": null,
+          "rag_retrieval_info": null,
+          "llm_usage": null
+        }
+        // ... more conversation turns
+      ],
+      "analysis": {
+        "evaluation_criteria_results": {
+          "test1": {
+            "criteria_id": "test1",
+            "result": "success",
+            "rationale": "The conversation was polite..."
+          }
+        },
+        "data_collection_results": {},
+        "call_successful": "success",
+        "transcript_summary": "Summary of the conversation..."
+      }
+    }
+    ```
+  </Step>
+</Steps>
+
+## Stream a Simulation
+
+<Steps>
+  <Step title="Set up the streaming request">
+    Use the streaming endpoint to receive real-time updates:
+
+    ```bash
+    curl -N -X POST "https://api.elevenlabs.io/v1/convai/agents/{agent_id}/simulate_conversation/stream" \
+         -H "xi-api-key: YOUR_API_KEY" \
+         -H "Content-Type: application/json" \
+         -d '{
+               "simulation_specification": {
+                 "simulated_user_config": {
+                   "prompt": {
+                     "prompt": "You are a friendly customer who wants to buy a product"
+                   }
+                 },
+                 "tool_mock_config": {}
+               },
+               "extra_evaluation_criteria": [
+                 {
+                   "id": "test1",
+                   "name": "test1",
+                   "type": "prompt",
+                   "conversation_goal_prompt": "Check if the conversation was polite",
+                   "use_knowledge_base": false
+                 }
+               ]
+             }'
+    ```
+  </Step>
+
+  <Step title="Process the stream">
+    The API will stream conversation turns and final analysis:
+
+    ```json
+    // Partial message
+    {
+      "simulated_conversation": [
+        {
+          "role": "agent",
+          "message": "Hey there, I'm Alexis from ElevenLabs support...",
+          "tool_calls": [],
+          "tool_results": [],
+          "feedback": null,
+          "llm_override": null,
+          "time_in_call_secs": 0,
+          "conversation_turn_metrics": null,
+          "rag_retrieval_info": null,
+          "llm_usage": null
+        }
+      ],
+      "analysis": null
+    }
+
+    // Final message
+    {
+      "simulated_conversation": null,
+      "analysis": {
+        "evaluation_criteria_results": {
+          "test1": {
+            "criteria_id": "test1",
+            "result": "success",
+            "rationale": "The conversation demonstrates politeness..."
+          }
+        },
+        "data_collection_results": {},
+        "call_successful": "success",
+        "transcript_summary": "Summary of the conversation..."
+      }
+    }
+    ```
+  </Step>
+</Steps>
+
+## Best Practices
+
+1. **Start Simple**: Begin with basic conversations to test your setup.
+2. **Use Streaming**: Use the streaming endpoint to monitor progress.
+3. **Validate Inputs**: Always validate your simulation specifications before running.
+4. **Monitor Resources**: Be mindful of API rate limits and compute time.
