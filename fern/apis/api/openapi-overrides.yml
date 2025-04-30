@@ -1,5 +1,8 @@
-security:
-  - api-key: []
+x-fern-global-headers:
+  - header: xi-api-key
+    name: api-key
+    optional: true
+    env: ELEVENLABS_API_KEY
 servers:
   - url: https://api.elevenlabs.io/
     x-fern-server-name: Production
@@ -653,11 +656,5 @@ components:
           $ref: '#/components/schemas/ConversationalConfig'
         platform_settings:
           $ref: '#/components/schemas/AgentPlatformSettings'
-  securitySchemes:
-    api-key:
-      type: apiKey
-      name: xi-api-key
-      optional: true
-      env: ELEVENLABS_API_KEY
-      in: header
-      description: Your API key. This is required by most endpoints to access our API programmatically. You can view your xi-api-key using the 'Profile' tab on the website.
+    Body_Text_to_speech_v1_text_to_speech__voice_id__post:
+      x-fern-type-name: TextToSpeechRequest
