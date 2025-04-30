@@ -6,7 +6,7 @@ on:
       commitType:
         description: 'Commit new OpenAPI spec to main or create a PR'
         required: true
-        default: 'PR'
+        default: 'main'
         type: choice
         options:
           - main
@@ -50,6 +50,9 @@ jobs:
           COMMIT_TYPE: ${{ inputs.commitType }}
           DRY_RUN: ${{ inputs.dryRun }}
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
           # Set up git config regardless of dry run mode
           git add ./fern/apis/api/openapi.json
 
