@@ -16,7 +16,8 @@ jobs:
   update-schema:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # Needed to checkout, commit, push
+      pull-requests: write # Needed for gh pr create
     steps:
       - uses: actions/create-github-app-token@v1
         id: app-token
@@ -44,30 +45,58 @@ jobs:
           pnpm install
           pnpm run fmt:openapi
 
-      - name: Commit and Push Changes
+      - name: Create Pull Request via GH CLI (if not dry run)
+        # Only run this step if the dryRun input is false
+        if: inputs.dryRun == false
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          DRY_RUN: ${{ inputs.dryRun }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }} # Use the app token for gh commands
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Configure git user
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Set up git config regardless of dry run mode
+          # Stage the specific file
           git add ./fern/apis/api/openapi.json
 
-          # Check for changes
+          # Check if there are staged changes
           if git diff --staged --quiet; then
-            echo "No changes to commit"
-            exit 0
+            echo "No changes detected in OpenAPI schema. Skipping PR creation."
+            exit 0 # Exit successfully if no changes
           fi
 
-          # In dry run mode, just show what would be committed
-          if [ "$DRY_RUN" = "true" ]; then
-            echo "DRY RUN: Changes detected (showing first 20 lines):"
+          # Create a unique branch name
+          BRANCH_NAME="update-openapi-schema-${{ github.run_id }}"
+          echo "Changes detected. Creating branch $BRANCH_NAME"
+          git checkout -b $BRANCH_NAME
+
+          # Commit the changes
+          echo "Committing changes..."
+          git commit -m "Update OpenAPI schema from api.elevenlabs.io"
+
+          # Push the new branch
+          echo "Pushing branch $BRANCH_NAME..."
+          git push origin $BRANCH_NAME
+
+          # Create the Pull Request
+          echo "Creating Pull Request..."
+          gh pr create \
+            --base main \
+            --head $BRANCH_NAME \
+            --title 'Automated: Update OpenAPI Schema' \
+            --body 'This PR updates the OpenAPI schema based on the latest version fetched from api.elevenlabs.io. _This is an automated PR created by the update-schema workflow._'
+
+          echo "Pull Request created successfully."
+
+      - name: Show Diff in Dry Run Mode
+        # Only run this step if the dryRun input is true
+        if: inputs.dryRun == true
+        run: |
+          # Stage the file to see potential changes
+          git add ./fern/apis/api/openapi.json
+          if git diff --staged --quiet; then
+            echo "DRY RUN: No changes detected."
+          else
+            echo "DRY RUN: Changes detected (showing first 20 lines of diff):"
             git diff --staged | head -n 20
             echo "... (more changes not shown) ..."
-            exit 0
           fi
-
-          git commit -m "Update OpenAPI schema from api.elevenlabs.io"
-          git push
