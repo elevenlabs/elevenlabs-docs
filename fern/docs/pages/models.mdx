@@ -201,3 +201,15 @@ Enterprise customers can request a higher concurrency limit by contacting their 
 </Note>
 
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
+
+### Concurrency limits
+
+As a general rule of thumb, a concurrency limit of **5** can approximately support up to 100 simultaneous TTS requests.
+
+This depends on several factors, including the selected model, the specific AI voices used, and the nature of the use case. For instance, Turbo models may support more concurrent requests than this baseline suggests.
+
+For character voiceovers, where TTS is used to facilitate dialogue, concurrency requirements can vary. Factors such as a character’s dialogue frequency, the length of pauses, and in-game actions between lines can all influence the necessary concurrency limit. In general, these use cases may support more requests than what the provided heuristic suggests.
+
+For live dubbing use cases, especially those involving multiple speakers in a conversational or narrative context, concurrency demands also tend to remain within the base estimate. Since multiple voices are often processed sequentially, a higher number of requests can typically be supported.
+
+For Conversational AI use cases, concurrency requirements depend on the speaking ratio between the AI agent and the human participant. For example, in customer support scenarios where the AI agent speaks less frequently than the user, a concurrency limit of 5 may support more than 100 simultaneous requests.
