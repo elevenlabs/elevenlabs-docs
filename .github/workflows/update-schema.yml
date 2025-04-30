@@ -18,6 +18,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.DOCUMENTATION_AUTOMATION_AGENT_ID }}
+          private-key: ${{ secrets.DOCUMENTATION_AUTOMATION_AGENT_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
@@ -40,7 +46,7 @@ jobs:
 
       - name: Commit and Push Changes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           DRY_RUN: ${{ inputs.dryRun }}
         run: |
           git config --global user.name "github-actions[bot]"
