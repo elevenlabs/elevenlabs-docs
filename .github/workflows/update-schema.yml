@@ -3,14 +3,6 @@ name: Update OpenAPI Schema
 on:
   workflow_dispatch:
     inputs:
-      commitType:
-        description: 'Commit new OpenAPI spec to main or create a PR'
-        required: true
-        default: 'main'
-        type: choice
-        options:
-          - main
-          - PR
       dryRun:
         description: 'Test mode (no commits or PRs will be created)'
         required: false
@@ -47,7 +39,6 @@ jobs:
       - name: Commit and Push Changes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMIT_TYPE: ${{ inputs.commitType }}
           DRY_RUN: ${{ inputs.dryRun }}
         run: |
           git config --global user.name "github-actions[bot]"
@@ -70,21 +61,5 @@ jobs:
             exit 0
           fi
 
-          if [ "${{ inputs.commitType }}" = "MAIN" ]; then
-            git commit -m "Update OpenAPI schema from api.elevenlabs.io"
-            git push
-          else
-            # Create a new branch with a timestamp
-            BRANCH_NAME="update-openapi-schema-$(date +%Y%m%d-%H%M%S)"
-            git checkout -b $BRANCH_NAME
-
-            git commit -m "Update OpenAPI schema from api.elevenlabs.io"
-            git push origin $BRANCH_NAME
-
-            # Create PR using GitHub CLI
-            gh pr create \
-              --title "Update OpenAPI schema" \
-              --body "Automated PR to update OpenAPI schema from api.elevenlabs.io" \
-              --base main \
-              --head $BRANCH_NAME
-          fi
+          git commit -m "Update OpenAPI schema from api.elevenlabs.io"
+          git push
