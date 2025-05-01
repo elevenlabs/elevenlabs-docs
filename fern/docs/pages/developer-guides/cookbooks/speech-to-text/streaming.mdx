@@ -103,8 +103,6 @@ const response = await fetch(
 );
 const audioBlob = new Blob([await response.arrayBuffer()], { type: 'audio/mp3' });
 
-// const file = fs.createReadStream("/Users/pma/Desktop/nicole.mp3")
-
 const transcription = await client.speechToText.convertAsStream({
   file: audioBlob,
   model_id: 'scribe_v1',
