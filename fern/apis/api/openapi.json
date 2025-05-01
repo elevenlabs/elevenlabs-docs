@@ -20336,98 +20336,6 @@
         ],
         "title": "ClientToolConfig"
       },
-      "CollectionContentItem": {
-        "type": "object",
-        "properties": {
-          "added_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Added At"
-          },
-          "added_by": {
-            "type": "string",
-            "title": "Added By"
-          },
-          "_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "data": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/TaskDescriptionContentItem"
-              },
-              {
-                "$ref": "#/components/schemas/NestedCollectionContentItem"
-              }
-            ],
-            "title": "Data"
-          }
-        },
-        "required": [
-          "added_at",
-          "added_by",
-          "_id",
-          "data"
-        ],
-        "title": "CollectionContentItem"
-      },
-      "CollectionModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description"
-          },
-          "contents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CollectionContentItem"
-            },
-            "title": "Contents"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "description",
-          "contents"
-        ],
-        "title": "CollectionModel"
-      },
-      "CollectionsList": {
-        "type": "object",
-        "properties": {
-          "collections": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CollectionModel"
-            },
-            "title": "Collections"
-          }
-        },
-        "required": [
-          "collections"
-        ],
-        "title": "CollectionsList"
-      },
       "ConvAISecretLocator": {
         "description": "Used to reference a secret from the agent's secret store.",
         "type": "object",
@@ -21754,30 +21662,6 @@
           "phone_number_id"
         ],
         "title": "CreatePhoneNumberResponseModel"
-      },
-      "CreateProjectRequestBody": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "title": "CreateProjectRequestBody"
       },
       "CreatePronunciationDictionaryResponseModel": {
         "type": "object",
@@ -25929,26 +25813,6 @@
         ],
         "title": "ModerationStatusResponseModel"
       },
-      "NestedCollectionContentItem": {
-        "type": "object",
-        "properties": {
-          "kind": {
-            "type": "string",
-            "const": "subproject",
-            "title": "Kind"
-          },
-          "ref_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Ref Id"
-          }
-        },
-        "required": [
-          "kind",
-          "ref_id"
-        ],
-        "title": "NestedCollectionContentItem"
-      },
       "ObjectJsonSchemaProperty-Input": {
         "type": "object",
         "properties": {
@@ -28251,19 +28115,6 @@
         ],
         "title": "RecordingResponseModel"
       },
-      "RenameProjectRequestBody": {
-        "type": "object",
-        "properties": {
-          "new_name": {
-            "type": "string",
-            "title": "New Name"
-          }
-        },
-        "required": [
-          "new_name"
-        ],
-        "title": "RenameProjectRequestBody"
-      },
       "Render": {
         "type": "object",
         "properties": {
@@ -28933,7 +28784,7 @@
             "title": "Id"
           },
           "type": {
-            "description": "The type of the principal: user, group, or workspace api key.",
+            "description": "The type of the principal: user, group, or service account (under 'key').",
             "type": "string",
             "enum": [
               "user",
@@ -30431,26 +30282,6 @@
           "ulaw_8000"
         ],
         "title": "TTSOutputFormat"
-      },
-      "TaskDescriptionContentItem": {
-        "type": "object",
-        "properties": {
-          "kind": {
-            "type": "string",
-            "const": "task_description",
-            "title": "Kind"
-          },
-          "ref_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Ref Id"
-          }
-        },
-        "required": [
-          "kind",
-          "ref_id"
-        ],
-        "title": "TaskDescriptionContentItem"
       },
       "TelephonyProvider": {
         "type": "string",
