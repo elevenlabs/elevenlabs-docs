@@ -651,6 +651,7 @@ components:
     Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:
       type: object
       title: Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch
+      x-fern-type-name: UpdateAgentRequest
       properties:
         conversation_config:
           $ref: '#/components/schemas/ConversationalConfig'
@@ -701,9 +702,6 @@ components:
             μ-law format (sometimes written mu-law, often approximated as u-law) with 8kHz sample rate. Note that this format is commonly used for Twilio audio inputs.
     ExtendedSubscriptionResponseModel:
       x-fern-type-name: Subscription
-      properties:
-        status:
-          x-fern-type-name: SubscriptionStatus
     FeedbackResponseModel:
       x-fern-type-name: FeedbackItem
     FineTuningResponseModel:
@@ -713,7 +711,7 @@ components:
           x-fern-type-name: FinetuningState
       required: []
     HistoryItemResponseModel:
-      x-fern-type-name: HistoryItem
+      x-fern-type-name: HistoryItemResponse
       properties:
         state:
           x-fern-type-name: HistoryItemState
@@ -768,26 +766,26 @@ components:
     Body_Add_voice_v1_voices_add_post:
       x-fern-type-name: AddVoiceRequest
     Body_Create_a_previously_generated_voice_v1_voice_generation_create_voice_post:
-      x-fern-type-name: CreatePreviouslyGenertedVoiceRequest
+      x-fern-type-name: CreatePreviouslyGeneratedVoiceRequest
     Body_Creates_AudioNative_enabled_project__v1_audio_native_post:
       x-fern-type-name: CreateAudioNativeProjectRequest
     Body_Download_history_items_v1_history_download_post:
       x-fern-type-name: DownloadHistoryRequest
     Body_Dub_a_video_or_an_audio_file_v1_dubbing_post:
-      x-fern-type-name: DubAVideoOrAudioFileRequest
+      x-fern-type-name: DubRequest
       required: [target_lang]
     Body_Edit_voice_v1_voices__voice_id__edit_post:
       x-fern-type-name: EditVoiceRequest
     Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post:
       x-fern-type-name: GenerateVoiceRequest
     Body_Speech_to_Speech_Streaming_v1_speech_to_speech__voice_id__stream_post:
-      x-fern-type-name: SpeechToSpeechAsStreamRequest
+      x-fern-type-name: SpeechToSpeechStreamRequest
     Body_Speech_to_Speech_v1_speech_to_speech__voice_id__post:
       x-fern-type-name: SpeechToSpeechRequest
     Body_Text_to_speech_v1_text_to_speech__voice_id__post:
       x-fern-type-name: TextToSpeechRequest
     Body_Text_to_speech_v1_text_to_speech__voice_id__stream_post:
-      x-fern-type-name: TextToSpeechAsStreamRequest
+      x-fern-type-name: TextToSpeechStreamRequest
     Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post:
       x-fern-type-name: UpdatePronunciationDictionariesRequest
     ChapterSnapshotResponseModel:
@@ -813,7 +811,7 @@ components:
     HTTPValidationError:
       x-fern-type-name: HTTPValidationError
     InvoiceResponseModel:
-      x-fern-type-name: Invoice
+      x-fern-type-name: InvoiceResponse
     LanguageResponseModel:
       x-fern-type-name: LanguageResponse
     LibraryVoiceResponseModel:
@@ -861,10 +859,78 @@ components:
     VoiceVerificationResponseModel:
       x-fern-type-name: VoiceVerificationResponse
     Body_Get_similar_library_voices_v1_similar_voices_post:
-      x-fern-type-name: GetSimilarLibraryVoicesRequest
+      x-fern-type-name: ListSimilarVoicesRequest
     Body_Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post:
       x-fern-type-name: PronunciationDictionary
       properties:
         rules:
           items:
             x-fern-type-name: PronunciationDictionaryRule
+    Body_Remove_rules_from_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__remove_rules_post:
+      x-fern-type-name: RemovePronunciationDictionaryRulesRequest
+    Body_Sound_Generation_v1_sound_generation_post:
+      x-fern-type-name: CreateSoundEffectRequest
+    Body_Audio_Isolation_v1_audio_isolation_post:
+      x-fern-type-name: AudioIsolationRequest
+    Body_Audio_Isolation_Stream_v1_audio_isolation_stream_post:
+      x-fern-type-name: AudioIsolationStreamRequest
+    Body_Text_to_speech_with_timestamps_v1_text_to_speech__voice_id__with_timestamps_post:
+      x-fern-type-name: TextToSpeechWithTimestampsRequest
+    Body_Text_to_speech_streaming_with_timestamps_v1_text_to_speech__voice_id__stream_with_timestamps_post:
+      x-fern-type-name: TextToSpeechStreamWithTimestampsRequest
+    Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post:
+      x-fern-type-name: SaveVoicePreviewRequest
+    Body_Edit_voice_settings_v1_voices__voice_id__settings_edit_post:
+      x-fern-type-name: EditVoiceSettingsRequest
+    Body_Get_Chapters_v1_studio_projects__project_id__chapters_get:
+      x-fern-type-name: GetChaptersRequest
+    Body_Get_Chapter_v1_studio_projects__project_id__chapters__chapter_id__get:
+      x-fern-type-name: GetChapterRequest
+    Body_Delete_Chapter_v1_studio_projects__project_id__chapters__chapter_id__delete:
+      x-fern-type-name: DeleteChapterRequest
+    Body_Get_Project_Chapters_Snapshots_v1_studio_projects__project_id__chapters__chapter_id__snapshots_get:
+      x-fern-type-name: GetChapterSnapshotsRequest
+    Body_Get_Projects_v1_studio_projects_get:
+      x-fern-type-name: GetProjectsRequest
+    Body_Get_Project_v1_studio_projects__project_id__get:
+      x-fern-type-name: GetProjectRequest
+    Body_Delete_Project_v1_studio_projects__project_id__delete:
+      x-fern-type-name: DeleteProjectRequest
+    Body_Create_transcript_v1_speech_to_text_post:
+      x-fern-type-name: CreateTranscriptRequest
+    Body_Invite_user_v1_workspace_invites_add_post:
+      x-fern-type-name: InviteUserRequest
+    Body_Update_member_v1_workspace_members_post:
+      x-fern-type-name: UpdateMemberRequest
+    Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post:
+      x-fern-type-name: AddMemberToGroupRequest
+    Body_Remove_member_from_user_group_v1_workspace_groups__group_id__members_remove_post:
+      x-fern-type-name: RemoveMemberFromGroupRequest
+    Body_Create_PVC_voice_v1_voices_pvc_post:
+      x-fern-type-name: CreatePvcVoiceRequest
+    Body_Update_audio_native_project_v1_audio_native__project_id__content_post:
+      x-fern-type-name: UpdateAudioNativeProjectRequest
+    Body_Update_Project_v1_studio_projects__project_id__post:
+      x-fern-type-name: UpdateProjectRequest
+    Body_Update_Chapter_v1_studio_projects__project_id__chapters__chapter_id__post:
+       x-fern-type-name: UpdateChapterRequest
+    AudioWithTimestampsResponseModel:
+      x-fern-type-name: AudioWithTimestampsResponse
+    StreamingAudioChunkWithTimestampsResponseModel:
+      x-fern-type-name: StreamingAudioChunkWithTimestampsResponse
+    VoicePreviewsRequestModel:
+      x-fern-type-name: VoiceDesignRequest
+    VoicePreviewsResponseModel:
+      x-fern-type-name: VoiceDesignPreviewResponse
+    GetVoicesV2ResponseModel:
+      x-fern-type-name: GetVoicesV2Response
+    DeleteSampleResponseModel:
+      x-fern-type-name: DeleteSampleResponse
+    DeleteHistoryItemResponse:
+       x-fern-type-name: DeleteHistoryItemResponse
+    CharacterUsageResponse:
+        x-fern-type-name: CharacterUsageResponse
+    GetPronunciationDictionariesResponseModel:
+        x-fern-type-name: GetPronunciationDictionariesResponse
+    GetPronunciationDictionaryResponseModel:
+        x-fern-type-name: GetPronunciationDictionaryResponse
