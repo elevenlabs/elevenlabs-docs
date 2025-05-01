@@ -192,6 +192,42 @@ In practice this typically only adds ~50ms of latency.
 | Business   | 30                | 75                    | 5              |
 | Enterprise | Elevated          | Elevated              | Highest        |
 
+The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
+
+How endpoint requests are made impacts concurrency limits:
+- With HTTP, each request counts individually toward your concurrency limit. 
+- With a WebSocket, multiple requests can be processed sequentially within a generation and count as one towards your concurrency limit.
+
+### Understanding concurrency limits and priority
+
+The concurrency limit associated with your plan should not be interpreted as the maximum number of simultaneous audio broadcasts (such as phone calls, conversations, character voiceovers, etc.) that can be handled at once.
+The actual number of concurrent broadcasts depends on several factors, including the specific AI voices used and the characteristics of the use case.
+
+As a general rule of thumb, a concurrency limit of 5 can typically support up to approximately 100 simultaneous audio broadcasts.
+
+<AccordionGroup>
+  <Accordion title="Conversational AI">
+      Where TTS is used to facilitate dialogue, the provided heuristic offers a reasonable estimate for balanced conversations between AI agents and human participants.
+
+      For use cases in which the AI agent speaks less frequently than the human, such as customer support interactions, a concurrency limit of 5 may support more than 100 simultaneous conversations.
+  </Accordion>
+  <Accordion title="Character voiceovers">
+      Generally, more than 100 simultaneous character voiceovers can be supported for a concurrency limit of 5.
+      
+      The number can vary depending on the character’s dialogue frequency, the length of pauses, and in-game actions between lines. 
+  </Accordion>
+  <Accordion title="Live Dubbing">
+      Concurrent dubbing streams generally follow the provided heuristic.
+
+      If the broadcast involves multiple speakers in a conversational or narrative context, more simultaneous dubbing streams than the heuristic suggests may be possible.
+  </Accordion>
+</AccordionGroup>
+
+<Note>Flash and Turbo models can effectively support twice as many audio broadcasts given a concurrency limit because of their architecture.</Note>
+
+If you exceed your plan's concurrency limits at any point, model requests may still succeed depending on available capacity. 
+Your plan's priority level determines allocation of available capacity for excess requests.
+
 <Note>
   To increase your concurrency limit & queue priority, [upgrade your subscription
   plan](https://elevenlabs.io/pricing/api).
@@ -200,4 +236,3 @@ Enterprise customers can request a higher concurrency limit by contacting their 
 
 </Note>
 
-The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
