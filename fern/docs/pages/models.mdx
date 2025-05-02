@@ -195,7 +195,8 @@ In practice this typically only adds ~50ms of latency.
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
 
 How endpoint requests are made impacts concurrency limits:
-- With HTTP, each request counts individually toward your concurrency limit. 
+
+- With HTTP, each request counts individually toward your concurrency limit.
 - With a WebSocket, multiple requests can be processed sequentially within a generation and count as one towards your concurrency limit.
 
 ### Understanding concurrency limits
@@ -210,6 +211,7 @@ As a general rule of thumb, a concurrency limit of 5 can typically support up to
       Where TTS is used to facilitate dialogue, the provided heuristic offers a reasonable estimate for balanced conversations between AI agents and human participants.
 
       For use cases in which the AI agent speaks less frequently than the human, such as customer support interactions, a concurrency limit of 5 may support more than 100 simultaneous conversations.
+
   </Accordion>
   <Accordion title="Character voiceovers">
       Generally, more than 100 simultaneous character voiceovers can be supported for a concurrency limit of 5.
@@ -220,12 +222,16 @@ As a general rule of thumb, a concurrency limit of 5 can typically support up to
       Concurrent dubbing streams generally follow the provided heuristic.
 
       If the broadcast involves multiple speakers in a conversational or narrative context, more simultaneous dubbing streams than the heuristic suggests may be possible.
+
   </Accordion>
 </AccordionGroup>
 
-<Note>Flash and Turbo models can effectively support twice as many audio broadcasts given a concurrency limit because of their architecture.</Note>
+<Note>
+  Flash and Turbo models can effectively support twice as many audio broadcasts given a concurrency
+  limit because of their architecture.
+</Note>
 
-If you exceed your plan's concurrency limits at any point and you are on the Enterprise plan, model requests may still succeed, albeit slower, on a best efforts basis depending on available capacity. 
+If you exceed your plan's concurrency limits at any point and you are on the Enterprise plan, model requests may still succeed, albeit slower, on a best efforts basis depending on available capacity.
 
 <Note>
   To increase your concurrency limit & queue priority, [upgrade your subscription
