@@ -9322,7 +9322,7 @@
       "post": {
         "operationId": "Share_workspace_resource_v1_workspace_resources__resource_id__share_post",
         "summary": "Share Workspace Resource",
-        "description": "Grants a role on a workspace resource to a user or a group. It overrides any existing role this user/group/workspace api key has on the resource. To target a user, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. You must have admin access to the resource to share it.",
+        "description": "Grants a role on a workspace resource to a user or a group. It overrides any existing role this user/service account/group/workspace api key has on the resource. To target a user or service account, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. The resource will be shared with the service account associated with the api key. You must have admin access to the resource to share it.",
         "parameters": [
           {
             "name": "resource_id",
@@ -9393,7 +9393,7 @@
       "post": {
         "operationId": "Unshare_workspace_resource_v1_workspace_resources__resource_id__unshare_post",
         "summary": "Unshare Workspace Resource",
-        "description": "Removes any existing role on a workspace resource from a user or a group. To target a user, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. You must have admin access to the resource to unshare it. You cannot remove permissions from the user who created the resource.",
+        "description": "Removes any existing role on a workspace resource from a user, service account, group or workspace api key. To target a user or service account, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. The resource will be unshared from the service account associated with the api key. You must have admin access to the resource to unshare it. You cannot remove permissions from the user who created the resource.",
         "parameters": [
           {
             "name": "resource_id",
@@ -17986,7 +17986,7 @@
             "$ref": "#/components/schemas/WorkspaceResourceType"
           },
           "user_email": {
-            "description": "The email of the user",
+            "description": "The email of the user or service account.",
             "anyOf": [
               {
                 "type": "string"
@@ -19199,7 +19199,7 @@
             "$ref": "#/components/schemas/WorkspaceResourceType"
           },
           "user_email": {
-            "description": "The email of the user",
+            "description": "The email of the user or service account.",
             "anyOf": [
               {
                 "type": "string"
@@ -27635,6 +27635,7 @@
         },
         "required": [
           "id",
+          "name",
           "conversation_goal_prompt"
         ],
         "title": "PromptEvaluationCriteria"
