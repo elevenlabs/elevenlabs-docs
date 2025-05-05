@@ -38,6 +38,37 @@ Run the following command to lint/format the project
 pnpm run fmt
 ```
 
+## Code Snippets
+
+The documentation includes tested code snippets that demonstrate how to use ElevenLabs APIs and SDKs.
+
+### Snippets Workflow
+
+1. **Create Code Examples**:
+
+   - Write language-specific examples in `examples/snippets/` directory
+   - Organize by language: `examples/snippets/python/` and `examples/snippets/node/`
+   - Use consistent naming across languages (e.g., `quickstart_tts.py` and `quickstart_tts.mts`)
+
+2. **Test Snippets**:
+
+   - Run `pnpm run snippets:test` to verify all snippets work correctly
+   - Run `pnpm run snippets:typecheck` to check TypeScript types
+
+3. **Generate Documentation Snippets**:
+
+   - Run `pnpm run snippets:generate` to create MDX files with code blocks
+   - The script combines examples from different languages into CodeBlocks components
+   - Generated files are placed in `fern/snippets/generated/`
+
+4. **Use in Documentation**:
+   - Import the generated MDX files into documentation using the `<Markdown>` component:
+   ```mdx
+   <Markdown src="/snippets/generated/quickstart_tts.mdx" />
+   ```
+
+This workflow ensures that all code examples in the documentation are tested and working.
+
 ## Other developer resources
 
 ### SDKs

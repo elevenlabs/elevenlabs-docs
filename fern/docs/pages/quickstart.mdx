@@ -21,43 +21,7 @@ The ElevenLabs API provides a simple interface to state-of-the-art audio [models
     </Step>
     <Step title="Make your first request">
       Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
-
-      <CodeBlocks>
-        ```python
-        from dotenv import load_dotenv
-        from elevenlabs.client import ElevenLabs
-        from elevenlabs import play
-
-        load_dotenv()
-
-        client = ElevenLabs(
-          api_key=os.getenv("ELEVENLABS_API_KEY"),
-        )
-
-        audio = client.text_to_speech.convert(
-            text="The first move is what sets everything in motion.",
-            voice_id="JBFqnCBsd6RMkjVDRZzb",
-            model_id="eleven_multilingual_v2",
-            output_format="mp3_44100_128",
-        )
-
-        play(audio)
-        ```
-
-        ```typescript
-        import { ElevenLabsClient, play } from "elevenlabs";
-        import "dotenv/config";
-
-        const client = new ElevenLabsClient();
-        const audio = await client.textToSpeech.convert("JBFqnCBsd6RMkjVDRZzb", {
-          text: "The first move is what sets everything in motion.",
-          model_id: "eleven_multilingual_v2",
-          output_format: "mp3_44100_128",
-        });
-
-        await play(audio);
-        ```
-      </CodeBlocks>
+       <Markdown src="/snippets/generated/quickstart_tts.mdx" />
     </Step>
     <Step title="Run the code">
         <CodeBlocks>
