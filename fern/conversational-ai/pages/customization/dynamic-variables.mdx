@@ -106,7 +106,7 @@ System variables:
     import os
     import signal
     from elevenlabs.client import ElevenLabs
-    from elevenlabs.conversational_ai.conversation import Conversation, ConversationConfig
+    from elevenlabs.conversational_ai.conversation import Conversation, ConversationInitiationData
     from elevenlabs.conversational_ai.default_audio_interface import DefaultAudioInterface
 
     agent_id = os.getenv("AGENT_ID")
@@ -114,27 +114,27 @@ System variables:
     client = ElevenLabs(api_key=api_key)
 
     dynamic_vars = {
-      "user_name": "Angelo",
+        "user_name": "Angelo",
     }
 
-    config = ConversationConfig(
-      dynamic_variables=dynamic_vars
+    config = ConversationInitiationData(
+        dynamic_variables=dynamic_vars
     )
 
     conversation = Conversation(
-      client,
-      agent_id,
-      config=config,
-      # Assume auth is required when API_KEY is set.
-      requires_auth=bool(api_key),
-      # Use the default audio interface.
-      audio_interface=DefaultAudioInterface(),
-      # Simple callbacks that print the conversation to the console.
-      callback_agent_response=lambda response: print(f"Agent: {response}"),
-      callback_agent_response_correction=lambda original, corrected: print(f"Agent: {original} -> {corrected}"),
-      callback_user_transcript=lambda transcript: print(f"User: {transcript}"),
-      # Uncomment the below if you want to see latency measurements.
-      # callback_latency_measurement=lambda latency: print(f"Latency: {latency}ms"),
+        client,
+        agent_id,
+        config=config,
+        # Assume auth is required when API_KEY is set.
+        requires_auth=bool(api_key),
+        # Use the default audio interface.
+        audio_interface=DefaultAudioInterface(),
+        # Simple callbacks that print the conversation to the console.
+        callback_agent_response=lambda response: print(f"Agent: {response}"),
+        callback_agent_response_correction=lambda original, corrected: print(f"Agent: {original} -> {corrected}"),
+        callback_user_transcript=lambda transcript: print(f"User: {transcript}"),
+        # Uncomment the below if you want to see latency measurements.
+        # callback_latency_measurement=lambda latency: print(f"Latency: {latency}ms"),
     )
 
     conversation.start_session()

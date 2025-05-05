@@ -66,31 +66,29 @@ When creating an agent via API, you can add the `language detection` tool to you
 
 ```python
 from elevenlabs import (
-    ConversationalConfig,
+    ConversationalConfigApiModelInput,
     ElevenLabs,
-    AgentConfig,
-    PromptAgent,
-    PromptAgentToolsItem_System,
-    LanguagePreset,
-    ConversationConfigClientOverride,
+    AgentConfigApiModelInput,
+    PromptAgentInput,
+    PromptAgentInputToolsItem_System,
+    LanguagePresetInput,
+    ConversationConfigClientOverrideInput,
     AgentConfigOverride,
-    LanguagePresetTranslation,
-    PromptAgentOverride
 )
 
 # Initialize the client
 client = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Create the language detection tool
-language_detection_tool = PromptAgentToolsItem_System(
+language_detection_tool = PromptAgentInputToolsItem_System(
     name="language_detection",
     description=""  # Optional: Customize when the tool should be triggered
 )
 
 # Create language presets
 language_presets = {
-    "nl": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "nl": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Hoi, hoe gaat het met je?",
@@ -100,16 +98,16 @@ language_presets = {
         ),
         first_message_translation=None
     ),
-    "fi": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "fi": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 first_message="Hei, kuinka voit?",
             ),
             tts=None
         ),
     ),
-    "tr": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "tr": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Merhaba, nasılsın?",
@@ -118,8 +116,8 @@ language_presets = {
             tts=None
         ),
     ),
-    "ru": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "ru": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Привет, как ты?",
@@ -128,8 +126,8 @@ language_presets = {
             tts=None
         ),
     ),
-    "pt": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "pt": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Oi, como você está?",
@@ -141,9 +139,9 @@ language_presets = {
 }
 
 # Create the agent configuration
-conversation_config = ConversationalConfig(
-    agent=AgentConfig(
-        prompt=PromptAgent(
+conversation_config = ConversationalConfigApiModelInput(
+    agent=AgentConfigApiModelInput(
+        prompt=PromptAgentInput(
             tools=[language_detection_tool],
             first_message="Hi how are you?"
         )
