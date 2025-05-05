@@ -36,7 +36,7 @@ describe.each(config.languages.map((o) => [o.name, o] as [string, Language]))(
 
         expect(error).toBeNull();
       },
-      1000000
+      30000
     );
   }
 );
