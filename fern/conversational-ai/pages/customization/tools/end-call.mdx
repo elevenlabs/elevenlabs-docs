@@ -31,26 +31,26 @@ When creating an agent via API, you can add the End Call tool to your agent conf
 
 ```python
 from elevenlabs import (
-    ConversationalConfig,
+    ConversationalConfigApiModelInput,
     ElevenLabs,
-    AgentConfig,
-    PromptAgent,
-    PromptAgentToolsItem_System
+    AgentConfigApiModelInput,
+    PromptAgentInput,
+    PromptAgentInputToolsItem_System
 )
 
 # Initialize the client
 client = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Create the end call tool
-end_call_tool = PromptAgentToolsItem_System(
+end_call_tool = PromptAgentInputToolsItem_System(
     name="end_call",
     description=""  # Optional: Customize when the tool should be triggered
 )
 
 # Create the agent configuration
-conversation_config = ConversationalConfig(
-    agent=AgentConfig(
-        prompt=PromptAgent(
+conversation_config = ConversationalConfigApiModelInput(
+    agent=AgentConfigApiModelInput(
+        prompt=PromptAgentInput(
             tools=[end_call_tool]
         )
     )

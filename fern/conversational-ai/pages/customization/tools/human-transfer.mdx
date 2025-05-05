@@ -64,11 +64,11 @@ You can configure the `transfer_to_number` system tool when creating or updating
 
 ```python
 from elevenlabs import (
-    ConversationalConfig,
+    ConversationalConfigApiModelInput,
     ElevenLabs,
-    AgentConfig,
-    PromptAgent,
-    PromptAgentToolsItem_System,
+    AgentConfigApiModelInput,
+    PromptAgentInput,
+    PromptAgentInputToolsItem_System,
     SystemToolConfigInputParams_TransferToNumber,
     PhoneNumberTransfer,
 )
@@ -83,22 +83,22 @@ transfer_rules = [
 ]
 
 # Create the transfer tool configuration
-transfer_tool = PromptAgentToolsItem_System(
+transfer_tool = PromptAgentInputToolsItem_System(
     type="system",
-    name="transfer_to_number",
-    description="Transfer the user to a human operator based on their request.", # Optional custom description
+    name="transfer_to_human",
+    description="Transfer the user to a specialized agent based on their request.", # Optional custom description
     params=SystemToolConfigInputParams_TransferToNumber(
         transfers=transfer_rules
     )
 )
 
 # Create the agent configuration
-conversation_config = ConversationalConfig(
-    agent=AgentConfig(
-        prompt=PromptAgent(
+conversation_config = ConversationalConfigApiModelInput(
+    agent=AgentConfigApiModelInput(
+        prompt=PromptAgentInput(
             prompt="You are a helpful assistant.",
             first_message="Hi, how can I help you today?",
-            tools=[transfer_tool], # Add the tool here
+            tools=[transfer_tool],
         )
     )
 )
@@ -107,8 +107,6 @@ conversation_config = ConversationalConfig(
 response = client.conversational_ai.create_agent(
     conversation_config=conversation_config
 )
-
-print(response)
 
 # Note: When the LLM decides to call this tool, it needs to provide:
 # - transfer_number: The phone number to transfer to (must match one defined in rules).
