@@ -651,10 +651,286 @@ components:
     Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:
       type: object
       title: Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch
+      x-fern-type-name: UpdateAgentRequest
       properties:
         conversation_config:
           $ref: '#/components/schemas/ConversationalConfig'
         platform_settings:
           $ref: '#/components/schemas/AgentPlatformSettings'
+    OutputFormat:
+      type: string
+      enum:
+        - mp3_22050_32
+        - mp3_44100_32
+        - mp3_44100_64
+        - mp3_44100_96
+        - mp3_44100_128
+        - mp3_44100_192
+        - pcm_16000
+        - pcm_22050
+        - pcm_24000
+        - pcm_44100
+        - ulaw_8000
+      x-fern-enum:
+        mp3_22050_32:
+          description: Output format, mp3 with 22.05kHz sample rate at 32kbps
+        mp3_44100_32:
+          description: Output format, mp3 with 44.1kHz sample rate at 32kbps
+        mp3_44100_64:
+          description: Output format, mp3 with 44.1kHz sample rate at 64kbps
+        mp3_44100_96:
+          description: Output format, mp3 with 44.1kHz sample rate at 96kbps
+        mp3_44100_128:
+          description: Default output format, mp3 with 44.1kHz sample rate at 128kbps
+        mp3_44100_192:
+          description: |
+            Output format, mp3 with 44.1kHz sample rate at 192kbps.
+        pcm_16000:
+          description: |
+            PCM format (S16LE) with 16kHz sample rate.
+        pcm_22050:
+          description: |
+            PCM format (S16LE) with 22.05kHz sample rate.
+        pcm_24000:
+          description: |
+            PCM format (S16LE) with 24kHz sample rate.
+        pcm_44100:
+          description: |
+            PCM format (S16LE) with 44.1kHz sample rate. Requires you to be subscribed to Independent Publisher tier or above.
+        ulaw_8000:
+          description: |
+            μ-law format (sometimes written mu-law, often approximated as u-law) with 8kHz sample rate. Note that this format is commonly used for Twilio audio inputs.
+    ExtendedSubscriptionResponseModel:
+      x-fern-type-name: Subscription
+    FeedbackResponseModel:
+      x-fern-type-name: FeedbackItem
+    FineTuningResponseModel:
+      x-fern-type-name: FineTuningResponse
+      properties:
+        finetuning_state:
+          x-fern-type-name: FinetuningState
+      required: []
+    HistoryItemResponseModel:
+      x-fern-type-name: HistoryItemResponse
+      properties:
+        state:
+          x-fern-type-name: HistoryItemState
+        voice_category:
+          x-fern-type-name: VoiceCategory
+    ModelResponseModel:
+      x-fern-type-name: Model
+      required: [model_id]
+    SubscriptionResponseModel:
+      x-fern-type-name: SubscriptionResponse
+      properties:
+        status:
+          x-fern-type-name: SubscriptionStatus
+    UserResponseModel:
+      x-fern-type-name: User
+    VoiceResponseModel:
+      x-fern-type-name: Voice
+      required:
+        - voice_id
+    VoiceSettingsResponseModel:
+      x-fern-type-name: VoiceSettings
+      required: []
+    VoiceSharingResponseModel:
+      x-fern-type-name: VoiceSharingResponse
+      required: []
+      properties:
+        status:
+          x-fern-type-name: voice_sharing_state
+        review_status:
+          x-fern-type-name: review_status
+    Age:
+      x-fern-type-name: Age
+    Gender:
+      x-fern-type-name: Gender
+    SampleResponseModel:
+      x-fern-type-name: VoiceSample
+      required: []
+    AddProjectResponseModel:
+      x-fern-type-name: AddProjectResponseModel
+    AddPronunciationDictionaryResponseModel:
+      x-fern-type-name: AddPronunciationDictionaryResponseModel
+    AddVoiceResponseModel:
+      x-fern-type-name: AddVoiceResponseModel
+    AudioNativeCreateProjectResponseModel:
+      x-fern-type-name: AudioNativeCreateProjectResponseModel
+    Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_file_post:
+      x-fern-type-name: AddPronunciationDictionaryRequest
+    Body_Add_project_v1_projects_add_post:
+      x-fern-type-name: AddProjectRequest
+    Body_Add_sharing_voice_v1_voices_add__public_user_id___voice_id__post:
+      x-fern-type-name: AddSharingVoiceRequest
+    Body_Add_voice_v1_voices_add_post:
+      x-fern-type-name: AddVoiceRequest
+    Body_Create_a_previously_generated_voice_v1_voice_generation_create_voice_post:
+      x-fern-type-name: CreatePreviouslyGeneratedVoiceRequest
+    Body_Creates_AudioNative_enabled_project__v1_audio_native_post:
+      x-fern-type-name: CreateAudioNativeProjectRequest
+    Body_Download_history_items_v1_history_download_post:
+      x-fern-type-name: DownloadHistoryRequest
+    Body_Dub_a_video_or_an_audio_file_v1_dubbing_post:
+      x-fern-type-name: DubRequest
+      required: [target_lang]
+    Body_Edit_voice_v1_voices__voice_id__edit_post:
+      x-fern-type-name: EditVoiceRequest
+    Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post:
+      x-fern-type-name: GenerateVoiceRequest
+    Body_Speech_to_Speech_Streaming_v1_speech_to_speech__voice_id__stream_post:
+      x-fern-type-name: SpeechToSpeechStreamRequest
+    Body_Speech_to_Speech_v1_speech_to_speech__voice_id__post:
+      x-fern-type-name: SpeechToSpeechRequest
     Body_Text_to_speech_v1_text_to_speech__voice_id__post:
       x-fern-type-name: TextToSpeechRequest
+    Body_Text_to_speech_v1_text_to_speech__voice_id__stream_post:
+      x-fern-type-name: TextToSpeechStreamRequest
+    Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post:
+      x-fern-type-name: UpdatePronunciationDictionariesRequest
+    ChapterSnapshotResponseModel:
+      x-fern-type-name: ChapterSnapshotResponse
+    ChapterSnapshotsResponseModel:
+      x-fern-type-name: ChapterSnapshotsResponse
+    ChapterStatisticsResponseModel:
+      x-fern-type-name: ChapterStatisticsResponse
+    DoDubbingResponseModel:
+      x-fern-type-name: DoDubbingResponse
+    GetChaptersResponseModel:
+      x-fern-type-name: GetChaptersResponse
+    GetLibraryVoicesResponseModel:
+      x-fern-type-name: GetLibraryVoicesResponse
+    GetProjectsResponseModel:
+      x-fern-type-name: GetProjectsResponse
+    GetPronunciationDictionaryMetadataResponseModel:
+      x-fern-type-name: GetPronunciationDictionaryMetadataResponse
+    GetSpeechHistoryResponseModel:
+      x-fern-type-name: GetSpeechHistoryResponse
+    GetVoicesResponseModel:
+      x-fern-type-name: GetVoicesResponse
+    HTTPValidationError:
+      x-fern-type-name: HTTPValidationError
+    InvoiceResponseModel:
+      x-fern-type-name: InvoiceResponse
+    LanguageResponseModel:
+      x-fern-type-name: LanguageResponse
+    LibraryVoiceResponseModel:
+      x-fern-type-name: LibraryVoiceResponse
+    ManualVerificationFileResponseModel:
+      x-fern-type-name: ManualVerificationFileResponse
+    ManualVerificationResponseModel:
+      x-fern-type-name: ManualVerificationResponse
+    ProjectExtendedResponseModel:
+      x-fern-type-name: ProjectExtendedResponse
+      properties:
+        state:
+          x-fern-type-name: ProjectState
+    ProjectResponseModel:
+      x-fern-type-name: ProjectResponse
+      properties:
+        state:
+          x-fern-type-name: ProjectState
+    ProjectSnapshotResponseModel:
+      x-fern-type-name: ProjectSnapshotResponse
+    ProjectSnapshotsResponseModel:
+      x-fern-type-name: ProjectSnapshotsResponse
+    PronunciationDictionaryVersionLocatorDBModel:
+      x-fern-type-name: PronunciationDictionaryVersionLocator
+    RecordingResponseModel:
+      x-fern-type-name: RecordingResponse
+    SpeechHistoryItemResponseModel:
+      x-fern-type-name: SpeechHistoryItemResponse
+      properties:
+        state:
+          - x-fern-type-name: SpeechHistoryState
+    ValidationError:
+      x-fern-type-name: ValidationError
+    VerificationAttemptResponseModel:
+      x-fern-type-name: VerificationAttemptResponse
+    VoiceGenerationParameterOptionResponseModel:
+      x-fern-type-name: VoiceGenerationParameterOptionResponse
+    VoiceGenerationParameterResponseModel:
+      x-fern-type-name: VoiceGenerationParameterResponse
+    ChapterResponseModel:
+      x-fern-type-name: ChapterResponse
+      properties:
+        state:
+          x-fern-type-name: ChapterState
+    VoiceVerificationResponseModel:
+      x-fern-type-name: VoiceVerificationResponse
+    Body_Get_similar_library_voices_v1_similar_voices_post:
+      x-fern-type-name: ListSimilarVoicesRequest
+    Body_Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post:
+      x-fern-type-name: PronunciationDictionary
+      properties:
+        rules:
+          items:
+            x-fern-type-name: PronunciationDictionaryRule
+    Body_Remove_rules_from_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__remove_rules_post:
+      x-fern-type-name: RemovePronunciationDictionaryRulesRequest
+    Body_Sound_Generation_v1_sound_generation_post:
+      x-fern-type-name: CreateSoundEffectRequest
+    Body_Audio_Isolation_v1_audio_isolation_post:
+      x-fern-type-name: AudioIsolationRequest
+    Body_Audio_Isolation_Stream_v1_audio_isolation_stream_post:
+      x-fern-type-name: AudioIsolationStreamRequest
+    Body_Text_to_speech_with_timestamps_v1_text_to_speech__voice_id__with_timestamps_post:
+      x-fern-type-name: TextToSpeechWithTimestampsRequest
+    Body_Text_to_speech_streaming_with_timestamps_v1_text_to_speech__voice_id__stream_with_timestamps_post:
+      x-fern-type-name: TextToSpeechStreamWithTimestampsRequest
+    Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post:
+      x-fern-type-name: SaveVoicePreviewRequest
+    Body_Edit_voice_settings_v1_voices__voice_id__settings_edit_post:
+      x-fern-type-name: EditVoiceSettingsRequest
+    Body_Get_Chapters_v1_studio_projects__project_id__chapters_get:
+      x-fern-type-name: GetChaptersRequest
+    Body_Get_Chapter_v1_studio_projects__project_id__chapters__chapter_id__get:
+      x-fern-type-name: GetChapterRequest
+    Body_Delete_Chapter_v1_studio_projects__project_id__chapters__chapter_id__delete:
+      x-fern-type-name: DeleteChapterRequest
+    Body_Get_Project_Chapters_Snapshots_v1_studio_projects__project_id__chapters__chapter_id__snapshots_get:
+      x-fern-type-name: GetChapterSnapshotsRequest
+    Body_Get_Projects_v1_studio_projects_get:
+      x-fern-type-name: GetProjectsRequest
+    Body_Get_Project_v1_studio_projects__project_id__get:
+      x-fern-type-name: GetProjectRequest
+    Body_Delete_Project_v1_studio_projects__project_id__delete:
+      x-fern-type-name: DeleteProjectRequest
+    Body_Create_transcript_v1_speech_to_text_post:
+      x-fern-type-name: CreateTranscriptRequest
+    Body_Invite_user_v1_workspace_invites_add_post:
+      x-fern-type-name: InviteUserRequest
+    Body_Update_member_v1_workspace_members_post:
+      x-fern-type-name: UpdateMemberRequest
+    Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post:
+      x-fern-type-name: AddMemberToGroupRequest
+    Body_Remove_member_from_user_group_v1_workspace_groups__group_id__members_remove_post:
+      x-fern-type-name: RemoveMemberFromGroupRequest
+    Body_Create_PVC_voice_v1_voices_pvc_post:
+      x-fern-type-name: CreatePvcVoiceRequest
+    Body_Update_audio_native_project_v1_audio_native__project_id__content_post:
+      x-fern-type-name: UpdateAudioNativeProjectRequest
+    Body_Update_Project_v1_studio_projects__project_id__post:
+      x-fern-type-name: UpdateProjectRequest
+    Body_Update_Chapter_v1_studio_projects__project_id__chapters__chapter_id__post:
+      x-fern-type-name: UpdateChapterRequest
+    AudioWithTimestampsResponseModel:
+      x-fern-type-name: AudioWithTimestampsResponse
+    StreamingAudioChunkWithTimestampsResponseModel:
+      x-fern-type-name: StreamingAudioChunkWithTimestampsResponse
+    VoicePreviewsRequestModel:
+      x-fern-type-name: VoiceDesignRequest
+    VoicePreviewsResponseModel:
+      x-fern-type-name: VoiceDesignPreviewResponse
+    GetVoicesV2ResponseModel:
+      x-fern-type-name: GetVoicesV2Response
+    DeleteSampleResponseModel:
+      x-fern-type-name: DeleteSampleResponse
+    DeleteHistoryItemResponse:
+      x-fern-type-name: DeleteHistoryItemResponse
+    CharacterUsageResponse:
+      x-fern-type-name: CharacterUsageResponse
+    GetPronunciationDictionariesResponseModel:
+      x-fern-type-name: GetPronunciationDictionariesResponse
+    GetPronunciationDictionaryResponseModel:
+      x-fern-type-name: GetPronunciationDictionaryResponse

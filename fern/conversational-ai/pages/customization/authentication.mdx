@@ -260,15 +260,14 @@ agent = client.conversational_ai.create_agent(
       first_message="Hi. I'm an authenticated agent that can only be called from certain domains.",
     )
   ),
-  platform_settings=AgentPlatformSettingsRequestModel(
+platform_settings=AgentPlatformSettingsRequestModel(
   auth=AuthSettings(
     enable_auth=True,
     allowlist=[
       AllowlistItem(hostname="example.com"),
       AllowlistItem(hostname="app.example.com"),
       AllowlistItem(hostname="localhost:3000")
-      ]
-    )
+    ]
   )
 )
 ```
