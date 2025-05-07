@@ -7,17 +7,23 @@
 ## Getting started
 
 1. Clone the repo
+
 ```bash
 git clone https://github.com/elevenlabs/elevenlabs-docs.git
 cd examples/elevenlabs-nextjs
 ```
+
 2. Setup the `.env` file
+
 ```bash
 cp .env.example .env
 ```
+
 - ELEVENLABS_API_KEY: Get your API key from [ElevenLabs](https://elevenlabs.io/app/settings/api-keys)
-- IRON_SESSION_SECRET_KEY: Generate using  ```openssl rand -base64 32```
+- IRON_SESSION_SECRET_KEY: Generate using `openssl rand -base64 32`
+
 3. Install/run the project
+
 ```bash
 pnpm install
 pnpm dev
@@ -26,12 +32,14 @@ pnpm dev
 Open http://localhost:3000
 
 ## Capabilities
+
 - Text to Speech
 - Speech to Text
 - Sound Effects
 - Conversational AI
 
 ## Technology
+
 - ElevenLabs SDK
 - Next.js w/ Turbo + shadcn/ui
 - Tailwind CSS v4
