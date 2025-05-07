@@ -17840,6 +17840,39 @@
               ]
             ],
             "title": "Group Ids"
+          },
+          "workspace_permission": {
+            "description": "The workspace permission of the user",
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "external",
+                  "admin",
+                  "workspace_admin",
+                  "workspace_member",
+                  "support_l1",
+                  "support_l2",
+                  "moderator",
+                  "sales",
+                  "voice_mixer",
+                  "voice_admin",
+                  "convai_admin",
+                  "enterprise_viewer",
+                  "quality_check_admin",
+                  "workspace_migration_admin",
+                  "human_reviewer",
+                  "productions_admin"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "workspace_member"
+            ],
+            "title": "Workspace Permission"
           }
         },
         "required": [
@@ -32455,7 +32488,7 @@
             ]
           },
           "request_body_schema": {
-            "description": "Schema for the body parameters, if any. Used for POST/PATCH requests. The schema should be an object which will be sent as the json body",
+            "description": "Schema for the body parameters, if any. Used for POST/PATCH/PUT requests. The schema should be an object which will be sent as the json body",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Input"
@@ -32550,7 +32583,7 @@
             ]
           },
           "request_body_schema": {
-            "description": "Schema for the body parameters, if any. Used for POST/PATCH requests. The schema should be an object which will be sent as the json body",
+            "description": "Schema for the body parameters, if any. Used for POST/PATCH/PUT requests. The schema should be an object which will be sent as the json body",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Output"
