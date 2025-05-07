@@ -64,10 +64,10 @@ You can configure the `transfer_to_number` system tool when creating or updating
 
 ```python
 from elevenlabs import (
-    ConversationalConfigApiModelInput,
+    ConversationalConfig,
     ElevenLabs,
-    AgentConfigApiModelInput,
-    PromptAgentInput,
+    AgentConfig,
+    PromptAgent,
     PromptAgentInputToolsItem_System,
     SystemToolConfigInputParams_TransferToNumber,
     PhoneNumberTransfer,
@@ -93,9 +93,9 @@ transfer_tool = PromptAgentInputToolsItem_System(
 )
 
 # Create the agent configuration
-conversation_config = ConversationalConfigApiModelInput(
-    agent=AgentConfigApiModelInput(
-        prompt=PromptAgentInput(
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
             prompt="You are a helpful assistant.",
             first_message="Hi, how can I help you today?",
             tools=[transfer_tool],
