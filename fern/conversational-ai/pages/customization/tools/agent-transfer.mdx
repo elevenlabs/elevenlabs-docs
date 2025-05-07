@@ -81,8 +81,8 @@ You can configure the `transfer_to_agent` system tool when creating or updating 
 from elevenlabs import (
     ConversationalConfig,
     ElevenLabs,
-    AgentConfigApiModelInput,
-    PromptAgentInput,
+    AgentConfig,
+    PromptAgent,
     PromptAgentInputToolsItem_System,
     SystemToolConfigInputParams_TransferToAgent,
     AgentTransfer
@@ -109,8 +109,8 @@ transfer_tool = PromptAgentInputToolsItem_System(
 
 # Create the agent configuration
 conversation_config = ConversationalConfig(
-    agent=AgentConfigApiModelInput(
-        prompt=PromptAgentInput(
+    agent=AgentConfig(
+        prompt=PromptAgent(
             prompt="You are a helpful assistant.",
             first_message="Hi, how can I help you today?",
             tools=[transfer_tool],

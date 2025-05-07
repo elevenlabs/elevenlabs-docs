@@ -33,7 +33,7 @@ Our language detection tool triggers language switching in two cases, both based
 <Steps>
     <Step title="Configure supported languages">
         The languages that the agent can switch to must be defined in the `Agent` settings tab.
-        
+
         <Frame background="subtle">
             ![Agent languages](/assets/images/conversational-ai/agent-languages.png)
         </Frame>
@@ -68,8 +68,8 @@ When creating an agent via API, you can add the `language detection` tool to you
 from elevenlabs import (
     ConversationalConfig,
     ElevenLabs,
-    AgentConfigApiModelInput,
-    PromptAgentInput,
+    AgentConfig,
+    PromptAgent,
     PromptAgentInputToolsItem_System,
     LanguagePresetInput,
     ConversationConfigClientOverrideInput,
@@ -140,8 +140,8 @@ language_presets = {
 
 # Create the agent configuration
 conversation_config = ConversationalConfig(
-    agent=AgentConfigApiModelInput(
-        prompt=PromptAgentInput(
+    agent=AgentConfig(
+        prompt=PromptAgent(
             tools=[language_detection_tool],
             first_message="Hi how are you?"
         )
