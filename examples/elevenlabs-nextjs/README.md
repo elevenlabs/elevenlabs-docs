@@ -1,4 +1,4 @@
-## ElevenLabs NextJS Template
+## ElevenLabs NextJS Audio Starter Kit
 
 ![template](https://github.com/user-attachments/assets/3fcdc65d-bd4a-4cf5-b33b-2a7e50516e91)
 
