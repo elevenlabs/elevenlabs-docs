@@ -1,0 +1,291 @@
+---
+title: Multi-Context WebSocket
+subtitle: Stream multiple independent audio feeds over a single WebSocket connection for a single end-user conversation in real-time.
+---
+
+WebSocket streaming allows for sending and receiving data over a single, long-lived connection, ideal for real-time audio streaming.
+The v1 multi WebSocket extends this capability by enabling up to 5 contexts over a single socket.
+This is designed for handling interruptions better in conversational use cases for a single end-user conversation, such as handling the main dialogue, user barge-ins (interruptions), and other vocal cues simultaneously without needing multiple WebSocket connections for that single user.
+
+<Note>Existing v1 WebSocket integrations will continue to work.</Note>
+
+### Why v1 multi WebSocket?
+
+The v1 multi WebSocket addresses several needs and limitations of the original v1 WebSocket, primarily for enhancing complex, single end-user conversational experiences:
+
+| Need                                                                                                                                                       | Limitation in v1                       | Improvement in v1 multi                                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Multiple independent audio streams within a single end-user conversation (e.g., managing main responses and interruptions seamlessly for one user session) | Only one logical stream per socket     | context_id multiplexing: Up to 5 concurrent logical generators share a single network connection for that one user's session.            |
+| Context control                                                                                                                                            | Closing a connection required flushing | Manual flush control: New close_context / close_socket flags allow clients to control which contexts to close, with or without flushing. |
+| Clearer protocol surface                                                                                                                                   | Exposed some deprecated parameters     | Removed deprecated parameters; defaults are tuned for Flash models.                                                                      |
+
+### v1 multi schema changes from v1
+
+The v1 multi WebSocket introduces several schema changes to support multiple contexts within a single connection. Here's a summary of the key differences:
+
+- **Added context management fields**: New fields like `context_id`, `close_context`, and `close_socket` for managing multiple audio streams
+- **Changed closing behavior**: Deprecated the empty text message method for closing connections in favor of explicit close flags
+- **Removed deprecated fields**: Removed `try_trigger_generation` and other legacy parameters
+- **Enhanced response schema**: Added `context_id` to responses for proper client-side routing
+
+### Request Schema Changes
+
+<Tabs>
+  <Tab title="Existing Fields">
+
+    | Field                      | v1                                                  | v1 multi                                                                                                                            |
+    | -------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+    | text                       | ✓                                                   | ✓ (First message for each new context must be a single space " ")                                                                   |
+    | voice_settings             | Defined in first message, subsequently must match   | Defined in the first message of each context_id. Semantics identical to v1, but settings can differ per context.                    |
+    | generation_config          | Defined in first message, subsequently must match   | Defined in the first message of each context_id. Semantics identical to v1, and can differ per context.                             |
+    | xi_api_key / authorization | Defined in header or first message, must match      | Same.                                                                                                                               |
+    | flush                      | Forces buffer generation (and then continues)       | Same, but operates per context_id.                                                                                                  |
+    | try_trigger_generation     | Tries generation if >50 chars accumulated           | Removed.                                                                                                                            |
+
+  </Tab>
+  <Tab title="New Fields">
+
+    | Field                             | Purpose                                                                                                                                                                                    |
+    | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+    | context_id (string, optional)     | Routes the message to a specific logical generator within the single user session. If absent or "", messages belong to the default context. Max 5 live contexts per socket.                |
+    | close_context (boolean, optional) | Immediately closes the specified context. Combine with flush: true to flush before closing. See Closing Contexts section.                                                              |
+    | close_socket (boolean, optional)  | Closes all contexts and terminates the WebSocket for the current user session. Combine with flush: true to flush all contexts. See Closing Contexts section.                           |
+
+  </Tab>
+</Tabs>
+
+### Response Schema Changes
+
+<Tabs>
+  <Tab title="Existing Fields">
+
+    | Field                | v1 | v1 multi                                                                      |
+    | -------------------- | -- | ----------------------------------------------------------------------------- |
+    | audio                | ✓  | Unchanged                                                                     |
+    | is_final             | ✓  | An is_final message is received per context when that context closes.         |
+    | normalized_alignment | ✓  | Unchanged                                                                     |
+    | alignment            | ✓  | Unchanged                                                                     |
+
+  </Tab>
+  <Tab title="New Fields">
+
+    | Field                         | Purpose                                                                                                                                                                               |
+    | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | context_id (string, optional) | The response object now includes the context_id of the originating generator, allowing for correct routing of audio within the client application. null/None for the default context. |
+
+  </Tab>
+</Tabs>
+
+### Context Lifecycle Changes
+
+<Tabs>
+  <Tab title="Opening Contexts">
+    Managing contexts for a single user session involves several key actions:
+
+    - **First Context**: The `context_id` in the initial message sent to the WebSocket establishes the first active generator for the user's session.
+    - **Additional Contexts**: You can create new contexts for the same user session by sending another initial message. This message can contain any starting text, or " " if none is ready yet, and a new, unique `context_id`. For example: `{"context_id": "assistant_reply", "text": " "}`.
+    - **Configuration per Context**: `voice_settings` and `generation_config` can be provided in the first message of each context. These settings can differ between contexts.
+    - **Audio Generation**: The server begins generating audio once the buffer thresholds for a specific context are met. Automatic mode is supported on a per-context basis.
+
+  </Tab>
+  <Tab title="Closing Contexts">
+    The v1 multi WebSocket introduces more granular control over closing contexts compared to the v1 WebSocket:
+
+    - **Sending `{"text":""}` on the default context**:
+        - **v1 Behaviour**: Flushes the buffer and then closes the socket.
+        - **v1 multi Behaviour**: Simply resets the timeout clock. Use the `close_context` or `close_socket` flags to close instead.
+
+    - **Sending `{"flush":true, "context_id":"your_context"}`**:
+        - **v1 Behaviour**: Not applicable, as flush was a global operation.
+        - **v1 multi Behaviour**: Flushes the buffer of the specified `your_context`. If you intend to end that stream after flushing, combine this with `close_context: true`.
+
+    - **Sending `{"close_context":true, "context_id":"your_context"}`**:
+        - **v1 Behaviour**: Not applicable.
+        - **v1 multi Behaviour**: Immediately closes `your_context` without flushing, unless `flush:true` is included in the same message or the context was already set to flush. An `is_final:true` message with the same `context_id` will be sent.
+
+    - **Sending `{"close_socket":true}`**:
+        - **v1 Behaviour**: Not applicable.
+        - **v1 multi Behaviour**: Closes all contexts for the current user session. If this message also includes `flush:true`, all contexts are flushed. Otherwise, only contexts that were awaiting a previous flush command will be flushed. After flushing (if applicable), the WebSocket connection is terminated. An `is_final:true` message is emitted for each context.
+
+  </Tab>
+</Tabs>
+
+### Requirements
+
+An ElevenLabs account with an API key (here's how to find your API key).
+
+Python or Node.js (or another javascript runtime) installed on your machine
+
+#### Setup
+
+Install required dependencies:
+
+<CodeBlocks>
+```python
+pip install python-dotenv pip install websockets
+```
+
+```javascript
+npm install dotenv
+npm install @types/dotenv --save-dev
+npm install ws
+```
+
+</CodeBlocks>
+
+Create a .env file in your project directory and add your API key:
+
+<CodeBlocks>
+
+```bash
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+</CodeBlocks>
+
+### Endpoint & Handshake
+
+The v1 multi WebSocket uses a different endpoint URL than the original v1 WebSocket:
+
+| Version  | Endpoint URL                                                              |
+| -------- | ------------------------------------------------------------------------- |
+| v1       | `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream-input`       |
+| v1 multi | `wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/multi-stream-input` |
+
+Both versions support common query parameters such as `model_id` and `auto_mode`. However, the v1 multi endpoint does not support the `optimize_streaming_latency` and `use_pvc_as_ivc` parameters that are available in the original v1 endpoint.
+
+### Initiate the websocket connection
+
+<CodeBlocks>
+
+```python
+
+import os
+from dotenv import load_dotenv
+import websockets
+import json # Make sure to import json
+
+load_dotenv()
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
+voice_id = 'Xb7hH8MSUJpSbSDYk0k2'
+
+model_id = 'eleven_flash_v2_5'
+
+uri = f"wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/multi-stream-input?model_id={model_id}"
+
+async def text_to_speech_multi_ws_streaming(voice_id, model_id):
+async with websockets.connect(uri) as websocket:
+print("WebSocket connection established for a single user session.")
+pass
+
+```
+
+```javascript
+import * as dotenv from 'dotenv';
+import * as fs from 'node:fs';
+import WebSocket from 'ws';
+
+// Load the API key from the .env file
+dotenv.config();
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+
+const voiceId = 'Xb7hH8MSUJpSbSDYk0k2';
+// For latency-sensitive use cases, 'eleven_flash_v2_5' is recommended.
+const model = 'eleven_flash_v2_5';
+
+// Note the change in the URI to /multi-stream-input/
+const uri = `wss://api.elevenlabs.io/v1/text-to-speech/${voiceId}/multi-stream-input?model_id=${model}`;
+const websocket = new WebSocket(uri, {
+  headers: { 'xi-api-key': `${ELEVENLABS_API_KEY}` },
+});
+
+websocket.on('open', () => {
+  console.log('WebSocket connection established for a single user session.');
+  // Ready to send initial context messages
+});
+
+// Create a directory for saving audio if it doesn't exist
+const outputDir = './output';
+try {
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+} catch (err) {
+  console.error('Error creating output directory:', err);
+}
+```
+
+</CodeBlocks>
+
+### Opening a new context
+
+<CodeBlocks>
+```python
+await ws.send(json.dumps({"text": "This text will be included in the new context", "voice_settings": {...}, "context_id":"new_context_id}))
+```
+
+```javascript
+await websocket.send(
+  json.dumps({
+    text: 'This text will be included in the next context',
+    voice_settings: { stability: 0.5 },
+    xi_api_key: ELEVENLABS_API_KEY,
+    context_id: 'new_context_id',
+  })
+);
+```
+
+</CodeBlocks>
+
+### Pronunciation Dictionaries (per context)
+
+Pronunciation dictionaries can be applied per context and must be specified in the "Initialize Connection" message (the first message for that context_id). See the API Reference for Text to Speech Streaming Input for details on the pronunciation_dictionary_locators field.
+
+### Best practices
+
+- One Socket per Single End-User Conversation: Use one WebSocket connection for the duration of a single end-user's interactive session or conversation. Do not use one socket to serve multiple different end-users.
+- Multiplex Contexts Within the Session: Multiplex contexts within this single socket to handle different audio generation needs for that one user (e.g., primary assistant response, user interruption handling, background notifications for that user).
+- Flush Strategically: Call flush:true at natural boundaries (e.g., sentence ends, turn changes in the conversation) before closing contexts to ensure all intended audio for that part of the interaction is generated.
+- Manage Context Limits: Be mindful of the server-side limit of 5 concurrent active contexts per user session. Gracefully close contexts (close_context: true) when they are no longer needed for the current interaction.
+- Context Inactivity: Each context will automatically close after a period of inactivity (default: 20 seconds). This timeout is per-context.
+
+### FAQs
+
+<AccordionGroup>
+  <Accordion title="Can I still receive alignment timestamps in v1 multi?">
+    Yes, alignment objects (alignment and normalized_alignment) are unchanged and are emitted per
+    audio chunk for each context within the user session.
+  </Accordion>
+  <Accordion title="Is context_id echoed back in responses?">
+    Yes, in v1 multi, every response message includes the context_id (or null/None for the default
+    context), making it easy to route audio and messages correctly on the client side for the
+    different parts of the single user's conversation.
+  </Accordion>
+  <Accordion title="What happens if I omit context_id in a request message?">
+    The message is routed to the default context for the current user session. If no default context
+    was explicitly initialized (e.g. with a context_id: null or context_id: ""), the first message
+    without a context_id will initialize it.
+  </Accordion>
+  <Accordion title="What if I need to handle audio for more than 5 parallel scenarios within a single user conversation?">
+    The v1 multi WebSocket is designed for managing up to 5 parallel audio streams for a single
+    end-user conversation. This limit is typically sufficient for complex conversational AI
+    interactions (e.g., main dialogue, handling an interruption, playing a notification, and
+    preparing a follow-up for the same user). If your design for a single user truly requires more
+    than 5 concurrent audio generations, you might need to re-evaluate the interaction flow or, in
+    very rare cases, open a second socket for that same user (though this complicates client-side
+    management).
+  </Accordion>
+  <Accordion title="How do I handle multiple different end-users simultaneously?">
+    You should open a separate WebSocket connection (and thus a separate v1/multi-stream-input
+    session) for each distinct end-user conversation. The multi-context feature is for complexity
+    within one user's session, not for supporting different end-user conversation.
+  </Accordion>
+  <Accordion title="How do I keep the WebSocket connection alive for the user session?">
+    The WebSocket connection itself will close after a longer period of inactivity if no messages
+    are sent. Individual contexts also have their own inactivity timeouts (default 20s). If you have
+    periods where no audio is being generated for the user but you want to keep their session
+    active, you can periodically send a minimal message to a placeholder context, simply sending an
+    empty text message with a context id will reset that contexts inactivity timeout.
+  </Accordion>
+</AccordionGroup>
