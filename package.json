@@ -15,7 +15,10 @@
     "sdk:preview": "fern generate --group python-sdk --preview --api api && fern generate --group typescript-sdk --preview --api api",
     "openapi:update": "curl -o ./fern/apis/api/openapi.json https://api.elevenlabs.io/openapi.json && pnpm run fmt:openapi",
     "openapi:lint": "pnpm lint-openapi ./fern/apis/api/openapi.json",
-    "ci": "pnpm run fmt:check && pnpm run fmt:openapi && pnpm run fern:check"
+    "ci": "pnpm run fmt:check && pnpm run fmt:openapi && pnpm run fern:check && pnpm run snippets:typecheck && pnpm run snippets:test",
+    "snippets:test": "pnpm --filter snippet-manager test",
+    "snippets:typecheck": "tsc --noEmit",
+    "snippets:generate": "pnpm --filter snippet-manager generate-mdx"
   },
   "keywords": [
     "elevenlabs",
@@ -27,10 +30,16 @@
   "license": "MIT",
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.5.0",
     "fern-api": "^0.56.16",
     "ibm-openapi-validator": "^1.33.2",
     "openapi-format": "^1.25.0",
     "prettier": "3.4.2",
-    "prettier-plugin-tailwindcss": "^0.6.9"
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "elevenlabs": "*"
   }
 }
