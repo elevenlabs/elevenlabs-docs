@@ -6241,7 +6241,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "get_dubbing_resource"
@@ -6319,7 +6320,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "add_language_to_resource"
@@ -6409,10 +6411,15 @@
           "dubbing",
           "dubbing",
           "resource",
+          "segment",
+          "enterprise"
+        ],
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "speaker",
           "segment"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "create_segment_for_speaker"
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/segment/{segment_id}/{language}": {
@@ -6510,7 +6517,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "update_segment_language"
@@ -6589,7 +6597,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "delete_segment"
@@ -6667,7 +6676,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "transcribe_segments"
@@ -6745,7 +6755,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "translate_segments"
@@ -6823,10 +6834,186 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "dub_segments"
+      }
+    },
+    "/v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}": {
+      "patch": {
+        "operationId": "Update_metadata_for_a_speaker_v1_dubbing_resource__dubbing_id__speaker__speaker_id__patch",
+        "summary": "Update Metadata For A Speaker",
+        "description": "Amend the metadata associated with a speaker, such as their voice. Both voice cloning and using voices from the ElevenLabs library are supported.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "speaker_id",
+            "in": "path",
+            "description": "ID of the speaker.",
+            "required": true,
+            "schema": {
+              "description": "ID of the speaker.",
+              "type": "string",
+              "title": "Speaker Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Update_metadata_for_a_speaker_v1_dubbing_resource__dubbing_id__speaker__speaker_id__patch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpeakerUpdatedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing",
+          "dubbing",
+          "resource",
+          "segment",
+          "enterprise"
+        ],
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "speaker"
+        ],
+        "x-fern-sdk-method-name": "update"
+      }
+    },
+    "/v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}/similar-voices": {
+      "get": {
+        "operationId": "Search_the_ElevenLabs_library_for_voices_similar_to_a_speaker__v1_dubbing_resource__dubbing_id__speaker__speaker_id__similar_voices_get",
+        "summary": "Search The Elevenlabs Library For Voices Similar To A Speaker.",
+        "description": "Fetch the top 10 similar voices to a speaker, including the voice IDs, names, descriptions, and, where possible, a sample audio recording.",
+        "parameters": [
+          {
+            "name": "dubbing_id",
+            "in": "path",
+            "description": "ID of the dubbing project.",
+            "required": true,
+            "schema": {
+              "description": "ID of the dubbing project.",
+              "type": "string",
+              "title": "Dubbing Id"
+            }
+          },
+          {
+            "name": "speaker_id",
+            "in": "path",
+            "description": "ID of the speaker.",
+            "required": true,
+            "schema": {
+              "description": "ID of the speaker.",
+              "type": "string",
+              "title": "Speaker Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarVoicesForSpeakerResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing",
+          "dubbing",
+          "resource",
+          "segment",
+          "enterprise"
+        ],
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "speaker"
+        ],
+        "x-fern-sdk-method-name": "similar_voices"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/render/{language}": {
@@ -6912,7 +7099,8 @@
           "dubbing",
           "dubbing",
           "resource",
-          "segment"
+          "segment",
+          "enterprise"
         ],
         "x-fern-sdk-group-name": "dubbing",
         "x-fern-sdk-method-name": "render_dub"
@@ -9718,7 +9906,7 @@
         "x-fern-sdk-method-name": "get_signed_url"
       }
     },
-    "/v1/convai/twilio/outbound_call": {
+    "/v1/convai/twilio/outbound-call": {
       "post": {
         "operationId": "Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post",
         "summary": "Handle An Outbound Call Via Twilio",
@@ -10078,10 +10266,10 @@
           {
             "name": "conversation_signature",
             "in": "query",
-            "description": "An expiring token that enables a conversation to start. These can be generated for an agent using the /v1/convai/conversation/get_signed_url endpoint",
+            "description": "An expiring token that enables a websocket conversation to start. These can be generated for an agent using the /v1/convai/conversation/get_signed_url endpoint",
             "required": false,
             "schema": {
-              "description": "An expiring token that enables a conversation to start. These can be generated for an agent using the /v1/convai/conversation/get_signed_url endpoint",
+              "description": "An expiring token that enables a websocket conversation to start. These can be generated for an agent using the /v1/convai/conversation/get_signed_url endpoint",
               "anyOf": [
                 {
                   "type": "string"
@@ -11688,11 +11876,11 @@
         "x-fern-sdk-method-name": "create_knowledge_base_text_document"
       }
     },
-    "/v1/convai/knowledge-base/{documentation_id}/rag-index": {
-      "post": {
-        "operationId": "Compute_RAG_index__v1_convai_knowledge_base__documentation_id__rag_index_post",
-        "summary": "Compute Rag Index.",
-        "description": "In case the document is not RAG indexed, it triggers rag indexing task, otherwise it just returns the current status.",
+    "/v1/convai/knowledge-base/{documentation_id}": {
+      "patch": {
+        "operationId": "Update_document_v1_convai_knowledge_base__documentation_id__patch",
+        "summary": "Update Document",
+        "description": "Update the name of a document",
         "parameters": [
           {
             "name": "documentation_id",
@@ -11733,8 +11921,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "description": "Payload for RAG index status endpoint.",
-                "$ref": "#/components/schemas/RAGIndexRequestModel"
+                "$ref": "#/components/schemas/Body_Update_document_v1_convai_knowledge_base__documentation_id__patch"
               }
             }
           }
@@ -11745,7 +11932,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RAGIndexResponseModel"
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "url": "#/components/schemas/GetKnowledgeBaseURLResponseModel",
+                      "file": "#/components/schemas/GetKnowledgeBaseFileResponseModel",
+                      "text": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GetKnowledgeBaseURLResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetKnowledgeBaseFileResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
+                    }
+                  ],
+                  "title": "Response Update Document V1 Convai Knowledge Base  Documentation Id  Patch"
                 }
               }
             }
@@ -11765,10 +11971,8 @@
           "Conversational AI"
         ],
         "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "rag_index_status"
-      }
-    },
-    "/v1/convai/knowledge-base/{documentation_id}": {
+        "x-fern-sdk-method-name": "update_knowledge_base_document"
+      },
       "get": {
         "operationId": "Get_documentation_from_knowledge_base_v1_convai_knowledge_base__documentation_id__get",
         "summary": "Get Documentation From Knowledge Base",
@@ -11919,6 +12123,90 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "delete_knowledge_base_document"
+      }
+    },
+    "/v1/convai/knowledge-base/{documentation_id}/rag-index": {
+      "post": {
+        "operationId": "Compute_RAG_index__v1_convai_knowledge_base__documentation_id__rag_index_post",
+        "summary": "Compute Rag Index.",
+        "description": "In case the document is not RAG indexed, it triggers rag indexing task, otherwise it just returns the current status.",
+        "parameters": [
+          {
+            "name": "documentation_id",
+            "in": "path",
+            "description": "The id of a document from the knowledge base. This is returned on document addition.",
+            "required": true,
+            "schema": {
+              "description": "The id of a document from the knowledge base. This is returned on document addition.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Documentation Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Payload for RAG index status endpoint.",
+                "$ref": "#/components/schemas/RAGIndexRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RAGIndexResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "document"
+        ],
+        "x-fern-sdk-method-name": "compute_rag_index"
       }
     },
     "/v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}": {
@@ -12662,6 +12950,136 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "delete_secret"
+      }
+    },
+    "/v1/convai/batch-calling/{batch_id}": {
+      "get": {
+        "operationId": "Get_a_batch_call_by_ID__v1_convai_batch_calling__batch_id__get",
+        "summary": "Get A Batch Call By Id.",
+        "description": "Get detailed information about a batch call including all recipients.",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Batch Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchCallDetailedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "get_batch_call"
+      }
+    },
+    "/v1/convai/sip-trunk/outbound-call": {
+      "post": {
+        "operationId": "Handle_an_outbound_call_via_SIP_trunk_v1_convai_sip_trunk_outbound_call_post",
+        "summary": "Handle An Outbound Call Via Sip Trunk",
+        "description": "Handle an outbound call via SIP trunk",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Handle_an_outbound_call_via_SIP_trunk_v1_convai_sip_trunk_outbound_call_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SIPTrunkOutboundCallResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "sip_trunk"
+        ],
+        "x-fern-sdk-method-name": "outbound_call"
       }
     },
     "/v1/voices/pvc": {
@@ -14476,13 +14894,13 @@
             "type": "string",
             "title": "Name"
           },
-          "categories": {
-            "description": "The categories of the agent",
+          "tags": {
+            "description": "Agent tags used to categorize the agent",
             "type": "array",
             "items": {
               "type": "string"
             },
-            "title": "Categories"
+            "title": "Tags"
           },
           "created_at_unix_secs": {
             "description": "The creation time of the agent in unix seconds",
@@ -14496,18 +14914,18 @@
         },
         "example": {
           "agent_id": "J3Pbu5gP6NNKBscdCdwB",
-          "categories": [
+          "created_at_unix_secs": 1716153600,
+          "name": "My Agent",
+          "tags": [
             "Customer Support",
             "Technical Help",
             "Eleven"
-          ],
-          "created_at_unix_secs": 1716153600,
-          "name": "My Agent"
+          ]
         },
         "required": [
           "agent_id",
           "name",
-          "categories",
+          "tags",
           "created_at_unix_secs",
           "access_info"
         ],
@@ -14594,6 +15012,11 @@
             "const": "array",
             "title": "Type"
           },
+          "description": {
+            "type": "string",
+            "default": "",
+            "title": "Description"
+          },
           "items": {
             "oneOf": [
               {
@@ -14607,11 +15030,6 @@
               }
             ],
             "title": "Items"
-          },
-          "description": {
-            "type": "string",
-            "default": "",
-            "title": "Description"
           }
         },
         "additionalProperties": false,
@@ -14629,6 +15047,11 @@
             "const": "array",
             "title": "Type"
           },
+          "description": {
+            "type": "string",
+            "default": "",
+            "title": "Description"
+          },
           "items": {
             "oneOf": [
               {
@@ -14642,11 +15065,6 @@
               }
             ],
             "title": "Items"
-          },
-          "description": {
-            "type": "string",
-            "default": "",
-            "title": "Description"
           }
         },
         "additionalProperties": false,
@@ -14953,7 +15371,9 @@
           "public",
           "authorization_header",
           "signed_url",
-          "shareable_link"
+          "shareable_link",
+          "livekit_token",
+          "livekit_token_website"
         ],
         "title": "AuthorizationMethod"
       },
@@ -14964,6 +15384,99 @@
           "manual"
         ],
         "title": "BanReasonType"
+      },
+      "BatchCallDetailedResponse": {
+        "description": "Detailed response model for a batch call including all recipients.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "scheduled_time_unix": {
+            "type": "integer",
+            "title": "Scheduled Time Unix"
+          },
+          "total_calls_dispatched": {
+            "type": "integer",
+            "title": "Total Calls Dispatched"
+          },
+          "total_calls_scheduled": {
+            "type": "integer",
+            "title": "Total Calls Scheduled"
+          },
+          "last_updated_at_unix": {
+            "type": "integer",
+            "title": "Last Updated At Unix"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallStatus"
+          },
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutboundCallRecipientResponseModel"
+            },
+            "title": "Recipients"
+          }
+        },
+        "required": [
+          "id",
+          "phone_number_id",
+          "name",
+          "agent_id",
+          "created_at_unix",
+          "scheduled_time_unix",
+          "total_calls_dispatched",
+          "total_calls_scheduled",
+          "last_updated_at_unix",
+          "status",
+          "agent_name",
+          "recipients"
+        ],
+        "title": "BatchCallDetailedResponse"
+      },
+      "BatchCallRecipientStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BatchCallRecipientStatus"
+      },
+      "BatchCallStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BatchCallStatus"
       },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
@@ -15611,7 +16124,8 @@
             "description": "A custom, human-readable name for the document.",
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -15640,7 +16154,8 @@
             "description": "A custom, human-readable name for the document.",
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -15669,7 +16184,8 @@
             "description": "A custom, human-readable name for the document.",
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -15860,8 +16376,8 @@
             "optional": true,
             "title": "Name"
           },
-          "categories": {
-            "description": "Categories to help classify and filter the agent",
+          "tags": {
+            "description": "Tags to help classify and filter the agent",
             "anyOf": [
               {
                 "items": {
@@ -15881,7 +16397,7 @@
               ]
             ],
             "optional": true,
-            "title": "Categories"
+            "title": "Tags"
           }
         },
         "required": [
@@ -16355,7 +16871,8 @@
             "description": "A custom, human-readable name for the document.",
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -16558,7 +17075,8 @@
             "description": "A custom, human-readable name for the document.",
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -16925,7 +17443,8 @@
             "description": "A custom, human-readable name for the document.",
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -17047,7 +17566,7 @@
             "title": "Model Id"
           },
           "file": {
-            "description": "Either txt or HTML input file containing the article content. HTML should be formatted as follows '&lt;html&gt;&lt;body&gt;&lt;div&gt;&lt;p&gt;Your content&lt;/p&gt;&lt;h5&gt;More of your content&lt;/h5&gt;&lt;p&gt;Some more of your content&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;'",
+            "description": "Either txt or HTML input file containing the article content. HTML should be formatted as follows '&lt;html&gt;&lt;body&gt;&lt;div&gt;&lt;p&gt;Your content&lt;/p&gt;&lt;h3&gt;More of your content&lt;/h3&gt;&lt;p&gt;Some more of your content&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;'",
             "type": "string",
             "format": "binary",
             "title": "File"
@@ -17735,6 +18254,39 @@
         },
         "title": "Body_Get_similar_library_voices_v1_similar_voices_post"
       },
+      "Body_Handle_an_outbound_call_via_SIP_trunk_v1_convai_sip_trunk_outbound_call_post": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "agent_phone_number_id": {
+            "type": "string",
+            "title": "Agent Phone Number Id"
+          },
+          "to_number": {
+            "type": "string",
+            "title": "To Number"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "agent_id",
+          "agent_phone_number_id",
+          "to_number"
+        ],
+        "title": "Body_Handle_an_outbound_call_via_SIP_trunk_v1_convai_sip_trunk_outbound_call_post"
+      },
       "Body_Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post": {
         "type": "object",
         "properties": {
@@ -17923,8 +18475,8 @@
             "optional": true,
             "title": "Name"
           },
-          "categories": {
-            "description": "Categories to help classify and filter the agent",
+          "tags": {
+            "description": "Tags to help classify and filter the agent",
             "anyOf": [
               {
                 "items": {
@@ -17944,7 +18496,7 @@
               ]
             ],
             "optional": true,
-            "title": "Categories"
+            "title": "Tags"
           }
         },
         "title": "Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch"
@@ -18554,7 +19106,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorDBModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorRequestModel"
                 },
                 "type": "array"
               },
@@ -18745,7 +19297,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorDBModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorRequestModel"
                 },
                 "type": "array"
               },
@@ -18936,7 +19488,7 @@
             "anyOf": [
               {
                 "items": {
-                  "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorDBModel"
+                  "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorRequestModel"
                 },
                 "type": "array"
               },
@@ -19126,7 +19678,7 @@
             "description": "A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorDBModel"
+              "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorRequestModel"
             },
             "examples": [
               [
@@ -19630,6 +20182,21 @@
         },
         "title": "Body_Update_chapter_v1_studio_projects__project_id__chapters__chapter_id__post"
       },
+      "Body_Update_document_v1_convai_knowledge_base__documentation_id__patch": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "A custom, human-readable name for the document.",
+            "type": "string",
+            "minLength": 1,
+            "title": "Name"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "Body_Update_document_v1_convai_knowledge_base__documentation_id__patch"
+      },
       "Body_Update_member_v1_workspace_members_post": {
         "type": "object",
         "properties": {
@@ -19671,6 +20238,39 @@
           "email"
         ],
         "title": "Body_Update_member_v1_workspace_members_post"
+      },
+      "Body_Update_metadata_for_a_speaker_v1_dubbing_resource__dubbing_id__speaker__speaker_id__patch": {
+        "type": "object",
+        "properties": {
+          "voice_id": {
+            "description": "Either the identifier of a voice from the ElevenLabs voice library, or one of ['track-clone', 'clip-clone'].",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Id"
+          },
+          "languages": {
+            "description": "Languages to apply these changes to. If empty, will apply to all languages.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Languages"
+          }
+        },
+        "title": "Body_Update_metadata_for_a_speaker_v1_dubbing_resource__dubbing_id__speaker__speaker_id__patch"
       },
       "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post": {
         "type": "object",
@@ -20310,13 +20910,6 @@
             "default": "",
             "title": "Id"
           },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "client",
-            "const": "client",
-            "title": "Type"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -20327,6 +20920,13 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
           },
           "parameters": {
             "description": "Schema for any parameters to pass to the client",
@@ -20383,13 +20983,6 @@
             "default": "",
             "title": "Id"
           },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "client",
-            "const": "client",
-            "title": "Type"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -20400,6 +20993,13 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
           },
           "parameters": {
             "description": "Schema for any parameters to pass to the client",
@@ -20811,6 +21411,24 @@
         ],
         "title": "ConversationHistoryAnalysisCommonModel"
       },
+      "ConversationHistoryBatchCallModel": {
+        "type": "object",
+        "properties": {
+          "batch_call_id": {
+            "type": "string",
+            "title": "Batch Call Id"
+          },
+          "batch_call_recipient_id": {
+            "type": "string",
+            "title": "Batch Call Recipient Id"
+          }
+        },
+        "required": [
+          "batch_call_id",
+          "batch_call_recipient_id"
+        ],
+        "title": "ConversationHistoryBatchCallModel"
+      },
       "ConversationHistoryErrorCommonModel": {
         "type": "object",
         "properties": {
@@ -20949,6 +21567,16 @@
               }
             ],
             "title": "Phone Call"
+          },
+          "batch_call": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationHistoryBatchCallModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "termination_reason": {
             "type": "string",
@@ -21396,6 +22024,42 @@
           "enable_conversation_initiation_client_data_from_webhook": true
         },
         "title": "ConversationInitiationClientDataConfig"
+      },
+      "ConversationInitiationClientDataInternal": {
+        "type": "object",
+        "properties": {
+          "conversation_config_override": {
+            "$ref": "#/components/schemas/ConversationConfigClientOverride-Output"
+          },
+          "custom_llm_extra_body": {
+            "type": "object",
+            "title": "Custom Llm Extra Body"
+          },
+          "dynamic_variables": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
+          }
+        },
+        "title": "ConversationInitiationClientDataInternal"
       },
       "ConversationInitiationClientDataRequest-Input": {
         "type": "object",
@@ -21949,6 +22613,30 @@
         ],
         "title": "DashboardCriteriaChartModel"
       },
+      "DashboardDataCollectionChartModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "default": "data_collection",
+            "const": "data_collection",
+            "title": "Type"
+          },
+          "data_collection_id": {
+            "type": "string",
+            "title": "Data Collection Id"
+          }
+        },
+        "required": [
+          "name",
+          "data_collection_id"
+        ],
+        "title": "DashboardDataCollectionChartModel"
+      },
       "DataCollectionResultCommonModel": {
         "type": "object",
         "properties": {
@@ -22452,6 +23140,10 @@
             ],
             "title": "Text"
           },
+          "audio_stale": {
+            "type": "boolean",
+            "title": "Audio Stale"
+          },
           "media_ref": {
             "anyOf": [
               {
@@ -22467,6 +23159,7 @@
           "start_time",
           "end_time",
           "text",
+          "audio_stale",
           "media_ref"
         ],
         "title": "DubbedSegment"
@@ -23505,13 +24198,13 @@
               }
             ]
           },
-          "categories": {
-            "description": "The categories of the agent",
+          "tags": {
+            "description": "Agent tags used to categorize the agent",
             "type": "array",
             "items": {
               "type": "string"
             },
-            "title": "Categories"
+            "title": "Tags"
           }
         },
         "example": {
@@ -23646,13 +24339,17 @@
                 },
                 {
                   "$ref": "#/components/schemas/DashboardCriteriaChartModel"
+                },
+                {
+                  "$ref": "#/components/schemas/DashboardDataCollectionChartModel"
                 }
               ],
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
                   "call_success": "#/components/schemas/DashboardCallSuccessChartModel",
-                  "criteria": "#/components/schemas/DashboardCriteriaChartModel"
+                  "criteria": "#/components/schemas/DashboardCriteriaChartModel",
+                  "data_collection": "#/components/schemas/DashboardDataCollectionChartModel"
                 }
               }
             },
@@ -25581,6 +26278,120 @@
         ],
         "title": "LiteralJsonSchemaProperty"
       },
+      "MCPToolConfig-Input": {
+        "description": "A MCP tool is a tool that is used to call a MCP server",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
+          "parameters": {
+            "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_tool_name": {
+            "description": "The name of the MCP tool to call",
+            "type": "string",
+            "title": "Mcp Tool Name"
+          },
+          "mcp_server_id": {
+            "description": "The id of the MCP server to call",
+            "type": "string",
+            "title": "Mcp Server Id"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "mcp_tool_name",
+          "mcp_server_id"
+        ],
+        "title": "MCPToolConfig"
+      },
+      "MCPToolConfig-Output": {
+        "description": "A MCP tool is a tool that is used to call a MCP server",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
+          "parameters": {
+            "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_tool_name": {
+            "description": "The name of the MCP tool to call",
+            "type": "string",
+            "title": "Mcp Tool Name"
+          },
+          "mcp_server_id": {
+            "description": "The id of the MCP server to call",
+            "type": "string",
+            "title": "Mcp Server Id"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "mcp_tool_name",
+          "mcp_server_id"
+        ],
+        "title": "MCPToolConfig"
+      },
       "ManualVerificationFileResponseModel": {
         "type": "object",
         "properties": {
@@ -25953,6 +26764,18 @@
             "const": "object",
             "title": "Type"
           },
+          "required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Required"
+          },
+          "description": {
+            "type": "string",
+            "default": "",
+            "title": "Description"
+          },
           "properties": {
             "type": "object",
             "additionalProperties": {
@@ -25969,18 +26792,6 @@
               ]
             },
             "title": "Properties"
-          },
-          "required": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Required"
-          },
-          "description": {
-            "type": "string",
-            "default": "",
-            "title": "Description"
           }
         },
         "additionalProperties": false,
@@ -25994,6 +26805,18 @@
             "default": "object",
             "const": "object",
             "title": "Type"
+          },
+          "required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Required"
+          },
+          "description": {
+            "type": "string",
+            "default": "",
+            "title": "Description"
           },
           "properties": {
             "type": "object",
@@ -26011,18 +26834,6 @@
               ]
             },
             "title": "Properties"
-          },
-          "required": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Required"
-          },
-          "description": {
-            "type": "string",
-            "default": "",
-            "title": "Description"
           }
         },
         "additionalProperties": false,
@@ -26058,6 +26869,60 @@
         },
         "title": "OrbAvatar"
       },
+      "OutboundCallRecipientResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallRecipientStatus"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "updated_at_unix": {
+            "type": "integer",
+            "title": "Updated At Unix"
+          },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataInternal"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "phone_number",
+          "status",
+          "created_at_unix",
+          "updated_at_unix",
+          "conversation_id"
+        ],
+        "title": "OutboundCallRecipientResponseModel"
+      },
       "PatchConvAIDashboardSettingsRequest": {
         "type": "object",
         "properties": {
@@ -26070,13 +26935,17 @@
                 },
                 {
                   "$ref": "#/components/schemas/DashboardCriteriaChartModel"
+                },
+                {
+                  "$ref": "#/components/schemas/DashboardDataCollectionChartModel"
                 }
               ],
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
                   "call_success": "#/components/schemas/DashboardCallSuccessChartModel",
-                  "criteria": "#/components/schemas/DashboardCriteriaChartModel"
+                  "criteria": "#/components/schemas/DashboardCriteriaChartModel",
+                  "data_collection": "#/components/schemas/DashboardDataCollectionChartModel"
                 }
               }
             },
@@ -27520,6 +28389,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/SystemToolConfig-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/MCPToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -27527,6 +28399,7 @@
                 "propertyName": "type",
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
+                  "mcp": "#/components/schemas/MCPToolConfig-Input",
                   "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
@@ -27541,6 +28414,15 @@
               "type": "string"
             },
             "title": "Tool Ids"
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Mcp Server Ids"
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -27629,6 +28511,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/SystemToolConfig-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/MCPToolConfig-Output"
                 }
               ],
               "description": "The type of tool",
@@ -27636,6 +28521,7 @@
                 "propertyName": "type",
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Output",
+                  "mcp": "#/components/schemas/MCPToolConfig-Output",
                   "system": "#/components/schemas/SystemToolConfig-Output",
                   "webhook": "#/components/schemas/WebhookToolConfig-Output"
                 }
@@ -27650,6 +28536,15 @@
               "type": "string"
             },
             "title": "Tool Ids"
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Mcp Server Ids"
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -27922,6 +28817,32 @@
         ],
         "title": "PronunciationDictionaryVersionLocatorDBModel"
       },
+      "PronunciationDictionaryVersionLocatorRequestModel": {
+        "type": "object",
+        "properties": {
+          "pronunciation_dictionary_id": {
+            "description": "The ID of the pronunciation dictionary.",
+            "type": "string",
+            "title": "Pronunciation Dictionary Id"
+          },
+          "version_id": {
+            "description": "The ID of the version of the pronunciation dictionary. If not provided, the latest version will be used.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          }
+        },
+        "required": [
+          "pronunciation_dictionary_id"
+        ],
+        "title": "PronunciationDictionaryVersionLocatorRequestModel"
+      },
       "PronunciationDictionaryVersionResponseModel": {
         "type": "object",
         "properties": {
@@ -28029,6 +28950,7 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/LiteralJsonSchemaProperty"
             },
+            "minProperties": 1,
             "title": "Properties"
           },
           "required": {
@@ -28488,6 +29410,36 @@
         ],
         "title": "SIPTrunkCredentials"
       },
+      "SIPTrunkOutboundCallResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "sip_call_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sip Call Id"
+          }
+        },
+        "required": [
+          "success",
+          "message",
+          "sip_call_id"
+        ],
+        "title": "SIPTrunkOutboundCallResponse"
+      },
       "SafetyCommonModel": {
         "description": "Safety object that has the information of safety evaluations based on used voice.",
         "type": "object",
@@ -28715,6 +29667,20 @@
               }
             ],
             "title": "Text"
+          },
+          "translations": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Translations"
           }
         },
         "required": [
@@ -28933,6 +29899,74 @@
         ],
         "title": "ShareOptionResponseModel"
       },
+      "SimilarVoice": {
+        "type": "object",
+        "properties": {
+          "voice_id": {
+            "type": "string",
+            "title": "Voice Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "premade",
+              "cloned",
+              "generated",
+              "professional",
+              "famous"
+            ],
+            "title": "Category"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "preview_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Url"
+          }
+        },
+        "required": [
+          "voice_id",
+          "name",
+          "category"
+        ],
+        "title": "SimilarVoice"
+      },
+      "SimilarVoicesForSpeakerResponse": {
+        "type": "object",
+        "properties": {
+          "voices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SimilarVoice"
+            },
+            "title": "Voices"
+          }
+        },
+        "required": [
+          "voices"
+        ],
+        "title": "SimilarVoicesForSpeakerResponse"
+      },
       "SpeakerAudioResponseModel": {
         "type": "object",
         "properties": {
@@ -29120,6 +30154,13 @@
             "type": "string",
             "title": "Speaker Name"
           },
+          "voices": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Voices"
+          },
           "segments": {
             "type": "array",
             "items": {
@@ -29132,9 +30173,23 @@
           "id",
           "media_ref",
           "speaker_name",
+          "voices",
           "segments"
         ],
         "title": "SpeakerTrack"
+      },
+      "SpeakerUpdatedResponse": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "title": "SpeakerUpdatedResponse"
       },
       "SpeechHistoryItemResponseModel": {
         "type": "object",
@@ -30160,13 +31215,6 @@
             "default": "",
             "title": "Id"
           },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "system",
-            "const": "system",
-            "title": "Type"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -30177,6 +31225,13 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
           },
           "params": {
             "discriminator": {
@@ -30224,13 +31279,6 @@
             "default": "",
             "title": "Id"
           },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "system",
-            "const": "system",
-            "title": "Type"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -30241,6 +31289,13 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
           },
           "params": {
             "discriminator": {
@@ -32645,13 +33700,6 @@
             "default": "",
             "title": "Id"
           },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "webhook",
-            "const": "webhook",
-            "title": "Type"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -32662,6 +33710,13 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
           },
           "api_schema": {
             "description": "The schema for the outgoing webhoook, including parameters and URL specification",
@@ -32691,13 +33746,6 @@
             "default": "",
             "title": "Id"
           },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "webhook",
-            "const": "webhook",
-            "title": "Type"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -32708,6 +33756,13 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
           },
           "api_schema": {
             "description": "The schema for the outgoing webhoook, including parameters and URL specification",
@@ -33363,6 +34418,7 @@
           "convai_secrets",
           "music_latent",
           "convai_phone_numbers",
+          "convai_mcps",
           "convai_batch_calls"
         ],
         "title": "WorkspaceResourceType"
