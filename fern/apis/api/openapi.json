@@ -9906,7 +9906,7 @@
         "x-fern-sdk-method-name": "get_signed_url"
       }
     },
-    "/v1/convai/twilio/outbound_call": {
+    "/v1/convai/twilio/outbound-call": {
       "post": {
         "operationId": "Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post",
         "summary": "Handle An Outbound Call Via Twilio",
@@ -12952,7 +12952,70 @@
         "x-fern-sdk-method-name": "delete_secret"
       }
     },
-    "/v1/convai/sip-trunk/outbound_call": {
+    "/v1/convai/batch-calling/{batch_id}": {
+      "get": {
+        "operationId": "Get_a_batch_call_by_ID__v1_convai_batch_calling__batch_id__get",
+        "summary": "Get A Batch Call By Id.",
+        "description": "Get detailed information about a batch call including all recipients.",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Batch Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchCallDetailedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "get_batch_call"
+      }
+    },
+    "/v1/convai/sip-trunk/outbound-call": {
       "post": {
         "operationId": "Handle_an_outbound_call_via_SIP_trunk_v1_convai_sip_trunk_outbound_call_post",
         "summary": "Handle An Outbound Call Via Sip Trunk",
@@ -15321,6 +15384,99 @@
           "manual"
         ],
         "title": "BanReasonType"
+      },
+      "BatchCallDetailedResponse": {
+        "description": "Detailed response model for a batch call including all recipients.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "scheduled_time_unix": {
+            "type": "integer",
+            "title": "Scheduled Time Unix"
+          },
+          "total_calls_dispatched": {
+            "type": "integer",
+            "title": "Total Calls Dispatched"
+          },
+          "total_calls_scheduled": {
+            "type": "integer",
+            "title": "Total Calls Scheduled"
+          },
+          "last_updated_at_unix": {
+            "type": "integer",
+            "title": "Last Updated At Unix"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallStatus"
+          },
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutboundCallRecipientResponseModel"
+            },
+            "title": "Recipients"
+          }
+        },
+        "required": [
+          "id",
+          "phone_number_id",
+          "name",
+          "agent_id",
+          "created_at_unix",
+          "scheduled_time_unix",
+          "total_calls_dispatched",
+          "total_calls_scheduled",
+          "last_updated_at_unix",
+          "status",
+          "agent_name",
+          "recipients"
+        ],
+        "title": "BatchCallDetailedResponse"
+      },
+      "BatchCallRecipientStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BatchCallRecipientStatus"
+      },
+      "BatchCallStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "in_progress",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BatchCallStatus"
       },
       "Body_Add_a_language_to_the_resource_v1_dubbing_resource__dubbing_id__language_post": {
         "type": "object",
@@ -21255,6 +21411,24 @@
         ],
         "title": "ConversationHistoryAnalysisCommonModel"
       },
+      "ConversationHistoryBatchCallModel": {
+        "type": "object",
+        "properties": {
+          "batch_call_id": {
+            "type": "string",
+            "title": "Batch Call Id"
+          },
+          "batch_call_recipient_id": {
+            "type": "string",
+            "title": "Batch Call Recipient Id"
+          }
+        },
+        "required": [
+          "batch_call_id",
+          "batch_call_recipient_id"
+        ],
+        "title": "ConversationHistoryBatchCallModel"
+      },
       "ConversationHistoryErrorCommonModel": {
         "type": "object",
         "properties": {
@@ -21393,6 +21567,16 @@
               }
             ],
             "title": "Phone Call"
+          },
+          "batch_call": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationHistoryBatchCallModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "termination_reason": {
             "type": "string",
@@ -21840,6 +22024,42 @@
           "enable_conversation_initiation_client_data_from_webhook": true
         },
         "title": "ConversationInitiationClientDataConfig"
+      },
+      "ConversationInitiationClientDataInternal": {
+        "type": "object",
+        "properties": {
+          "conversation_config_override": {
+            "$ref": "#/components/schemas/ConversationConfigClientOverride-Output"
+          },
+          "custom_llm_extra_body": {
+            "type": "object",
+            "title": "Custom Llm Extra Body"
+          },
+          "dynamic_variables": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
+          }
+        },
+        "title": "ConversationInitiationClientDataInternal"
       },
       "ConversationInitiationClientDataRequest-Input": {
         "type": "object",
@@ -26648,6 +26868,60 @@
           "type": "orb"
         },
         "title": "OrbAvatar"
+      },
+      "OutboundCallRecipientResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallRecipientStatus"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "updated_at_unix": {
+            "type": "integer",
+            "title": "Updated At Unix"
+          },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataInternal"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "phone_number",
+          "status",
+          "created_at_unix",
+          "updated_at_unix",
+          "conversation_id"
+        ],
+        "title": "OutboundCallRecipientResponseModel"
       },
       "PatchConvAIDashboardSettingsRequest": {
         "type": "object",
