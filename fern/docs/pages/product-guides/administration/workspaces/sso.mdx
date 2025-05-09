@@ -62,16 +62,16 @@ Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your exis
 
   </Accordion>
   <Accordion title="Okta - SAML">
-    What shall I fill for Audience Restriction?
-    - Use Service Provider Entity Id
+    **What to fill in on the Okta side**:
+    - **Audience Restriction**: This is the Service Provider Entity ID from the ElevenLabs SSO configuration page.
+    - **Single Sign-On URL/Recipient URL/Destination**: This is the Redirect URL from the ElevenLabs SSO configuration page.
 
-    What shall I fill for Single Sign-On URL/Recipient URL/Destination URL?
-    - Use Redirect URL
-
-    Which fields should I use to provide ElevenLabs?
-    - Use Issuer for IdP Entity ID
-    - Use Single Sign-On URL for IdP Sign-In URL
-
+    **What to fill in on the ElevenLabs side**:
+    - Create the application in Okta and then fill out these fields using the results
+    - **Identity Provider Entity Id**: Use the SAML Issuer ID
+    - **Identity Provider Sign-In URL**: Use the Sign On URL from Okta
+        - This can generally be found in the Metadata details within the Sign On tab of the Okta application
+        - It will end in **/sso/saml**
   </Accordion>
   <Accordion title="OneLogin - SAML">
     - Please fill Recipient field with the value of Redirect URL.
