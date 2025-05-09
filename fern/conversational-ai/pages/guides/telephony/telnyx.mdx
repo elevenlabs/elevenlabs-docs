@@ -1,0 +1,85 @@
+---
+title: Telnyx SIP trunking
+subtitle: Connect Telnyx SIP trunks with ElevenLabs conversational AI agents.
+---
+
+<Note>
+  Before following this guide, consider reading the [SIP trunking
+  guide](/docs/conversational-ai/guides/sip-trunking) to understand how ElevenLabs supports SIP
+  trunks.
+</Note>
+
+## Overview
+
+This guide explains how to connect your Telnyx SIP trunks directly to ElevenLabs conversational AI agents. This integration allows you to use your existing Telnyx phone numbers and infrastructure while leveraging ElevenLabs' advanced voice AI capabilities.
+
+## How SIP trunking with Telnyx works
+
+SIP trunking establishes a direct connection between your Telnyx telephony infrastructure and the ElevenLabs platform:
+
+1. **Inbound calls**: Calls from your Telnyx SIP trunk are routed to the ElevenLabs platform using our origination URI. You will configure this in your Telnyx account.
+2. **Outbound calls**: Calls initiated by ElevenLabs are routed to your Telnyx SIP trunk using your termination URI, enabling your agents to make outgoing calls.
+3. **Authentication**: Connection security is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication.
+4. **Signaling and Media**: The initial call setup (signaling) uses TCP. Once the call is established, the actual audio data (RTP stream) is transmitted over UDP.
+
+## Requirements
+
+Before setting up the Telnyx SIP trunk integration, ensure you have:
+
+1. An active ElevenLabs account
+2. An active Telnyx account
+3. At least one phone number purchased or ported into your Telnyx account
+4. Administrator access to your Telnyx portal
+5. Appropriate firewall settings to allow SIP and RTP traffic
+
+## Creating a SIP trunk using the Telnyx UI
+
+<Steps>
+
+    <Step title="Sign in to Telnyx">
+      Log in to your Telnyx account at [portal.telnyx.com](https://portal.telnyx.com/).
+    </Step>
+
+    <Step title="Purchase a phone number">
+      Navigate to the Numbers section and purchase a phone number that will be used with your ElevenLabs agent.
+    </Step>
+
+    <Step title="Navigate to SIP Trunking">
+      Go to Voice » SIP Trunking in the Telnyx portal.
+    </Step>
+
+    <Step title="Create a SIP connection">
+      Click on Create SIP Connection and choose FQDN as the connection type, then save.
+    </Step>
+
+    <Step title="Configure inbound settings">
+      1. Select Add FQDN and enter `sip.rtc.elevenlabs.io` into the FQDN field.
+      2. Select the Inbound tab.
+      3. In the Destination Number Format field, select `+E.164`.
+      4. For SIP Transport Protocol, select TCP.
+      5. In the SIP Region field, select your region.
+    </Step>
+
+    <Step title="Configure outbound settings">
+      1. Select the Outbound tab.
+      2. In the Outbound Voice Profile field, select or create an outbound voice profile.
+    </Step>
+
+    <Step title="Configure authentication">
+      1. Select the Settings tab.
+      2. In the Authentication & Routing Configuration section, select Outbound Calls Authentication.
+      3. In the Authentication Method field, select Credentials and enter a username and password.
+    </Step>
+
+
+    <Step title="Assign phone number">
+      1. Select the Numbers tab.
+      2. Assign your purchased phone number to this SIP connection.
+    </Step>
+
+</Steps>
+
+<Warning>
+  After setting up your Telnyx SIP trunk, follow the [SIP trunking
+  guide](/conversational-ai/guides/sip-trunking) to complete the configuration in ElevenLabs.
+</Warning>
