@@ -589,6 +589,10 @@ navigation:
                     title: Delete agent
                   - endpoint: GET /v1/convai/agents/{agent_id}/link
                     title: Get link
+                  - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation
+                    title: Simulate conversation
+                  - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation/stream
+                    title: Stream simulate conversation
               - section: Conversations
                 contents:
                   - endpoint: GET /v1/convai/conversations
@@ -599,7 +603,7 @@ navigation:
                     title: Delete conversation
                   - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
                     title: Get conversation audio
-                  - endpoint: GET /v1/convai/conversation/get_signed_url
+                  - endpoint: GET /v1/convai/conversation/get-signed-url
                     title: Get signed URL
                   - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
                     title: Send conversation feedback
@@ -711,7 +715,45 @@ navigation:
                   title: Sound Effects
               - audioIsolation
               - textToVoice
-              - dubbing
+              - dubbing:
+                  contents:
+                    - section: Resources (Enterprise Only)
+                      slug: /resources
+                      contents:
+                        - endpoint: GET /v1/dubbing/resource/{dubbing_id}
+                          title: Get dubbing resource
+                          slug: /get-resource
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}/segment
+                          title: Create segment
+                          slug: /create-segment
+                        - endpoint: DELETE /v1/dubbing/resource/{dubbing_id}/segment/{segment_id}
+                          title: Delete a segment
+                          slug: /delete-segment
+                        - endpoint: PATCH /v1/dubbing/resource/{dubbing_id}/segment/{segment_id}/{language}
+                          title: Update a segment
+                          slug: /update-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/transcribe
+                          title: Transcribe segment
+                          slug: /transcribe-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/translate
+                          title: Translate segment
+                          slug: /translate-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/dub
+                          title: Dub segment
+                          slug: /dub-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/render/{language}
+                          title: Render segment
+                          slug: /render-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/language
+                          title: Add language to resource
+                          slug: /add-language
+                        - endpoint: PATCH /v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}
+                          title: Update speaker
+                          slug: /update-speaker
+                        - endpoint: GET /v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}/similar-voices
+                          title: Get similar voices
+                          slug: /get-similar-voices
+
               - audioNative
               - voices:
                   contents:
