@@ -8251,9 +8251,9 @@
     },
     "/v1/usage/character-stats": {
       "get": {
-        "operationId": "Get_character_usage_metrics_v1_usage_character_stats_get",
-        "summary": "Get Character Usage Metrics",
-        "description": "Returns the credit usage metrics for the current user or the entire workspace they are part of. The response will return a time axis with unix timestamps for each day and daily usage along that axis. The usage will be broken down by the specified breakdown type. For example, breakdown type \"voice\" will return the usage of each voice along the time axis.",
+        "operationId": "Get_characters_usage_metrics_v1_usage_character_stats_get",
+        "summary": "Get Characters Usage Metrics",
+        "description": "Returns the usage metrics for the current user or the entire workspace they are part of. The response provides a time axis based on the specified aggregation interval (default: day), with usage values for each interval along that axis. Usage is broken down by the selected breakdown type. For example, breakdown type \"voice\" will return the usage of each voice for each interval along the time axis.",
         "parameters": [
           {
             "name": "start_unix",
@@ -9838,7 +9838,7 @@
         "x-fern-sdk-method-name": "create"
       }
     },
-    "/v1/convai/conversation/get_signed_url": {
+    "/v1/convai/conversation/get-signed-url": {
       "get": {
         "operationId": "Get_Signed_Url_v1_convai_conversation_get_signed_url_get",
         "summary": "Get Signed Url",
@@ -9904,6 +9904,74 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "get_signed_url"
+      }
+    },
+    "/v1/convai/conversation/get_signed_url": {
+      "get": {
+        "operationId": "get_signed_url_deprecated",
+        "summary": "Get Signed Url",
+        "description": "Get a signed url to start a conversation with an agent with an agent that requires authorization",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "query",
+            "description": "The id of the agent you're taking the action on.",
+            "required": true,
+            "schema": {
+              "description": "The id of the agent you're taking the action on.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationSignedUrlResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-skip-spec": true
       }
     },
     "/v1/convai/twilio/outbound-call": {
@@ -10266,10 +10334,10 @@
           {
             "name": "conversation_signature",
             "in": "query",
-            "description": "An expiring token that enables a websocket conversation to start. These can be generated for an agent using the /v1/convai/conversation/get_signed_url endpoint",
+            "description": "An expiring token that enables a websocket conversation to start. These can be generated for an agent using the /v1/convai/conversation/get-signed-url endpoint",
             "required": false,
             "schema": {
-              "description": "An expiring token that enables a websocket conversation to start. These can be generated for an agent using the /v1/convai/conversation/get_signed_url endpoint",
+              "description": "An expiring token that enables a websocket conversation to start. These can be generated for an agent using the /v1/convai/conversation/get-signed-url endpoint",
               "anyOf": [
                 {
                   "type": "string"
@@ -10579,6 +10647,163 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "get_agents"
+      }
+    },
+    "/v1/convai/agents/{agent_id}/simulate-conversation": {
+      "post": {
+        "operationId": "Simulates_a_conversation_v1_convai_agents__agent_id__simulate_conversation_post",
+        "summary": "Simulates A Conversation",
+        "description": "Run a conversation between the agent and a simulated user.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "The id of an agent. This is returned on agent creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of an agent. This is returned on agent creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Simulates_a_conversation_v1_convai_agents__agent_id__simulate_conversation_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentSimulatedChatTestResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "simulate_conversation"
+      }
+    },
+    "/v1/convai/agents/{agent_id}/simulate-conversation/stream": {
+      "post": {
+        "operationId": "Simulates_a_conversation__Stream__v1_convai_agents__agent_id__simulate_conversation_stream_post",
+        "summary": "Simulates A Conversation (Stream)",
+        "description": "Run a conversation between the agent and a simulated user and stream back the response. Response is streamed back as partial lists of messages that should be concatenated and once the conversation has complete a single final message with the conversation analysis will be sent.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "The id of an agent. This is returned on agent creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of an agent. This is returned on agent creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Simulates_a_conversation__Stream__v1_convai_agents__agent_id__simulate_conversation_stream_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "simulate_conversation_stream"
       }
     },
     "/v1/convai/conversations": {
@@ -14706,6 +14931,35 @@
         },
         "title": "AgentConfigAPIModel"
       },
+      "AgentConfigDBModel": {
+        "type": "object",
+        "properties": {
+          "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
+            "type": "string",
+            "default": "",
+            "title": "First Message"
+          },
+          "language": {
+            "description": "Language of the agent - used for ASR and TTS",
+            "type": "string",
+            "default": "en",
+            "title": "Language"
+          },
+          "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
+            "$ref": "#/components/schemas/DynamicVariablesConfig"
+          },
+          "prompt": {
+            "$ref": "#/components/schemas/PromptAgentDBModel"
+          }
+        },
+        "example": {
+          "first_message": "Hello, how can I help you today?",
+          "language": "en"
+        },
+        "title": "AgentConfigDBModel"
+      },
       "AgentConfigOverride": {
         "type": "object",
         "properties": {
@@ -14880,6 +15134,26 @@
           }
         },
         "title": "AgentPlatformSettingsResponseModel"
+      },
+      "AgentSimulatedChatTestResponseModel": {
+        "type": "object",
+        "properties": {
+          "simulated_conversation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Output"
+            },
+            "title": "Simulated Conversation"
+          },
+          "analysis": {
+            "$ref": "#/components/schemas/ConversationHistoryAnalysisCommonModel"
+          }
+        },
+        "required": [
+          "simulated_conversation",
+          "analysis"
+        ],
+        "title": "AgentSimulatedChatTestResponseModel"
       },
       "AgentSummaryResponseModel": {
         "type": "object",
@@ -18691,6 +18965,62 @@
         ],
         "title": "Body_Share_workspace_resource_v1_workspace_resources__resource_id__share_post"
       },
+      "Body_Simulates_a_conversation__Stream__v1_convai_agents__agent_id__simulate_conversation_stream_post": {
+        "type": "object",
+        "properties": {
+          "simulation_specification": {
+            "description": "A specification detailing how the conversation should be simulated",
+            "$ref": "#/components/schemas/ConversationSimulationSpecification"
+          },
+          "extra_evaluation_criteria": {
+            "description": "A list of evaluation criteria to test",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PromptEvaluationCriteria"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Evaluation Criteria"
+          }
+        },
+        "required": [
+          "simulation_specification"
+        ],
+        "title": "Body_Simulates_a_conversation__Stream__v1_convai_agents__agent_id__simulate_conversation_stream_post"
+      },
+      "Body_Simulates_a_conversation_v1_convai_agents__agent_id__simulate_conversation_post": {
+        "type": "object",
+        "properties": {
+          "simulation_specification": {
+            "description": "A specification detailing how the conversation should be simulated",
+            "$ref": "#/components/schemas/ConversationSimulationSpecification"
+          },
+          "extra_evaluation_criteria": {
+            "description": "A list of evaluation criteria to test",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PromptEvaluationCriteria"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Evaluation Criteria"
+          }
+        },
+        "required": [
+          "simulation_specification"
+        ],
+        "title": "Body_Simulates_a_conversation_v1_convai_agents__agent_id__simulate_conversation_post"
+      },
       "Body_Sound_Generation_v1_sound_generation_post": {
         "type": "object",
         "properties": {
@@ -19075,7 +19405,7 @@
           "model_id": {
             "description": "Identifier of the model that will be used, you can query them using GET /v1/models. The model needs to have support for text to speech, you can check this using the can_do_text_to_speech property.",
             "type": "string",
-            "default": "eleven_monolingual_v1",
+            "default": "eleven_multilingual_v2",
             "title": "Model Id"
           },
           "language_code": {
@@ -19266,7 +19596,7 @@
           "model_id": {
             "description": "Identifier of the model that will be used, you can query them using GET /v1/models. The model needs to have support for text to speech, you can check this using the can_do_text_to_speech property.",
             "type": "string",
-            "default": "eleven_monolingual_v1",
+            "default": "eleven_multilingual_v2",
             "title": "Model Id"
           },
           "language_code": {
@@ -19457,7 +19787,7 @@
           "model_id": {
             "description": "Identifier of the model that will be used, you can query them using GET /v1/models. The model needs to have support for text to speech, you can check this using the can_do_text_to_speech property.",
             "type": "string",
-            "default": "eleven_monolingual_v1",
+            "default": "eleven_multilingual_v2",
             "title": "Model Id"
           },
           "language_code": {
@@ -19648,7 +19978,7 @@
           "model_id": {
             "description": "Identifier of the model that will be used, you can query them using GET /v1/models. The model needs to have support for text to speech, you can check this using the can_do_text_to_speech property.",
             "type": "string",
-            "default": "eleven_monolingual_v1",
+            "default": "eleven_multilingual_v2",
             "title": "Model Id"
           },
           "language_code": {
@@ -21639,7 +21969,7 @@
         ],
         "title": "ConversationHistoryRagUsageCommonModel"
       },
-      "ConversationHistoryTranscriptCommonModel": {
+      "ConversationHistoryTranscriptCommonModel-Input": {
         "type": "object",
         "properties": {
           "role": {
@@ -21723,7 +22053,105 @@
           "llm_usage": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/LLMUsage"
+                "$ref": "#/components/schemas/LLMUsage-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "time_in_call_secs"
+        ],
+        "title": "ConversationHistoryTranscriptCommonModel"
+      },
+      "ConversationHistoryTranscriptCommonModel-Output": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent"
+            ],
+            "title": "Role"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallCommonModel"
+            },
+            "title": "Tool Calls"
+          },
+          "tool_results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolResultCommonModel"
+            },
+            "title": "Tool Results"
+          },
+          "feedback": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserFeedback"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "llm_override": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Override"
+          },
+          "time_in_call_secs": {
+            "type": "integer",
+            "title": "Time In Call Secs"
+          },
+          "conversation_turn_metrics": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationTurnMetrics"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rag_retrieval_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RagRetrievalInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "llm_usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LLMUsage-Output"
               },
               {
                 "type": "null"
@@ -22181,6 +22609,34 @@
           "signed_url"
         ],
         "title": "ConversationSignedUrlResponseModel"
+      },
+      "ConversationSimulationSpecification": {
+        "description": "A specification that will be used to simulate a conversation between an agent and an AI user.",
+        "type": "object",
+        "properties": {
+          "simulated_user_config": {
+            "$ref": "#/components/schemas/AgentConfigDBModel"
+          },
+          "tool_mock_config": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ToolMockConfig"
+            },
+            "title": "Tool Mock Config"
+          },
+          "partial_conversation_history": {
+            "description": "A partial conversation history to start the simulation from. If empty, simulation starts fresh.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Input"
+            },
+            "title": "Partial Conversation History"
+          }
+        },
+        "required": [
+          "simulated_user_config"
+        ],
+        "title": "ConversationSimulationSpecification"
       },
       "ConversationSummaryResponseModel": {
         "type": "object",
@@ -24402,7 +24858,7 @@
           "transcript": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel"
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Output"
             },
             "title": "Transcript"
           },
@@ -25750,10 +26206,10 @@
         "type": "object",
         "properties": {
           "irreversible_generation": {
-            "$ref": "#/components/schemas/LLMUsage"
+            "$ref": "#/components/schemas/LLMUsage-Output"
           },
           "initiated_generation": {
-            "$ref": "#/components/schemas/LLMUsage"
+            "$ref": "#/components/schemas/LLMUsage-Output"
           }
         },
         "title": "LLMCategoryUsage"
@@ -25792,7 +26248,23 @@
         },
         "title": "LLMTokensCategoryUsage"
       },
-      "LLMUsage": {
+      "LLMUsage-Input": {
+        "type": "object",
+        "properties": {
+          "model_usage": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LLMInputOutputTokensUsage"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/LLM"
+            },
+            "title": "Model Usage"
+          }
+        },
+        "title": "LLMUsage"
+      },
+      "LLMUsage-Output": {
         "type": "object",
         "properties": {
           "model_usage": {
@@ -28593,6 +29065,135 @@
           "tools": []
         },
         "title": "PromptAgent"
+      },
+      "PromptAgentDBModel": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "The prompt for the agent",
+            "type": "string",
+            "default": "",
+            "title": "Prompt"
+          },
+          "llm": {
+            "description": "The LLM to query with the prompt and the chat history",
+            "default": "gemini-2.0-flash-001",
+            "$ref": "#/components/schemas/LLM"
+          },
+          "temperature": {
+            "description": "The temperature for the LLM",
+            "type": "number",
+            "default": 0,
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
+            "type": "integer",
+            "default": -1,
+            "title": "Max Tokens"
+          },
+          "tools": {
+            "description": "A list of tools that the agent can use over the course of the conversation",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WebhookToolConfig-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/ClientToolConfig-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/SystemToolConfig-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/MCPToolConfig-Input"
+                }
+              ],
+              "description": "The type of tool",
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "client": "#/components/schemas/ClientToolConfig-Input",
+                  "mcp": "#/components/schemas/MCPToolConfig-Input",
+                  "system": "#/components/schemas/SystemToolConfig-Input",
+                  "webhook": "#/components/schemas/WebhookToolConfig-Input"
+                }
+              }
+            },
+            "title": "Tools"
+          },
+          "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Tool Ids"
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Mcp Server Ids"
+          },
+          "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KnowledgeBaseLocator"
+            },
+            "title": "Knowledge Base"
+          },
+          "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CustomLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
+          },
+          "rag": {
+            "description": "Configuration for RAG",
+            "$ref": "#/components/schemas/RagConfig"
+          },
+          "knowledge_base_document_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Knowledge Base Document Ids"
+          }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
+        },
+        "title": "PromptAgentDBModel"
       },
       "PromptAgentOverride": {
         "type": "object",
@@ -31478,6 +32079,22 @@
         ],
         "title": "TelephonyProvider"
       },
+      "ToolMockConfig": {
+        "type": "object",
+        "properties": {
+          "default_return_value": {
+            "type": "string",
+            "default": "Tool Called.",
+            "title": "Default Return Value"
+          },
+          "default_is_error": {
+            "type": "boolean",
+            "default": false,
+            "title": "Default Is Error"
+          }
+        },
+        "title": "ToolMockConfig"
+      },
       "TransferToAgentToolConfig": {
         "type": "object",
         "properties": {
@@ -32874,7 +33491,7 @@
             "title": "Use Speaker Boost"
           },
           "speed": {
-            "description": "Controls the speed of the generated speech. Values range from 0.7 to 1.2, with 1.0 being the default speed. Lower values create slower, more deliberate speech while higher values produce faster-paced speech. Extreme values can impact the quality of the generated speech.",
+            "description": "Adjusts the speed of the voice. A value of 1.0 is the default speed, while values less than 1.0 slow down the speech, and values greater than 1.0 speed it up.",
             "anyOf": [
               {
                 "type": "number"
