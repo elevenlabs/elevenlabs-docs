@@ -21251,6 +21251,14 @@
             "minLength": 0,
             "title": "Description"
           },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 30 seconds (inclusive).",
+            "type": "integer",
+            "default": 20,
+            "maximum": 30,
+            "minimum": 1,
+            "title": "Response Timeout Secs"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -21274,20 +21282,6 @@
             "type": "boolean",
             "default": false,
             "title": "Expects Response"
-          },
-          "response_timeout_secs": {
-            "description": "The maximum time in seconds to wait for a response from the client. Should only be set if expects_response is true",
-            "anyOf": [
-              {
-                "type": "integer",
-                "maximum": 30,
-                "minimum": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Response Timeout Secs"
           },
           "dynamic_variables": {
             "description": "Configuration for dynamic variables",
@@ -21324,6 +21318,14 @@
             "minLength": 0,
             "title": "Description"
           },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 30 seconds (inclusive).",
+            "type": "integer",
+            "default": 20,
+            "maximum": 30,
+            "minimum": 1,
+            "title": "Response Timeout Secs"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -21347,20 +21349,6 @@
             "type": "boolean",
             "default": false,
             "title": "Expects Response"
-          },
-          "response_timeout_secs": {
-            "description": "The maximum time in seconds to wait for a response from the client. Should only be set if expects_response is true",
-            "anyOf": [
-              {
-                "type": "integer",
-                "maximum": 30,
-                "minimum": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Response Timeout Secs"
           },
           "dynamic_variables": {
             "description": "Configuration for dynamic variables",
@@ -24830,6 +24818,13 @@
           },
           "webhooks": {
             "$ref": "#/components/schemas/ConvAIWebhooks"
+          },
+          "rag_retention_period_days": {
+            "type": "integer",
+            "default": 10,
+            "exclusiveMinimum": 0,
+            "maximum": 30,
+            "title": "Rag Retention Period Days"
           }
         },
         "title": "GetConvAISettingsResponseModel"
@@ -26770,6 +26765,12 @@
             "minLength": 0,
             "title": "Description"
           },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete.",
+            "type": "integer",
+            "default": 20,
+            "title": "Response Timeout Secs"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -26826,6 +26827,12 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete.",
+            "type": "integer",
+            "default": 20,
+            "title": "Response Timeout Secs"
           },
           "type": {
             "description": "The type of tool",
@@ -27442,6 +27449,13 @@
           },
           "webhooks": {
             "$ref": "#/components/schemas/ConvAIWebhooks"
+          },
+          "rag_retention_period_days": {
+            "type": "integer",
+            "default": 10,
+            "exclusiveMinimum": 0,
+            "maximum": 30,
+            "title": "Rag Retention Period Days"
           }
         },
         "title": "PatchConvAISettingsRequest"
@@ -31827,6 +31841,12 @@
             "minLength": 0,
             "title": "Description"
           },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete.",
+            "type": "integer",
+            "default": 20,
+            "title": "Response Timeout Secs"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -31890,6 +31910,12 @@
             "type": "string",
             "minLength": 0,
             "title": "Description"
+          },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete.",
+            "type": "integer",
+            "default": 20,
+            "title": "Response Timeout Secs"
           },
           "type": {
             "description": "The type of tool",
@@ -34328,6 +34354,14 @@
             "minLength": 0,
             "title": "Description"
           },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 5 and 120 seconds (inclusive).",
+            "type": "integer",
+            "default": 20,
+            "maximum": 120,
+            "minimum": 5,
+            "title": "Response Timeout Secs"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -34345,6 +34379,7 @@
           }
         },
         "example": {
+          "response_timeout_secs": 20,
           "type": "webhook"
         },
         "required": [
@@ -34374,6 +34409,14 @@
             "minLength": 0,
             "title": "Description"
           },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 5 and 120 seconds (inclusive).",
+            "type": "integer",
+            "default": 20,
+            "maximum": 120,
+            "minimum": 5,
+            "title": "Response Timeout Secs"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -34391,6 +34434,7 @@
           }
         },
         "example": {
+          "response_timeout_secs": 20,
           "type": "webhook"
         },
         "required": [
