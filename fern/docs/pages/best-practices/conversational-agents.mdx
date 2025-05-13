@@ -1,0 +1,225 @@
+---
+title: Conversational agents
+subtitle: Learn how to build real-time conversational AI agents using our multi-context WebSocket API for dynamic and responsive interactions.
+---
+
+## Overview
+
+Building responsive conversational AI agents requires the ability to manage audio streams dynamically, handle interruptions gracefully, and maintain natural-sounding speech across conversational turns. Our multi-context WebSocket API for Text to Speech (TTS) is specifically designed for these scenarios.
+
+This API extends our [standard TTS WebSocket functionality](/docs/developer-guides/websockets) by introducing the concept of "contexts." Each context operates as an independent audio generation stream within a single WebSocket connection. This allows you to:
+
+- Manage multiple lines of speech concurrently (e.g., agent speaking while preparing a response to a user interruption).
+- Seamlessly handle user barge-ins by closing an existing speech context and initiating a new one.
+- Maintain prosodic consistency for utterances within the same logical context.
+- Optimize resource usage by selectively closing contexts that are no longer needed.
+
+This guide will walk you through connecting to the multi-context WebSocket, managing contexts, and applying best practices for building engaging conversational agents.
+
+## Requirements
+
+- An ElevenLabs account with an API key (learn how to [find your API key](/docs/api-reference/authentication)).
+- Python or Node.js (or another JavaScript runtime) installed on your machine.
+- Familiarity with WebSocket communication. We recommend reading our [guide on standard WebSocket streaming](/docs/developer-guides/websockets) for foundational concepts.
+
+## Setup
+
+Install the necessary dependencies for your chosen language:
+
+<CodeBlocks>
+
+```python
+pip install python-dotenv websockets
+```
+
+```javascript
+npm install dotenv ws
+for TypeScript, you might also want types:
+npm install @types/dotenv @types/ws --save-dev
+```
+
+</CodeBlocks>
+
+Create a .env file in your project directory to store your API key:
+
+### Connecting to the Multi-Context WebSocket
+
+The multi-context WebSocket endpoint is:
+`wss://api.elevenlabs.io/v1/text-to-speech/{voice_id}/multi-stream-input`
+You need to replace {voice_id} with the ID of the voice you wish to use. You can also specify query parameters such as model_id (e.g., eleven_flash_v2_5 for low latency) and output_format.
+
+<CodeBlocks>
+
+```python
+import os
+import json
+import asyncio
+import websockets
+from dotenv import load_dotenv
+
+load_dotenv()
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+VOICE_ID = "your_voice_id"
+MODEL_ID = "eleven_flash_v2_5"
+
+WEBSOCKET_URI = f"wss://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/multi-stream-input?model_id={MODEL_ID}"
+
+async def connect_multi_context_ws():
+    # Connect with API key in headers and appropriate max size
+    websocket = await websockets.connect(
+        WEBSOCKET_URI,
+        max_size=16 * 1024 * 1024,
+        extra_headers={"xi-api-key": ELEVENLABS_API_KEY}
+    )
+
+
+    # No need to send API key in message body when using header authentication
+
+    # Handle the rest of your application logic here
+
+    # Keep connection open for demonstration
+    await asyncio.sleep(10)
+
+    await websocket.close()
+
+if __name__ == "__main__":
+    asyncio.run(connect_multi_context_ws())
+```
+
+```javascript
+import * as dotenv from 'dotenv';
+import WebSocket from 'ws';
+
+dotenv.config();
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+const VOICE_ID = 'your_voice_id';
+const MODEL_ID = 'eleven_flash_v2_5';
+
+const WEBSOCKET_URI = `wss://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/multi-stream-input?model_id=${MODEL_ID}`;
+
+// Connect with API key in headers
+const websocket = new WebSocket(WEBSOCKET_URI, {
+  headers: { 'xi-api-key': ELEVENLABS_API_KEY },
+  maxPayload: 16 * 1024 * 1024, // 16MB max payload size
+});
+
+websocket.onopen = () => {
+  console.log('WebSocket connection established');
+
+  // Handle the rest of your application logic here
+};
+
+websocket.onerror = (error) => {
+  console.error(`WebSocket Error: ${error}`);
+};
+
+websocket.onclose = (event) => {
+  console.log(`WebSocket closed: Code=${event.code}, Reason=${event.reason}`);
+};
+
+// Define onmessage handler to process responses
+websocket.onmessage = (event) => {
+  // Process incoming messages
+};
+```
+
+</CodeBlocks>
+
+### Sending Messages (WebsocketTTSRequestMulti)
+
+Messages sent to the multi-context WebSocket are JSON objects with these key fields:
+
+text (string | null): The text to synthesize
+context_id (string | null): Unique identifier for the speech context
+voice_settings (object | null): Optional voice parameters (only set in first message for a context)
+generation_config (object | null): Optional generation parameters (only set in first message for a context)
+flush (boolean): Forces generation of any buffered audio when set to true
+close_context (boolean): Closes the context when set to true
+close_socket (boolean): Closes the entire WebSocket connection when set to true
+
+### Handling Interuptions
+
+Handling Interruptions
+When a user interrupts your agent, you should close the current context and create a new one:
+
+<CodeBlocks>
+```python 
+async def handle_interruption(websocket, old_context_id, new_context_id, new_response):
+    # Close the existing context that was interrupted
+    await websocket.send(json.dumps({
+        "context_id": old_context_id,
+        "close_context": True
+    }))
+    print(f"Closed interrupted context '{old_context_id}'")
+    
+    # Create a new context for the new response
+    await send_text_in_context(websocket, new_response, new_context_id)
+```
+
+```
+function handleInterruption(websocket: WebSocket, oldContextId: string, newContextId: string, newResponse: string) {
+  // Close the existing context that was interrupted
+  websocket.send(JSON.stringify({
+    context_id: oldContextId,
+    close_context: true
+  }));
+  console.log(`Closed interrupted context '${oldContextId}'`);
+
+  // Create a new context for the new response
+  sendTextInContext(websocket, newResponse, newContextId);
+}
+```
+
+</CodeBlocks>
+
+### Closing the WebSocket Connection
+
+When your conversation ends, you can clean up all contexts by closing the socket:
+
+<CodeBlocks>
+```python
+async def end_conversation(websocket):
+    # This will close all contexts and close the connection
+    await websocket.send(json.dumps({
+        "close_socket": True
+    }))
+    print("Ending conversation and closing WebSocket")`
+```
+```javascript
+function endConversation(websocket: WebSocket) {
+  // This will close all contexts and close the connection
+  websocket.send(JSON.stringify({
+    close_socket: true
+  }));
+  console.log("Ending conversation and closing WebSocket");
+}
+```
+</CodeBlocks>
+
+### Best practices
+
+<Note>
+  These best practices are essential for building responsive, efficient conversational agents with
+  our multi-context WebSocket API.
+</Note>
+
+<Steps>
+  <Step>
+    Establish one WebSocket connection for each end-user session. This reduces overhead and latency
+    compared to creating multiple connections. Within this single connection, you can manage
+    multiple contexts for different parts of the conversation.
+  </Step>
+  <Step>
+    When generating long responses, stream the text in smaller chunks and use the `flush: true` flag
+    at the end of complete sentences. This improves the perceived responsiveness by starting audio
+    generation sooner.
+  </Step>
+  <Step>
+    Stream in one context until an interruption occurs, then create a new context and close the
+    existing one. This approach ensures smooth transitions when the conversation flow changes.
+  </Step>
+  <Step>
+    Close unused contexts promptly. The server can maintain up to 5 concurrent contexts per
+    connection, but you should close contexts when they are no longer needed:
+  </Step>
+</Steps>
