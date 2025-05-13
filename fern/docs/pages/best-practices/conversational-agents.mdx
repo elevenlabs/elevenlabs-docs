@@ -3,6 +3,13 @@ title: Conversational agents best practices
 subtitle: Learn how to build real-time conversational AI agents using our multi-context WebSocket API for dynamic and responsive interactions.
 ---
 
+<Warning title="Advanced">
+  Orchestrating conversational agents using this multi-context WebSocket API is a complex task
+  recommended for advanced developers. For a more managed solution, consider exploring our
+  [Conversational AI product](/docs/conversational-ai/overview), which simplifies many of these
+  challenges.
+</Warning>
+
 ## Overview
 
 Building responsive conversational AI agents requires the ability to manage audio streams dynamically, handle interruptions gracefully, and maintain natural-sounding speech across conversational turns. Our multi-context WebSocket API for Text to Speech (TTS) is specifically designed for these scenarios.
@@ -85,7 +92,7 @@ function handleInterruption(websocket: WebSocket, oldContextId: string, newConte
 
 ### Keeping a context alive
 
-```python 
+```python
 async def keep_context_alive(websocket, context_id):
     await websocket.send(json.dumps({
         "context_id": context_id,
