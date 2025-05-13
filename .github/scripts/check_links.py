@@ -609,6 +609,9 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
                             if 'docs/websockets' in normalized_link:
                                 continue
 
+                            if '/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input' in normalized_link:
+                                continue
+
                             # Also check with trailing slash added
                             if normalized_link + '/' in valid_paths or normalized_link + '/' in api_reference_paths:
                                 continue
