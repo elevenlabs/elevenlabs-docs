@@ -62,9 +62,9 @@ This guide will walk you through connecting to the multi-context WebSocket, mana
   </Step>
 </Steps>
 
-### Handling Interuptions
+### Handling interuptions
 
-When a user interrupts your agent, you should close the current context and create a new one:
+When a user interrupts your agent, you should [close the current context](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Close-Context) and [create a new one](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Initialise-Context):
 
 <CodeBlocks>
 ```python 
@@ -98,7 +98,7 @@ function handleInterruption(websocket: WebSocket, oldContextId: string, newConte
 
 ### Keeping a context alive
 
-Contexts automatically timeout after a default of 20 seconds of inactivity. If you need to keep a context alive without generating text (for example, during a processing delay), you can send an empty text message to reset the timeout clock.
+Contexts automatically timeout after [a default of 20 seconds of inactivity](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#request.query.inactivity_timeout). If you need to keep a context alive without generating text (for example, during a processing delay), you can send an empty text message to reset the timeout clock.
 
 <CodeBlocks>
 
@@ -122,9 +122,9 @@ function handleInterruption(websocket: WebSocket, contextId: string) {
 
 </CodeBlocks>
 
-### Closing the WebSocket Connection
+### Closing the WebSocket connection
 
-When your conversation ends, you can clean up all contexts by closing the socket:
+When your conversation ends, you can clean up all contexts by [closing the socket](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Close-Socket):
 
 <CodeBlocks>
 ```python
