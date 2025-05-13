@@ -28,7 +28,7 @@ Choosing the most appropriate LLM is a primary factor in cost efficiency.
 
 Prompt engineering is a powerful technique for reducing token consumption and associated costs. By crafting clear, concise, and unambiguous system prompts, you can guide the model to produce more efficient responses. Eliminate redundant wording and unnecessary context that might inflate your token count. Consider explicitly instructing the model on your desired output length—for example, by adding phrases like "Limit your response to two sentences" or "Provide a brief summary." These simple directives can significantly reduce the number of output tokens while maintaining the quality and relevance of the generated content.
 
-**Employ Agent Transfer for Modular Design**: For complex conversational flows, leverage [agent-agent transfer](/docs/conversational-ai/customization/tools/agent-transfer). This allows you to break down a single, large system prompt into multiple, smaller, and more specialized prompts, each handled by a different agent. This significantly reduces the token count per interaction by loading only the contextually relevant prompt for the current stage of the conversation, rather than a comprehensive prompt designed for all possibilities.
+**Employ Agent Transfer for Modular Design**: For complex conversational flows, leverage [agent-agent transfer](/docs/conversational-ai/customization/tools/system-tools/agent-transfer). This allows you to break down a single, large system prompt into multiple, smaller, and more specialized prompts, each handled by a different agent. This significantly reduces the token count per interaction by loading only the contextually relevant prompt for the current stage of the conversation, rather than a comprehensive prompt designed for all possibilities.
 
 ## Leveraging knowledge and retrieval
 
@@ -38,7 +38,7 @@ For applications requiring access to large information volumes, Retrieval Augmen
   - RAG reduces input tokens by providing the LLM with only relevant snippets from your [Knowledge Base](/docs/conversational-ai/customization/knowledge-base), instead of including extensive data in the prompt.
   - Optimize the retriever to fetch only the most pertinent "chunks" of information.
   - Fine-tune chunk size and overlap for a balance between context and token count.
-  - Learn more about implementing [RAG](/docs/conversational-ai/customization/rag).
+  - Learn more about implementing [RAG](/docs/conversational-ai/customization/knowledge-base/rag).
 - **Lean Knowledge Bases**:
   - Ensure your [Knowledge Base](/docs/conversational-ai/customization/knowledge-base) contains accurate, up-to-date, and relevant information.
   - Well-structured content improves retrieval precision and reduces token usage from irrelevant context.
