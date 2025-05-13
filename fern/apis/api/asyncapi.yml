@@ -39,53 +39,7 @@ channels:
     bindings:
       ws:
         query:
-          type: object
-          properties:
-            model_id:
-              description: The model ID to use
-              type: string
-            language_code:
-              description: The ISO 639-1 language code (for Turbo v2.5 and Flash v2.5 models only)
-              type: string
-            enable_logging:
-              description: Whether to enable logging of the request
-              type: string
-            enable_ssml_parsing:
-              description: Whether to enable SSML parsing
-              type: boolean
-              default: false
-            optimize_streaming_latency:
-              description: Latency optimization level (deprecated)
-              type: string
-              enum: ['0', '1', '2', '3', '4']
-              default: '0'
-              deprecated: true
-            output_format:
-              $ref: '#/components/schemas/TextToSpeechOutputFormatEnum'
-            inactivity_timeout:
-              description: Timeout for inactivity before connection is closed
-              type: number
-              default: 20
-            sync_alignment:
-              description: Whether to include timing data with every audio chunk
-              type: boolean
-              default: false
-            auto_mode:
-              description: This parameter focuses on reducing the latency by disabling the chunk schedule and all buffers. It is only recommended when sending full sentences or phrases, sending partial phrases will result in highly reduced quality. By default it's set to false.
-              type: boolean
-              default: false
-            apply_text_normalization:
-              $ref: '#/components/schemas/TextToSpeechApplyTextNormalizationEnum'
-            seed:
-              description: >-
-                If specified, our system will make a best effort to sample deterministically, such that repeated requests
-                with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be an
-                integer between 0 and 4294967295.
-              type: integer
-              minimum: 0
-              maximum: 4294967295
-              example: 12345
-
+          $ref: '#/components/schemas/StreamInputQueryParameters'
     publish:
       description: Send messages to the WebSocket
       operationId: sendMessage
@@ -205,7 +159,7 @@ channels:
       message:
         oneOf:
           - $ref: '#/components/messages/InitializeConnectionMulti'
-          - $ref: '#/components/messages/InitialiseContextMulti'
+          - $ref: '#/components/messages/InitialiseContext'
           - $ref: '#/components/messages/SendTextMulti'
           - $ref: '#/components/messages/FlushContextClient'
           - $ref: '#/components/messages/CloseContextClient'
@@ -258,7 +212,7 @@ channels:
                 chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
               context_id: 'conv_1'
           - type: publish
-            messageId: InitialiseContextMulti
+            messageId: InitialiseContext
             value:
               text: 'Hi this is a new context with different settings! '
               context_id: 'interruption_context'
@@ -364,11 +318,11 @@ components:
       description: Message to keep a specific context alive by resetting its inactivity timeout.
       payload:
         $ref: '#/components/schemas/KeepContextAlive'
-    InitialiseContextMulti:
-      messageId: initialiseContextMulti
+    InitialiseContext:
+      messageId: initialiseContext
       description: Message to initialize or re-initialize a TTS context with text and settings for multi-stream connections.
       payload:
-        $ref: '#/components/schemas/InitialiseContextMulti'
+        $ref: '#/components/schemas/InitialiseContext'
   schemas:
     InitializeConnection:
       type: object
@@ -798,7 +752,7 @@ components:
           type: string
           description: The identifier of the context to keep alive.
 
-    InitialiseContextMulti:
+    InitialiseContext:
       type: object
       description: Payload to initialize or re-initialize a TTS context with specific settings and initial text for multi-stream connections.
       properties:
@@ -859,3 +813,50 @@ components:
           'opus_48000_192',
         ]
       default: 'mp3_44100'
+    StreamInputQueryParameters:
+      type: object
+      properties:
+        model_id:
+          description: The model ID to use
+          type: string
+        language_code:
+          description: The ISO 639-1 language code (for Turbo v2.5 and Flash v2.5 models only)
+          type: string
+        enable_logging:
+          description: Whether to enable logging of the request
+          type: string
+        enable_ssml_parsing:
+          description: Whether to enable SSML parsing
+          type: boolean
+          default: false
+        optimize_streaming_latency:
+          description: Latency optimization level (deprecated)
+          type: string
+          enum: ['0', '1', '2', '3', '4']
+          default: '0'
+          deprecated: true
+        output_format:
+          $ref: '#/components/schemas/TextToSpeechOutputFormatEnum'
+        inactivity_timeout:
+          description: Timeout for inactivity before connection is closed
+          type: number
+          default: 20
+        sync_alignment:
+          description: Whether to include timing data with every audio chunk
+          type: boolean
+          default: false
+        auto_mode:
+          description: This parameter focuses on reducing the latency by disabling the chunk schedule and all buffers. It is only recommended when sending full sentences or phrases, sending partial phrases will result in highly reduced quality. By default it's set to false.
+          type: boolean
+          default: false
+        apply_text_normalization:
+          $ref: '#/components/schemas/TextToSpeechApplyTextNormalizationEnum'
+        seed:
+          description: >-
+            If specified, our system will make a best effort to sample deterministically, such that repeated requests
+            with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be an
+            integer between 0 and 4294967295.
+          type: integer
+          minimum: 0
+          maximum: 4294967295
+          example: 12345
