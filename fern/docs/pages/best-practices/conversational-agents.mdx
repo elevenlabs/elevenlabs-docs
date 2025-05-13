@@ -1,5 +1,5 @@
 ---
-title: Conversational agents best practices
+title: Conversational agents
 subtitle: Learn how to build real-time conversational AI agents using our multi-context WebSocket API for dynamic and responsive interactions.
 ---
 
@@ -180,7 +180,9 @@ XI_API_KEY=your_elevenlabs_api_key_here
 
 </CodeBlocks>
 
-### Complete example
+### Example conversational agent
+
+<Note>This code is provided as an example and is not intended for production usage</Note>
 
 <CodeBlocks>
 
@@ -210,7 +212,6 @@ async def send_text_in_context(websocket, text, context_id, voice_settings=None)
         message["voice_settings"] = voice_settings
 
     await websocket.send(json.dumps(message))
-    print(f"Sent text to context '{context_id}': {text[:30]}...")
 
 async def continue_context(websocket, text, context_id):
     """Add more text to an existing context."""
@@ -218,7 +219,6 @@ async def continue_context(websocket, text, context_id):
         "text": text,
         "context_id": context_id
     }))
-    print(f"Added to context '{context_id}': {text[:30]}...")
 
 async def flush_context(websocket, context_id):
     """Force generation of any buffered audio in the context."""
@@ -226,7 +226,6 @@ async def flush_context(websocket, context_id):
         "context_id": context_id,
         "flush": True
     }))
-    print(f"Flushed context '{context_id}'")
 
 async def handle_interruption(websocket, old_context_id, new_context_id, new_response):
     """Handle user interruption by closing current context and starting a new one."""
@@ -235,7 +234,6 @@ async def handle_interruption(websocket, old_context_id, new_context_id, new_res
         "context_id": old_context_id,
         "close_context": True
     }))
-    print(f"Closed interrupted context '{old_context_id}'")
 
     # Create a new context for the new response
     await send_text_in_context(websocket, new_response, new_context_id)
@@ -245,7 +243,6 @@ async def end_conversation(websocket):
     await websocket.send(json.dumps({
         "close_socket": True
     }))
-    print("Ending conversation and closing WebSocket")
 
 async def receive_messages(websocket):
     """Process incoming WebSocket messages."""
@@ -268,7 +265,7 @@ async def conversation_agent_demo():
     # Connect with API key in headers
     async with websockets.connect(
         WEBSOCKET_URI,
-        max_size=16 * 1024 * 1024, # Adjusted to be 16MB, aligned with typical WebSocket limits
+        max_size=16 * 1024 * 1024,
         extra_headers={"xi-api-key": ELEVENLABS_API_KEY}
     ) as websocket:
         # Start receiving messages in background
@@ -368,7 +365,6 @@ function sendTextInContext(websocket, text, contextId, voiceSettings = null) {
   }
 
   websocket.send(JSON.stringify(message));
-  console.log(`Sent text to context '${contextId}': ${text.substring(0, 30)}...`);
 }
 
 // Function to continue an existing context with more text
@@ -379,7 +375,6 @@ function continueContext(websocket, text, contextId) {
       context_id: contextId,
     })
   );
-  console.log(`Added to context '${contextId}': ${text.substring(0, 30)}...`);
 }
 
 // Function to flush a context, forcing generation of buffered audio
@@ -390,7 +385,6 @@ function flushContext(websocket, contextId) {
       flush: true,
     })
   );
-  console.log(`Flushed context '${contextId}'`);
 }
 
 // Function to handle user interruption
@@ -402,7 +396,6 @@ function handleInterruption(websocket, oldContextId, newContextId, newResponse) 
       close_context: true,
     })
   );
-  console.log(`Closed interrupted context '${oldContextId}'`);
 
   // Create a new context for the new response
   sendTextInContext(websocket, newResponse, newContextId);
@@ -415,7 +408,6 @@ function endConversation(websocket) {
       close_socket: true,
     })
   );
-  console.log('Ending conversation and closing WebSocket');
 }
 
 // Function to run the conversation agent demo
@@ -430,8 +422,6 @@ async function conversationAgentDemo() {
 
   // Set up event handlers
   websocket.on('open', () => {
-    console.log('WebSocket connection established');
-
     // Initial agent response
     sendTextInContext(
       websocket,
@@ -500,7 +490,7 @@ async function conversationAgentDemo() {
       const contextId = data.context_id || 'default';
 
       if (data.audio) {
-        console.log(`Received audio for context '${contextId}'`);
+        //do stuff
       }
 
       if (data.is_final) {
