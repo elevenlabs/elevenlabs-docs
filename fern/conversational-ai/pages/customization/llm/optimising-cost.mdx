@@ -21,7 +21,7 @@ Monitoring your usage via the ElevenLabs dashboard or API is crucial for identif
 
 Choosing the most appropriate LLM is a primary factor in cost efficiency.
 
-- **Right-Sizing**: Select the least complex (and typically less expensive) model that can reliably perform your specific task. Avoid using high-cost models for simple operations. For instance, models like Google's `gemini-2.0-flash-lite` offer highly competitive pricing for many common tasks. Always cross-reference with the full [Supported LLMs list](/docs/conversational-ai/customization/llm#supported-llms) for the latest pricing and capabilities.
+- **Right-Sizing**: Select the least complex (and typically less expensive) model that can reliably perform your specific task. Avoid using high-cost models for simple operations. For instance, models like Google's `gemini-2.0-flash` offer highly competitive pricing for many common tasks. Always cross-reference with the full [Supported LLMs list](/docs/conversational-ai/customization/llm#supported-llms) for the latest pricing and capabilities.
 - **Experimentation**: Test various models for your tasks, comparing output quality against incurred costs. Consider language support, context window needs, and specialized skills.
 
 Refer to the [Supported LLMs section](/docs/conversational-ai/customization/llm#supported-llms) for a detailed comparison of available models.
@@ -52,24 +52,24 @@ Using [Server Tools](/docs/conversational-ai/customization/tools/server-tools) a
 - **Orchestration**: The LLM acts as an orchestrator, making structured tool calls. This is often far more token-efficient than attempting complex tasks via prompting alone.
 - **Tool Descriptions**: Provide clear, concise descriptions for each tool, enabling the LLM to use them efficiently and accurately.
 
-## Quick Wins: A Cost-Saving Checklist
+## Quick Wins: A cost-saving checklist
 
 To assist developers in readily applying these strategies, the following checklist summarizes key feature and associated actions for cost optimization. This table serves as a quick reference and a starting point for implementing immediate cost-saving measures.
 
 ### Cost Optimization Checklist
 
-| ElevenLabs Feature | Primary Cost Impact                                      | Key Action(s) for Developer                                                                                                                                        |
-| :----------------- | :------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LLM Choice         | Reduces per-token cost                                   | Select the smallest, most economical model that reliably performs the task. Experiment and compare cost vs. quality.                                               |
-| Custom LLMs        | Potentially lower inference cost for specialized tasks   | Evaluate for high-volume, specific tasks; fine-tune on proprietary data to create smaller, efficient models.                                                       |
-| System Prompts     | Reduces input & output tokens, guides model behavior     | Be concise, clear, and specific. Instruct on desired output format and length (e.g., "be brief," "use JSON").                                                      |
-| User Prompts       | Reduces input tokens                                     | Encourage specific queries; use few-shot examples strategically; summarize or select relevant history.                                                             |
-| Output Control     | Reduces output tokens                                    | Prompt for summaries or key info; use `max_tokens` cautiously; iterate on prompts to achieve natural conciseness.                                                  |
-| RAG                | Reduces input tokens by avoiding large context in prompt | Optimize retriever for relevance; fine-tune chunk size/overlap; ensure high-quality embeddings and search algorithms.                                              |
-| Knowledge Base     | Improves RAG efficiency, reducing irrelevant tokens      | Curate regularly; remove outdated info; ensure good structure, metadata, and tagging for precise retrieval.                                                        |
-| Tools (Functions)  | Avoids LLM calls for specific tasks; reduces tokens      | Delegate deterministic, calculation-heavy, or external API tasks to tools. Design clear tool descriptions for the LLM.                                             |
-| Agent Transfer     | Enables use of cheaper models for simpler parts of tasks | Use simpler/cheaper agents for initial triage/FAQs; transfer to capable agents only when needed; summarize context on transfer.                                    |
-| Session Mgmt.      | Reduces input tokens in ongoing conversations            | Implement history summarization or sliding window techniques to keep context lean upon receiving a post call webhook when building a stateful consumer application |
+| ElevenLabs Feature | Primary Cost Impact                                      | Key Action(s) for Developer                                                                                                                                                           |
+| :----------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| LLM Choice         | Reduces per-token cost                                   | Select the smallest, most economical model that reliably performs the task. Experiment and compare cost vs. quality.                                                                  |
+| Custom LLMs        | Potentially lower inference cost for specialized tasks   | Evaluate for high-volume, specific tasks; fine-tune on proprietary data to create smaller, efficient models.                                                                          |
+| System Prompts     | Reduces input & output tokens, guides model behavior     | Be concise, clear, and specific. Instruct on desired output format and length (e.g., "be brief," "use JSON").                                                                         |
+| User Prompts       | Reduces input tokens                                     | Encourage specific queries; use few-shot examples strategically; summarize or select relevant history.                                                                                |
+| Output Control     | Reduces output tokens                                    | Prompt for summaries or key info; use `max_tokens` cautiously; iterate on prompts to achieve natural conciseness.                                                                     |
+| RAG                | Reduces input tokens by avoiding large context in prompt | Optimize retriever for relevance; fine-tune chunk size/overlap; ensure high-quality embeddings and search algorithms.                                                                 |
+| Knowledge Base     | Improves RAG efficiency, reducing irrelevant tokens      | Curate regularly; remove outdated info; ensure good structure, metadata, and tagging for precise retrieval.                                                                           |
+| Tools (Functions)  | Avoids LLM calls for specific tasks; reduces tokens      | Delegate deterministic, calculation-heavy, or external API tasks to tools. Design clear tool descriptions for the LLM.                                                                |
+| Agent Transfer     | Enables use of cheaper models for simpler parts of tasks | Use simpler/cheaper agents for initial triage/FAQs; transfer to capable agents only when needed; summarize context on transfer.                                                       |
+| History Mgmt.      | Reduces input tokens from previous conversations         | Implement history summarization or sliding window techniques to keep context lean upon when building a stateful consumer application (can be done upon receiving a post call webhook) |
 
 <Tip>
   Continuously monitor your LLM usage and costs. Regularly review and refine your prompts, RAG
