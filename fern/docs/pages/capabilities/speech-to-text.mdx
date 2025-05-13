@@ -483,6 +483,20 @@ The output is classified in three category types:
   <div>[Explore all](/docs/models)</div>
 </div>
 
+## Concurrency and priority
+
+Concurrency is the concept of how many requests can be processed at the same time.
+
+For Speech to Text, files that are over 8 minutes long are transcribed in parallel internally in order to speed up processing. The audio is chunked into four segments to be transcribed concurrently.
+
+You can calculate the concurrency limit with the following calculation:
+
+$$
+Concurrency = \min(4, \text{round\_up}(\frac{\text{audio\_duration\_secs}}{480}))
+$$
+
+For example, a 15 minute audio file will be transcribed with a concurrency of 2, while a 120 minute audio file will be transcribed with a concurrency of 4.
+
 ## Supported languages
 
 <Markdown src="/snippets/v1-scribe-model-languages.mdx" />

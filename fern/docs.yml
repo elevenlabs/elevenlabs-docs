@@ -383,19 +383,26 @@ navigation:
               - page: Language detection
                 icon: duotone earth-europe
                 path: conversational-ai/pages/customization/tools/language-detection.mdx
-          - section: Custom LLM
-            icon: duotone brain-circuit
-            path: conversational-ai/pages/customization/custom-llm/overview.mdx
+          - section: LLM
+            icon: duotone brain
+            path: conversational-ai/pages/customization/llm.mdx
             contents:
-              - page: Cloudflare
-                icon: brands cloudflare
-                path: conversational-ai/pages/customization/custom-llm/cloudflare-workers-ai.mdx
-              - page: Groq Cloud
-                icon: duotone cloud
-                path: conversational-ai/pages/customization/custom-llm/groq-cloud.mdx
-              - page: Together AI
-                icon: duotone users
-                path: conversational-ai/pages/customization/custom-llm/together-ai.mdx
+              - section: Custom LLM
+                icon: duotone brain-circuit
+                path: conversational-ai/pages/customization/custom-llm/overview.mdx
+                contents:
+                  - page: Cloudflare
+                    icon: brands cloudflare
+                    path: conversational-ai/pages/customization/custom-llm/cloudflare-workers-ai.mdx
+                  - page: Groq Cloud
+                    icon: duotone cloud
+                    path: conversational-ai/pages/customization/custom-llm/groq-cloud.mdx
+                  - page: Together AI
+                    icon: duotone users
+                    path: conversational-ai/pages/customization/custom-llm/together-ai.mdx
+              - page: LLM cascading
+                icon: duotone layer-group
+                path: conversational-ai/pages/guides/cascade.mdx
           - page: Widget
             icon: duotone frame
             path: conversational-ai/pages/customization/widget.mdx
@@ -417,18 +424,54 @@ navigation:
                 icon: duotone microphone
                 path: conversational-ai/pages/customization/audio-saving.mdx
 
+      - section: PHONE NUMBERS
+        contents:
+          - page: SIP trunking
+            icon: duotone phone-office
+            path: conversational-ai/pages/guides/sip-trunking.mdx
+          - section: Telephony
+            icon: duotone headset
+            contents:
+              - page: Vonage
+                icon: duotone v
+                path: conversational-ai/pages/guides/telephony/vonage.mdx
+              - page: Telnyx
+                icon: duotone tty-answer
+                path: conversational-ai/pages/guides/telephony/telnyx.mdx
+              - page: Plivo
+                icon: duotone phone-volume
+                path: conversational-ai/pages/guides/telephony/plivo.mdx
+          - section: Twilio integration
+            icon: duotone phone
+            contents:
+              - page: Native integration
+                icon: duotone browser
+                path: conversational-ai/pages/guides/twilio-dashboard.mdx
+              - page: Customising calls
+                icon: duotone user-gear
+                path: conversational-ai/pages/customization/dynamic-variables/twilio-inbound-integration.mdx
+              - page: Custom server
+                icon: duotone code
+                path: conversational-ai/pages/guides/twilio-custom-server.mdx
+              - page: Outbound calling
+                icon: mobile-signal
+                path: conversational-ai/pages/guides/twilio-outbound-calling.mdx
+
       - section: WORKFLOWS
         skip-slug: false
         contents:
-          - page: Agent to agent transfer
-            icon: duotone arrows-turn-to-dots
-            path: conversational-ai/pages/customization/tools/agent-transfer.mdx
-          - page: Transfer to human
-            icon: duotone user-headset
-            path: conversational-ai/pages/customization/tools/human-transfer.mdx
           - page: Post-call webhooks
             icon: duotone bell-ring
             path: conversational-ai/pages/workflows/post-call-webhook.mdx
+          - section: Call transfers
+            icon: duotone phone-volume
+            contents:
+              - page: Transfer to human
+                icon: duotone user-headset
+                path: conversational-ai/pages/customization/tools/human-transfer.mdx
+              - page: Agent to agent transfer
+                icon: duotone arrows-turn-to-dots
+                path: conversational-ai/pages/customization/tools/agent-transfer.mdx
 
       - section: BEST PRACTICES
         contents:
@@ -442,15 +485,9 @@ navigation:
       - section: GUIDES
         skip-slug: false
         contents:
-          - page: SIP trunking
-            icon: duotone phone-office
-            path: conversational-ai/pages/guides/sip-trunking.mdx
           - page: ElevenLabs' docs agent
             icon: duotone message-bot
             path: conversational-ai/pages/best-practices/our-docs-agent.mdx
-          - page: LLM Cascading
-            icon: duotone layer-group
-            path: conversational-ai/pages/guides/cascade.mdx
           - section: Quickstarts
             icon: duotone code
             contents:
@@ -460,21 +497,6 @@ navigation:
               - page: JavaScript
                 icon: brands js
                 path: conversational-ai/pages/guides/vite.mdx
-          - section: Twilio
-            icon: duotone phone
-            contents:
-              - page: Native integration
-                icon: duotone browser
-                path: conversational-ai/pages/guides/twilio-dashboard.mdx
-              - page: Dynamic calls
-                icon: duotone user-gear
-                path: conversational-ai/pages/customization/dynamic-variables/twilio-inbound-integration.mdx
-              - page: Custom server
-                icon: duotone code
-                path: conversational-ai/pages/guides/twilio-custom-server.mdx
-              - page: Outbound calling
-                icon: mobile-signal
-                path: conversational-ai/pages/guides/twilio-outbound-calling.mdx
           - section: No-Code
             icon: duotone browser
             contents:
@@ -511,18 +533,6 @@ navigation:
               - page: Zendesk
                 icon: duotone z
                 path: conversational-ai/pages/guides/zendesk.mdx
-          - section: Telephony
-            icon: duotone headset
-            contents:
-              - page: Vonage
-                icon: duotone v
-                path: conversational-ai/pages/guides/telephony/vonage.mdx
-              - page: Telnyx
-                icon: duotone tty-answer
-                path: conversational-ai/pages/guides/telephony/telnyx.mdx
-              - page: Plivo
-                icon: duotone phone-volume
-                path: conversational-ai/pages/guides/telephony/plivo.mdx
       - section: LEGAL
         contents:
           - page: HIPAA compliance
@@ -593,6 +603,10 @@ navigation:
                     title: Delete agent
                   - endpoint: GET /v1/convai/agents/{agent_id}/link
                     title: Get link
+                  - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation
+                    title: Simulate conversation
+                  - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation/stream
+                    title: Stream simulate conversation
               - section: Conversations
                 contents:
                   - endpoint: GET /v1/convai/conversations
@@ -603,12 +617,14 @@ navigation:
                     title: Delete conversation
                   - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
                     title: Get conversation audio
-                  - endpoint: GET /v1/convai/conversation/get_signed_url
+                  - endpoint: GET /v1/convai/conversation/get-signed-url
                     title: Get signed URL
                   - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
                     title: Send conversation feedback
-                  - endpoint: POST /v1/convai/twilio/outbound_call
+                  - endpoint: POST /v1/convai/twilio/outbound-call
                     title: Outbound call via twilio
+                  - endpoint: GET /v1/convai/batch-calling/{batch_id}
+                    title: Get batch call information
               - section: Knowledge Base
                 contents:
                   - endpoint: GET /v1/convai/knowledge-base
@@ -617,6 +633,8 @@ navigation:
                     title: Delete knowledge base document
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}
                     title: Get knowledge base document
+                  - endpoint: PATCH /v1/convai/knowledge-base/{documentation_id}
+                    title: Update knowledge base document
                   - endpoint: POST /v1/convai/knowledge-base/url
                     title: Create knowledge base document from URL
                   - endpoint: POST /v1/convai/knowledge-base/text
@@ -629,7 +647,7 @@ navigation:
                     title: Get dependent agents
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/content
                     title: Get document content
-                  - endpoint: GET /v1/convai/knowledge-base/:documentation_id/chunk/:chunk_id
+                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/chunk/{chunk_id}
                     title: Get document chunk
               - section: Phone Numbers
                 contents:
@@ -665,6 +683,10 @@ navigation:
                     title: Get dashboard settings
                   - endpoint: PATCH /v1/convai/settings/dashboard
                     title: Update dashboard settings
+              - section: SIP Trunk
+                contents:
+                  - endpoint: POST /v1/convai/sip-trunk/outbound-call
+                    title: Outbound call via SIP trunk
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -707,7 +729,45 @@ navigation:
                   title: Sound Effects
               - audioIsolation
               - textToVoice
-              - dubbing
+              - dubbing:
+                  contents:
+                    - section: Resources (Enterprise Only)
+                      slug: /resources
+                      contents:
+                        - endpoint: GET /v1/dubbing/resource/{dubbing_id}
+                          title: Get dubbing resource
+                          slug: /get-resource
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}/segment
+                          title: Create segment
+                          slug: /create-segment
+                        - endpoint: DELETE /v1/dubbing/resource/{dubbing_id}/segment/{segment_id}
+                          title: Delete a segment
+                          slug: /delete-segment
+                        - endpoint: PATCH /v1/dubbing/resource/{dubbing_id}/segment/{segment_id}/{language}
+                          title: Update a segment
+                          slug: /update-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/transcribe
+                          title: Transcribe segment
+                          slug: /transcribe-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/translate
+                          title: Translate segment
+                          slug: /translate-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/dub
+                          title: Dub segment
+                          slug: /dub-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/render/{language}
+                          title: Render segment
+                          slug: /render-segment
+                        - endpoint: POST /v1/dubbing/resource/{dubbing_id}/language
+                          title: Add language to resource
+                          slug: /add-language
+                        - endpoint: PATCH /v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}
+                          title: Update speaker
+                          slug: /update-speaker
+                        - endpoint: GET /v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}/similar-voices
+                          title: Get similar voices
+                          slug: /get-similar-voices
+
               - audioNative
               - voices:
                   contents:
