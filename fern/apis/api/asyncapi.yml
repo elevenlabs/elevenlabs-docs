@@ -212,7 +212,7 @@ channels:
                 chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
               context_id: 'conv_1'
           - type: publish
-            messageId: InitialiseContextMulti
+            messageId: InitialiseContext
             value:
               text: 'Hi this is a new context with different settings! '
               context_id: 'interruption_context'
@@ -318,11 +318,11 @@ components:
       description: Message to keep a specific context alive by resetting its inactivity timeout.
       payload:
         $ref: '#/components/schemas/KeepContextAlive'
-    InitialiseContextMulti:
-      messageId: initialiseContextMulti
+    InitialiseContext:
+      messageId: initialiseContext
       description: Message to initialize or re-initialize a TTS context with text and settings for multi-stream connections.
       payload:
-        $ref: '#/components/schemas/InitialiseContextMulti'
+        $ref: '#/components/schemas/InitialiseContext'
   schemas:
     InitializeConnection:
       type: object
@@ -752,7 +752,7 @@ components:
           type: string
           description: The identifier of the context to keep alive.
 
-    InitialiseContextMulti:
+    InitialiseContext:
       type: object
       description: Payload to initialize or re-initialize a TTS context with specific settings and initial text for multi-stream connections.
       properties:
