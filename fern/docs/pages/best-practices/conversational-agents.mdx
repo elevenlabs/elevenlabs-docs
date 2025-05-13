@@ -98,6 +98,8 @@ function handleInterruption(websocket: WebSocket, oldContextId: string, newConte
 
 ### Keeping a context alive
 
+<CodeBlocks>
+
 ```python
 async def keep_context_alive(websocket, context_id):
     await websocket.send(json.dumps({
@@ -106,19 +108,17 @@ async def keep_context_alive(websocket, context_id):
     }))
 ```
 
-```
-function handleInterruption(websocket: WebSocket, oldContextId: string, newContextId: string, newResponse: string) {
+```javascript
+function handleInterruption(websocket: WebSocket, contextId: string) {
   // Close the existing context that was interrupted
   websocket.send(JSON.stringify({
     context_id: oldContextId,
-    close_context: true
+    text: ""
   }));
-  console.log(`Closed interrupted context '${oldContextId}'`);
-
-  // Create a new context for the new response
-  sendTextInContext(websocket, newResponse, newContextId);
 }
 ```
+
+</CodeBlocks>
 
 ### Closing the WebSocket Connection
 
