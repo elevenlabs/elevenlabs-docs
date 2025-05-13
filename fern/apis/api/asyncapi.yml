@@ -182,20 +182,6 @@ channels:
       contexts, flush them, or close them independently. A `close_socket` message can be used to terminate
       the entire connection gracefully.
 
-      Connection Query Parameters:
-      - `xi_api_key` (string, optional): Your API key, if not provided in the first message or header.
-      - `authorization` (string, optional): Your bearer token, if not provided in the first message or header.
-      - `model_id` (string, optional): The model ID to use (e.g., 'eleven_multilingual_v2').
-      - `language_code` (string, optional): ISO 639-1 language code (for specific models).
-      - `enable_logging` (boolean, optional, default: true): Whether to enable logging.
-      - `output_format` (string, optional, default: 'mp3_44100_192'): Desired output audio format.
-      - `enable_ssml_parsing` (boolean, optional, default: false): Whether to enable SSML parsing.
-      - `seed` (integer, optional): Seed for deterministic generation (best-effort).
-      - `apply_text_normalization` (string, optional, enum: ['auto', 'on', 'off'], default: 'auto'): Text normalization mode.
-      - `inactivity_timeout` (integer, optional, default: 20): Timeout in seconds for inactivity before connection is closed.
-      - `sync_alignment` (boolean, optional, default: false): Whether to include timing data with every audio chunk.
-      - `auto_mode` (boolean, optional, default: false): Reduces latency by disabling chunk schedule and buffers. Recommended for full sentences/phrases.
-
     bindings:
       ws:
         query:
@@ -274,27 +260,29 @@ channels:
       description: Send messages to the multi-context WebSocket.
       operationId: sendMessageMultiContext
       message:
-        $ref: '#/components/schemas/WebsocketTTSClientMessageMulti'
+        $ref: '#/components/messages/ClientMultiContextMessage'
     subscribe:
       description: Receive messages from the multi-context WebSocket.
       operationId: receiveMessageMultiContext
       message:
-        $ref: '#/components/schemas/WebsocketTTSServerMessageMulti'
+        $ref: '#/components/messages/ServerMultiContextMessage'
     x-fern-examples:
       - name: Multi-Context TTS Example
         description: Demonstrates initializing two contexts, sending text, and managing them.
         query-parameters:
           model_id: eleven_multilingual_v2
         messages:
-          - type: publish # Initialize context "conv_1"
+          - type: publish
+            messageId: ClientMultiContextMessage
             value:
               text: 'hi this is the start of a new context'
               voice_settings:
                 stability: 0.5
                 similarity_boost: 0.8
-              xi_api_key: <YOUR_API_KEY>
-              context_id: 'conv_1'
+                xi_api_key: <YOUR_API_KEY>
+                context_id: 'conv_1'
           - type: subscribe
+            messageId: ServerMultiContextMessage
             value:
               audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
               is_final: false
@@ -307,7 +295,14 @@ channels:
             value:
               audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
               is_final: false
-              alignment: { chars: ['H', 'e', 'l', 'l', 'o', ...], ... }
+              normalizedAlignment:
+                charStartTimesMs: [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21]
+                charsDurationsMs: [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+                chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+              alignment:
+                charStartTimesMs: [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21]
+                charsDurationsMs: [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
+                chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
               context_id: 'conv_1'
           - type: publish
             value:
@@ -315,7 +310,7 @@ channels:
               voice_settings:
                 stability: 0.7
                 similarity_boost: 0.9
-              context_id: 'interruption_context'
+                context_id: 'interruption_context'
           - type: publish
             value:
               text: 'Hi! '
@@ -345,6 +340,7 @@ channels:
           - type: publish
             value:
               close_socket: true
+              context_id: 'interruption_context'
           - type: subscribe
             value:
               is_final: true
@@ -371,6 +367,12 @@ components:
       messageId: finalOutput
       payload:
         $ref: '#/components/schemas/FinalOutput'
+    ClientMultiContextMessage:
+      payload:
+        $ref: '#/components/schemas/WebsocketTTSClientMessageMulti'
+    ServerMultiContextMessage:
+      payload:
+        $ref: '#/components/schemas/WebsocketTTSServerMessageMulti'
   schemas:
     InitializeConnection:
       type: object
