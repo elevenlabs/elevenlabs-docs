@@ -182,14 +182,13 @@ channels:
       contexts, flush them, or close them independently. A `close_socket` message can be used to terminate
       the entire connection gracefully.
 
+      For more information on how to use this API for conversational agents see the [conversational agents guide](/docs/best-practices/conversational-agents).
+
     bindings:
       ws:
         query:
           type: object
           properties:
-            xi_api_key:
-              description: Your ElevenLabs API key.
-              type: string
             authorization:
               description: Your authorization bearer token.
               type: string
@@ -233,7 +232,7 @@ channels:
                   'opus_48000_192',
                 ]
             inactivity_timeout:
-              description: Timeout for inactivity before connection is closed (seconds).
+              description: Timeout for inactivity before a context is closed (seconds), can be up to 180 seconds.
               type: integer
               default: 20
             sync_alignment:
@@ -258,21 +257,23 @@ channels:
 
     publish:
       description: Send messages to the multi-context WebSocket.
-      operationId: sendMessageMultiContext
+      operationId: sendMessageMulti
       message:
         oneOf:
-          - $ref: '#/components/messages/InitializeConnectionMultiContext'
-          - $ref: '#/components/messages/SendTextMultiContext'
+          - $ref: '#/components/messages/InitializeConnectionMulti'
+          - $ref: '#/components/messages/InitialiseContextMulti'
+          - $ref: '#/components/messages/SendTextMulti'
           - $ref: '#/components/messages/FlushContextClient'
           - $ref: '#/components/messages/CloseContextClient'
           - $ref: '#/components/messages/CloseSocketClient'
+          - $ref: '#/components/messages/KeepContextAlive'
     subscribe:
       description: Receive messages from the multi-context WebSocket.
-      operationId: receiveMessageMultiContext
+      operationId: receiveMessageMulti
       message:
         oneOf:
-          - $ref: '#/components/messages/AudioOutputMultiContext'
-          - $ref: '#/components/messages/FinalOutputMultiContext'
+          - $ref: '#/components/messages/AudioOutputMulti'
+          - $ref: '#/components/messages/FinalOutputMulti'
     x-fern-examples:
       - name: Multi-Context TTS Example
         description: Demonstrates initializing two contexts, sending text, and managing them.
@@ -280,27 +281,26 @@ channels:
           model_id: eleven_multilingual_v2
         messages:
           - type: publish
-            messageId: InitializeConnectionMultiContext
+            messageId: InitializeConnectionMulti
             value:
               text: ' '
               voice_settings:
                 stability: 0.5
                 similarity_boost: 0.8
-                xi_api_key: <YOUR_API_KEY>
-                context_id: 'conv_1'
-          - type: subscribe
-            messageId: AudioOutputMultiContext
-            value:
-              audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
-              is_final: false
               context_id: 'conv_1'
           - type: publish
-            messageId: SendTextMultiContext
+            messageId: SendTextMulti
             value:
               text: 'Hello from conversation one. '
               context_id: 'conv_1'
+          - type: publish
+            messageId: FlushContextClient
+            value:
+              text: 'This is added to the buffer of text to flush. '
+              context_id: 'conv_1'
+              flush: true
           - type: subscribe
-            messageId: AudioOutputMultiContext
+            messageId: AudioOutputMulti
             value:
               audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
               is_final: false
@@ -314,51 +314,44 @@ channels:
                 chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
               context_id: 'conv_1'
           - type: publish
-            messageId: InitializeConnectionMultiContext
+            messageId: InitialiseContextMulti
             value:
-              text: ' '
+              text: 'Hi this is a new context with different settings! '
+              context_id: 'interruption_context'
               voice_settings:
-                stability: 0.7
+                stability: 0.2
                 similarity_boost: 0.9
-                context_id: 'interruption_context'
-          - type: publish
-            messageId: SendTextMultiContext
-            value:
-              text: 'Hi! '
-              context_id: 'interruption_context'
-          - type: subscribe
-            messageId: AudioOutputMultiContext
-            value:
-              audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
-              is_final: false
-              context_id: 'interruption_context'
-          - type: publish
-            messageId: FlushContextClient
-            value:
-              context_id: 'conv_1'
-          - type: subscribe
-            messageId: AudioOutputMultiContext
-            value:
-              audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
-              is_final: false
-              context_id: 'conv_1'
           - type: publish
             messageId: CloseContextClient
             value:
               context_id: 'conv_1'
-          - type: subscribe
-            messageId: FinalOutputMultiContext
-            value:
-              is_final: true
-              context_id: 'conv_1'
+              close_context: true
           - type: publish
-            messageId: CloseSocketClient
-            value: {}
+            messageId: FlushContextClient
+            value:
+              context_id: 'interruption_context'
+              flush: true
           - type: subscribe
-            messageId: FinalOutputMultiContext
+            messageId: AudioOutputMulti
+            value:
+              audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
+              is_final: false
+              context_id: 'interruption_context'
+          - type: subscribe
+            messageId: FinalOutputMulti
             value:
               is_final: true
               context_id: 'interruption_context'
+          - type: publish
+            messageId: KeepContextAlive
+            value:
+              context_id: 'interruption_context'
+              text: ''
+          - type: publish
+            messageId: CloseSocketClient
+            value:
+              close_socket: true
+
 components:
   messages:
     SendText:
@@ -381,47 +374,57 @@ components:
       messageId: finalOutput
       payload:
         $ref: '#/components/schemas/FinalOutput'
-    ClientMultiContextMessage:
+    ClientMultiMessage:
       payload:
         $ref: '#/components/schemas/WebsocketTTSClientMessageMulti'
-    ServerMultiContextMessage:
+    ServerMultiMessage:
       payload:
         $ref: '#/components/schemas/WebsocketTTSServerMessageMulti'
-    InitializeConnectionMultiContext:
-      messageId: initializeConnectionMultiContext
+    InitializeConnectionMulti:
+      messageId: initializeConnectionMulti
       description: Message to initialize a new TTS context in a multi-context stream.
       payload:
-        $ref: '#/components/schemas/InitializeConnectionMultiContext'
-    SendTextMultiContext:
-      messageId: sendTextMultiContext
+        $ref: '#/components/schemas/InitializeConnectionMulti'
+    SendTextMulti:
+      messageId: sendTextMulti
       description: Message to send text for synthesis to a specific context.
       payload:
-        $ref: '#/components/schemas/SendTextMultiContext'
+        $ref: '#/components/schemas/SendTextMulti'
     FlushContextClient:
       messageId: flushContextClient
       description: Message to flush the audio buffer for a specific context.
       payload:
-        $ref: '#/components/schemas/FlushContextClientSchema'
+        $ref: '#/components/schemas/FlushContext'
     CloseContextClient:
       messageId: closeContextClient
       description: Message to close a specific TTS context.
       payload:
-        $ref: '#/components/schemas/CloseContextClientSchema'
+        $ref: '#/components/schemas/CloseContext'
     CloseSocketClient:
       messageId: closeSocketClient
       description: Message to gracefully close the entire WebSocket connection.
       payload:
-        $ref: '#/components/schemas/CloseSocketClientSchema'
-    AudioOutputMultiContext:
-      messageId: audioOutputMultiContext
+        $ref: '#/components/schemas/CloseSocket'
+    AudioOutputMulti:
+      messageId: audioOutputMulti
       description: Server message containing an audio chunk for a specific context.
       payload:
-        $ref: '#/components/schemas/AudioOutputMultiContextSchema'
-    FinalOutputMultiContext:
-      messageId: finalOutputMultiContext
+        $ref: '#/components/schemas/AudioOutputMulti'
+    FinalOutputMulti:
+      messageId: finalOutputMulti
       description: Server message indicating the final output for a specific context.
       payload:
-        $ref: '#/components/schemas/FinalOutputMultiContextSchema'
+        $ref: '#/components/schemas/FinalOutputMulti'
+    KeepContextAlive:
+      messageId: keepContextAlive
+      description: Message to keep a specific context alive by resetting its inactivity timeout.
+      payload:
+        $ref: '#/components/schemas/KeepContextAlive'
+    InitialiseContextMulti:
+      messageId: initialiseContextMulti
+      description: Message to initialize or re-initialize a TTS context with text and settings for multi-stream connections.
+      payload:
+        $ref: '#/components/schemas/InitialiseContextMulti'
   schemas:
     InitializeConnection:
       type: object
@@ -718,7 +721,7 @@ components:
           nullable: true
           description: The context identifier to which this message pertains.
 
-    InitializeConnectionMultiContext:
+    InitializeConnectionMulti:
       type: object
       description: Payload to initialize a new context in a multi-stream WebSocket connection.
       properties:
@@ -742,60 +745,74 @@ components:
           description: Your authorization bearer token (if not in header). For this context's first message only.
         context_id:
           type: string
-          description: A unique identifier for this new TTS context.
+          description: A unique identifier for the first context created in the websocket. If not provided, a default context will be used.
       required:
         - text
-        - context_id
 
-    SendTextMultiContext:
+    SendTextMulti:
       type: object
       description: Payload to send text for synthesis to an existing context.
       required:
         - text
-        - context_id
       properties:
         text:
           type: string
           description: Text to synthesize. Should end with a single space.
-        try_trigger_generation:
-          type: boolean
-          default: false
-          description: Advanced setting to attempt immediate audio generation.
         context_id:
           type: string
           description: The target context_id for this text.
+        flush:
+          type: boolean
+          default: false
+          description: If true, flushes the audio buffer for the specified context. If false, the text will be appended to the buffer to be generated.
 
-    FlushContextClientSchema:
+    FlushContext:
       type: object
       description: Payload to flush the audio buffer for a specific context.
       required:
         - context_id
+        - flush
       properties:
         context_id:
           type: string
           description: The context_id to flush.
+        text:
+          type: string
+          description: The text to append to the buffer to be flushed.
+        flush:
+          type: boolean
+          default: false
+          description: If true, flushes the audio buffer for the specified context. If false, the context will remain open and the text will be appended to the buffer to be generated.
 
-    CloseContextClientSchema:
+    CloseContext:
       type: object
       description: Payload to close a specific TTS context.
       required:
         - context_id
+        - close_context
       properties:
         context_id:
           type: string
           description: The context_id to close.
+        close_context:
+          type: boolean
+          default: false
+          description: Must set the close_context to true, to close the specified context. If false, the context will remain open and the text will be ignored. If set to true, the context will close. If it has already been set to flush it will continue flushing. The same context id can be used again but will not be linked to the previous context with the same name.
 
-    CloseSocketClientSchema:
+    CloseSocket:
       type: object
       description: Payload to signal closing the entire WebSocket connection.
-      properties: {}
+      properties:
+        close_socket:
+          type: boolean
+          default: false
+          description: If true, closes all contexts and closes the entire WebSocket connection. Any context that was previously set to flush will wait to flush before closing.
 
-    AudioOutputMultiContextSchema:
+    AudioOutputMulti:
       type: object
       description: Server payload containing an audio chunk for a specific context.
       required:
         - audio
-        - context_id
       properties:
         audio:
           type: string
@@ -808,14 +825,13 @@ components:
           nullable: true
         context_id:
           type: string
-          description: The context_id this audio pertains to.
+          description: The context_id for which this audio is.
 
-    FinalOutputMultiContextSchema:
+    FinalOutputMulti:
       type: object
       description: Server payload indicating the final output for a specific context.
       required:
         - isFinal
-        - context_id
       properties:
         isFinal:
           x-fern-type: literal<true>
@@ -823,3 +839,45 @@ components:
         context_id:
           type: string
           description: The context_id for which this is the final message.
+
+    KeepContextAlive:
+      type: object
+      description: Payload to keep a specific context alive by resetting its inactivity timeout. Empty text is ignored but resets the clock.
+      required:
+        - text
+        - context_id
+      properties:
+        text:
+          x-fern-type: literal<"">
+          description: An empty string. This text is ignored by the server but its presence resets the inactivity timeout for the specified context.
+        context_id:
+          type: string
+          description: The identifier of the context to keep alive.
+
+    InitialiseContextMulti:
+      type: object
+      description: Payload to initialize or re-initialize a TTS context with specific settings and initial text for multi-stream connections.
+      properties:
+        text:
+          type: string
+          description: The initial text to synthesize. Should end with a single space.
+        voice_settings:
+          $ref: '#/components/schemas/RealtimeVoiceSettings'
+        generation_config:
+          $ref: '#/components/schemas/GenerationConfig'
+        pronunciation_dictionary_locators:
+          type: array
+          items:
+            $ref: '#/components/schemas/PronunciationDictionaryLocator'
+          description: Optional list of pronunciation dictionary locators to be used for this context.
+        xi_api_key:
+          type: string
+          description: Your ElevenLabs API key. Required if not provided in the WebSocket connection's header or query parameters. This applies to the (re)initialization of this specific context.
+        authorization:
+          type: string
+          description: Your authorization bearer token. Required if not provided in the WebSocket connection's header or query parameters. This applies to the (re)initialization of this specific context.
+        context_id:
+          type: string
+          description: An identifier for the text-to-speech context. If omitted, a default context ID may be assigned by the server. If provided, this message will create a new context with this ID or re-initialize an existing one with the new settings and text.
+      required:
+        - text
