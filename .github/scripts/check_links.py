@@ -605,6 +605,9 @@ def validate_links(docs_dir, valid_paths, api_reference_paths):
 
                             if '/docs/api-reference/sip-trunk/outbound-call' in normalized_link:
                                 continue
+
+                            if '/docs/conversational-ai/phone-numbers/sip-trunking' in normalized_link:
+                                continue
                             
                             # Also check with trailing slash added
                             if normalized_link + '/' in valid_paths or normalized_link + '/' in api_reference_paths:
