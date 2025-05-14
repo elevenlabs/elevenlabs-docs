@@ -34,7 +34,11 @@ This guide outlines key security practices to consider when using MCP server int
 - **Remote Execution**: Tools exposed by an MCP server execute code on that server. While this is the basis of their functionality, it's a critical security consideration. Malicious or poorly secured tools could pose a risk.
 - **Input Validation**: Although the MCP server is responsible for validating inputs to its tools, be mindful of the data your agent might send. The LLM should be guided to use tools as intended.
 
-### 5. Monitor and review
+### 5. Add guardrails
+
+- **Prompt Injections**: Connecting to untrusted external MCP servers exposes the risk of prompt injection attacks. Ensure to add thorough guardrails to your system prompt to reduce the risk of exposure to a malicious attack.
+
+### 6. Monitor and review
 
 - **Logging (Server-Side)**: If you control the MCP server, implement comprehensive logging of tool invocations and data access.
 - **Regular Review**: Periodically review your integrated MCP servers. Check if their security posture has changed or if new tools have been added that require re-assessment.
