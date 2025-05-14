@@ -180,8 +180,8 @@ export async function GET() {
     throw Error('ELEVENLABS_AGENT_ID is not set');
   }
   try {
-    const client = new ElevenLabsClient();
-    const response = await client.conversationalAi.getSignedUrl({
+    const elevenlabs = new ElevenLabsClient();
+    const response = await elevenlabs.conversationalAi.conversations.getSignedUrl({
       agent_id: agentId,
     });
     return NextResponse.json({ signedUrl: response.signed_url });
@@ -294,7 +294,7 @@ import { after } from 'next/server';
 // Initialize Redis
 const redis = Redis.fromEnv();
 
-const elevenLabsClient = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
   apiKey: process.env.ELEVENLABS_API_KEY,
 });
 
@@ -312,10 +312,10 @@ export async function uploadFormData(formData: FormData) {
   after(async () => {
     // Upload files as background job
     // Create knowledge base entries
-    // Loop trhough files and create knowledge base entries
+    // Loop through files and create knowledge base entries
     for (const file of files) {
       if (file.size > 0) {
-        const response = await elevenLabsClient.conversationalAi.addToKnowledgeBase({ file });
+        const response = await elevenlabs.conversationalAi.knowledgeBase.documents.createFromFile({ file });
         if (response.id) {
           knowledgeBase.push({
             id: response.id,
@@ -327,7 +327,7 @@ export async function uploadFormData(formData: FormData) {
     }
     // Append all urls
     for (const url of urls) {
-      const response = await elevenLabsClient.conversationalAi.addToKnowledgeBase({
+      const response = await elevenlabs.conversationalAi.knowledgeBase.documents.createFromUrl({
         url: url as string,
       });
       if (response.id) {
@@ -357,7 +357,7 @@ The [post-call webhook](/docs/conversational-ai/workflows/post-call-webhooks) is
 
 There's a few steps that are happening here, namely:
 
-1. Verify the webhook secret and consrtuct the webhook payload.
+1. Verify the webhook secret and construct the webhook payload.
 2. Create a custom voice design based on the `voice_description`.
 3. Create a conversational AI agent for the users based on the `agent_description` they provided.
 4. Retrieve the knowledge base documents from the conversation state stored in Redis and attach the knowledge base to the agent.
@@ -378,7 +378,7 @@ const redis = Redis.fromEnv();
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const elevenLabsClient = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
   apiKey: process.env.ELEVENLABS_API_KEY,
 });
 
@@ -403,11 +403,11 @@ export async function POST(req: NextRequest) {
     ) {
       try {
         // Design the voice
-        const voicePreview = await elevenLabsClient.textToVoice.createPreviews({
+        const voicePreview = await elevenlabs.textToVoice.createPreviews({
           voice_description: analysis.data_collection_results.voice_description.value,
           text: 'The night air carried whispers of betrayal, thick as London fog. I adjusted my cufflinks - after all, even spies must maintain appearances, especially when the game is afoot.',
         });
-        const voice = await elevenLabsClient.textToVoice.createVoiceFromPreview({
+        const voice = await elevenlabs.textToVoice.createVoiceFromPreview({
           voice_name: `voice-${conversation_id}`,
           voice_description: `Voice for ${conversation_id}`,
           generated_voice_id: voicePreview.previews[0].generated_voice_id,
@@ -417,7 +417,7 @@ export async function POST(req: NextRequest) {
         const redisRes = await getRedisDataWithRetry(conversation_id);
         if (!redisRes) throw new Error('Conversation data not found!');
         // Handle agent creation
-        const agent = await elevenLabsClient.conversationalAi.createAgent({
+        const agent = await elevenlabs.conversationalAi.agents.create({
           name: `Agent for ${conversation_id}`,
           conversation_config: {
             tts: { voice_id: voice.voice_id },
@@ -605,11 +605,11 @@ Using the `voice_description` from the webhook payload, we create a custom voice
 // ...
 
 // Design the voice
-const voicePreview = await elevenLabsClient.textToVoice.createPreviews({
+const voicePreview = await elevenlabs.textToVoice.createPreviews({
   voice_description: analysis.data_collection_results.voice_description.value,
   text: 'The night air carried whispers of betrayal, thick as London fog. I adjusted my cufflinks - after all, even spies must maintain appearances, especially when the game is afoot.',
 });
-const voice = await elevenLabsClient.textToVoice.createVoiceFromPreview({
+const voice = await elevenlabs.textToVoice.createVoiceFromPreview({
   voice_name: `voice-${conversation_id}`,
   voice_description: `Voice for ${conversation_id}`,
   generated_voice_id: voicePreview.previews[0].generated_voice_id,
@@ -663,7 +663,7 @@ Create the conversational AI agent for the user based on the `agent_description`
 // ...
 
 // Handle agent creation
-const agent = await elevenLabsClient.conversationalAi.createAgent({
+const agent = await elevenlabs.conversationalAi.agents.create({
   name: `Agent for ${conversation_id}`,
   conversation_config: {
     tts: { voice_id: voice.voice_id },

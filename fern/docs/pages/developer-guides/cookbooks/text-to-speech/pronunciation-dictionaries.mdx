@@ -51,7 +51,7 @@ import os
 from elevenlabs.client import ElevenLabs
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(
+elevenlabs = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
 )
 ```
@@ -89,20 +89,20 @@ from elevenlabs import play, PronunciationDictionaryVersionLocator
 
 with open("dictionary.pls", "rb") as f:
     # this dictionary changes how tomato is pronounced
-    pronunciation_dictionary = client.pronunciation_dictionary.add_from_file(
+    pronunciation_dictionary = elevenlabs.pronunciation_dictionaries.create_from_file(
         file=f.read(), name="example"
     )
 
-audio_1 = client.generate(
+audio_1 = elevenlabs.text_to_speech.convert(
     text="Without the dictionary: tomato",
-    voice="Rachel",
-    model="eleven_turbo_v2",
+    voice_id="21m00Tcm4TlvDq8ikWAM",
+    model_id="eleven_turbo_v2",
 )
 
-audio_2 = client.generate(
+audio_2 = elevenlabs.text_to_speech.convert(
     text="With the dictionary: tomato",
-    voice="Rachel",
-    model="eleven_turbo_v2",
+    voice_id="21m00Tcm4TlvDq8ikWAM",
+    model_id="eleven_turbo_v2",
     pronunciation_dictionary_locators=[
         PronunciationDictionaryVersionLocator(
             pronunciation_dictionary_id=pronunciation_dictionary.id,
@@ -118,17 +118,17 @@ play(audio_2)
 
 ## Remove Rules From a Pronunciation Dictionary
 
-To remove rules from a pronunciation dictionary, we can simply call `remove_rules_from_the_pronunciation_dictionary` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. In the example, we take pronunciation dictionary version id from `remove_rules_from_the_pronunciation_dictionary` response because every changes to pronunciation dictionary will create a new version, so we need to use the latest version returned from the response. The old version also still available.
+To remove rules from a pronunciation dictionary, we can simply call `remove_rules` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. In the example, we take pronunciation dictionary version ID from `remove_rules` response because every changes to pronunciation dictionary will create a new version, so we need to use the latest version returned from the response. The old version also still available.
 
 ```python
 pronunciation_dictionary_rules_removed = (
-    client.pronunciation_dictionary.remove_rules_from_the_pronunciation_dictionary(
+    elevenlabs.pronunciation_dictionaries.remove_rules(
         pronunciation_dictionary_id=pronunciation_dictionary.id,
         rule_strings=["tomato", "Tomato"],
     )
 )
 
-audio_3 = client.generate(
+audio_3 = elevenlabs.generate(
     text="With the rule removed: tomato",
     voice="Rachel",
     model="eleven_turbo_v2",
@@ -145,12 +145,12 @@ play(audio_3)
 
 ## Add Rules to Pronunciation Dictionary
 
-We can add rules directly to the pronunciation dictionary with `PronunciationDictionaryRule_Phoneme` class and call `add_rules_to_the_pronunciation_dictionary` from the pronunciation dictionary. The snippet will demonstrate adding rules with the class and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. This example also use pronunciation dictionary version returned from `add_rules_to_the_pronunciation_dictionary` to ensure we use the latest dictionary version.
+We can add rules directly to the pronunciation dictionary with `PronunciationDictionaryRule_Phoneme` class and call `add_rules` from the pronunciation dictionary. The snippet will demonstrate adding rules with the class and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. This example also use pronunciation dictionary version returned from `add_rules` to ensure we use the latest dictionary version.
 
 ```python
 from elevenlabs import PronunciationDictionaryRule_Phoneme
 
-pronunciation_dictionary_rules_added = client.pronunciation_dictionary.add_rules_to_the_pronunciation_dictionary(
+pronunciation_dictionary_rules_added = elevenlabs.pronunciation_dictionaries.add_rules_to_the_pronunciation_dictionary(
     pronunciation_dictionary_id=pronunciation_dictionary_rules_removed.id,
     rules=[
         PronunciationDictionaryRule_Phoneme(
@@ -168,7 +168,7 @@ pronunciation_dictionary_rules_added = client.pronunciation_dictionary.add_rules
     ],
 )
 
-audio_4 = client.generate(
+audio_4 = elevenlabs.generate(
     text="With the rule added again: tomato",
     voice="Rachel",
     model="eleven_turbo_v2",

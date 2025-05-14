@@ -53,7 +53,7 @@ This process ensures that relevant information to the user's query is passed to 
 <Steps>
     <Step title="Enable RAG for your agent">
         In your agent's settings, navigate to the **Knowledge Base** section and toggle on the **Use RAG** option.
-        
+
         <Frame background="subtle">
         <img src="/assets/images/conversational-ai/rag-enabled.png" alt="Toggle switch to enable RAG in the agent settings" />
         </Frame>
@@ -145,14 +145,14 @@ from elevenlabs import ElevenLabs
 import time
 
 # Initialize the ElevenLabs client
-client = ElevenLabs(api_key="your-api-key")
+elevenlabs = ElevenLabs(api_key="your-api-key")
 
 # First, index a document for RAG
 document_id = "your-document-id"
 embedding_model = "e5_mistral_7b_instruct"
 
 # Trigger RAG indexing
-response = client.conversational_ai.rag_index_status(
+response = elevenlabs.conversational_ai.knowledge_base.document.compute_rag_index(
     documentation_id=document_id,
     model=embedding_model
 )
@@ -160,7 +160,7 @@ response = client.conversational_ai.rag_index_status(
 # Check indexing status
 while response.status not in ["SUCCEEDED", "FAILED"]:
     time.sleep(5)  # Wait 5 seconds before checking status again
-    response = client.conversational_ai.rag_index_status(
+    response = elevenlabs.conversational_ai.knowledge_base.document.compute_rag_index(
         documentation_id=document_id,
         model=embedding_model
     )
@@ -169,7 +169,7 @@ while response.status not in ["SUCCEEDED", "FAILED"]:
 agent_id = "your-agent-id"
 
 # Get the current agent configuration
-agent_config = client.conversational_ai.get_agent(agent_id=agent_id)
+agent_config = elevenlabs.conversational_ai.agents.get(agent_id=agent_id)
 
 # Enable RAG in the agent configuration
 agent_config.agent.prompt.rag = {
@@ -184,7 +184,7 @@ for i, doc in enumerate(agent_config.agent.prompt.knowledge_base):
         agent_config.agent.prompt.knowledge_base[i].usage_mode = "auto"
 
 # Update the agent configuration
-client.conversational_ai.update_agent(
+elevenlabs.conversational_ai.agents.update(
     agent_id=agent_id,
     conversation_config=agent_config.agent
 )
@@ -197,19 +197,19 @@ async function enableRAG(documentId, agentId, apiKey) {
   try {
     // Initialize the ElevenLabs client
     const { ElevenLabs } = require('elevenlabs');
-    const client = new ElevenLabs({
+    const elevenlabs = new ElevenLabs({
       apiKey: apiKey,
     });
 
     // Start document indexing for RAG
-    let response = await client.conversationalAi.ragIndexStatus(documentId, {
+    let response = await elevenlabs.conversationalAi.knowledgeBase.document.computeRagIndex(documentId, {
       model: 'e5_mistral_7b_instruct',
     });
 
     // Check indexing status until completion
     while (response.status !== 'SUCCEEDED' && response.status !== 'FAILED') {
       await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
-      response = await client.conversationalAi.ragIndexStatus(documentId, {
+      response = await elevenlabs.conversationalAi.knowledgeBase.document.computeRagIndex(documentId, {
         model: 'e5_mistral_7b_instruct',
       });
     }
@@ -219,7 +219,7 @@ async function enableRAG(documentId, agentId, apiKey) {
     }
 
     // Get current agent configuration
-    const agentConfig = await client.conversationalAi.getAgent(agentId);
+    const agentConfig = await elevenlabs.conversationalAi.agents.get(agentId);
 
     // Enable RAG in the agent configuration
     const updatedConfig = {
@@ -246,7 +246,7 @@ async function enableRAG(documentId, agentId, apiKey) {
     }
 
     // Update the agent configuration
-    await client.conversationalAi.updateAgent(agentId, updatedConfig);
+    await elevenlabs.conversationalAi.agents.update(agentId, updatedConfig);
 
     console.log('RAG configuration updated successfully');
     return true;
