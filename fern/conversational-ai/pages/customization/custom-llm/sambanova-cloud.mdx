@@ -12,12 +12,16 @@ OpenAI-compatible API endpoint, you can set up your Conversational AI agent on E
 
 To make use of the full power of ElevenLabs Conversational AI you need to use a model that supports tool use and structured outputs. SambaNova recommends the following models for their accuracy and performance:
 
-- DeepSeek-V3-0324 (671B model with 32k context window)
-- Meta-Llama-3.3-70B-Instruct (128k context window)
-- Llama-4-Maverick-17B-128E-Instruct (64k context window)
-- Qwen3-32B (8k context window)
+- `DeepSeek-V3-0324` (671B model)
+- `Meta-Llama-3.3-70B-Instruct`
+- `Llama-4-Maverick-17B-128E-Instruct`
+- `Qwen3-32B`
 
-## Setting your ElevenLabs agent with a SambaNova LLM
+For up-to-date information on context windows, please refer to [this](https://docs.sambanova.ai/cloud/docs/get-started/supported-models) page.
+
+Note that `Meta-Llama-3.3-70B-Instruct` is SambaNova's most battle-tested model. If any model is causing issues, you may report it on SambaNova's [Community page](https://community.sambanova.ai).
+
+## Configuring your ElevenLabs agent with a SambaNova LLM
 
 <Steps>
   <Step>
@@ -53,7 +57,10 @@ To make use of the full power of ElevenLabs Conversational AI you need to use a 
 
   </Step>
   <Step>
-    Navigate to your [AI Agent](https://elevenlabs.io/app/conversational-ai), scroll down to the "Workspace Secrets" section and select "Add Secret". Name the key `SAMBANOVA_API_KEY` and copy the value from the SambaNova Cloud dashboard. Be sure to hit "Save" to make the secret available to your agent.
+    Create a new [AI Agent](https://elevenlabs.io/app/conversational-ai/agents) or edit and existing one.
+  </Step>
+  <Step>  
+    Scroll down to the "Workspace Secrets" section and select "Add Secret". Name the key `SAMBANOVA_API_KEY` and copy the value from the SambaNova Cloud dashboard. Be sure to hit "Save" to make the secret available to your agent.
 
     <Frame background="subtle">
       ![Add Secret](/assets/images/conversational-ai/sambanova-cloud/workspace-secret.png)
@@ -76,6 +83,14 @@ To make use of the full power of ElevenLabs Conversational AI you need to use a 
 
   </Step>
   <Step>
-   Now you can go ahead and click "Test AI Agent" to chat with your SambaNova model!
+    Set the max tokens to 1024 to restrict the agent's output for brevity. Also be sure to include an instruction in the System Prompt for the model to respond in 500 words or less.
+
+    <Frame background="subtle">
+      ![Enter url](/assets/images/conversational-ai/sambanova-cloud/sn-maxtokens.png)
+    </Frame>
+
+  </Step>
+  <Step>
+   Save your changes and click on "Test AI Agent" to chat with your SambaNova model!
   </Step>
 </Steps>
