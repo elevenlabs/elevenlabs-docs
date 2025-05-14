@@ -9648,56 +9648,6 @@
         ]
       }
     },
-    "/profile/{handle}": {
-      "get": {
-        "operationId": "Get_a_profile_page_profile__handle__get",
-        "summary": "Get A Profile Page",
-        "description": "Gets a profile page based on a handle",
-        "parameters": [
-          {
-            "name": "handle",
-            "in": "path",
-            "description": "Handle for a VA's profile page",
-            "required": true,
-            "schema": {
-              "description": "Handle for a VA's profile page",
-              "type": "string",
-              "examples": [
-                "talexgeorge"
-              ],
-              "title": "Handle"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfilePageResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "voices"
-        ],
-        "x-fern-sdk-group-name": "profile",
-        "x-fern-sdk-method-name": "get"
-      }
-    },
     "/v1/speech-to-text": {
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
@@ -11348,7 +11298,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPhoneNumberResponseModel"
+                  "discriminator": {
+                    "propertyName": "provider",
+                    "mapping": {
+                      "twilio": "#/components/schemas/GetPhoneNumberTwilioResponseModel",
+                      "sip_trunk": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                    }
+                  ],
+                  "title": "Response Get Phone Number V1 Convai Phone Numbers  Phone Number Id  Get"
                 }
               }
             }
@@ -11491,7 +11456,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPhoneNumberResponseModel"
+                  "discriminator": {
+                    "propertyName": "provider",
+                    "mapping": {
+                      "twilio": "#/components/schemas/GetPhoneNumberTwilioResponseModel",
+                      "sip_trunk": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                    }
+                  ],
+                  "title": "Response Update Phone Number V1 Convai Phone Numbers  Phone Number Id  Patch"
                 }
               }
             }
@@ -11547,7 +11527,21 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetPhoneNumberResponseModel"
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
+                      },
+                      {
+                        "$ref": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                      }
+                    ],
+                    "discriminator": {
+                      "propertyName": "provider",
+                      "mapping": {
+                        "twilio": "#/components/schemas/GetPhoneNumberTwilioResponseModel",
+                        "sip_trunk": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                      }
+                    }
                   },
                   "title": "Response List Phone Numbers V1 Convai Phone Numbers  Get"
                 }
@@ -21871,11 +21865,15 @@
                 "oneOf": [
                   {
                     "$ref": "#/components/schemas/ConversationHistoryTwilioPhoneCallModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ConversationHistorySIPTrunkingPhoneCallModel"
                   }
                 ],
                 "discriminator": {
                   "propertyName": "type",
                   "mapping": {
+                    "sip_trunking": "#/components/schemas/ConversationHistorySIPTrunkingPhoneCallModel",
                     "twilio": "#/components/schemas/ConversationHistoryTwilioPhoneCallModel"
                   }
                 }
@@ -21956,6 +21954,49 @@
           "embedding_model"
         ],
         "title": "ConversationHistoryRagUsageCommonModel"
+      },
+      "ConversationHistorySIPTrunkingPhoneCallModel": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ],
+            "title": "Direction"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "agent_number": {
+            "type": "string",
+            "title": "Agent Number"
+          },
+          "external_number": {
+            "type": "string",
+            "title": "External Number"
+          },
+          "type": {
+            "type": "string",
+            "const": "sip_trunking",
+            "title": "Type"
+          },
+          "call_sid": {
+            "type": "string",
+            "title": "Call Sid"
+          }
+        },
+        "required": [
+          "direction",
+          "phone_number_id",
+          "agent_number",
+          "external_number",
+          "type",
+          "call_sid"
+        ],
+        "title": "ConversationHistorySIPTrunkingPhoneCallModel"
       },
       "ConversationHistoryTranscriptCommonModel-Input": {
         "type": "object",
@@ -22908,19 +22949,51 @@
             "type": "string",
             "title": "Phone Number"
           },
-          "provider": {
-            "default": "sip_trunk",
-            "$ref": "#/components/schemas/TelephonyProvider"
-          },
           "label": {
             "description": "Label for the phone number",
             "type": "string",
             "title": "Label"
           },
+          "provider": {
+            "type": "string",
+            "default": "sip_trunk",
+            "const": "sip_trunk",
+            "title": "Provider"
+          },
           "termination_uri": {
             "description": "SIP trunk termination URI",
             "type": "string",
             "title": "Termination Uri"
+          },
+          "address": {
+            "description": "Hostname or IP the SIP INVITE is sent to.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "transport": {
+            "description": "Protocol to use for SIP transport (signalling layer).",
+            "default": "auto",
+            "$ref": "#/components/schemas/SIPTrunkTransportEnum"
+          },
+          "media_encryption": {
+            "description": "Whether or not to encrypt media (data layer).",
+            "default": "allowed",
+            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
+          },
+          "headers": {
+            "description": "SIP X-* headers for INVITE request. These headers are sent as-is and may help identify this call.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Headers"
           },
           "credentials": {
             "description": "Optional digest authentication credentials (username/password). If not provided, ACL authentication is assumed.",
@@ -22949,14 +23022,16 @@
             "type": "string",
             "title": "Phone Number"
           },
-          "provider": {
-            "default": "twilio",
-            "$ref": "#/components/schemas/TelephonyProvider"
-          },
           "label": {
             "description": "Label for the phone number",
             "type": "string",
             "title": "Label"
+          },
+          "provider": {
+            "type": "string",
+            "default": "twilio",
+            "const": "twilio",
+            "title": "Provider"
           },
           "sid": {
             "description": "Twilio Account SID",
@@ -24627,7 +24702,21 @@
             "description": "The phone numbers of the agent",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GetPhoneNumberResponseModel"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
+                },
+                {
+                  "$ref": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "provider",
+                "mapping": {
+                  "sip_trunk": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel",
+                  "twilio": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
+                }
+              }
             },
             "title": "Phone Numbers"
           },
@@ -25399,17 +25488,13 @@
         ],
         "title": "GetLibraryVoicesResponseModel"
       },
-      "GetPhoneNumberResponseModel": {
+      "GetPhoneNumberSIPTrunkResponseModel": {
         "type": "object",
         "properties": {
           "phone_number": {
             "description": "Phone number",
             "type": "string",
             "title": "Phone Number"
-          },
-          "provider": {
-            "description": "Phone provider",
-            "$ref": "#/components/schemas/TelephonyProvider"
           },
           "label": {
             "description": "Label for the phone number",
@@ -25431,6 +25516,23 @@
                 "type": "null"
               }
             ]
+          },
+          "provider": {
+            "description": "Phone provider",
+            "type": "string",
+            "default": "sip_trunk",
+            "const": "sip_trunk",
+            "title": "Provider"
+          },
+          "provider_config": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SIPTrunkConfigResponseModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "example": {
@@ -25438,11 +25540,57 @@
         },
         "required": [
           "phone_number",
-          "provider",
           "label",
           "phone_number_id"
         ],
-        "title": "GetPhoneNumberResponseModel"
+        "title": "GetPhoneNumberSIPTrunkResponseModel"
+      },
+      "GetPhoneNumberTwilioResponseModel": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "description": "Phone number",
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "label": {
+            "description": "Label for the phone number",
+            "type": "string",
+            "title": "Label"
+          },
+          "phone_number_id": {
+            "description": "The ID of the phone number",
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "assigned_agent": {
+            "description": "The agent that is assigned to the phone number",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PhoneNumberAgentInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider": {
+            "description": "Phone provider",
+            "type": "string",
+            "default": "twilio",
+            "const": "twilio",
+            "title": "Provider"
+          }
+        },
+        "example": {
+          "phone_number_id": "X3Pbu5gP6NNKBscdCdwB"
+        },
+        "required": [
+          "phone_number",
+          "label",
+          "phone_number_id"
+        ],
+        "title": "GetPhoneNumberTwilioResponseModel"
       },
       "GetProjectsResponseModel": {
         "type": "object",
@@ -27831,74 +27979,6 @@
         },
         "title": "PrivacyConfig"
       },
-      "ProfilePageResponseModel": {
-        "type": "object",
-        "properties": {
-          "handle": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Handle"
-          },
-          "public_user_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Public User Id"
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          },
-          "bio": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Bio"
-          },
-          "profile_picture": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Profile Picture"
-          }
-        },
-        "required": [
-          "handle",
-          "public_user_id",
-          "name",
-          "bio",
-          "profile_picture"
-        ],
-        "title": "ProfilePageResponseModel"
-      },
       "ProjectCreationMetaResponseModel": {
         "type": "object",
         "properties": {
@@ -30005,6 +30085,72 @@
         ],
         "title": "ResourceMetadataResponseModel"
       },
+      "SIPMediaEncryptionEnum": {
+        "type": "string",
+        "enum": [
+          "disabled",
+          "allowed",
+          "required"
+        ],
+        "title": "SIPMediaEncryptionEnum"
+      },
+      "SIPTrunkConfigResponseModel": {
+        "description": "SIP Trunk configuration details for a phone number",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "Hostname or IP the SIP INVITE is sent to",
+            "type": "string",
+            "title": "Address"
+          },
+          "transport": {
+            "description": "Protocol to use for SIP transport",
+            "$ref": "#/components/schemas/SIPTrunkTransportEnum"
+          },
+          "media_encryption": {
+            "description": "Whether or not to encrypt media (data layer).",
+            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
+          },
+          "headers": {
+            "description": "SIP headers for INVITE request",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Headers"
+          },
+          "has_auth_credentials": {
+            "description": "Whether authentication credentials are configured",
+            "type": "boolean",
+            "title": "Has Auth Credentials"
+          },
+          "username": {
+            "description": "SIP trunk username (if available)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "has_outbound_trunk": {
+            "description": "Whether a LiveKit SIP outbound trunk is configured",
+            "type": "boolean",
+            "default": false,
+            "title": "Has Outbound Trunk"
+          }
+        },
+        "required": [
+          "address",
+          "transport",
+          "media_encryption",
+          "has_auth_credentials"
+        ],
+        "title": "SIPTrunkConfigResponseModel"
+      },
       "SIPTrunkCredentials": {
         "type": "object",
         "properties": {
@@ -30054,6 +30200,16 @@
           "sip_call_id"
         ],
         "title": "SIPTrunkOutboundCallResponse"
+      },
+      "SIPTrunkTransportEnum": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "udp",
+          "tcp",
+          "tls"
+        ],
+        "title": "SIPTrunkTransportEnum"
       },
       "SafetyCommonModel": {
         "description": "Safety object that has the information of safety evaluations based on used voice.",
@@ -30937,7 +31093,7 @@
             "title": "Share Link Id"
           },
           "source": {
-            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing or PlayAPI.",
+            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing, PlayAPI or PD (pronunciation dictionary).",
             "anyOf": [
               {
                 "type": "string",
@@ -30947,7 +31103,8 @@
                   "Projects",
                   "AN",
                   "Dubbing",
-                  "PlayAPI"
+                  "PlayAPI",
+                  "PD"
                 ]
               },
               {
