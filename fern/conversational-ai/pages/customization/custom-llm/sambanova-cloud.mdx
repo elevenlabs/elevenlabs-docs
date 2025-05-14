@@ -1,0 +1,81 @@
+---
+title: SambaNova Cloud
+subtitle: Connect an agent to a custom LLM on SambaNova Cloud.
+---
+
+## Overview
+
+[SambaNova Cloud](https://cloud.sambanova.ai) is the fastest provider of the best [open source models](https://docs.sambanova.ai/cloud/docs/get-started/supported-models), including DeepSeek R1, DeepSeek V3, Llama 4 Maverick and others. Through an
+OpenAI-compatible API endpoint, you can set up your Conversational AI agent on ElevenLabs in a few minutes.
+
+## Choosing a model
+
+To make use of the full power of ElevenLabs Conversational AI you need to use a model that supports tool use and structured outputs. SambaNova recommends the following models for their accuracy and performance:
+
+- DeepSeek-V3-0324 (671B model with 32k context window)
+- Meta-Llama-3.3-70B-Instruct (128k context window)
+- Llama-4-Maverick-17B-128E-Instruct (64k context window)
+- Qwen3-32B (8k context window)
+
+## Setting your ElevenLabs agent with a SambaNova LLM
+
+<Steps>
+  <Step>
+    Navigate to [cloud.sambanova.ai/apis](https://cloud.sambanova.ai/apis) and create a new API key.
+
+    <Frame background="subtle">
+    ![Add Secret](/assets/images/conversational-ai/sambanova-cloud/sn-api-key.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Once you have your API key, you can test it by running the following curl command:
+
+    ```bash
+    curl -H "Authorization: Bearer <your-api-key>" \
+     -H "Content-Type: application/json" \
+     -d '{
+	"stream": true,
+	"model": "DeepSeek-V3-0324",
+	"messages": [
+		{
+			"role": "system",
+			"content": "You are a helpful assistant"
+		},
+		{
+			"role": "user",
+			"content": "Hello"
+		}
+	]
+	}' \
+     -X POST https://api.sambanova.ai/v1/chat/completions
+    ```
+
+  </Step>
+  <Step>
+    Navigate to your [AI Agent](https://elevenlabs.io/app/conversational-ai), scroll down to the "Workspace Secrets" section and select "Add Secret". Name the key `SAMBANOVA_API_KEY` and copy the value from the SambaNova Cloud dashboard. Be sure to hit "Save" to make the secret available to your agent.
+
+    <Frame background="subtle">
+      ![Add Secret](/assets/images/conversational-ai/sambanova-cloud/workspace-secret.png)
+    </Frame>
+
+  </Step>
+  <Step>
+    Choose "Custom LLM" from the dropdown menu.
+    
+    <Frame background="subtle">
+      ![Choose custom llm](/assets/images/conversational-ai/byollm-2.png)
+    </Frame>
+  </Step>
+  <Step>
+    For the Server URL, specify SambaNova's OpenAI-compatible API endpoint: `https://api.sambanova.ai/v1`. For the Model ID, specify one the model names indicated above (e.g., `Meta-Llama-3.3-70B-Instruct`) and select the `SAMBANOVA_API_KEY` API key from the dropdown menu.
+
+    <Frame background="subtle">
+      ![Enter url](/assets/images/conversational-ai/sambanova-cloud/sn-llm.png)
+    </Frame>
+
+  </Step>
+  <Step>
+   Now you can go ahead and click "Test AI Agent" to chat with your SambaNova model!
+  </Step>
+</Steps>
