@@ -315,7 +315,9 @@ export async function uploadFormData(formData: FormData) {
     // Loop through files and create knowledge base entries
     for (const file of files) {
       if (file.size > 0) {
-        const response = await elevenlabs.conversationalAi.knowledgeBase.documents.createFromFile({ file });
+        const response = await elevenlabs.conversationalAi.knowledgeBase.documents.createFromFile({
+          file,
+        });
         if (response.id) {
           knowledgeBase.push({
             id: response.id,

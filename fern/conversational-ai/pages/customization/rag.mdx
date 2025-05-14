@@ -202,16 +202,22 @@ async function enableRAG(documentId, agentId, apiKey) {
     });
 
     // Start document indexing for RAG
-    let response = await elevenlabs.conversationalAi.knowledgeBase.document.computeRagIndex(documentId, {
-      model: 'e5_mistral_7b_instruct',
-    });
+    let response = await elevenlabs.conversationalAi.knowledgeBase.document.computeRagIndex(
+      documentId,
+      {
+        model: 'e5_mistral_7b_instruct',
+      }
+    );
 
     // Check indexing status until completion
     while (response.status !== 'SUCCEEDED' && response.status !== 'FAILED') {
       await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
-      response = await elevenlabs.conversationalAi.knowledgeBase.document.computeRagIndex(documentId, {
-        model: 'e5_mistral_7b_instruct',
-      });
+      response = await elevenlabs.conversationalAi.knowledgeBase.document.computeRagIndex(
+        documentId,
+        {
+          model: 'e5_mistral_7b_instruct',
+        }
+      );
     }
 
     if (response.status === 'FAILED') {
