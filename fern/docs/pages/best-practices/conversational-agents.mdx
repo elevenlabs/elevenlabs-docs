@@ -251,7 +251,7 @@ async def receive_messages(websocket):
     try:
         async for message in websocket:
             data = json.loads(message)
-            context_id = data.get("context_id", "default")
+            context_id = data.get("contextId", "default")
 
             if data.get("audio"):
                 print(f"Received audio for context '{context_id}'")
@@ -488,7 +488,7 @@ async function conversationAgentDemo() {
   websocket.on('message', (message) => {
     try {
       const data = JSON.parse(message);
-      const contextId = data.context_id || 'default';
+      const contextId = data.contextId || 'default';
 
       if (data.audio) {
         //do stuff
