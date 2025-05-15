@@ -8072,6 +8072,27 @@
             }
           },
           {
+            "name": "include_custom_rates",
+            "in": "query",
+            "description": "Include/exclude voices with custom rates",
+            "required": false,
+            "schema": {
+              "description": "Include/exclude voices with custom rates",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                true
+              ],
+              "title": "Include Custom Rates"
+            }
+          },
+          {
             "name": "reader_app_enabled",
             "in": "query",
             "description": "Filter voices that are enabled for the reader app",
@@ -27968,6 +27989,12 @@
             "type": "boolean",
             "default": false,
             "title": "Apply To Existing Conversations"
+          },
+          "zero_retention_mode": {
+            "description": "Whether to enable zero retention mode - no PII data is stored",
+            "type": "boolean",
+            "default": false,
+            "title": "Zero Retention Mode"
           }
         },
         "example": {
@@ -27975,7 +28002,8 @@
           "delete_audio": false,
           "delete_transcript_and_pii": false,
           "record_voice": true,
-          "retention_days": -1
+          "retention_days": -1,
+          "zero_retention_mode": false
         },
         "title": "PrivacyConfig"
       },
@@ -31093,7 +31121,7 @@
             "title": "Share Link Id"
           },
           "source": {
-            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing, PlayAPI or PD (pronunciation dictionary).",
+            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing, PlayAPI, PD (pronunciation dictionary) or ConvAI (conversational AI).",
             "anyOf": [
               {
                 "type": "string",
@@ -31101,10 +31129,11 @@
                   "TTS",
                   "STS",
                   "Projects",
+                  "PD",
                   "AN",
                   "Dubbing",
                   "PlayAPI",
-                  "PD"
+                  "ConvAI"
                 ]
               },
               {
@@ -31343,6 +31372,11 @@
             ],
             "title": "Speaker Id"
           },
+          "logprob": {
+            "description": "The log of the probability with which this word was predicted. Logprobs are in range [-infinity, 0], higher logprobs indicate a higher confidence the model has in its predictions.",
+            "type": "number",
+            "title": "Logprob"
+          },
           "characters": {
             "description": "The characters that make up the word and their timing information.",
             "anyOf": [
@@ -31388,6 +31422,7 @@
             }
           ],
           "end": 0.5,
+          "logprob": -0.124,
           "speaker_id": "speaker_1",
           "start": 0,
           "text": "Hello",
@@ -31395,7 +31430,8 @@
         },
         "required": [
           "text",
-          "type"
+          "type",
+          "logprob"
         ],
         "title": "SpeechToTextWordResponseModel"
       },
