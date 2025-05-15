@@ -118,11 +118,11 @@ play(audio_2)
 
 ## Remove Rules From a Pronunciation Dictionary
 
-To remove rules from a pronunciation dictionary, we can simply call `remove_rules` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. In the example, we take pronunciation dictionary version ID from `remove_rules` response because every changes to pronunciation dictionary will create a new version, so we need to use the latest version returned from the response. The old version also still available.
+To remove rules from a pronunciation dictionary, call the `remove` method in the pronunciation dictionary module. In the following snippet, we start by removing rules based on the rule string and get the updated result. Next, we generate and play another text-to-speech audio to test the difference. In the example, we get the pronunciation dictionary version ID from the `remove` method response as every change to a pronunciation dictionary will generate a new version.
 
 ```python
 pronunciation_dictionary_rules_removed = (
-    elevenlabs.pronunciation_dictionaries.remove_rules(
+    elevenlabs.pronunciation_dictionaries.rules.remove(
         pronunciation_dictionary_id=pronunciation_dictionary.id,
         rule_strings=["tomato", "Tomato"],
     )
@@ -145,12 +145,12 @@ play(audio_3)
 
 ## Add Rules to Pronunciation Dictionary
 
-We can add rules directly to the pronunciation dictionary with `PronunciationDictionaryRule_Phoneme` class and call `add_rules` from the pronunciation dictionary. The snippet will demonstrate adding rules with the class and get the updated result. Finally, we generate and play another text-to-speech audio to test the difference. This example also use pronunciation dictionary version returned from `add_rules` to ensure we use the latest dictionary version.
+We can add rules directly to the pronunciation dictionary by calling the `add` method. Next, generate and play another text-to-speech audio to test the difference.
 
 ```python
 from elevenlabs import PronunciationDictionaryRule_Phoneme
 
-pronunciation_dictionary_rules_added = elevenlabs.pronunciation_dictionaries.add_rules_to_the_pronunciation_dictionary(
+pronunciation_dictionary_rules_added = elevenlabs.pronunciation_dictionaries.rules.add(
     pronunciation_dictionary_id=pronunciation_dictionary_rules_removed.id,
     rules=[
         PronunciationDictionaryRule_Phoneme(
@@ -185,7 +185,7 @@ play(audio_4)
 
 ## Conclusion
 
-You know how to use a pronunciation dictionary for generating text-to-speech audio. These functionailities open up opportunities to generate text-to-speech audio based on your pronunciation dictionary, making it more flexible for your use case.
+You know how to use a pronunciation dictionary for generating text-to-speech audio. These functionalities open up opportunities to generate Text to Speech audio based on your pronunciation dictionary, making it more flexible for your use case.
 
 For more details, visit our [example repo](https://github.com/elevenlabs/elevenlabs-examples/tree/main/examples/pronunciation-dictionaries/python) to see the full project files which give a clear structure for setting up your application:
 
