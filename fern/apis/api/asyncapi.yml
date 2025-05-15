@@ -102,7 +102,7 @@ channels:
       This is useful for scenarios requiring concurrent or interleaved audio generations, such as dynamic
       conversational AI applications.
 
-      Each context, identified by a `context_id`, maintains its own state. You can send text to specific
+      Each context, identified by a context id, maintains its own state. You can send text to specific
       contexts, flush them, or close them independently. A `close_socket` message can be used to terminate
       the entire connection gracefully.
 
@@ -210,7 +210,7 @@ channels:
                 charStartTimesMs: [0, 3, 7, 9, 11, 12, 13, 15, 17, 19, 21]
                 charsDurationsMs: [3, 4, 2, 2, 1, 1, 2, 2, 2, 2, 3]
                 chars: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
-              context_id: 'conv_1'
+              contextId: 'conv_1'
           - type: publish
             messageId: InitialiseContext
             value:
@@ -234,12 +234,12 @@ channels:
             value:
               audio: Y3VyaW91cyBtaW5kcyB0aGluayBhbGlrZSA6KQ==
               is_final: false
-              context_id: 'interruption_context'
+              contextId: 'interruption_context'
           - type: subscribe
             messageId: FinalOutputMulti
             value:
               is_final: true
-              context_id: 'interruption_context'
+              contextId: 'interruption_context'
           - type: publish
             messageId: KeepContextAlive
             value:
@@ -607,14 +607,14 @@ components:
         is_final:
           type: boolean
           nullable: true
-          description: If true, indicates that this is the final message for the specified `context_id`. This is sent when a context is closed. `audio` will be null or empty.
+          description: If true, indicates that this is the final message for the specified contextId. This is sent when a context is closed. `audio` will be null or empty.
         normalizedAlignment:
           $ref: '#/components/schemas/NormalizedAlignment'
           nullable: true
         alignment:
           $ref: '#/components/schemas/Alignment'
           nullable: true
-        context_id:
+        contextId:
           type: string
           nullable: true
           description: The context identifier to which this message pertains.
@@ -734,7 +734,7 @@ components:
         isFinal:
           x-fern-type: literal<true>
           description: Indicates this is the final message for the context.
-        context_id:
+        contextId:
           type: string
           description: The context_id for which this is the final message.
 
