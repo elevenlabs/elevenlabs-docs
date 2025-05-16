@@ -5,7 +5,7 @@ subtitle: Learn how to test and evaluate your Conversational AI agent with simul
 
 ## Overview
 
-The ElevenLabs Conversational AI API allows you to simulate and evaluate text-based conversations with your AI agent. This guide will teach you how to implement an end-to-end simulation testing workflow with the simulate conversation endpoints, enabling you to granularly test and improve your agent's performance to ensure it meets your interaction goals.
+The ElevenLabs Conversational AI API allows you to simulate and evaluate text-based conversations with your AI agent. This guide will teach you how to implement an end-to-end simulation testing workflow using the simulate conversation endpoints, enabling you to granularly test and improve your agent's performance to ensure it meets your interaction goals.
 
 ## Prerequisites
 
@@ -16,33 +16,34 @@ The ElevenLabs Conversational AI API allows you to simulate and evaluate text-ba
 
 <Steps>
 
-<Step title="Identify Initial Evaluation Parameters">
-Identify historical scenarios where your agent has underperformed or user interactions have been inconsistent. Use these insights to create various prompts for a simulated user who will interact with your agent. Additionally, define any extra evaluation criteria not already specified in your agent configuration to test outcomes you may want for a specific simulated user.
+<Step title="Identify initial evaluation parameters">
+Search through your agent's conversation history and find instances where your agent has underperformed. Use those conversations to create various prompts for a simulated user who will interact with your agent. Additionally, define any extra evaluation criteria not already specified in your agent configuration to test outcomes you may want for a specific simulated user.
 
 </Step>
 
-<Step title="Prepare your Request">
+<Step title="Simulate the conversation via the SDK">
 Create a request to the simulation endpoint using the ElevenLabs SDK.
 
 <CodeGroup>
 ```python title="Python"
-import os
+from dotenv import load_dotenv
 from elevenlabs import (
     ElevenLabs,
     ConversationSimulationSpecification,
-    AgentConfigDbModel,
-    PromptAgentDbModel,
+    AgentConfig,
+    PromptAgent,
     PromptEvaluationCriteria
 )
 
+load_dotenv()
 api_key = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(api_key=api_key)
+elevenlabs = ElevenLabs(api_key=api_key)
 
-response = client.conversational_ai.agents.simulate_conversation(
+response = elevenlabs.conversational_ai.agents.simulate_conversation(
 agent_id="YOUR_AGENT_ID",
 simulation_specification=ConversationSimulationSpecification(
-simulated_user_config=AgentConfigDbModel(
-prompt=PromptAgentDbModel(
+simulated_user_config=AgentConfig(
+prompt=PromptAgent(
 prompt="Your goal is to be a really difficult user.",
 llm="gpt-4o",
 temperature=0.5
@@ -64,13 +65,15 @@ print(response)
 ````
 
 ```typescript title="TypeScript"
+import dotenv from 'dotenv';
 import { ElevenLabsClient } from "elevenlabs";
 
+dotenv.config();
 const apiKey = process.env.ELEVENLABS_API_KEY;
-const client = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
     apiKey: apiKey,
 });
-const response = await client.conversationalAi.agents.simulateConversation(
+const response = await elevenlabs.conversationalAi.agents.simulateConversation(
     "YOUR_AGENT_ID",
     {
         simulation_specification: {
@@ -105,13 +108,13 @@ console.log(JSON.stringify(response, null, 4));
 
 </Step>
 
-<Step title="Analyze the Response">
+<Step title="Analyze the response">
 The SDK provides a comprehensive JSON object that includes the entire conversation transcript and detailed analysis.
 
 **Simulated Conversation**: Captures each interaction turn between the simulated user and the agent, detailing messages and tool usage.
 
 <CodeGroup>
-```json title="Example Conversation History"
+```json title="Example conversation history"
 [
   ...
   {
@@ -213,7 +216,7 @@ The SDK provides a comprehensive JSON object that includes the entire conversati
 **Analysis**: Offers insights into evaluation criteria outcomes, data collection metrics, and a summary of the conversation transcript.
 
 <CodeGroup>
-```json title="Example Analysis"
+```json title="Example analysis"
 {
   "analysis": {
     "evaluation_criteria_results": {
@@ -252,14 +255,14 @@ The SDK provides a comprehensive JSON object that includes the entire conversati
 </CodeGroup>
 </Step>
 
-<Step title="Improve your Evaluation Criteria">
+<Step title="Improve your evaluation criteria">
   Review the simulated conversations thoroughly to assess the effectiveness of your evaluation
   criteria. Identify any gaps or areas where the criteria may fall short in evaluating the agent's
-  performance, and refine and adjust the evaluation criteria accordingly to ensure they align with
-  your desired outcomes and accurately measure the agent's capabilities.
+  performance. Refine and adjust the evaluation criteria accordingly to ensure they align with your
+  desired outcomes and accurately measure the agent's capabilities.
 </Step>
 
-<Step title="Improve your Agent">
+<Step title="Improve your agent">
   Once you are confident in the accuracy of your evaluation criteria, use the learnings from
   simulated conversations to enhance your agent's capabilities. Consider refining the system prompt
   to better guide the agent's responses, ensuring they align with your objectives and user
@@ -270,7 +273,7 @@ The SDK provides a comprehensive JSON object that includes the entire conversati
   experience.
 </Step>
 
-<Step title="Continuous Iteration">
+<Step title="Continuous iteration">
   After completing an initial testing and improvement cycle, establishing a comprehensive testing
   suite can be a great way to cover a broad range of possible scenarios. This suite can explore
   multiple simulated conversations using varied simulated user prompts and starting conditions. By
@@ -280,7 +283,7 @@ The SDK provides a comprehensive JSON object that includes the entire conversati
 
 </Steps>
 
-## Best Practices
+## Pro Tips
 
 #### Detailed Prompts and Criteria
 
@@ -288,8 +291,8 @@ Crafting detailed and verbose simulated user prompts and evaluation criteria can
 
 #### Mock Tool Configurations
 
-Utilize mock tool configurations to test the decision-making process of your agent. This allows you to observe how the agent decides to make tool calls, providing insights into its problem-solving strategies.
+Utilize mock tool configurations to test the decision-making process of your agent. This allows you to observe how the agent decides to make tool calls and react to different tool call results. For more details, check out the tool_mock_config input parameter from the [API reference](docs/api-reference/agents/simulate-conversation#request.body.simulation_specification.tool_mock_config).
 
 #### Partial Conversation History
 
-Incorporate partial conversation histories to evaluate how agents handle ongoing interactions. This is particularly useful for assessing the agent's ability to manage conversations when tool calls fail or when it needs to pick up from a previous point in the dialogue.
+Use partial conversation histories to evaluate how agents handle interactions from a specific point. This is particularly useful for assessing the agent's ability to manage conversations where the user has already set up a question in a specific way, or if there have been certain tool calls that have succeeded or failed. For more details, check out the partial_conversation_history input parameter from the [API reference](docs/api-reference/agents/simulate-conversation#request.body.simulation_specification.partial_conversation_history).
