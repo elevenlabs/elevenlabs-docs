@@ -7020,7 +7020,7 @@
       "post": {
         "operationId": "Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post",
         "summary": "Render Audio Or Video For The Given Language",
-        "description": "Regenerate the dubs for either the entire resource or the specified segments/languages. Will automatically transcribe and translate any missing transcriptions and translations.",
+        "description": "Regenerate the output media for a language using the latest Studio state. Please ensure all segments have been dubbed before rendering, otherwise they will be omitted. Renders are generated asynchronously, and to check the status of all renders please use the 'Get Dubbing Resource' endpoint.",
         "parameters": [
           {
             "name": "dubbing_id",
@@ -7307,7 +7307,7 @@
       "get": {
         "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
         "summary": "Get Dubbed File",
-        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
+        "description": "Returns dub as a streamed MP3 or MP4 file. If this dub has been edited using Dubbing Studio you need to use the resource render endpoint as this endpoint only returns the original automatic dub result.",
         "parameters": [
           {
             "name": "dubbing_id",
@@ -15749,6 +15749,7 @@
         "type": "string",
         "enum": [
           "pending",
+          "initiated",
           "in_progress",
           "completed",
           "failed",
@@ -22725,6 +22726,7 @@
           "status": {
             "type": "string",
             "enum": [
+              "initiated",
               "in-progress",
               "processing",
               "done",
@@ -24929,6 +24931,12 @@
           "webhooks": {
             "$ref": "#/components/schemas/ConvAIWebhooks"
           },
+          "can_use_mcp_servers": {
+            "description": "Whether the workspace can use MCP servers",
+            "type": "boolean",
+            "default": false,
+            "title": "Can Use Mcp Servers"
+          },
           "rag_retention_period_days": {
             "type": "integer",
             "default": 10,
@@ -24953,6 +24961,7 @@
           "status": {
             "type": "string",
             "enum": [
+              "initiated",
               "in-progress",
               "processing",
               "done",
@@ -26689,7 +26698,7 @@
             "title": "Cloned By Count"
           },
           "rate": {
-            "description": "The rate of the voice.",
+            "description": "The rate multiplier of the voice.",
             "anyOf": [
               {
                 "type": "number"
@@ -26699,6 +26708,18 @@
               }
             ],
             "title": "Rate"
+          },
+          "fiat_rate": {
+            "description": "The rate of the voice in USD per 1000 credits. null if default",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fiat Rate"
           },
           "free_users_allowed": {
             "description": "Whether free users are allowed to use the voice.",
@@ -27618,6 +27639,12 @@
           },
           "webhooks": {
             "$ref": "#/components/schemas/ConvAIWebhooks"
+          },
+          "can_use_mcp_servers": {
+            "description": "Whether the workspace can use MCP servers",
+            "type": "boolean",
+            "default": false,
+            "title": "Can Use Mcp Servers"
           },
           "rag_retention_period_days": {
             "type": "integer",
@@ -30210,6 +30237,17 @@
             "type": "string",
             "title": "Message"
           },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
           "sip_call_id": {
             "anyOf": [
               {
@@ -30225,6 +30263,7 @@
         "required": [
           "success",
           "message",
+          "conversation_id",
           "sip_call_id"
         ],
         "title": "SIPTrunkOutboundCallResponse"
@@ -32405,6 +32444,17 @@
             "type": "string",
             "title": "Message"
           },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
           "callSid": {
             "anyOf": [
               {
@@ -32420,6 +32470,7 @@
         "required": [
           "success",
           "message",
+          "conversation_id",
           "callSid"
         ],
         "title": "TwilioOutboundCallResponse"
@@ -33956,6 +34007,18 @@
             ],
             "title": "Rate"
           },
+          "fiat_rate": {
+            "description": "The rate of the voice sharing in USD per 1000 credits.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fiat Rate"
+          },
           "notice_period": {
             "description": "The notice period of the voice sharing.",
             "type": "integer",
@@ -34875,6 +34938,18 @@
             "default": false,
             "title": "Disable Banner"
           },
+          "override_link": {
+            "description": "The override link for the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Link"
+          },
           "mic_muting_enabled": {
             "description": "Whether to enable mic muting",
             "type": "boolean",
@@ -35143,6 +35218,18 @@
             "type": "boolean",
             "default": false,
             "title": "Disable Banner"
+          },
+          "override_link": {
+            "description": "The override link for the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Link"
           },
           "mic_muting_enabled": {
             "description": "Whether to enable mic muting",
