@@ -111,7 +111,7 @@ System variables:
 
     agent_id = os.getenv("AGENT_ID")
     api_key = os.getenv("ELEVENLABS_API_KEY")
-    client = ElevenLabs(api_key=api_key)
+    elevenlabs = ElevenLabs(api_key=api_key)
 
     dynamic_vars = {
         "user_name": "Angelo",
@@ -122,7 +122,7 @@ System variables:
     )
 
     conversation = Conversation(
-        client,
+        elevenlabs,
         agent_id,
         config=config,
         # Assume auth is required when API_KEY is set.

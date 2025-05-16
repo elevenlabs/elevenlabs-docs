@@ -34,7 +34,7 @@ This guide will show you how to transform the voice of an audio file using the V
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
           api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
         voice_id = "JBFqnCBsd6RMkjVDRZzb"
@@ -45,7 +45,7 @@ This guide will show you how to transform the voice of an audio file using the V
         response = requests.get(audio_url)
         audio_data = BytesIO(response.content)
 
-        audio_stream = client.speech_to_speech.convert(
+        audio_stream = elevenlabs.speech_to_speech.convert(
             voice_id=voice_id,
             audio=audio_data,
             model_id="eleven_multilingual_sts_v2",
@@ -60,7 +60,7 @@ This guide will show you how to transform the voice of an audio file using the V
         import { ElevenLabsClient, play } from "elevenlabs";
         import "dotenv/config";
 
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
         const voiceId = "JBFqnCBsd6RMkjVDRZzb";
 
         const response = await fetch(
@@ -68,7 +68,7 @@ This guide will show you how to transform the voice of an audio file using the V
         );
         const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
-        const audioStream = await client.speechToSpeech.convert(voiceId, {
+        const audioStream = await elevenlabs.speechToSpeech.convert(voiceId, {
           audio: audioBlob,
           model_id: "eleven_multilingual_sts_v2",
           output_format: "mp3_44100_128",

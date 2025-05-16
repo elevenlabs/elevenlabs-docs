@@ -116,7 +116,7 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 );
 
-const client = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
   apiKey: Deno.env.get('ELEVENLABS_API_KEY'),
 });
 
@@ -161,7 +161,7 @@ Deno.serve(async (req) => {
 
   try {
     console.log('ElevenLabs API call');
-    const response = await client.textToSpeech.convertAsStream(voiceId, {
+    const response = await elevenlabs.textToSpeech.stream(voiceId, {
       output_format: 'mp3_44100_128',
       model_id: 'eleven_multilingual_v2',
       text,
@@ -255,7 +255,7 @@ There's a couple of things worth noting about the code. Let's step through it st
 
     ```ts {1,17,20,22-27}
     try {
-      const response = await client.textToSpeech.convertAsStream(voiceId, {
+      const response = await elevenlabs.textToSpeech.stream(voiceId, {
         output_format: "mp3_44100_128",
         model_id: "eleven_multilingual_v2",
         text,

@@ -14,9 +14,9 @@ In Python, a streaming request looks like:
 from elevenlabs import stream
 from elevenlabs.client import ElevenLabs
 
-client = ElevenLabs()
+elevenlabs = ElevenLabs()
 
-audio_stream = client.text_to_speech.convert_as_stream(
+audio_stream = elevenlabs.text_to_speech.convert_as_stream(
     text="This is a test",
     voice_id="JBFqnCBsd6RMkjVDRZzb",
     model_id="eleven_multilingual_v2"
@@ -37,10 +37,10 @@ In Node / Typescript, a streaming request looks like:
 import { ElevenLabsClient, stream } from 'elevenlabs';
 import { Readable } from 'stream';
 
-const client = new ElevenLabsClient();
+const elevenlabs = new ElevenLabsClient();
 
 async function main() {
-  const audioStream = await client.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
+  const audioStream = await elevenlabs.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
     text: 'This is a test',
     model_id: 'eleven_multilingual_v2',
   });

@@ -89,7 +89,7 @@ from elevenlabs import (
 )
 
 # Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Define transfer rules
 transfer_rules = [
@@ -119,7 +119,7 @@ conversation_config = ConversationalConfig(
 )
 
 # Create the agent
-response = client.conversational_ai.create_agent(
+response = elevenlabs.conversational_ai.agents.create(
     conversation_config=conversation_config
 )
 
@@ -130,7 +130,7 @@ print(response)
 import { ElevenLabs } from 'elevenlabs';
 
 // Initialize the client
-const client = new ElevenLabs({
+const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
@@ -141,7 +141,7 @@ const transferRules = [
 ];
 
 // Create the agent with the transfer tool
-await client.conversationalAi.createAgent({
+await elevenlabs.conversationalAi.agents.create({
   conversation_config: {
     agent: {
       prompt: {

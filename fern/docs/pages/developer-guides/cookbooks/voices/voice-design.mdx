@@ -39,11 +39,11 @@ This guide will show you how to design a voice via a prompt using the Voice Desi
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
           api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
 
-        voices = client.text_to_voice.create_previews(
+        voices = elevenlabs.text_to_voice.create_previews(
             voice_description="A huge giant, at least as tall as a building. A deep booming voice, loud and jolly.",
             text="Greetings little human. I am a mighty giant from a far away land. Would you like me to tell you a story?"
         )
@@ -64,9 +64,9 @@ This guide will show you how to design a voice via a prompt using the Voice Desi
         import { Readable } from 'node:stream';
         import { Buffer } from 'node:buffer';
 
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
 
-        const { previews } = await client.textToVoice.createPreviews({
+        const { previews } = await elevenlabs.textToVoice.createPreviews({
             voice_description: "A huge giant, at least as tall as a building. A deep booming voice, loud and jolly.",
             text: "Greetings little human. I am a mighty giant from a far away land. Would you like me to tell you a story?",
         });
@@ -101,7 +101,7 @@ This guide will show you how to design a voice via a prompt using the Voice Desi
 
         <CodeBlocks>
         ```python
-        voice = client.text_to_voice.create_voice_from_preview(
+        voice = elevenlabs.text_to_voice.create_voice_from_preview(
             voice_name="Jolly giant",
             voice_description="A huge giant, at least as tall as a building. A deep booming voice, loud and jolly.",
             # The generated voice ID of the preview you want to use,
@@ -113,7 +113,7 @@ This guide will show you how to design a voice via a prompt using the Voice Desi
         ```
 
         ```typescript
-        const voice = await client.textToVoice.createVoiceFromPreview({
+        const voice = await elevenlabs.textToVoice.createVoiceFromPreview({
             voice_name: "Jolly giant",
             voice_description: "A huge giant, at least as tall as a building. A deep booming voice, loud and jolly.",
             // The generated voice ID of the preview you want to use,

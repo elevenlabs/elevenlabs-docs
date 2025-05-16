@@ -14,16 +14,16 @@ Add the ElevenLabs Swift SDK to your project using Swift Package Manager:
 <Steps>
   <Step title="Add the Package Dependency">
   <>
-    1. Open your project in Xcode   
-    2. Go to `File` > `Add Packages...` 
-    3. Enter the repository URL: `https://github.com/elevenlabs/ElevenLabsSwift` 
+    1. Open your project in Xcode
+    2. Go to `File` > `Add Packages...`
+    3. Enter the repository URL: `https://github.com/elevenlabs/ElevenLabsSwift`
     4. Select your desired version
   </>
 
   </Step>
   <Step title="Import the SDK">
    <>
-     ```swift 
+     ```swift
      import ElevenLabsSDK
       ```
    </>
@@ -89,10 +89,10 @@ There are two ways to initialize a session:
     ```swift
     // Swift example using URLSession
     func getSignedUrl() async throws -> String {
-        let url = URL(string: "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url")!
+        let url = URL(string: "https://api.elevenlabs.io/v1/convai/conversation/get-signed-url")!
         var request = URLRequest(url: url)
         request.setValue("YOUR-API-KEY", forHTTPHeaderField: "xi-api-key")
-        
+
         let (data, _) = try await URLSession.shared.data(for: request)
         let response = try JSONDecoder().decode(SignedUrlResponse.self, from: data)
         return response.signedUrl
