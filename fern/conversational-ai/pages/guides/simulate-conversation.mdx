@@ -40,24 +40,24 @@ api_key = os.getenv("ELEVENLABS_API_KEY")
 elevenlabs = ElevenLabs(api_key=api_key)
 
 response = elevenlabs.conversational_ai.agents.simulate_conversation(
-agent_id="YOUR_AGENT_ID",
-simulation_specification=ConversationSimulationSpecification(
-simulated_user_config=AgentConfig(
-prompt=PromptAgent(
-prompt="Your goal is to be a really difficult user.",
-llm="gpt-4o",
-temperature=0.5
-)
-)
-),
-extra_evaluation_criteria=[
-PromptEvaluationCriteria(
-id="politeness_check",
-name="Politeness Check",
-conversation_goal_prompt="The agent was polite.",
-use_knowledge_base=False
-)
-]
+    agent_id="YOUR_AGENT_ID",
+    simulation_specification=ConversationSimulationSpecification(
+        simulated_user_config=AgentConfig(
+            prompt=PromptAgent(
+                prompt="Your goal is to be a really difficult user.",
+                llm="gpt-4o",
+                temperature=0.5
+            )
+        )
+    ),
+    extra_evaluation_criteria=[
+        PromptEvaluationCriteria(
+            id="politeness_check",
+            name="Politeness Check",
+            conversation_goal_prompt="The agent was polite.",
+            use_knowledge_base=False
+        )
+    ]
 )
 
 print(response)
