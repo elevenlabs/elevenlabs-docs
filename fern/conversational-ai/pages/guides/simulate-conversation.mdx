@@ -25,6 +25,7 @@ Search through your agent's conversation history and find instances where your a
 Create a request to the simulation endpoint using the ElevenLabs SDK.
 
 <CodeGroup>
+
 ```python title="Python"
 from dotenv import load_dotenv
 from elevenlabs import (
@@ -62,41 +63,38 @@ response = elevenlabs.conversational_ai.agents.simulate_conversation(
 
 print(response)
 
-````
+```
 
 ```typescript title="TypeScript"
 import dotenv from 'dotenv';
-import { ElevenLabsClient } from "elevenlabs";
+import { ElevenLabsClient } from 'elevenlabs';
 
 dotenv.config();
 const apiKey = process.env.ELEVENLABS_API_KEY;
 const elevenlabs = new ElevenLabsClient({
-    apiKey: apiKey,
+  apiKey: apiKey,
 });
-const response = await elevenlabs.conversationalAi.agents.simulateConversation(
-    "YOUR_AGENT_ID",
+const response = await elevenlabs.conversationalAi.agents.simulateConversation('YOUR_AGENT_ID', {
+  simulation_specification: {
+    simulated_user_config: {
+      prompt: {
+        prompt: 'Your goal is to be a really difficult user.',
+        llm: 'gpt-4o',
+        temperature: 0.5,
+      },
+    },
+  },
+  extra_evaluation_criteria: [
     {
-        simulation_specification: {
-            simulated_user_config: {
-                prompt: {
-                    prompt: "Your goal is to be a really difficult user.",
-                    llm: "gpt-4o",
-                    temperature: 0.5
-                }
-            }
-        },
-        extra_evaluation_criteria: [
-            {
-                id: "politeness_check",
-                name: "Politeness Check",
-                conversation_goal_prompt: "The agent was polite.",
-                use_knowledge_base: false
-            }
-        ]
-    }
-)
+      id: 'politeness_check',
+      name: 'Politeness Check',
+      conversation_goal_prompt: 'The agent was polite.',
+      use_knowledge_base: false,
+    },
+  ],
+});
 console.log(JSON.stringify(response, null, 4));
-````
+```
 
 </CodeGroup>
 
