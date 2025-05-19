@@ -649,6 +649,7 @@ navigation:
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/content
                     title: Get document content
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/chunk/{chunk_id}
+                    slug: /get-chunk
                     title: Get document chunk
               - section: Phone Numbers
                 contents:
@@ -678,6 +679,8 @@ navigation:
                     title: Get secrets
                   - endpoint: POST /v1/convai/secrets
                     title: Create secret
+                  - endpoint: PATCH /v1/convai/secrets/{secret_id}
+                    title: Update secret
                   - endpoint: DELETE /v1/convai/secrets/{secret_id}
                     title: Delete secret
                   - endpoint: GET /v1/convai/settings/dashboard
@@ -688,6 +691,12 @@ navigation:
                 contents:
                   - endpoint: POST /v1/convai/sip-trunk/outbound-call
                     title: Outbound call via SIP trunk
+              - section: Batch Calling
+                contents:
+                  - endpoint: POST /v1/convai/batch-calling/submit
+                    title: Submit batch calling job
+                  - endpoint: GET /v1/convai/batch-calling/workspace
+                    title: List workspace batch calling jobs
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -880,7 +889,7 @@ navigation:
                     slug: /studio/get-chapter-snapshot
                   - endpoint: GET /v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}
                     slug: /studio/get-project-snapshot
-              - pronunciationDictionary
+              - pronunciationDictionaries
               - samples
               - usage
               - user
@@ -1045,17 +1054,17 @@ redirects:
   - source: /docs/api-reference/get-voices
     destination: /docs/api-reference/voices/search
   - source: /docs/api-reference/pronunciation-dictionaries-add-from-file
-    destination: /docs/api-reference/pronunciation-dictionary/add-from-file
+    destination: /docs/api-reference/pronunciation-dictionaries/add-from-file
   - source: /docs/api-reference/pronunciation-dictionaries-id
-    destination: /docs/api-reference/pronunciation-dictionary/get
+    destination: /docs/api-reference/pronunciation-dictionaries/get
   - source: /docs/api-reference/pronunciation-dictionaries-id-add-rules
-    destination: /docs/api-reference/pronunciation-dictionary/add-rules
+    destination: /docs/api-reference/pronunciation-dictionaries/add-rules
   - source: /docs/api-reference/pronunciation-dictionaries-id-remove-rules
-    destination: /docs/api-reference/pronunciation-dictionary/remove-rules
+    destination: /docs/api-reference/pronunciation-dictionaries/remove-rules
   - source: /docs/api-reference/pronunciation-dictionaries-id-version_id-download
-    destination: /docs/api-reference/pronunciation-dictionary/download
+    destination: /docs/api-reference/pronunciation-dictionaries/download
   - source: /docs/api-reference/pronunciation-dictionaries-list
-    destination: /docs/api-reference/pronunciation-dictionary/get-all
+    destination: /docs/api-reference/pronunciation-dictionaries/get-all
   - source: /docs/api-reference/query-library
     destination: /docs/api-reference/voice-library/get-shared
   - source: /docs/api-reference/sound-generation
@@ -1339,3 +1348,63 @@ redirects:
     destination: /docs/conversational-ai/phone-numbers/twilio-integration/native-integration
   - source: /docs/conversational-ai/phone-numbers/twilio/dynamic-calls
     destination: /docs/conversational-ai/phone-numbers/twilio-integration/customising-calls
+  - source: /docs/api-reference/text-to-speech/convert-as-stream
+    destination: /docs/api-reference/text-to-speech/stream
+  - source: /docs/api-reference/audio-isolation/audio-isolation
+    destination: /docs/api-reference/audio-isolation/convert
+  - source: /docs/api-reference/workspace/share-workspace-resource
+    destination: /docs/api-reference/workspace/resources/share
+  - source: /docs/api-reference/voices/get-similar-library-voices
+    destination: /docs/api-reference/voices/find-similar-voices
+  - source: /docs/api-reference/agents/get-agents
+    destination: /docs/api-reference/agents/get
+  - source: /docs/conversational-ai/api-reference/conversations/get-conversations
+    destination: /docs/conversational-ai/api-reference/conversations/list
+  - source: /docs/conversational-ai/api-reference/conversations/get-conversation
+    destination: /docs/conversational-ai/api-reference/conversations/get
+  - source: /docs/api-reference/dubbing/get-dubbing-resource
+    destination: /docs/api-reference/dubbing/resources/get-resource
+  - source: /docs/api-reference/workspace/delete-member
+    destination: /docs/api-reference/workspace/members/delete
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-document-by-id
+    destination: /docs/api-reference/knowledge-base/get
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-list
+    destination: /docs/api-reference/knowledge-base/list
+  - source: /docs/api-reference/conversations/get-conversation
+    destination: /docs/api-reference/conversations/get
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-document-part-by-id
+    destination: /docs/api-reference/knowledge-base/get-chunk
+  - source: /docs/api-reference/widget/get-agent-widget
+    destination: /docs/api-reference/widget/get
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-document-content
+    destination: /docs/api-reference/knowledge-base/get-content
+  - source: /docs/api-reference/workspace/invite-multiple-users
+    destination: /docs/api-reference/workspace/invites/create-batch
+  - source: /docs/api-reference/workspace/invite-user
+    destination: /docs/api-reference/workspace/invites/create
+  - source: /docs/api-reference/conversations/get-conversations
+    destination: /docs/api-reference/conversations/list
+  - source: /docs/api-reference/knowledge-base/update-knowledge-base-document
+    destination: /docs/api-reference/knowledge-base/update
+  - source: /docs/api-reference/workspace/search-user-groups
+    destination: /docs/api-reference/workspace/groups/search
+  - source: /docs/api-reference/dubbing/add-language-to-resource
+    destination: /docs/api-reference/dubbing/resources/add-language
+  - source: /docs/api-reference/dubbing/dub-segments
+    destination: /docs/api-reference/dubbing/resources/dub-segment
+  - source: /docs/api-reference/workspace/unshare-workspace-resource
+    destination: /docs/api-reference/workspace/resources/unshare
+  - source: /docs/api-reference/workspace/share-workspace-resource
+    destination: /docs/api-reference/workspace/resources/share
+  - source: /docs/api-reference/dubbing/update-segment-language
+    destination: /docs/api-reference/dubbing/resources/update-segment
+  - source: /docs/api-reference/workspace/get-resource
+    destination: /docs/api-reference/dubbing/resources/get-resource
+  - source: /docs/api-reference/dubbing/translate-segments
+    destination: /docs/api-reference/dubbing/resources/translate-segment
+  - source: /docs/api-reference/dubbing/render-dub
+    destination: /docs/api-reference/dubbing/resources/render-segment
+  - source: /docs/api-reference/audio-native/update-content
+    destination: /docs/api-reference/audio-native/update
+  - source: /docs/conversational-ai/api-reference/conversations/post-conversation-feedback
+    destination: /docs/conversational-ai/api-reference/conversations/create
