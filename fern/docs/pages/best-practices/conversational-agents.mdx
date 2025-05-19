@@ -1,0 +1,520 @@
+---
+title: Multi-Context Websocket
+subtitle: Learn how to build real time voice agents using our multi-context WebSocket API for dynamic and responsive interactions.
+---
+
+<Warning title="Advanced">
+  Orchestrating voice agents using this multi-context WebSocket API is a complex task recommended
+  for advanced developers. For a more managed solution, consider exploring our [Conversational AI
+  product](/docs/conversational-ai/overview), which simplifies many of these challenges.
+</Warning>
+
+## Overview
+
+Building responsive voice agents requires the ability to manage audio streams dynamically, handle interruptions gracefully, and maintain natural-sounding speech across conversational turns. Our multi-context WebSocket API for Text to Speech (TTS) is specifically designed for these scenarios.
+
+This API extends our [standard TTS WebSocket functionality](/docs/websockets) by introducing the concept of "contexts." Each context operates as an independent audio generation stream within a single WebSocket connection. This allows you to:
+
+- Manage multiple lines of speech concurrently (e.g., agent speaking while preparing a response to a user interruption).
+- Seamlessly handle user barge-ins by closing an existing speech context and initiating a new one.
+- Maintain prosodic consistency for utterances within the same logical context.
+- Optimize resource usage by selectively closing contexts that are no longer needed.
+
+<Warning>
+  The multi-context WebSocket API is optimized for voice applications and is not intended for
+  generating multiple unrelated audio streams simultaneously. Each connection is limited to 5
+  concurrent contexts to reflect this.
+</Warning>
+
+This guide will walk you through connecting to the multi-context WebSocket, managing contexts, and applying best practices for building engaging voice agents.
+
+### Best practices
+
+<Note>
+  These best practices are essential for building responsive, efficient voice agents with our
+  multi-context WebSocket API.
+</Note>
+
+<Steps>
+  <Step title="Use a single WebSocket connection">
+    Establish one WebSocket connection for each end-user session. This reduces overhead and latency
+    compared to creating multiple connections. Within this single connection, you can manage
+    multiple contexts for different parts of the conversation.
+  </Step>
+  <Step title="Stream responses in chunks, generate sentences">
+    When generating long responses, stream the text in smaller chunks and use the `flush: true` flag
+    at the end of complete sentences. This improves the quality of the generated audio and improves
+    responsiveness.
+  </Step>
+  <Step title="Handle interruptions gracefully">
+    Stream text into one context until an interruption occurs, then create a new context and close
+    the existing one. This approach ensures smooth transitions when the conversation flow changes.
+  </Step>
+  <Step title="Manage context lifecycle">
+    Close unused contexts promptly. The server can maintain up to 5 concurrent contexts per
+    connection, but you should close contexts when they are no longer needed.
+  </Step>
+  <Step title="Prevent context timeouts">
+    Contexts by default timeout after 20 seconds and are closed automatically. The inactivity
+    timeout is a websocket level parameter that applies to all contexts and can be up to 180 seconds
+    if needed. Send an empty text message on a context to reset the timeout clock.
+  </Step>
+</Steps>
+
+### Handling interuptions
+
+When a user interrupts your agent, you should [close the current context](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Close-Context) and [create a new one](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Initialise-Context):
+
+<CodeBlocks>
+```python 
+async def handle_interruption(websocket, old_context_id, new_context_id, new_response):
+    # Close the existing context that was interrupted
+    await websocket.send(json.dumps({
+        "context_id": old_context_id,
+        "close_context": True
+    }))
+    print(f"Closed interrupted context '{old_context_id}'")
+    
+    # Create a new context for the new response
+    await send_text_in_context(websocket, new_response, new_context_id)
+```
+
+```
+function handleInterruption(websocket: WebSocket, oldContextId: string, newContextId: string, newResponse: string) {
+  // Close the existing context that was interrupted
+  websocket.send(JSON.stringify({
+    context_id: oldContextId,
+    close_context: true
+  }));
+  console.log(`Closed interrupted context '${oldContextId}'`);
+
+  // Create a new context for the new response
+  sendTextInContext(websocket, newResponse, newContextId);
+}
+```
+
+</CodeBlocks>
+
+### Keeping a context alive
+
+Contexts automatically timeout after [a default of 20 seconds of inactivity](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#request.query.inactivity_timeout). If you need to keep a context alive without generating text (for example, during a processing delay), you can send an empty text message to reset the timeout clock.
+
+<CodeBlocks>
+
+```python
+async def keep_context_alive(websocket, context_id):
+    await websocket.send(json.dumps({
+        "context_id": context_id,
+        "text": ""
+    }))
+```
+
+```javascript
+function handleInterruption(websocket: WebSocket, contextId: string) {
+  // Close the existing context that was interrupted
+  websocket.send(JSON.stringify({
+    context_id: oldContextId,
+    text: ""
+  }));
+}
+```
+
+</CodeBlocks>
+
+### Closing the WebSocket connection
+
+When your conversation ends, you can clean up all contexts by [closing the socket](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Close-Socket):
+
+<CodeBlocks>
+```python
+async def end_conversation(websocket):
+    # This will close all contexts and close the connection
+    await websocket.send(json.dumps({
+        "close_socket": True
+    }))
+    print("Ending conversation and closing WebSocket")`
+```
+```javascript
+function endConversation(websocket: WebSocket) {
+  // This will close all contexts and close the connection
+  websocket.send(JSON.stringify({
+    close_socket: true
+  }));
+  console.log("Ending conversation and closing WebSocket");
+}
+```
+</CodeBlocks>
+
+## Complete conversational agent example
+
+### Requirements
+
+- An ElevenLabs account with an API key (learn how to [find your API key](/docs/api-reference/authentication)).
+- Python or Node.js (or another JavaScript runtime) installed on your machine.
+- Familiarity with WebSocket communication. We recommend reading our [guide on standard WebSocket streaming](/docs/developer-guides/websockets) for foundational concepts.
+
+### Setup
+
+Install the necessary dependencies for your chosen language:
+
+<CodeBlocks>
+
+```python
+pip install python-dotenv websockets
+```
+
+```javascript
+npm install dotenv ws
+for TypeScript, you might also want types:
+npm install @types/dotenv @types/ws --save-dev
+```
+
+</CodeBlocks>
+
+Create a .env file in your project directory to store your API key:
+
+<CodeBlocks>
+
+```python .env
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+```
+
+</CodeBlocks>
+
+### Example voice agent
+
+<Note>This code is provided as an example and is not intended for production usage</Note>
+
+<CodeBlocks>
+
+```python maxLines=100
+import os
+import json
+import asyncio
+import websockets
+from dotenv import load_dotenv
+
+load_dotenv()
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+VOICE_ID = "your_voice_id"
+MODEL_ID = "eleven_flash_v2_5"
+
+WEBSOCKET_URI = f"wss://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/multi-stream-input?model_id={MODEL_ID}"
+
+async def send_text_in_context(websocket, text, context_id, voice_settings=None):
+    """Send text to be synthesized in the specified context."""
+    message = {
+        "text": text,
+        "context_id": context_id,
+    }
+
+    # Only include voice_settings for the first message in a context
+    if voice_settings:
+        message["voice_settings"] = voice_settings
+
+    await websocket.send(json.dumps(message))
+
+async def continue_context(websocket, text, context_id):
+    """Add more text to an existing context."""
+    await websocket.send(json.dumps({
+        "text": text,
+        "context_id": context_id
+    }))
+
+async def flush_context(websocket, context_id):
+    """Force generation of any buffered audio in the context."""
+    await websocket.send(json.dumps({
+        "context_id": context_id,
+        "flush": True
+    }))
+
+async def handle_interruption(websocket, old_context_id, new_context_id, new_response):
+    """Handle user interruption by closing current context and starting a new one."""
+    # Close the existing context that was interrupted
+    await websocket.send(json.dumps({
+        "context_id": old_context_id,
+        "close_context": True
+    }))
+
+    # Create a new context for the new response
+    await send_text_in_context(websocket, new_response, new_context_id)
+
+async def end_conversation(websocket):
+    """End the conversation and close the WebSocket connection."""
+    await websocket.send(json.dumps({
+        "close_socket": True
+    }))
+
+async def receive_messages(websocket):
+    """Process incoming WebSocket messages."""
+    context_audio = {}
+    try:
+        async for message in websocket:
+            data = json.loads(message)
+            context_id = data.get("contextId", "default")
+
+            if data.get("audio"):
+                print(f"Received audio for context '{context_id}'")
+
+            if data.get("is_final"):
+                print(f"Context '{context_id}' completed")
+    except (websockets.exceptions.ConnectionClosed, asyncio.CancelledError):
+        print("Message receiving stopped")
+
+async def conversation_agent_demo():
+    """Run a complete conversational agent demo."""
+    # Connect with API key in headers
+    async with websockets.connect(
+        WEBSOCKET_URI,
+        max_size=16 * 1024 * 1024,
+        extra_headers={"xi-api-key": ELEVENLABS_API_KEY}
+    ) as websocket:
+        # Start receiving messages in background
+        receive_task = asyncio.create_task(receive_messages(websocket))
+
+        # Initial agent response
+        await send_text_in_context(
+            websocket,
+            "Hello! I'm your virtual assistant. I can help you with a wide range of topics. What would you like to know about today?",
+            "greeting"
+        )
+
+        # Wait a bit (simulating user listening)
+        await asyncio.sleep(2)
+
+        # Simulate user interruption
+        print("USER INTERRUPTS: 'Can you tell me about the weather?'")
+
+        # Handle the interruption by closing current context and starting new one
+        await handle_interruption(
+            websocket,
+            "greeting",
+            "weather_response",
+            "I'd be happy to tell you about the weather. Currently in your area, it's 72 degrees and sunny with a slight chance of rain later this afternoon."
+        )
+
+        # Add more to the weather context
+        await continue_context(
+            websocket,
+            " If you're planning to go outside, you might want to bring a light jacket just in case.",
+            "weather_response"
+        )
+
+        # Flush at the end of this turn to ensure all audio is generated
+        await flush_context(websocket, "weather_response")
+
+        # Wait a bit (simulating user listening)
+        await asyncio.sleep(3)
+
+        # Simulate user asking another question
+        print("USER: 'What about tomorrow?'")
+
+        # Create a new context for this response
+        await send_text_in_context(
+            websocket,
+            "Tomorrow's forecast shows temperatures around 75 degrees with partly cloudy skies. It should be a beautiful day overall!",
+            "tomorrow_weather"
+        )
+
+        # Flush and close this context
+        await flush_context(websocket, "tomorrow_weather")
+        await websocket.send(json.dumps({
+            "context_id": "tomorrow_weather",
+            "close_context": True
+        }))
+
+        # End the conversation
+        await asyncio.sleep(2)
+        await end_conversation(websocket)
+
+        # Cancel the receive task
+        receive_task.cancel()
+        try:
+            await receive_task
+        except asyncio.CancelledError:
+            pass
+
+if __name__ == "__main__":
+    asyncio.run(conversation_agent_demo())
+
+```
+
+```javascript maxLines=100
+// Import required modules
+import dotenv from 'dotenv';
+import fs from 'fs';
+import WebSocket from 'ws';
+
+// Load environment variables
+dotenv.config();
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+const VOICE_ID = 'your_voice_id';
+const MODEL_ID = 'eleven_flash_v2_5';
+
+const WEBSOCKET_URI = `wss://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/multi-stream-input?model_id=${MODEL_ID}`;
+
+// Function to send text in a specific context
+function sendTextInContext(websocket, text, contextId, voiceSettings = null) {
+  const message = {
+    text: text,
+    context_id: contextId,
+  };
+
+  // Only include voice_settings for the first message in a context
+  if (voiceSettings) {
+    message.voice_settings = voiceSettings;
+  }
+
+  websocket.send(JSON.stringify(message));
+}
+
+// Function to continue an existing context with more text
+function continueContext(websocket, text, contextId) {
+  websocket.send(
+    JSON.stringify({
+      text: text,
+      context_id: contextId,
+    })
+  );
+}
+
+// Function to flush a context, forcing generation of buffered audio
+function flushContext(websocket, contextId) {
+  websocket.send(
+    JSON.stringify({
+      context_id: contextId,
+      flush: true,
+    })
+  );
+}
+
+// Function to handle user interruption
+function handleInterruption(websocket, oldContextId, newContextId, newResponse) {
+  // Close the existing context that was interrupted
+  websocket.send(
+    JSON.stringify({
+      context_id: oldContextId,
+      close_context: true,
+    })
+  );
+
+  // Create a new context for the new response
+  sendTextInContext(websocket, newResponse, newContextId);
+}
+
+// Function to end the conversation and close the connection
+function endConversation(websocket) {
+  websocket.send(
+    JSON.stringify({
+      close_socket: true,
+    })
+  );
+}
+
+// Function to run the conversation agent demo
+async function conversationAgentDemo() {
+  // Connect to WebSocket with API key in headers
+  const websocket = new WebSocket(WEBSOCKET_URI, {
+    headers: {
+      'xi-api-key': ELEVENLABS_API_KEY,
+    },
+    maxPayload: 16 * 1024 * 1024,
+  });
+
+  // Set up event handlers
+  websocket.on('open', () => {
+    // Initial agent response
+    sendTextInContext(
+      websocket,
+      "Hello! I'm your virtual assistant. I can help you with a wide range of topics. What would you like to know about today?",
+      'greeting'
+    );
+
+    // Simulate wait time (user listening)
+    setTimeout(() => {
+      // Simulate user interruption
+      console.log("USER INTERRUPTS: 'Can you tell me about the weather?'");
+
+      // Handle the interruption
+      handleInterruption(
+        websocket,
+        'greeting',
+        'weather_response',
+        "I'd be happy to tell you about the weather. Currently in your area, it's 72 degrees and sunny with a slight chance of rain later this afternoon."
+      );
+
+      // Add more to the weather context
+      setTimeout(() => {
+        continueContext(
+          websocket,
+          " If you're planning to go outside, you might want to bring a light jacket just in case.",
+          'weather_response'
+        );
+
+        // Flush at the end of this turn
+        flushContext(websocket, 'weather_response');
+
+        // Simulate wait time (user listening)
+        setTimeout(() => {
+          // Simulate user asking another question
+          console.log("USER: 'What about tomorrow?'");
+
+          // Create a new context for this response
+          sendTextInContext(
+            websocket,
+            "Tomorrow's forecast shows temperatures around 75 degrees with partly cloudy skies. It should be a beautiful day overall!",
+            'tomorrow_weather'
+          );
+
+          // Flush and close this context
+          flushContext(websocket, 'tomorrow_weather');
+          websocket.send(
+            JSON.stringify({
+              context_id: 'tomorrow_weather',
+              close_context: true,
+            })
+          );
+
+          // End the conversation
+          setTimeout(() => {
+            endConversation(websocket);
+          }, 2000);
+        }, 3000);
+      }, 500);
+    }, 2000);
+  });
+
+  // Handle incoming messages
+  websocket.on('message', (message) => {
+    try {
+      const data = JSON.parse(message);
+      const contextId = data.contextId || 'default';
+
+      if (data.audio) {
+        //do stuff
+      }
+
+      if (data.is_final) {
+        console.log(`Context '${contextId}' completed`);
+      }
+    } catch (error) {
+      console.error('Error parsing message:', error);
+    }
+  });
+
+  // Handle WebSocket closure
+  websocket.on('close', () => {
+    console.log('WebSocket connection closed');
+  });
+
+  // Handle WebSocket errors
+  websocket.on('error', (error) => {
+    console.error('WebSocket error:', error);
+  });
+}
+
+// Run the demo
+conversationAgentDemo();
+```
+
+</CodeBlocks>
