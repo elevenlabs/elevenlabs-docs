@@ -1,0 +1,123 @@
+---
+title: Batch calling
+subtitle: Initiate multiple outbound calls simultaneously with your Conversational AI agents.
+---
+
+<Note>
+  When conducting outbound call campaigns, ensure compliance with all relevant regulations,
+  including the [TCPA (Telephone Consumer Protection Act)](/docs/conversational-ai/legal/tcpa) and
+  any applicable state laws.
+</Note>
+
+## Overview
+
+Batch Calling enables you to initiate multiple outbound calls simultaneously using your configured Conversational AI agents. This feature is ideal for scenarios such as sending notifications, conducting surveys, or delivering personalized messages to a large list of recipients efficiently.
+
+### Key features
+
+- **Upload Recipient Lists**: Easily upload recipient lists in CSV or XLS format.
+- **Dynamic Variables**: Personalize calls by including dynamic variables (e.g., `user_name`) in your recipient list as seperate columns.
+- **Agent Selection**: Choose the specific Conversational AI agent to handle the calls.
+- **Scheduling**: Send batches immediately or schedule them for a later time.
+- **Real-time Monitoring**: Track the progress of your batch calls, including overall status and individual call status.
+- **Detailed Reporting**: View comprehensive details of completed batch calls, including individual call recipient information.
+
+## Creating a batch call
+
+Follow these steps to create a new batch call:
+
+<Steps>
+
+<Step title="Navigate to Batch Calling">
+  Access the Outbound section from the [main navigation
+  menu](https://elevenlabs.io/app/conversational-ai/batch-calling)
+</Step>
+
+<Step title="Initiate a new batch call">
+  Click on the "Create a batch call" button. This will open the "Create a batch call" page.
+
+  <Frame background="subtle" caption="The 'Create a batch call' interface.">
+    <img
+      src="/assets/images/conversational-ai/batch-call-creation.png"
+      alt="Create a batch call page showing fields for batch name, phone number, agent selection, recipient upload, and timing options."
+    />
+  </Frame>
+</Step>
+
+<Step title="Configure batch details">
+
+- **Batch Name**: Enter a descriptive name for your batch call (e.g., "Delivery notice", "Weekly Update Notifications").
+- **Phone Number**: Select the phone number that will be used to make the outbound calls.
+- **Select Agent**: Choose the pre-configured Conversational AI agent that will handle the conversations for this batch.
+
+</Step>
+
+<Step title="Upload recipients">
+
+- **Upload File**: Upload your recipient list. Supported file formats are CSV and XLS.
+- **Formatting**:
+  - The `phone_number` column is mandatory in your uploaded file.
+  - You can include other columns (e.g., `name`, `user_name`) which will be passed as dynamic variables to personalize the calls.
+  - A template is available for download to ensure correct formatting.
+
+</Step>
+
+<Step title="Set timing">
+  - **Send immediately**: The batch call will start processing as soon as you submit it. -
+  **Schedule for later**: Choose a specific date and time for the batch call to begin.
+</Step>
+
+<Step title="Submit the batch call">
+  - You may "Test call" with a single recipient before submitting the entire batch. - Click "Submit
+  a Batch Call" to finalize and initiate or schedule the batch.
+</Step>
+
+</Steps>
+
+## Managing and monitoring batch calls
+
+Once a batch call is created, you can monitor its progress and view its details.
+
+### Batch calling overview
+
+The Batch Calling overview page displays a list of all your batch calls.
+
+<Frame
+  background="subtle"
+  caption="Overview of batch calls, displaying status, progress, and other details for each batch."
+>
+  <img
+    src="/assets/images/conversational-ai/batch-call-summary.png"
+    alt="Batch Calling overview page listing several batch calls with their status, recipient count, and progress."
+  />
+</Frame>
+
+### Viewing batch call details
+
+Clicking on a specific batch call from the overview page will take you to its detailed view, from where you can view individual conversations.
+
+<Frame
+  background="subtle"
+  caption="Detailed view of a specific batch call, showing summary statistics and a list of call recipients with their individual statuses."
+>
+  <img
+    src="/assets/images/conversational-ai/batch-call-completed-summary.png"
+    alt="Batch call details page showing a summary (status, total recipients, started, progress) and a list of call recipients with phone number, dynamic variables, and status."
+  />
+</Frame>
+
+## API Usage
+
+You can also manage and initiate batch calls programmatically using the ElevenLabs API. This allows for integration into your existing workflows and applications.
+
+### Listing batch calls
+
+To retrieve a list of all batch calls within your workspace, you can use the API. This is useful for monitoring the status and details of ongoing or completed batch calls.
+
+For detailed information on the endpoint, request parameters, and response formats for listing batch calls, please refer to the [Batch Calling List API Reference](/docs/api-reference/batch-calling/list).
+
+### Submitting a batch call
+
+To programmatically submit a new batch call, including specifying the agent, phone number, and a list of recipients, you can use the API.
+
+For detailed information on the endpoint, request parameters, and response formats for creating batch calls, please refer to the [Batch Calling Create API Reference](/docs/api-reference/batch-calling/create).
