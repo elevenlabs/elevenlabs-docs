@@ -22,7 +22,7 @@ Before you begin, make sure you have installed the ElevenLabs SDK.
     ```
 
     ```javascript title="JavaScript"
-    npm install elevenlabs
+    npm install @elevenlabs/elevenlabs-js
     ```
 
 </CodeBlocks>
@@ -60,7 +60,7 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
 
     load_dotenv()
 
-    client = ElevenLabs(
+    elevenlabs = ElevenLabs(
         api_key=os.getenv("ELEVENLABS_API_KEY"),
     )
 
@@ -70,7 +70,7 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
     response = requests.get(audio_url)
     audio_data = BytesIO(response.content)
 
-    transcription = client.speech_to_text.convert(
+    transcription = elevenlabs.speech_to_text.convert(
         file=audio_data,
         model_id="scribe_v1", # 'scribe_v1_experimental' is also available for new, experimental features
         tag_audio_events=True, # Tag audio events like laughter, applause, etc.
@@ -86,14 +86,14 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
     import "dotenv/config";
     import { ElevenLabsClient } from "elevenlabs";
 
-    const client = new ElevenLabsClient();
+    const elevenlabs = new ElevenLabsClient();
 
     const response = await fetch(
         "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
     );
     const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
-    const transcription = await client.speechToText.convert({
+    const transcription = await elevenlabs.speechToText.convert({
         file: audioBlob,
         model_id: "scribe_v1", // 'scribe_v1_experimental' is also available for new, experimental features
         tag_audio_events: true, // Tag audio events like laughter, applause, etc.
