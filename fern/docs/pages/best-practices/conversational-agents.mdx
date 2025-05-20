@@ -1,18 +1,17 @@
 ---
-title: Conversational agents
-subtitle: Learn how to build real-time conversational AI agents using our multi-context WebSocket API for dynamic and responsive interactions.
+title: Multi-Context Websocket
+subtitle: Learn how to build real time voice agents using our multi-context WebSocket API for dynamic and responsive interactions.
 ---
 
 <Warning title="Advanced">
-  Orchestrating conversational agents using this multi-context WebSocket API is a complex task
-  recommended for advanced developers. For a more managed solution, consider exploring our
-  [Conversational AI product](/docs/conversational-ai/overview), which simplifies many of these
-  challenges.
+  Orchestrating voice agents using this multi-context WebSocket API is a complex task recommended
+  for advanced developers. For a more managed solution, consider exploring our [Conversational AI
+  product](/docs/conversational-ai/overview), which simplifies many of these challenges.
 </Warning>
 
 ## Overview
 
-Building responsive conversational AI agents requires the ability to manage audio streams dynamically, handle interruptions gracefully, and maintain natural-sounding speech across conversational turns. Our multi-context WebSocket API for Text to Speech (TTS) is specifically designed for these scenarios.
+Building responsive voice agents requires the ability to manage audio streams dynamically, handle interruptions gracefully, and maintain natural-sounding speech across conversational turns. Our multi-context WebSocket API for Text to Speech (TTS) is specifically designed for these scenarios.
 
 This API extends our [standard TTS WebSocket functionality](/docs/websockets) by introducing the concept of "contexts." Each context operates as an independent audio generation stream within a single WebSocket connection. This allows you to:
 
@@ -22,18 +21,18 @@ This API extends our [standard TTS WebSocket functionality](/docs/websockets) by
 - Optimize resource usage by selectively closing contexts that are no longer needed.
 
 <Warning>
-  The multi-context WebSocket API is optimized for conversational applications and is not intended
-  for generating multiple unrelated audio streams simultaneously. Each connection is limited to 5
+  The multi-context WebSocket API is optimized for voice applications and is not intended for
+  generating multiple unrelated audio streams simultaneously. Each connection is limited to 5
   concurrent contexts to reflect this.
 </Warning>
 
-This guide will walk you through connecting to the multi-context WebSocket, managing contexts, and applying best practices for building engaging conversational agents.
+This guide will walk you through connecting to the multi-context WebSocket, managing contexts, and applying best practices for building engaging voice agents.
 
 ### Best practices
 
 <Note>
-  These best practices are essential for building responsive, efficient conversational agents with
-  our multi-context WebSocket API.
+  These best practices are essential for building responsive, efficient voice agents with our
+  multi-context WebSocket API.
 </Note>
 
 <Steps>
@@ -182,7 +181,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
 </CodeBlocks>
 
-### Example conversational agent
+### Example voice agent
 
 <Note>This code is provided as an example and is not intended for production usage</Note>
 
@@ -252,7 +251,7 @@ async def receive_messages(websocket):
     try:
         async for message in websocket:
             data = json.loads(message)
-            context_id = data.get("context_id", "default")
+            context_id = data.get("contextId", "default")
 
             if data.get("audio"):
                 print(f"Received audio for context '{context_id}'")
@@ -489,7 +488,7 @@ async function conversationAgentDemo() {
   websocket.on('message', (message) => {
     try {
       const data = JSON.parse(message);
-      const contextId = data.context_id || 'default';
+      const contextId = data.contextId || 'default';
 
       if (data.audio) {
         //do stuff

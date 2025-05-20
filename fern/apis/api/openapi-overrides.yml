@@ -10,6 +10,9 @@ servers:
   - url: https://api.us.elevenlabs.io/
     x-fern-server-name: Production US
     description: Production routed only to the US region.
+  - url: https://api.eu.residency.elevenlabs.io
+    x-fern-server-name: Production EU
+    description: Production route for customers with EU data residency.
 x-fern-groups:
   samples:
     summary: Samples
@@ -27,11 +30,6 @@ paths:
     get:
       summary: Get dubbed transcript
       x-fern-sdk-method-name: get_transcript_for_dub
-  /profile/{handle}:
-    get:
-      summary: Get a profile page
-      x-fern-sdk-group-name: voices
-      x-fern-sdk-method-name: get_a_profile_page
   /v1/dubbing/resource/{dubbing_id}:
     get:
       summary: Get dubbing resource
@@ -540,12 +538,23 @@ paths:
     delete:
       x-fern-audiences:
         - convai
+    patch:
+      x-fern-audiences:
+        - convai
   /v1/convai/knowledge-base/{documentation_id}/rag-index:
     post:
       x-fern-audiences:
         - convai
   /v1/convai/sip-trunk/outbound-call:
     post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/submit:
+    post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/workspace:
+    get:
       x-fern-audiences:
         - convai
   /v1/audio-native:
@@ -584,7 +593,6 @@ paths:
     post:
       description: Removes background noise from audio.
       summary: Audio isolation
-
   /v1/audio-isolation/stream:
     post:
       description: Removes background noise from audio.
@@ -828,6 +836,8 @@ components:
       x-fern-type-name: GetProjectsResponse
     GetPronunciationDictionaryMetadataResponseModel:
       x-fern-type-name: GetPronunciationDictionaryMetadataResponse
+    GetPhoneNumberResponseModel:
+      x-fern-type-name: GetPhoneNumberResponse
     GetSpeechHistoryResponseModel:
       x-fern-type-name: GetSpeechHistoryResponse
     GetVoicesResponseModel:
@@ -859,6 +869,8 @@ components:
     ProjectSnapshotsResponseModel:
       x-fern-type-name: ProjectSnapshotsResponse
     PronunciationDictionaryVersionLocatorDBModel:
+      x-fern-type-name: PronunciationDictionaryVersionLocator
+    PronunciationDictionaryVersionLocatorRequestModel:
       x-fern-type-name: PronunciationDictionaryVersionLocator
     RecordingResponseModel:
       x-fern-type-name: RecordingResponse

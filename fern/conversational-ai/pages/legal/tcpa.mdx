@@ -1,0 +1,62 @@
+---
+title: Overview of Key TCPA Requirements
+---
+
+<Warning title="Legal Disclaimer">
+  This guide is for informational purposes only and is not comprehensive. This guide does not
+  constitute legal advice. The TCPA is complex and subject to interpretation. Consult with qualified
+  legal counsel to ensure your specific use of ElevenLabs Conversational AI for outbound calling
+  complies with all applicable laws and regulations. Visit our [Compliance Portal](https://elevenlabs.io/compliance) for comprehensive information on
+  our certifications and practices.
+
+</Warning>
+
+This guide provides a high-level overview of certain key requirements under the Telephone Consumer Protection Act (TCPA) for developers and businesses using ElevenLabs Conversational AI for outbound calls in the United States. Adherence to the TCPA is critical when making automated calls or using AI-generated voices for outbound communications.
+
+<Note>
+  The TCPA primarily governs **outbound** calls and texts. It does not generally apply to inbound
+  communications initiated by the consumer. In addition to complying with the TCPA, you must also
+  comply with all applicable state-level laws that may govern telemarketing, automated calls, or the
+  use of AI-generated voices. Many states have enacted their own regulations that may be more
+  restrictive than federal requirements.
+</Note>
+
+## Types of Consent Required
+
+The type of consent needed under the TCPA depends on whether your outbound call using ElevenLabs AI voice is classified as **marketing** or **non-marketing**. ElevenLabs' AI-generated voices are considered "artificial or prerecorded voices" under the TCPA, triggering specific consent rules.
+
+| Call Type using ElevenLabs AI          | Consent Required                         | Consent Requirements                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Sample Consent Disclosure Language (Illustrative)                                                                                                                                                                                       |
+| :------------------------------------- | :--------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Marketing Call**                     | **Prior Express Written Consent (PEWC)** | 1. A **signed written agreement** from the recipient (electronic signatures under E-SIGN Act are valid).<br /><br />2. The agreement must feature a **clear and conspicuous disclosure** stating that:<br />&nbsp;&nbsp;&nbsp;&nbsp; (A) The recipient authorizes _[Your Company Name]_ to make automated calls using an artificial/prerecorded voice to the specific phone number provided; **AND**<br />&nbsp;&nbsp;&nbsp;&nbsp; (B) Consent is **not** a condition of purchasing any goods or services. | "By checking this box and providing my phone number, I agree to receive automated marketing calls from [Your Company Name], including using an AI-generated voice, at the number provided. Consent is not a condition of any purchase." |
+| **Non-Marketing / Informational Call** | **Prior Express Consent (PEC)**          | The consumer must have given permission to be contacted at the number provided for informational purposes (e.g., providing a phone number for appointment reminders or account updates). While not always requiring a written agreement like PEWC, consent must still be express and affirmative.                                                                                                                                                                                                          | "Please provide your phone number if you'd like to receive [e.g., appointment reminders, service updates] from _[Your Company Name]_, including automated calls using an AI-generated voice."                                           |
+
+<Note>
+  \*Signatures for PEWC can comply with the E-SIGN Act (e.g., via website form submission, email
+  confirmation, or a recorded telephone keypress after clear disclosure).
+</Note>
+
+## Key Compliance Guidelines for Developers
+
+When using ElevenLabs Conversational AI for outbound calling:
+
+1.  **Affirmative Opt-In**: Consent must be affirmative. Pre-checked boxes for consent are not compliant.
+2.  **Consent Revocation**: Consumers can revoke consent at any time through "any reasonable manner" (e.g., verbal request during a call, email, text reply like "STOP").
+    - Ensure your system, especially interactive AI, can recognize and process opt-out requests, for example using our [end call tool](/docs/)
+    - Honor revocations promptly, and in all cases within 10 business days..
+3.  **Record Keeping**: Maintain clear records of all obtained consents (who, when, where, and how consent was given) and any revocations. The burden of proving consent is on the caller.
+4.  **Calling Time Restrictions**: Outbound calls to residential numbers are restricted to 8:00 a.m. to 9:00 p.m. in the recipient's local time zone. Implement time-zone awareness.
+5.  **Do-Not-Call (DNC) Lists**:
+    - Maintain an internal DNC list of individuals who have asked not to be called.
+    - For marketing calls, scrub lists against the National DNC Registry, unless an exception (like valid PEWC) applies.
+6.  **Identify the Caller**: Clearly state the name of the company at the beginning of the call.
+7.  **Provide a Callback Number**: Share a toll-free number that recipients can use to opt out of future calls.
+8.  **Enable Automated Opt-Outs for Promotional Calls**: For promotional calls, provide an automated opt-out mechanism within two seconds of identifying the company. Include brief instructions on how to use it. If the recipient opts out, the system must (i) immediately end the call and (ii) record the number on the company's internal opt-out list. If leaving a voicemail, include a toll-free number that connects to an automated opt-out system with the same functionality.
+
+## Understanding "Marketing"
+
+Under the TCPA, a call is generally considered **"marketing"** if its purpose is to:
+
+- Encourage the purchase or rental of, or investment in, property, goods, or services.
+- Advertise the commercial availability or quality of any property, goods, or services.
+
+If your call includes any promotional content, it will likely be classified as marketing, requiring PEWC.
