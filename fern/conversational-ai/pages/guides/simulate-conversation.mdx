@@ -66,8 +66,8 @@ print(response)
 ```
 
 ```typescript title="TypeScript"
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
 
 dotenv.config();
 const apiKey = process.env.ELEVENLABS_API_KEY;
@@ -75,8 +75,8 @@ const elevenlabs = new ElevenLabsClient({
   apiKey: apiKey,
 });
 const response = await elevenlabs.conversationalAi.agents.simulateConversation('YOUR_AGENT_ID', {
-  simulation_specification: {
-    simulated_user_config: {
+  simulationSpecification: {
+    simulatedUserConfig: {
       prompt: {
         prompt: 'Your goal is to be a really difficult user.',
         llm: 'gpt-4o',
@@ -84,12 +84,12 @@ const response = await elevenlabs.conversationalAi.agents.simulateConversation('
       },
     },
   },
-  extra_evaluation_criteria: [
+  extraEvaluationCriteria: [
     {
       id: 'politeness_check',
       name: 'Politeness Check',
-      conversation_goal_prompt: 'The agent was polite.',
-      use_knowledge_base: false,
+      conversationGoalPrompt: 'The agent was polite.',
+      useKnowledgeBase: false,
     },
   ],
 });

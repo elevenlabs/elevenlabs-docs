@@ -34,15 +34,15 @@ for chunk in audio_stream:
 In Node / Typescript, a streaming request looks like:
 
 ```javascript maxLines=0
-import { ElevenLabsClient, stream } from 'elevenlabs';
+import { ElevenLabsClient, stream } from '@elevenlabs/elevenlabs-js';
 import { Readable } from 'stream';
 
 const elevenlabs = new ElevenLabsClient();
 
 async function main() {
-  const audioStream = await elevenlabs.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
+  const audioStream = await elevenlabs.textToSpeech.stream('JBFqnCBsd6RMkjVDRZzb', {
     text: 'This is a test',
-    model_id: 'eleven_multilingual_v2',
+    modelId: 'eleven_multilingual_v2',
   });
 
   // option 1: play the streamed audio locally

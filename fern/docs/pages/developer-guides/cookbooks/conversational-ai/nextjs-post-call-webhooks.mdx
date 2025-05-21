@@ -171,7 +171,7 @@ To secure your conversational AI agent, you need to enable authentication in the
 Once authentication is enabled, you will need to create a signed URL in a secure server-side environment to initiate a conversation with the agent. In Next.js, you can do this by setting up a new API route.
 
 ```tsx ./app/api/signed-url/route.ts
-import { ElevenLabsClient } from 'elevenlabs';
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -182,9 +182,9 @@ export async function GET() {
   try {
     const elevenlabs = new ElevenLabsClient();
     const response = await elevenlabs.conversationalAi.conversations.getSignedUrl({
-      agent_id: agentId,
+      agentId,
     });
-    return NextResponse.json({ signedUrl: response.signed_url });
+    return NextResponse.json({ signedUrl: response.signedUrl });
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Failed to get signed URL' }, { status: 500 });
@@ -286,8 +286,8 @@ Create a new `upload` server action to handle the knowledge base creation upon f
 ```tsx ./app/actions/upload.ts {26,32,44,56-60}
 'use server';
 
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import { Redis } from '@upstash/redis';
-import { ElevenLabsClient } from 'elevenlabs';
 import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 
@@ -366,9 +366,9 @@ There's a few steps that are happening here, namely:
 5. Send an email to the user to notify them that their custom conversational AI agent is ready to chat.
 
 ```ts ./app/api/convai-webhook/route.ts
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import { Redis } from '@upstash/redis';
 import crypto from 'crypto';
-import { ElevenLabsClient } from 'elevenlabs';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { Resend } from 'resend';
@@ -406,13 +406,13 @@ export async function POST(req: NextRequest) {
       try {
         // Design the voice
         const voicePreview = await elevenlabs.textToVoice.createPreviews({
-          voice_description: analysis.data_collection_results.voice_description.value,
+          voiceDescription: analysis.data_collection_results.voice_description.value,
           text: 'The night air carried whispers of betrayal, thick as London fog. I adjusted my cufflinks - after all, even spies must maintain appearances, especially when the game is afoot.',
         });
         const voice = await elevenlabs.textToVoice.createVoiceFromPreview({
-          voice_name: `voice-${conversation_id}`,
-          voice_description: `Voice for ${conversation_id}`,
-          generated_voice_id: voicePreview.previews[0].generated_voice_id,
+          voiceName: `voice-${conversation_id}`,
+          voiceDescription: `Voice for ${conversation_id}`,
+          generatedVoiceId: voicePreview.previews[0].generatedVoiceId,
         });
 
         // Get the knowledge base from redis
@@ -421,27 +421,27 @@ export async function POST(req: NextRequest) {
         // Handle agent creation
         const agent = await elevenlabs.conversationalAi.agents.create({
           name: `Agent for ${conversation_id}`,
-          conversation_config: {
-            tts: { voice_id: voice.voice_id },
+          conversationConfig: {
+            tts: { voiceId: voice.voice_id },
             agent: {
               prompt: {
                 prompt:
                   analysis.data_collection_results.agent_description?.value ??
                   'You are a helpful assistant.',
-                knowledge_base: redisRes.knowledgeBase,
+                knowledgeBase: redisRes.knowledgeBase,
               },
-              first_message: 'Hello, how can I help you today?',
+              firstMessage: 'Hello, how can I help you today?',
             },
           },
         });
-        console.log('Agent created', { agent: agent.agent_id });
+        console.log('Agent created', { agent: agent.agentId });
         // Send email to user
         console.log('Sending email to', redisRes.email);
         await resend.emails.send({
           from: process.env.RESEND_FROM_EMAIL!,
           to: redisRes.email,
           subject: 'Your Conversational AI agent is ready to chat!',
-          react: EmailTemplate({ agentId: agent.agent_id }),
+          react: EmailTemplate({ agentId: agent.agentId }),
         });
       } catch (error) {
         console.error(error);
@@ -455,42 +455,9 @@ export async function POST(req: NextRequest) {
 
 const constructWebhookEvent = async (req: NextRequest, secret?: string) => {
   const body = await req.text();
-  const signature_header = req.headers.get('ElevenLabs-Signature');
+  const signatureHeader = req.headers.get('ElevenLabs-Signature');
 
-  if (!signature_header) {
-    return { event: null, error: 'Missing signature header' };
-  }
-
-  const headers = signature_header.split(',');
-  const timestamp = headers.find((e) => e.startsWith('t='))?.substring(2);
-  const signature = headers.find((e) => e.startsWith('v0='));
-
-  if (!timestamp || !signature) {
-    return { event: null, error: 'Invalid signature format' };
-  }
-
-  // Validate timestamp
-  const reqTimestamp = Number(timestamp) * 1000;
-  const tolerance = Date.now() - 30 * 60 * 1000;
-  if (reqTimestamp < tolerance) {
-    return { event: null, error: 'Request expired' };
-  }
-
-  // Validate hash
-  const message = `${timestamp}.${body}`;
-
-  if (!secret) {
-    return { event: null, error: 'Webhook secret not configured' };
-  }
-
-  const digest = 'v0=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
-
-  if (signature !== digest) {
-    return { event: null, error: 'Invalid signature' };
-  }
-
-  const event = JSON.parse(body);
-  return { event, error: null };
+  return await elevenlabs.webhooks.constructEvent(body, signatureHeader, secret);
 };
 
 async function getRedisDataWithRetry(
@@ -536,42 +503,9 @@ export async function POST(req: NextRequest) {
 // ...
 const constructWebhookEvent = async (req: NextRequest, secret?: string) => {
   const body = await req.text();
-  const signature_header = req.headers.get('ElevenLabs-Signature');
+  const signatureHeader = req.headers.get('ElevenLabs-Signature');
 
-  if (!signature_header) {
-    return { event: null, error: 'Missing signature header' };
-  }
-
-  const headers = signature_header.split(',');
-  const timestamp = headers.find((e) => e.startsWith('t='))?.substring(2);
-  const signature = headers.find((e) => e.startsWith('v0='));
-
-  if (!timestamp || !signature) {
-    return { event: null, error: 'Invalid signature format' };
-  }
-
-  // Validate timestamp
-  const reqTimestamp = Number(timestamp) * 1000;
-  const tolerance = Date.now() - 30 * 60 * 1000;
-  if (reqTimestamp < tolerance) {
-    return { event: null, error: 'Request expired' };
-  }
-
-  // Validate hash
-  const message = `${timestamp}.${body}`;
-
-  if (!secret) {
-    return { event: null, error: 'Webhook secret not configured' };
-  }
-
-  const digest = 'v0=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
-
-  if (signature !== digest) {
-    return { event: null, error: 'Invalid signature' };
-  }
-
-  const event = JSON.parse(body);
-  return { event, error: null };
+  return await elevenlabs.webhooks.constructEvent(body, signatureHeader, secret);
 };
 
 async function getRedisDataWithRetry(
@@ -608,13 +542,13 @@ Using the `voice_description` from the webhook payload, we create a custom voice
 
 // Design the voice
 const voicePreview = await elevenlabs.textToVoice.createPreviews({
-  voice_description: analysis.data_collection_results.voice_description.value,
+  voiceDescription: analysis.data_collection_results.voice_description.value,
   text: 'The night air carried whispers of betrayal, thick as London fog. I adjusted my cufflinks - after all, even spies must maintain appearances, especially when the game is afoot.',
 });
 const voice = await elevenlabs.textToVoice.createVoiceFromPreview({
-  voice_name: `voice-${conversation_id}`,
-  voice_description: `Voice for ${conversation_id}`,
-  generated_voice_id: voicePreview.previews[0].generated_voice_id,
+  voiceName: `voice-${conversation_id}`,
+  voiceDescription: `Voice for ${conversation_id}`,
+  generatedVoiceId: voicePreview.previews[0].generatedVoiceId,
 });
 
 // ...
@@ -666,21 +600,21 @@ Create the conversational AI agent for the user based on the `agent_description`
 
 // Handle agent creation
 const agent = await elevenlabs.conversationalAi.agents.create({
-  name: `Agent for ${conversation_id}`,
-  conversation_config: {
-    tts: { voice_id: voice.voice_id },
+  name: `Agent for ${conversationId}`,
+  conversationConfig: {
+    tts: { voiceId: voice.voiceId },
     agent: {
       prompt: {
         prompt:
           analysis.data_collection_results.agent_description?.value ??
           'You are a helpful assistant.',
-        knowledge_base: redisRes.knowledgeBase,
+        knowledgeBase: redisRes.knowledgeBase,
       },
-      first_message: 'Hello, how can I help you today?',
+      firstMessage: 'Hello, how can I help you today?',
     },
   },
 });
-console.log('Agent created', { agent: agent.agent_id });
+console.log('Agent created', { agent: agent.agentId });
 
 // ...
 ```
@@ -702,7 +636,7 @@ await resend.emails.send({
   from: process.env.RESEND_FROM_EMAIL!,
   to: redisRes.email,
   subject: 'Your Conversational AI agent is ready to chat!',
-  react: EmailTemplate({ agentId: agent.agent_id }),
+  react: EmailTemplate({ agentId: agent.agentId }),
 });
 
 // ...

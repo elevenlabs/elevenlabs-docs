@@ -59,7 +59,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
 
         ```typescript maxLines=0
         // example.mts
-        import { ElevenLabsClient } from "elevenlabs";
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
         import fs from "node:fs";
 
@@ -158,7 +158,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         // Trigger the speaker separation action, this will take some time to complete
         for (const sample of samples) {
             if (sample.sample_id) {
-                await elevenlabs.voices.pvc.samples.speakers.separate(voice.voice_id, sample.sample_id);
+                await elevenlabs.voices.pvc.samples.speakers.separate(voiceId, sample.sampleId);
             }
         }
 
@@ -169,7 +169,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
             for (const id of ids) {
                 if (!id) continue;
 
-                const { status } = await elevenlabs.voices.pvc.samples.speakers.get(voice.voice_id, id);
+                const { status } = await elevenlabs.voices.pvc.samples.speakers.get(voice.voiceId, id);
                 console.log(`Sample ${id} status: ${status}`);
                 if (status === "completed" || status === "failed") {
                     ids.splice(ids.indexOf(id), 1);
@@ -240,19 +240,19 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         // After separation is completed, get the list of speakers and their audio
         if (samples) {
             for (const sample of samples) {
-                if (!sample.sample_id) continue;
+                if (!sample.sampleId) continue;
 
-                const { speakers } = await elevenlabs.voices.pvc.samples.speakers.get(voiceId, sample.sample_id)
+                const { speakers } = await elevenlabs.voices.pvc.samples.speakers.get(voiceId, sample.sampleId)
 
                 if (speakers) {
                     for (const speaker of Object.values(speakers)) {
-                        if (!speaker || !speaker.speaker_id) continue;
-                        const { audio_base_64: audioBase64 } = await elevenlabs.voices.pvc.samples.speakers.audio.get(voiceId, sample.sample_id, speaker.speaker_id);
+                        if (!speaker || !speaker.speakerId) continue;
+                        const { audioBase64 } = await elevenlabs.voices.pvc.samples.speakers.audio.get(voiceId, sample.sampleId, speaker.speakerId);
                         const audioBuffer = Buffer.from(audioBase64, 'base64');
 
                         // Write the audio to a file
                         // Note which speaker ID you wish to use for the PVC
-                        fs.writeFileSync(`path/to/speakers/sample_${sample.sample_id}_speaker_${speaker.speaker_id}.mp3`, audioBuffer);
+                        fs.writeFileSync(`path/to/speakers/sample_${sample.sampleId}_speaker_${speaker.speakerId}.mp3`, audioBuffer);
                     }
                 }
             }
@@ -272,8 +272,8 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         )
         ```
         ```typescript
-        await elevenlabs.voices.pvc.samples.update(voice.voice_id, samples.sample_id, {
-            selected_speaker_ids: [speaker.speaker_id],
+        await elevenlabs.voices.pvc.samples.update(voice.voiceId, samples.sampleId, {
+            selectedSpeakerIds: [speaker.speakerId],
         })
         ```
 
@@ -312,7 +312,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         )
         ```
         ```typescript
-        await elevenlabs.voices.pvc.verification.captcha.verify(voice.voice_id, {
+        await elevenlabs.voices.pvc.verification.captcha.verify(voice.voiceId, {
         	recording: fs.createReadStream("/path/to/recording.mp3"),
         })
         ```
@@ -334,7 +334,7 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         ```
 
         ```typescript
-        await elevenlabs.voices.pvc.verification.request(voice.voice_id, {
+        await elevenlabs.voices.pvc.verification.request(voice.voiceId, {
             files: [fs.createReadStream("/path/to/verification/files.txt")],
         });
         ```
@@ -375,13 +375,13 @@ In terms of creating a PVC via the API, it contains considerably more steps than
         ```typescript maxLines=0
         await elevenlabs.voices.pvc.train(voiceId, {
             // Specify the model the PVC should be trained on
-            model_id: "eleven_multilingual_v2",
+            modelId: "eleven_multilingual_v2",
         });
 
         // Poll the fine tuning status until it is complete or fails
         // This example specifically checks for the eleven_multilingual_v2 model
         const interval = setInterval(async () => {
-            const { fine_tuning: fineTuning } = await elevenlabs.voices.get(voiceId);
+            const { fineTuning } = await elevenlabs.voices.get(voiceId);
             if (!fineTuning) return;
 
             console.log(`Fine tuning progress: ${fineTuning?.progress?.eleven_multilingual_v2}`);

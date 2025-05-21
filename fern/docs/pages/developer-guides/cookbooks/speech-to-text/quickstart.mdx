@@ -51,7 +51,7 @@ This guide will show you how to convert spoken audio into text using the Speech 
 
         ```typescript maxLines=0
         // example.mts
-        import { ElevenLabsClient } from "elevenlabs";
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
 
         const elevenlabs = new ElevenLabsClient();
@@ -63,9 +63,9 @@ This guide will show you how to convert spoken audio into text using the Speech 
 
         const transcription = await elevenlabs.speechToText.convert({
           file: audioBlob,
-          model_id: "scribe_v1", // Model to use, for now only "scribe_v1" is support.
-          tag_audio_events: true, // Tag audio events like laughter, applause, etc.
-          language_code: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
+          modelId: "scribe_v1", // Model to use, for now only "scribe_v1" is supported.
+          tagAudioEvents: true, // Tag audio events like laughter, applause, etc.
+          languageCode: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
           diarize: true, // Whether to annotate who is speaking
         });
 

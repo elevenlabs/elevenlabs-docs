@@ -2,14 +2,13 @@
 
 import type {
   GetVoicesResponse,
-  AddVoiceResponseModel,
   EditVoiceResponseModel,
   DeleteVoiceResponseModel,
   Voice,
-  BodyAddVoiceV1VoicesAddPost,
-  BodyEditVoiceV1VoicesVoiceIdEditPost,
   VoiceSettings,
-} from 'elevenlabs/api';
+  AddVoiceIvcResponseModel,
+  voices,
+} from '@elevenlabs/elevenlabs-js/api';
 
 import { getElevenLabsClient, handleError } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';
@@ -20,7 +19,7 @@ export async function getVoices(): Promise<Result<GetVoicesResponse>> {
 
   try {
     const client = clientResult.value;
-    const response = await client.voices.getAll();
+    const response = await client.voices.search();
     return Ok(response);
   } catch (error) {
     return handleError(error, 'voice retrieval');
@@ -43,14 +42,14 @@ export async function getVoice(voiceId: string): Promise<Result<Voice>> {
 }
 
 export async function addVoice(
-  request: BodyAddVoiceV1VoicesAddPost
-): Promise<Result<AddVoiceResponseModel>> {
+  request: voices.ivc.BodyAddVoiceV1VoicesAddPost
+): Promise<Result<AddVoiceIvcResponseModel>> {
   const clientResult = await getElevenLabsClient();
   if (!clientResult.ok) return Err(clientResult.error);
 
   try {
     const client = clientResult.value;
-    const response = await client.voices.add(request);
+    const response = await client.voices.ivc.create(request);
 
     return Ok(response);
   } catch (error) {
@@ -60,14 +59,14 @@ export async function addVoice(
 
 export async function editVoice(
   voiceId: string,
-  request: BodyEditVoiceV1VoicesVoiceIdEditPost
+  request: voices.BodyEditVoiceV1VoicesVoiceIdEditPost
 ): Promise<Result<EditVoiceResponseModel>> {
   const clientResult = await getElevenLabsClient();
   if (!clientResult.ok) return Err(clientResult.error);
 
   try {
     const client = clientResult.value;
-    const response = await client.voices.edit(voiceId, request);
+    const response = await client.voices.update(voiceId, request);
 
     return Ok(response);
   } catch (error) {
@@ -94,7 +93,7 @@ export async function getDefaultVoiceSettings(): Promise<Result<VoiceSettings>> 
 
   try {
     const client = clientResult.value;
-    const response = await client.voices.getDefaultSettings();
+    const response = await client.voices.settings.getDefault();
     return Ok(response);
   } catch (error) {
     return handleError(error, 'default voice settings retrieval');

@@ -108,8 +108,8 @@ def text_to_speech_file(text: str) -> str:
 ```
 
 ```typescript TypeScript
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
 import { createWriteStream } from 'fs';
 import { v4 as uuid } from 'uuid';
 
@@ -125,14 +125,14 @@ export const createAudioFileFromText = async (text: string): Promise<string> => 
   return new Promise<string>(async (resolve, reject) => {
     try {
       const audio = await elevenlabs.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
-        model_id: 'eleven_multilingual_v2',
+        modelId: 'eleven_multilingual_v2',
         text,
-        output_format: 'mp3_44100_128',
+        outputFormat: 'mp3_44100_128',
         // Optional voice settings that allow you to customize the output
-        voice_settings: {
+        voiceSettings: {
           stability: 0,
-          similarity_boost: 0,
-          use_speaker_boost: true,
+          similarityBoost: 0,
+          useSpeakerBoost: true,
           speed: 1.0,
         },
       });
@@ -220,8 +220,8 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
 ```
 
 ```typescript TypeScript
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
 
 dotenv.config();
 
@@ -237,14 +237,14 @@ const elevenlabs = new ElevenLabsClient({
 
 export const createAudioStreamFromText = async (text: string): Promise<Buffer> => {
   const audioStream = await elevenlabs.textToSpeech.stream('JBFqnCBsd6RMkjVDRZzb', {
-    model_id: 'eleven_multilingual_v2',
+    modelId: 'eleven_multilingual_v2',
     text,
-    output_format: 'mp3_44100_128',
+    outputFormat: 'mp3_44100_128',
     // Optional voice settings that allow you to customize the output
-    voice_settings: {
+    voiceSettings: {
       stability: 0,
-      similarity_boost: 1.0,
-      use_speaker_boost: true,
+      similarityBoost: 1.0,
+      useSpeakerBoost: true,
       speed: 1.0,
     },
   });

@@ -12,7 +12,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const agentsResult = await getAgents();
 
   const sortedAgents = agentsResult.ok
-    ? [...agentsResult.value.agents].sort((a, b) => b.created_at_unix_secs - a.created_at_unix_secs)
+    ? [...agentsResult.value.agents].sort((a, b) => b.createdAtUnixSecs - a.createdAtUnixSecs)
     : [];
 
   return (
