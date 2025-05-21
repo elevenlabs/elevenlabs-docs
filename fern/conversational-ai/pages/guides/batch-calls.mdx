@@ -61,9 +61,21 @@ Follow these steps to create a new batch call:
 
 - **Upload File**: Upload your recipient list. Supported file formats are CSV and XLS.
 - **Formatting**:
-  - The `phone_number` column is mandatory in your uploaded file.
+  - The `phone_number` column is mandatory in your uploaded file (if your agent has a `phone_number` dynamic variable that also has to be set, please rename it).
   - You can include other columns (e.g., `name`, `user_name`) which will be passed as dynamic variables to personalize the calls.
   - A template is available for download to ensure correct formatting.
+
+<Note title="Setting overrides">
+  The following column headers are special fields that are used to override an agent's initial
+  configuration:
+    - language
+    - first_message
+    - system_prompt
+    - voice_id
+  The batch call will fail if those fields are passed but are not set to be overridable in the agent's security settings. See more
+  [here](/docs/conversational-ai/customization/personalization/overrides).
+
+</Note>
 
 </Step>
 
