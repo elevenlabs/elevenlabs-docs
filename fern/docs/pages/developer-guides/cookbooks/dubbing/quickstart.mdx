@@ -35,7 +35,7 @@ This guide will show you how to dub an audio file across languages. In this exam
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
           api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
 
@@ -50,14 +50,14 @@ This guide will show you how to dub an audio file across languages. In this exam
         audio_data.name = "audio.mp3"
 
         # Start dubbing
-        dubbed = client.dubbing.dub_a_video_or_an_audio_file(
+        dubbed = elevenlabs.dubbing.create(
             file=audio_data, target_lang=target_lang
         )
 
         while True:
-            status = client.dubbing.get_dubbing_project_metadata(dubbed.dubbing_id).status
+            status = elevenlabs.dubbing.get(dubbed.dubbing_id).status
             if status == "dubbed":
-                dubbed_file = client.dubbing.get_dubbed_file(dubbed.dubbing_id, target_lang)
+                dubbed_file = elevenlabs.dubbing.audio.get(dubbed.dubbing_id, target_lang)
                 play(dubbed_file)
                 break
             else:
@@ -70,7 +70,7 @@ This guide will show you how to dub an audio file across languages. In this exam
         import { ElevenLabsClient, play } from "elevenlabs";
         import "dotenv/config";
 
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
 
         const targetLang = "es"; // spanish
         const sourceAudio = await fetch(
@@ -81,17 +81,17 @@ This guide will show you how to dub an audio file across languages. In this exam
         });
 
         // Start dubbing
-        const dubbed = await client.dubbing.dubAVideoOrAnAudioFile({
+        const dubbed = await elevenlabs.dubbing.create({
           file: audioBlob,
           target_lang: targetLang,
         });
 
         while (true) {
-          const { status } = await client.dubbing.getDubbingProjectMetadata(
+          const { status } = await elevenlabs.dubbing.get(
             dubbed.dubbing_id
           );
           if (status === "dubbed") {
-            const dubbedFile = await client.dubbing.getDubbedFile(
+            const dubbedFile = await elevenlabs.dubbing.audio.get(
               dubbed.dubbing_id,
               targetLang
             );

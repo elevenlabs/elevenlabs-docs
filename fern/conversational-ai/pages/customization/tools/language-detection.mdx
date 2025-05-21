@@ -77,7 +77,7 @@ from elevenlabs import (
 )
 
 # Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Create the language detection tool
 language_detection_tool = PromptAgentInputToolsItem_System(
@@ -150,7 +150,7 @@ conversation_config = ConversationalConfig(
 )
 
 # Create the agent
-response = client.conversational_ai.create_agent(
+response = elevenlabs.conversational_ai.agents.create(
     conversation_config=conversation_config
 )
 ```
@@ -159,12 +159,12 @@ response = client.conversational_ai.create_agent(
 import { ElevenLabs } from 'elevenlabs';
 
 // Initialize the client
-const client = new ElevenLabs({
+const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
 // Create the agent with language detection tool
-await client.conversationalAi.createAgent({
+await elevenlabs.conversationalAi.agents.create({
   conversation_config: {
     agent: {
       prompt: {
