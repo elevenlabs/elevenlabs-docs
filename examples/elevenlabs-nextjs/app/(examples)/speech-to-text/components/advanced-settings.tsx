@@ -1,6 +1,6 @@
 'use client';
 
-import type { BodySpeechToTextV1SpeechToTextPost } from 'elevenlabs/api';
+import type { BodySpeechToTextV1SpeechToTextPost } from '@elevenlabs/elevenlabs-js/api';
 import { ChevronDown, Settings2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -62,11 +62,11 @@ export default function AdvancedSettings({ options, onChange }: AdvancedSettings
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="tag_audio_events"
-                  checked={options.tag_audio_events}
+                  checked={options.tagAudioEvents}
                   onCheckedChange={(checked) =>
                     onChange({
                       ...options,
-                      tag_audio_events: checked === true,
+                      tagAudioEvents: checked === true,
                     })
                   }
                 />
@@ -88,11 +88,11 @@ export default function AdvancedSettings({ options, onChange }: AdvancedSettings
                 min="1"
                 max="32"
                 placeholder="Auto-detect (default)"
-                value={options.num_speakers || ''}
+                value={options.numSpeakers || ''}
                 onChange={(e) =>
                   onChange({
                     ...options,
-                    num_speakers: e.target.value ? parseInt(e.target.value) : undefined,
+                    numSpeakers: e.target.value ? Number.parseInt(e.target.value) : undefined,
                   })
                 }
                 className="max-w-full"
@@ -106,11 +106,11 @@ export default function AdvancedSettings({ options, onChange }: AdvancedSettings
                 id="language_code"
                 type="text"
                 placeholder="e.g., en, fr, es, de"
-                value={options.language_code || ''}
+                value={options.languageCode || ''}
                 onChange={(e) =>
                   onChange({
                     ...options,
-                    language_code: e.target.value || undefined,
+                    languageCode: e.target.value || undefined,
                   })
                 }
                 className="max-w-full"
@@ -124,11 +124,11 @@ export default function AdvancedSettings({ options, onChange }: AdvancedSettings
           <div className="bg-muted/50 mt-2 space-y-3 rounded-lg p-4">
             <h4 className="font-medium">Timestamp Granularity</h4>
             <RadioGroup
-              value={options.timestamps_granularity}
+              value={options.timestampsGranularity}
               onValueChange={(value) =>
                 onChange({
                   ...options,
-                  timestamps_granularity: value as 'none' | 'word' | 'character',
+                  timestampsGranularity: value as 'none' | 'word' | 'character',
                 })
               }
               className="flex flex-wrap gap-4"

@@ -97,19 +97,19 @@ export default function Page() {
     setTranscription((prev) => ({ ...prev, isProcessing: true }));
 
     try {
-      const options: TranscriptionOptions = {
-        model_id: transcriptionOptions.model_id,
-        timestamps_granularity: transcriptionOptions.timestamps_granularity,
-        tag_audio_events: transcriptionOptions.tag_audio_events,
-        diarize: transcriptionOptions.diarize,
-      };
+			const options: TranscriptionOptions = {
+				modelId: transcriptionOptions.model_id,
+				timestampsGranularity: transcriptionOptions.timestamps_granularity,
+				tagAudioEvents: transcriptionOptions.tag_audio_events,
+				diarize: transcriptionOptions.diarize,
+			};
 
       if (transcriptionOptions.num_speakers) {
         options.num_speakers = transcriptionOptions.num_speakers;
       }
 
       if (transcriptionOptions.language_code && transcriptionOptions.language_code.trim() !== '') {
-        options.language_code = transcriptionOptions.language_code.trim();
+        options.languageCode = transcriptionOptions.languageCode.trim();
       }
 
       const startTime = performance.now();

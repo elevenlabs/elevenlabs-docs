@@ -1,6 +1,6 @@
 'use client';
 
-import { BodySoundGenerationV1SoundGenerationPost } from 'elevenlabs/api';
+import { BodySoundGenerationV1SoundGenerationPost } from '@elevenlabs/elevenlabs-js/api';
 import { ClockIcon, DiamondIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -39,12 +39,12 @@ export function SoundEffectPromptBar({
 
       const request: BodySoundGenerationV1SoundGenerationPost = {
         text: data.text,
-        prompt_influence: data.prompt_influence,
+        promptInfluence: data.promptInfluence,
       };
 
       // Only add duration_seconds if it's a number (not 'auto')
-      if (data.duration_seconds !== 'auto') {
-        request.duration_seconds = data.duration_seconds;
+      if (data.durationSeconds !== 'auto') {
+        request.durationSeconds = data.durationSeconds;
       }
 
       const result = await createSoundEffect(request);
@@ -71,8 +71,8 @@ export function SoundEffectPromptBar({
   };
 
   const renderLeftControls = ({ form }: PromptControlsProps<SoundEffectInputType>) => {
-    const duration = form.watch('duration_seconds');
-    const promptInfluence = form.watch('prompt_influence');
+    const duration = form.watch('durationSeconds');
+    const promptInfluence = form.watch('promptInfluence');
 
     return (
       <div className="flex flex-wrap gap-1.5">
@@ -93,7 +93,7 @@ export function SoundEffectPromptBar({
             <DropdownMenuRadioGroup
               value={String(duration)}
               onValueChange={(value) =>
-                form.setValue('duration_seconds', value === 'auto' ? 'auto' : parseFloat(value), {
+                form.setValue('durationSeconds', value === 'auto' ? 'auto' : Number.parseFloat(value), {
                   shouldDirty: true,
                   shouldTouch: true,
                 })
@@ -144,7 +144,7 @@ export function SoundEffectPromptBar({
               <Slider
                 value={[promptInfluence]}
                 onValueChange={(values) =>
-                  form.setValue('prompt_influence', values[0], {
+                  form.setValue('promptInfluence', values[0], {
                     shouldDirty: true,
                     shouldTouch: true,
                   })
@@ -170,8 +170,8 @@ export function SoundEffectPromptBar({
       schema={soundEffectSchema}
       defaultValues={{
         text: '',
-        duration_seconds: 'auto',
-        prompt_influence: 0.3,
+        durationSeconds: 'auto',
+        promptInfluence: 0.3,
       }}
       promptFieldName="text"
       placeholder="Describe your sound effect..."
