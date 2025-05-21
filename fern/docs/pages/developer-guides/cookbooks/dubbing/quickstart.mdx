@@ -67,7 +67,7 @@ This guide will show you how to dub an audio file across languages. In this exam
 
         ```typescript maxLines=0
         // example.mts
-        import { ElevenLabsClient, play } from "elevenlabs";
+        import { ElevenLabsClient, play } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
 
         const elevenlabs = new ElevenLabsClient();
@@ -83,16 +83,16 @@ This guide will show you how to dub an audio file across languages. In this exam
         // Start dubbing
         const dubbed = await elevenlabs.dubbing.create({
           file: audioBlob,
-          target_lang: targetLang,
+          targetLang: targetLang,
         });
 
         while (true) {
           const { status } = await elevenlabs.dubbing.get(
-            dubbed.dubbing_id
+            dubbed.dubbingId
           );
           if (status === "dubbed") {
             const dubbedFile = await elevenlabs.dubbing.audio.get(
-              dubbed.dubbing_id,
+              dubbed.dubbingId,
               targetLang
             );
             await play(dubbedFile);

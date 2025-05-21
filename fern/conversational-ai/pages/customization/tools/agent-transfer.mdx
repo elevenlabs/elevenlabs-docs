@@ -127,7 +127,7 @@ print(response)
 ```
 
 ```javascript
-import { ElevenLabs } from 'elevenlabs';
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
 
 // Initialize the client
 const elevenlabs = new ElevenLabs({
@@ -136,24 +136,24 @@ const elevenlabs = new ElevenLabs({
 
 // Define transfer rules
 const transferRules = [
-  { agent_id: 'AGENT_ID_1', condition: 'When the user asks for billing support.' },
-  { agent_id: 'AGENT_ID_2', condition: 'When the user requests advanced technical help.' },
+  { agentId: 'AGENT_ID_1', condition: 'When the user asks for billing support.' },
+  { agentId: 'AGENT_ID_2', condition: 'When the user requests advanced technical help.' },
 ];
 
 // Create the agent with the transfer tool
 await elevenlabs.conversationalAi.agents.create({
-  conversation_config: {
+  conversationConfig: {
     agent: {
       prompt: {
         prompt: 'You are a helpful assistant.',
-        first_message: 'Hi, how can I help you today?',
+        firstMessage: 'Hi, how can I help you today?',
         tools: [
           {
             type: 'system',
             name: 'transfer_to_agent',
             description: 'Transfer the user to a specialized agent based on their request.', // Optional custom description
             params: {
-              system_tool_type: 'transfer_to_agent',
+              systemToolType: 'transfer_to_agent',
               transfers: transferRules,
             },
           },

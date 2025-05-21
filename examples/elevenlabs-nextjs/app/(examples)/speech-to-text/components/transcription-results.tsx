@@ -1,6 +1,6 @@
 'use client';
 
-import * as ElevenLabs from 'elevenlabs/api';
+import * as ElevenLabs from '@elevenlabs/elevenlabs-js/api';
 import { UserIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -11,16 +11,16 @@ import { TranscriptionOptions } from './advanced-settings';
 
 export type TranscriptionResult = Omit<
   ElevenLabs.SpeechToTextChunkResponseModel,
-  'language_code' | 'language_probability'
+  'languageCode' | 'languageProbability'
 > & {
   processingTimeMs?: number;
-  language_code?: string;
-  language_probability?: number;
+  languageCode?: string;
+  languageProbability?: number;
 };
 
 export type WordGroup = {
   id: string;
-  speaker_id: string;
+  speakerId: string;
   start: number;
   end: number;
   text: string;
@@ -63,7 +63,7 @@ export function TranscriptionResults({
 
       <TranscriptionBadges data={data} options={options} />
 
-      {options.timestamps_granularity !== 'none' && wordGroups.length > 0 ? (
+      {options.timestampsGranularity !== 'none' && wordGroups.length > 0 ? (
         <div className="mt-6 space-y-6">
           {wordGroups.map((group) => (
             <SpeakerGroup
@@ -77,7 +77,7 @@ export function TranscriptionResults({
         </div>
       ) : data.text ? (
         <div className="bg-card/50 border-muted/30 mt-4 rounded-lg border p-4 text-sm leading-relaxed">
-          {options.timestamps_granularity !== 'none' && data.words && data.words.length > 0 ? (
+          {options.timestampsGranularity !== 'none' && data.words && data.words.length > 0 ? (
             <div className="space-y-2">
               <p className="text-muted-foreground mb-3 text-xs">
                 Click on words to jump to their position in the audio
@@ -118,12 +118,12 @@ function TranscriptionBadges({
 }) {
   return (
     <div className="mb-6 mt-4 flex flex-wrap gap-2">
-      {data.language_code && (
+      {data.languageCode && (
         <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-          Language: {data.language_code.toUpperCase()}
-          {data.language_probability && (
+          Language: {data.languageCode.toUpperCase()}
+          {data.languageProbability && (
             <span className="ml-1 text-[10px] opacity-70">
-              ({(data.language_probability * 100).toFixed()}%)
+              ({(data.languageProbability * 100).toFixed()}%)
             </span>
           )}
         </Badge>
@@ -132,13 +132,13 @@ function TranscriptionBadges({
       {options.diarize && (
         <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
           Speakers:
-          {options.num_speakers ? (
-            <span className="ml-1">Manual ({options.num_speakers})</span>
+          {options.numSpeakers ? (
+            <span className="ml-1">Manual ({options.numSpeakers})</span>
           ) : (
             <span className="ml-1">
               Auto-detected (
-              {data.words?.some((w) => w.speaker_id)
-                ? new Set(data.words.filter((w) => w.speaker_id).map((w) => w.speaker_id)).size
+              {data.words?.some((w) => w.speakerId)
+                ? new Set(data.words.filter((w) => w.speakerId).map((w) => w.speakerId)).size
                 : 1}
               )
             </span>
@@ -151,15 +151,15 @@ function TranscriptionBadges({
       </Badge>
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-        Audio Events: {options.tag_audio_events ? 'Enabled' : 'Disabled'}
+        Audio Events: {options.tagAudioEvents ? 'Enabled' : 'Disabled'}
       </Badge>
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-        Granularity: <span className="ml-1 capitalize">{options.timestamps_granularity}</span>
+        Granularity: <span className="ml-1 capitalize">{options.timestampsGranularity}</span>
       </Badge>
 
       <Badge variant="outline" className="px-2 py-1 text-xs font-medium">
-        Model: {options.model_id}
+        Model: {options.modelId}
       </Badge>
     </div>
   );
@@ -185,7 +185,7 @@ interface SpeakerGroupProps {
 
 function SpeakerGroup({ group, currentTime, onSeekToTime, options }: SpeakerGroupProps) {
   const speakerId = group.speaker_id.replace('speaker_', '');
-  const colorIndex = parseInt(speakerId, 10) % SPEAKER_COLORS.length;
+  const colorIndex = Number.parseInt(speakerId, 10) % SPEAKER_COLORS.length;
   const speakerColor = SPEAKER_COLORS[colorIndex];
 
   return (
@@ -204,7 +204,7 @@ function SpeakerGroup({ group, currentTime, onSeekToTime, options }: SpeakerGrou
 
       <div className="flex-1">
         <div className="text-foreground/70 mb-1.5 flex items-center gap-2 text-sm">
-          <span className="font-medium">Speaker {parseInt(speakerId, 10) + 1}</span>
+          <span className="font-medium">Speaker {Number.parseInt(speakerId, 10) + 1}</span>
           <span className="text-muted-foreground text-xs">{formatTime(group.start)}</span>
         </div>
         <div className="bg-card/50 shadow-xs border-muted/30 rounded-lg border p-4 text-sm leading-relaxed">
@@ -259,7 +259,7 @@ function TranscriptWord({
       return <span key={`${groupId}-word-${wordIndex}`}> </span>;
     case 'word': {
       const useCharacterHighlighting =
-        options.timestamps_granularity === 'character' &&
+        options.timestampsGranularity === 'character' &&
         word.characters &&
         word.characters.length > 0;
 

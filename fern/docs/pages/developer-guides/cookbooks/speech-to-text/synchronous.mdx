@@ -84,7 +84,7 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
 
     ```javascript title="speechToText.mjs" maxLines=0
     import "dotenv/config";
-    import { ElevenLabsClient } from "elevenlabs";
+    import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 
     const elevenlabs = new ElevenLabsClient();
 
@@ -95,9 +95,9 @@ To convert the audio of a file to text, we'll use the `convert` method of the El
 
     const transcription = await elevenlabs.speechToText.convert({
         file: audioBlob,
-        model_id: "scribe_v1", // 'scribe_v1_experimental' is also available for new, experimental features
-        tag_audio_events: true, // Tag audio events like laughter, applause, etc.
-        language_code: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
+        modelId: "scribe_v1", // 'scribe_v1_experimental' is also available for new, experimental features
+        tagAudioEvents: true, // Tag audio events like laughter, applause, etc.
+        languageCode: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
         diarize: true, // Whether to annotate who is speaking
     });
 

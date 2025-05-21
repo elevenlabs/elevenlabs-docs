@@ -92,7 +92,7 @@ for chunk in transcription:
 
 ```javascript title="speechToTextStream.js" maxLines=0
 import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 dotenv.config();
 
@@ -105,11 +105,11 @@ const audioBlob = new Blob([await response.arrayBuffer()], { type: 'audio/mp3' }
 
 const transcription = await elevenlabs.speechToText.convertAsStream({
   file: audioBlob,
-  model_id: 'scribe_v1',
-  maximum_speakers: 1, // Number of speakers in the audio file
-  tag_audio_events: true, // Tag audio events like laughter, applause, etc.
-  speech_to_text_language_code: 'en', // Language of the audio file
-  transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
+  modelId: 'scribe_v1',
+  maximumSpeakers: 1, // Number of speakers in the audio file
+  tagAudioEvents: true, // Tag audio events like laughter, applause, etc.
+  speechToTextLanguageCode: 'en', // Language of the audio file
+  transcribeVerbatim: false, // Transcribe verbatim sounds like "um" and "ah"
 });
 
 for await (const chunk of transcription) {

@@ -58,14 +58,14 @@ async def get_signed_url():
 ```
 
 ```javascript
-import { ElevenLabsClient } from 'elevenlabs';
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 // Server-side code using the JavaScript SDK
 const elevenlabs = new ElevenLabsClient({ apiKey: 'your-api-key' });
 async function getSignedUrl() {
   try {
     const response = await elevenlabs.conversationalAi.conversations.getSignedUrl({
-      agent_id: 'your-agent-id',
+      agentId: 'your-agent-id',
     });
 
     return response.signed_url;
@@ -207,14 +207,14 @@ agent = elevenlabs.conversational_ai.agents.create(
 async function createAuthenticatedAgent(client) {
   try {
     const agent = await elevenlabs.conversationalAi.agents.create({
-      conversation_config: {
+      conversationConfig: {
         agent: {
-          first_message: "Hi. I'm an authenticated agent.",
+          firstMessage: "Hi. I'm an authenticated agent.",
         },
       },
-      platform_settings: {
+      platformSettings: {
         auth: {
-          enable_auth: false,
+          enableAuth: false,
           allowlist: [
             { hostname: 'example.com' },
             { hostname: 'app.example.com' },
@@ -276,14 +276,14 @@ platform_settings=AgentPlatformSettingsRequestModel(
 async function createAuthenticatedAgent(elevenlabs) {
   try {
     const agent = await elevenlabs.conversationalAi.agents.create({
-      conversation_config: {
+      conversationConfig: {
         agent: {
-          first_message: "Hi. I'm an authenticated agent.",
+          firstMessage: "Hi. I'm an authenticated agent.",
         },
       },
-      platform_settings: {
+      platformSettings: {
         auth: {
-          enable_auth: true,
+          enableAuth: true,
           allowlist: [
             { hostname: 'example.com' },
             { hostname: 'app.example.com' },
