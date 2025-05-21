@@ -1,4 +1,4 @@
-import { ElevenLabsClient } from 'elevenlabs';
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 import { getApiKey } from '@/app/actions/manage-api-key';
 import { env } from '@/env.mjs';

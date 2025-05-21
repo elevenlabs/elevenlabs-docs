@@ -1,6 +1,6 @@
 'use client';
 
-import type { TextToSpeechRequest } from 'elevenlabs/api';
+import type { TextToSpeechRequest } from '@elevenlabs/elevenlabs-js/api';
 import { useState, useCallback } from 'react';
 
 import { streamSpeech } from '@/app/actions/stream-speech';

@@ -538,12 +538,23 @@ paths:
     delete:
       x-fern-audiences:
         - convai
+    patch:
+      x-fern-audiences:
+        - convai
   /v1/convai/knowledge-base/{documentation_id}/rag-index:
     post:
       x-fern-audiences:
         - convai
   /v1/convai/sip-trunk/outbound-call:
     post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/submit:
+    post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/workspace:
+    get:
       x-fern-audiences:
         - convai
   /v1/audio-native:
@@ -582,7 +593,6 @@ paths:
     post:
       description: Removes background noise from audio.
       summary: Audio isolation
-
   /v1/audio-isolation/stream:
     post:
       description: Removes background noise from audio.
@@ -963,6 +973,8 @@ components:
     AgentConfigAPIModel-Input:
       x-fern-type-name: AgentConfig
     AgentConfigAPIModel-Output:
+      x-fern-type-name: AgentConfig
+    AgentConfigDBModel:
       x-fern-type-name: AgentConfig
     ConversationalConfigAPIModel-Input:
       x-fern-type-name: ConversationalConfig

@@ -28,7 +28,7 @@ This guide will show you how to use the Forced Alignment API to align text to au
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
             api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
 
@@ -39,7 +39,7 @@ This guide will show you how to use the Forced Alignment API to align text to au
         audio_data = BytesIO(response.content)
 
         # Perform the text-to-speech conversion
-        transcription = client.forced_alignment.create(
+        transcription = elevenlabs.forced_alignment.create(
             file=audio_data,
             text="With a soft and whispery American accent, I'm the ideal choice for creating ASMR content, meditative guides, or adding an intimate feel to your narrative projects."
         )
@@ -49,16 +49,16 @@ This guide will show you how to use the Forced Alignment API to align text to au
 
         ```typescript maxLines=0
         // example.ts
-        import { ElevenLabsClient } from "elevenlabs";
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
 
         const response = await fetch(
             "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
         );
         const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
-        const transcript = await client.forcedAlignment.create({
+        const transcript = await elevenlabs.forcedAlignment.create({
             file: audioBlob,
             text: "With a soft and whispery American accent, I'm the ideal choice for creating ASMR content, meditative guides, or adding an intimate feel to your narrative projects."
         })

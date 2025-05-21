@@ -26,7 +26,7 @@ Before you begin, make sure you have installed the ElevenLabs SDK.
     ```
 
     ```bash JavaScript
-    npm install elevenlabs
+    npm install @elevenlabs/elevenlabs-js
     ```
 
 </CodeGroup>
@@ -68,7 +68,7 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-client = ElevenLabs(
+elevenlabs = ElevenLabs(
     api_key=os.getenv("ELEVENLABS_API_KEY"),
 )
 
@@ -79,7 +79,7 @@ response = requests.get(audio_url)
 audio_data = BytesIO(response.content)
 
 # Perform the text-to-speech conversion
-transcription = client.speech_to_text.convert_as_stream(
+transcription = elevenlabs.speech_to_text.convert_as_stream(
     model_id="scribe_v1",
     file=audio_data
 )
@@ -91,25 +91,25 @@ for chunk in transcription:
 ```
 
 ```javascript title="speechToTextStream.js" maxLines=0
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
 
 dotenv.config();
 
-const client = new ElevenLabsClient();
+const elevenlabs = new ElevenLabsClient();
 
 const response = await fetch(
   'https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3'
 );
 const audioBlob = new Blob([await response.arrayBuffer()], { type: 'audio/mp3' });
 
-const transcription = await client.speechToText.convertAsStream({
+const transcription = await elevenlabs.speechToText.convertAsStream({
   file: audioBlob,
-  model_id: 'scribe_v1',
-  maximum_speakers: 1, // Number of speakers in the audio file
-  tag_audio_events: true, // Tag audio events like laughter, applause, etc.
-  speech_to_text_language_code: 'en', // Language of the audio file
-  transcribe_verbatim: false, // Transcribe verbatim sounds like "um" and "ah"
+  modelId: 'scribe_v1',
+  maximumSpeakers: 1, // Number of speakers in the audio file
+  tagAudioEvents: true, // Tag audio events like laughter, applause, etc.
+  speechToTextLanguageCode: 'en', // Language of the audio file
+  transcribeVerbatim: false, // Transcribe verbatim sounds like "um" and "ah"
 });
 
 for await (const chunk of transcription) {
