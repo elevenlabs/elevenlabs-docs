@@ -93,10 +93,14 @@ export function SoundEffectPromptBar({
             <DropdownMenuRadioGroup
               value={String(duration)}
               onValueChange={(value) =>
-                form.setValue('durationSeconds', value === 'auto' ? 'auto' : Number.parseFloat(value), {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                })
+                form.setValue(
+                  'durationSeconds',
+                  value === 'auto' ? 'auto' : Number.parseFloat(value),
+                  {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  }
+                )
               }
             >
               <DropdownMenuRadioItem className="focus:bg-white/10" value="auto">

@@ -286,8 +286,8 @@ Create a new `upload` server action to handle the knowledge base creation upon f
 ```tsx ./app/actions/upload.ts {26,32,44,56-60}
 'use server';
 
-import { Redis } from '@upstash/redis';
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
+import { Redis } from '@upstash/redis';
 import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 
@@ -366,9 +366,9 @@ There's a few steps that are happening here, namely:
 5. Send an email to the user to notify them that their custom conversational AI agent is ready to chat.
 
 ```ts ./app/api/convai-webhook/route.ts
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import { Redis } from '@upstash/redis';
 import crypto from 'crypto';
-import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { Resend } from 'resend';

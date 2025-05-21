@@ -1,7 +1,7 @@
 'use client';
 
-import type { GetAgentResponseModel } from '@elevenlabs/elevenlabs-js/api';
 import { useConversation } from '@11labs/react';
+import type { GetAgentResponseModel } from '@elevenlabs/elevenlabs-js/api';
 import { AlertCircle, Info, Loader2, Mic, PhoneOff, Terminal } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -19,9 +19,9 @@ export default function ConversationUI() {
   const searchParams = useSearchParams();
   const agentIdFromUrl = searchParams.get('agent_id');
 
-	const [selectedAgent, setSelectedAgent] = useState<string | null>(
-		agentIdFromUrl || (agents.length > 0 ? agents[0].agentId : null),
-	);
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(
+    agentIdFromUrl || (agents.length > 0 ? agents[0].agentId : null)
+  );
 
   const [agentDetails, setAgentDetails] = useState<GetAgentResponseModel | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(true);
@@ -141,9 +141,7 @@ export default function ConversationUI() {
               if (result.ok) {
                 setAgentDetails(result.value);
                 setEditablePrompt(result.value.conversationConfig?.agent?.prompt?.prompt || '');
-                setEditableFirstMessage(
-                  result.value.conversationConfig?.agent?.firstMessage || ''
-                );
+                setEditableFirstMessage(result.value.conversationConfig?.agent?.firstMessage || '');
               } else {
                 setLoadError(result.error || 'Failed to load agent details');
               }
@@ -172,11 +170,9 @@ export default function ConversationUI() {
   return (
     <>
       <div className="mb-6">
-				<h3 className="text-xl font-bold">{agentDetails.name}</h3>
-				{agentDetails.agentId && (
-					<p className="text-muted-foreground">{agentDetails.agentId}</p>
-				)}
-			</div>
+        <h3 className="text-xl font-bold">{agentDetails.name}</h3>
+        {agentDetails.agentId && <p className="text-muted-foreground">{agentDetails.agentId}</p>}
+      </div>
 
       {loadError && (
         <Alert variant="destructive" className="mb-4">

@@ -11,11 +11,9 @@ export const metadata: Metadata = {
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const agentsResult = await getAgents();
 
-	const sortedAgents = agentsResult.ok
-		? [...agentsResult.value.agents].sort(
-				(a, b) => b.createdAtUnixSecs - a.createdAtUnixSecs,
-			)
-		: [];
+  const sortedAgents = agentsResult.ok
+    ? [...agentsResult.value.agents].sort((a, b) => b.createdAtUnixSecs - a.createdAtUnixSecs)
+    : [];
 
   return (
     <ConversationalAIProvider

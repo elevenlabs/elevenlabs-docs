@@ -70,12 +70,12 @@ export function TextToSpeechPromptBar({
             voiceId: v.voiceId,
             name: v.name ?? 'Unknown Voice',
           }));
-					setVoices(voiceList);
-				} else {
-					setVoices(FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name })));
-				}
-			} catch (error) {
-				console.error("Error loading voices:", error);
+          setVoices(voiceList);
+        } else {
+          setVoices(FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name })));
+        }
+      } catch (error) {
+        console.error('Error loading voices:', error);
         setVoices(FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name })));
       } finally {
         setIsLoading(false);
@@ -85,9 +85,9 @@ export function TextToSpeechPromptBar({
     loadVoices();
   }, []);
 
-	const getVoiceName = (voiceId: string): string => {
-		const voice = voices.find((v) => v.voiceId === voiceId);
-		if (voice) return voice.name;
+  const getVoiceName = (voiceId: string): string => {
+    const voice = voices.find((v) => v.voiceId === voiceId);
+    if (voice) return voice.name;
 
     const featuredVoice = FEATURED_VOICES.find((v) => v.id === voiceId);
     if (featuredVoice) return featuredVoice.name;

@@ -45,12 +45,12 @@ export default function Page() {
     isProcessing: false,
   });
 
-	const [transcriptionOptions, setTranscriptionOptions] = useState<TranscriptionOptions>({
-		modelId: STT_MODELS.SCRIBE_V1,
-		timestampsGranularity: "character",
-		tagAudioEvents: true,
-		diarize: true,
-	});
+  const [transcriptionOptions, setTranscriptionOptions] = useState<TranscriptionOptions>({
+    modelId: STT_MODELS.SCRIBE_V1,
+    timestampsGranularity: 'character',
+    tagAudioEvents: true,
+    diarize: true,
+  });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -97,20 +97,20 @@ export default function Page() {
     setTranscription((prev) => ({ ...prev, isProcessing: true }));
 
     try {
-			const options: TranscriptionOptions = {
-				modelId: transcriptionOptions.modelId,
-				timestampsGranularity: transcriptionOptions.timestampsGranularity,
-				tagAudioEvents: transcriptionOptions.tagAudioEvents,
-				diarize: transcriptionOptions.diarize,
-			};
+      const options: TranscriptionOptions = {
+        modelId: transcriptionOptions.modelId,
+        timestampsGranularity: transcriptionOptions.timestampsGranularity,
+        tagAudioEvents: transcriptionOptions.tagAudioEvents,
+        diarize: transcriptionOptions.diarize,
+      };
 
-			if (transcriptionOptions.numSpeakers) {
-				options.numSpeakers = transcriptionOptions.numSpeakers;
-			}
+      if (transcriptionOptions.numSpeakers) {
+        options.numSpeakers = transcriptionOptions.numSpeakers;
+      }
 
-			if (transcriptionOptions.languageCode && transcriptionOptions.languageCode.trim() !== "") {
-				options.languageCode = transcriptionOptions.languageCode.trim();
-			}
+      if (transcriptionOptions.languageCode && transcriptionOptions.languageCode.trim() !== '') {
+        options.languageCode = transcriptionOptions.languageCode.trim();
+      }
 
       const startTime = performance.now();
       const result = await createTranscription({
