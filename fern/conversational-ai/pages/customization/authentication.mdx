@@ -49,8 +49,8 @@ To obtain a signed URL, make a request to the `get_signed_url` [endpoint](/docs/
 from elevenlabs.client import ElevenLabs
 async def get_signed_url():
     try:
-        client = ElevenLabs(api_key="your-api-key")
-        response = await client.conversational_ai.get_signed_url(agent_id="your-agent-id")
+        elevenlabs = ElevenLabs(api_key="your-api-key")
+        response = await elevenlabs.conversational_ai.conversations.get_signed_url(agent_id="your-agent-id")
         return response.signed_url
     except Exception as error:
         print(f"Error getting signed URL: {error}")
@@ -58,14 +58,14 @@ async def get_signed_url():
 ```
 
 ```javascript
-import { ElevenLabsClient } from 'elevenlabs';
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 // Server-side code using the JavaScript SDK
-const client = new ElevenLabsClient({ apiKey: 'your-api-key' });
+const elevenlabs = new ElevenLabsClient({ apiKey: 'your-api-key' });
 async function getSignedUrl() {
   try {
-    const response = await client.conversationalAi.getSignedUrl({
-      agent_id: 'your-agent-id',
+    const response = await elevenlabs.conversationalAi.conversations.getSignedUrl({
+      agentId: 'your-agent-id',
     });
 
     return response.signed_url;
@@ -77,7 +77,7 @@ async function getSignedUrl() {
 ```
 
 ```bash
-curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=your-agent-id" \
+curl -X GET "https://api.elevenlabs.io/v1/convai/conversation/get-signed-url?agent_id=your-agent-id" \
 -H "xi-api-key: your-api-key"
 ```
 
@@ -109,10 +109,10 @@ import os
 from elevenlabs.client import ElevenLabs
 api_key = os.getenv("ELEVENLABS_API_KEY")
 
-client = ElevenLabs(api_key=api_key)
+elevenlabs = ElevenLabs(api_key=api_key)
 
 conversation = Conversation(
-  client=client,
+  client=elevenlabs,
   agent_id=os.getenv("AGENT_ID"),
   requires_auth=True,
   audio_interface=AudioInterface(),
@@ -123,7 +123,7 @@ async def start_conversation():
   try:
     signed_url = await get_signed_url()
     conversation = Conversation(
-      client=client,
+      client=elevenlabs,
       url=signed_url,
     )
 
@@ -182,9 +182,9 @@ import os
 from elevenlabs.types import *
 
 api_key = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(api_key=api_key)
+elevenlabs = ElevenLabs(api_key=api_key)
 
-agent = client.conversational_ai.create_agent(
+agent = elevenlabs.conversational_ai.agents.create(
   conversation_config=ConversationalConfig(
     agent=AgentConfig(
       first_message="Hi. I'm an authenticated agent.",
@@ -206,15 +206,15 @@ agent = client.conversational_ai.create_agent(
 ```javascript
 async function createAuthenticatedAgent(client) {
   try {
-    const agent = await client.conversationalAi.createAgent({
-      conversation_config: {
+    const agent = await elevenlabs.conversationalAi.agents.create({
+      conversationConfig: {
         agent: {
-          first_message: "Hi. I'm an authenticated agent.",
+          firstMessage: "Hi. I'm an authenticated agent.",
         },
       },
-      platform_settings: {
+      platformSettings: {
         auth: {
-          enable_auth: false,
+          enableAuth: false,
           allowlist: [
             { hostname: 'example.com' },
             { hostname: 'app.example.com' },
@@ -253,8 +253,8 @@ from elevenlabs.client import ElevenLabs
 import os
 from elevenlabs.types import *
 api_key = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(api_key=api_key)
-agent = client.conversational_ai.create_agent(
+elevenlabs = ElevenLabs(api_key=api_key)
+agent = elevenlabs.conversational_ai.agents.create(
   conversation_config=ConversationalConfig(
     agent=AgentConfig(
       first_message="Hi. I'm an authenticated agent that can only be called from certain domains.",
@@ -273,17 +273,17 @@ platform_settings=AgentPlatformSettingsRequestModel(
 ```
 
 ```javascript
-async function createAuthenticatedAgent(client) {
+async function createAuthenticatedAgent(elevenlabs) {
   try {
-    const agent = await client.conversationalAi.createAgent({
-      conversation_config: {
+    const agent = await elevenlabs.conversationalAi.agents.create({
+      conversationConfig: {
         agent: {
-          first_message: "Hi. I'm an authenticated agent.",
+          firstMessage: "Hi. I'm an authenticated agent.",
         },
       },
-      platform_settings: {
+      platformSettings: {
         auth: {
-          enable_auth: true,
+          enableAuth: true,
           allowlist: [
             { hostname: 'example.com' },
             { hostname: 'app.example.com' },

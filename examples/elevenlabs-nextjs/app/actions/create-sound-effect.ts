@@ -1,12 +1,12 @@
 'use server';
 
-import type { BodySoundGenerationV1SoundGenerationPost } from 'elevenlabs/api';
+import type { CreateSoundEffectRequest } from '@elevenlabs/elevenlabs-js/api';
 
 import { getElevenLabsClient, handleError } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';
 
 export async function createSoundEffect(
-  request: BodySoundGenerationV1SoundGenerationPost
+  request: CreateSoundEffectRequest
 ): Promise<Result<{ audioBase64: string; processingTimeMs: number }>> {
   const startTime = performance.now();
   const clientResult = await getElevenLabsClient();

@@ -26,7 +26,7 @@ pip install elevenlabs
 ```
 
 ```bash TypeScript
-npm install elevenlabs
+npm install @elevenlabs/elevenlabs-js
 ```
 
 </CodeGroup>
@@ -58,7 +58,7 @@ To convert text to speech and save it as a file, we’ll use the `convert` metho
 
 <CodeGroup>
 
-```python text_to_speech_file.py (Python)
+```python Python
 
 import os
 import uuid
@@ -66,14 +66,14 @@ from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(
+elevenlabs = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
 )
 
 
 def text_to_speech_file(text: str) -> str:
     # Calling the text_to_speech conversion API with detailed parameters
-    response = client.text_to_speech.convert(
+    response = elevenlabs.text_to_speech.convert(
         voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
         output_format="mp3_22050_32",
         text=text,
@@ -107,9 +107,9 @@ def text_to_speech_file(text: str) -> str:
 
 ```
 
-```typescript text_to_speech_file.ts (Typescript)
+```typescript TypeScript
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
 import { createWriteStream } from 'fs';
 import { v4 as uuid } from 'uuid';
 
@@ -117,22 +117,22 @@ dotenv.config();
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
-const client = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
   apiKey: ELEVENLABS_API_KEY,
 });
 
 export const createAudioFileFromText = async (text: string): Promise<string> => {
   return new Promise<string>(async (resolve, reject) => {
     try {
-      const audio = await client.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
-        model_id: 'eleven_multilingual_v2',
+      const audio = await elevenlabs.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
+        modelId: 'eleven_multilingual_v2',
         text,
-        output_format: 'mp3_44100_128',
+        outputFormat: 'mp3_44100_128',
         // Optional voice settings that allow you to customize the output
-        voice_settings: {
+        voiceSettings: {
           stability: 0,
-          similarity_boost: 0,
-          use_speaker_boost: true,
+          similarityBoost: 0,
+          useSpeakerBoost: true,
           speed: 1.0,
         },
       });
@@ -172,7 +172,7 @@ If you prefer to stream the audio directly without saving it to a file, you can 
 
 <CodeGroup>
 
-```python text_to_speech_stream.py (Python)
+```python Python
 
 import os
 from typing import IO
@@ -181,14 +181,14 @@ from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-client = ElevenLabs(
+elevenlabs = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
 )
 
 
 def text_to_speech_stream(text: str) -> IO[bytes]:
     # Perform the text-to-speech conversion
-    response = client.text_to_speech.convert(
+    response = elevenlabs.text_to_speech.stream(
         voice_id="pNInz6obpgDQGcFmaJgB", # Adam pre-made voice
         output_format="mp3_22050_32",
         text=text,
@@ -219,9 +219,9 @@ def text_to_speech_stream(text: str) -> IO[bytes]:
 
 ```
 
-```typescript text_to_speech_stream.ts (Typescript)
+```typescript TypeScript
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import * as dotenv from 'dotenv';
-import { ElevenLabsClient } from 'elevenlabs';
 
 dotenv.config();
 
@@ -231,20 +231,20 @@ if (!ELEVENLABS_API_KEY) {
   throw new Error('Missing ELEVENLABS_API_KEY in environment variables');
 }
 
-const client = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
   apiKey: ELEVENLABS_API_KEY,
 });
 
 export const createAudioStreamFromText = async (text: string): Promise<Buffer> => {
-  const audioStream = await client.textToSpeech.convertAsStream('JBFqnCBsd6RMkjVDRZzb', {
-    model_id: 'eleven_multilingual_v2',
+  const audioStream = await elevenlabs.textToSpeech.stream('JBFqnCBsd6RMkjVDRZzb', {
+    modelId: 'eleven_multilingual_v2',
     text,
-    output_format: 'mp3_44100_128',
+    outputFormat: 'mp3_44100_128',
     // Optional voice settings that allow you to customize the output
-    voice_settings: {
+    voiceSettings: {
       stability: 0,
-      similarity_boost: 1.0,
-      use_speaker_boost: true,
+      similarityBoost: 1.0,
+      useSpeakerBoost: true,
       speed: 1.0,
     },
   });

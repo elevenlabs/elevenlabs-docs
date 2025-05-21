@@ -1,4 +1,4 @@
-import * as ElevenLabs from 'elevenlabs/api';
+import * as ElevenLabs from '@elevenlabs/elevenlabs-js/api';
 
 import { WordGroup } from '../components/transcription-results';
 
@@ -18,10 +18,10 @@ export const groupWordsBySpeaker = (
     // Skip words with invalid timestamps
     if (isNaN(word.start ?? NaN) || isNaN(word.end ?? NaN)) return;
 
-    if (!currentGroup || currentGroup.speaker_id !== (word.speaker_id || 'unknown')) {
+    if (!currentGroup || currentGroup.speakerId !== (word.speakerId || 'unknown')) {
       currentGroup = {
         id: `group-${index}`,
-        speaker_id: word.speaker_id || 'unknown',
+        speakerId: word.speakerId || 'unknown',
         start: word.start || 0,
         end: word.end || 0,
         text: '',

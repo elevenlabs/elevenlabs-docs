@@ -122,7 +122,7 @@ import { ElevenLabsClient } from 'npm:elevenlabs@1.50.5';
 
 console.log(`Function "elevenlabs-scribe-bot" up and running!`);
 
-const elevenLabsClient = new ElevenLabsClient({
+const elevenlabs = new ElevenLabsClient({
   apiKey: Deno.env.get('ELEVENLABS_API_KEY') || '',
 });
 
@@ -155,7 +155,7 @@ async function scribe({
       type: fileType,
     });
 
-    const scribeResult = await elevenLabsClient.speechToText.convert({
+    const scribeResult = await elevenlabs.speechToText.convert({
       file: sourceBlob,
       model_id: 'scribe_v1', // 'scribe_v1_experimental' is also available for new, experimental features
       tag_audio_events: false,
@@ -318,7 +318,7 @@ There's a couple of things worth noting about the code. Let's step through it st
     Finally, in the background worker, the bot uses the ElevenLabs JavaScript SDK to transcribe the file. Once the transcription is complete, the bot replies to the user with the transcript and writes a log entry to the Supabase database using [supabase-js](https://supabase.com/docs/reference/javascript).
 
     ```ts {29-38,43-46,54-65}
-    const elevenLabsClient = new ElevenLabsClient({
+    const elevenlabs = new ElevenLabsClient({
       apiKey: Deno.env.get('ELEVENLABS_API_KEY') || '',
     });
 
@@ -351,7 +351,7 @@ There's a couple of things worth noting about the code. Let's step through it st
           type: fileType,
         });
 
-        const scribeResult = await elevenLabsClient.speechToText.convert({
+        const scribeResult = await elevenlabs.speechToText.convert({
           file: sourceBlob,
           model_id: 'scribe_v1', // 'scribe_v1_experimental' is also available for new, experimental features
           tag_audio_events: false,

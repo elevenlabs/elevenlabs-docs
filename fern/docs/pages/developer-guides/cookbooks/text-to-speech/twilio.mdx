@@ -31,7 +31,7 @@ npm init -y
 ### Install dependencies
 
 ```
-npm install elevenlabs express express-ws twilio
+npm install @elevenlabs/elevenlabs-js express express-ws twilio
 ```
 
 ### Install dev dependencies
@@ -44,8 +44,8 @@ npm i @types/node @types/express @types/express-ws @types/ws dotenv tsx typescri
 
 ```ts
 // src/app.ts
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 import 'dotenv/config';
-import { ElevenLabsClient } from 'elevenlabs';
 import express, { Response } from 'express';
 import ExpressWs from 'express-ws';
 import { Readable } from 'stream';
@@ -82,8 +82,8 @@ function startApp() {
       if (message.event === 'start' && message.start) {
         const streamSid = message.start.streamSid;
         const response = await elevenlabs.textToSpeech.convert(voiceId, {
-          model_id: 'eleven_flash_v2_5',
-          output_format: outputFormat,
+          modelId: 'eleven_flash_v2_5',
+          outputFormat: outputFormat,
           text,
         });
 
@@ -172,8 +172,8 @@ Here we listen for messages that Twilio sends to our websocket endpoint. When we
       if (message.event === 'start' && message.start) {
         const streamSid = message.start.streamSid;
         const response = await elevenlabs.textToSpeech.convert(voiceId, {
-          model_id: 'eleven_flash_v2_5',
-          output_format: outputFormat,
+          modelId: 'eleven_flash_v2_5',
+          outputFormat: outputFormat,
           text,
         });
 ```

@@ -29,11 +29,11 @@ For an outline of the differences between Instant Voice Clones and Professional 
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
           api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
 
-        voice = client.voices.add(
+        voice = elevenlabs.voices.ivc.create(
             name="My Voice Clone",
             # Replace with the paths to your audio files.
             # The more files you add, the better the clone will be.
@@ -45,13 +45,13 @@ For an outline of the differences between Instant Voice Clones and Professional 
 
         ```typescript maxLines=0
         // example.mts
-        import { ElevenLabsClient } from "elevenlabs";
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
         import fs from "node:fs";
 
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
 
-        const voice = await client.voices.add({
+        const voice = await elevenlabs.voices.ivc.create({
             name: "My Voice Clone",
             // Replace with the paths to your audio files.
             // The more files you add, the better the clone will be.
