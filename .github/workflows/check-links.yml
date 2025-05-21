@@ -9,17 +9,19 @@ on:
 jobs:
   check-links:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v4
         with:
-          node-version: '16'
+          version: 9
 
-      - name: Install Fern
-        run: npm install -g fern-api
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - run: pnpm install
 
       - name: Create link checker script
         run: |
@@ -27,7 +29,7 @@ jobs:
           #!/bin/bash
 
           # Run broken-links command and capture output
-          output=$(fern docs broken-links)
+          output=$(pnpm run fern:broken-links)
 
           # Filter only lines with broken links inside /docs/ or external docs
           echo "$output" | grep -E 'broken link to /(docs|elevenlabs\.io/docs)' > filtered_output.txt
