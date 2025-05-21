@@ -184,9 +184,9 @@ interface SpeakerGroupProps {
 }
 
 function SpeakerGroup({ group, currentTime, onSeekToTime, options }: SpeakerGroupProps) {
-  const speakerId = group.speaker_id.replace('speaker_', '');
-  const colorIndex = Number.parseInt(speakerId, 10) % SPEAKER_COLORS.length;
-  const speakerColor = SPEAKER_COLORS[colorIndex];
+	const speakerId = group.speakerId.replace("speaker", "");
+	const colorIndex = Number.parseInt(speakerId, 10) % SPEAKER_COLORS.length;
+	const speakerColor = SPEAKER_COLORS[colorIndex];
 
   return (
     <div className="flex gap-4">

@@ -23,10 +23,10 @@ export default function Page() {
     return <EmptyState />;
   }
 
-  const defaultAgent = agents[0].agent_id;
+	const defaultAgent = agents[0].agentId;
 
-  return (
-    <div className="container mx-auto p-6">
+	return (
+		<div className="container mx-auto p-6">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Conversational AI</h1>

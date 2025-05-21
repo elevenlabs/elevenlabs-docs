@@ -19,9 +19,9 @@ export default function ConversationUI() {
   const searchParams = useSearchParams();
   const agentIdFromUrl = searchParams.get('agent_id');
 
-  const [selectedAgent, setSelectedAgent] = useState<string | null>(
-    agentIdFromUrl || (agents.length > 0 ? agents[0].agent_id : null)
-  );
+	const [selectedAgent, setSelectedAgent] = useState<string | null>(
+		agentIdFromUrl || (agents.length > 0 ? agents[0].agentId : null),
+	);
 
   const [agentDetails, setAgentDetails] = useState<GetAgentResponseModel | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(true);
@@ -172,9 +172,11 @@ export default function ConversationUI() {
   return (
     <>
       <div className="mb-6">
-        <h3 className="text-xl font-bold">{agentDetails.name}</h3>
-        {agentDetails.agent_id && <p className="text-muted-foreground">{agentDetails.agent_id}</p>}
-      </div>
+				<h3 className="text-xl font-bold">{agentDetails.name}</h3>
+				{agentDetails.agentId && (
+					<p className="text-muted-foreground">{agentDetails.agentId}</p>
+				)}
+			</div>
 
       {loadError && (
         <Alert variant="destructive" className="mb-4">

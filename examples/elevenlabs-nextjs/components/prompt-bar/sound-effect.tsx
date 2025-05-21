@@ -1,6 +1,6 @@
 'use client';
 
-import { BodySoundGenerationV1SoundGenerationPost } from '@elevenlabs/elevenlabs-js/api';
+import { CreateSoundEffectRequest } from '@elevenlabs/elevenlabs-js/api';
 import { ClockIcon, DiamondIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -37,7 +37,7 @@ export function SoundEffectPromptBar({
 
       const pendingId = onPendingEffect(data.text);
 
-      const request: BodySoundGenerationV1SoundGenerationPost = {
+      const request: CreateSoundEffectRequest = {
         text: data.text,
         promptInfluence: data.promptInfluence,
       };
