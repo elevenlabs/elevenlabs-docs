@@ -34,7 +34,7 @@ This guide will show you how to remove background noise from an audio file using
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
           api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
 
@@ -42,17 +42,17 @@ This guide will show you how to remove background noise from an audio file using
         response = requests.get(audio_url)
         audio_data = BytesIO(response.content)
 
-        audio_stream = client.audio_isolation.audio_isolation(audio=audio_data)
+        audio_stream = elevenlabs.audio_isolation.convert(audio=audio_data)
 
         play(audio_stream)
         ```
 
         ```typescript maxLines=0
         // example.mts
-        import { ElevenLabsClient, play } from "elevenlabs";
+        import { ElevenLabsClient, play } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
 
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
 
         const audioUrl =
           "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/fin.mp3";
@@ -61,7 +61,7 @@ This guide will show you how to remove background noise from an audio file using
           type: "audio/mp3",
         });
 
-        const audioStream = await client.audioIsolation.audioIsolation({
+        const audioStream = await elevenlabs.audioIsolation.convert({
           audio: audioBlob,
         });
 

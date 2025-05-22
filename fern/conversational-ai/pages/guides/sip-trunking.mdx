@@ -12,15 +12,16 @@ With SIP trunking, you can:
 
 - Connect your Private Branch Exchange (PBX) or SIP-enabled phone system to ElevenLabs' voice AI platform
 - Route calls to AI agents without changing your existing phone infrastructure
-- Currently only handles inbound calls
+- Handle both inbound and outbound calls
 
 ## How SIP trunking works
 
 SIP trunking establishes a direct connection between your telephony infrastructure and the ElevenLabs platform:
 
-1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform our origination URI.
-2. **Authentication**: Connection security for the signaling is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication.
-3. **Media Stream**: Once the call is established, the actual audio data (RTP stream) is transmitted over UDP for low latency.
+1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform using our origination URI.
+2. **Outbound calls**: Calls initiated by ElevenLabs are routed to your SIP trunk using your termination URI, enabling your agents to make outgoing calls.
+3. **Authentication**: Connection security for the signaling is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication based on the signaling source IP.
+4. **Signaling and Media**: The initial call setup (signaling) uses TCP. Once the call is established, the actual audio data (RTP stream) is transmitted over UDP for low latency.
 
 ## Requirements
 
@@ -54,7 +55,7 @@ Before setting up SIP trunking, ensure you have:
     This pre-populated URI cannot be modified and serves as the destination endpoint where your system should route all inbound calls (calls from your system to ElevenLabs).
 
     <Note>
-      The `transport=tcp` parameter specifies that the initial SIP signaling connection uses TCP. However, the actual audio data (RTP stream) is transmitted over UDP for low latency performance, which is standard for real-time communication.
+      The `transport=tcp` parameter specifies that the initial SIP signaling connection uses TCP. However, the actual audio data (RTP stream) is transmitted over UDP for low-latency performance, which is standard for real-time communication. This distinction is important: only the call setup uses TCP; the voice data itself uses UDP.
     </Note>
 
   </Step>
@@ -81,7 +82,15 @@ Before setting up SIP trunking, ensure you have:
       <img src="/assets/images/conversational-ai/sip-trunk-outbound.png" alt="SIP trunk outbound configuration" />
     </Frame>
 
-    If left empty, ACL authentication will be used. In which case you'll need to allowlist ElevenLabs IPs in your provider's settings. See the [IP whitelisting documentation](https://elevenlabs.io/docs/conversational-ai/workflows/post-call-webhooks#ip-whitelisting) for the list of IPs to allowlist.
+    If left empty, Access Control List (ACL) authentication based on the source IP address will be attempted. In this case, you'll need to ensure your system sends SIP requests from an IP address that you allowlist in your provider's settings, and that your firewall allows return traffic from ElevenLabs.
+
+    <Info>
+      **Signaling vs. Media IPs**:
+      - The **SIP signaling** connection originates from `sip.rtc.elevenlabs.io` (currently resolving to `34.49.132.122`). This IP is static and can be allowlisted if using ACL authentication.
+      - The **RTP media stream** (audio data) uses dynamic IP addresses from an autoscaling pool. These IPs change and **cannot be reliably allowlisted**.
+
+      For robust security without relying on IP allowlisting for media, **Digest Authentication is strongly recommended**.
+    </Info>
 
   </Step>
   <Step title="Complete Setup">
@@ -103,25 +112,43 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 <AccordionGroup>
 
   <Accordion title="Connection Issues">
-    If you're experiencing connection problems:
-    1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side
-    2. Check that your firewall allows SIP traffic on port 5060
-    3. Confirm that your termination URI is correctly formatted
-    4. Test with and without authentication credentials
+    If you're experiencing connection problems: 
+    
+    1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side. 
+    2. Check that your firewall allows SIP signaling traffic
+    (TCP/UDP port 5060) *to* `sip.rtc.elevenlabs.io` (`34.49.132.122`) and allows RTP traffic 
+    3. Confirm that your termination URI is correctly formatted. 
+    4. Test with and without digest authentication credentials.
+    
   </Accordion>
   <Accordion title="Authentication Failures">
-    If calls are failing due to authentication issues: 
-    1. Double-check your username and password if using digest authentication 
-    2. Verify that ElevenLabs' IP addresses are allowlisted if using ACL authentication 
-    3. Check your SIP trunk provider's logs for specific authentication error messages
+    If calls are failing due to authentication issues:
+
+    1. Double-check your username and password if using digest authentication.
+    2. If using ACL authentication, ensure your provider is configured to trust signaling traffic from `sip.rtc.elevenlabs.io` (`34.49.132.122`). Remember that ACL does not
+    apply to the media stream IPs.
+    3. Check your SIP trunk provider's logs for specific authenticatio nerror messages.
+
+  </Accordion>
+  <Accordion title="No Audio or One-Way Audio">
+    If the call connects but there's no audio or audio only flows one way:
+
+    1. Verify that your firewall allows UDP traffic for the RTP media stream (typically ports 10000-60000).
+    Since these IPs change, ensure the rule is not restricted to specific static IPs.
+    2. Check for Network Address Translation (NAT) issues that might be blocking the RTP
+    stream.
+
   </Accordion>
   <Accordion title="Audio Quality Issues">
-    If you experience poor audio quality: 
-    1. Ensure your network has sufficient bandwidth (at least 100 Kbps per call) 
-    2. Check for network congestion or packet loss
-    3. Verify that your SIP trunk provider supports high-quality codecs
+    If you experience poor audio quality:
+
+    1. Ensure your network has sufficient bandwidth (at least
+      100 Kbps per call) and low latency/jitter for UDP traffic.
+    2. Check for network congestion or packet loss, particularly on the UDP path.
+    3. Verify codec settings match on both ends.
+
   </Accordion>
-  
+
 </AccordionGroup>
 
 ## Limitations and Considerations

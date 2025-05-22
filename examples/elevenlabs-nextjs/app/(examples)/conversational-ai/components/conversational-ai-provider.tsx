@@ -1,10 +1,10 @@
 'use client';
 
-import * as ElevenLabs from 'elevenlabs/api';
+import { AgentSummaryResponseModel } from '@elevenlabs/elevenlabs-js/api';
 import { createContext, ReactNode, useContext } from 'react';
 
 interface ConversationalAIContextType {
-  agents: ElevenLabs.AgentSummaryResponseModel[];
+  agents: AgentSummaryResponseModel[];
   error: string | null;
 }
 
@@ -20,7 +20,7 @@ export function useConversationalAI() {
 
 interface ConversationalAIProviderProps {
   children: ReactNode;
-  agents: ElevenLabs.AgentSummaryResponseModel[];
+  agents: AgentSummaryResponseModel[];
   error: string | null;
 }
 

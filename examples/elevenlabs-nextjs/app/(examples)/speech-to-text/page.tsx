@@ -46,9 +46,9 @@ export default function Page() {
   });
 
   const [transcriptionOptions, setTranscriptionOptions] = useState<TranscriptionOptions>({
-    model_id: STT_MODELS.SCRIBE_V1,
-    timestamps_granularity: 'character',
-    tag_audio_events: true,
+    modelId: STT_MODELS.SCRIBE_V1,
+    timestampsGranularity: 'character',
+    tagAudioEvents: true,
     diarize: true,
   });
 
@@ -98,18 +98,18 @@ export default function Page() {
 
     try {
       const options: TranscriptionOptions = {
-        model_id: transcriptionOptions.model_id,
-        timestamps_granularity: transcriptionOptions.timestamps_granularity,
-        tag_audio_events: transcriptionOptions.tag_audio_events,
+        modelId: transcriptionOptions.modelId,
+        timestampsGranularity: transcriptionOptions.timestampsGranularity,
+        tagAudioEvents: transcriptionOptions.tagAudioEvents,
         diarize: transcriptionOptions.diarize,
       };
 
-      if (transcriptionOptions.num_speakers) {
-        options.num_speakers = transcriptionOptions.num_speakers;
+      if (transcriptionOptions.numSpeakers) {
+        options.numSpeakers = transcriptionOptions.numSpeakers;
       }
 
-      if (transcriptionOptions.language_code && transcriptionOptions.language_code.trim() !== '') {
-        options.language_code = transcriptionOptions.language_code.trim();
+      if (transcriptionOptions.languageCode && transcriptionOptions.languageCode.trim() !== '') {
+        options.languageCode = transcriptionOptions.languageCode.trim();
       }
 
       const startTime = performance.now();

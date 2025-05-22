@@ -5,8 +5,8 @@ subtitle: Build an outbound calling AI agent with Twilio and ElevenLabs.
 
 <Warning>
   **Outbound calls are now natively supported**, see guide
-  [here](/docs/conversational-ai/guides/twilio/native-integration#making-outbound-calls) We
-  recommend using the native integration instead of this guide.
+  [here](/docs/conversational-ai/phone-numbers/twilio-integration/native-integration#making-outbound-calls)
+  We recommend using the native integration instead of this guide.
 </Warning>
 
 In this guide you will learn how to build an integration with Twilio to initialise outbound calls to your prospects and customers.
@@ -43,7 +43,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
     1. Navigate to your agent settings.
     2. Go to the Voice section.
     3. Select "μ-law 8000 Hz" from the dropdown.
-    
+
    <Frame background="subtle">![](/assets/images/conversational-ai/twilio-1.png)</Frame>
   </Step>
 
@@ -55,7 +55,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
 
   <Step title="Enable auth and overrides">
     1. Navigate to your agent settings.
-    2. Go to the security section.  
+    2. Go to the security section.
     3. Toggle on "Enable authentication".
     4. In "Enable overrides" toggle on "First message" and "System prompt" as you will be dynamically injecting these values when initiating the call.
 
@@ -154,7 +154,7 @@ const twilioClient = new Twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 async function getSignedUrl() {
   try {
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${ELEVENLABS_AGENT_ID}`,
+      `https://api.elevenlabs.io/v1/convai/conversation/get-signed-url?agent_id=${ELEVENLABS_AGENT_ID}`,
       {
         method: 'GET',
         headers: {

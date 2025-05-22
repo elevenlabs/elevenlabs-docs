@@ -16,7 +16,7 @@ System tools provide this capability by allowing the assistant to perform action
   <Card
     title="End call"
     icon="duotone square-phone-hangup"
-    href="docs/conversational-ai/customization/tools/system-tools/end-call"
+    href="/docs/conversational-ai/customization/tools/system-tools/end-call"
   >
     Let your agent automatically terminate a conversation when appropriate conditions are met.
   </Card>
@@ -41,6 +41,13 @@ System tools provide this capability by allowing the assistant to perform action
   >
     Seamlessly transfer the user to a human operator.
   </Card>
+  <Card
+    title="Skip turn"
+    icon="duotone forward"
+    href="/docs/conversational-ai/customization/tools/system-tools/skip-turn"
+  >
+    Enable the agent to skip their turns if the LLM detects the agent should not speak yet.
+  </Card>
 </CardGroup>
 
 ## Implementation
@@ -55,19 +62,19 @@ from elevenlabs import (
     ElevenLabs,
     AgentConfig,
     PromptAgent,
-    PromptAgentToolsItem_System
+    PromptAgentInputToolsItem_System,
 )
 
 # Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Create system tools
-end_call_tool = PromptAgentToolsItem_System(
+end_call_tool = PromptAgentInputToolsItem_System(
     name="end_call",
     description=""  # Optional: Customize when the tool should be triggered
 )
 
-language_detection_tool = PromptAgentToolsItem_System(
+language_detection_tool = PromptAgentInputToolsItem_System(
     name="language_detection",
     description=""  # Optional: Customize when the tool should be triggered
 )
@@ -82,22 +89,22 @@ conversation_config = ConversationalConfig(
 )
 
 # Create the agent
-response = client.conversational_ai.create_agent(
+response = elevenlabs.conversational_ai.agents.create(
     conversation_config=conversation_config
 )
 ```
 
 ```javascript
-import { ElevenLabs } from 'elevenlabs';
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
 
 // Initialize the client
-const client = new ElevenLabs({
+const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
 // Create the agent with system tools
-await client.conversationalAi.createAgent({
-  conversation_config: {
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
     agent: {
       prompt: {
         tools: [

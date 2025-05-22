@@ -7,8 +7,8 @@ subtitle: >-
 
 <Warning>
   Custom server should be used for **outbound calls only**. Please use our [native
-  integration](/docs/conversational-ai/guides/twilio/native-integration) for **inbound Twilio
-  calls**.
+  integration](/docs/conversational-ai/phone-numbers/twilio-integration/native-integration) for
+  **inbound Twilio calls**.
 </Warning>
 
 Connect your ElevenLabs Conversational AI agent to phone calls and create human-like voice experiences using Twilio's Voice API.
@@ -28,9 +28,9 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
 <Steps>
   <Step title="Configure TTS Output">
     1. Navigate to your agent settings
-    2. Go to the Voice Section 
+    2. Go to the Voice Section
     3. Select "μ-law 8000 Hz" from the dropdown
-    
+
    <Frame background="subtle">![](/assets/images/conversational-ai/twilio-1.png)</Frame>
   </Step>
 
@@ -38,8 +38,9 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
     1. Navigate to your agent settings
     2. Go to the Advanced Section
     3. Select "μ-law 8000 Hz" for the input format
-    
+
     <Frame background="subtle">![](/assets/images/conversational-ai/twilio-2.png)</Frame>
+
   </Step>
 </Steps>
 
@@ -70,6 +71,12 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
         </Step>
         <Step title="Create the project files">
             Create a `.env` & `index.js` file  with the following code:
+
+            ```
+            conversational-ai-twilio/
+            ├── .env
+            └── index.js
+            ```
 
             <CodeGroup>
 
@@ -323,7 +330,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
             app = FastAPI()
 
             # Initialize ElevenLabs client
-            eleven_labs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+            elevenlabs = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
             ELEVEN_LABS_AGENT_ID = os.getenv("AGENT_ID")
 
             @app.get("/")
@@ -350,7 +357,7 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
 
                 try:
                     conversation = Conversation(
-                        client=eleven_labs_client,
+                        client=elevenlabs,
                         agent_id=ELEVEN_LABS_AGENT_ID,
                         requires_auth=False,
                         audio_interface=audio_interface,
@@ -494,8 +501,9 @@ Before integrating with Twilio, you'll need to configure your agent to use the c
     4. Under "Voice Configuration", set the webhook for incoming calls to:
        `https://your-ngrok-url.ngrok.app/twilio/inbound_call`
     5. Set the HTTP method to POST
-    
+
     <Frame background="subtle">![](/assets/images/conversational-ai/twilio-4.png)</Frame>
+
   </Step>
 </Steps>
 

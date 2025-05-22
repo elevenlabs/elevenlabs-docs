@@ -1,0 +1,87 @@
+---
+title: Plivo
+subtitle: Integrate ElevenLabs conversational AI agents with your Plivo SIP trunks
+---
+
+<Note>
+  Before following this guide, consider reading the [SIP trunking
+  guide](/docs/conversational-ai/phone-numbers/sip-trunking) to understand how ElevenLabs supports
+  SIP trunks.
+</Note>
+
+## Overview
+
+This guide explains how to connect your Plivo SIP trunks directly to ElevenLabs conversational AI agents.
+This integration allows you to use your existing Plivo phone numbers and infrastructure while leveraging ElevenLabs' advanced voice AI capabilities, for both inbound and outbound calls.
+
+## How SIP trunking with Plivo works
+
+SIP trunking establishes a direct connection between your Plivo telephony infrastructure and the ElevenLabs platform:
+
+1.  **Inbound calls**: Calls from your Plivo SIP trunk are routed to the ElevenLabs platform using our origination URI. You will configure this in your Plivo account.
+2.  **Outbound calls**: Calls initiated by ElevenLabs are routed to your Plivo SIP trunk using your termination URI, enabling your agents to make outgoing calls.
+3.  **Authentication**: Connection security for the signaling is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication based on the signaling source IP from Plivo.
+4.  **Signaling and Media**: The initial call setup (signaling) uses TCP. Once the call is established, the actual audio data (RTP stream) is transmitted over UDP.
+
+## Requirements
+
+Before setting up the Plivo SIP trunk integration, ensure you have:
+
+1.  An active Plivo account with SIP trunking enabled
+2.  Plivo phone numbers that you want to connect to ElevenLabs
+3.  Administrator access to your Plivo account and SIP trunk configuration
+4.  Appropriate firewall settings to allow SIP traffic to and from ElevenLabs and Plivo
+
+## Configuring Plivo SIP trunks
+
+This section provides detailed instructions for creating SIP trunks in Plivo before connecting them to ElevenLabs.
+
+### Setting up inbound trunks (calls from Plivo to ElevenLabs)
+
+<Steps>
+
+  <Step title="Access Plivo Console">Sign in to the Plivo Console.</Step>
+  <Step title="Navigate to Zentrunk Dashboard">
+    Go to the Zentrunk Dashboard in your Plivo account.
+  </Step>
+  <Step title="Create inbound SIP trunk">
+    1. Select "Create New Inbound Trunk" and provide a descriptive name for your trunk. 
+    2. Under Trunk Authentication, click "Add New URI". 
+    3. Enter the ElevenLabs SIP URI: `sip.rtc.elevenlabs.io` 
+    4. Select "Create Trunk" to complete your inbound trunk creation.
+  </Step>
+  <Step title="Assign phone number to trunk">
+    1. Navigate to the Phone Numbers Dashboard and select the number you want to route to your inbound trunk. 
+    2. Under Number Configuration, set "Trunk" to your newly created inbound trunk.
+    3. Select "Update" to save the configuration.
+  </Step>
+  
+</Steps>
+
+### Setting up outbound trunks (calls from ElevenLabs to Plivo)
+
+<Steps>
+  <Step title="Access Plivo Console">Sign in to the Plivo Console.</Step>
+  
+  <Step title="Navigate to Zentrunk Dashboard">
+    Go to the Zentrunk Dashboard in your Plivo account.
+  </Step>
+
+  <Step title="Create outbound SIP trunk">
+    1. Select "Create New Outbound Trunk" and provide a descriptive name for your trunk. 
+    2. Under Trunk Authentication, click "Add New Credentials List". 
+    3. Add a username and password that you'll use to authenticate outbound calls.
+    4. Select "Create Credentials List". 5. Save your credentials list and select "Create Trunk" to complete your outbound trunk configuration.
+  </Step>
+  
+  <Step title="Note your termination URI">
+    After creating the outbound trunk, note the termination URI (typically in the format
+    `sip:yourusername@yourplivotrunk.sip.plivo.com`). You'll need this information when configuring
+    the SIP trunk in ElevenLabs.
+  </Step>
+</Steps>
+
+<Warning>
+  Once you've set up your Plivo SIP trunk, follow the [SIP trunking
+  guide](/docs/conversational-ai/phone-numbers/sip-trunking) to finish the setup ElevenLabs as well.
+</Warning>

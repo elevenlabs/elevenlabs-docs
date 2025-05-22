@@ -33,7 +33,7 @@ Our language detection tool triggers language switching in two cases, both based
 <Steps>
     <Step title="Configure supported languages">
         The languages that the agent can switch to must be defined in the `Agent` settings tab.
-        
+
         <Frame background="subtle">
             ![Agent languages](/assets/images/conversational-ai/agent-languages.png)
         </Frame>
@@ -70,27 +70,25 @@ from elevenlabs import (
     ElevenLabs,
     AgentConfig,
     PromptAgent,
-    PromptAgentToolsItem_System,
-    LanguagePreset,
-    ConversationConfigClientOverride,
+    PromptAgentInputToolsItem_System,
+    LanguagePresetInput,
+    ConversationConfigClientOverrideInput,
     AgentConfigOverride,
-    LanguagePresetTranslation,
-    PromptAgentOverride
 )
 
 # Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Create the language detection tool
-language_detection_tool = PromptAgentToolsItem_System(
+language_detection_tool = PromptAgentInputToolsItem_System(
     name="language_detection",
     description=""  # Optional: Customize when the tool should be triggered
 )
 
 # Create language presets
 language_presets = {
-    "nl": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "nl": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Hoi, hoe gaat het met je?",
@@ -100,16 +98,16 @@ language_presets = {
         ),
         first_message_translation=None
     ),
-    "fi": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "fi": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 first_message="Hei, kuinka voit?",
             ),
             tts=None
         ),
     ),
-    "tr": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "tr": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Merhaba, nasılsın?",
@@ -118,8 +116,8 @@ language_presets = {
             tts=None
         ),
     ),
-    "ru": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "ru": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Привет, как ты?",
@@ -128,8 +126,8 @@ language_presets = {
             tts=None
         ),
     ),
-    "pt": LanguagePreset(
-        overrides=ConversationConfigClientOverride(
+    "pt": LanguagePresetInput(
+        overrides=ConversationConfigClientOverrideInput(
             agent=AgentConfigOverride(
                 prompt=None,
                 first_message="Oi, como você está?",
@@ -152,22 +150,22 @@ conversation_config = ConversationalConfig(
 )
 
 # Create the agent
-response = client.conversational_ai.create_agent(
+response = elevenlabs.conversational_ai.agents.create(
     conversation_config=conversation_config
 )
 ```
 
 ```javascript
-import { ElevenLabs } from 'elevenlabs';
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
 
 // Initialize the client
-const client = new ElevenLabs({
+const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
 // Create the agent with language detection tool
-await client.conversationalAi.createAgent({
-  conversation_config: {
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
     agent: {
       prompt: {
         tools: [
@@ -177,15 +175,15 @@ await client.conversationalAi.createAgent({
             description: '', // Optional: Customize when the tool should be triggered
           },
         ],
-        first_message: 'Hi, how are you?',
+        firstMessage: 'Hi, how are you?',
       },
     },
-    language_presets: {
+    languagePresets: {
       nl: {
         overrides: {
           agent: {
             prompt: null,
-            first_message: 'Hoi, hoe gaat het met je?',
+            firstMessage: 'Hoi, hoe gaat het met je?',
             language: null,
           },
           tts: null,
@@ -195,13 +193,13 @@ await client.conversationalAi.createAgent({
         overrides: {
           agent: {
             prompt: null,
-            first_message: 'Hei, kuinka voit?',
+            firstMessage: 'Hei, kuinka voit?',
             language: null,
           },
           tts: null,
         },
-        first_message_translation: {
-          source_hash: '{"firstMessage":"Hi how are you?","language":"en"}',
+        firstMessageTranslation: {
+          sourceHash: '{"firstMessage":"Hi how are you?","language":"en"}',
           text: 'Hei, kuinka voit?',
         },
       },
@@ -209,7 +207,7 @@ await client.conversationalAi.createAgent({
         overrides: {
           agent: {
             prompt: null,
-            first_message: 'Merhaba, nasılsın?',
+            firstMessage: 'Merhaba, nasılsın?',
             language: null,
           },
           tts: null,
@@ -219,7 +217,7 @@ await client.conversationalAi.createAgent({
         overrides: {
           agent: {
             prompt: null,
-            first_message: 'Привет, как ты?',
+            firstMessage: 'Привет, как ты?',
             language: null,
           },
           tts: null,
@@ -229,7 +227,7 @@ await client.conversationalAi.createAgent({
         overrides: {
           agent: {
             prompt: null,
-            first_message: 'Oi, como você está?',
+            firstMessage: 'Oi, como você está?',
             language: null,
           },
           tts: null,
@@ -239,7 +237,7 @@ await client.conversationalAi.createAgent({
         overrides: {
           agent: {
             prompt: null,
-            first_message: 'مرحبًا كيف حالك؟',
+            firstMessage: 'مرحبًا كيف حالك؟',
             language: null,
           },
           tts: null,

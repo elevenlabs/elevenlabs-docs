@@ -28,7 +28,7 @@ This guide will show you how to convert spoken audio into text using the Speech 
 
         load_dotenv()
 
-        client = ElevenLabs(
+        elevenlabs = ElevenLabs(
           api_key=os.getenv("ELEVENLABS_API_KEY"),
         )
 
@@ -38,7 +38,7 @@ This guide will show you how to convert spoken audio into text using the Speech 
         response = requests.get(audio_url)
         audio_data = BytesIO(response.content)
 
-        transcription = client.speech_to_text.convert(
+        transcription = elevenlabs.speech_to_text.convert(
             file=audio_data,
             model_id="scribe_v1", # Model to use, for now only "scribe_v1" is supported
             tag_audio_events=True, # Tag audio events like laughter, applause, etc.
@@ -51,21 +51,21 @@ This guide will show you how to convert spoken audio into text using the Speech 
 
         ```typescript maxLines=0
         // example.mts
-        import { ElevenLabsClient } from "elevenlabs";
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
         import "dotenv/config";
 
-        const client = new ElevenLabsClient();
+        const elevenlabs = new ElevenLabsClient();
 
         const response = await fetch(
           "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
         );
         const audioBlob = new Blob([await response.arrayBuffer()], { type: "audio/mp3" });
 
-        const transcription = await client.speechToText.convert({
+        const transcription = await elevenlabs.speechToText.convert({
           file: audioBlob,
-          model_id: "scribe_v1", // Model to use, for now only "scribe_v1" is support.
-          tag_audio_events: true, // Tag audio events like laughter, applause, etc.
-          language_code: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
+          modelId: "scribe_v1", // Model to use, for now only "scribe_v1" is supported.
+          tagAudioEvents: true, // Tag audio events like laughter, applause, etc.
+          languageCode: "eng", // Language of the audio file. If set to null, the model will detect the language automatically.
           diarize: true, // Whether to annotate who is speaking
         });
 

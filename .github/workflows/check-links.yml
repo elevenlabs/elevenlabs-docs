@@ -5,27 +5,46 @@ on:
     paths:
       - 'fern/**'
       - '.github/workflows/check-links.yml'
-      - '.github/scripts/check_links.py'
 
 jobs:
   check-links:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: pnpm/action-setup@v4
         with:
-          python-version: '3.x'
+          version: 9
 
-      - name: Install dependencies
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - run: pnpm install
+
+      - name: Create link checker script
         run: |
-          python -m pip install --upgrade pip
-          pip install pyyaml
+          cat > check_docs_links.sh << 'EOF'
+          #!/bin/bash
 
-      - name: Make script executable
-        run: chmod +x .github/scripts/check_links.py
+          # Run broken-links command and capture output
+          output=$(pnpm run fern:broken-links)
+
+          # Filter only lines with broken links inside /docs/ or external docs
+          echo "$output" | grep -E 'broken link to /(docs|elevenlabs\.io/docs)' > filtered_output.txt
+
+          # Check if there are still relevant broken links
+          if [[ -s filtered_output.txt ]]; then
+            echo "Detected broken links in /docs or allowed external docs:"
+            cat filtered_output.txt
+            exit 1
+          else
+            echo "No relevant broken links found."
+            exit 0
+          fi
+          EOF
+          chmod +x check_docs_links.sh
 
       - name: Check documentation links
-        run: python .github/scripts/check_links.py
+        run: ./check_docs_links.sh
