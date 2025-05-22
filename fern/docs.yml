@@ -688,22 +688,28 @@ navigation:
                     title: Create widget avatar
               - section: Workspace
                 contents:
-                  - endpoint: GET /v1/convai/settings
-                    title: Get settings
-                  - endpoint: PATCH /v1/convai/settings
-                    title: Update settings
-                  - endpoint: GET /v1/convai/secrets
-                    title: Get secrets
-                  - endpoint: POST /v1/convai/secrets
-                    title: Create secret
-                  - endpoint: PATCH /v1/convai/secrets/{secret_id}
-                    title: Update secret
-                  - endpoint: DELETE /v1/convai/secrets/{secret_id}
-                    title: Delete secret
-                  - endpoint: GET /v1/convai/settings/dashboard
-                    title: Get dashboard settings
-                  - endpoint: PATCH /v1/convai/settings/dashboard
-                    title: Update dashboard settings
+                  - section: Settings
+                    skip-slug: true
+                    contents:
+                      - endpoint: GET /v1/convai/settings
+                        title: Get settings
+                      - endpoint: PATCH /v1/convai/settings
+                        title: Update settings
+                  - section: Secrets
+                    contents:
+                      - endpoint: GET /v1/convai/secrets
+                        title: Get secrets
+                      - endpoint: POST /v1/convai/secrets
+                        title: Create secret
+                      - endpoint: PATCH /v1/convai/secrets/{secret_id}
+                        title: Update secret
+                      - endpoint: DELETE /v1/convai/secrets/{secret_id}
+                        title: Delete secret
+                  - section: Dashboard
+                    contents:
+                      - endpoint: GET /v1/convai/settings/dashboard
+                        title: Get dashboard settings
+                      - endpoint: PATCH /v1/convai/settings/dashboard
               - section: SIP Trunk
                 contents:
                   - endpoint: POST /v1/convai/sip-trunk/outbound-call
@@ -1013,9 +1019,9 @@ redirects:
   - source: /docs/api-reference/add-chapter
     destination: /docs/api-reference/chapters/add-chapter
   - source: /docs/api-reference/add-shared-voice
-    destination: /docs/api-reference/voice-library/add-sharing-voice
+    destination: /docs/api-reference/voice-library/share
   - source: /docs/api-reference/add-voice
-    destination: /docs/api-reference/voices/add
+    destination: /docs/api-reference/voices/ivc/create
   - source: /docs/api-reference/audio-isolation
     destination: /docs/api-reference/audio-isolation/create
   - source: /docs/api-reference/audio-isolation-stream
@@ -1041,7 +1047,7 @@ redirects:
   - source: /docs/api-reference/edit-voice
     destination: /docs/api-reference/voices/edit
   - source: /docs/api-reference/edit-voice-settings
-    destination: /docs/api-reference/voices/edit-settings
+    destination: /docs/api-reference/voices/settings/update
   - source: /docs/api-reference/get-audio-from-history-item
     destination: /docs/api-reference/history/get-audio
   - source: /docs/api-reference/get-audio-from-sample
@@ -1053,7 +1059,7 @@ redirects:
   - source: /docs/api-reference/get-chapters
     destination: /docs/api-reference/chapters/get-chapters
   - source: /docs/api-reference/get-default-voice-settings
-    destination: /docs/api-reference/voices/get-default-settings
+    destination: /docs/api-reference/voices/settings/get-default
   - source: /docs/api-reference/get-dubbed-file
     destination: /docs/api-reference/dubbing/get-dubbed-file
   - source: /docs/api-reference/get-dubbing-metadata
@@ -1069,11 +1075,11 @@ redirects:
   - source: /docs/api-reference/get-user-info
     destination: /docs/api-reference/user/get
   - source: /docs/api-reference/get-user-subscription-info
-    destination: /docs/api-reference/user/get-subscription
+    destination: /docs/api-reference/user/subscription/get
   - source: /docs/api-reference/get-voice
     destination: /docs/api-reference/voices/get
   - source: /docs/api-reference/get-voice-settings
-    destination: /docs/api-reference/voices/get-settings
+    destination: /docs/api-reference/voices/settings/get
   - source: /docs/api-reference/get-voices
     destination: /docs/api-reference/voices/search
   - source: /docs/api-reference/pronunciation-dictionaries-add-from-file
@@ -1347,8 +1353,8 @@ redirects:
     destination: /docs/api-reference/studio/update-chapter
   - source: /docs/api-reference/projects/update-pronunciation-dictionaries
     destination: /docs/api-reference/studio/create-pronunciation-dictionaries
-  - source: /docs/api-reference/projects:slug*
-    destination: /docs/api-reference/studio/slug*
+  - source: /docs/api-reference/projects/:slug*
+    destination: /docs/api-reference/studio/:slug*
   - source: /docs/conversational-ai/workflows/agent-agent-transfers
     destination: /docs/conversational-ai/customization/tools/system-tools/agent-transfer
   - source: /docs/best-practices/conversational-agents
@@ -1389,7 +1395,7 @@ redirects:
     destination: /docs/api-reference/dubbing/resources/get-resource
   - source: /docs/api-reference/workspace/delete-member
     destination: /docs/api-reference/workspace/members/delete
-  - source: /docs/api-reference/knowledge-base/get-knowledge-base-document-by-id
+  - source: /docs/api-reference/knowledge-base/get
     destination: /docs/api-reference/knowledge-base/get
   - source: /docs/api-reference/knowledge-base/get-knowledge-base-list
     destination: /docs/api-reference/knowledge-base/list
@@ -1446,6 +1452,6 @@ redirects:
   - source: /docs/api-reference/pronunciation-dictionary/download
     destination: /docs/api-reference/pronunciation-dictionaries/download
   - source: /docs/conversational-ai/customization/privacy/hipaa-compliance
-    destination: /docs/conversational-ai/legal/hipaa-compliance
+    destination: /docs/conversational-ai/legal/hipaa
   - source: /docs/conversational-ai/customization/hipaa-compliance
     destination: docs/conversational-ai/legal/hipaa-compliance
