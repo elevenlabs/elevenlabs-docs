@@ -686,22 +686,28 @@ navigation:
                     title: Create widget avatar
               - section: Workspace
                 contents:
-                  - endpoint: GET /v1/convai/settings
-                    title: Get settings
-                  - endpoint: PATCH /v1/convai/settings
-                    title: Update settings
-                  - endpoint: GET /v1/convai/secrets
-                    title: Get secrets
-                  - endpoint: POST /v1/convai/secrets
-                    title: Create secret
-                  - endpoint: PATCH /v1/convai/secrets/{secret_id}
-                    title: Update secret
-                  - endpoint: DELETE /v1/convai/secrets/{secret_id}
-                    title: Delete secret
-                  - endpoint: GET /v1/convai/settings/dashboard
-                    title: Get dashboard settings
-                  - endpoint: PATCH /v1/convai/settings/dashboard
-                    title: Update dashboard settings
+                  - section: Settings
+                    skip-slug: true
+                    contents:
+                      - endpoint: GET /v1/convai/settings
+                        title: Get settings
+                      - endpoint: PATCH /v1/convai/settings
+                        title: Update settings
+                  - section: Secrets
+                    contents:
+                      - endpoint: GET /v1/convai/secrets
+                        title: Get secrets
+                      - endpoint: POST /v1/convai/secrets
+                        title: Create secret
+                      - endpoint: PATCH /v1/convai/secrets/{secret_id}
+                        title: Update secret
+                      - endpoint: DELETE /v1/convai/secrets/{secret_id}
+                        title: Delete secret
+                  - section: Dashboard
+                    contents:
+                      - endpoint: GET /v1/convai/settings/dashboard
+                        title: Get dashboard settings
+                      - endpoint: PATCH /v1/convai/settings/dashboard
               - section: SIP Trunk
                 contents:
                   - endpoint: POST /v1/convai/sip-trunk/outbound-call
