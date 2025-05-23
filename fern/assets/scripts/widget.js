@@ -7,7 +7,7 @@ function injectElevenLabsWidget() {
   }
 
   const script = document.createElement('script');
-  script.src = 'https://unpkg.com/@11labs/convai-widget-embed@0.0.5/dist/index.js';
+  script.src = 'https://unpkg.com/@11labs/convai-widget-embed';
   script.async = true;
   script.type = 'text/javascript';
   document.head.appendChild(script);
@@ -20,6 +20,15 @@ function injectElevenLabsWidget() {
   widget.id = ID;
   widget.setAttribute('agent-id', 'q6EtujId97WBxLEUlEgQ');
   widget.setAttribute('variant', 'full');
+  widget.setAttribute('transcript', 'true');
+  widget.setAttribute('text-input', 'true');
+  widget.setAttribute(
+    'text-contents',
+    JSON.stringify({
+      start_call: 'Ask anything',
+      input_placeholder: 'Or send a message',
+    })
+  );
 
   // Set initial colors and variant based on current theme and device
   updateWidgetColors(widget);
@@ -43,7 +52,7 @@ function injectElevenLabsWidget() {
   function updateWidgetVariant(widget) {
     const isMobile = window.innerWidth <= 640; // Common mobile breakpoint
     if (isMobile) {
-      widget.setAttribute('variant', 'expandable');
+      widget.setAttribute('variant', 'compact');
     } else {
       widget.setAttribute('variant', 'full');
     }
