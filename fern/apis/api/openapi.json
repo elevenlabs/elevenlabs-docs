@@ -32111,6 +32111,19 @@
         ],
         "title": "SimilarVoicesForSpeakerResponse"
       },
+      "SkipTurnToolConfig": {
+        "description": "Allows the agent to explicitly skip its turn.\n\nThis tool should be invoked by the LLM when the user indicates they would like\nto think or take a short pause before continuing the conversation—e.g. when\nthey say: \"Give me a second\", \"Let me think\", or \"One moment please\".  After\ncalling this tool, the assistant should not speak until the user speaks\nagain, or another normal turn-taking condition is met.  The tool itself has\nno parameters and performs no side-effects other than informing the backend\nthat the current turn generation is complete.",
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "skip_turn",
+            "const": "skip_turn",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "SkipTurnToolConfig"
+      },
       "SpeakerAudioResponseModel": {
         "type": "object",
         "properties": {
@@ -33398,6 +33411,7 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
                 "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
               }
@@ -33414,6 +33428,9 @@
               },
               {
                 "$ref": "#/components/schemas/TransferToNumberToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/SkipTurnToolConfig"
               }
             ],
             "title": "Params"
@@ -33468,6 +33485,7 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
                 "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
               }
@@ -33484,6 +33502,9 @@
               },
               {
                 "$ref": "#/components/schemas/TransferToNumberToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/SkipTurnToolConfig"
               }
             ],
             "title": "Params"
