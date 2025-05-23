@@ -22,10 +22,13 @@ function injectElevenLabsWidget() {
   widget.setAttribute('variant', 'full');
   widget.setAttribute('transcript', 'true');
   widget.setAttribute('text-input', 'true');
-  widget.setAttribute('text-contents', JSON.stringify({
-    start_call: 'Ask anything',
-    input_placeholder: 'Or send a message',
-  }));
+  widget.setAttribute(
+    'text-contents',
+    JSON.stringify({
+      start_call: 'Ask anything',
+      input_placeholder: 'Or send a message',
+    })
+  );
 
   // Set initial colors and variant based on current theme and device
   updateWidgetColors(widget);
