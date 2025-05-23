@@ -7,7 +7,7 @@ function injectElevenLabsWidget() {
   }
 
   const script = document.createElement('script');
-  script.src = 'https://elevenlabs.io/convai-widget/index.js';
+  script.src = 'https://unpkg.com/@11labs/convai-widget-embed@0.0.5/dist/index.js';
   script.async = true;
   script.type = 'text/javascript';
   document.head.appendChild(script);
