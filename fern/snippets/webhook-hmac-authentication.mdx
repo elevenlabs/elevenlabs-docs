@@ -20,6 +20,11 @@ The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.re
     import time
     import hmac
     from hashlib import sha256
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    secret = os.getenv("ELEVENLABS_WEBHOOK_SECRET")
 
     app = FastAPI()
 
@@ -35,7 +40,7 @@ The hash is equivalent to the hex encoded sha256 HMAC signature of `timestamp.re
 
         # Validate timestamp
         tolerance = int(time.time()) - 30 * 60
-        if int(timestamp) < tolerance
+        if int(timestamp) < tolerance:
             return
 
         # Validate signature
