@@ -8166,6 +8166,27 @@
             }
           },
           {
+            "name": "include_live_moderated",
+            "in": "query",
+            "description": "Include/exclude voices that are live moderated",
+            "required": false,
+            "schema": {
+              "description": "Include/exclude voices that are live moderated",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                true
+              ],
+              "title": "Include Live Moderated"
+            }
+          },
+          {
             "name": "reader_app_enabled",
             "in": "query",
             "description": "Filter voices that are enabled for the reader app",
@@ -15757,7 +15778,7 @@
           },
           "widget": {
             "description": "Configuration for the widget",
-            "$ref": "#/components/schemas/WidgetConfig"
+            "$ref": "#/components/schemas/WidgetConfig-Input"
           },
           "data_collection": {
             "description": "Data collection settings",
@@ -15799,7 +15820,7 @@
           },
           "widget": {
             "description": "Configuration for the widget",
-            "$ref": "#/components/schemas/WidgetConfig"
+            "$ref": "#/components/schemas/WidgetConfig-Output"
           },
           "data_collection": {
             "description": "Data collection settings",
@@ -22055,7 +22076,8 @@
           "client_tool_call",
           "vad_score",
           "internal_turn_probability",
-          "internal_tentative_agent_response"
+          "internal_tentative_agent_response",
+          "internal_native_mcp_tool_call"
         ],
         "title": "ClientEvent"
       },
@@ -24988,6 +25010,7 @@
       "EmbedVariant": {
         "type": "string",
         "enum": [
+          "tiny",
           "compact",
           "full",
           "expandable"
@@ -28306,6 +28329,11 @@
             "type": "boolean",
             "title": "Can Use Style"
           },
+          "can_use_quality": {
+            "description": "Whether the model can use quality.",
+            "type": "boolean",
+            "title": "Can Use Quality"
+          },
           "can_use_speaker_boost": {
             "description": "Whether the model can use speaker boost.",
             "type": "boolean",
@@ -28372,6 +28400,7 @@
           "can_be_finetuned": true,
           "can_do_text_to_speech": true,
           "can_do_voice_conversion": true,
+          "can_use_quality": false,
           "can_use_speaker_boost": true,
           "can_use_style": true,
           "concurrency_group": "standard",
@@ -28401,6 +28430,7 @@
           "can_do_text_to_speech",
           "can_do_voice_conversion",
           "can_use_style",
+          "can_use_quality",
           "can_use_speaker_boost",
           "serves_pro_voices",
           "token_cost_factor",
@@ -31118,6 +31148,17 @@
             "exclusiveMaximum": 10000000,
             "exclusiveMinimum": 0,
             "title": "Max Documents Length"
+          },
+          "max_retrieved_rag_chunks_count": {
+            "description": "Maximum number of RAG document chunks to initially retrieve from the vector store. These are then further filtered by vector distance and total length.",
+            "type": "integer",
+            "default": 20,
+            "examples": [
+              5
+            ],
+            "exclusiveMinimum": 0,
+            "maximum": 20,
+            "title": "Max Retrieved Rag Chunks Count"
           }
         },
         "title": "RagConfig"
@@ -35063,6 +35104,18 @@
             ],
             "title": "Similarity Boost"
           },
+          "quality": {
+            "description": "Controls the audio quality of the generated speech. Higher values produce clearer audio but increase generation time.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quality"
+          },
           "style": {
             "description": "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.",
             "anyOf": [
@@ -36033,13 +36086,18 @@
         ],
         "title": "WebhookToolConfig"
       },
-      "WidgetConfig": {
+      "WidgetConfig-Input": {
         "type": "object",
         "properties": {
           "variant": {
             "description": "The variant of the widget",
             "default": "full",
             "$ref": "#/components/schemas/EmbedVariant"
+          },
+          "placement": {
+            "description": "The placement of the widget on the screen",
+            "default": "bottom-right",
+            "$ref": "#/components/schemas/WidgetPlacement"
           },
           "expandable": {
             "description": "Whether the widget is expandable",
@@ -36289,11 +36347,33 @@
             "default": false,
             "title": "Mic Muting Enabled"
           },
+          "transcript_enabled": {
+            "description": "Whether the widget should show the conversation transcript as it goes on",
+            "type": "boolean",
+            "default": false,
+            "title": "Transcript Enabled"
+          },
+          "text_input_enabled": {
+            "description": "Whether the user should be able to send text messages",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Input Enabled"
+          },
+          "text_contents": {
+            "description": "Text contents of the widget",
+            "$ref": "#/components/schemas/WidgetTextContents"
+          },
           "language_selector": {
             "description": "Whether to show the language selector",
             "type": "boolean",
             "default": false,
             "title": "Language Selector"
+          },
+          "supports_text_only": {
+            "description": "Whether the widget can switch to text only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Supports Text Only"
           },
           "custom_avatar_path": {
             "description": "The custom avatar path",
@@ -36306,6 +36386,330 @@
               }
             ],
             "title": "Custom Avatar Path"
+          },
+          "language_presets": {
+            "description": "Language presets for the widget",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WidgetLanguagePreset"
+            },
+            "title": "Language Presets"
+          }
+        },
+        "example": {
+          "custom_avatar_path": "https://example.com/avatar.png",
+          "language_selector": false
+        },
+        "title": "WidgetConfig"
+      },
+      "WidgetConfig-Output": {
+        "type": "object",
+        "properties": {
+          "variant": {
+            "description": "The variant of the widget",
+            "default": "full",
+            "$ref": "#/components/schemas/EmbedVariant"
+          },
+          "placement": {
+            "description": "The placement of the widget on the screen",
+            "default": "bottom-right",
+            "$ref": "#/components/schemas/WidgetPlacement"
+          },
+          "expandable": {
+            "description": "Whether the widget is expandable",
+            "default": "never",
+            "$ref": "#/components/schemas/WidgetExpandable"
+          },
+          "avatar": {
+            "description": "The avatar of the widget",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OrbAvatar"
+              },
+              {
+                "$ref": "#/components/schemas/URLAvatar"
+              },
+              {
+                "$ref": "#/components/schemas/ImageAvatar"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "feedback_mode": {
+            "description": "The feedback mode of the widget",
+            "default": "none",
+            "$ref": "#/components/schemas/WidgetFeedbackMode"
+          },
+          "bg_color": {
+            "description": "The background color of the widget",
+            "type": "string",
+            "default": "#ffffff",
+            "title": "Bg Color"
+          },
+          "text_color": {
+            "description": "The text color of the widget",
+            "type": "string",
+            "default": "#000000",
+            "title": "Text Color"
+          },
+          "btn_color": {
+            "description": "The button color of the widget",
+            "type": "string",
+            "default": "#000000",
+            "title": "Btn Color"
+          },
+          "btn_text_color": {
+            "description": "The button text color of the widget",
+            "type": "string",
+            "default": "#ffffff",
+            "title": "Btn Text Color"
+          },
+          "border_color": {
+            "description": "The border color of the widget",
+            "type": "string",
+            "default": "#e1e1e1",
+            "title": "Border Color"
+          },
+          "focus_color": {
+            "description": "The focus color of the widget",
+            "type": "string",
+            "default": "#000000",
+            "title": "Focus Color"
+          },
+          "border_radius": {
+            "description": "The border radius of the widget",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Border Radius"
+          },
+          "btn_radius": {
+            "description": "The button radius of the widget",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Btn Radius"
+          },
+          "action_text": {
+            "description": "The action text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action Text"
+          },
+          "start_call_text": {
+            "description": "The start call text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Call Text"
+          },
+          "end_call_text": {
+            "description": "The end call text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Call Text"
+          },
+          "expand_text": {
+            "description": "The expand text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand Text"
+          },
+          "listening_text": {
+            "description": "The text to display when the agent is listening",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listening Text"
+          },
+          "speaking_text": {
+            "description": "The text to display when the agent is speaking",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaking Text"
+          },
+          "shareable_page_text": {
+            "description": "The text to display when sharing",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shareable Page Text"
+          },
+          "shareable_page_show_terms": {
+            "description": "Whether to show terms and conditions on the shareable page",
+            "type": "boolean",
+            "default": true,
+            "title": "Shareable Page Show Terms"
+          },
+          "terms_text": {
+            "description": "The text to display for terms and conditions",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms Text"
+          },
+          "terms_html": {
+            "description": "The HTML to display for terms and conditions",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms Html"
+          },
+          "terms_key": {
+            "description": "The key to display for terms and conditions",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms Key"
+          },
+          "show_avatar_when_collapsed": {
+            "description": "Whether to show the avatar when the widget is collapsed",
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Show Avatar When Collapsed"
+          },
+          "disable_banner": {
+            "description": "Whether to disable the banner",
+            "type": "boolean",
+            "default": false,
+            "title": "Disable Banner"
+          },
+          "override_link": {
+            "description": "The override link for the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Link"
+          },
+          "mic_muting_enabled": {
+            "description": "Whether to enable mic muting",
+            "type": "boolean",
+            "default": false,
+            "title": "Mic Muting Enabled"
+          },
+          "transcript_enabled": {
+            "description": "Whether the widget should show the conversation transcript as it goes on",
+            "type": "boolean",
+            "default": false,
+            "title": "Transcript Enabled"
+          },
+          "text_input_enabled": {
+            "description": "Whether the user should be able to send text messages",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Input Enabled"
+          },
+          "text_contents": {
+            "description": "Text contents of the widget",
+            "$ref": "#/components/schemas/WidgetTextContents"
+          },
+          "language_selector": {
+            "description": "Whether to show the language selector",
+            "type": "boolean",
+            "default": false,
+            "title": "Language Selector"
+          },
+          "supports_text_only": {
+            "description": "Whether the widget can switch to text only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Supports Text Only"
+          },
+          "custom_avatar_path": {
+            "description": "The custom avatar path",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Avatar Path"
+          },
+          "language_presets": {
+            "description": "Language presets for the widget",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WidgetLanguagePreset"
+            },
+            "title": "Language Presets"
           }
         },
         "example": {
@@ -36322,6 +36726,11 @@
             "default": "full",
             "$ref": "#/components/schemas/EmbedVariant"
           },
+          "placement": {
+            "description": "The placement of the widget on the screen",
+            "default": "bottom-right",
+            "$ref": "#/components/schemas/WidgetPlacement"
+          },
           "expandable": {
             "description": "Whether the widget is expandable",
             "default": "never",
@@ -36569,6 +36978,22 @@
             "type": "boolean",
             "default": false,
             "title": "Mic Muting Enabled"
+          },
+          "transcript_enabled": {
+            "description": "Whether the widget should show the conversation transcript as it goes on",
+            "type": "boolean",
+            "default": false,
+            "title": "Transcript Enabled"
+          },
+          "text_input_enabled": {
+            "description": "Whether the user should be able to send text messages",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Input Enabled"
+          },
+          "text_contents": {
+            "description": "Text contents of the widget",
+            "$ref": "#/components/schemas/WidgetTextContents"
           },
           "language": {
             "type": "string",
@@ -36587,6 +37012,37 @@
               }
             ],
             "title": "Supported Language Overrides"
+          },
+          "language_presets": {
+            "description": "Language presets for the widget",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WidgetLanguagePresetResponse"
+            },
+            "title": "Language Presets"
+          },
+          "text_only": {
+            "description": "Whether the agent uses text-only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Only"
+          },
+          "supports_text_only": {
+            "description": "Whether the agent can be switched to text-only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Supports Text Only"
+          },
+          "first_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message"
           }
         },
         "example": {
@@ -36638,6 +37094,321 @@
           "end"
         ],
         "title": "WidgetFeedbackMode"
+      },
+      "WidgetLanguagePreset": {
+        "type": "object",
+        "properties": {
+          "text_contents": {
+            "description": "The text contents for the selected language",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WidgetTextContents"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "WidgetLanguagePreset"
+      },
+      "WidgetLanguagePresetResponse": {
+        "type": "object",
+        "properties": {
+          "first_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message"
+          },
+          "text_contents": {
+            "description": "The text contents for the selected language",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WidgetTextContents"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "WidgetLanguagePresetResponse"
+      },
+      "WidgetPlacement": {
+        "type": "string",
+        "enum": [
+          "top-left",
+          "top",
+          "top-right",
+          "bottom-left",
+          "bottom",
+          "bottom-right"
+        ],
+        "title": "WidgetPlacement"
+      },
+      "WidgetTextContents": {
+        "type": "object",
+        "properties": {
+          "main_label": {
+            "description": "Call to action displayed inside the compact and full variants.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Main Label"
+          },
+          "start_call": {
+            "description": "Text and ARIA label for the start call button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Call"
+          },
+          "new_call": {
+            "description": "Text and ARIA label for the new call button. Displayed when the caller already finished at least one call in order ot start the next one.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Call"
+          },
+          "end_call": {
+            "description": "Text and ARIA label for the end call button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Call"
+          },
+          "mute_microphone": {
+            "description": "ARIA label for the mute microphone button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mute Microphone"
+          },
+          "change_language": {
+            "description": "ARIA label for the change language dropdown.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Language"
+          },
+          "collapse": {
+            "description": "ARIA label for the collapse button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collapse"
+          },
+          "expand": {
+            "description": "ARIA label for the expand button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand"
+          },
+          "copied": {
+            "description": "Text displayed when the user copies a value using the copy button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Copied"
+          },
+          "accept_terms": {
+            "description": "Text and ARIA label for the accept terms button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accept Terms"
+          },
+          "dismiss_terms": {
+            "description": "Text and ARIA label for the cancel terms button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dismiss Terms"
+          },
+          "listening_status": {
+            "description": "Status displayed when the agent is listening.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listening Status"
+          },
+          "speaking_status": {
+            "description": "Status displayed when the agent is speaking.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaking Status"
+          },
+          "connecting_status": {
+            "description": "Status displayed when the agent is connecting.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connecting Status"
+          },
+          "input_label": {
+            "description": "ARIA label for the text message input.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Label"
+          },
+          "input_placeholder": {
+            "description": "Placeholder text for the text message input.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Placeholder"
+          },
+          "user_ended_conversation": {
+            "description": "Information message displayed when the user ends the conversation.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Ended Conversation"
+          },
+          "agent_ended_conversation": {
+            "description": "Information message displayed when the agent ends the conversation.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Ended Conversation"
+          },
+          "conversation_id": {
+            "description": "Text label used next to the conversation ID.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
+          "error_occurred": {
+            "description": "Text label used when an error occurs.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Occurred"
+          },
+          "copy_id": {
+            "description": "Text and ARIA label used for the copy ID button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Copy Id"
+          }
+        },
+        "title": "WidgetTextContents"
       },
       "WorkspaceBatchCallsResponse": {
         "type": "object",
