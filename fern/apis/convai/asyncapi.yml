@@ -43,6 +43,8 @@ channels:
           - $ref: '#/components/messages/ConversationInitiationClientData'
           - $ref: '#/components/messages/ClientToolResult'
           - $ref: '#/components/messages/ContextualUpdate'
+          - $ref: '#/components/messages/UserMessage'
+          - $ref: '#/components/messages/UserActivity'
     subscribe:
       summary: Messages sent from the server to the client.
       description: Defines the message types that can be received by the client from the server
@@ -174,12 +176,25 @@ channels:
               result: 'Account is active and in good standing'
               is_error: false
 
-          # 14) Client => ServerL: Contextual update
+          # 14) Client => Server: Contextual update
           - type: publish
             messageId: ContextualUpdate
             value:
               type: 'contextual_update'
               text: 'User is viewing the pricing page'
+
+          # 15) Client => Server: User text message
+          - type: publish
+            messageId: UserMessage
+            value:
+              type: 'user_message'
+              text: 'I would like to upgrade my account'
+
+          # 16) Client => Server: User activity ping
+          - type: publish
+            messageId: UserActivity
+            value:
+              type: 'user_activity'
 
 components:
   messages:
@@ -258,6 +273,16 @@ components:
       description: Non-interrupting content sent to update the conversation state without disrupting the flow.
       payload:
         $ref: '#/components/schemas/ContextualUpdate'
+    UserMessage:
+      name: User Message
+      description: Text message sent by the user to the conversation.
+      payload:
+        $ref: '#/components/schemas/UserMessage'
+    UserActivity:
+      name: User Activity
+      description: Activity ping to prevent agent interruption and indicate user presence.
+      payload:
+        $ref: '#/components/schemas/UserActivity'
   schemas:
     UserAudioChunk:
       type: object
@@ -537,3 +562,22 @@ components:
         text:
           type: string
           description: Contextual information to be added to the conversation state.
+    UserMessage:
+      type: object
+      description: Schema for user text messages
+      required:
+        - type
+      properties:
+        type:
+          x-fern-type: literal<"user_message">
+        text:
+          type: string
+          description: Text message content from the user.
+    UserActivity:
+      type: object
+      description: Schema for user activity pings
+      required:
+        - type
+      properties:
+        type:
+          x-fern-type: literal<"user_activity">
