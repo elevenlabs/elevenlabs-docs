@@ -1,3 +1,5 @@
+import Dialogue from '../../../components/dialogue'
+
 ---
 title: Text to Dialogue
 subtitle: Learn how to create immersive, natural-sounding dialogue with ElevenLabs.
@@ -90,6 +92,35 @@ emotion. Voice settings like Stability and Similarity help control the consisten
 underlying emotion comes from textual cues.
 
 Read the [prompting guide](/docs/best-practices/prompting) for more details.
+
+### Emotional deliveries with non-speech audio event
+
+<Warning>
+  This feature is still under active development, actual results may vary.
+</Warning>
+
+The Eleven v3 model allows the use of non-speech audio events to influence the delivery of the dialogue. This is done by inserting the audio events into the text input wrapped in square brackets.
+
+Some examples include:
+
+- "[laughter] That's really funny!"
+- "[groaning] That was awful."
+- "Well, [sigh] I'm not sure what to say."
+
+You can also use punctuation to indicate the flow of a dialog, for example:
+
+- "Hello, is this seat-"
+- "Free? Yes it is."
+
+- "I understand, and I apologize if I upset you. I'll make sure to..."
+- "You did. You're annoying."
+
+<Dialogue dialogue={[
+  { speaker: 'Alex', text: 'Hello, is this seat-'},
+  { speaker: 'Bob', text: 'Free? Yes it is.'},
+  { speaker: 'Alex', text: 'I understand, and I apologize if I upset you. I\'ll make sure to...'},
+  { speaker: 'Bob', text: 'You did. You\'re annoying.'},
+]} />
 
 ## FAQ
 

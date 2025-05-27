@@ -1,0 +1,98 @@
+---
+title: Text to Dialogue quickstart
+subtitle: Learn how to generate immersive dialogue from text.
+---
+
+<Warning>
+  This feature is currently in alpha and is subject to change.
+</Warning>
+
+This guide will show you how to generate immersive, natural-sounding dialogue from text using the Text to Dialogue API.
+
+## Using the Text to Dialogue API
+
+<Steps>
+    <Step title="Create an API key">
+        <Markdown src="/snippets/quickstart-api-key.mdx" />
+    </Step>
+    <Step title="Install the SDK">
+        <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+    </Step>
+    <Step title="Make the API request">
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+
+        <CodeBlocks>
+        ```python maxLines=0
+        # example.py
+        import os
+        from dotenv import load_dotenv
+        from io import BytesIO
+        import requests
+        from elevenlabs.client import ElevenLabs
+
+        load_dotenv()
+
+        elevenlabs = ElevenLabs(
+          api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        audio_url = (
+            "https://storage.googleapis.com/eleven-public-cdn/audio/marketing/nicole.mp3"
+        )
+        response = requests.get(audio_url)
+        audio_data = BytesIO(response.content)
+
+        transcription = elevenlabs.speech_to_text.convert(
+            file=audio_data,
+            model_id="scribe_v1", # Model to use, for now only "scribe_v1" is supported
+            tag_audio_events=True, # Tag audio events like laughter, applause, etc.
+            language_code="eng", # Language of the audio file. If set to None, the model will detect the language automatically.
+            diarize=True, # Whether to annotate who is speaking
+        )
+
+        print(transcription)
+        ```
+
+        ```typescript maxLines=0
+        // example.mts
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+        import "dotenv/config";
+
+        const elevenlabs = new ElevenLabsClient();
+
+        const audio = await elevenlabs.textToDialogue.convert({
+            inputs: [
+                {
+                    text: "Hello, how are you?",
+                    voiceId: "Aw4FAjKCGjjNkVhN1Xmq",
+                },
+                {
+                    text: "I'm... I'm doing well, thank you",
+                    voiceId: "P4gSM3ELNeBHoc7LRsmF",
+                },
+            ],
+        });
+
+        play(audio);
+        ```
+        </CodeBlocks>
+    </Step>
+    <Step title="Execute the code">
+        <CodeBlocks>
+            ```python
+            python example.py
+            ```
+
+            ```typescript
+            npx tsx example.mts
+            ```
+        </CodeBlocks>
+
+        You should hear the dialogue audio play.
+    </Step>
+
+</Steps>
+
+## Next steps
+
+Explore the [API reference](/docs/api-reference/text-to-dialogue/convert) for more information on the Text to Dialogue API and its options.
