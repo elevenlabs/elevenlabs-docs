@@ -29,30 +29,38 @@ Before setting up the Genesys integration, ensure you have:
 
 <Steps>
 
-  <Step title="Access Genesys Cloud Admin">
-    Sign in to your Genesys Cloud organization with administrator privileges.
-  </Step>
+{' '}
 
-  <Step title="Navigate to Integrations">
-    Go to Admin → Integrations in the Genesys Cloud interface.
-  </Step>
+<Step title="Access Genesys Cloud Admin">
+  Sign in to your Genesys Cloud organization with administrator privileges.
+</Step>
 
-  <Step title="Create Audio Connector integration">
-    1. Click "Add Integration" and search for "Audio Connector"
-    2. Select the Audio Connector integration type
-    3. Provide a descriptive name for your integration
-    4. In the WebSocket URL field, enter: `wss://api.elevenlabs.io/v1/convai/conversation/genesys`
-  </Step>
+{' '}
 
-  <Step title="Configure authentication">
-    1. Navigate to the Configuration section of your Audio Connector integration
-    2. Add your ElevenLabs API key in the authentication configuration
-    3. Save the integration configuration
-  </Step>
+<Step title="Navigate to Integrations">
+  Go to Admin → Integrations in the Genesys Cloud interface.
+</Step>
 
-  <Step title="Activate the integration">
-    Set the integration status to "Active" to enable the connection.
-  </Step>
+{' '}
+
+<Step title="Create Audio Connector integration">
+  1. Click "Add Integration" and search for "Audio Connector" 2. Select the Audio Connector
+  integration type 3. Provide a descriptive name for your integration 4. In the WebSocket URL field,
+  enter: `wss://api.elevenlabs.io/v1/convai/conversation/genesys`
+</Step>
+
+{' '}
+
+<Step title="Configure authentication">
+  1. Navigate to the Configuration section of your Audio Connector integration 2. Add your
+  ElevenLabs API key in the authentication configuration 3. Save the integration configuration
+</Step>
+
+{' '}
+
+<Step title="Activate the integration">
+  Set the integration status to "Active" to enable the connection.
+</Step>
 
 </Steps>
 
@@ -60,27 +68,35 @@ Before setting up the Genesys integration, ensure you have:
 
 <Steps>
 
-  <Step title="Open Architect">
-    Navigate to Admin → Architect in Genesys Cloud.
-  </Step>
+{' '}
 
-  <Step title="Create or edit a flow">
-    Open an existing inbound, outbound, or in-queue call flow, or create a new one where you want to use the ElevenLabs agent.
-  </Step>
+<Step title="Open Architect">Navigate to Admin → Architect in Genesys Cloud.</Step>
 
-  <Step title="Add bot action">
-    1. In your flow, add a "Call Bot" action from the Bot category
-    2. Select your Audio Connector integration from the integration dropdown
-    3. In the connector_id field, specify your ElevenLabs agent ID
-  </Step>
+{' '}
 
-  <Step title="Configure input variables (optional)">
-    If you need to pass context to your ElevenLabs agent, configure input variables in the bot action. These will be available as dynamic variables in your ElevenLabs agent.
-  </Step>
+<Step title="Create or edit a flow">
+  Open an existing inbound, outbound, or in-queue call flow, or create a new one where you want to
+  use the ElevenLabs agent.
+</Step>
 
-  <Step title="Publish your flow">
-    Save and publish your flow to make the integration active.
-  </Step>
+{' '}
+
+<Step title="Add bot action">
+  1. In your flow, add a "Call Bot" action from the Bot category 2. Select your Audio Connector
+  integration from the integration dropdown 3. In the connector_id field, specify your ElevenLabs
+  agent ID
+</Step>
+
+{' '}
+
+<Step title="Configure input variables (optional)">
+  If you need to pass context to your ElevenLabs agent, configure input variables in the bot action.
+  These will be available as dynamic variables in your ElevenLabs agent.
+</Step>
+
+{' '}
+
+<Step title="Publish your flow">Save and publish your flow to make the integration active.</Step>
 
 </Steps>
 
@@ -91,7 +107,8 @@ Your ElevenLabs conversational AI agent must be configured with specific audio s
 ### Audio format requirements
 
 <Warning>
-  Both user audio input and agent audio output must be configured as μ-law 8kHz for proper compatibility with Genesys.
+  Both user audio input and agent audio output must be configured as μ-law 8kHz for proper
+  compatibility with Genesys.
 </Warning>
 
 - **TTS output format**: Set to μ-law 8kHz in Agent Settings → Voice
@@ -105,7 +122,8 @@ The Genesys integration supports only the following client events:
 - **Interruption events**: For handling caller interruptions during agent speech
 
 <Note>
-  Other client event types are not supported in the Genesys integration and should not be configured in your agent.
+  Other client event types are not supported in the Genesys integration and should not be configured
+  in your agent.
 </Note>
 
 ## Input variables
@@ -130,7 +148,8 @@ ElevenLabs Agent Prompt: Hi {{customer_name}}, how can I help you today?
 ## Output variables
 
 <Info>
-  Output variables from ElevenLabs agents back to Genesys flows are coming soon. This feature will allow you to capture conversation outcomes and route calls accordingly.
+  Output variables from ElevenLabs agents back to Genesys flows are coming soon. This feature will
+  allow you to capture conversation outcomes and route calls accordingly.
 </Info>
 
 ## Limitations and unsupported features
@@ -153,9 +172,12 @@ For call transfers, use Genesys Architect's native transfer actions after the bo
     Verify that your API key is correctly configured in the Audio Connector integration, and the ElevenLabs agent ID is correctly configured in the connector_id field in your Architect flow.
   </Accordion>
 
-  <Accordion title="Audio quality issues">
-    Ensure both user audio and output audio are set to μ-law 8kHz in your ElevenLabs agent configuration. Other audio formats may cause compatibility issues.
-  </Accordion>
+{' '}
+
+<Accordion title="Audio quality issues">
+  Ensure both user audio and output audio are set to μ-law 8kHz in your ElevenLabs agent
+  configuration. Other audio formats may cause compatibility issues.
+</Accordion>
 
   <Accordion title="Input variables not working">
     Verify that input variables are properly defined in your Genesys flow's "Call Bot" action and that they're referenced correctly in your ElevenLabs agent using the {{variable_name}} syntax.
