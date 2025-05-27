@@ -20,8 +20,6 @@ function injectElevenLabsWidget() {
   widget.id = ID;
   widget.setAttribute('agent-id', 'q6EtujId97WBxLEUlEgQ');
   widget.setAttribute('variant', 'full');
-  widget.setAttribute('transcript', 'true');
-  widget.setAttribute('text-input', 'true');
   widget.setAttribute(
     'text-contents',
     JSON.stringify({
