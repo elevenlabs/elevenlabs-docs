@@ -71,9 +71,9 @@ Before setting up the Genesys integration, ensure you have:
   agent ID
 </Step>
 
-<Step title="Configure input variables (optional)">
-  If you need to pass context to your ElevenLabs agent, configure input variables in the bot action.
-  These will be available as dynamic variables in your ElevenLabs agent.
+<Step title="Configure session variables (optional)">
+  If you need to pass context to your ElevenLabs agent, configure input session variables in the bot
+  action. These will be available as dynamic variables in your ElevenLabs agent.
 </Step>
 
 <Step title="Publish your flow">Save and publish your flow to make the integration active.</Step>
@@ -106,13 +106,13 @@ The Genesys integration supports only the following client events:
   if configured.
 </Note>
 
-## Input variables
+## Session variables
 
-You can pass dynamic context from your Genesys flow to your ElevenLabs agent using input variables:
+You can pass dynamic context from your Genesys flow to your ElevenLabs agent using input session variables:
 
-### Setting up input variables
+### Setting up session variables
 
-1. **In Genesys flow**: Define input variables in your "Call Bot" action
+1. **In Genesys flow**: Define input session variables in your "Call Bot" action
 2. **In ElevenLabs agent**: These variables are automatically available as dynamic variables
 3. **Usage**: Reference these variables in your agent's conversation flow or system prompts
 
@@ -120,16 +120,12 @@ Learn more about [dynamic variables](/docs/conversational-ai/customization/dynam
 
 ### Example usage
 
-```
-Genesys Flow Variable: customer_name = "John Smith"
-ElevenLabs Agent Prompt: Hi {{customer_name}}, how can I help you today?
-```
-
-## Output variables
+Genesys Flow input session variable: customer_name = "John Smith"
+ElevenLabs agent prompt: Hi {{customer_name}}, how can I help you today?
 
 <Info>
-  Output variables from ElevenLabs agents back to Genesys flows are coming soon. This feature will
-  allow you to capture conversation outcomes and route calls accordingly.
+  Output session variables from ElevenLabs agents back to Genesys flows are coming soon. This
+  feature will allow you to capture conversation outcomes and route calls accordingly.
 </Info>
 
 ## Limitations and unsupported features
@@ -152,7 +148,7 @@ For call transfers, use Genesys Architect's native transfer actions after the bo
     Verify that your API key is correctly configured in the Audio Connector integration and the ElevenLabs agent ID is correctly configured in the connector_id field in your Architect flow.
   </Accordion>
 
-  <Accordion title="Input variables not working">
-    Verify that input variables are properly defined in your Genesys flow's "Call Bot" action and that they're referenced correctly in your ElevenLabs agent using the {{variable_name}} syntax.
+  <Accordion title="Session variables not working">
+    Verify that input session variables are properly defined in your Genesys flow's "Call Bot" action and that they're referenced correctly in your ElevenLabs agent using the {{variable_name}} syntax.
   </Accordion>
 </AccordionGroup>
