@@ -1,5 +1,3 @@
-import Dialogue from '../../../components/dialogue'
-
 ---
 title: Text to Dialogue
 subtitle: Learn how to create immersive, natural-sounding dialogue with ElevenLabs.
@@ -21,7 +19,7 @@ Listen to a sample:
 
 <elevenlabs-audio-player
     audio-title="Dialogue example"
-    audio-src="/assets/audio/dialogue.mp3"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue.mp3"
 />
 
 <CardGroup cols={2}>
@@ -41,7 +39,7 @@ Listen to a sample:
   </Card>
 </CardGroup>
 
-### Voice options
+## Voice options
 
 ElevenLabs offers thousands of voices across 32 languages through multiple creation methods:
 
@@ -52,7 +50,61 @@ ElevenLabs offers thousands of voices across 32 languages through multiple creat
 
 Learn more about our [voice options](/docs/capabilities/voices).
 
-### Supported formats
+## Prompting
+
+The models interpret emotional context directly from the text input. For example, adding
+descriptive text like "she said excitedly" or using exclamation marks will influence the speech
+emotion. Voice settings like Stability and Similarity help control the consistency, while the
+underlying emotion comes from textual cues.
+
+Read the [prompting guide](/docs/best-practices/prompting) for more details.
+
+### Emotional deliveries with non-speech audio event
+
+<Warning>
+  This feature is still under active development, actual results may vary.
+</Warning>
+
+The Eleven v3 model allows the use of non-speech audio events to influence the delivery of the dialogue. This is done by inserting the audio events into the text input wrapped in square brackets.
+
+Some examples include:
+
+```
+"[giggling] That's really funny!"
+"[groaning] That was awful."
+"Well, [sigh] I'm not sure what to say."
+```
+
+<elevenlabs-audio-player
+    audio-title="Expressive dialogue"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue-expressive.mp3"
+/>
+
+You can also use punctuation to indicate the flow of a dialog, like interruptions:
+
+```
+"Hello, is this seat-"
+"Free? Yes it is."
+```
+
+<elevenlabs-audio-player
+    audio-title="Interruption"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue-interruption.mp3"
+/>
+
+Ellipses can be used to indicate trailing sentences:
+
+```
+"I understand, and I apologize if I upset you. I'll make sure to..."
+"You did. You're annoying."
+```
+
+<elevenlabs-audio-player
+    audio-title="Ellipsis"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue-ellipsis.mp3"
+/>
+
+## Supported formats
 
 The default response format is "mp3", but other formats like "PCM", & "μ-law" are available.
 
@@ -84,48 +136,10 @@ The default response format is "mp3", but other formats like "PCM", & "μ-law" a
 
 <Markdown src="/snippets/v3-model-languages.mdx" />
 
-### Prompting
-
-The models interpret emotional context directly from the text input. For example, adding
-descriptive text like "she said excitedly" or using exclamation marks will influence the speech
-emotion. Voice settings like Stability and Similarity help control the consistency, while the
-underlying emotion comes from textual cues.
-
-Read the [prompting guide](/docs/best-practices/prompting) for more details.
-
-### Emotional deliveries with non-speech audio event
-
-<Warning>
-  This feature is still under active development, actual results may vary.
-</Warning>
-
-The Eleven v3 model allows the use of non-speech audio events to influence the delivery of the dialogue. This is done by inserting the audio events into the text input wrapped in square brackets.
-
-Some examples include:
-
-- "[laughter] That's really funny!"
-- "[groaning] That was awful."
-- "Well, [sigh] I'm not sure what to say."
-
-You can also use punctuation to indicate the flow of a dialog, for example:
-
-- "Hello, is this seat-"
-- "Free? Yes it is."
-
-- "I understand, and I apologize if I upset you. I'll make sure to..."
-- "You did. You're annoying."
-
-<Dialogue dialogue={[
-  { speaker: 'Alex', text: 'Hello, is this seat-'},
-  { speaker: 'Bob', text: 'Free? Yes it is.'},
-  { speaker: 'Alex', text: 'I understand, and I apologize if I upset you. I\'ll make sure to...'},
-  { speaker: 'Bob', text: 'You did. You\'re annoying.'},
-]} />
-
 ## FAQ
 
 <AccordionGroup>
-  <Accordion title="Can I use any model?">
+  <Accordion title="Which models can I use?">
     Text to Dialogue is only available on the Eleven v3 model.
   </Accordion>
   <Accordion title="Do I own the audio output?">
