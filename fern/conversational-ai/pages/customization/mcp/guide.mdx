@@ -3,6 +3,8 @@ title: Model Context Protocol
 subtitle: Connect your ElevenLabs conversational agents to external tools and data sources using the Model Context Protocol.
 ---
 
+<Frame background="subtle">![Overview](/assets/images/conversational-ai/mcp-overview.png)</Frame>
+
 <Error title="User Responsibility">
   You are responsible for the security, compliance, and behavior of any third-party MCP server you
   integrate with your ElevenLabs conversational agents. ElevenLabs provides the platform for
@@ -11,59 +13,59 @@ subtitle: Connect your ElevenLabs conversational agents to external tools and da
 
 ## Overview
 
-The **Model Context Protocol (MCP)** is an open standard that defines how applications provide context to Large Language Models (LLMs). Think of MCP as a universal connector, enabling AI models to seamlessly interact with diverse data sources and tools. By integrating servers that implement MCP, you can significantly extend the capabilities of your ElevenLabs conversational agents.
+The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that defines how applications provide context to Large Language Models (LLMs). Think of MCP as a universal connector that enables AI models to seamlessly interact with diverse data sources and tools. By integrating servers that implement MCP, you can significantly extend the capabilities of your ElevenLabs conversational agents.
 
 <Note>
-  MCP support is not currently available for users on Zero Retention Mode and those requiring HIPAA
+  MCP support is not currently available for users on Zero Retention Mode or those requiring HIPAA
   compliance.
 </Note>
 
 ElevenLabs allows you to connect your conversational agents to external MCP servers. This enables your agents to:
 
-- Access and process information from various data sources via the MCP server.
-- Utilize specialized tools and functionalities exposed by the MCP server.
-- Create more dynamic, knowledgeable, and interactive conversational experiences.
+- Access and process information from various data sources via the MCP server
+- Utilize specialized tools and functionalities exposed by the MCP server
+- Create more dynamic, knowledgeable, and interactive conversational experiences
 
-<Frame
-  background="subtle"
-  caption="Adding an MCP server integration to your ElevenLabs workspace. (Replace with actual image)"
->
-  <img src="/assets/images/mcp-add-server-workspace.png" alt="Adding an MCP server to workspace" />
-</Frame>
+## Getting started
 
-## How MCP integration works with ElevenLabs
+<Note>
+  ElevenLabs currently supports SSE transport MCP servers only. Streamable HTTP servers will be
+  supported soon.
+</Note>
 
-1.  **Register MCP Server**: In your ElevenLabs workspace, register an external MCP server by providing its URL and any necessary authentication details.
-2.  **Tool Discovery**: ElevenLabs interacts with the registered MCP server to discover the tools and resources it offers, as defined by the MCP specification.
-3.  **Agent Configuration**: When building or configuring a conversational agent in ElevenLabs, select which registered MCP servers (and consequently, their tools) the agent can utilize.
-4.  **Runtime Interaction**: During a conversation, your ElevenLabs agent can invoke tools on the connected MCP server. The LLM controlling the agent decides when and how to use these tools based on the conversation's context and the tool descriptions provided by the MCP server.
+1. Retrieve the URL of your MCP server. In this example, we'll use [Zapier MCP](https://zapier.com/mcp), which lets you connect Conversational AI to hundreds of tools and services.
 
-<Frame
-  background="subtle"
-  caption="List of configured MCP server integrations in the workspace. (Replace with actual image)"
->
-  <img src="/assets/images/mcp-server-list.png" alt="List of MCP servers" />
-</Frame>
+2. Navigate to the [MCP server integrations dashboard](https://elevenlabs.io/app/conversational-ai/integrations) and click "Add Custom MCP Server".
 
-<Frame
-  background="subtle"
-  caption="Testing tool extraction from an integrated MCP server. (Replace with actual image)"
->
-  <img src="/assets/images/mcp-test-tool-extraction.png" alt="Testing MCP tool extraction" />
-</Frame>
+   <Frame background="subtle">
+     ![Creating your first MCP server](/assets/images/conversational-ai/mcp-create.png)
+   </Frame>
 
-<Frame
-  background="subtle"
-  caption="Assigning an integrated MCP server to a conversational agent. (Replace with actual image)"
->
-  <img src="/assets/images/mcp-add-to-agent.png" alt="Adding MCP server to an agent" />
-</Frame>
+3. Configure the MCP server with the following details:
+
+   - **Name**: The name of the MCP server (e.g., "Zapier MCP Server")
+   - **Description**: A description of what the MCP server can do (e.g., "An MCP server with access to Zapier's tools and services")
+   - **Server URL**: The URL of the MCP server. In some cases this contains a secret key, treat it like a password and store it securely as a workspace secret.
+   - **Secret Token (Optional)**: If the MCP server requires a secret token (Authorization header), enter it here.
+   - **HTTP Headers (Optional)**: If the MCP server requires additional HTTP headers, enter them here.
+
+4. Click "Add Integration" to save the integration and test the connection to list available tools.
+
+   <Frame background="subtle">
+     ![Zapier example tools](/assets/images/conversational-ai/mcp-zapier.png)
+   </Frame>
+
+5. The MCP server is now available to add to your agents. Note that MCP servers can currently only be added to agents with `Security > Enable authentication` enabled.
+
+   <Frame background="subtle">
+     ![Adding the MCP server to an agent](/assets/images/conversational-ai/mcp-add.png)
+   </Frame>
 
 ## Key considerations for ElevenLabs integration
 
-- **External Servers**: You are responsible for selecting the external MCP servers you wish to integrate. ElevenLabs provides the means to connect to them.
-- **Supported Features**: ElevenLabs currently supports MCP servers that communicate over SSE (Server-Sent Events) for real-time interactions.
-- **Dynamic Tools**: The tools and capabilities available from an integrated MCP server are defined by that external server and can change if the server's configuration is updated.
+- **External servers**: You are responsible for selecting the external MCP servers you wish to integrate. ElevenLabs provides the means to connect to them.
+- **Supported features**: ElevenLabs currently supports MCP servers that communicate over SSE (Server-Sent Events) for real-time interactions.
+- **Dynamic tools**: The tools and capabilities available from an integrated MCP server are defined by that external server and can change if the server's configuration is updated.
 
 ## Security and disclaimer
 
@@ -81,8 +83,6 @@ Refer to our [MCP Integration Security Guidelines](/docs/conversational-ai/custo
 
 ## Finding or building MCP servers
 
-To use this feature, you'll need access to an MCP server. You can:
-
-- Utilize publicly available MCP servers from trusted providers.
-- Develop your own MCP server to expose your proprietary data or tools.
-- Explore the Model Context Protocol community and resources for examples and server implementations.
+- Utilize publicly available MCP servers from trusted providers
+- Develop your own MCP server to expose your proprietary data or tools
+- Explore the Model Context Protocol community and resources for examples and server implementations
