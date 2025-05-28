@@ -11,7 +11,7 @@ Dynamic variables can be integrated into multiple aspects of your agent:
 
 - **System prompts** to customize behavior and context
 - **First messages** to personalize greetings
-- **Tool parameters** to pass user-specific data
+- **Tool parameters and headers** to pass user-specific data
 
 Here are a few examples where dynamic variables are useful:
 
@@ -46,6 +46,13 @@ System variables:
 - In tool calls: Updated at execution time (value reflects current state)
 
 <Warning>Custom dynamic variables cannot use the reserved `system__` prefix.</Warning>
+
+## Secret dynamic variables
+
+Secret dynamic variables are populated in the same way as normal dynamic variables but indicate to our Conversational AI platform that these should
+only be used in dynamic variable headers and never sent to an LLM provider as part of an agent's system prompt or first message.
+
+We recommend using these for auth tokens or private IDs that should not be sent to an LLM. To create a secret dynamic variable, simply prefix the dynamic variable with `secret__`.
 
 ## Guide
 
@@ -111,7 +118,7 @@ System variables:
 
     agent_id = os.getenv("AGENT_ID")
     api_key = os.getenv("ELEVENLABS_API_KEY")
-    client = ElevenLabs(api_key=api_key)
+    elevenlabs = ElevenLabs(api_key=api_key)
 
     dynamic_vars = {
         "user_name": "Angelo",
@@ -122,7 +129,7 @@ System variables:
     )
 
     conversation = Conversation(
-        client,
+        elevenlabs,
         agent_id,
         config=config,
         # Assume auth is required when API_KEY is set.

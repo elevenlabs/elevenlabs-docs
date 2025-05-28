@@ -151,7 +151,7 @@
           "speech-history"
         ],
         "x-fern-sdk-group-name": "history",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/history/{history_item_id}": {
@@ -597,7 +597,7 @@
           "audio-isolation"
         ],
         "x-fern-sdk-group-name": "audio_isolation",
-        "x-fern-sdk-method-name": "audio_isolation"
+        "x-fern-sdk-method-name": "convert"
       }
     },
     "/v1/audio-isolation/stream": {
@@ -657,7 +657,7 @@
           "audio-isolation"
         ],
         "x-fern-sdk-group-name": "audio_isolation",
-        "x-fern-sdk-method-name": "audio_isolation_stream",
+        "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
       }
     },
@@ -817,8 +817,12 @@
         "tags": [
           "samples"
         ],
-        "x-fern-sdk-group-name": "samples",
-        "x-fern-sdk-method-name": "get_audio"
+        "x-fern-sdk-group-name": [
+          "voices",
+          "samples",
+          "audio"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/text-to-speech/{voice_id}": {
@@ -1249,7 +1253,7 @@
           "text-to-speech"
         ],
         "x-fern-sdk-group-name": "text_to_speech",
-        "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
       }
     },
@@ -1682,7 +1686,7 @@
           "speech-to-speech"
         ],
         "x-fern-sdk-group-name": "speech_to_speech",
-        "x-fern-sdk-method-name": "convert_as_stream",
+        "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
       }
     },
@@ -2045,8 +2049,11 @@
         "tags": [
           "user"
         ],
-        "x-fern-sdk-group-name": "user",
-        "x-fern-sdk-method-name": "get_subscription"
+        "x-fern-sdk-group-name": [
+          "user",
+          "subscription"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/user": {
@@ -2433,8 +2440,11 @@
         "tags": [
           "voices"
         ],
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_default_settings"
+        "x-fern-sdk-group-name": [
+          "voices",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "get_default"
       }
     },
     "/v1/voices/{voice_id}/settings": {
@@ -2501,8 +2511,11 @@
         "tags": [
           "voices"
         ],
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_settings"
+        "x-fern-sdk-group-name": [
+          "voices",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/voices/{voice_id}": {
@@ -2728,8 +2741,11 @@
         "tags": [
           "voices"
         ],
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "edit_settings"
+        "x-fern-sdk-group-name": [
+          "voices",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/voices/add": {
@@ -2792,8 +2808,11 @@
         "tags": [
           "voices"
         ],
-        "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "add"
+        "x-fern-sdk-group-name": [
+          "voices",
+          "ivc"
+        ],
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/voices/{voice_id}/edit": {
@@ -2871,7 +2890,7 @@
           "voices"
         ],
         "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "edit"
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/voices/add/{public_user_id}/{voice_id}": {
@@ -2963,7 +2982,7 @@
           "voices"
         ],
         "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "add_sharing_voice"
+        "x-fern-sdk-method-name": "share"
       }
     },
     "/v1/studio/podcasts": {
@@ -3133,7 +3152,7 @@
           "studio",
           "projects"
         ],
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "list"
       },
       "post": {
         "operationId": "Create_Studio_project_v1_studio_projects_post",
@@ -3198,7 +3217,7 @@
           "studio",
           "projects"
         ],
-        "x-fern-sdk-method-name": "add"
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/projects": {
@@ -3395,7 +3414,7 @@
           "studio",
           "projects"
         ],
-        "x-fern-sdk-method-name": "update_metadata"
+        "x-fern-sdk-method-name": "update"
       },
       "get": {
         "operationId": "Get_Studio_project_v1_studio_projects__project_id__get",
@@ -3816,9 +3835,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "projects"
+          "projects",
+          "content"
         ],
-        "x-fern-sdk-method-name": "update_content"
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/projects/{project_id}/content": {
@@ -4099,9 +4119,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "projects"
+          "projects",
+          "snapshots"
         ],
-        "x-fern-sdk-method-name": "get_snapshots"
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/projects/{project_id}/snapshots": {
@@ -4251,9 +4272,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "projects"
+          "projects",
+          "snapshots"
         ],
-        "x-fern-sdk-method-name": "get_project_snapshot"
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}/stream": {
@@ -4338,9 +4360,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "projects"
+          "projects",
+          "snapshots"
         ],
-        "x-fern-sdk-method-name": "stream_audio",
+        "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
       }
     },
@@ -4508,7 +4531,8 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "projects"
+          "projects",
+          "snapshots"
         ],
         "x-fern-sdk-method-name": "stream_archive"
       }
@@ -4653,9 +4677,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
+          "projects",
           "chapters"
         ],
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "list"
       },
       "post": {
         "operationId": "Create_chapter_v1_studio_projects__project_id__chapters_post",
@@ -4732,6 +4757,7 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
+          "projects",
           "chapters"
         ],
         "x-fern-sdk-method-name": "create"
@@ -4884,6 +4910,7 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
+          "projects",
           "chapters"
         ],
         "x-fern-sdk-method-name": "get"
@@ -4976,9 +5003,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
+          "projects",
           "chapters"
         ],
-        "x-fern-sdk-method-name": "edit"
+        "x-fern-sdk-method-name": "update"
       },
       "delete": {
         "operationId": "Delete_chapter_v1_studio_projects__project_id__chapters__chapter_id__delete",
@@ -5059,6 +5087,7 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
+          "projects",
           "chapters"
         ],
         "x-fern-sdk-method-name": "delete"
@@ -5467,6 +5496,7 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
+          "projects",
           "chapters"
         ],
         "x-fern-sdk-method-name": "convert"
@@ -5631,9 +5661,11 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "chapters"
+          "projects",
+          "chapters",
+          "snapshots"
         ],
-        "x-fern-sdk-method-name": "get_all_snapshots"
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/projects/{project_id}/chapters/{chapter_id}/snapshots": {
@@ -5811,9 +5843,11 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "chapters"
+          "projects",
+          "chapters",
+          "snapshots"
         ],
-        "x-fern-sdk-method-name": "get_chapter_snapshot"
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/studio/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream": {
@@ -5920,9 +5954,11 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "chapters"
+          "projects",
+          "chapters",
+          "snapshots"
         ],
-        "x-fern-sdk-method-name": "stream_snapshot",
+        "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
       }
     },
@@ -6099,9 +6135,10 @@
         ],
         "x-fern-sdk-group-name": [
           "studio",
-          "projects"
+          "projects",
+          "pronunciation_dictionaries"
         ],
-        "x-fern-sdk-method-name": "update_pronunciation_dictionaries"
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/projects/{project_id}/update-pronunciation-dictionaries": {
@@ -6244,8 +6281,11 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_resource"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/language": {
@@ -6323,8 +6363,12 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "add_language_to_resource"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource",
+          "language"
+        ],
+        "x-fern-sdk-method-name": "add"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}/segment": {
@@ -6416,6 +6460,7 @@
         ],
         "x-fern-sdk-group-name": [
           "dubbing",
+          "resource",
           "speaker",
           "segment"
         ],
@@ -6520,8 +6565,12 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "update_segment_language"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource",
+          "segment"
+        ],
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/segment/{segment_id}": {
@@ -6600,8 +6649,12 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "delete_segment"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource",
+          "segment"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/transcribe": {
@@ -6679,8 +6732,11 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "transcribe_segments"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource"
+        ],
+        "x-fern-sdk-method-name": "transcribe"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/translate": {
@@ -6758,8 +6814,11 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "translate_segments"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource"
+        ],
+        "x-fern-sdk-method-name": "translate"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/dub": {
@@ -6837,8 +6896,11 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "dub_segments"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource"
+        ],
+        "x-fern-sdk-method-name": "dub"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/speaker/{speaker_id}": {
@@ -6928,6 +6990,7 @@
         ],
         "x-fern-sdk-group-name": [
           "dubbing",
+          "resource",
           "speaker"
         ],
         "x-fern-sdk-method-name": "update"
@@ -7011,16 +7074,17 @@
         ],
         "x-fern-sdk-group-name": [
           "dubbing",
+          "resource",
           "speaker"
         ],
-        "x-fern-sdk-method-name": "similar_voices"
+        "x-fern-sdk-method-name": "find_similar_voices"
       }
     },
     "/v1/dubbing/resource/{dubbing_id}/render/{language}": {
       "post": {
         "operationId": "Render_audio_or_video_for_the_given_language_v1_dubbing_resource__dubbing_id__render__language__post",
         "summary": "Render Audio Or Video For The Given Language",
-        "description": "Regenerate the dubs for either the entire resource or the specified segments/languages. Will automatically transcribe and translate any missing transcriptions and translations.",
+        "description": "Regenerate the output media for a language using the latest Studio state. Please ensure all segments have been dubbed before rendering, otherwise they will be omitted. Renders are generated asynchronously, and to check the status of all renders please use the 'Get Dubbing Resource' endpoint.",
         "parameters": [
           {
             "name": "dubbing_id",
@@ -7102,8 +7166,11 @@
           "segment",
           "enterprise"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "render_dub"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "resource"
+        ],
+        "x-fern-sdk-method-name": "render"
       }
     },
     "/v1/dubbing": {
@@ -7168,7 +7235,7 @@
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "dub_a_video_or_an_audio_file"
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/dubbing/{dubbing_id}": {
@@ -7235,7 +7302,7 @@
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbing_project_metadata"
+        "x-fern-sdk-method-name": "get"
       },
       "delete": {
         "operationId": "Delete_dubbing_v1_dubbing__dubbing_id__delete",
@@ -7300,14 +7367,14 @@
           "dubbing"
         ],
         "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "delete_dubbing_project"
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/dubbing/{dubbing_id}/audio/{language_code}": {
       "get": {
         "operationId": "Get_dubbed_file_v1_dubbing__dubbing_id__audio__language_code__get",
         "summary": "Get Dubbed File",
-        "description": "Returns dubbed file as a streamed file. Videos will be returned in MP4 format and audio only dubs will be returned in MP3.",
+        "description": "Returns dub as a streamed MP3 or MP4 file. If this dub has been edited using Dubbing Studio you need to use the resource render endpoint as this endpoint only returns the original automatic dub result.",
         "parameters": [
           {
             "name": "dubbing_id",
@@ -7417,8 +7484,11 @@
           "dubbing",
           "dubbing"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_dubbed_file"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "audio"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/dubbing/{dubbing_id}/transcript/{language_code}": {
@@ -7546,8 +7616,11 @@
           "dubbing",
           "dubbing"
         ],
-        "x-fern-sdk-group-name": "dubbing",
-        "x-fern-sdk-method-name": "get_transcript_for_dub"
+        "x-fern-sdk-group-name": [
+          "dubbing",
+          "transcript"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/models": {
@@ -7605,7 +7678,7 @@
           "models"
         ],
         "x-fern-sdk-group-name": "models",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/audio-native": {
@@ -7814,7 +7887,7 @@
           "audio-native"
         ],
         "x-fern-sdk-group-name": "audio_native",
-        "x-fern-sdk-method-name": "update_content"
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/shared-voices": {
@@ -8072,6 +8145,48 @@
             }
           },
           {
+            "name": "include_custom_rates",
+            "in": "query",
+            "description": "Include/exclude voices with custom rates",
+            "required": false,
+            "schema": {
+              "description": "Include/exclude voices with custom rates",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                true
+              ],
+              "title": "Include Custom Rates"
+            }
+          },
+          {
+            "name": "include_live_moderated",
+            "in": "query",
+            "description": "Include/exclude voices that are live moderated",
+            "required": false,
+            "schema": {
+              "description": "Include/exclude voices that are live moderated",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                true
+              ],
+              "title": "Include Live Moderated"
+            }
+          },
+          {
             "name": "reader_app_enabled",
             "in": "query",
             "description": "Filter voices that are enabled for the reader app",
@@ -8246,7 +8361,7 @@
           "voices"
         ],
         "x-fern-sdk-group-name": "voices",
-        "x-fern-sdk-method-name": "get_similar_library_voices"
+        "x-fern-sdk-method-name": "find_similar_voices"
       }
     },
     "/v1/usage/character-stats": {
@@ -8373,7 +8488,7 @@
           "usage"
         ],
         "x-fern-sdk-group-name": "usage",
-        "x-fern-sdk-method-name": "get_characters_usage_metrics"
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/pronunciation-dictionaries/add-from-file": {
@@ -8436,8 +8551,8 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "add_from_file"
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "create_from_file"
       }
     },
     "/v1/pronunciation-dictionaries/add-from-rules": {
@@ -8500,8 +8615,8 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "add_from_rules"
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "create_from_rules"
       }
     },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
@@ -8578,8 +8693,11 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "add_rules"
+        "x-fern-sdk-group-name": [
+          "pronunciation_dictionaries",
+          "rules"
+        ],
+        "x-fern-sdk-method-name": "add"
       }
     },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/remove-rules": {
@@ -8656,8 +8774,11 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "remove_rules"
+        "x-fern-sdk-group-name": [
+          "pronunciation_dictionaries",
+          "rules"
+        ],
+        "x-fern-sdk-method-name": "remove"
       }
     },
     "/v1/pronunciation-dictionaries/{dictionary_id}/{version_id}/download": {
@@ -8747,7 +8868,7 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
         "x-fern-sdk-method-name": "download"
       }
     },
@@ -8815,7 +8936,7 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
         "x-fern-sdk-method-name": "get"
       }
     },
@@ -8949,8 +9070,8 @@
         "tags": [
           "Pronunciation Dictionary"
         ],
-        "x-fern-sdk-group-name": "pronunciation_dictionary",
-        "x-fern-sdk-method-name": "get_all"
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/workspace/groups/search": {
@@ -9010,7 +9131,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "groups"
+        ],
+        "x-fern-sdk-method-name": "search"
       }
     },
     "/v1/workspace/groups/{group_id}/members/remove": {
@@ -9076,7 +9202,13 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "groups",
+          "members"
+        ],
+        "x-fern-sdk-method-name": "remove"
       }
     },
     "/v1/workspace/groups/{group_id}/members": {
@@ -9142,7 +9274,13 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "groups",
+          "members"
+        ],
+        "x-fern-sdk-method-name": "add"
       }
     },
     "/v1/workspace/invites/add": {
@@ -9204,7 +9342,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "invites"
+        ],
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/workspace/invites/add-bulk": {
@@ -9266,7 +9409,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "invites"
+        ],
+        "x-fern-sdk-method-name": "create_batch"
       }
     },
     "/v1/workspace/invites": {
@@ -9328,7 +9476,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "invites"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/workspace/members": {
@@ -9390,7 +9543,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "members"
+        ],
+        "x-fern-sdk-method-name": "update"
       },
       "delete": {
         "operationId": "Delete_member_v1_workspace_members_delete",
@@ -9430,7 +9588,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "members"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/workspace/resources/{resource_id}": {
@@ -9503,7 +9666,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "resources"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/workspace/resources/{resource_id}/share": {
@@ -9574,7 +9742,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "resources"
+        ],
+        "x-fern-sdk-method-name": "share"
       }
     },
     "/v1/workspace/resources/{resource_id}/unshare": {
@@ -9645,7 +9818,12 @@
         },
         "tags": [
           "workspace"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "resources"
+        ],
+        "x-fern-sdk-method-name": "unshare"
       }
     },
     "/v1/speech-to-text": {
@@ -9852,7 +10030,10 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
         "x-fern-sdk-method-name": "get_signed_url"
       }
     },
@@ -9984,8 +10165,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "twilio_outbound_call"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "twilio"
+        ],
+        "x-fern-sdk-method-name": "outbound_call"
       }
     },
     "/v1/convai/agents/create": {
@@ -10048,8 +10232,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_agent"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/convai/agents/{agent_id}": {
@@ -10117,8 +10304,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agent"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "patch": {
         "operationId": "Patches_an_Agent_settings_v1_convai_agents__agent_id__patch",
@@ -10193,8 +10383,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_agent"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "update"
       },
       "delete": {
         "operationId": "Delete_Agent_v1_convai_agents__agent_id__delete",
@@ -10256,8 +10449,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_agent"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/convai/agents/{agent_id}/widget": {
@@ -10343,8 +10539,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agent_widget"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents",
+          "widget"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/convai/agents/{agent_id}/link": {
@@ -10412,8 +10612,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agent_link"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents",
+          "link"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/convai/agents/{agent_id}/avatar": {
@@ -10491,8 +10695,13 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "post_agent_avatar"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents",
+          "widget",
+          "avatar"
+        ],
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/convai/agents": {
@@ -10595,8 +10804,155 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_agents"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
+    "/v1/convai/agent/{agent_id}/knowledge-base/size": {
+      "get": {
+        "operationId": "Returns_the_size_of_the_agent_s_knowledge_base_v1_convai_agent__agent_id__knowledge_base_size_get",
+        "summary": "Returns The Size Of The Agent'S Knowledge Base",
+        "description": "Returns the number of pages in the agent's knowledge base.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAgentKnowledgebaseSizeResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents",
+          "knowledge_base"
+        ],
+        "x-fern-sdk-method-name": "size"
+      }
+    },
+    "/v1/convai/agent/{agent_id}/llm-usage/calculate": {
+      "post": {
+        "operationId": "Calculate_expected_LLM_usage_for_an_agent_v1_convai_agent__agent_id__llm_usage_calculate_post",
+        "summary": "Calculate Expected Llm Usage For An Agent",
+        "description": "Calculates expected number of LLM tokens needed for the specified agent.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LLMUsageCalculatorRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LLMUsageCalculatorResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents",
+          "llm_usage"
+        ],
+        "x-fern-sdk-method-name": "calculate"
       }
     },
     "/v1/convai/agents/{agent_id}/simulate-conversation": {
@@ -10916,8 +11272,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversations"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/conversations/{conversation_id}": {
@@ -10985,8 +11344,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversation"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "delete": {
         "operationId": "Delete_Conversation_v1_convai_conversations__conversation_id__delete",
@@ -11050,8 +11412,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_conversation"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/convai/conversations/{conversation_id}/audio": {
@@ -11115,8 +11480,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_conversation_audio",
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations",
+          "audio"
+        ],
+        "x-fern-sdk-method-name": "get",
         "x-fern-streaming": true
       }
     },
@@ -11175,8 +11544,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "post_conversation_feedback"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations",
+          "feedback"
+        ],
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/convai/phone-numbers/create": {
@@ -11248,8 +11621,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_phone_number"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "phone_numbers"
+        ],
+        "x-fern-sdk-method-name": "create"
       }
     },
     "/v1/convai/phone-numbers/{phone_number_id}": {
@@ -11332,8 +11708,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_phone_number"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "phone_numbers"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "delete": {
         "operationId": "Delete_phone_number_v1_convai_phone_numbers__phone_number_id__delete",
@@ -11397,8 +11776,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_phone_number"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "phone_numbers"
+        ],
+        "x-fern-sdk-method-name": "delete"
       },
       "patch": {
         "operationId": "Update_phone_number_v1_convai_phone_numbers__phone_number_id__patch",
@@ -11490,8 +11872,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_phone_number"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "phone_numbers"
+        ],
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/convai/phone-numbers/": {
@@ -11562,8 +11947,58 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_phone_numbers"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "phone_numbers"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
+    "/v1/convai/llm-usage/calculate": {
+      "post": {
+        "operationId": "Calculate_expected_LLM_usage_v1_convai_llm_usage_calculate_post",
+        "summary": "Calculate Expected Llm Usage",
+        "description": "Returns a list of LLM models and the expected cost for using them based on the provided values.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LLMUsageCalculatorPublicRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LLMUsageCalculatorResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "llm_usage"
+        ],
+        "x-fern-sdk-method-name": "calculate"
       }
     },
     "/v1/convai/knowledge-base": {
@@ -11773,8 +12208,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_list"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base"
+        ],
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/add-to-knowledge-base": {
@@ -11963,8 +12401,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_knowledge_base_url_document"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "create_from_url"
       }
     },
     "/v1/convai/knowledge-base/file": {
@@ -12027,8 +12469,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_knowledge_base_file_document"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "create_from_file"
       }
     },
     "/v1/convai/knowledge-base/text": {
@@ -12091,8 +12537,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_knowledge_base_text_document"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "create_from_text"
       }
     },
     "/v1/convai/knowledge-base/{documentation_id}": {
@@ -12189,8 +12639,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_knowledge_base_document"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "update"
       },
       "get": {
         "operationId": "Get_documentation_from_knowledge_base_v1_convai_knowledge_base__documentation_id__get",
@@ -12275,8 +12729,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_document_by_id"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "delete": {
         "operationId": "Delete_knowledge_base_document_v1_convai_knowledge_base__documentation_id__delete",
@@ -12340,8 +12798,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_knowledge_base_document"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/convai/knowledge-base/{documentation_id}/rag-index": {
@@ -12613,8 +13075,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_dependent_agents"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "get_agents"
       }
     },
     "/v1/convai/knowledge-base/{documentation_id}/content": {
@@ -12678,8 +13144,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_document_content",
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents"
+        ],
+        "x-fern-sdk-method-name": "get_content",
         "x-fern-sdk-streaming": true
       }
     },
@@ -12763,8 +13233,13 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_knowledge_base_document_part_by_id"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "knowledge_base",
+          "documents",
+          "chunk"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/convai/settings": {
@@ -12817,8 +13292,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_settings"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "patch": {
         "operationId": "Update_Convai_settings_v1_convai_settings_patch",
@@ -12880,8 +13358,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_settings"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/convai/settings/dashboard": {
@@ -12934,8 +13415,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_dashboard_settings"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "dashboard",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "patch": {
         "operationId": "Update_Convai_dashboard_settings_v1_convai_settings_dashboard_patch",
@@ -12997,8 +13482,12 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_dashboard_settings"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "dashboard",
+          "settings"
+        ],
+        "x-fern-sdk-method-name": "update"
       }
     },
     "/v1/convai/secrets": {
@@ -13062,8 +13551,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "create_secret"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "secrets"
+        ],
+        "x-fern-sdk-method-name": "create"
       },
       "get": {
         "operationId": "Get_ConvAI_workspace_secrets_v1_convai_secrets_get",
@@ -13111,8 +13603,11 @@
             }
           }
         },
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_secrets"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "secrets"
+        ],
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/secrets/{secret_id}": {
@@ -13167,8 +13662,233 @@
         "tags": [
           "Conversational AI"
         ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "secrets"
+        ],
+        "x-fern-sdk-method-name": "delete"
+      },
+      "patch": {
+        "operationId": "Update_ConvAI_workspace_secret_v1_convai_secrets__secret_id__patch",
+        "summary": "Update Convai Workspace Secret",
+        "description": "Update an existing secret for the workspace",
+        "parameters": [
+          {
+            "name": "secret_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Secret Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Secret data to update",
+                "$ref": "#/components/schemas/PatchWorkspaceSecretRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostWorkspaceSecretResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
         "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "delete_secret"
+        "x-fern-sdk-method-name": "update_secret"
+      }
+    },
+    "/v1/convai/batch-calling/submit": {
+      "post": {
+        "operationId": "Submit_a_batch_call_request__v1_convai_batch_calling_submit_post",
+        "summary": "Submit A Batch Call Request.",
+        "description": "Submit a batch call request to schedule calls for multiple recipients.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchCallResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "batch_calls"
+        ],
+        "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/convai/batch-calling/workspace": {
+      "get": {
+        "operationId": "Get_all_batch_calls_for_a_workspace__v1_convai_batch_calling_workspace_get",
+        "summary": "Get All Batch Calls For A Workspace.",
+        "description": "Get all batch calls for the current workspace.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "last_doc",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Last Doc"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceBatchCallsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "batch_calls"
+        ],
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/batch-calling/{batch_id}": {
@@ -13230,8 +13950,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_batch_call"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "batch_calls"
+        ],
+        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/convai/sip-trunk/outbound-call": {
@@ -15055,7 +15778,7 @@
           },
           "widget": {
             "description": "Configuration for the widget",
-            "$ref": "#/components/schemas/WidgetConfig"
+            "$ref": "#/components/schemas/WidgetConfig-Input"
           },
           "data_collection": {
             "description": "Data collection settings",
@@ -15097,7 +15820,7 @@
           },
           "widget": {
             "description": "Configuration for the widget",
-            "$ref": "#/components/schemas/WidgetConfig"
+            "$ref": "#/components/schemas/WidgetConfig-Output"
           },
           "data_collection": {
             "description": "Data collection settings",
@@ -15665,6 +16388,10 @@
             "type": "string",
             "title": "Phone Number Id"
           },
+          "phone_provider": {
+            "default": "twilio",
+            "$ref": "#/components/schemas/TelephonyProvider"
+          },
           "name": {
             "type": "string",
             "title": "Name"
@@ -15728,12 +16455,79 @@
         "type": "string",
         "enum": [
           "pending",
+          "initiated",
           "in_progress",
           "completed",
           "failed",
           "cancelled"
         ],
         "title": "BatchCallRecipientStatus"
+      },
+      "BatchCallResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "phone_number_id": {
+            "type": "string",
+            "title": "Phone Number Id"
+          },
+          "phone_provider": {
+            "default": "twilio",
+            "$ref": "#/components/schemas/TelephonyProvider"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "created_at_unix": {
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "scheduled_time_unix": {
+            "type": "integer",
+            "title": "Scheduled Time Unix"
+          },
+          "total_calls_dispatched": {
+            "type": "integer",
+            "title": "Total Calls Dispatched"
+          },
+          "total_calls_scheduled": {
+            "type": "integer",
+            "title": "Total Calls Scheduled"
+          },
+          "last_updated_at_unix": {
+            "type": "integer",
+            "title": "Last Updated At Unix"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BatchCallStatus"
+          },
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          }
+        },
+        "required": [
+          "id",
+          "phone_number_id",
+          "name",
+          "agent_id",
+          "created_at_unix",
+          "scheduled_time_unix",
+          "total_calls_dispatched",
+          "total_calls_scheduled",
+          "last_updated_at_unix",
+          "status",
+          "agent_name"
+        ],
+        "title": "BatchCallResponse"
       },
       "BatchCallStatus": {
         "type": "string",
@@ -19385,6 +20179,50 @@
         },
         "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
       },
+      "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
+        "type": "object",
+        "properties": {
+          "call_name": {
+            "type": "string",
+            "title": "Call Name"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "agent_phone_number_id": {
+            "type": "string",
+            "title": "Agent Phone Number Id"
+          },
+          "scheduled_time_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scheduled Time Unix"
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutboundCallRecipient"
+            },
+            "maxItems": 10000,
+            "title": "Recipients"
+          }
+        },
+        "required": [
+          "call_name",
+          "agent_id",
+          "agent_phone_number_id",
+          "scheduled_time_unix",
+          "recipients"
+        ],
+        "title": "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post"
+      },
       "Body_Text_to_speech_streaming_v1_text_to_speech__voice_id__stream_post": {
         "type": "object",
         "properties": {
@@ -20647,6 +21485,23 @@
       "ChapterContentBlockInputModel": {
         "type": "object",
         "properties": {
+          "sub_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "p",
+                  "h1",
+                  "h2",
+                  "h3"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sub Type"
+          },
           "block_id": {
             "anyOf": [
               {
@@ -21221,7 +22076,8 @@
           "client_tool_call",
           "vad_score",
           "internal_turn_probability",
-          "internal_tentative_agent_response"
+          "internal_tentative_agent_response",
+          "internal_native_mcp_tool_call"
         ],
         "title": "ClientEvent"
       },
@@ -21358,6 +22214,20 @@
           "description"
         ],
         "title": "ClientToolConfig"
+      },
+      "ConvAIDynamicVariable": {
+        "description": "Used to reference a dynamic variable.",
+        "type": "object",
+        "properties": {
+          "variable_name": {
+            "type": "string",
+            "title": "Variable Name"
+          }
+        },
+        "required": [
+          "variable_name"
+        ],
+        "title": "ConvAIDynamicVariable"
       },
       "ConvAISecretLocator": {
         "description": "Used to reference a secret from the agent's secret store.",
@@ -21524,6 +22394,12 @@
       "ConversationConfig": {
         "type": "object",
         "properties": {
+          "text_only": {
+            "description": "If enabled audio will not be processed and only text will be used, use to avoid audio pricing.",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Only"
+          },
           "max_duration_seconds": {
             "description": "The maximum duration of a conversation in seconds",
             "type": "integer",
@@ -21572,6 +22448,17 @@
                 "type": "null"
               }
             ]
+          },
+          "conversation": {
+            "description": "The overrides for the conversation configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationConfigOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "title": "ConversationConfigClientOverride"
@@ -21600,6 +22487,17 @@
                 "type": "null"
               }
             ]
+          },
+          "conversation": {
+            "description": "The overrides for the conversation configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationConfigOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "title": "ConversationConfigClientOverride"
@@ -21614,6 +22512,10 @@
           "tts": {
             "description": "Overrides for the TTS configuration",
             "$ref": "#/components/schemas/TTSConversationalConfigOverrideConfig"
+          },
+          "conversation": {
+            "description": "Overrides for the conversation configuration",
+            "$ref": "#/components/schemas/ConversationConfigOverrideConfig"
           }
         },
         "title": "ConversationConfigClientOverrideConfig"
@@ -21628,9 +22530,45 @@
           "tts": {
             "description": "Overrides for the TTS configuration",
             "$ref": "#/components/schemas/TTSConversationalConfigOverrideConfig"
+          },
+          "conversation": {
+            "description": "Overrides for the conversation configuration",
+            "$ref": "#/components/schemas/ConversationConfigOverrideConfig"
           }
         },
         "title": "ConversationConfigClientOverrideConfig"
+      },
+      "ConversationConfigOverride": {
+        "type": "object",
+        "properties": {
+          "text_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Only"
+          }
+        },
+        "title": "ConversationConfigOverride"
+      },
+      "ConversationConfigOverrideConfig": {
+        "type": "object",
+        "properties": {
+          "text_only": {
+            "description": "Whether to allow overriding the text only configuration",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Only"
+          }
+        },
+        "example": {
+          "text_only": false
+        },
+        "title": "ConversationConfigOverrideConfig"
       },
       "ConversationDeletionSettings": {
         "type": "object",
@@ -22055,6 +22993,21 @@
             ],
             "title": "Llm Override"
           },
+          "source_medium": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "audio",
+                  "text"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Medium"
+          },
           "time_in_call_secs": {
             "type": "integer",
             "title": "Time In Call Secs"
@@ -22088,6 +23041,22 @@
                 "type": "null"
               }
             ]
+          },
+          "interrupted": {
+            "type": "boolean",
+            "default": false,
+            "title": "Interrupted"
+          },
+          "original_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Message"
           }
         },
         "required": [
@@ -22153,6 +23122,21 @@
             ],
             "title": "Llm Override"
           },
+          "source_medium": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "audio",
+                  "text"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Medium"
+          },
           "time_in_call_secs": {
             "type": "integer",
             "title": "Time In Call Secs"
@@ -22186,6 +23170,22 @@
                 "type": "null"
               }
             ]
+          },
+          "interrupted": {
+            "type": "boolean",
+            "default": false,
+            "title": "Interrupted"
+          },
+          "original_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Message"
           }
         },
         "required": [
@@ -22704,6 +23704,7 @@
           "status": {
             "type": "string",
             "enum": [
+              "initiated",
               "in-progress",
               "processing",
               "done",
@@ -22751,6 +23752,18 @@
             ],
             "title": "Expiration Time Unix Secs"
           },
+          "conversation_id": {
+            "description": "The ID of the conversation",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
           "purpose": {
             "description": "The purpose of the token",
             "default": "signed_url",
@@ -22758,7 +23771,8 @@
           }
         },
         "example": {
-          "agent_id": "J3Pbu5gP6NNKBscdCdwB",
+          "agent_id": "agent_J3Pbu5gP6NNKBscdCdwB",
+          "conversation_id": "conv_J3Pbu5gP6NNKBscdCdwB",
           "conversation_token": "1234567890",
           "expiration_time_unix_secs": 1716153600,
           "purpose": "signed_url"
@@ -23996,6 +25010,7 @@
       "EmbedVariant": {
         "type": "string",
         "enum": [
+          "tiny",
           "compact",
           "full",
           "expandable"
@@ -24645,6 +25660,19 @@
         ],
         "title": "GetAgentEmbedResponseModel"
       },
+      "GetAgentKnowledgebaseSizeResponseModel": {
+        "type": "object",
+        "properties": {
+          "number_of_pages": {
+            "type": "number",
+            "title": "Number Of Pages"
+          }
+        },
+        "required": [
+          "number_of_pages"
+        ],
+        "title": "GetAgentKnowledgebaseSizeResponseModel"
+      },
       "GetAgentLinkResponseModel": {
         "type": "object",
         "properties": {
@@ -24908,6 +25936,12 @@
           "webhooks": {
             "$ref": "#/components/schemas/ConvAIWebhooks"
           },
+          "can_use_mcp_servers": {
+            "description": "Whether the workspace can use MCP servers",
+            "type": "boolean",
+            "default": false,
+            "title": "Can Use Mcp Servers"
+          },
           "rag_retention_period_days": {
             "type": "integer",
             "default": 10,
@@ -24932,6 +25966,7 @@
           "status": {
             "type": "string",
             "enum": [
+              "initiated",
               "in-progress",
               "processing",
               "done",
@@ -26423,6 +27458,107 @@
         },
         "title": "LLMUsage"
       },
+      "LLMUsageCalculatorLLMResponseModel": {
+        "type": "object",
+        "properties": {
+          "llm": {
+            "$ref": "#/components/schemas/LLM"
+          },
+          "price_per_minute": {
+            "type": "number",
+            "title": "Price Per Minute"
+          }
+        },
+        "required": [
+          "llm",
+          "price_per_minute"
+        ],
+        "title": "LLMUsageCalculatorLLMResponseModel"
+      },
+      "LLMUsageCalculatorPublicRequestModel": {
+        "type": "object",
+        "properties": {
+          "prompt_length": {
+            "description": "Length of the prompt in characters.",
+            "type": "integer",
+            "title": "Prompt Length"
+          },
+          "number_of_pages": {
+            "description": "Pages of content in PDF documents or URLs in the agent's knowledge base.",
+            "type": "integer",
+            "title": "Number Of Pages"
+          },
+          "rag_enabled": {
+            "description": "Whether RAG is enabled.",
+            "type": "boolean",
+            "title": "Rag Enabled"
+          }
+        },
+        "required": [
+          "prompt_length",
+          "number_of_pages",
+          "rag_enabled"
+        ],
+        "title": "LLMUsageCalculatorPublicRequestModel"
+      },
+      "LLMUsageCalculatorRequestModel": {
+        "type": "object",
+        "properties": {
+          "prompt_length": {
+            "description": "Length of the prompt in characters.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt Length"
+          },
+          "number_of_pages": {
+            "description": "Pages of content in pdf documents OR urls in agent's Knowledge Base.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Number Of Pages"
+          },
+          "rag_enabled": {
+            "description": "Whether RAG is enabled.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rag Enabled"
+          }
+        },
+        "title": "LLMUsageCalculatorRequestModel"
+      },
+      "LLMUsageCalculatorResponseModel": {
+        "type": "object",
+        "properties": {
+          "llm_prices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LLMUsageCalculatorLLMResponseModel"
+            },
+            "title": "Llm Prices"
+          }
+        },
+        "required": [
+          "llm_prices"
+        ],
+        "title": "LLMUsageCalculatorResponseModel"
+      },
       "LanguageAddedResponse": {
         "type": "object",
         "properties": {
@@ -26668,7 +27804,7 @@
             "title": "Cloned By Count"
           },
           "rate": {
-            "description": "The rate of the voice.",
+            "description": "The rate multiplier of the voice.",
             "anyOf": [
               {
                 "type": "number"
@@ -26678,6 +27814,18 @@
               }
             ],
             "title": "Rate"
+          },
+          "fiat_rate": {
+            "description": "The rate of the voice in USD per 1000 credits. null if default",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fiat Rate"
           },
           "free_users_allowed": {
             "description": "Whether free users are allowed to use the voice.",
@@ -27181,6 +28329,11 @@
             "type": "boolean",
             "title": "Can Use Style"
           },
+          "can_use_quality": {
+            "description": "Whether the model can use quality.",
+            "type": "boolean",
+            "title": "Can Use Quality"
+          },
           "can_use_speaker_boost": {
             "description": "Whether the model can use speaker boost.",
             "type": "boolean",
@@ -27247,6 +28400,7 @@
           "can_be_finetuned": true,
           "can_do_text_to_speech": true,
           "can_do_voice_conversion": true,
+          "can_use_quality": false,
           "can_use_speaker_boost": true,
           "can_use_style": true,
           "concurrency_group": "standard",
@@ -27276,6 +28430,7 @@
           "can_do_text_to_speech",
           "can_do_voice_conversion",
           "can_use_style",
+          "can_use_quality",
           "can_use_speaker_boost",
           "serves_pro_voices",
           "token_cost_factor",
@@ -27381,6 +28536,132 @@
           "on_watchlist"
         ],
         "title": "ModerationStatusResponseModel"
+      },
+      "NativeMCPToolConfig-Input": {
+        "description": "A Native MCP tool is a tool that is used to call a Native MCP server",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "title": "Description"
+          },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete.",
+            "type": "integer",
+            "default": 20,
+            "title": "Response Timeout Secs"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "native_mcp",
+            "const": "native_mcp",
+            "title": "Type"
+          },
+          "parameters": {
+            "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_tool_name": {
+            "description": "The name of the MCP tool to call",
+            "type": "string",
+            "title": "Mcp Tool Name"
+          },
+          "mcp_server_id": {
+            "description": "The id of the MCP server to call",
+            "type": "string",
+            "title": "Mcp Server Id"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "mcp_tool_name",
+          "mcp_server_id"
+        ],
+        "title": "NativeMCPToolConfig"
+      },
+      "NativeMCPToolConfig-Output": {
+        "description": "A Native MCP tool is a tool that is used to call a Native MCP server",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "default": "",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 0,
+            "title": "Description"
+          },
+          "response_timeout_secs": {
+            "description": "The maximum time in seconds to wait for the tool call to complete.",
+            "type": "integer",
+            "default": 20,
+            "title": "Response Timeout Secs"
+          },
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "native_mcp",
+            "const": "native_mcp",
+            "title": "Type"
+          },
+          "parameters": {
+            "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_tool_name": {
+            "description": "The name of the MCP tool to call",
+            "type": "string",
+            "title": "Mcp Tool Name"
+          },
+          "mcp_server_id": {
+            "description": "The id of the MCP server to call",
+            "type": "string",
+            "title": "Mcp Server Id"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "mcp_tool_name",
+          "mcp_server_id"
+        ],
+        "title": "NativeMCPToolConfig"
       },
       "ObjectJsonSchemaProperty-Input": {
         "type": "object",
@@ -27496,6 +28777,40 @@
         },
         "title": "OrbAvatar"
       },
+      "OutboundCallRecipient": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          },
+          "conversation_initiation_client_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationClientDataRequest-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "title": "OutboundCallRecipient"
+      },
       "OutboundCallRecipientResponseModel": {
         "type": "object",
         "properties": {
@@ -27598,6 +28913,12 @@
           "webhooks": {
             "$ref": "#/components/schemas/ConvAIWebhooks"
           },
+          "can_use_mcp_servers": {
+            "description": "Whether the workspace can use MCP servers",
+            "type": "boolean",
+            "default": false,
+            "title": "Can Use Mcp Servers"
+          },
           "rag_retention_period_days": {
             "type": "integer",
             "default": 10,
@@ -27607,6 +28928,30 @@
           }
         },
         "title": "PatchConvAISettingsRequest"
+      },
+      "PatchWorkspaceSecretRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "update",
+            "title": "Type"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "type",
+          "name",
+          "value"
+        ],
+        "title": "PatchWorkspaceSecretRequest"
       },
       "PdfExportOptions": {
         "type": "object",
@@ -27968,6 +29313,12 @@
             "type": "boolean",
             "default": false,
             "title": "Apply To Existing Conversations"
+          },
+          "zero_retention_mode": {
+            "description": "Whether to enable zero retention mode - no PII data is stored",
+            "type": "boolean",
+            "default": false,
+            "title": "Zero Retention Mode"
           }
         },
         "example": {
@@ -27975,7 +29326,8 @@
           "delete_audio": false,
           "delete_transcript_and_pii": false,
           "record_voice": true,
-          "retention_days": -1
+          "retention_days": -1,
+          "zero_retention_mode": false
         },
         "title": "PrivacyConfig"
       },
@@ -28958,6 +30310,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/MCPToolConfig-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/NativeMCPToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -28966,6 +30321,7 @@
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
                   "mcp": "#/components/schemas/MCPToolConfig-Input",
+                  "native_mcp": "#/components/schemas/NativeMCPToolConfig-Input",
                   "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
@@ -28989,6 +30345,15 @@
             },
             "maxItems": 10,
             "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Native Mcp Server Ids"
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -29080,6 +30445,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/MCPToolConfig-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/NativeMCPToolConfig-Output"
                 }
               ],
               "description": "The type of tool",
@@ -29088,6 +30456,7 @@
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Output",
                   "mcp": "#/components/schemas/MCPToolConfig-Output",
+                  "native_mcp": "#/components/schemas/NativeMCPToolConfig-Output",
                   "system": "#/components/schemas/SystemToolConfig-Output",
                   "webhook": "#/components/schemas/WebhookToolConfig-Output"
                 }
@@ -29111,6 +30480,15 @@
             },
             "maxItems": 10,
             "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Native Mcp Server Ids"
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -29202,6 +30580,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/MCPToolConfig-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/NativeMCPToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -29210,6 +30591,7 @@
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
                   "mcp": "#/components/schemas/MCPToolConfig-Input",
+                  "native_mcp": "#/components/schemas/NativeMCPToolConfig-Input",
                   "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
@@ -29233,6 +30615,15 @@
             },
             "maxItems": 10,
             "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Native Mcp Server Ids"
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -29757,6 +31148,17 @@
             "exclusiveMaximum": 10000000,
             "exclusiveMinimum": 0,
             "title": "Max Documents Length"
+          },
+          "max_retrieved_rag_chunks_count": {
+            "description": "Maximum number of RAG document chunks to initially retrieve from the vector store. These are then further filtered by vector distance and total length.",
+            "type": "integer",
+            "default": 20,
+            "examples": [
+              5
+            ],
+            "exclusiveMinimum": 0,
+            "maximum": 20,
+            "title": "Max Retrieved Rag Chunks Count"
           }
         },
         "title": "RagConfig"
@@ -30182,6 +31584,17 @@
             "type": "string",
             "title": "Message"
           },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
           "sip_call_id": {
             "anyOf": [
               {
@@ -30197,6 +31610,7 @@
         "required": [
           "success",
           "message",
+          "conversation_id",
           "sip_call_id"
         ],
         "title": "SIPTrunkOutboundCallResponse"
@@ -30738,6 +32152,19 @@
         ],
         "title": "SimilarVoicesForSpeakerResponse"
       },
+      "SkipTurnToolConfig": {
+        "description": "Allows the agent to explicitly skip its turn.\n\nThis tool should be invoked by the LLM when the user indicates they would like\nto think or take a short pause before continuing the conversation—e.g. when\nthey say: \"Give me a second\", \"Let me think\", or \"One moment please\".  After\ncalling this tool, the assistant should not speak until the user speaks\nagain, or another normal turn-taking condition is met.  The tool itself has\nno parameters and performs no side-effects other than informing the backend\nthat the current turn generation is complete.",
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "skip_turn",
+            "const": "skip_turn",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "SkipTurnToolConfig"
+      },
       "SpeakerAudioResponseModel": {
         "type": "object",
         "properties": {
@@ -31093,7 +32520,7 @@
             "title": "Share Link Id"
           },
           "source": {
-            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing, PlayAPI or PD (pronunciation dictionary).",
+            "description": "The source of the history item. Either TTS (text to speech), STS (speech to text), AN (audio native), Projects, Dubbing, PlayAPI, PD (pronunciation dictionary) or ConvAI (conversational AI).",
             "anyOf": [
               {
                 "type": "string",
@@ -31101,10 +32528,11 @@
                   "TTS",
                   "STS",
                   "Projects",
+                  "PD",
                   "AN",
                   "Dubbing",
                   "PlayAPI",
-                  "PD"
+                  "ConvAI"
                 ]
               },
               {
@@ -31343,6 +32771,11 @@
             ],
             "title": "Speaker Id"
           },
+          "logprob": {
+            "description": "The log of the probability with which this word was predicted. Logprobs are in range [-infinity, 0], higher logprobs indicate a higher confidence the model has in its predictions.",
+            "type": "number",
+            "title": "Logprob"
+          },
           "characters": {
             "description": "The characters that make up the word and their timing information.",
             "anyOf": [
@@ -31388,6 +32821,7 @@
             }
           ],
           "end": 0.5,
+          "logprob": -0.124,
           "speaker_id": "speaker_1",
           "start": 0,
           "text": "Hello",
@@ -31395,7 +32829,8 @@
         },
         "required": [
           "text",
-          "type"
+          "type",
+          "logprob"
         ],
         "title": "SpeechToTextWordResponseModel"
       },
@@ -32017,6 +33452,7 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
                 "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
               }
@@ -32033,6 +33469,9 @@
               },
               {
                 "$ref": "#/components/schemas/TransferToNumberToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/SkipTurnToolConfig"
               }
             ],
             "title": "Params"
@@ -32087,6 +33526,7 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
                 "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
               }
@@ -32103,6 +33543,9 @@
               },
               {
                 "$ref": "#/components/schemas/TransferToNumberToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/SkipTurnToolConfig"
               }
             ],
             "title": "Params"
@@ -32369,6 +33812,17 @@
             "type": "string",
             "title": "Message"
           },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
           "callSid": {
             "anyOf": [
               {
@@ -32384,6 +33838,7 @@
         "required": [
           "success",
           "message",
+          "conversation_id",
           "callSid"
         ],
         "title": "TwilioOutboundCallResponse"
@@ -33649,6 +35104,18 @@
             ],
             "title": "Similarity Boost"
           },
+          "quality": {
+            "description": "Controls the audio quality of the generated speech. Higher values produce clearer audio but increase generation time.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quality"
+          },
           "style": {
             "description": "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.",
             "anyOf": [
@@ -33919,6 +35386,18 @@
               }
             ],
             "title": "Rate"
+          },
+          "fiat_rate": {
+            "description": "The rate of the voice sharing in USD per 1000 credits.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fiat Rate"
           },
           "notice_period": {
             "description": "The notice period of the voice sharing.",
@@ -34363,6 +35842,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/ConvAISecretLocator"
+                },
+                {
+                  "$ref": "#/components/schemas/ConvAIDynamicVariable"
                 }
               ]
             },
@@ -34458,6 +35940,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/ConvAISecretLocator"
+                },
+                {
+                  "$ref": "#/components/schemas/ConvAIDynamicVariable"
                 }
               ]
             },
@@ -34601,13 +36086,18 @@
         ],
         "title": "WebhookToolConfig"
       },
-      "WidgetConfig": {
+      "WidgetConfig-Input": {
         "type": "object",
         "properties": {
           "variant": {
             "description": "The variant of the widget",
             "default": "full",
             "$ref": "#/components/schemas/EmbedVariant"
+          },
+          "placement": {
+            "description": "The placement of the widget on the screen",
+            "default": "bottom-right",
+            "$ref": "#/components/schemas/WidgetPlacement"
           },
           "expandable": {
             "description": "Whether the widget is expandable",
@@ -34839,17 +36329,51 @@
             "default": false,
             "title": "Disable Banner"
           },
+          "override_link": {
+            "description": "The override link for the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Link"
+          },
           "mic_muting_enabled": {
             "description": "Whether to enable mic muting",
             "type": "boolean",
             "default": false,
             "title": "Mic Muting Enabled"
           },
+          "transcript_enabled": {
+            "description": "Whether the widget should show the conversation transcript as it goes on",
+            "type": "boolean",
+            "default": false,
+            "title": "Transcript Enabled"
+          },
+          "text_input_enabled": {
+            "description": "Whether the user should be able to send text messages",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Input Enabled"
+          },
+          "text_contents": {
+            "description": "Text contents of the widget",
+            "$ref": "#/components/schemas/WidgetTextContents"
+          },
           "language_selector": {
             "description": "Whether to show the language selector",
             "type": "boolean",
             "default": false,
             "title": "Language Selector"
+          },
+          "supports_text_only": {
+            "description": "Whether the widget can switch to text only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Supports Text Only"
           },
           "custom_avatar_path": {
             "description": "The custom avatar path",
@@ -34862,6 +36386,330 @@
               }
             ],
             "title": "Custom Avatar Path"
+          },
+          "language_presets": {
+            "description": "Language presets for the widget",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WidgetLanguagePreset"
+            },
+            "title": "Language Presets"
+          }
+        },
+        "example": {
+          "custom_avatar_path": "https://example.com/avatar.png",
+          "language_selector": false
+        },
+        "title": "WidgetConfig"
+      },
+      "WidgetConfig-Output": {
+        "type": "object",
+        "properties": {
+          "variant": {
+            "description": "The variant of the widget",
+            "default": "full",
+            "$ref": "#/components/schemas/EmbedVariant"
+          },
+          "placement": {
+            "description": "The placement of the widget on the screen",
+            "default": "bottom-right",
+            "$ref": "#/components/schemas/WidgetPlacement"
+          },
+          "expandable": {
+            "description": "Whether the widget is expandable",
+            "default": "never",
+            "$ref": "#/components/schemas/WidgetExpandable"
+          },
+          "avatar": {
+            "description": "The avatar of the widget",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OrbAvatar"
+              },
+              {
+                "$ref": "#/components/schemas/URLAvatar"
+              },
+              {
+                "$ref": "#/components/schemas/ImageAvatar"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "feedback_mode": {
+            "description": "The feedback mode of the widget",
+            "default": "none",
+            "$ref": "#/components/schemas/WidgetFeedbackMode"
+          },
+          "bg_color": {
+            "description": "The background color of the widget",
+            "type": "string",
+            "default": "#ffffff",
+            "title": "Bg Color"
+          },
+          "text_color": {
+            "description": "The text color of the widget",
+            "type": "string",
+            "default": "#000000",
+            "title": "Text Color"
+          },
+          "btn_color": {
+            "description": "The button color of the widget",
+            "type": "string",
+            "default": "#000000",
+            "title": "Btn Color"
+          },
+          "btn_text_color": {
+            "description": "The button text color of the widget",
+            "type": "string",
+            "default": "#ffffff",
+            "title": "Btn Text Color"
+          },
+          "border_color": {
+            "description": "The border color of the widget",
+            "type": "string",
+            "default": "#e1e1e1",
+            "title": "Border Color"
+          },
+          "focus_color": {
+            "description": "The focus color of the widget",
+            "type": "string",
+            "default": "#000000",
+            "title": "Focus Color"
+          },
+          "border_radius": {
+            "description": "The border radius of the widget",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Border Radius"
+          },
+          "btn_radius": {
+            "description": "The button radius of the widget",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Btn Radius"
+          },
+          "action_text": {
+            "description": "The action text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action Text"
+          },
+          "start_call_text": {
+            "description": "The start call text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Call Text"
+          },
+          "end_call_text": {
+            "description": "The end call text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Call Text"
+          },
+          "expand_text": {
+            "description": "The expand text of the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand Text"
+          },
+          "listening_text": {
+            "description": "The text to display when the agent is listening",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listening Text"
+          },
+          "speaking_text": {
+            "description": "The text to display when the agent is speaking",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaking Text"
+          },
+          "shareable_page_text": {
+            "description": "The text to display when sharing",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shareable Page Text"
+          },
+          "shareable_page_show_terms": {
+            "description": "Whether to show terms and conditions on the shareable page",
+            "type": "boolean",
+            "default": true,
+            "title": "Shareable Page Show Terms"
+          },
+          "terms_text": {
+            "description": "The text to display for terms and conditions",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms Text"
+          },
+          "terms_html": {
+            "description": "The HTML to display for terms and conditions",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms Html"
+          },
+          "terms_key": {
+            "description": "The key to display for terms and conditions",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms Key"
+          },
+          "show_avatar_when_collapsed": {
+            "description": "Whether to show the avatar when the widget is collapsed",
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Show Avatar When Collapsed"
+          },
+          "disable_banner": {
+            "description": "Whether to disable the banner",
+            "type": "boolean",
+            "default": false,
+            "title": "Disable Banner"
+          },
+          "override_link": {
+            "description": "The override link for the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Link"
+          },
+          "mic_muting_enabled": {
+            "description": "Whether to enable mic muting",
+            "type": "boolean",
+            "default": false,
+            "title": "Mic Muting Enabled"
+          },
+          "transcript_enabled": {
+            "description": "Whether the widget should show the conversation transcript as it goes on",
+            "type": "boolean",
+            "default": false,
+            "title": "Transcript Enabled"
+          },
+          "text_input_enabled": {
+            "description": "Whether the user should be able to send text messages",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Input Enabled"
+          },
+          "text_contents": {
+            "description": "Text contents of the widget",
+            "$ref": "#/components/schemas/WidgetTextContents"
+          },
+          "language_selector": {
+            "description": "Whether to show the language selector",
+            "type": "boolean",
+            "default": false,
+            "title": "Language Selector"
+          },
+          "supports_text_only": {
+            "description": "Whether the widget can switch to text only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Supports Text Only"
+          },
+          "custom_avatar_path": {
+            "description": "The custom avatar path",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Avatar Path"
+          },
+          "language_presets": {
+            "description": "Language presets for the widget",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WidgetLanguagePreset"
+            },
+            "title": "Language Presets"
           }
         },
         "example": {
@@ -34878,6 +36726,11 @@
             "default": "full",
             "$ref": "#/components/schemas/EmbedVariant"
           },
+          "placement": {
+            "description": "The placement of the widget on the screen",
+            "default": "bottom-right",
+            "$ref": "#/components/schemas/WidgetPlacement"
+          },
           "expandable": {
             "description": "Whether the widget is expandable",
             "default": "never",
@@ -35108,11 +36961,39 @@
             "default": false,
             "title": "Disable Banner"
           },
+          "override_link": {
+            "description": "The override link for the widget",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Link"
+          },
           "mic_muting_enabled": {
             "description": "Whether to enable mic muting",
             "type": "boolean",
             "default": false,
             "title": "Mic Muting Enabled"
+          },
+          "transcript_enabled": {
+            "description": "Whether the widget should show the conversation transcript as it goes on",
+            "type": "boolean",
+            "default": false,
+            "title": "Transcript Enabled"
+          },
+          "text_input_enabled": {
+            "description": "Whether the user should be able to send text messages",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Input Enabled"
+          },
+          "text_contents": {
+            "description": "Text contents of the widget",
+            "$ref": "#/components/schemas/WidgetTextContents"
           },
           "language": {
             "type": "string",
@@ -35131,6 +37012,37 @@
               }
             ],
             "title": "Supported Language Overrides"
+          },
+          "language_presets": {
+            "description": "Language presets for the widget",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WidgetLanguagePresetResponse"
+            },
+            "title": "Language Presets"
+          },
+          "text_only": {
+            "description": "Whether the agent uses text-only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Text Only"
+          },
+          "supports_text_only": {
+            "description": "Whether the agent can be switched to text-only mode",
+            "type": "boolean",
+            "default": false,
+            "title": "Supports Text Only"
+          },
+          "first_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message"
           }
         },
         "example": {
@@ -35182,6 +37094,355 @@
           "end"
         ],
         "title": "WidgetFeedbackMode"
+      },
+      "WidgetLanguagePreset": {
+        "type": "object",
+        "properties": {
+          "text_contents": {
+            "description": "The text contents for the selected language",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WidgetTextContents"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "WidgetLanguagePreset"
+      },
+      "WidgetLanguagePresetResponse": {
+        "type": "object",
+        "properties": {
+          "first_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message"
+          },
+          "text_contents": {
+            "description": "The text contents for the selected language",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WidgetTextContents"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "WidgetLanguagePresetResponse"
+      },
+      "WidgetPlacement": {
+        "type": "string",
+        "enum": [
+          "top-left",
+          "top",
+          "top-right",
+          "bottom-left",
+          "bottom",
+          "bottom-right"
+        ],
+        "title": "WidgetPlacement"
+      },
+      "WidgetTextContents": {
+        "type": "object",
+        "properties": {
+          "main_label": {
+            "description": "Call to action displayed inside the compact and full variants.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Main Label"
+          },
+          "start_call": {
+            "description": "Text and ARIA label for the start call button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Call"
+          },
+          "new_call": {
+            "description": "Text and ARIA label for the new call button. Displayed when the caller already finished at least one call in order ot start the next one.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Call"
+          },
+          "end_call": {
+            "description": "Text and ARIA label for the end call button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Call"
+          },
+          "mute_microphone": {
+            "description": "ARIA label for the mute microphone button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mute Microphone"
+          },
+          "change_language": {
+            "description": "ARIA label for the change language dropdown.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Language"
+          },
+          "collapse": {
+            "description": "ARIA label for the collapse button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collapse"
+          },
+          "expand": {
+            "description": "ARIA label for the expand button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expand"
+          },
+          "copied": {
+            "description": "Text displayed when the user copies a value using the copy button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Copied"
+          },
+          "accept_terms": {
+            "description": "Text and ARIA label for the accept terms button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accept Terms"
+          },
+          "dismiss_terms": {
+            "description": "Text and ARIA label for the cancel terms button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dismiss Terms"
+          },
+          "listening_status": {
+            "description": "Status displayed when the agent is listening.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listening Status"
+          },
+          "speaking_status": {
+            "description": "Status displayed when the agent is speaking.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaking Status"
+          },
+          "connecting_status": {
+            "description": "Status displayed when the agent is connecting.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connecting Status"
+          },
+          "input_label": {
+            "description": "ARIA label for the text message input.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Label"
+          },
+          "input_placeholder": {
+            "description": "Placeholder text for the text message input.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Placeholder"
+          },
+          "user_ended_conversation": {
+            "description": "Information message displayed when the user ends the conversation.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Ended Conversation"
+          },
+          "agent_ended_conversation": {
+            "description": "Information message displayed when the agent ends the conversation.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Ended Conversation"
+          },
+          "conversation_id": {
+            "description": "Text label used next to the conversation ID.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
+          "error_occurred": {
+            "description": "Text label used when an error occurs.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Occurred"
+          },
+          "copy_id": {
+            "description": "Text and ARIA label used for the copy ID button.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Copy Id"
+          }
+        },
+        "title": "WidgetTextContents"
+      },
+      "WorkspaceBatchCallsResponse": {
+        "type": "object",
+        "properties": {
+          "batch_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchCallResponse"
+            },
+            "title": "Batch Calls"
+          },
+          "next_doc": {
+            "description": "The next document, used to paginate through the batch calls",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Doc"
+          },
+          "has_more": {
+            "description": "Whether there are more batch calls to paginate through",
+            "type": "boolean",
+            "default": false,
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "batch_calls"
+        ],
+        "title": "WorkspaceBatchCallsResponse"
       },
       "WorkspaceGroupByNameResponseModel": {
         "type": "object",

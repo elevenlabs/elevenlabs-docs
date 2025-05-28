@@ -39,7 +39,7 @@ from elevenlabs import (
 )
 
 # Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Create the end call tool
 end_call_tool = PromptAgentInputToolsItem_System(
@@ -57,22 +57,22 @@ conversation_config = ConversationalConfig(
 )
 
 # Create the agent
-response = client.conversational_ai.create_agent(
+response = elevenlabs.conversational_ai.agents.create(
     conversation_config=conversation_config
 )
 ```
 
 ```javascript
-import { ElevenLabs } from 'elevenlabs';
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
 
 // Initialize the client
-const client = new ElevenLabs({
+const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
 // Create the agent with end call tool
-await client.conversationalAi.createAgent({
-  conversation_config: {
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
     agent: {
       prompt: {
         tools: [

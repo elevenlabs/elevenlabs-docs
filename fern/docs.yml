@@ -133,6 +133,9 @@ navigation:
                     path: docs/pages/developer-guides/cookbooks/conversational-ai/expo-react-native.mdx
                   - page: Post-call webhooks
                     path: docs/pages/developer-guides/cookbooks/conversational-ai/nextjs-post-call-webhooks.mdx
+              - page: Multi-context WebSocket
+                icon: duotone link-horizontal
+                path: docs/pages/best-practices/conversational-agents.mdx
           - page: Libraries & SDKs
             slug: libraries
             icon: duotone books
@@ -163,8 +166,8 @@ navigation:
                 path: docs/pages/best-practices/prompting/normalization.mdx
           - page: Latency optimization
             path: docs/pages/best-practices/latency-optimization.mdx
-          - page: Conversational agents
-            path: docs/pages/best-practices/conversational-agents.mdx
+          - page: Security
+            path: docs/pages/best-practices/security-best-practices.mdx
       - section: PRODUCT GUIDES
         skip-slug: false
         contents:
@@ -335,6 +338,9 @@ navigation:
                   - page: Transfer to human
                     icon: duotone user-headset
                     path: conversational-ai/pages/customization/tools/human-transfer.mdx
+                  - page: Skip turn
+                    icon: duotone forward
+                    path: conversational-ai/pages/customization/tools/skip-turn.mdx
           - section: Events
             icon: duotone signal-stream
             path: conversational-ai/pages/customization/events.mdx
@@ -428,9 +434,9 @@ navigation:
               - page: Audio saving
                 icon: duotone microphone
                 path: conversational-ai/pages/customization/audio-saving.mdx
-          - page: HIPAA compliance
-            icon: duotone hospital-user
-            path: conversational-ai/pages/customization/privacy/hipaa.mdx
+              - page: Zero Retention Mode
+                icon: duotone shield-check
+                path: conversational-ai/pages/customization/privacy/zrm.mdx
           - section: MCP
             icon: duotone chart-network
             path: conversational-ai/pages/customization/mcp/guide.mdx
@@ -438,11 +444,15 @@ navigation:
               - page: Security
                 icon: duotone hexagon-exclamation
                 path: conversational-ai/pages/customization/mcp/security.mdx
+
       - section: PHONE NUMBERS
         contents:
           - page: SIP trunking
             icon: duotone phone-office
             path: conversational-ai/pages/guides/sip-trunking.mdx
+          - page: Batch calls
+            icon: duotone phone-arrow-up-right
+            path: conversational-ai/pages/guides/batch-calls.mdx
           - section: Telephony
             icon: duotone headset
             contents:
@@ -502,6 +512,9 @@ navigation:
           - page: ElevenLabs' docs agent
             icon: duotone message-bot
             path: conversational-ai/pages/best-practices/our-docs-agent.mdx
+          - page: Simulate Conversations
+            icon: duotone comments
+            path: conversational-ai/pages/guides/simulate-conversation.mdx
           - section: Quickstarts
             icon: duotone code
             contents:
@@ -547,6 +560,17 @@ navigation:
               - page: Zendesk
                 icon: duotone z
                 path: conversational-ai/pages/guides/zendesk.mdx
+      - section: LEGAL
+        contents:
+          - page: HIPAA
+            icon: duotone hospital-user
+            path: conversational-ai/pages/legal/hipaa.mdx
+          - page: TCPA
+            icon: duotone phone-slash
+            path: conversational-ai/pages/legal/tcpa.mdx
+          - page: GDPR
+            icon: duotone circle-euro
+            path: conversational-ai/pages/legal/gdpr.mdx
       - section: RESOURCES
         skip-slug: true
         contents:
@@ -610,6 +634,8 @@ navigation:
                     title: Simulate conversation
                   - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation/stream
                     title: Stream simulate conversation
+                  - endpoint: POST /v1/convai/agent/{agent_id}/llm-usage/calculate
+                    title: Calculate expected LLM usage
               - section: Conversations
                 contents:
                   - endpoint: GET /v1/convai/conversations
@@ -619,6 +645,7 @@ navigation:
                   - endpoint: DELETE /v1/convai/conversations/{conversation_id}
                     title: Delete conversation
                   - endpoint: GET /v1/convai/conversations/{conversation_id}/audio
+                    slug: /get-audio
                     title: Get conversation audio
                   - endpoint: GET /v1/convai/conversation/get-signed-url
                     title: Get signed URL
@@ -626,8 +653,6 @@ navigation:
                     title: Send conversation feedback
                   - endpoint: POST /v1/convai/twilio/outbound-call
                     title: Outbound call via twilio
-                  - endpoint: GET /v1/convai/batch-calling/{batch_id}
-                    title: Get batch call information
               - section: Knowledge Base
                 contents:
                   - endpoint: GET /v1/convai/knowledge-base
@@ -651,7 +676,10 @@ navigation:
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/content
                     title: Get document content
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/chunk/{chunk_id}
+                    slug: /get-chunk
                     title: Get document chunk
+                  - endpoint: GET /v1/convai/agent/{agent_id}/knowledge-base/size
+                    title: Get knowledge base size
               - section: Phone Numbers
                 contents:
                   - endpoint: POST /v1/convai/phone-numbers/create
@@ -672,24 +700,44 @@ navigation:
                     title: Create widget avatar
               - section: Workspace
                 contents:
-                  - endpoint: GET /v1/convai/settings
-                    title: Get settings
-                  - endpoint: PATCH /v1/convai/settings
-                    title: Update settings
-                  - endpoint: GET /v1/convai/secrets
-                    title: Get secrets
-                  - endpoint: POST /v1/convai/secrets
-                    title: Create secret
-                  - endpoint: DELETE /v1/convai/secrets/{secret_id}
-                    title: Delete secret
-                  - endpoint: GET /v1/convai/settings/dashboard
-                    title: Get dashboard settings
-                  - endpoint: PATCH /v1/convai/settings/dashboard
-                    title: Update dashboard settings
+                  - section: Settings
+                    skip-slug: true
+                    contents:
+                      - endpoint: GET /v1/convai/settings
+                        title: Get settings
+                      - endpoint: PATCH /v1/convai/settings
+                        title: Update settings
+                  - section: Secrets
+                    contents:
+                      - endpoint: GET /v1/convai/secrets
+                        title: Get secrets
+                      - endpoint: POST /v1/convai/secrets
+                        title: Create secret
+                      - endpoint: PATCH /v1/convai/secrets/{secret_id}
+                        title: Update secret
+                      - endpoint: DELETE /v1/convai/secrets/{secret_id}
+                        title: Delete secret
+                  - section: Dashboard
+                    contents:
+                      - endpoint: GET /v1/convai/settings/dashboard
+                        title: Get dashboard settings
+                      - endpoint: PATCH /v1/convai/settings/dashboard
               - section: SIP Trunk
                 contents:
                   - endpoint: POST /v1/convai/sip-trunk/outbound-call
                     title: Outbound call via SIP trunk
+              - section: Batch Calling
+                contents:
+                  - endpoint: POST /v1/convai/batch-calling/submit
+                    title: Submit batch calling job
+                  - endpoint: GET /v1/convai/batch-calling/workspace
+                    title: List workspace batch calling jobs
+                  - endpoint: GET /v1/convai/batch-calling/{batch_id}
+                    title: Get batch call information
+              - section: LLM Usage
+                contents:
+                  - endpoint: POST /v1/convai/llm-usage/calculate
+                    title: Calculate expected LLM usage
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -738,7 +786,7 @@ navigation:
               - textToVoice
               - dubbing:
                   contents:
-                    - section: Resources (Enterprise Only)
+                    - section: Resources (Enterprise, Closed Beta)
                       slug: /resources
                       contents:
                         - endpoint: GET /v1/dubbing/resource/{dubbing_id}
@@ -882,7 +930,7 @@ navigation:
                     slug: /studio/get-chapter-snapshot
                   - endpoint: GET /v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}
                     slug: /studio/get-project-snapshot
-              - pronunciationDictionary
+              - pronunciationDictionaries
               - samples
               - usage
               - user
@@ -983,9 +1031,9 @@ redirects:
   - source: /docs/api-reference/add-chapter
     destination: /docs/api-reference/chapters/add-chapter
   - source: /docs/api-reference/add-shared-voice
-    destination: /docs/api-reference/voice-library/add-sharing-voice
+    destination: /docs/api-reference/voice-library/share
   - source: /docs/api-reference/add-voice
-    destination: /docs/api-reference/voices/add
+    destination: /docs/api-reference/voices/ivc/create
   - source: /docs/api-reference/audio-isolation
     destination: /docs/api-reference/audio-isolation/create
   - source: /docs/api-reference/audio-isolation-stream
@@ -1011,7 +1059,7 @@ redirects:
   - source: /docs/api-reference/edit-voice
     destination: /docs/api-reference/voices/edit
   - source: /docs/api-reference/edit-voice-settings
-    destination: /docs/api-reference/voices/edit-settings
+    destination: /docs/api-reference/voices/settings/update
   - source: /docs/api-reference/get-audio-from-history-item
     destination: /docs/api-reference/history/get-audio
   - source: /docs/api-reference/get-audio-from-sample
@@ -1023,7 +1071,7 @@ redirects:
   - source: /docs/api-reference/get-chapters
     destination: /docs/api-reference/chapters/get-chapters
   - source: /docs/api-reference/get-default-voice-settings
-    destination: /docs/api-reference/voices/get-default-settings
+    destination: /docs/api-reference/voices/settings/get-default
   - source: /docs/api-reference/get-dubbed-file
     destination: /docs/api-reference/dubbing/get-dubbed-file
   - source: /docs/api-reference/get-dubbing-metadata
@@ -1039,25 +1087,25 @@ redirects:
   - source: /docs/api-reference/get-user-info
     destination: /docs/api-reference/user/get
   - source: /docs/api-reference/get-user-subscription-info
-    destination: /docs/api-reference/user/get-subscription
+    destination: /docs/api-reference/user/subscription/get
   - source: /docs/api-reference/get-voice
     destination: /docs/api-reference/voices/get
   - source: /docs/api-reference/get-voice-settings
-    destination: /docs/api-reference/voices/get-settings
+    destination: /docs/api-reference/voices/settings/get
   - source: /docs/api-reference/get-voices
     destination: /docs/api-reference/voices/search
   - source: /docs/api-reference/pronunciation-dictionaries-add-from-file
-    destination: /docs/api-reference/pronunciation-dictionary/add-from-file
+    destination: /docs/api-reference/pronunciation-dictionaries/add-from-file
   - source: /docs/api-reference/pronunciation-dictionaries-id
-    destination: /docs/api-reference/pronunciation-dictionary/get
+    destination: /docs/api-reference/pronunciation-dictionaries/get
   - source: /docs/api-reference/pronunciation-dictionaries-id-add-rules
-    destination: /docs/api-reference/pronunciation-dictionary/add-rules
+    destination: /docs/api-reference/pronunciation-dictionaries/add-rules
   - source: /docs/api-reference/pronunciation-dictionaries-id-remove-rules
-    destination: /docs/api-reference/pronunciation-dictionary/remove-rules
+    destination: /docs/api-reference/pronunciation-dictionaries/remove-rules
   - source: /docs/api-reference/pronunciation-dictionaries-id-version_id-download
-    destination: /docs/api-reference/pronunciation-dictionary/download
+    destination: /docs/api-reference/pronunciation-dictionaries/download
   - source: /docs/api-reference/pronunciation-dictionaries-list
-    destination: /docs/api-reference/pronunciation-dictionary/get-all
+    destination: /docs/api-reference/pronunciation-dictionaries/get-all
   - source: /docs/api-reference/query-library
     destination: /docs/api-reference/voice-library/get-shared
   - source: /docs/api-reference/sound-generation
@@ -1317,7 +1365,105 @@ redirects:
     destination: /docs/api-reference/studio/update-chapter
   - source: /docs/api-reference/projects/update-pronunciation-dictionaries
     destination: /docs/api-reference/studio/create-pronunciation-dictionaries
-  - source: /docs/api-reference/projects:slug*
-    destination: /docs/api-reference/studio/slug*
+  - source: /docs/api-reference/projects/:slug*
+    destination: /docs/api-reference/studio/:slug*
   - source: /docs/conversational-ai/workflows/agent-agent-transfers
     destination: /docs/conversational-ai/customization/tools/system-tools/agent-transfer
+  - source: /docs/best-practices/conversational-agents
+    destination: /docs/cookbooks/multi-context-web-socket
+  - source: /docs/conversational-ai/customization/tools/agent-transfer
+    destination: /docs/conversational-ai/customization/tools/system-tools/agent-transfer
+  - source: /docs/conversational-ai/customization/tools/human-transfer
+    destination: /docs/conversational-ai/customization/tools/system-tools/human-transfer
+  - source: /docs/conversational-ai/guides/sip-trunking.mdx
+    destination: /docs/conversational-ai/phone-numbers/sip-trunking
+  - source: /docs/conversational-ai/workflows/transfer-to-human
+    destination: /docs/conversational-ai/workflows/call-transfers/transfer-to-human
+  - source: /docs/conversational-ai/workflows/agent-to-agent-transfer
+    destination: /docs/conversational-ai/workflows/call-transfers/agent-to-agent-transfer
+  - source: /docs/conversational-ai/guides/twilio/outbound-calling
+    destination: /docs/conversational-ai/phone-numbers/twilio-integration/outbound-calling
+  - source: /docs/conversational-ai/guides/twilio/custom-server
+    destination: /docs/conversational-ai/phone-numbers/twilio-integration/custom-server
+  - source: /docs/conversational-ai/phone-numbers/twilio/native-integration
+    destination: /docs/conversational-ai/phone-numbers/twilio-integration/native-integration
+  - source: /docs/conversational-ai/phone-numbers/twilio/dynamic-calls
+    destination: /docs/conversational-ai/phone-numbers/twilio-integration/customising-calls
+  - source: /docs/api-reference/text-to-speech/convert-as-stream
+    destination: /docs/api-reference/text-to-speech/stream
+  - source: /docs/api-reference/audio-isolation/audio-isolation
+    destination: /docs/api-reference/audio-isolation/convert
+  - source: /docs/api-reference/workspace/share-workspace-resource
+    destination: /docs/api-reference/workspace/resources/share
+  - source: /docs/api-reference/voices/get-similar-library-voices
+    destination: /docs/api-reference/voices/find-similar-voices
+  - source: /docs/api-reference/agents/get-agents
+    destination: /docs/api-reference/agents/get
+  - source: /docs/conversational-ai/api-reference/conversations/get-conversations
+    destination: /docs/conversational-ai/api-reference/conversations/list
+  - source: /docs/conversational-ai/api-reference/conversations/get-conversation
+    destination: /docs/conversational-ai/api-reference/conversations/get
+  - source: /docs/api-reference/dubbing/get-dubbing-resource
+    destination: /docs/api-reference/dubbing/resources/get-resource
+  - source: /docs/api-reference/workspace/delete-member
+    destination: /docs/api-reference/workspace/members/delete
+  - source: /docs/api-reference/knowledge-base/get
+    destination: /docs/api-reference/knowledge-base/get
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-list
+    destination: /docs/api-reference/knowledge-base/list
+  - source: /docs/api-reference/conversations/get-conversation
+    destination: /docs/api-reference/conversations/get
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-document-part-by-id
+    destination: /docs/api-reference/knowledge-base/get-chunk
+  - source: /docs/api-reference/widget/get-agent-widget
+    destination: /docs/api-reference/widget/get
+  - source: /docs/api-reference/knowledge-base/get-knowledge-base-document-content
+    destination: /docs/api-reference/knowledge-base/get-content
+  - source: /docs/api-reference/workspace/invite-multiple-users
+    destination: /docs/api-reference/workspace/invites/create-batch
+  - source: /docs/api-reference/workspace/invite-user
+    destination: /docs/api-reference/workspace/invites/create
+  - source: /docs/api-reference/conversations/get-conversations
+    destination: /docs/api-reference/conversations/list
+  - source: /docs/api-reference/knowledge-base/update-knowledge-base-document
+    destination: /docs/api-reference/knowledge-base/update
+  - source: /docs/api-reference/workspace/search-user-groups
+    destination: /docs/api-reference/workspace/groups/search
+  - source: /docs/api-reference/dubbing/add-language-to-resource
+    destination: /docs/api-reference/dubbing/resources/add-language
+  - source: /docs/api-reference/dubbing/dub-segments
+    destination: /docs/api-reference/dubbing/resources/dub-segment
+  - source: /docs/api-reference/workspace/unshare-workspace-resource
+    destination: /docs/api-reference/workspace/resources/unshare
+  - source: /docs/api-reference/workspace/share-workspace-resource
+    destination: /docs/api-reference/workspace/resources/share
+  - source: /docs/api-reference/dubbing/update-segment-language
+    destination: /docs/api-reference/dubbing/resources/update-segment
+  - source: /docs/api-reference/workspace/get-resource
+    destination: /docs/api-reference/dubbing/resources/get-resource
+  - source: /docs/api-reference/dubbing/translate-segments
+    destination: /docs/api-reference/dubbing/resources/translate-segment
+  - source: /docs/api-reference/dubbing/render-dub
+    destination: /docs/api-reference/dubbing/resources/render-segment
+  - source: /docs/api-reference/audio-native/update-content
+    destination: /docs/api-reference/audio-native/update
+  - source: /docs/conversational-ai/api-reference/conversations/post-conversation-feedback
+    destination: /docs/conversational-ai/api-reference/conversations/create
+  - source: /docs/api-reference/audio-isolation/audio-isolation-stream
+    destination: /docs/api-reference/audio-isolation/stream
+  - source: /docs/api-reference/pronunciation-dictionary/add-rules
+    destination: /docs/api-reference/pronunciation-dictionaries/rules/add
+  - source: /docs/api-reference/pronunciation-dictionary/get
+    destination: /docs/api-reference/pronunciation-dictionaries/get
+  - source: /docs/api-reference/pronunciation-dictionary/get-all
+    destination: /docs/api-reference/pronunciation-dictionaries/list
+  - source: /docs/api-reference/pronunciation-dictionary/remove-rules
+    destination: /docs/api-reference/pronunciation-dictionaries/rules/remove
+  - source: /docs/api-reference/pronunciation-dictionary/add-from-file
+    destination: /docs/api-reference/pronunciation-dictionaries/create-from-file
+  - source: /docs/api-reference/pronunciation-dictionary/download
+    destination: /docs/api-reference/pronunciation-dictionaries/download
+  - source: /docs/conversational-ai/customization/privacy/hipaa-compliance
+    destination: /docs/conversational-ai/legal/hipaa
+  - source: /docs/conversational-ai/customization/hipaa-compliance
+    destination: docs/conversational-ai/legal/hipaa-compliance

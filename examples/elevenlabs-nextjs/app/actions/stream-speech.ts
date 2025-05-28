@@ -1,6 +1,6 @@
 'use server';
 
-import type { TextToSpeechRequest } from 'elevenlabs/api';
+import type { TextToSpeechRequest } from '@elevenlabs/elevenlabs-js/api';
 import { PassThrough } from 'stream';
 
 import { getElevenLabsClient, handleError } from '@/app/actions/utils';
@@ -15,7 +15,7 @@ export async function streamSpeech(
 
   try {
     const client = clientResult.value;
-    const nodeStream = await client.textToSpeech.convertAsStream(voiceId, request);
+    const nodeStream = await client.textToSpeech.stream(voiceId, request);
 
     const passThrough = new PassThrough();
 
