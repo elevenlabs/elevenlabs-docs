@@ -1,7 +1,7 @@
 'use client';
 
-import { useConversation } from '@11labs/react';
 import type { GetAgentResponseModel } from '@elevenlabs/elevenlabs-js/api';
+import { useConversation } from '@elevenlabs/react';
 import { AlertCircle, Info, Loader2, Mic, PhoneOff, Terminal } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
