@@ -17,7 +17,7 @@ subtitle: Tailor each conversation with personalized context for each user.
 
 Overrides allow you to modify your AI agent's behavior in real-time without creating multiple agents. This enables you to personalize responses with user-specific data.
 
-Overrides can be enable for the following fields in the agent's security settings:
+Overrides can be enabled for the following fields in the agent's security settings:
 
 - System prompt
 - First message
@@ -75,9 +75,9 @@ This guide will show you how to override the default agent **System prompt** & *
     conversation_override = {
         "agent": {
             "prompt": {
-                "prompt": f"The customer's bank account balance is {customer_balance}. They are based in {customer_location}."
+                "prompt": f"The customer's bank account balance is {customer_balance}. They are based in {customer_location}." # Optional: override the system prompt.
             },
-            "first_message": f"Hi {customer_name}, how can I help you today?",
+            "first_message": f"Hi {customer_name}, how can I help you today?", # Optional: override the first_message.
             "language": "en" # Optional: override the language.
         },
         "tts": {
@@ -102,9 +102,9 @@ This guide will show you how to override the default agent **System prompt** & *
       overrides: {
           agent: {
               prompt: {
-                  prompt: `The customer's bank account balance is ${customer_balance}. They are based in ${customer_location}.`
+                  prompt: `The customer's bank account balance is ${customer_balance}. They are based in ${customer_location}.` // Optional: override the system prompt.
               },
-              firstMessage: `Hi ${customer_name}, how can I help you today?`,
+              firstMessage: `Hi ${customer_name}, how can I help you today?`, // Optional: override the first message.
               language: "en" // Optional: override the language.
           },
           tts: {
@@ -119,15 +119,15 @@ This guide will show you how to override the default agent **System prompt** & *
     import ElevenLabsSDK
 
     let promptOverride = ElevenLabsSDK.AgentPrompt(
-        prompt: "The customer's bank account balance is \(customer_balance). They are based in \(customer_location)."
+        prompt: "The customer's bank account balance is \(customer_balance). They are based in \(customer_location)." // Optional: override the system prompt.
     )
     let agentConfig = ElevenLabsSDK.AgentConfig(
-        prompt: promptOverride,
-        firstMessage: "Hi \(customer_name), how can I help you today?",
+        prompt: promptOverride, // Optional: override the system prompt.
+        firstMessage: "Hi \(customer_name), how can I help you today?", // Optional: override the first message.
         language: .en // Optional: override the language.
     )
     let overrides = ElevenLabsSDK.ConversationConfigOverride(
-        agent: agentConfig,
+        agent: agentConfig, // Optional: override agent settings.
         tts: TTSConfig(voiceId: "custom_voice_id") // Optional: override the voice.
     )
 
@@ -145,18 +145,18 @@ This guide will show you how to override the default agent **System prompt** & *
     ```html title="Widget"
       <elevenlabs-convai
         agent-id="your-agent-id"
-        override-language="es"
-        override-prompt="Custom system prompt for this user"
-        override-first-message="Hi! How can I help you today?"
-        override-voice-id="custom_voice_id"
+        override-language="es"         <!-- Optional: override the language -->
+        override-prompt="Custom system prompt for this user"  <!-- Optional: override the system prompt -->
+        override-first-message="Hi! How can I help you today?"  <!-- Optional: override the first message -->
+        override-voice-id="custom_voice_id"  <!-- Optional: override the voice -->
       ></elevenlabs-convai>
     ```
 
     </CodeGroup>
 
-    <Info>
-      To override the agent voice or language, you'll need to enable these in the Security tab.
-    </Info>
+    <Note>
+      When using overrides, omit any fields you don't want to override rather than setting them to empty strings or null values. Only include the fields you specifically want to customize.
+    </Note>
 
   </Step>
 </Steps>
