@@ -31,6 +31,7 @@ Before setting up SIP trunking, ensure you have:
 2. Phone numbers that you want to connect to ElevenLabs
 3. Administrator access to your SIP trunk configuration
 4. Appropriate firewall settings to allow SIP traffic
+5. **Audio codec compatibility**: Your system must support **48kHz audio** or be capable of resampling audio on your end, as ElevenLabs' SIP deployment outputs and receives audio at this sample rate. This is independent of any audio format configured on the agent for direct websocket connections.
 
 ## Setting up SIP trunking
 
@@ -156,7 +157,7 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 - Support for multiple concurrent calls depends on your subscription tier
 - Call recording and analytics features are available but may require additional configuration
 - Outbound calling capabilities may be limited by your SIP trunk provider
-- Currently, only PCM audio formats (e.g., PCM 16kHz) are supported for SIP trunking connections.
+- **Audio format**: ElevenLabs' SIP deployment outputs and receives audio at **48kHz sample rate**. This is independent of any audio format configured on the agent for direct websocket connections. Your SIP trunk system must either support this format natively or perform resampling to match your system's requirements
 
 ## FAQ
 

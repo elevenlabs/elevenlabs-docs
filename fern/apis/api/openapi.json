@@ -10028,7 +10028,7 @@
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
         "summary": "Speech To Text",
-        "description": "Transcribe an audio or video file.",
+        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks.",
         "parameters": [
           {
             "name": "enable_logging",
@@ -10073,11 +10073,22 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Synchronous transcription result",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Asynchronous request accepted",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Request accepted. Transcription result will be sent to the webhook.",
+                  "request_id": "abc123"
                 }
               }
             }
@@ -12955,6 +12966,18 @@
             }
           },
           {
+            "name": "force",
+            "in": "query",
+            "description": "If set to true, the document will be deleted regardless of whether it is used by any agents and it will be deleted from the dependent agents.",
+            "required": false,
+            "schema": {
+              "description": "If set to true, the document will be deleted regardless of whether it is used by any agents and it will be deleted from the dependent agents.",
+              "type": "boolean",
+              "default": false,
+              "title": "Force"
+            }
+          },
+          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -15777,13 +15800,16 @@
             "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
             "type": "string",
             "default": "",
-            "title": "First Message"
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
           },
           "language": {
             "description": "Language of the agent - used for ASR and TTS",
             "type": "string",
             "default": "en",
-            "title": "Language"
+            "title": "Language",
+            "x-convai-client-override": true
           },
           "dynamic_variables": {
             "description": "Configuration for dynamic variables",
@@ -15807,13 +15833,16 @@
             "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
             "type": "string",
             "default": "",
-            "title": "First Message"
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
           },
           "language": {
             "description": "Language of the agent - used for ASR and TTS",
             "type": "string",
             "default": "en",
-            "title": "Language"
+            "title": "Language",
+            "x-convai-client-override": true
           },
           "dynamic_variables": {
             "description": "Configuration for dynamic variables",
@@ -15837,13 +15866,16 @@
             "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
             "type": "string",
             "default": "",
-            "title": "First Message"
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
           },
           "language": {
             "description": "Language of the agent - used for ASR and TTS",
             "type": "string",
             "default": "en",
-            "title": "Language"
+            "title": "Language",
+            "x-convai-client-override": true
           },
           "dynamic_variables": {
             "description": "Configuration for dynamic variables",
@@ -15862,8 +15894,35 @@
       "AgentConfigOverride": {
         "type": "object",
         "properties": {
+          "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "language": {
+            "description": "Language of the agent - used for ASR and TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language",
+            "x-convai-client-override": true
+          },
           "prompt": {
-            "description": "The overrides for the prompt configuration",
+            "description": "The prompt for the agent",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/PromptAgentOverride"
@@ -15872,63 +15931,35 @@
                 "type": "null"
               }
             ]
-          },
-          "first_message": {
-            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "First Message"
-          },
-          "language": {
-            "description": "The language of the agent, used for ASR and TTS",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Language"
           }
         },
         "example": {
           "first_message": "Hello, how can I help you today?",
-          "language": "en"
+          "language": "en",
+          "prompt": {
+            "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation."
+          }
         },
         "title": "AgentConfigOverride"
       },
       "AgentConfigOverrideConfig": {
         "type": "object",
         "properties": {
-          "prompt": {
-            "description": "Overrides for the prompt configuration",
-            "$ref": "#/components/schemas/PromptAgentOverrideConfig"
-          },
           "first_message": {
-            "description": "Whether to allow overriding the first message",
+            "description": "Whether to allow overriding the first_message field.",
             "type": "boolean",
             "default": false,
             "title": "First Message"
           },
           "language": {
-            "description": "Whether to allow overriding the language",
+            "description": "Whether to allow overriding the language field.",
             "type": "boolean",
             "default": false,
             "title": "Language"
-          }
-        },
-        "example": {
-          "first_message": false,
-          "language": false,
+          },
           "prompt": {
-            "prompt": false
+            "description": "Configures overrides for nested fields.",
+            "$ref": "#/components/schemas/PromptAgentOverrideConfig"
           }
         },
         "title": "AgentConfigOverrideConfig"
@@ -20306,6 +20337,12 @@
               "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3"
             ],
             "title": "Cloud Storage Url"
+          },
+          "webhook": {
+            "description": "Whether to send the transcription result to configured speech-to-text webhooks.  If set the request will return early without the transcription, which will be delivered later via webhook.",
+            "type": "boolean",
+            "default": false,
+            "title": "Webhook"
           }
         },
         "required": [
@@ -20443,6 +20480,13 @@
               {
                 "type": "null"
               }
+            ],
+            "examples": [
+              {
+                "quality": 0.5,
+                "similarity_boost": 0.5,
+                "stability": 0.5
+              }
             ]
           },
           "pronunciation_dictionary_locators": {
@@ -20526,6 +20570,13 @@
               },
               {
                 "type": "null"
+              }
+            ],
+            "examples": [
+              {
+                "quality": 0.5,
+                "similarity_boost": 0.5,
+                "stability": 0.5
               }
             ]
           },
@@ -22748,7 +22799,8 @@
             "description": "If enabled audio will not be processed and only text will be used, use to avoid audio pricing.",
             "type": "boolean",
             "default": false,
-            "title": "Text Only"
+            "title": "Text Only",
+            "x-convai-client-override": true
           },
           "max_duration_seconds": {
             "description": "The maximum duration of a conversation in seconds",
@@ -22777,19 +22829,8 @@
       "ConversationConfigClientOverride-Input": {
         "type": "object",
         "properties": {
-          "agent": {
-            "description": "The overrides for the agent configuration",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AgentConfigOverride"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "tts": {
-            "description": "The overrides for the TTS configuration",
+            "description": "Configuration for conversational text to speech",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/TTSConversationalConfigOverride"
@@ -22800,7 +22841,7 @@
             ]
           },
           "conversation": {
-            "description": "The overrides for the conversation configuration",
+            "description": "Configuration for conversational events",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationConfigOverride"
@@ -22809,6 +22850,29 @@
                 "type": "null"
               }
             ]
+          },
+          "agent": {
+            "description": "Agent specific configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentConfigOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "agent": {
+            "first_message": "Hello, how can I help you today?",
+            "language": "en",
+            "prompt": {
+              "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation."
+            }
+          },
+          "tts": {
+            "voice_id": "cjVigY5qzO86Huf0OWal"
           }
         },
         "title": "ConversationConfigClientOverride"
@@ -22816,19 +22880,8 @@
       "ConversationConfigClientOverride-Output": {
         "type": "object",
         "properties": {
-          "agent": {
-            "description": "The overrides for the agent configuration",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AgentConfigOverride"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "tts": {
-            "description": "The overrides for the TTS configuration",
+            "description": "Configuration for conversational text to speech",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/TTSConversationalConfigOverride"
@@ -22839,7 +22892,7 @@
             ]
           },
           "conversation": {
-            "description": "The overrides for the conversation configuration",
+            "description": "Configuration for conversational events",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationConfigOverride"
@@ -22848,6 +22901,29 @@
                 "type": "null"
               }
             ]
+          },
+          "agent": {
+            "description": "Agent specific configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentConfigOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "agent": {
+            "first_message": "Hello, how can I help you today?",
+            "language": "en",
+            "prompt": {
+              "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation."
+            }
+          },
+          "tts": {
+            "voice_id": "cjVigY5qzO86Huf0OWal"
           }
         },
         "title": "ConversationConfigClientOverride"
@@ -22855,17 +22931,17 @@
       "ConversationConfigClientOverrideConfig-Input": {
         "type": "object",
         "properties": {
-          "agent": {
-            "description": "Overrides for the agent configuration",
-            "$ref": "#/components/schemas/AgentConfigOverrideConfig"
-          },
           "tts": {
-            "description": "Overrides for the TTS configuration",
+            "description": "Configures overrides for nested fields.",
             "$ref": "#/components/schemas/TTSConversationalConfigOverrideConfig"
           },
           "conversation": {
-            "description": "Overrides for the conversation configuration",
+            "description": "Configures overrides for nested fields.",
             "$ref": "#/components/schemas/ConversationConfigOverrideConfig"
+          },
+          "agent": {
+            "description": "Configures overrides for nested fields.",
+            "$ref": "#/components/schemas/AgentConfigOverrideConfig"
           }
         },
         "title": "ConversationConfigClientOverrideConfig"
@@ -22873,17 +22949,17 @@
       "ConversationConfigClientOverrideConfig-Output": {
         "type": "object",
         "properties": {
-          "agent": {
-            "description": "Overrides for the agent configuration",
-            "$ref": "#/components/schemas/AgentConfigOverrideConfig"
-          },
           "tts": {
-            "description": "Overrides for the TTS configuration",
+            "description": "Configures overrides for nested fields.",
             "$ref": "#/components/schemas/TTSConversationalConfigOverrideConfig"
           },
           "conversation": {
-            "description": "Overrides for the conversation configuration",
+            "description": "Configures overrides for nested fields.",
             "$ref": "#/components/schemas/ConversationConfigOverrideConfig"
+          },
+          "agent": {
+            "description": "Configures overrides for nested fields.",
+            "$ref": "#/components/schemas/AgentConfigOverrideConfig"
           }
         },
         "title": "ConversationConfigClientOverrideConfig"
@@ -22892,6 +22968,7 @@
         "type": "object",
         "properties": {
           "text_only": {
+            "description": "If enabled audio will not be processed and only text will be used, use to avoid audio pricing.",
             "anyOf": [
               {
                 "type": "boolean"
@@ -22900,7 +22977,8 @@
                 "type": "null"
               }
             ],
-            "title": "Text Only"
+            "title": "Text Only",
+            "x-convai-client-override": true
           }
         },
         "title": "ConversationConfigOverride"
@@ -22909,14 +22987,11 @@
         "type": "object",
         "properties": {
           "text_only": {
-            "description": "Whether to allow overriding the text only configuration",
+            "description": "Whether to allow overriding the text_only field.",
             "type": "boolean",
             "default": false,
             "title": "Text Only"
           }
-        },
-        "example": {
-          "text_only": false
         },
         "title": "ConversationConfigOverrideConfig"
       },
@@ -23217,6 +23292,11 @@
                 "type": "null"
               }
             ]
+          },
+          "text_only": {
+            "type": "boolean",
+            "default": false,
+            "title": "Text Only"
           }
         },
         "required": [
@@ -24931,6 +25011,32 @@
           "voice_id"
         ],
         "title": "DialogueInput"
+      },
+      "DialogueInputResponseModel": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "description": "The text of the dialogue input line.",
+            "type": "string",
+            "title": "Text"
+          },
+          "voice_id": {
+            "description": "The ID of the voice used for this dialogue input line.",
+            "type": "string",
+            "title": "Voice Id"
+          },
+          "voice_name": {
+            "description": "The name of the voice used for this dialogue input line.",
+            "type": "string",
+            "title": "Voice Name"
+          }
+        },
+        "required": [
+          "text",
+          "voice_id",
+          "voice_name"
+        ],
+        "title": "DialogueInputResponseModel"
       },
       "DoDubbingResponseModel": {
         "type": "object",
@@ -27741,6 +27847,7 @@
           "gemini-2.0-flash-lite",
           "gemini-2.5-flash",
           "gemini-1.0-pro",
+          "claude-sonnet-4",
           "claude-3-7-sonnet",
           "claude-3-5-sonnet",
           "claude-3-5-sonnet-v1",
@@ -28411,6 +28518,16 @@
         ],
         "title": "LiteralJsonSchemaProperty"
       },
+      "MCPApprovalRequiredModel": {
+        "description": "Defines the approval model for an MCP tool",
+        "type": "string",
+        "enum": [
+          "user_approval_always_given",
+          "user_approval_never_given",
+          "user_approval_required_per_tool"
+        ],
+        "title": "MCPApprovalRequiredModel"
+      },
       "MCPToolConfig-Input": {
         "description": "A MCP tool is a tool that is used to call a MCP server",
         "type": "object",
@@ -28464,6 +28581,11 @@
             "description": "The id of the MCP server to call",
             "type": "string",
             "title": "Mcp Server Id"
+          },
+          "approval_mode": {
+            "description": "If set to approved, the tool will be pre-approved and not require user approval before executing",
+            "default": "user_approval_never_given",
+            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
           }
         },
         "required": [
@@ -28527,6 +28649,11 @@
             "description": "The id of the MCP server to call",
             "type": "string",
             "title": "Mcp Server Id"
+          },
+          "approval_mode": {
+            "description": "If set to approved, the tool will be pre-approved and not require user approval before executing",
+            "default": "user_approval_never_given",
+            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
           }
         },
         "required": [
@@ -29007,6 +29134,11 @@
             "description": "The id of the MCP server to call",
             "type": "string",
             "title": "Mcp Server Id"
+          },
+          "approval_mode": {
+            "description": "If set to always accept, the tool will be pre-approved and not require user approval before executing",
+            "default": "user_approval_never_given",
+            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
           }
         },
         "required": [
@@ -29070,6 +29202,11 @@
             "description": "The id of the MCP server to call",
             "type": "string",
             "title": "Mcp Server Id"
+          },
+          "approval_mode": {
+            "description": "If set to always accept, the tool will be pre-approved and not require user approval before executing",
+            "default": "user_approval_never_given",
+            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
           }
         },
         "required": [
@@ -30692,7 +30829,8 @@
             "description": "The prompt for the agent",
             "type": "string",
             "default": "",
-            "title": "Prompt"
+            "title": "Prompt",
+            "x-convai-client-override": true
           },
           "llm": {
             "description": "The LLM to query with the prompt and the chat history",
@@ -30827,7 +30965,8 @@
             "description": "The prompt for the agent",
             "type": "string",
             "default": "",
-            "title": "Prompt"
+            "title": "Prompt",
+            "x-convai-client-override": true
           },
           "llm": {
             "description": "The LLM to query with the prompt and the chat history",
@@ -30962,7 +31101,8 @@
             "description": "The prompt for the agent",
             "type": "string",
             "default": "",
-            "title": "Prompt"
+            "title": "Prompt",
+            "x-convai-client-override": true
           },
           "llm": {
             "description": "The LLM to query with the prompt and the chat history",
@@ -31101,14 +31241,21 @@
         "type": "object",
         "properties": {
           "prompt": {
-            "description": "The initial system message that defines the agent, e.g. “You are a German language teacher named Laura.”",
-            "type": "string",
-            "default": "",
-            "title": "Prompt"
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt",
+            "x-convai-client-override": true
           }
         },
         "example": {
-          "prompt": "You are a German language teacher named Laura."
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation."
         },
         "title": "PromptAgentOverride"
       },
@@ -31116,7 +31263,7 @@
         "type": "object",
         "properties": {
           "prompt": {
-            "description": "Whether to allow prompt overriding",
+            "description": "Whether to allow overriding the prompt field.",
             "type": "boolean",
             "default": false,
             "title": "Prompt"
@@ -32828,7 +32975,14 @@
           },
           "voice_id": {
             "description": "The ID of the voice used.",
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Voice Id"
           },
           "model_id": {
@@ -32845,7 +32999,14 @@
           },
           "voice_name": {
             "description": "The name of the voice.",
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Voice Name"
           },
           "voice_category": {
@@ -32868,7 +33029,14 @@
           },
           "text": {
             "description": "The text used to generate the audio item.",
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Text"
           },
           "date_unix": {
@@ -32968,6 +33136,21 @@
                 "type": "null"
               }
             ]
+          },
+          "dialogue": {
+            "description": "The dialogue (voice and text pairs) used to generate the audio item. If this is set then the top level `text` and `voice_id` fields will be empty.",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/DialogueInputResponseModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dialogue"
           }
         },
         "example": {
@@ -32993,9 +33176,6 @@
         },
         "required": [
           "history_item_id",
-          "voice_id",
-          "voice_name",
-          "text",
           "date_unix",
           "character_count_change_from",
           "character_count_change_to",
@@ -33991,7 +34171,9 @@
             "type": "string",
             "default": "cjVigY5qzO86Huf0OWal",
             "minLength": 0,
-            "title": "Voice Id"
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
           },
           "agent_output_audio_format": {
             "description": "The audio format to use for TTS",
@@ -34052,6 +34234,7 @@
         "type": "object",
         "properties": {
           "voice_id": {
+            "description": "The voice ID to use for TTS",
             "anyOf": [
               {
                 "type": "string"
@@ -34060,8 +34243,13 @@
                 "type": "null"
               }
             ],
-            "title": "Voice Id"
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
           }
+        },
+        "example": {
+          "voice_id": "cjVigY5qzO86Huf0OWal"
         },
         "title": "TTSConversationalConfigOverride"
       },
@@ -34069,14 +34257,11 @@
         "type": "object",
         "properties": {
           "voice_id": {
-            "description": "Whether to allow overriding the voice ID",
+            "description": "Whether to allow overriding the voice_id field.",
             "type": "boolean",
             "default": false,
             "title": "Voice Id"
           }
-        },
-        "example": {
-          "voice_id": false
         },
         "title": "TTSConversationalConfigOverrideConfig"
       },
