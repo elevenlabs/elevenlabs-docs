@@ -155,6 +155,26 @@ paths:
   # ================
   # Sound Effects
   # ================
+  /v1/text-to-dialogue:
+    post:
+      summary: Create dialogue
+      x-fern-examples:
+        - request:
+            inputs:
+              [
+                { text: 'Knock knock', voice_id: 'JBFqnCBsd6RMkjVDRZzb' },
+                { text: 'Who is there?', voice_id: 'Aw4FAjKCGjjNkVhN1Xmq' },
+              ]
+  /v1/text-to-dialogue/stream:
+    post:
+      summary: Stream dialogue
+      x-fern-examples:
+        - request:
+            inputs:
+              [
+                { text: 'Knock knock', voice_id: 'JBFqnCBsd6RMkjVDRZzb' },
+                { text: 'Who is there?', voice_id: 'Aw4FAjKCGjjNkVhN1Xmq' },
+              ]
   /v1/sound-generation:
     post:
       summary: Create sound effect
@@ -340,7 +360,10 @@ paths:
       summary: Get pronunciation dictionary by version
   /v1/pronunciation-dictionaries/add-from-file:
     post:
-      summary: Create a pronunciation dictionary
+      summary: Create a pronunciation dictionary from a file
+  /v1/pronunciation-dictionaries/add-from-rules:
+    post:
+      summary: Create a pronunciation dictionary from rules
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules:
     post:
       summary: Add pronunciation dictionary rules
@@ -698,9 +721,9 @@ components:
       x-fern-type-name: UpdateAgentRequest
       properties:
         conversation_config:
-          $ref: '#/components/schemas/ConversationalConfig'
+          $ref: '#/components/schemas/ConversationalConfigAPIModel-Input'
         platform_settings:
-          $ref: '#/components/schemas/AgentPlatformSettings'
+          $ref: '#/components/schemas/AgentPlatformSettingsRequestModel'
     OutputFormat:
       type: string
       enum:
