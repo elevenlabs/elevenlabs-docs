@@ -13,6 +13,8 @@ The ElevenLabs [Text to Dialogue](/docs/api-reference/text-to-dialogue) API crea
 - Creating immersive dialogue for podcasts and other audio content
 - Bring audiobooks to life with expressive narration
 
+Text to Dialogue is not intended for use in real-time applications like Conversational AI. Several generations might be required to achieve the desired results. When integrating Text to Dialogue into your application, consider generating several generations and allowing the user to select the best one.
+
 Listen to a sample:
 
 <elevenlabs-audio-player
@@ -57,11 +59,25 @@ underlying emotion comes from textual cues.
 
 Read the [prompting guide](/docs/best-practices/prompting) for more details.
 
-### Emotional deliveries with non-speech audio events
+### Emotional deliveries with audio tags
 
 <Warning>This feature is still under active development, actual results may vary.</Warning>
 
 The Eleven v3 model allows the use of non-speech audio events to influence the delivery of the dialogue. This is done by inserting the audio events into the text input wrapped in square brackets.
+
+Audio tags come in a few different forms:
+
+### Emotions and delivery
+
+For example, [sad], [laughing] and [whispering]
+
+### Audio events
+
+For example, [leaves rustling], [gentle footsteps] and [applause].
+
+### Overall direction
+
+For example, [football], [wrestling match] and [auctioneer].
 
 Some examples include:
 
@@ -93,7 +109,7 @@ Ellipses can be used to indicate trailing sentences:
 ```
 "[indecisive] Hi, can I get uhhh..."
 "[quizzically] The usual?"
-"[elated] Yes! [laughs] I'm so glad you asked!"
+"[elated] Yes! [laughs] I'm so glad you knew!"
 ```
 
 <elevenlabs-audio-player
@@ -147,8 +163,9 @@ The default response format is "mp3", but other formats like "PCM", & "μ-law" a
   <Accordion title="What qualifies as a free regeneration?">
     A free regeneration allows you to regenerate the same text to speech content without additional cost, subject to these conditions:
 
-    - You can regenerate each piece of content up to 2 times for free
-    - The content must be exactly the same as the previous generation. Any changes to the text, voice settings, or other parameters will require a new, paid generation
+    - Only available within the ElevenLabs dashboard.
+    - You can regenerate each piece of content up to 2 times for free.
+    - The content must be exactly the same as the previous generation. Any changes to the text, voice settings, or other parameters will require a new, paid generation.
 
     Free regenerations are useful in case there is a slight distortion in the audio output. According to ElevenLabs' internal benchmarks, regenerations will solve roughly half of issues with quality, with remaining issues usually due to poor training data.
 
