@@ -9830,7 +9830,7 @@
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
         "summary": "Speech To Text",
-        "description": "Transcribe an audio or video file.",
+        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks.",
         "parameters": [
           {
             "name": "enable_logging",
@@ -9875,11 +9875,22 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Synchronous transcription result",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Asynchronous request accepted",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Request accepted. Transcription result will be sent to the webhook.",
+                  "request_id": "abc123"
                 }
               }
             }
@@ -20144,6 +20155,12 @@
               "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3"
             ],
             "title": "Cloud Storage Url"
+          },
+          "webhook": {
+            "description": "Whether to send the transcription result to configured speech-to-text webhooks.  If set the request will return early without the transcription, which will be delivered later via webhook.",
+            "type": "boolean",
+            "default": false,
+            "title": "Webhook"
           }
         },
         "required": [
@@ -23093,6 +23110,11 @@
                 "type": "null"
               }
             ]
+          },
+          "text_only": {
+            "type": "boolean",
+            "default": false,
+            "title": "Text Only"
           }
         },
         "required": [
@@ -35488,6 +35510,18 @@
               }
             ],
             "title": "Similarity Boost"
+          },
+          "quality": {
+            "description": "Controls the audio quality of the generated speech. Higher values produce clearer audio but increase generation time.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quality"
           },
           "style": {
             "description": "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.",
