@@ -79,7 +79,7 @@ response = requests.get(audio_url)
 audio_data = BytesIO(response.content)
 
 # Perform the text-to-speech conversion
-transcription = elevenlabs.speech_to_text.convert_as_stream(
+transcription = elevenlabs.speech_to_text.stream(
     model_id="scribe_v1",
     file=audio_data
 )
@@ -103,7 +103,7 @@ const response = await fetch(
 );
 const audioBlob = new Blob([await response.arrayBuffer()], { type: 'audio/mp3' });
 
-const transcription = await elevenlabs.speechToText.convertAsStream({
+const transcription = await elevenlabs.speechToText.stream({
   file: audioBlob,
   modelId: 'scribe_v1',
   maximumSpeakers: 1, // Number of speakers in the audio file
