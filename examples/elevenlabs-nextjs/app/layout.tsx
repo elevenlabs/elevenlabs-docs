@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 import { getApiKey } from '@/app/actions/manage-api-key';
 import { ApiKeyBanner } from '@/components/api-key-banner';
@@ -33,6 +34,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const apiKeyResult = await getApiKey();
   const apiKey = apiKeyResult.ok ? apiKeyResult.value : null;
 
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+  const isElevenLabsV3 = pathname.includes('/elevenlabs-v3');
+
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body>
@@ -51,14 +56,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   <SidebarTrigger />
                   <ApiKeyBanner />
                 </header>
-                <div className="p-4">
-                  <div className="mx-auto max-w-4xl space-y-3 px-2 pt-20 lg:px-8 lg:py-8">
-                    <Byline />
-                    <Card className="border-gradient rounded-lg p-px shadow-lg">
-                      <div className="bg-card rounded-lg">{children}</div>
-                    </Card>
+                {isElevenLabsV3 ? (
+                  children
+                ) : (
+                  <div className="p-4">
+                    <div className="mx-auto max-w-4xl space-y-3 px-2 pt-20 lg:px-8 lg:py-8">
+                      <Byline />
+                      <Card className="border-gradient rounded-lg p-px shadow-lg">
+                        <div className="bg-card rounded-lg">{children}</div>
+                      </Card>
+                    </div>
                   </div>
-                </div>
+                )}
               </SidebarInset>
             </SidebarProvider>
           </KeyProvider>

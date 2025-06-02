@@ -1,4 +1,4 @@
-import { AudioLines, MessageSquareQuote, MessagesSquare, Sparkles } from 'lucide-react';
+import { AudioLines, Gem, MessageSquareQuote, MessagesSquare, Sparkles } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 type Demo = {
@@ -13,6 +13,12 @@ export const demos: { name: string; items: Demo[] }[] = [
   {
     name: 'Capabilities',
     items: [
+      {
+        name: 'ElevenLabs v3',
+        icon: Gem,
+        slug: 'elevenlabs-v3',
+        description: 'Learn how to build with ElevenLabs v3.',
+      },
       {
         name: 'Text to speech',
         icon: MessageSquareQuote,

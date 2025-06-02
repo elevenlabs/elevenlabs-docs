@@ -33,3 +33,13 @@ export const ttsSchema = z.object({
 });
 
 export type TtsInput = z.infer<typeof ttsSchema>;
+
+export const ttsV3Schema = z.object({
+  prompt: z
+    .string()
+    .min(1, 'Prompt is required')
+    .max(5000, 'Prompt must be 5000 characters or less'),
+  voiceIds: z.array(z.string()).min(1, 'Voice ID is required'),
+});
+
+export type TTSV3Input = z.infer<typeof ttsV3Schema>;
