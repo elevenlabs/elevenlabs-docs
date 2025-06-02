@@ -27,7 +27,7 @@ const DIALOGUE_SUGGESTIONS = [
     id: 'sports-commentary',
     label: 'Epic sports moment',
     prompt:
-      'Two sports commentators calling the final moments of a nail-biting championship game with crowd reactions and dramatic tension',
+      'Sports commentators calling the final moments of a nail-biting championship game with crowd reactions and dramatic tension',
     icon: <UsersIcon className="h-4 w-4" />,
   },
   {

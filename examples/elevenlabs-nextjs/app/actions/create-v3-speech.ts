@@ -39,7 +39,7 @@ export async function createTextToDialogue(
       .join('\n');
 
     const { object } = await generateObject({
-      model: anthropic('claude-4-opus-20250514'),
+      model: anthropic('claude-4-sonnet-20250514'),
       schema: z.object({
         generation: z.array(
           z.object({
@@ -62,7 +62,7 @@ INSTRUCTIONS:
 3. Include emotional audio markers in square brackets where appropriate, for example: [laughs], [sighs], [gasps], [whispers], [excited], [annoyed], [confused], [dramatic], [nervous], [cheerful], [sarcastic], [deadpan], etc.
 4. The model also supports other markers like: [gunshot], [explosion], [applause], [burp], [humming], [sneezes], [chuckle], [whistles], [claps], [screams], [inhales], [exhales], [sniffs], [claps], [screams], [inhales], [exhales], [applause], [burps], [humming], [sneezes], [chuckle], [whistles] & many more.
 4. Make the dialogue feel authentic with natural pauses, interruptions, and emotional reactions
-5. Each text segment should be 1-3 sentences long for natural speech flow
+5. Text segments and dialogue should be short & engaging. Ideally 10 seconds of audio in total or less.
 6. Vary the voice assignments to create distinct characters
 7. The dialogue can be in any language that fits the prompt
 8. Include personality quirks and speech patterns that match the audio markers
