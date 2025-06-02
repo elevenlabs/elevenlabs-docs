@@ -1401,6 +1401,204 @@
         "x-fern-streaming": true
       }
     },
+    "/v1/text-to-dialogue": {
+      "post": {
+        "operationId": "Text_to_dialogue__multi_voice__v1_text_to_dialogue_post",
+        "summary": "Text To Dialogue (Multi-Voice)",
+        "description": "Converts a list of text and voice ID pairs into speech (dialogue) and returns audio.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Text_to_dialogue__multi_voice__v1_text_to_dialogue_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The generated audio file",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-dialogue"
+        ],
+        "x-fern-sdk-group-name": "text_to_dialogue",
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-streaming": true
+      }
+    },
+    "/v1/text-to-dialogue/stream": {
+      "post": {
+        "operationId": "Text_to_dialogue__multi_voice__streaming_v1_text_to_dialogue_stream_post",
+        "summary": "Text To Dialogue (Multi-Voice) Streaming",
+        "description": "Converts a list of text and voice ID pairs into speech (dialogue) and returns an audio stream.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Text_to_dialogue__multi_voice__streaming_v1_text_to_dialogue_stream_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Streaming audio data",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-dialogue"
+        ],
+        "x-fern-sdk-group-name": "text_to_dialogue",
+        "x-fern-sdk-method-name": "stream",
+        "x-fern-streaming": true
+      }
+    },
     "/v1/speech-to-speech/{voice_id}": {
       "post": {
         "operationId": "Speech_to_Speech_v1_speech_to_speech__voice_id__post",
@@ -16395,7 +16593,8 @@
           "signed_url",
           "shareable_link",
           "livekit_token",
-          "livekit_token_website"
+          "livekit_token_website",
+          "genesys_api_key"
         ],
         "title": "AuthorizationMethod"
       },
@@ -20302,8 +20501,8 @@
             "examples": [
               {
                 "quality": 0.5,
-                "similarity_boost": 0.5,
-                "stability": 0.5
+                "stability": 0.5,
+                "use_speaker_boost": true
               }
             ]
           },
@@ -20393,8 +20592,8 @@
             "examples": [
               {
                 "quality": 0.5,
-                "similarity_boost": 0.5,
-                "stability": 0.5
+                "stability": 0.5,
+                "use_speaker_boost": true
               }
             ]
           },
@@ -24065,7 +24264,7 @@
           },
           "tts": {
             "description": "Configuration for conversational text to speech",
-            "$ref": "#/components/schemas/TTSConversationalConfig"
+            "$ref": "#/components/schemas/TTSConversationalConfig-Input"
           },
           "conversation": {
             "description": "Configuration for conversational events",
@@ -24099,7 +24298,7 @@
           },
           "tts": {
             "description": "Configuration for conversational text to speech",
-            "$ref": "#/components/schemas/TTSConversationalConfig"
+            "$ref": "#/components/schemas/TTSConversationalConfig-Output"
           },
           "conversation": {
             "description": "Configuration for conversational events",
@@ -28775,8 +28974,20 @@
             ],
             "title": "Stability"
           },
-          "similarity_boost": {
-            "description": "Determines how closely the AI should adhere to the original voice when attempting to replicate it.",
+          "use_speaker_boost": {
+            "description": "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Speaker Boost"
+          },
+          "quality": {
+            "description": "Controls the audio quality of the generated speech. Higher values produce clearer audio but increase generation time.",
             "anyOf": [
               {
                 "type": "number"
@@ -28785,10 +28996,11 @@
                 "type": "null"
               }
             ],
-            "title": "Similarity Boost"
+            "title": "Quality"
           }
         },
         "example": {
+          "quality": 0.5,
           "similarity_boost": 1,
           "stability": 1
         },
@@ -33815,6 +34027,58 @@
         ],
         "title": "SubscriptionUsageResponseModel"
       },
+      "SupportedVoice": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Label"
+          },
+          "voice_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Voice Id"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "model_family": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSModelFamily"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "voice_id"
+        ],
+        "title": "SupportedVoice"
+      },
       "SystemToolConfig-Input": {
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
@@ -33963,7 +34227,7 @@
         ],
         "title": "SystemToolConfig"
       },
-      "TTSConversationalConfig": {
+      "TTSConversationalConfig-Input": {
         "type": "object",
         "properties": {
           "model_id": {
@@ -33979,6 +34243,94 @@
             "title": "Voice Id",
             "x-convai-client-override": true,
             "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SupportedVoice"
+            },
+            "title": "Supported Voices"
+          },
+          "agent_output_audio_format": {
+            "description": "The audio format to use for TTS",
+            "default": "pcm_16000",
+            "$ref": "#/components/schemas/TTSOutputFormat"
+          },
+          "optimize_streaming_latency": {
+            "description": "The optimization for streaming latency",
+            "default": 3,
+            "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
+          },
+          "stability": {
+            "description": "The stability of generated speech",
+            "type": "number",
+            "default": 0.5,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Stability"
+          },
+          "speed": {
+            "description": "The speed of generated speech",
+            "type": "number",
+            "default": 1,
+            "maximum": 1.2,
+            "minimum": 0.7,
+            "title": "Speed"
+          },
+          "similarity_boost": {
+            "description": "The similarity boost for generated speech",
+            "type": "number",
+            "default": 0.8,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Similarity Boost"
+          },
+          "pronunciation_dictionary_locators": {
+            "description": "The pronunciation dictionary locators",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PydanticPronunciationDictionaryVersionLocator"
+            },
+            "title": "Pronunciation Dictionary Locators"
+          }
+        },
+        "example": {
+          "agent_output_audio_format": "pcm_16000",
+          "model_id": "eleven_turbo_v2",
+          "optimize_streaming_latency": 3,
+          "pronunciation_dictionary_locators": [],
+          "similarity_boost": 0.8,
+          "speed": 1,
+          "stability": 0.5,
+          "voice_id": "cjVigY5qzO86Huf0OWal"
+        },
+        "title": "TTSConversationalConfig"
+      },
+      "TTSConversationalConfig-Output": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "description": "The model to use for TTS",
+            "default": "eleven_turbo_v2",
+            "$ref": "#/components/schemas/TTSConversationalModel"
+          },
+          "voice_id": {
+            "description": "The voice ID to use for TTS",
+            "type": "string",
+            "default": "cjVigY5qzO86Huf0OWal",
+            "minLength": 0,
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SupportedVoice"
+            },
+            "title": "Supported Voices"
           },
           "agent_output_audio_format": {
             "description": "The audio format to use for TTS",
@@ -34079,6 +34431,15 @@
           "eleven_flash_v2_5"
         ],
         "title": "TTSConversationalModel"
+      },
+      "TTSModelFamily": {
+        "type": "string",
+        "enum": [
+          "turbo",
+          "flash",
+          "multilingual"
+        ],
+        "title": "TTSModelFamily"
       },
       "TTSOptimizeStreamingLatency": {
         "type": "integer",
@@ -35499,17 +35860,17 @@
             ],
             "title": "Stability"
           },
-          "similarity_boost": {
-            "description": "Determines how closely the AI should adhere to the original voice when attempting to replicate it.",
+          "use_speaker_boost": {
+            "description": "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
             "anyOf": [
               {
-                "type": "number"
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Similarity Boost"
+            "title": "Use Speaker Boost"
           },
           "quality": {
             "description": "Controls the audio quality of the generated speech. Higher values produce clearer audio but increase generation time.",
@@ -35523,6 +35884,18 @@
             ],
             "title": "Quality"
           },
+          "similarity_boost": {
+            "description": "Determines how closely the AI should adhere to the original voice when attempting to replicate it.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Similarity Boost"
+          },
           "style": {
             "description": "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.",
             "anyOf": [
@@ -35534,18 +35907,6 @@
               }
             ],
             "title": "Style"
-          },
-          "use_speaker_boost": {
-            "description": "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Use Speaker Boost"
           },
           "speed": {
             "description": "Adjusts the speed of the voice. A value of 1.0 is the default speed, while values less than 1.0 slow down the speech, and values greater than 1.0 speed it up.",
@@ -36763,7 +37124,7 @@
           "text_input_enabled": {
             "description": "Whether the user should be able to send text messages",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Text Input Enabled"
           },
           "text_contents": {
@@ -36779,7 +37140,7 @@
           "supports_text_only": {
             "description": "Whether the widget can switch to text only mode",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Supports Text Only"
           },
           "custom_avatar_path": {
@@ -37079,7 +37440,7 @@
           "text_input_enabled": {
             "description": "Whether the user should be able to send text messages",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Text Input Enabled"
           },
           "text_contents": {
@@ -37095,7 +37456,7 @@
           "supports_text_only": {
             "description": "Whether the widget can switch to text only mode",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Supports Text Only"
           },
           "custom_avatar_path": {
@@ -37395,7 +37756,7 @@
           "text_input_enabled": {
             "description": "Whether the user should be able to send text messages",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Text Input Enabled"
           },
           "text_contents": {
