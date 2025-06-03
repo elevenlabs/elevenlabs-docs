@@ -1,79 +1,102 @@
 ---
-title: Speech-to-text webhooks
-subtitle: Learn how to use webhooks to receive real-time notifications when your speech-to-text tasks are completed.
+title: Asynchronous Speech to Text
+subtitle: Learn how to use webhooks to receive asynchronous notifications when your transcription tasks are completed.
 ---
 
 ## Overview
 
-Webhooks allow you to receive automatic notifications when your speech-to-text transcription tasks are completed, eliminating the need to continuously poll the API for status updates. This is particularly useful for long-running transcription jobs or when processing large volumes of audio files.
+Webhooks allow you to receive automatic notifications when your Speech to Text transcription tasks are completed, eliminating the need to continuously poll the API for status updates. This is particularly useful for long-running transcription jobs or when processing large volumes of audio files.
 
 When a transcription is completed, ElevenLabs will send a POST request to your specified webhook URL with the transcription results, including the transcript text, language detection, and any metadata.
 
-## Requirements
-
-- An ElevenLabs account with an [API key](/app/settings/api-keys)
-- A publicly accessible HTTPS endpoint to receive webhook notifications
-- Basic understanding of the [Speech-to-text API](/docs/api-reference/speech-to-text)
-
-## Setup
+## Using webhooks
 
 <Steps>
-  ### Create a webhook endpoint
+  <Step title="Create a webhook endpoint">
+    First, create a webhook in the ElevenLabs dashboard. Navigate to your [webhooks settings](https://elevenlabs.io/app/settings/webhooks) and click "Create Webhook".
 
-First, create a webhook in the ElevenLabs dashboard. Navigate to your [webhooks settings](https://elevenlabs.io/app/settings/webhooks) and click "Create Webhook".
+    <Frame background="subtle" caption="Create a new webhook in the ElevenLabs dashboard">
+      <img
+        src="/assets/images/cookbooks/scribe/webhooks/create-webhook.png"
+        alt="Create webhook interface"
+      />
+    </Frame>
 
-<Frame background="subtle" caption="Create a new webhook in the ElevenLabs dashboard">
-  <img
-    src="/assets/images/cookbooks/scribe/webhooks/create-webhook.png"
-    alt="Create webhook interface"
-  />
-</Frame>
+    Configure your webhook with:
 
-Configure your webhook with:
+    - **Name**: A descriptive name for your webhook
+    - **Callback URL**: Your publicly accessible HTTPS endpoint
+    - **Webhook Auth Method**: Either `HMAC` or `OAuth`. It is up to the client to implement the verification mechanism. ElevenLabs sends headers that allow for verification but we do not enforce it.
+  </Step>
 
-- **Name**: A descriptive name for your webhook
-- **Callback URL**: Your publicly accessible HTTPS endpoint
-- **Webhook Auth Method**: Either `HMAC` or `OAuth`. It is up to the client to implement the verification mechanism. ElevenLabs sends headers that allow for verification but we do not enforce it.
+  <Step title="Associate webhook with transcription tasks">
+    Once created, you can associate the webhook with your speech-to-text tasks. In the dashboard, navigate to the webhook events section and link your webhooks to speech-to-text events.
 
-### Associate webhook with transcription tasks
+    <Frame background="subtle" caption="Associate webhook with speech-to-text tasks">
+      <img
+        src="/assets/images/cookbooks/scribe/webhooks/associate-webhook.png"
+        alt="Webhook association interface"
+      />
+    </Frame>
+  </Step>
+  <Step title="Create an API key">
+      <Markdown src="/snippets/quickstart-api-key.mdx" />
+  </Step>
+  <Step title="Install the SDK">
+      <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+  </Step>
+  <Step title="Make API calls with webhook parameter enabled">
+    When making speech-to-text API calls, include the `webhook` parameter set to `true` to enable webhook notifications for that specific request.
 
-Once created, you can associate the webhook with your speech-to-text tasks. In the dashboard, navigate to the webhook events section and link your webhooks to speech-to-text events.
+    <CodeBlocks>
+      ```python maxLines=0
+      from dotenv import load_dotenv
+      from elevenlabs.client import ElevenLabs
 
-<Frame background="subtle" caption="Associate webhook with speech-to-text tasks">
-  <img
-    src="/assets/images/cookbooks/scribe/webhooks/associate-webhook.png"
-    alt="Webhook association interface"
-  />
-</Frame>
+      load_dotenv()
 
-### Make API calls with webhook enabled
+      elevenlabs = ElevenLabs(
+        api_key=os.getenv("ELEVENLABS_API_KEY"),
+      )
 
-When making speech-to-text API calls, include the `webhook` parameter set to `true` to enable webhook notifications for that specific request.
+      def transcribe_with_webhook(audio_file):
+        try:
+          result = elevenlabs.speech_to_text.convert(
+            file=audio_file,
+            model_id="scribe_v1",
+            webhook=True,
+          )
+          print(f"Transcription started: {result.task_id}")
+          return result
+        except Exception as e:
+          print(f"Error starting transcription: {e}")
+          raise e
+      ```
+      ```typescript maxLines=0
+      import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
-```javascript
-import { ElevenLabsClient } from 'elevenlabs';
+      const elevenlabs = new ElevenLabsClient({
+        apiKey: process.env.ELEVENLABS_API_KEY,
+      });
 
-const elevenlabs = new ElevenLabsClient({
-  apiKey: process.env.ELEVENLABS_API_KEY,
-});
+      async function transcribeWithWebhook(audioFile) {
+        try {
+          const result = await elevenlabs.speechToText.convert({
+            file: audioFile,
+            modelId: 'scribe_v1',
+            webhook: true,
+          });
 
-async function transcribeWithWebhook(audioFile) {
-  try {
-    const result = await elevenlabs.speechToText.convert({
-      file: audioFile,
-      model_id: 'scribe_v1',
-      webhook: true,
-    });
-
-    console.log('Transcription started:', result.task_id);
-    return result;
-  } catch (error) {
-    console.error('Error starting transcription:', error);
-    throw error;
-  }
-}
-```
-
+          console.log('Transcription started:', result.taskId);
+          return result;
+        } catch (error) {
+          console.error('Error starting transcription:', error);
+          throw error;
+        }
+      }
+      ```
+    </CodeBlocks>
+  </Step>
 </Steps>
 
 ## Webhook payload
@@ -118,32 +141,33 @@ Please refer to the [Speech-to-text API](/docs/api-reference/speech-to-text) ref
 Here's an example of how to implement a webhook endpoint to handle incoming notifications:
 
 ```javascript
-import crypto from 'crypto';
 import express from 'express';
+import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+import "dotenv/config";
+
+const elevenlabs = new ElevenLabsClient();
 
 const app = express();
 app.use(express.json());
 
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-function verifyWebhookSignature(payload, signature, secret) {
-  const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-
-  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
-}
-
 app.post('/webhook/speech-to-text', (req, res) => {
   try {
     const signature = req.headers['x-elevenlabs-signature'];
     const payload = JSON.stringify(req.body);
+    let event;
 
-    if (WEBHOOK_SECRET && !verifyWebhookSignature(payload, signature, WEBHOOK_SECRET)) {
+    try {
+      // Verify the webhook signature.
+      event = elevenlabs.webhooks.constructEvent(payload, signature, WEBHOOK_SECRET);
+    } catch (error) {
       return res.status(401).json({ error: 'Invalid signature' });
     }
 
-    const { task_id, status, text, language_code } = req.body;
+    if (event.type === 'speech_to_text.completed') {
+      const { task_id, status, text, language_code } = event.data;
 
-    if (status === 'completed') {
       console.log(`Transcription ${task_id} completed`);
       console.log(`Language: ${language_code}`);
       console.log(`Text: ${text}`);
@@ -178,20 +202,7 @@ app.listen(3000, () => {
 
 ### Signature verification
 
-Always verify webhook signatures to ensure requests are authentic:
-
-```javascript
-import crypto from 'crypto';
-
-function verifySignature(payload, signature, secret) {
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(payload, 'utf8')
-    .digest('hex');
-
-  return signature === expectedSignature;
-}
-```
+Always verify webhook signatures to ensure requests came from ElevenLabs.
 
 ### HTTPS requirement
 
@@ -243,7 +254,7 @@ async function testWebhook() {
 
   const result = await elevenlabs.speechToText.convert({
     file: audioFile,
-    model_id: 'scribe_v1',
+    modelId: 'scribe_v1',
     webhook: true,
   });
 
