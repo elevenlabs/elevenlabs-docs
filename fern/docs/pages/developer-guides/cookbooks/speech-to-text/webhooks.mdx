@@ -27,6 +27,7 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
     - **Name**: A descriptive name for your webhook
     - **Callback URL**: Your publicly accessible HTTPS endpoint
     - **Webhook Auth Method**: Either `HMAC` or `OAuth`. It is up to the client to implement the verification mechanism. ElevenLabs sends headers that allow for verification but we do not enforce it.
+
   </Step>
 
   <Step title="Associate webhook with transcription tasks">
@@ -38,6 +39,7 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
         alt="Webhook association interface"
       />
     </Frame>
+
   </Step>
   <Step title="Create an API key">
       <Markdown src="/snippets/quickstart-api-key.mdx" />
@@ -96,6 +98,7 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
       }
       ```
     </CodeBlocks>
+
   </Step>
 </Steps>
 
@@ -141,9 +144,9 @@ Please refer to the [Speech-to-text API](/docs/api-reference/speech-to-text) ref
 Here's an example of how to implement a webhook endpoint to handle incoming notifications:
 
 ```javascript
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
+import 'dotenv/config';
 import express from 'express';
-import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
-import "dotenv/config";
 
 const elevenlabs = new ElevenLabsClient();
 
