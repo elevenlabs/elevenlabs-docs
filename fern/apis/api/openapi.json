@@ -661,6 +661,267 @@
         "x-fern-streaming": true
       }
     },
+    "/v1/shared-sound-generations": {
+      "get": {
+        "operationId": "Get_shared_sound_effects_v1_shared_sound_generations_get",
+        "summary": "Get Shared Sound Effects",
+        "description": "Returns a list of shared sound effects.",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "How many sound effects to return at maximum. Can not exceed 100, defaults to 30.",
+            "required": false,
+            "schema": {
+              "description": "How many sound effects to return at maximum. Can not exceed 100, defaults to 30.",
+              "type": "integer",
+              "default": 30,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Sound effect category used for filtering.",
+            "required": false,
+            "schema": {
+              "description": "Sound effect category used for filtering.",
+              "anyOf": [
+                {
+                  "enum": [
+                    "restaurant",
+                    "park",
+                    "industrial",
+                    "school",
+                    "office",
+                    "urban",
+                    "ocean",
+                    "nature",
+                    "weather",
+                    "foley",
+                    "fantasy",
+                    "human",
+                    "device",
+                    "sci-fi",
+                    "horror",
+                    "animal",
+                    "boom",
+                    "braam",
+                    "riser",
+                    "whoosh",
+                    "drone",
+                    "impact",
+                    "weapon",
+                    "transport",
+                    "household",
+                    "percussion",
+                    "cymbal",
+                    "synth",
+                    "bass",
+                    "guitar",
+                    "key",
+                    "string",
+                    "brass",
+                    "woodwind",
+                    "ui element",
+                    "sport",
+                    "vehicle",
+                    "misc"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "Nature"
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search term used for filtering",
+            "required": false,
+            "schema": {
+              "description": "Search term used for filtering",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "Cold water"
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort criteria. Can be one of: created_date, download_count, like_count, trending_score. Defaults to trending_score.",
+            "required": false,
+            "schema": {
+              "description": "Sort criteria. Can be one of: created_date, download_count, like_count, trending_score. Defaults to trending_score.",
+              "default": "trending_score",
+              "anyOf": [
+                {
+                  "enum": [
+                    "sharing_date_unix",
+                    "purchased_count",
+                    "like_count",
+                    "trending_score"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "trending_score"
+              ],
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "featured",
+            "in": "query",
+            "description": "Filter featured sound effects.",
+            "required": false,
+            "schema": {
+              "description": "Filter featured sound effects.",
+              "type": "boolean",
+              "default": false,
+              "examples": [
+                true
+              ],
+              "title": "Featured"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSharedSoundGenerationsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sound-effects-explore"
+        ]
+      }
+    },
+    "/v1/shared-sound-generations/{sound_effect_generation_id}/purchase": {
+      "post": {
+        "operationId": "Purchases_shared_sound_effect_v1_shared_sound_generations__sound_effect_generation_id__purchase_post",
+        "summary": "Purchases Shared Sound Effect",
+        "description": "Purchases shared sound effect and charges user for the purchase.",
+        "parameters": [
+          {
+            "name": "sound_effect_generation_id",
+            "in": "path",
+            "description": "sound_effect_generation_id to be used, you can use GET https://api.elevenlabs.io/v1/sound-effects-history to receive a list of history items and their sound_effect_generation_ids.",
+            "required": true,
+            "schema": {
+              "description": "sound_effect_generation_id to be used, you can use GET https://api.elevenlabs.io/v1/sound-effects-history to receive a list of history items and their sound_effect_generation_ids.",
+              "type": "string",
+              "examples": [
+                "VW7YKqPnjY4h39yTbx2L"
+              ],
+              "title": "Sound Effect Generation Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "audio/mpeg": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sound-effects-explore"
+        ]
+      }
+    },
     "/v1/voices/{voice_id}/samples/{sample_id}": {
       "delete": {
         "operationId": "Delete_sample_v1_voices__voice_id__samples__sample_id__delete",
@@ -1398,6 +1659,204 @@
         ],
         "x-fern-sdk-group-name": "text_to_speech",
         "x-fern-sdk-method-name": "stream_with_timestamps",
+        "x-fern-streaming": true
+      }
+    },
+    "/v1/text-to-dialogue": {
+      "post": {
+        "operationId": "Text_to_dialogue__multi_voice__v1_text_to_dialogue_post",
+        "summary": "Text To Dialogue (Multi-Voice)",
+        "description": "Converts a list of text and voice ID pairs into speech (dialogue) and returns audio.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Text_to_dialogue__multi_voice__v1_text_to_dialogue_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The generated audio file",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-dialogue"
+        ],
+        "x-fern-sdk-group-name": "text_to_dialogue",
+        "x-fern-sdk-method-name": "convert",
+        "x-fern-streaming": true
+      }
+    },
+    "/v1/text-to-dialogue/stream": {
+      "post": {
+        "operationId": "Text_to_dialogue__multi_voice__streaming_v1_text_to_dialogue_stream_post",
+        "summary": "Text To Dialogue (Multi-Voice) Streaming",
+        "description": "Converts a list of text and voice ID pairs into speech (dialogue) and returns an audio stream.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Text_to_dialogue__multi_voice__streaming_v1_text_to_dialogue_stream_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Streaming audio data",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-dialogue"
+        ],
+        "x-fern-sdk-group-name": "text_to_dialogue",
+        "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
       }
     },
@@ -16395,7 +16854,8 @@
           "signed_url",
           "shareable_link",
           "livekit_token",
-          "livekit_token_website"
+          "livekit_token_website",
+          "genesys_api_key"
         ],
         "title": "AuthorizationMethod"
       },
@@ -20301,9 +20761,8 @@
             ],
             "examples": [
               {
-                "quality": 0.5,
-                "similarity_boost": 0.5,
-                "stability": 0.5
+                "stability": 0.5,
+                "use_speaker_boost": true
               }
             ]
           },
@@ -20392,9 +20851,8 @@
             ],
             "examples": [
               {
-                "quality": 0.5,
-                "similarity_boost": 0.5,
-                "stability": 0.5
+                "stability": 0.5,
+                "use_speaker_boost": true
               }
             ]
           },
@@ -23241,21 +23699,6 @@
             ],
             "title": "Llm Override"
           },
-          "source_medium": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "audio",
-                  "text"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Medium"
-          },
           "time_in_call_secs": {
             "type": "integer",
             "title": "Time In Call Secs"
@@ -23305,6 +23748,21 @@
               }
             ],
             "title": "Original Message"
+          },
+          "source_medium": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "audio",
+                  "text"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Medium"
           }
         },
         "required": [
@@ -23370,21 +23828,6 @@
             ],
             "title": "Llm Override"
           },
-          "source_medium": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "audio",
-                  "text"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Medium"
-          },
           "time_in_call_secs": {
             "type": "integer",
             "title": "Time In Call Secs"
@@ -23434,6 +23877,21 @@
               }
             ],
             "title": "Original Message"
+          },
+          "source_medium": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "audio",
+                  "text"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Medium"
           }
         },
         "required": [
@@ -24065,7 +24523,7 @@
           },
           "tts": {
             "description": "Configuration for conversational text to speech",
-            "$ref": "#/components/schemas/TTSConversationalConfig"
+            "$ref": "#/components/schemas/TTSConversationalConfig-Input"
           },
           "conversation": {
             "description": "Configuration for conversational events",
@@ -24099,7 +24557,7 @@
           },
           "tts": {
             "description": "Configuration for conversational text to speech",
-            "$ref": "#/components/schemas/TTSConversationalConfig"
+            "$ref": "#/components/schemas/TTSConversationalConfig-Output"
           },
           "conversation": {
             "description": "Configuration for conversational events",
@@ -24344,6 +24802,24 @@
                 "type": "null"
               }
             ]
+          },
+          "request_headers": {
+            "description": "Headers that should be included in the request",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/ConvAISecretLocator"
+                },
+                {
+                  "$ref": "#/components/schemas/ConvAIDynamicVariable"
+                }
+              ]
+            },
+            "title": "Request Headers"
           }
         },
         "required": [
@@ -27112,6 +27588,39 @@
         ],
         "title": "GetPronunciationDictionaryMetadataResponseModel"
       },
+      "GetSharedSoundGenerationsResponseModel": {
+        "type": "object",
+        "properties": {
+          "shared_sound_generations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SharedSoundGenerationResponseModel"
+            },
+            "title": "Shared Sound Generations"
+          },
+          "last_sort_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sort Id"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "shared_sound_generations",
+          "last_sort_id",
+          "has_more"
+        ],
+        "title": "GetSharedSoundGenerationsResponseModel"
+      },
       "GetSpeechHistoryResponseModel": {
         "type": "object",
         "properties": {
@@ -27661,17 +28170,41 @@
           "gpt-3.5-turbo",
           "gemini-1.5-pro",
           "gemini-1.5-flash",
-          "gemini-2.0-flash-001",
+          "gemini-2.0-flash",
           "gemini-2.0-flash-lite",
           "gemini-2.5-flash",
-          "gemini-1.0-pro",
           "claude-sonnet-4",
           "claude-3-7-sonnet",
           "claude-3-5-sonnet",
           "claude-3-5-sonnet-v1",
           "claude-3-haiku",
           "grok-beta",
-          "custom-llm"
+          "custom-llm",
+          "gemini-2.5-flash-preview-05-20",
+          "gemini-2.5-flash-preview-04-17",
+          "gemini-2.0-flash-lite-001",
+          "gemini-2.0-flash-001",
+          "gemini-1.5-flash-002",
+          "gemini-1.5-flash-001",
+          "gemini-1.5-pro-002",
+          "gemini-1.5-pro-001",
+          "claude-sonnet-4@20250514",
+          "claude-3-7-sonnet@20250219",
+          "claude-3-5-sonnet@20240620",
+          "claude-3-5-sonnet-v2@20241022",
+          "claude-3-haiku@20240307",
+          "gpt-4.1-2025-04-14",
+          "gpt-4.1-mini-2025-04-14",
+          "gpt-4.1-nano-2025-04-14",
+          "gpt-4o-mini-2024-07-18",
+          "gpt-4o-2024-11-20",
+          "gpt-4o-2024-08-06",
+          "gpt-4o-2024-05-13",
+          "gpt-4-0613",
+          "gpt-4-0314",
+          "gpt-4-turbo-2024-04-09",
+          "gpt-3.5-turbo-0125",
+          "gpt-3.5-turbo-1106"
         ],
         "title": "LLM"
       },
@@ -28644,11 +29177,6 @@
             "type": "boolean",
             "title": "Can Use Style"
           },
-          "can_use_quality": {
-            "description": "Whether the model can use quality.",
-            "type": "boolean",
-            "title": "Can Use Quality"
-          },
           "can_use_speaker_boost": {
             "description": "Whether the model can use speaker boost.",
             "type": "boolean",
@@ -28715,7 +29243,6 @@
           "can_be_finetuned": true,
           "can_do_text_to_speech": true,
           "can_do_voice_conversion": true,
-          "can_use_quality": false,
           "can_use_speaker_boost": true,
           "can_use_style": true,
           "concurrency_group": "standard",
@@ -28745,7 +29272,6 @@
           "can_do_text_to_speech",
           "can_do_voice_conversion",
           "can_use_style",
-          "can_use_quality",
           "can_use_speaker_boost",
           "serves_pro_voices",
           "token_cost_factor",
@@ -28775,17 +29301,17 @@
             ],
             "title": "Stability"
           },
-          "similarity_boost": {
-            "description": "Determines how closely the AI should adhere to the original voice when attempting to replicate it.",
+          "use_speaker_boost": {
+            "description": "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
             "anyOf": [
               {
-                "type": "number"
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Similarity Boost"
+            "title": "Use Speaker Boost"
           }
         },
         "example": {
@@ -30639,7 +31165,7 @@
           },
           "llm": {
             "description": "The LLM to query with the prompt and the chat history",
-            "default": "gemini-2.0-flash-001",
+            "default": "gemini-2.0-flash",
             "$ref": "#/components/schemas/LLM"
           },
           "temperature": {
@@ -30775,7 +31301,7 @@
           },
           "llm": {
             "description": "The LLM to query with the prompt and the chat history",
-            "default": "gemini-2.0-flash-001",
+            "default": "gemini-2.0-flash",
             "$ref": "#/components/schemas/LLM"
           },
           "temperature": {
@@ -30911,7 +31437,7 @@
           },
           "llm": {
             "description": "The LLM to query with the prompt and the chat history",
-            "default": "gemini-2.0-flash-001",
+            "default": "gemini-2.0-flash",
             "$ref": "#/components/schemas/LLM"
           },
           "temperature": {
@@ -32453,6 +32979,77 @@
         ],
         "title": "ShareOptionResponseModel"
       },
+      "SharedSoundGenerationResponseModel": {
+        "type": "object",
+        "properties": {
+          "public_user_id": {
+            "type": "string",
+            "title": "Public User Id"
+          },
+          "history_item_id": {
+            "type": "string",
+            "title": "History Item Id"
+          },
+          "generation_id": {
+            "type": "string",
+            "title": "Generation Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "labels": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Labels"
+          },
+          "purchased_count": {
+            "type": "integer",
+            "title": "Purchased Count"
+          },
+          "like_count": {
+            "type": "integer",
+            "title": "Like Count"
+          },
+          "featured": {
+            "type": "boolean",
+            "title": "Featured"
+          },
+          "preview_url": {
+            "type": "string",
+            "title": "Preview Url"
+          },
+          "purchased": {
+            "type": "boolean",
+            "title": "Purchased"
+          },
+          "icon_url": {
+            "type": "string",
+            "title": "Icon Url"
+          }
+        },
+        "required": [
+          "public_user_id",
+          "history_item_id",
+          "generation_id",
+          "text",
+          "category",
+          "labels",
+          "purchased_count",
+          "like_count",
+          "featured",
+          "preview_url",
+          "purchased",
+          "icon_url"
+        ],
+        "title": "SharedSoundGenerationResponseModel"
+      },
       "SimilarVoice": {
         "type": "object",
         "properties": {
@@ -33815,6 +34412,58 @@
         ],
         "title": "SubscriptionUsageResponseModel"
       },
+      "SupportedVoice": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Label"
+          },
+          "voice_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Voice Id"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "model_family": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSModelFamily"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "voice_id"
+        ],
+        "title": "SupportedVoice"
+      },
       "SystemToolConfig-Input": {
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
@@ -33963,7 +34612,7 @@
         ],
         "title": "SystemToolConfig"
       },
-      "TTSConversationalConfig": {
+      "TTSConversationalConfig-Input": {
         "type": "object",
         "properties": {
           "model_id": {
@@ -33979,6 +34628,94 @@
             "title": "Voice Id",
             "x-convai-client-override": true,
             "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SupportedVoice"
+            },
+            "title": "Supported Voices"
+          },
+          "agent_output_audio_format": {
+            "description": "The audio format to use for TTS",
+            "default": "pcm_16000",
+            "$ref": "#/components/schemas/TTSOutputFormat"
+          },
+          "optimize_streaming_latency": {
+            "description": "The optimization for streaming latency",
+            "default": 3,
+            "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
+          },
+          "stability": {
+            "description": "The stability of generated speech",
+            "type": "number",
+            "default": 0.5,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Stability"
+          },
+          "speed": {
+            "description": "The speed of generated speech",
+            "type": "number",
+            "default": 1,
+            "maximum": 1.2,
+            "minimum": 0.7,
+            "title": "Speed"
+          },
+          "similarity_boost": {
+            "description": "The similarity boost for generated speech",
+            "type": "number",
+            "default": 0.8,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Similarity Boost"
+          },
+          "pronunciation_dictionary_locators": {
+            "description": "The pronunciation dictionary locators",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PydanticPronunciationDictionaryVersionLocator"
+            },
+            "title": "Pronunciation Dictionary Locators"
+          }
+        },
+        "example": {
+          "agent_output_audio_format": "pcm_16000",
+          "model_id": "eleven_turbo_v2",
+          "optimize_streaming_latency": 3,
+          "pronunciation_dictionary_locators": [],
+          "similarity_boost": 0.8,
+          "speed": 1,
+          "stability": 0.5,
+          "voice_id": "cjVigY5qzO86Huf0OWal"
+        },
+        "title": "TTSConversationalConfig"
+      },
+      "TTSConversationalConfig-Output": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "description": "The model to use for TTS",
+            "default": "eleven_turbo_v2",
+            "$ref": "#/components/schemas/TTSConversationalModel"
+          },
+          "voice_id": {
+            "description": "The voice ID to use for TTS",
+            "type": "string",
+            "default": "cjVigY5qzO86Huf0OWal",
+            "minLength": 0,
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SupportedVoice"
+            },
+            "title": "Supported Voices"
           },
           "agent_output_audio_format": {
             "description": "The audio format to use for TTS",
@@ -34079,6 +34816,15 @@
           "eleven_flash_v2_5"
         ],
         "title": "TTSConversationalModel"
+      },
+      "TTSModelFamily": {
+        "type": "string",
+        "enum": [
+          "turbo",
+          "flash",
+          "multilingual"
+        ],
+        "title": "TTSModelFamily"
       },
       "TTSOptimizeStreamingLatency": {
         "type": "integer",
@@ -35499,6 +36245,18 @@
             ],
             "title": "Stability"
           },
+          "use_speaker_boost": {
+            "description": "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Speaker Boost"
+          },
           "similarity_boost": {
             "description": "Determines how closely the AI should adhere to the original voice when attempting to replicate it.",
             "anyOf": [
@@ -35511,18 +36269,6 @@
             ],
             "title": "Similarity Boost"
           },
-          "quality": {
-            "description": "Controls the audio quality of the generated speech. Higher values produce clearer audio but increase generation time.",
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Quality"
-          },
           "style": {
             "description": "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.",
             "anyOf": [
@@ -35534,18 +36280,6 @@
               }
             ],
             "title": "Style"
-          },
-          "use_speaker_boost": {
-            "description": "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.",
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Use Speaker Boost"
           },
           "speed": {
             "description": "Adjusts the speed of the voice. A value of 1.0 is the default speed, while values less than 1.0 slow down the speech, and values greater than 1.0 speed it up.",
@@ -36763,7 +37497,7 @@
           "text_input_enabled": {
             "description": "Whether the user should be able to send text messages",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Text Input Enabled"
           },
           "text_contents": {
@@ -36779,7 +37513,7 @@
           "supports_text_only": {
             "description": "Whether the widget can switch to text only mode",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Supports Text Only"
           },
           "custom_avatar_path": {
@@ -37079,7 +37813,7 @@
           "text_input_enabled": {
             "description": "Whether the user should be able to send text messages",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Text Input Enabled"
           },
           "text_contents": {
@@ -37095,7 +37829,7 @@
           "supports_text_only": {
             "description": "Whether the widget can switch to text only mode",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Supports Text Only"
           },
           "custom_avatar_path": {
@@ -37395,7 +38129,7 @@
           "text_input_enabled": {
             "description": "Whether the user should be able to send text messages",
             "type": "boolean",
-            "default": false,
+            "default": true,
             "title": "Text Input Enabled"
           },
           "text_contents": {
