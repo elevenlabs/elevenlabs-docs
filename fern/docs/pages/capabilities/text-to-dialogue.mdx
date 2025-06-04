@@ -1,0 +1,187 @@
+---
+title: Text to Dialogue
+subtitle: Learn how to create immersive, natural-sounding dialogue with ElevenLabs.
+---
+
+<Warning>
+  Eleven v3 API access is currently not publicly available, but will be soon. To request access,
+  please [contact our sales team](https://elevenlabs.io/contact-sales).
+</Warning>
+
+## Overview
+
+The ElevenLabs [Text to Dialogue](/docs/api-reference/text-to-dialogue) API creates natural sounding expressive dialogue from text using the Eleven v3 model. Popular use cases include:
+
+- Generating pitch perfect conversations for video games
+- Creating immersive dialogue for podcasts and other audio content
+- Bring audiobooks to life with expressive narration
+
+Text to Dialogue is not intended for use in real-time applications like Conversational AI. Several generations might be required to achieve the desired results. When integrating Text to Dialogue into your application, consider generating several generations and allowing the user to select the best one.
+
+Listen to a sample:
+
+<elevenlabs-audio-player
+    audio-title="Dialogue example"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue.mp3"
+/>
+
+<CardGroup cols={2}>
+  <Card
+    title="Developer tutorial"
+    icon="duotone book-sparkles"
+    href="/docs/cookbooks/text-to-dialogue/quickstart"
+  >
+    Learn how to integrate text to dialogue into your application.
+  </Card>
+  <Card
+    title="Product guide"
+    icon="duotone book-user"
+    href="/docs/product-guides/playground/text-to-dialogue"
+  >
+    Step-by-step guide for using text to dialogue in ElevenLabs.
+  </Card>
+</CardGroup>
+
+## Voice options
+
+ElevenLabs offers thousands of voices across 70+ languages through multiple creation methods:
+
+- [Voice library](/docs/capabilities/voices) with 3,000+ community-shared voices
+- [Professional voice cloning](/docs/capabilities/voices#cloned) for highest-fidelity replicas
+- [Instant voice cloning](/docs/capabilities/voices#cloned) for quick voice replication
+- [Voice design](/docs/capabilities/voices#voice-design) to generate custom voices from text descriptions
+
+Learn more about our [voice options](/docs/capabilities/voices).
+
+## Prompting
+
+The models interpret emotional context directly from the text input. For example, adding
+descriptive text like "she said excitedly" or using exclamation marks will influence the speech
+emotion. Voice settings like Stability and Similarity help control the consistency, while the
+underlying emotion comes from textual cues.
+
+Read the [prompting guide](/docs/best-practices/prompting) for more details.
+
+### Emotional deliveries with audio tags
+
+<Warning>This feature is still under active development, actual results may vary.</Warning>
+
+The Eleven v3 model allows the use of non-speech audio events to influence the delivery of the dialogue. This is done by inserting the audio events into the text input wrapped in square brackets.
+
+Audio tags come in a few different forms:
+
+### Emotions and delivery
+
+For example, [sad], [laughing] and [whispering]
+
+### Audio events
+
+For example, [leaves rustling], [gentle footsteps] and [applause].
+
+### Overall direction
+
+For example, [football], [wrestling match] and [auctioneer].
+
+Some examples include:
+
+```
+"[giggling] That's really funny!"
+"[groaning] That was awful."
+"Well, [sigh] I'm not sure what to say."
+```
+
+<elevenlabs-audio-player
+    audio-title="Expressive dialogue"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue-emotive.mp3"
+/>
+
+You can also use punctuation to indicate the flow of dialog, like interruptions:
+
+```
+"[cautiously] Hello, is this seat-"
+"[jumping in] Free? [cheerfully] Yes it is."
+```
+
+<elevenlabs-audio-player
+    audio-title="Interruption"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue-interruption.mp3"
+/>
+
+Ellipses can be used to indicate trailing sentences:
+
+```
+"[indecisive] Hi, can I get uhhh..."
+"[quizzically] The usual?"
+"[elated] Yes! [laughs] I'm so glad you knew!"
+```
+
+<elevenlabs-audio-player
+    audio-title="Ellipses"
+    audio-src="https://github.com/elevenlabs/elevenlabs-docs/raw/refs/heads/main/fern/assets/audio/dialogue-ellipses.mp3"
+/>
+
+## Supported formats
+
+The default response format is "mp3", but other formats like "PCM", & "μ-law" are available.
+
+- **MP3**
+  - Sample rates: 22.05kHz - 44.1kHz
+  - Bitrates: 32kbps - 192kbps
+  - 22.05kHz @ 32kbps
+  - 44.1kHz @ 32kbps, 64kbps, 96kbps, 128kbps, 192kbps
+- **PCM (S16LE)**
+  - Sample rates: 16kHz - 44.1kHz
+  - Bitrates: 8kHz, 16kHz, 22.05kHz, 24kHz, 44.1kHz, 48kHz
+  - 16-bit depth
+- **μ-law**
+  - 8kHz sample rate
+  - Optimized for telephony applications
+- **A-law**
+  - 8kHz sample rate
+  - Optimized for telephony applications
+- **Opus**
+  - Sample rate: 48kHz
+  - Bitrates: 32kbps - 192kbps
+
+<Success>
+  Higher quality audio options are only available on paid tiers - see our [pricing
+  page](https://elevenlabs.io/pricing/api) for details.
+</Success>
+
+## Supported languages
+
+<Markdown src="/snippets/v3-model-languages.mdx" />
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Which models can I use?">
+    Text to Dialogue is only available on the Eleven v3 model.
+  </Accordion>
+  <Accordion title="Do I own the audio output?">
+    Yes. You retain ownership of any audio you generate. However, commercial usage rights are only
+    available with paid plans. With a paid subscription, you may use generated audio for commercial
+    purposes and monetize the outputs if you own the IP rights to the input content.
+  </Accordion>
+  <Accordion title="What qualifies as a free regeneration?">
+    A free regeneration allows you to regenerate the same text to speech content without additional cost, subject to these conditions:
+
+    - Only available within the ElevenLabs dashboard.
+    - You can regenerate each piece of content up to 2 times for free.
+    - The content must be exactly the same as the previous generation. Any changes to the text, voice settings, or other parameters will require a new, paid generation.
+
+    Free regenerations are useful in case there is a slight distortion in the audio output. According to ElevenLabs' internal benchmarks, regenerations will solve roughly half of issues with quality, with remaining issues usually due to poor training data.
+
+  </Accordion>
+  <Accordion title="How many speakers can my dialogue have?">
+    There is no limit to the number of speakers in a dialogue.
+  </Accordion>
+  <Accordion title="Why is my output sometimes inconsistent?">
+    The models are nondeterministic. For consistency, use the optional [seed
+    parameter](/docs/api-reference/text-to-speech/convert#request.body.seed), though subtle
+    differences may still occur.
+  </Accordion>
+  <Accordion title="What's the best practice for large text conversions?">
+    Split long text into segments and use streaming for real-time playback and efficient processing.
+  </Accordion>
+</AccordionGroup>

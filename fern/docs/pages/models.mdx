@@ -17,6 +17,7 @@ The ElevenLabs API offers a range of audio models optimized for different use ca
 
 | Model ID                     | Description                                                                                                                                                                                                           | Languages                                                                                                                                                                                       |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eleven_v3`                  | Human-like and expressive speech generation                                                                                                                                                                           | [70+ languages](/docs/models#supported-languages)                                                                                                                                               |
 | `eleven_multilingual_v2`     | Our most lifelike model with rich emotional expression                                                                                                                                                                | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru`                   |
 | `eleven_flash_v2_5`          | Ultra-fast model optimized for real-time use (~75ms&dagger;)                                                                                                                                                          | All `eleven_multilingual_v2` languages plus: `hu`, `no`, `vi`                                                                                                                                   |
 | `eleven_flash_v2`            | Ultra-fast model optimized for real-time use (~75ms&dagger;)                                                                                                                                                          | `en`                                                                                                                                                                                            |
@@ -44,6 +45,39 @@ These models are maintained for backward compatibility but are not recommended f
 
 </Accordion>
 
+## Eleven v3 (alpha)
+
+<Warning>
+  This model is currently in alpha and is subject to change. Eleven v3 is not made for real-time
+  applications like Conversational AI. When integrating Eleven v3 into your application, consider
+  generating several generations and allowing the user to select the best one.
+</Warning>
+
+Eleven v3 is our latest and most advanced speech synthesis model. It is a state-of-the-art model that produces natural, life-like speech with high emotional range and contextual understanding across multiple languages.
+
+This model works well in the following scenarios:
+
+- **Character Discussions**: Excellent for audio experiences with multiple characters that interact with each other.
+- **Audiobook Production**: Perfect for long-form narration with complex emotional delivery.
+- **Emotional Dialogue**: Generate natural, lifelike dialogue with high emotional range and contextual understanding.
+
+With Eleven v3 comes a new Text to Dialogue API, which allows you to generate natural, lifelike dialogue with high emotional range and contextual understanding across multiple languages. Eleven v3 can also be used with the Text to Speech API to generate natural, lifelike speech with high emotional range and contextual understanding across multiple languages.
+
+<Warning>
+  Eleven v3 API access is currently not publicly available, but will be soon. To request access,
+  please [contact our sales team](https://elevenlabs.io/contact-sales).
+</Warning>
+
+Read more about the Text to Dialogue API [here](/docs/capabilities/text-to-dialogue).
+
+### Model selection
+
+The model can be used with the Text to Speech API by selecting the `eleven_v3` model ID. The Text to Dialogue API defaults to using the v3 model. Alternatively you can select a preview version which is formatted as `eleven_v3_preview_YYYY_MM_DD`. When a preview version has been evaluated and is ready for production, it will be promoted to the `eleven_v3` model ID. Use the evergreen `eleven_v3` model ID for the most stable experience and the preview version for the latest features.
+
+### Supported languages
+
+<Markdown src="/snippets/v3-model-languages.mdx" />
+
 ## Multilingual v2
 
 Eleven Multilingual v2 is our most advanced, emotionally-aware speech synthesis model. It produces natural, lifelike speech with high emotional range and contextual understanding across multiple languages.
@@ -52,10 +86,10 @@ The model delivers consistent voice quality and personality across all supported
 
 This model excels in scenarios requiring high-quality, emotionally nuanced speech:
 
-- **Audiobook Production**: Perfect for long-form narration with complex emotional delivery
-- **Character Voiceovers**: Ideal for gaming and animation due to its emotional range
-- **Professional Content**: Well-suited for corporate videos and e-learning materials
-- **Multilingual Projects**: Maintains consistent voice quality across language switches
+- **Character Voiceovers**: Ideal for gaming and animation due to its emotional range.
+- **Professional Content**: Well-suited for corporate videos and e-learning materials.
+- **Multilingual Projects**: Maintains consistent voice quality across language switches.
+- **Stable Quality**: Produces consistent, high-quality audio output.
 
 While it has a higher latency & cost per character than Flash models, it delivers superior quality for projects where lifelike speech is important.
 
@@ -69,9 +103,9 @@ The model balances speed and quality, making it ideal for interactive applicatio
 
 This model is particularly well-suited for:
 
-- **Conversational AI**: Perfect for real-time voice agents and chatbots
-- **Interactive Applications**: Ideal for games and applications requiring immediate response
-- **Large-Scale Processing**: Efficient for bulk text-to-speech conversion
+- **Conversational AI**: Perfect for real-time voice agents and chatbots.
+- **Interactive Applications**: Ideal for games and applications requiring immediate response.
+- **Large-Scale Processing**: Efficient for bulk text-to-speech conversion.
 
 With its lower price point and 75ms latency, Flash v2.5 is the cost-effective option for anyone needing fast, reliable speech synthesis across multiple languages.
 
@@ -240,8 +274,9 @@ The diagram below is an example of how 4 concurrent calls with different users c
   </Accordion>
   <Accordion title="Character voiceovers">
       Generally, more than 100 simultaneous character voiceovers can be supported for a concurrency limit of 5.
-      
-      The number can vary depending on the character’s dialogue frequency, the length of pauses, and in-game actions between lines. 
+
+      The number can vary depending on the character’s dialogue frequency, the length of pauses, and in-game actions between lines.
+
   </Accordion>
   <Accordion title="Live Dubbing">
       Concurrent dubbing streams generally follow the provided heuristic.
