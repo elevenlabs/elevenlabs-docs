@@ -545,6 +545,14 @@ paths:
     get:
       x-fern-audiences:
         - convai
+  /v1/convai/knowledge-base/{documentation_id}/rag-index/{rag_index_id}:
+    delete:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base/rag-index:
+    get:
+      x-fern-audiences:
+        - convai
   /v1/convai/settings:
     get:
       x-fern-audiences:
@@ -570,6 +578,9 @@ paths:
     post:
       x-fern-audiences:
         - convai
+    get:
+      x-fern-audiences:
+        - convai
   /v1/convai/sip-trunk/outbound-call:
     post:
       x-fern-audiences:
@@ -580,6 +591,14 @@ paths:
         - convai
   /v1/convai/batch-calling/workspace:
     get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/{batch_id}/cancel:
+    post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/{batch_id}/retry:
+    post:
       x-fern-audiences:
         - convai
   /v1/convai/agent/{agent_id}/llm-usage/calculate:
@@ -715,6 +734,12 @@ paths:
   /v1/voices/pvc:
     post:
       summary: Create PVC voice
+  /v1/shared-sound-generations:
+    get:
+      x-fern-ignore: true
+  /v1/shared-sound-generations/{sound_effect_generation_id}/purchase:
+    post:
+      x-fern-ignore: true
 components:
   schemas:
     Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:
