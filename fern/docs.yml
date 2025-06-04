@@ -96,6 +96,9 @@ navigation:
                     path: docs/pages/developer-guides/cookbooks/text-to-speech/supabase-streaming.mdx
                   - page: Twilio
                     path: docs/pages/developer-guides/cookbooks/text-to-speech/twilio.mdx
+              - page: Text to Dialogue
+                icon: duotone people-arrows
+                path: docs/pages/developer-guides/cookbooks/text-to-dialogue/quickstart.mdx
               - section: Speech to Text
                 icon: duotone pen-clip
                 contents:
@@ -105,9 +108,8 @@ navigation:
                   #   path: docs/pages/developer-guides/cookbooks/speech-to-text/streaming.mdx
                   - page: Telegram bot
                     path: docs/pages/developer-guides/cookbooks/speech-to-text/telegram-bot.mdx
-              - page: Text to Dialogue
-                icon: duotone people-arrows
-                path: docs/pages/developer-guides/cookbooks/text-to-dialogue/quickstart.mdx
+                  - page: Webhooks
+                    path: docs/pages/developer-guides/cookbooks/speech-to-text/webhooks.mdx
               - page: Voice Changer
                 icon: duotone message-pen
                 path: docs/pages/developer-guides/cookbooks/voice-changer/quickstart.mdx
@@ -386,6 +388,9 @@ navigation:
             icon: duotone waveform-lines
             path: conversational-ai/pages/customization/voice.mdx
             contents:
+              - page: Multi-voice support
+                icon: duotone masks-theater
+                path: conversational-ai/pages/customization/voice/multi-voice.mdx
               - page: Pronunciation dictionary
                 icon: duotone microphone-stand
                 path: conversational-ai/pages/customization/voice/pronunciation-dictionary.mdx
@@ -466,6 +471,12 @@ navigation:
               - page: Plivo
                 icon: duotone phone-volume
                 path: conversational-ai/pages/guides/telephony/plivo.mdx
+          - section: CCaaS integrations
+            icon: duotone phone-intercom
+            contents:
+              - page: Genesys
+                icon: duotone headset
+                path: conversational-ai/pages/guides/ccaas/genesys.mdx
           - section: Twilio integration
             icon: duotone phone
             contents:
@@ -652,8 +663,6 @@ navigation:
                     title: Get signed URL
                   - endpoint: POST /v1/convai/conversations/{conversation_id}/feedback
                     title: Send conversation feedback
-                  - endpoint: POST /v1/convai/twilio/outbound-call
-                    title: Outbound call via twilio
               - section: Knowledge Base
                 contents:
                   - endpoint: GET /v1/convai/knowledge-base
@@ -661,6 +670,7 @@ navigation:
                   - endpoint: DELETE /v1/convai/knowledge-base/{documentation_id}
                     title: Delete knowledge base document
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}
+                    slug: /get-document
                     title: Get knowledge base document
                   - endpoint: PATCH /v1/convai/knowledge-base/{documentation_id}
                     title: Update knowledge base document
@@ -727,6 +737,10 @@ navigation:
                 contents:
                   - endpoint: POST /v1/convai/sip-trunk/outbound-call
                     title: Outbound call via SIP trunk
+              - section: Twilio
+                contents:
+                  - endpoint: POST /v1/convai/twilio/outbound-call
+                    title: Outbound call via twilio
               - section: Batch Calling
                 contents:
                   - endpoint: POST /v1/convai/batch-calling/submit
@@ -772,11 +786,9 @@ navigation:
                   title: Text to Speech
                   contents:
                     - endpoint: GET /v1/text-to-speech/{voice_id}/stream-input
-                      title: WebSockets
-              - section: Multi-Context Text to Speech
-                contents:
-                  - endpoint: GET /v1/text-to-speech/{voice_id}/multi-stream-input
-                    title: Multi-Context WebSockets
+                      title: WebSocket
+                    - endpoint: GET /v1/text-to-speech/{voice_id}/multi-stream-input
+                      title: Multi-Context WebSocket
               - speechToText:
                   title: Speech to Text
               - textToDialogue:
@@ -1411,7 +1423,7 @@ redirects:
   - source: /docs/api-reference/workspace/delete-member
     destination: /docs/api-reference/workspace/members/delete
   - source: /docs/api-reference/knowledge-base/get
-    destination: /docs/api-reference/knowledge-base/get
+    destination: /docs/api-reference/knowledge-base/get-document
   - source: /docs/api-reference/knowledge-base/get-knowledge-base-list
     destination: /docs/api-reference/knowledge-base/list
   - source: /docs/api-reference/conversations/get-conversation
@@ -1469,4 +1481,8 @@ redirects:
   - source: /docs/conversational-ai/customization/privacy/hipaa-compliance
     destination: /docs/conversational-ai/legal/hipaa
   - source: /docs/conversational-ai/customization/hipaa-compliance
-    destination: docs/conversational-ai/legal/hipaa-compliance
+    destination: /docs/conversational-ai/legal/hipaa-compliance
+  - source: /docs/api-reference/conversations/outbound-call
+    destination: /docs/api-reference/twilio/outbound-call
+  - source: /docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input
+    destination: /docs/api-reference/text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input
