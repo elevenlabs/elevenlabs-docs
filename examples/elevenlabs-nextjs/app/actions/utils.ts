@@ -7,9 +7,11 @@ import { Err, Ok, Result } from '@/types';
 export async function getElevenLabsClient(): Promise<Result<ElevenLabsClient>> {
   try {
     const userKeyResult = await getApiKey();
-    const userApiKey = userKeyResult.ok ? userKeyResult.value : null;
+    if (!userKeyResult.ok) {
+      return Err(userKeyResult.error);
+    }
 
-    const apiKey = userApiKey || env.ELEVENLABS_API_KEY;
+    const apiKey = userKeyResult.value || env.ELEVENLABS_API_KEY;
 
     if (!apiKey) {
       return Err(
