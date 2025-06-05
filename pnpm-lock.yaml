@@ -42,9 +42,12 @@ importers:
 
   examples/elevenlabs-nextjs:
     dependencies:
-      '@11labs/react':
-        specifier: ^0.0.8
-        version: 0.0.8(react@19.1.0)
+      '@elevenlabs/elevenlabs-js':
+        specifier: ^2.0.1
+        version: 2.1.0
+      '@elevenlabs/react':
+        specifier: ^0.1.5
+        version: 0.1.6(react@19.1.0)
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.1.0)
@@ -114,9 +117,6 @@ importers:
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
-      elevenlabs:
-        specifier: ^1.54.0
-        version: 1.57.0
       iron-session:
         specifier: ^8.0.4
         version: 8.0.4
@@ -235,14 +235,6 @@ importers:
         version: 4.19.4
 
 packages:
-
-  '@11labs/client@0.0.8':
-    resolution: {integrity: sha512-VKjCAePFy9X+M++vkUPJnxT7pPU4BuA+5pgtTUQWkIG27nxc2KxoDlZq1JsRK9DZdwr5zFFA+TwiFcz3+JG8lQ==}
-
-  '@11labs/react@0.0.8':
-    resolution: {integrity: sha512-ukOag3whs1KwNP13EYTpq6hWfl6qrBksZQyam10sQFy+iMTRysYP1vannoITnEpXOGhsZTHgtOdSZ/L4JFcKFQ==}
-    peerDependencies:
-      react: '>=16.8.0'
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -873,8 +865,16 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
+  '@elevenlabs/client@0.1.6':
+    resolution: {integrity: sha512-lpROzC4m13OfhMdGbV+zpyETWn1NFsj9lXWexZHp5nPNv80/CtmtxLpGPGqMlko73GNlAt3EgmoFPxUKcGVH1A==}
+
   '@elevenlabs/elevenlabs-js@2.1.0':
     resolution: {integrity: sha512-87wuXyli6YUmqzMv0fRkn13a1ujgUXU8eLfh418AoicOiWy5BmmO/GNvFQsZ9iZqG7pqsF9st2gSvWrxf6YWcw==}
+
+  '@elevenlabs/react@0.1.6':
+    resolution: {integrity: sha512-7T7JK4i34T2yKNCrK6dlgv+w7w866dbhJlAN6YCPzqZvbpJnAOJ/eQv/vdIGgiXJ+vc49YFrKSanqiLtiJURfA==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   '@emnapi/core@1.4.3':
     resolution: {integrity: sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g==}
@@ -2939,9 +2939,6 @@ packages:
 
   electron-to-chromium@1.5.149:
     resolution: {integrity: sha512-UyiO82eb9dVOx8YO3ajDf9jz2kKyt98DEITRdeLPstOEuTlLzDA4Gyq5K9he71TQziU5jUVu2OAu5N48HmQiyQ==}
-
-  elevenlabs@1.57.0:
-    resolution: {integrity: sha512-MDzlZUqB3oS9Eq8Fnr865i1EkapUFldVUlZnVlnuSpkNi0suzXfiOR/6WwGDi6QRMvQEZhI8pafsVK9kr+jKrw==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -5184,13 +5181,6 @@ packages:
 
 snapshots:
 
-  '@11labs/client@0.0.8': {}
-
-  '@11labs/react@0.0.8(react@19.1.0)':
-    dependencies:
-      '@11labs/client': 0.0.8
-      react: 19.1.0
-
   '@alloc/quick-lru@5.2.0': {}
 
   '@ampproject/remapping@2.3.0':
@@ -5989,6 +5979,8 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
+  '@elevenlabs/client@0.1.6': {}
+
   '@elevenlabs/elevenlabs-js@2.1.0':
     dependencies:
       command-exists: 1.2.9
@@ -6002,6 +5994,11 @@ snapshots:
       url-join: 4.0.1
     transitivePeerDependencies:
       - encoding
+
+  '@elevenlabs/react@0.1.6(react@19.1.0)':
+    dependencies:
+      '@elevenlabs/client': 0.1.6
+      react: 19.1.0
 
   '@emnapi/core@1.4.3':
     dependencies:
@@ -8247,20 +8244,6 @@ snapshots:
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.149: {}
-
-  elevenlabs@1.57.0:
-    dependencies:
-      command-exists: 1.2.9
-      execa: 5.1.1
-      form-data: 4.0.2
-      form-data-encoder: 4.0.2
-      formdata-node: 6.0.3
-      node-fetch: 2.7.0
-      qs: 6.14.0
-      readable-stream: 4.7.0
-      url-join: 4.0.1
-    transitivePeerDependencies:
-      - encoding
 
   emittery@0.13.1: {}
 
