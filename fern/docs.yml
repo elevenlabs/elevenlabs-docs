@@ -58,6 +58,8 @@ navigation:
             path: docs/pages/capabilities/text-to-speech.mdx
           - page: Speech to Text
             path: docs/pages/capabilities/speech-to-text.mdx
+          - page: Text to Dialogue
+            path: docs/pages/capabilities/text-to-dialogue.mdx
           - page: Voice Changer
             path: docs/pages/capabilities/voice-changer.mdx
           - page: Voice Isolator
@@ -94,6 +96,9 @@ navigation:
                     path: docs/pages/developer-guides/cookbooks/text-to-speech/supabase-streaming.mdx
                   - page: Twilio
                     path: docs/pages/developer-guides/cookbooks/text-to-speech/twilio.mdx
+              - page: Text to Dialogue
+                icon: duotone people-arrows
+                path: docs/pages/developer-guides/cookbooks/text-to-dialogue/quickstart.mdx
               - section: Speech to Text
                 icon: duotone pen-clip
                 contents:
@@ -687,6 +692,12 @@ navigation:
                     title: Create knowledge base document from file
                   - endpoint: POST /v1/convai/knowledge-base/{documentation_id}/rag-index
                     title: Compute RAG index
+                  - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/rag-index
+                    title: Get RAG index
+                  - endpoint: GET /v1/convai/knowledge-base/rag-index
+                    title: Get RAG index overview
+                  - endpoint: DELETE /v1/convai/knowledge-base/{documentation_id}/rag-index/{rag_index_id}
+                    title: Delete RAG index
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/dependent-agents
                     title: Get dependent agents
                   - endpoint: GET /v1/convai/knowledge-base/{documentation_id}/content
@@ -754,6 +765,10 @@ navigation:
                     title: List workspace batch calling jobs
                   - endpoint: GET /v1/convai/batch-calling/{batch_id}
                     title: Get batch call information
+                  - endpoint: POST /v1/convai/batch-calling/{batch_id}/cancel
+                    title: Cancel batch calling job
+                  - endpoint: POST /v1/convai/batch-calling/{batch_id}/retry
+                    title: Retry batch calling job
               - section: LLM Usage
                 contents:
                   - endpoint: POST /v1/convai/llm-usage/calculate
@@ -796,6 +811,8 @@ navigation:
                       title: Multi-Context WebSocket
               - speechToText:
                   title: Speech to Text
+              - textToDialogue:
+                  title: Text to Dialogue
               - speechToSpeech:
                   title: Voice Changer
               - textToSoundEffects:

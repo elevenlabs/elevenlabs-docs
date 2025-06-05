@@ -155,6 +155,28 @@ paths:
   # ================
   # Sound Effects
   # ================
+  /v1/text-to-dialogue:
+    post:
+      summary: Create dialogue
+      description: <Warning>Eleven v3 API access is currently not publicly available, but will be soon.</Warning><br/>Converts a list of text and voice ID pairs into speech (dialogue) and returns audio.
+      x-fern-examples:
+        - request:
+            inputs:
+              [
+                { text: 'Knock knock', voice_id: 'JBFqnCBsd6RMkjVDRZzb' },
+                { text: 'Who is there?', voice_id: 'Aw4FAjKCGjjNkVhN1Xmq' },
+              ]
+  /v1/text-to-dialogue/stream:
+    post:
+      summary: Stream dialogue
+      description: <Warning>Eleven v3 API access is currently not publicly available, but will be soon.</Warning><br/>Converts a list of text and voice ID pairs into speech (dialogue) and returns an audio stream.
+      x-fern-examples:
+        - request:
+            inputs:
+              [
+                { text: 'Knock knock', voice_id: 'JBFqnCBsd6RMkjVDRZzb' },
+                { text: 'Who is there?', voice_id: 'Aw4FAjKCGjjNkVhN1Xmq' },
+              ]
   /v1/sound-generation:
     post:
       summary: Create sound effect
@@ -340,7 +362,10 @@ paths:
       summary: Get pronunciation dictionary by version
   /v1/pronunciation-dictionaries/add-from-file:
     post:
-      summary: Create a pronunciation dictionary
+      summary: Create a pronunciation dictionary from a file
+  /v1/pronunciation-dictionaries/add-from-rules:
+    post:
+      summary: Create a pronunciation dictionary from rules
   /v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules:
     post:
       summary: Add pronunciation dictionary rules
@@ -520,6 +545,14 @@ paths:
     get:
       x-fern-audiences:
         - convai
+  /v1/convai/knowledge-base/{documentation_id}/rag-index/{rag_index_id}:
+    delete:
+      x-fern-audiences:
+        - convai
+  /v1/convai/knowledge-base/rag-index:
+    get:
+      x-fern-audiences:
+        - convai
   /v1/convai/settings:
     get:
       x-fern-audiences:
@@ -545,6 +578,9 @@ paths:
     post:
       x-fern-audiences:
         - convai
+    get:
+      x-fern-audiences:
+        - convai
   /v1/convai/sip-trunk/outbound-call:
     post:
       x-fern-audiences:
@@ -555,6 +591,14 @@ paths:
         - convai
   /v1/convai/batch-calling/workspace:
     get:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/{batch_id}/cancel:
+    post:
+      x-fern-audiences:
+        - convai
+  /v1/convai/batch-calling/{batch_id}/retry:
+    post:
       x-fern-audiences:
         - convai
   /v1/convai/agent/{agent_id}/llm-usage/calculate:
@@ -690,6 +734,12 @@ paths:
   /v1/voices/pvc:
     post:
       summary: Create PVC voice
+  /v1/shared-sound-generations:
+    get:
+      x-fern-ignore: true
+  /v1/shared-sound-generations/{sound_effect_generation_id}/purchase:
+    post:
+      x-fern-ignore: true
 components:
   schemas:
     Body_Patches_an_Agent_settings_v1_convai_agents__agent_id__patch:
@@ -698,9 +748,9 @@ components:
       x-fern-type-name: UpdateAgentRequest
       properties:
         conversation_config:
-          $ref: '#/components/schemas/ConversationalConfig'
+          $ref: '#/components/schemas/ConversationalConfigAPIModel-Input'
         platform_settings:
-          $ref: '#/components/schemas/AgentPlatformSettings'
+          $ref: '#/components/schemas/AgentPlatformSettingsRequestModel'
     OutputFormat:
       type: string
       enum:
