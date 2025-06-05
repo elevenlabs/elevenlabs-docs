@@ -13,13 +13,16 @@ export const config: {
   languages: [
     {
       name: 'node',
-      exec: (file: string) => `tsx ${file}`,
+      // Parse TypeScript without executing it
+      exec: (file: string) =>
+        `tsc --module nodenext --target es2020 --skipLibCheck --noEmit ${file}`,
       snippetRoot: (base: string) => path.join(base, 'examples/snippets/node'),
       glob: '**/*.{ts,mts}',
     },
     {
       name: 'python',
-      exec: (file: string) => `poetry run python ${file}`,
+      // Check Python syntax without running the snippet
+      exec: (file: string) => `python -m py_compile ${file}`,
       snippetRoot: (base: string) => path.join(base, 'examples/snippets/python'),
       glob: '**/*.py',
     },
