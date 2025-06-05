@@ -3,20 +3,10 @@ title: Integrate your own model
 subtitle: Connect an agent to your own LLM or host your own server.
 ---
 
-Currently, the following models are natively supported and can be configured via the agent settings:
-
-- Gemini 2.0 Flash
-- Gemini 1.5 Flash
-- Gemini 1.5 Pro
-- Gemini 1.0 Pro
-- GPT-4o Mini
-- GPT-4o
-- GPT-4 Turbo
-- GPT-3.5 Turbo
-- Claude 3.5 Sonnet
-- Claude 3 Haiku
-
-![Supported models](/assets/images/conversational-ai/llms.png)
+<Note>
+  Custom LLM allows you to connect your conversations to your own LLM via an external endpoint.
+  ElevenLabs also supports [natively integrated LLMs](/docs/conversational-ai/customization/llm)
+</Note>
 
 **Custom LLMs** let you bring your own OpenAI API key or run an entirely custom LLM server.
 
@@ -167,6 +157,258 @@ Now let's make the changes in Elevenlabs
 Direct your server URL to ngrok endpoint, setup "Limit token usage" to 5000 and set "Custom LLM extra body" to true.
 
 You can start interacting with Conversational AI with your own LLM server
+
+## System tools integration
+
+Your custom LLM can trigger [system tools](/docs/conversational-ai/customization/tools/system-tools) to control conversation flow and state. These tools are automatically included in the `tools` parameter of your chat completion requests when configured in your agent.
+
+### How system tools work
+
+1. **LLM Decision**: Your custom LLM decides when to call these tools based on conversation context
+2. **Tool Response**: The LLM responds with function calls in standard OpenAI format
+3. **Backend Processing**: ElevenLabs processes the tool calls and updates conversation state
+
+For more information on system tools, please see [our guide](/docs/conversational-ai/customization/tools/system-tools)
+
+### Available system tools
+
+<AccordionGroup>
+  <Accordion title="End call">
+    **Purpose**: Automatically terminate conversations when appropriate conditions are met.
+
+    **Trigger conditions**: The LLM should call this tool when:
+    - The main task has been completed and user is satisfied
+    - The conversation reached natural conclusion with mutual agreement
+    - The user explicitly indicates they want to end the conversation
+
+    **Parameters**:
+    - `reason` (string, required): The reason for ending the call
+    - `message` (string, optional): A farewell message to send to the user before ending the call
+
+    **Function call format**:
+    ```json
+    {
+      "type": "function",
+      "function": {
+        "name": "end_call",
+        "arguments": "{\"reason\": \"Task completed successfully\", \"message\": \"Thank you for using our service. Have a great day!\"}"
+      }
+    }
+    ```
+
+    **Implementation**: Configure as a system tool in your agent settings. The LLM will receive detailed instructions about when to call this function.
+
+    Learn more: [End call tool](/docs/conversational-ai/customization/tools/system-tools/end-call)
+
+  </Accordion>
+
+  <Accordion title="Language detection">
+    **Purpose**: Automatically switch to the user's detected language during conversations.
+
+    **Trigger conditions**: The LLM should call this tool when:
+    - User speaks in a different language than the current conversation language
+    - User explicitly requests to switch languages
+    - Multi-language support is needed for the conversation
+
+    **Parameters**:
+    - `reason` (string, required): The reason for the language switch
+    - `language` (string, required): The language code to switch to (must be in supported languages list)
+
+    **Function call format**:
+    ```json
+    {
+      "type": "function",
+      "function": {
+        "name": "language_detection",
+        "arguments": "{\"reason\": \"User requested Spanish\", \"language\": \"es\"}"
+      }
+    }
+    ```
+
+    **Implementation**: Configure supported languages in agent settings and add the language detection system tool. The agent will automatically switch voice and responses to match detected languages.
+
+    Learn more: [Language detection tool](/docs/conversational-ai/customization/tools/system-tools/language-detection)
+
+  </Accordion>
+
+  <Accordion title="Agent transfer">
+    **Purpose**: Transfer conversations between specialized AI agents based on user needs.
+
+    **Trigger conditions**: The LLM should call this tool when:
+    - User request requires specialized knowledge or different agent capabilities
+    - Current agent cannot adequately handle the query
+    - Conversation flow indicates need for different agent type
+
+    **Parameters**:
+    - `reason` (string, optional): The reason for the agent transfer
+    - `agent_number` (integer, required): Zero-indexed number of the agent to transfer to (based on configured transfer rules)
+
+    **Function call format**:
+    ```json
+    {
+      "type": "function",
+      "function": {
+        "name": "transfer_to_agent",
+        "arguments": "{\"reason\": \"User needs billing support\", \"agent_number\": 0}"
+      }
+    }
+    ```
+
+    **Implementation**: Define transfer rules mapping conditions to specific agent IDs. Configure which agents the current agent can transfer to. Agents are referenced by zero-indexed numbers in the transfer configuration.
+
+    Learn more: [Agent transfer tool](/docs/conversational-ai/customization/tools/system-tools/agent-transfer)
+
+  </Accordion>
+
+  <Accordion title="Transfer to human">
+    **Purpose**: Seamlessly hand off conversations to human operators when AI assistance is insufficient.
+
+    **Trigger conditions**: The LLM should call this tool when:
+    - Complex issues requiring human judgment
+    - User explicitly requests human assistance
+    - AI reaches limits of capability for the specific request
+    - Escalation protocols are triggered
+
+    **Parameters**:
+    - `reason` (string, optional): The reason for the transfer
+    - `transfer_number` (string, required): The phone number to transfer to (must match configured numbers)
+    - `client_message` (string, required): Message read to the client while waiting for transfer
+    - `agent_message` (string, required): Message for the human operator receiving the call
+
+    **Function call format**:
+    ```json
+    {
+      "type": "function",
+      "function": {
+        "name": "transfer_to_number",
+        "arguments": "{\"reason\": \"Complex billing issue\", \"transfer_number\": \"+15551234567\", \"client_message\": \"I'm transferring you to a billing specialist who can help with your account.\", \"agent_message\": \"Customer has a complex billing dispute about order #12345 from last month.\"}"
+      }
+    }
+    ```
+
+    **Implementation**: Configure transfer phone numbers and conditions. Define messages for both customer and receiving human operator. Works with both Twilio and SIP trunking.
+
+    Learn more: [Transfer to human tool](/docs/conversational-ai/customization/tools/system-tools/transfer-to-human)
+
+  </Accordion>
+
+  <Accordion title="Skip turn">
+    **Purpose**: Allow the agent to pause and wait for user input without speaking.
+
+    **Trigger conditions**: The LLM should call this tool when:
+    - User indicates they need a moment ("Give me a second", "Let me think")
+    - User requests pause in conversation flow
+    - Agent detects user needs time to process information
+
+    **Parameters**:
+    - `reason` (string, optional): Free-form reason explaining why the pause is needed
+
+    **Function call format**:
+    ```json
+    {
+      "type": "function",
+      "function": {
+        "name": "skip_turn",
+        "arguments": "{\"reason\": \"User requested time to think\"}"
+      }
+    }
+    ```
+
+    **Implementation**: No additional configuration needed. The tool simply signals the agent to remain silent until the user speaks again.
+
+    Learn more: [Skip turn tool](/docs/conversational-ai/customization/tools/system-tools/skip-turn)
+
+  </Accordion>
+</AccordionGroup>
+
+### Example Request with System Tools
+
+When system tools are configured, your custom LLM will receive requests that include the tools in the standard OpenAI format:
+
+```json
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant. You have access to system tools for managing conversations."
+    },
+    {
+      "role": "user",
+      "content": "I think we're done here, thanks for your help!"
+    }
+  ],
+  "model": "your-custom-model",
+  "temperature": 0.7,
+  "max_tokens": 1000,
+  "stream": true,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "end_call",
+        "description": "Call this function to end the current conversation when the main task has been completed...",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "The reason for the tool call."
+            },
+            "message": {
+              "type": "string",
+              "description": "A farewell message to send to the user along right before ending the call."
+            }
+          },
+          "required": ["reason"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "language_detection",
+        "description": "Change the conversation language when the user expresses a language preference explicitly...",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "The reason for the tool call."
+            },
+            "language": {
+              "type": "string",
+              "description": "The language to switch to. Must be one of language codes in tool description."
+            }
+          },
+          "required": ["reason", "language"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "skip_turn",
+        "description": "Skip a turn when the user explicitly indicates they need a moment to think...",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "description": "Optional free-form reason explaining why the pause is needed."
+            }
+          },
+          "required": []
+        }
+      }
+    }
+  ]
+}
+```
+
+<Note>
+  Your custom LLM must support function calling to use system tools. Ensure your model can generate
+  proper function call responses in OpenAI format.
+</Note>
 
 # Additional Features
 

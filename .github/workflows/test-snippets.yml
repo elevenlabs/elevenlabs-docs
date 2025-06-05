@@ -1,0 +1,50 @@
+name: Test Snippets
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-snippets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: '2.1.2'
+
+      - name: Install project dependencies
+        run: pnpm install
+
+      - name: Install Python dependencies
+        run: |
+          poetry install
+
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Snippets typecheck
+        run: pnpm run snippets:typecheck
+
+      - name: Snippets test
+        run: pnpm run snippets:test
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
