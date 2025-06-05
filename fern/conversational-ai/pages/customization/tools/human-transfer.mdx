@@ -7,12 +7,12 @@ subtitle: Seamlessly transfer the user to a human operator via phone number base
 
 Human transfer allows a Conversational AI agent to transfer the ongoing call to a specified phone number when certain conditions are met. This enables agents to hand off complex issues, specific requests, or situations requiring human intervention to a live operator.
 
-This feature utilizes the `transfer_to_number` system tool and currently supports transfers via Twilio. When triggered, the agent can provide a message to the user while they wait and a separate message summarizing the situation for the human operator receiving the call.
+This feature utilizes the `transfer_to_number` system tool which supports transfers via Twilio and SIP trunk numbers. When triggered, the agent can provide a message to the user while they wait and a separate message summarizing the situation for the human operator receiving the call.
 
-<Info>
-  This feature currently requires a configured native Twilio integration for the phone number
-  receiving the transfer.
-</Info>
+## Numbers that can be transferred to
+
+Currently only [SIP trunking](/docs/conversational-ai/phone-numbers/sip-trunking) phone numbers support transferring to external numbers.
+[Twilio phone numbers](/docs/conversational-ai/phone-numbers/twilio-integration/native-integration) currently can only transfer to phone numbers hosted on Twilio. If this is needed we recommended using Twilio numbers via [Twilio elastic SIP trunking](https://www.twilio.com/docs/sip-trunking) and our SIP trunking support, rather than via the native integration.
 
 ## Enabling human transfer
 
@@ -64,17 +64,17 @@ You can configure the `transfer_to_number` system tool when creating or updating
 
 ```python
 from elevenlabs import (
-    ConversationalConfigApiModelInput,
+    ConversationalConfig,
     ElevenLabs,
-    AgentConfigApiModelInput,
-    PromptAgentInput,
+    AgentConfig,
+    PromptAgent,
     PromptAgentInputToolsItem_System,
     SystemToolConfigInputParams_TransferToNumber,
     PhoneNumberTransfer,
 )
 
 # Initialize the client
-client = ElevenLabs(api_key="YOUR_API_KEY")
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Define transfer rules
 transfer_rules = [
@@ -93,9 +93,9 @@ transfer_tool = PromptAgentInputToolsItem_System(
 )
 
 # Create the agent configuration
-conversation_config = ConversationalConfigApiModelInput(
-    agent=AgentConfigApiModelInput(
-        prompt=PromptAgentInput(
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
             prompt="You are a helpful assistant.",
             first_message="Hi, how can I help you today?",
             tools=[transfer_tool],
@@ -104,7 +104,7 @@ conversation_config = ConversationalConfigApiModelInput(
 )
 
 # Create the agent
-response = client.conversational_ai.create_agent(
+response = elevenlabs.conversational_ai.agents.create(
     conversation_config=conversation_config
 )
 
@@ -115,33 +115,33 @@ response = client.conversational_ai.create_agent(
 ```
 
 ```javascript
-import { ElevenLabs } from 'elevenlabs';
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
 
 // Initialize the client
-const client = new ElevenLabs({
+const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
 // Define transfer rules
 const transferRules = [
-  { phone_number: '+15551234567', condition: 'When the user asks for billing support.' },
-  { phone_number: '+15559876543', condition: 'When the user requests to file a formal complaint.' },
+  { phoneNumber: '+15551234567', condition: 'When the user asks for billing support.' },
+  { phoneNumber: '+15559876543', condition: 'When the user requests to file a formal complaint.' },
 ];
 
 // Create the agent with the transfer tool
-await client.conversationalAi.createAgent({
-  conversation_config: {
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
     agent: {
       prompt: {
         prompt: 'You are a helpful assistant.',
-        first_message: 'Hi, how can I help you today?',
+        firstMessage: 'Hi, how can I help you today?',
         tools: [
           {
             type: 'system',
             name: 'transfer_to_number',
             description: 'Transfer the user to a human operator based on their request.', // Optional custom description
             params: {
-              system_tool_type: 'transfer_to_number',
+              systemToolType: 'transfer_to_number',
               transfers: transferRules,
             },
           },

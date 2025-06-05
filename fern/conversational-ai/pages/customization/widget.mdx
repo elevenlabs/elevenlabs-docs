@@ -4,13 +4,51 @@ subtitle: Learn how to customize the widget appearance to match your brand, and 
 ---
 
 **Widgets** enable instant integration of Conversational AI into any website. You can either customize your widget through the UI or through our type-safe [Conversational AI SDKs](/docs/conversational-ai/libraries) for complete control over styling and behavior. The SDK overrides take priority over UI customization.
+Our widget is multimodal and able to process both text and audio.
+
+<Frame caption="Multimodal conversational AI" background="subtle">
+  <iframe
+    width="100%"
+    height="400"
+    src="https://www.youtube.com/embed/TyPbeheubcs"
+    title="Multimodal conversational AI"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</Frame>
+
+## Modality configuration
+
+The widget supports flexible input modes to match your use case. Configure these options in the [dashboard](https://elevenlabs.io/app/conversational-ai/dashboard) **Widget** tab under the **Interface** section.
+
+<Note>
+  Multimodality is fully supported in our client SDKs, see more
+  [here](/docs/conversational-ai/libraries/).
+</Note>
+
+<Frame background="subtle">
+  ![Widget interface options](/assets/images/conversational-ai/widget-options.png)
+</Frame>
+
+**Available modes:**
+
+- **Voice only** (default): Users interact through speech only
+- **Voice + text**: Users can switch between voice and text input during conversations
+- **Text only mode**: Conversations start in text mode without voice capabilities when initiated with a text message
+
+<Note>
+  The widget defaults to voice-only mode. Enable the text input toggle to allow multimodal
+  interactions, or enable text-only mode support for purely text-based conversations when initiated
+  via text.
+</Note>
+
+## Embedding the widget
 
 <Note>
   Widgets currently require public agents with authentication disabled. Ensure this is disabled in
   the **Advanced** tab of your agent settings.
 </Note>
-
-## Embedding the widget
 
 Add this code snippet to your website's `<body>` section. Place it in your main `index.html` file for site-wide availability:
 
@@ -18,7 +56,11 @@ Add this code snippet to your website's `<body>` section. Place it in your main 
 
 ```html title="Widget embed code"
 <elevenlabs-convai agent-id="<replace-with-your-agent-id>"></elevenlabs-convai>
-<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+<script
+  src="https://unpkg.com/@elevenlabs/convai-widget-embed"
+  async
+  type="text/javascript"
+></script>
 ```
 
 </CodeBlocks>
@@ -125,7 +167,7 @@ Customize the widget's appearance, text content, language selection, and more in
     Customize the widget colors and shapes to match your brand identity.
 
     <Frame background="subtle">
-      ![Widget appearance](/assets/images/conversational-ai/widget-appearance.png)
+      ![Widget appearance](/assets/images/conversational-ai/appearance.gif)
     </Frame>
 
   </Tab>
@@ -152,7 +194,7 @@ Customize the widget's appearance, text content, language selection, and more in
     Configure the voice orb or provide your own avatar.
 
     <Frame background="subtle">
-      ![Widget orb customization](/assets/images/conversational-ai/widget-orb.png)
+      ![Widget orb customization](/assets/images/conversational-ai/avatar.gif)
     </Frame>
 
     **Available options**
@@ -166,7 +208,7 @@ Customize the widget's appearance, text content, language selection, and more in
     Customize all displayed widget text elements, for example to modify button labels.
 
     <Frame background="subtle">
-      ![Widget text contents](/assets/images/conversational-ai/widget-text.png)
+      ![Widget text contents](/assets/images/conversational-ai/textcontents.gif)
     </Frame>
 
   </Tab>
@@ -205,7 +247,7 @@ Customize the widget's appearance, text content, language selection, and more in
 
 Enable multi-language support in the widget.
 
-![Widget language](/assets/images/conversational-ai/widget-language.png)
+![Widget language](/assets/images/conversational-ai/language.gif)
 
 <Note>
   To enable language selection, you must first [add additional

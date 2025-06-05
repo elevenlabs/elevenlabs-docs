@@ -1,0 +1,143 @@
+---
+title: Batch calling
+subtitle: Initiate multiple outbound calls simultaneously with your Conversational AI agents.
+---
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/TIOnL1TwzBs"
+  title="Batch Calling Tutorial"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
+
+<Note>
+  When conducting outbound call campaigns, ensure compliance with all relevant regulations,
+  including the [TCPA (Telephone Consumer Protection Act)](/docs/conversational-ai/legal/tcpa) and
+  any applicable state laws.
+</Note>
+
+## Overview
+
+Batch Calling enables you to initiate multiple outbound calls simultaneously using your configured Conversational AI agents. This feature is ideal for scenarios such as sending notifications, conducting surveys, or delivering personalized messages to a large list of recipients efficiently.
+This feature is available for both phone numbers added via the [native Twilio integration](/docs/conversational-ai/phone-numbers/twilio-integration/native-integration) and [SIP trunking](/docs/conversational-ai/phone-numbers/sip-trunking).
+
+### Key features
+
+- **Upload recipient lists**: Easily upload recipient lists in CSV or XLS format.
+- **Dynamic variables**: Personalize calls by including dynamic variables (e.g., `user_name`) in your recipient list as seperate columns.
+- **Agent selection**: Choose the specific Conversational AI agent to handle the calls.
+- **Scheduling**: Send batches immediately or schedule them for a later time.
+- **Real-time monitoring**: Track the progress of your batch calls, including overall status and individual call status.
+- **Detailed reporting**: View comprehensive details of completed batch calls, including individual call recipient information.
+
+## Requirements
+
+- An ElevenLabs account with an [agent setup](/app/conversational-ai).
+- A phone number imported
+
+## Creating a batch call
+
+Follow these steps to create a new batch call:
+
+<Steps>
+
+<Step title="Navigate to Batch Calling">
+  Access the [Outbound calls interface](https://elevenlabs.io/app/conversational-ai/batch-calling)
+  from the Conversational AI dashboard
+</Step>
+
+<Step title="Initiate a new batch call">
+  Click on the "Create a batch call" button. This will open the "Create a batch call" page.
+
+  <Frame background="subtle" caption="The 'Create a batch call' interface.">
+    <img
+      src="/assets/images/conversational-ai/batch-call-creation.png"
+      alt="Create a batch call page showing fields for batch name, phone number, agent selection, recipient upload, and timing options."
+    />
+  </Frame>
+</Step>
+
+<Step title="Configure batch details">
+
+- **Batch name**: Enter a descriptive name for your batch call (e.g., "Delivery notice", "Weekly Update Notifications").
+- **Phone number**: Select the phone number that will be used to make the outbound calls.
+- **Select agent**: Choose the pre-configured Conversational AI agent that will handle the conversations for this batch.
+
+</Step>
+
+<Step title="Upload recipients">
+
+- **Upload File**: Upload your recipient list. Supported file formats are CSV and XLS.
+- **Formatting**:
+  - The `phone_number` column is mandatory in your uploaded file (if your agent has a `phone_number` dynamic variable that also has to be set, please rename it).
+  - You can include other columns (e.g., `name`, `user_name`) which will be passed as dynamic variables to personalize the calls.
+  - A template is available for download to ensure correct formatting.
+
+<Note title="Setting overrides">
+  The following column headers are special fields that are used to override an agent's initial
+  configuration:
+    - language
+    - first_message
+    - system_prompt
+    - voice_id
+
+The batch call will fail if those fields are passed but are not set to be overridable in the agent's security settings. See more
+[here](/docs/conversational-ai/customization/personalization/overrides).
+
+</Note>
+
+</Step>
+
+<Step title="Set timing">
+  - **Send immediately**: The batch call will start processing as soon as you submit it. -
+  **Schedule for later**: Choose a specific date and time for the batch call to begin.
+</Step>
+
+<Step title="Submit the batch call">
+  - You may "Test call" with a single recipient before submitting the entire batch. - Click "Submit
+  a Batch Call" to finalize and initiate or schedule the batch.
+</Step>
+
+</Steps>
+
+## Managing and monitoring batch calls
+
+Once a batch call is created, you can monitor its progress and view its details.
+
+### Batch calling overview
+
+The Batch Calling overview page displays a list of all your batch calls.
+
+<Frame
+  background="subtle"
+  caption="Overview of batch calls, displaying status, progress, and other details for each batch."
+>
+  <img
+    src="/assets/images/conversational-ai/batch-call-summary.png"
+    alt="Batch Calling overview page listing several batch calls with their status, recipient count, and progress."
+  />
+</Frame>
+
+### Viewing batch call details
+
+Clicking on a specific batch call from the overview page will take you to its detailed view, from where you can view individual conversations.
+
+<Frame
+  background="subtle"
+  caption="Detailed view of a specific batch call, showing summary statistics and a list of call recipients with their individual statuses."
+>
+  <img
+    src="/assets/images/conversational-ai/batch-call-completed-summary.png"
+    alt="Batch call details page showing a summary (status, total recipients, started, progress) and a list of call recipients with phone number, dynamic variables, and status."
+  />
+</Frame>
+
+## API Usage
+
+You can also manage and initiate batch calls programmatically using the ElevenLabs API. This allows for integration into your existing workflows and applications.
+
+- [List batch calls](/docs/api-reference/batch-calling/list) - Retrieve all batch calls in your workspace
+- [Create batch call](/docs/api-reference/batch-calling/create) - Submit a new batch call with agent, phone number, and recipient list

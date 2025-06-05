@@ -25,13 +25,13 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
   const searchParams = useSearchParams();
 
   const [selectedAgent, setSelectedAgent] = useState<string | null>(
-    searchParams.get('agent_id') || defaultAgent || null
+    searchParams.get('agentId') || defaultAgent || null
   );
 
   useEffect(() => {
     if (selectedAgent) {
       const params = new URLSearchParams(searchParams);
-      params.set('agent_id', selectedAgent);
+      params.set('agentId', selectedAgent);
 
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
@@ -51,7 +51,7 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
   };
 
   const getSelectedAgentData = () => {
-    return agents.find((a) => a.agent_id === selectedAgent);
+    return agents.find((a) => a.agentId === selectedAgent);
   };
 
   return (
@@ -67,12 +67,12 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
       </SelectTrigger>
       <SelectContent className="max-h-80">
         {agents.map((agent) => (
-          <SelectItem key={agent.agent_id} value={agent.agent_id} className="py-2 pl-2 pr-6">
+          <SelectItem key={agent.agentId} value={agent.agentId} className="py-2 pl-2 pr-6">
             <div className="flex flex-col">
               <div className="font-medium">{agent.name}</div>
               <div className="text-muted-foreground mt-1 flex items-center text-xs">
                 <CalendarIcon className="mr-1 h-3 w-3" />
-                <span>{formatDate(agent.created_at_unix_secs)}</span>
+                <span>{formatDate(agent.createdAtUnixSecs)}</span>
               </div>
             </div>
           </SelectItem>

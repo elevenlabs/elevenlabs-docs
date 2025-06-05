@@ -3,7 +3,7 @@
 import type {
   BodySpeechToTextV1SpeechToTextPost,
   SpeechToTextChunkResponseModel,
-} from 'elevenlabs/api';
+} from '@elevenlabs/elevenlabs-js/api';
 
 import { getElevenLabsClient, handleError } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';

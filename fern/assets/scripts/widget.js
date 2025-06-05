@@ -7,7 +7,7 @@ function injectElevenLabsWidget() {
   }
 
   const script = document.createElement('script');
-  script.src = 'https://elevenlabs.io/convai-widget/index.js';
+  script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
   script.async = true;
   script.type = 'text/javascript';
   document.head.appendChild(script);
@@ -43,7 +43,7 @@ function injectElevenLabsWidget() {
   function updateWidgetVariant(widget) {
     const isMobile = window.innerWidth <= 640; // Common mobile breakpoint
     if (isMobile) {
-      widget.setAttribute('variant', 'expandable');
+      widget.setAttribute('variant', 'compact');
     } else {
       widget.setAttribute('variant', 'full');
     }

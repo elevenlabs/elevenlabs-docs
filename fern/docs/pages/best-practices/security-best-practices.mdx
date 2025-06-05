@@ -1,0 +1,64 @@
+---
+title: Secure by design
+subtitle: Learn how to safely integrate ElevenLabs APIs.
+---
+
+Whether you're building voicemail apps, interactive characters, or audio-driven games, the ElevenLabs API gives you direct access to powerful voice capabilities.
+But with that access comes the responsibility to secure your users’ data and manage voice resources carefully.
+
+This guide outlines two critical security practices for developers:
+
+- Isolating environments using **service accounts**
+- Implementing **resource-level permissions**
+
+## Use service accounts to isolate environments
+
+Service accounts provide scoped, API-only access to the ElevenLabs platform. Unlike user accounts, they’re not tied to individuals—they’re designed for backend systems and automation.
+
+If a service account creates a resource, only admins can see it by default but it can be shared with other users. Similarly, you can share any resource with a service account just as you would with a user.
+Each service account is created at the workspace level and managed by workspace admins. They can create and access resources through the API.
+
+We recommend provisioning a dedicated service account for each environment:
+
+- `production-service-account`
+- `testing-service-account`
+- `uat-service-account` (if applicable)
+
+This ensures clean separation between environments, reduces accidental data leaks across environments, and simplifies monitoring.
+
+### Why this matters
+
+**Separation of concerns**  
+Avoid mixing test and production data. Environment isolation supports auditability and compliance.
+
+**Principle of least privilege**  
+Each service account should only have access to the minimum necessary resources. API keys can be scoped further at the time of creation.
+
+**Better observability**  
+Track API usage and performance by environment. Separate service accounts make it easier to debug issues and monitor activity.
+
+## Apply resource-level permissions in your backend
+
+If your app allows users to record messages using cloned voices, it is essential to ensure users only access voices they own or have been granted permission to use.
+
+While the ElevenLabs platform supports in-app sharing, you should enforce **resource-level access control** within your own systems when using the API.
+
+A recommended model:
+
+```
+user_id | voice_id | permission_level
+```
+
+Possible permission_level values:
+
+- `viewer`: can use the voice for speech generation
+- `editor`: can update voice settings
+- `admin`: can manage sharing and permissions
+
+This structure lets you control who can access and modify voices and prevents unauthorized use of sensitive resources.
+These permissions are suggestions based on controls natively offered if you are directly using the ElevenLabs platform.
+
+### Build securely. Scale confidently.
+
+Security should be foundational, not an afterthought.
+By leveraging service accounts and implementing permission controls, you’ll reduce risk and build trust—while giving your users the full potential of AI voice.

@@ -1,0 +1,296 @@
+---
+title: Simulate Conversations
+subtitle: Learn how to test and evaluate your Conversational AI agent with simulated conversations
+---
+
+## Overview
+
+The ElevenLabs Conversational AI API allows you to simulate and evaluate text-based conversations with your AI agent. This guide will teach you how to implement an end-to-end simulation testing workflow using the simulate conversation endpoints ([batch](/docs/api-reference/agents/simulate-conversation) and [streaming](/docs/api-reference/agents/simulate-conversation-stream)), enabling you to granularly test and improve your agent's performance to ensure it meets your interaction goals.
+
+## Prerequisites
+
+- An agent configured in ElevenLabs Conversational AI ([create one here](/docs/conversational-ai/quickstart))
+- Your ElevenLabs API key, which you can [create in the dashboard](https://elevenlabs.io/app/settings/api-keys)
+
+## Implementing a Simulation Testing Workflow
+
+<Steps>
+
+<Step title="Identify initial evaluation parameters">
+Search through your agent's conversation history and find instances where your agent has underperformed. Use those conversations to create various prompts for a simulated user who will interact with your agent. Additionally, define any extra evaluation criteria not already specified in your agent configuration to test outcomes you may want for a specific simulated user.
+
+</Step>
+
+<Step title="Simulate the conversation via the SDK">
+Create a request to the simulation endpoint using the ElevenLabs SDK.
+
+<CodeGroup>
+
+```python title="Python"
+from dotenv import load_dotenv
+from elevenlabs import (
+    ElevenLabs,
+    ConversationSimulationSpecification,
+    AgentConfig,
+    PromptAgent,
+    PromptEvaluationCriteria
+)
+
+load_dotenv()
+api_key = os.getenv("ELEVENLABS_API_KEY")
+elevenlabs = ElevenLabs(api_key=api_key)
+
+response = elevenlabs.conversational_ai.agents.simulate_conversation(
+    agent_id="YOUR_AGENT_ID",
+    simulation_specification=ConversationSimulationSpecification(
+        simulated_user_config=AgentConfig(
+            prompt=PromptAgent(
+                prompt="Your goal is to be a really difficult user.",
+                llm="gpt-4o",
+                temperature=0.5
+            )
+        )
+    ),
+    extra_evaluation_criteria=[
+        PromptEvaluationCriteria(
+            id="politeness_check",
+            name="Politeness Check",
+            conversation_goal_prompt="The agent was polite.",
+            use_knowledge_base=False
+        )
+    ]
+)
+
+print(response)
+
+```
+
+```typescript title="TypeScript"
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const apiKey = process.env.ELEVENLABS_API_KEY;
+const elevenlabs = new ElevenLabsClient({
+  apiKey: apiKey,
+});
+const response = await elevenlabs.conversationalAi.agents.simulateConversation('YOUR_AGENT_ID', {
+  simulationSpecification: {
+    simulatedUserConfig: {
+      prompt: {
+        prompt: 'Your goal is to be a really difficult user.',
+        llm: 'gpt-4o',
+        temperature: 0.5,
+      },
+    },
+  },
+  extraEvaluationCriteria: [
+    {
+      id: 'politeness_check',
+      name: 'Politeness Check',
+      conversationGoalPrompt: 'The agent was polite.',
+      useKnowledgeBase: false,
+    },
+  ],
+});
+console.log(JSON.stringify(response, null, 4));
+```
+
+</CodeGroup>
+
+<Note>
+  This is a basic example. For a comprehensive list of input parameters, please refer to the API
+  reference for [Simulate conversation](/docs/api-reference/agents/simulate-conversation) and
+  [Stream simulate conversation](/docs/api-reference/agents/simulate-conversation-stream) endpoints.
+</Note>
+
+</Step>
+
+<Step title="Analyze the response">
+The SDK provides a comprehensive JSON object that includes the entire conversation transcript and detailed analysis.
+
+**Simulated Conversation**: Captures each interaction turn between the simulated user and the agent, detailing messages and tool usage.
+
+<CodeGroup>
+```json title="Example conversation history"
+[
+  ...
+  {
+    "role": "user",
+    "message": "Maybe a little. I'll think about it, but I'm still not convinced it's the right move.",
+    "tool_calls": [],
+    "tool_results": [],
+    "feedback": null,
+    "llm_override": null,
+    "time_in_call_secs": 0,
+    "conversation_turn_metrics": null,
+    "rag_retrieval_info": null,
+    "llm_usage": null
+  },
+  {
+    "role": "agent",
+    "message": "I understand. If you want to explore more at your own pace, I can direct you to our documentation, which has guides and API references. Would you like me to send you a link?",
+    "tool_calls": [],
+    "tool_results": [],
+    "feedback": null,
+    "llm_override": null,
+    "time_in_call_secs": 0,
+    "conversation_turn_metrics": null,
+    "rag_retrieval_info": null,
+    "llm_usage": null
+  },
+  {
+    "role": "user",
+    "message": "I guess it wouldn't hurt to take a look. Go ahead and send it over.",
+    "tool_calls": [],
+    "tool_results": [],
+    "feedback": null,
+    "llm_override": null,
+    "time_in_call_secs": 0,
+    "conversation_turn_metrics": null,
+    "rag_retrieval_info": null,
+    "llm_usage": null
+  },
+  {
+    "role": "agent",
+    "message": null,
+    "tool_calls": [
+      {
+        "type": "client",
+        "request_id": "redirectToDocs_421d21e4b4354ed9ac827d7600a2d59c",
+        "tool_name": "redirectToDocs",
+        "params_as_json": "{\"path\": \"/docs/api-reference/introduction\"}",
+        "tool_has_been_called": false,
+        "tool_details": null
+      }
+    ],
+    "tool_results": [],
+    "feedback": null,
+    "llm_override": null,
+    "time_in_call_secs": 0,
+    "conversation_turn_metrics": null,
+    "rag_retrieval_info": null,
+    "llm_usage": null
+  },
+  {
+    "role": "agent",
+    "message": null,
+    "tool_calls": [],
+    "tool_results": [
+      {
+        "type": "client",
+        "request_id": "redirectToDocs_421d21e4b4354ed9ac827d7600a2d59c",
+        "tool_name": "redirectToDocs",
+        "result_value": "Tool Called.",
+        "is_error": false,
+        "tool_has_been_called": true,
+        "tool_latency_secs": 0
+      }
+    ],
+    "feedback": null,
+    "llm_override": null,
+    "time_in_call_secs": 0,
+    "conversation_turn_metrics": null,
+    "rag_retrieval_info": null,
+    "llm_usage": null
+  },
+  {
+    "role": "agent",
+    "message": "Okay, I've sent you a link to the introduction to our API reference.  It provides a good starting point for understanding our different tools and how they can be integrated. Let me know if you have any questions as you explore it.\n",
+    "tool_calls": [],
+    "tool_results": [],
+    "feedback": null,
+    "llm_override": null,
+    "time_in_call_secs": 0,
+    "conversation_turn_metrics": null,
+    "rag_retrieval_info": null,
+    "llm_usage": null
+  }
+  ...
+]
+```
+</CodeGroup>
+
+**Analysis**: Offers insights into evaluation criteria outcomes, data collection metrics, and a summary of the conversation transcript.
+
+<CodeGroup>
+```json title="Example analysis"
+{
+  "analysis": {
+    "evaluation_criteria_results": {
+      "politeness_check": {
+        "criteria_id": "politeness_check",
+        "result": "success",
+        "rationale": "The agent remained polite and helpful despite the user's challenging attitude."
+      },
+      "understood_root_cause": {
+        "criteria_id": "understood_root_cause",
+        "result": "success",
+        "rationale": "The agent acknowledged the user's hesitation and provided relevant information."
+      },
+      "positive_interaction": {
+        "criteria_id": "positive_interaction",
+        "result": "success",
+        "rationale": "The user eventually asked for the documentation link, indicating engagement."
+      }
+    },
+    "data_collection_results": {
+      "issue_type": {
+        "data_collection_id": "issue_type",
+        "value": "support_issue",
+        "rationale": "The user asked for help with integrating ElevenLabs tools."
+      },
+      "user_intent": {
+        "data_collection_id": "user_intent",
+        "value": "The user is interested in integrating ElevenLabs tools into a project."
+      }
+    },
+    "call_successful": "success",
+    "transcript_summary": "The user expressed skepticism, but the agent provided useful information and a link to the API documentation."
+  }
+}
+```
+</CodeGroup>
+</Step>
+
+<Step title="Improve your evaluation criteria">
+  Review the simulated conversations thoroughly to assess the effectiveness of your evaluation
+  criteria. Identify any gaps or areas where the criteria may fall short in evaluating the agent's
+  performance. Refine and adjust the evaluation criteria accordingly to ensure they align with your
+  desired outcomes and accurately measure the agent's capabilities.
+</Step>
+
+<Step title="Improve your agent">
+  Once you are confident in the accuracy of your evaluation criteria, use the learnings from
+  simulated conversations to enhance your agent's capabilities. Consider refining the system prompt
+  to better guide the agent's responses, ensuring they align with your objectives and user
+  expectations. Additionally, explore other features or configurations that could be optimized, such
+  as adjusting the agent's tone, improving its ability to handle specific queries, or integrating
+  additional data sources to enrich its responses. By systematically applying these learnings, you
+  can create a more robust and effective conversational agent that delivers a superior user
+  experience.
+</Step>
+
+<Step title="Continuous iteration">
+  After completing an initial testing and improvement cycle, establishing a comprehensive testing
+  suite can be a great way to cover a broad range of possible scenarios. This suite can explore
+  multiple simulated conversations using varied simulated user prompts and starting conditions. By
+  continuously iterating and refining your approach, you can ensure your agent remains effective and
+  responsive to evolving user needs.
+</Step>
+
+</Steps>
+
+## Pro Tips
+
+#### Detailed Prompts and Criteria
+
+Crafting detailed and verbose simulated user prompts and evaluation criteria can enhance the effectiveness of the simulation tests. The more context and specificity you provide, the better the agent can understand and respond to complex interactions.
+
+#### Mock Tool Configurations
+
+Utilize mock tool configurations to test the decision-making process of your agent. This allows you to observe how the agent decides to make tool calls and react to different tool call results. For more details, check out the tool_mock_config input parameter from the [API reference](/docs/api-reference/agents/simulate-conversation#request.body.simulation_specification.tool_mock_config).
+
+#### Partial Conversation History
+
+Use partial conversation histories to evaluate how agents handle interactions from a specific point. This is particularly useful for assessing the agent's ability to manage conversations where the user has already set up a question in a specific way, or if there have been certain tool calls that have succeeded or failed. For more details, check out the partial_conversation_history input parameter from the [API reference](/docs/api-reference/agents/simulate-conversation#request.body.simulation_specification.partial_conversation_history).

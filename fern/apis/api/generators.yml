@@ -4,14 +4,12 @@ api:
       overrides: ./openapi-overrides.yml
       settings:
         title-as-schema-name: false
-        # TODO: Set this to true for SDK v2
-        use-bytes-for-binary-response: false
     - asyncapi: ./asyncapi.yml
 groups:
   python-sdk:
     generators:
       - name: fernapi/fern-python-sdk
-        version: 4.4.0
+        version: 4.20.2
         output:
           location: pypi
           package-name: elevenlabs
@@ -21,6 +19,7 @@ groups:
           repository: elevenlabs/elevenlabs-python
           license: MIT
         config:
+          timeout_in_seconds: 240
           default_bytes_stream_chunk_size: 1024
           inline_request_params: false
           follow_redirects_by_default: true
@@ -51,17 +50,17 @@ groups:
   typescript-sdk:
     generators:
       - name: fernapi/fern-typescript-node-sdk
-        version: 0.48.5
+        version: 0.51.7
         github:
           repository: elevenlabs/elevenlabs-js
           mode: pull-request
           license: MIT
         output:
           location: npm
-          package-name: elevenlabs
+          package-name: '@elevenlabs/elevenlabs-js'
           token: ${NPM_TOKEN}
         config:
-          noSerdeLayer: true
+          defaultTimeoutInSeconds: 240
           inlineFileProperties: true
           namespaceExport: ElevenLabs
           extraDependencies:

@@ -23,7 +23,7 @@ export default function Page() {
     return <EmptyState />;
   }
 
-  const defaultAgent = agents[0].agent_id;
+  const defaultAgent = agents[0].agentId;
 
   return (
     <div className="container mx-auto p-6">

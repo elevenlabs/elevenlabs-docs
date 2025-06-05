@@ -19,9 +19,11 @@ Your application can send contextual information to the server to improve conver
   protocol is valuable for custom implementations and advanced use cases.
 </Info>
 
-## Contextual updates
+## Event types
 
-The primary client-to-server event is the contextual update, which allows your application to send non-interrupting background information to the conversation.
+### Contextual updates
+
+Contextual updates allow your application to send non-interrupting background information to the conversation.
 
 **Key characteristics:**
 
@@ -54,6 +56,72 @@ sendContextUpdate('User navigated to Help section');
 sendContextUpdate('Shopping cart contains 3 items');
 ```
 
+### User messages
+
+User messages allow you to send text directly to the conversation as if the user had spoken it. This is useful for text-based interactions or when you want to inject specific text into the conversation flow.
+
+**Key characteristics:**
+
+- Text is processed as user input to the conversation.
+- Triggers the same response flow as spoken user input.
+- Useful for text-based interfaces or programmatic user input.
+
+```javascript
+// User message event structure
+{
+  "type": "user_message",
+  "text": "I would like to upgrade my account"
+}
+```
+
+```javascript
+// Example sending user messages
+function sendUserMessage(text) {
+  websocket.send(
+    JSON.stringify({
+      type: 'user_message',
+      text: text,
+    })
+  );
+}
+
+// Usage examples
+sendUserMessage('I need help with billing');
+sendUserMessage('What are your pricing options?');
+sendUserMessage('Cancel my subscription');
+```
+
+### User activity
+
+User activity events serve as indicators to prevent interrupts from the agent.
+
+**Key characteristics:**
+
+- Resets the turn timeout timer.
+- Does not affect conversation content or flow.
+- Useful for maintaining long-running conversations during periods of silence.
+
+```javascript
+// User activity event structure
+{
+  "type": "user_activity"
+}
+```
+
+```javascript
+// Example sending user activity
+function sendUserActivity() {
+  websocket.send(
+    JSON.stringify({
+      type: 'user_activity',
+    })
+  );
+}
+
+// Usage example - send activity ping every 30 seconds
+setInterval(sendUserActivity, 30000);
+```
+
 ## Best practices
 
 1. **Contextual updates**
@@ -62,10 +130,23 @@ sendContextUpdate('Shopping cart contains 3 items');
    - Avoid overwhelming the LLM with too many updates.
    - Focus on information that impacts the conversation flow or is important context from activity in a UI not accessible to the voice agent.
 
-2. **Timing considerations**
+2. **User messages**
+
+   - Use for text-based user input when audio is not available or appropriate.
+   - Ensure text content is clear and well-formatted.
+   - Consider the conversation context when injecting programmatic messages.
+
+3. **User activity**
+
+   - Send activity pings during periods of user interaction to maintain session.
+   - Use reasonable intervals (e.g., 30-60 seconds) to avoid unnecessary network traffic.
+   - Implement activity detection based on actual user engagement (mouse movement, typing, etc.).
+
+4. **Timing considerations**
 
    - Send updates at appropriate moments.
    - Consider grouping multiple contextual updates into a single update (instead of sending every small change separately).
+   - Balance between keeping the session alive and avoiding excessive messaging.
 
 <Info>
   For detailed implementation examples, check our [SDK

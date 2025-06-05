@@ -1,0 +1,147 @@
+---
+title: Large Language Models (LLMs)
+subtitle: Understand the available LLMs for your conversational AI agents, their capabilities, and pricing.
+---
+
+## Overview
+
+Our conversational AI platform supports a variety of cutting-edge Large Language Models (LLMs) to power your voice agents. Choosing the right LLM depends on your specific needs, balancing factors like performance, context window size, features, and cost. This document provides details on the supported models and their associated pricing.
+
+The selection of an LLM is a critical step in configuring your conversational AI agent, directly impacting its conversational abilities, knowledge depth, and operational cost.
+
+## Supported LLMs
+
+We offer models from leading providers such as OpenAI, Google, and Anthropic, as well as the option to integrate your own custom LLM for maximum flexibility.
+
+<Note>
+  Pricing is typically denoted in USD per 1 million tokens unless specified otherwise. A token is a
+  fundamental unit of text data for LLMs, roughly equivalent to 4 characters on average.
+</Note>
+
+<AccordionGroup>
+  <Accordion title="Gemini">
+    Google's Gemini models offer a balance of performance, large context windows, and competitive pricing, with the lowest latency.
+    <Tabs>
+      <Tab title="Token cost">
+
+        | Model                   | Max Output Tokens | Max Context (Tokens) | Input Price ($/1M tokens) | Output Price ($/1M tokens) | Input Cache Read ($/1M tokens) | Input Cache Write ($/1M tokens) |
+        | ----------------------- | ----------------- | -------------------- | ------------------------- | -------------------------- | ------------------------------ | ------------------------------- |
+        | `gemini-1.5-pro`        | 8,192             | 2,097,152            | 1.25                      | 5                          | 0.3125                         | n/a                             |
+        | `gemini-1.5-flash`      | 8,192             | 1,048,576            | 0.075                     | 0.3                        | 0.01875                        | n/a                             |
+        | `gemini-2.0-flash`      | 8,192             | 1,048,576            | 0.1                       | 0.4                        | 0.025                          | n/a                             |
+        | `gemini-2.0-flash-lite` | 8,192             | 1,048,576            | 0.075                     | 0.3                        | n/a                            | n/a                             |
+        | `gemini-2.5-flash`      | 65,535            | 1,048,576            | 0.15                      | 0.6                        | n/a                            | n/a                             |
+
+      </Tab>
+      <Tab title="Per minute cost estimation">
+
+        | Model                   | Avg LLM Cost (No KB) ($/min) | Avg LLM Cost (Large KB) ($/min) |
+        | ----------------------- | ----------------------------- | ------------------------------- |
+        | `gemini-1.5-pro`        | 0.009                           | 0.10                            |
+        | `gemini-1.5-flash`      | 0.002                           | 0.01                            |
+        | `gemini-2.0-flash`      | 0.001                           | 0.02                            |
+        | `gemini-2.0-flash-lite` | 0.001                           | 0.009                           |
+        | `gemini-2.5-flash`      | 0.001                           | 0.10                            |
+
+      </Tab>
+    </Tabs>
+    <br />
+
+  </Accordion>
+
+  <Accordion title="OpenAI">
+    OpenAI models are known for their strong general-purpose capabilities and wide range of options.
+
+    <Tabs>
+      <Tab title="Token information">
+
+        | Model           | Max Output Tokens | Max Context (Tokens) | Input Price ($/1M tokens) | Output Price ($/1M tokens) | Input Cache Read ($/1M tokens) | Input Cache Write ($/1M tokens) |
+        | --------------- | ----------------- | -------------------- | ------------------------- | -------------------------- | ------------------------------ | ------------------------------- |
+        | `gpt-4o-mini`   | 16,384            | 128,000              | 0.15                      | 0.6                        | 0.075                          | n/a                             |
+        | `gpt-4o`        | 4,096             | 128,000              | 2.5                       | 10                         | 1.25                           | n/a                             |
+        | `gpt-4`         | 8,192             | 8,192                | 30                        | 60                         | n/a                            | n/a                             |
+        | `gpt-4-turbo`   | 4,096             | 128,000              | 10                        | 30                         | n/a                            | n/a                             |
+        | `gpt-4.1`       | 32,768            | 1,047,576            | 2                         | 8                          | n/a                            | n/a                             |
+        | `gpt-4.1-mini`  | 32,768            | 1,047,576            | 0.4                       | 1.6                        | 0.1                            | n/a                             |
+        | `gpt-4.1-nano`  | 32,768            | 1,047,576            | 0.1                       | 0.4                        | 0.025                          | n/a                             |
+        | `gpt-3.5-turbo` | 4,096             | 16,385               | 0.5                       | 1.5                        | n/a                            | n/a                             |
+
+
+      </Tab>
+
+      <Tab  title="Per minute cost estimation">
+
+        | Model           | Avg LLM Cost (No KB) ($/min)    | Avg LLM Cost (Large KB) ($/min) |
+        | --------------- | -----------------------------   | ------------------------------- |
+        | `gpt-4o-mini`   | 0.001                           | 0.10                            |
+        | `gpt-4o`        | 0.01                            | 0.13                            |
+        | `gpt-4`         | n/a                             | n/a                             |
+        | `gpt-4-turbo`   | 0.04                            | 0.39                            |
+        | `gpt-4.1`       | 0.003                           | 0.13                            |
+        | `gpt-4.1-mini`  | 0.002                           | 0.07                            |
+        | `gpt-4.1-nano`  | 0.000                           | 0.006                           |
+        | `gpt-3.5-turbo` | 0.005                           | 0.08                            |
+
+
+      </Tab>
+    </Tabs>
+    <br />
+
+  </Accordion>
+
+  <Accordion title="Anthropic">
+    Anthropic's Claude models are designed with a focus on helpfulness, honesty, and harmlessness, often featuring large context windows.
+
+     <Tabs>
+      <Tab title="Token cost">
+
+        | Model                  | Max Output Tokens | Max Context (Tokens) | Input Price ($/1M tokens) | Output Price ($/1M tokens) | Input Cache Read ($/1M tokens) | Input Cache Write ($/1M tokens) |
+        | ---------------------- | ----------------- | -------------------- | ------------------------- | -------------------------- | ------------------------------ | ------------------------------- |
+        | `claude-sonnet-4`      | 64,000            | 200,000              | 3                         | 15                         | 0.3                            | 3.75                            |
+        | `claude-3-7-sonnet`    | 4,096             | 200,000              | 3                         | 15                         | 0.3                            | 3.75                            |
+        | `claude-3-5-sonnet`    | 4,096             | 200,000              | 3                         | 15                         | 0.3                            | 3.75                            |
+        | `claude-3-5-sonnet-v1` | 4,096             | 200,000              | 3                         | 15                         | 0.3                            | 3.75                            |
+        | `claude-3-0-haiku`     | 4,096             | 200,000              | 0.25                      | 1.25                       | 0.03                           | 0.3                             |
+
+      </Tab>
+      <Tab title="Per minute cost estimation">
+
+          | Model                  | Avg LLM Cost (No KB) ($/min)    | Avg LLM Cost (Large KB) ($/min) |
+          | ---------------------- | -----------------------------   | ------------------------------- |
+          | `claude-sonnet-4`      | 0.03                            | 0.26                            |
+          | `claude-3-7-sonnet`    | 0.03                            | 0.26                            |
+          | `claude-3-5-sonnet`    | 0.03                            | 0.20                            |
+          | `claude-3-5-sonnet-v1` | 0.03                            | 0.17                            |
+          | `claude-3-0-haiku`     | 0.002                           | 0.03                            |
+
+      </Tab>
+    </Tabs>
+    <br />
+
+  </Accordion>
+</AccordionGroup>
+
+## Choosing an LLM
+
+Selecting the most suitable LLM for your application involves considering several factors:
+
+- **Task Complexity**: More demanding or nuanced tasks generally benefit from more powerful models (e.g., OpenAI's GPT-4 series, Anthropic's Claude Sonnet 4, Google's Gemini 2.5 models).
+- **Latency Requirements**: For applications requiring real-time or near real-time responses, such as live voice conversations, models optimized for speed are preferable (e.g., Google's Gemini Flash series, Anthropic's Claude Haiku, OpenAI's GPT-4o-mini).
+- **Context Window Size**: If your application needs to process, understand, or recall information from long conversations or extensive documents, select models with larger context windows.
+- **Cost-Effectiveness**: Balance the desired performance and features against your budget. LLM prices can vary significantly, so analyze the pricing structure (input, output, and cache tokens) in relation to your expected usage patterns.
+- **HIPAA Compliance**: If your application involves Protected Health Information (PHI), it is crucial to use an LLM that is designated as HIPAA compliant and ensure your entire data handling process meets regulatory standards.
+
+## HIPAA Compliance
+
+Certain LLMs available on our platform may be suitable for use in environments requiring HIPAA compliance, please see the [HIPAA compliance docs](/docs/conversational-ai/customization/hipaa-compliance) for more details
+
+## Understanding LLM Pricing
+
+- **Tokens**: LLM usage is typically billed based on the number of tokens processed. As a general guideline for English text, 100 tokens is approximately equivalent to 75 words.
+- **Input vs. Output Pricing**: Providers often differentiate pricing for input tokens (the data you send to the model) and output tokens (the data the model generates in response).
+- **Cache Pricing**:
+  - `input_cache_read`: This refers to the cost associated with retrieving previously processed input data from a cache. Utilizing cached data can lead to cost savings if identical inputs are processed multiple times.
+  - `input_cache_write`: This is the cost associated with storing input data into a cache. Some LLM providers may charge for this operation.
+- The prices listed in this document are per 1 million tokens and are based on the information available at the time of writing. These prices are subject to change by the LLM providers.
+
+For the most accurate and current information on model capabilities, pricing, and terms of service, always consult the official documentation from the respective LLM providers (OpenAI, Google, Anthropic, xAI).

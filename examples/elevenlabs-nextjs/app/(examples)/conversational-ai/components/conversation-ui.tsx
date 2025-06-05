@@ -1,7 +1,7 @@
 'use client';
 
-import { useConversation } from '@11labs/react';
-import * as ElevenLabs from 'elevenlabs/api';
+import type { GetAgentResponseModel } from '@elevenlabs/elevenlabs-js/api';
+import { useConversation } from '@elevenlabs/react';
 import { AlertCircle, Info, Loader2, Mic, PhoneOff, Terminal } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,10 +20,10 @@ export default function ConversationUI() {
   const agentIdFromUrl = searchParams.get('agent_id');
 
   const [selectedAgent, setSelectedAgent] = useState<string | null>(
-    agentIdFromUrl || (agents.length > 0 ? agents[0].agent_id : null)
+    agentIdFromUrl || (agents.length > 0 ? agents[0].agentId : null)
   );
 
-  const [agentDetails, setAgentDetails] = useState<ElevenLabs.GetAgentResponseModel | null>(null);
+  const [agentDetails, setAgentDetails] = useState<GetAgentResponseModel | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [editablePrompt, setEditablePrompt] = useState<string>('');
@@ -55,8 +55,8 @@ export default function ConversationUI() {
 
           if (result.ok) {
             setAgentDetails(result.value);
-            setEditablePrompt(result.value.conversation_config?.agent?.prompt?.prompt || '');
-            setEditableFirstMessage(result.value.conversation_config?.agent?.first_message || '');
+            setEditablePrompt(result.value.conversationConfig?.agent?.prompt?.prompt || '');
+            setEditableFirstMessage(result.value.conversationConfig?.agent?.firstMessage || '');
             setLoadError(null);
           } else {
             console.error('Failed to load agent details:', result.error);
@@ -87,7 +87,7 @@ export default function ConversationUI() {
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
       const signedUrlResult = await getAgentSignedUrl({
-        agent_id: selectedAgent,
+        agentId: selectedAgent,
       });
 
       if (!signedUrlResult.ok) {
@@ -96,7 +96,7 @@ export default function ConversationUI() {
       }
 
       await conversation.startSession({
-        signedUrl: signedUrlResult.value.signed_url,
+        signedUrl: signedUrlResult.value.signedUrl,
         overrides: {
           agent: {
             prompt: {
@@ -140,10 +140,8 @@ export default function ConversationUI() {
             getAgent(selectedAgent as string).then((result) => {
               if (result.ok) {
                 setAgentDetails(result.value);
-                setEditablePrompt(result.value.conversation_config?.agent?.prompt?.prompt || '');
-                setEditableFirstMessage(
-                  result.value.conversation_config?.agent?.first_message || ''
-                );
+                setEditablePrompt(result.value.conversationConfig?.agent?.prompt?.prompt || '');
+                setEditableFirstMessage(result.value.conversationConfig?.agent?.firstMessage || '');
               } else {
                 setLoadError(result.error || 'Failed to load agent details');
               }
@@ -173,7 +171,7 @@ export default function ConversationUI() {
     <>
       <div className="mb-6">
         <h3 className="text-xl font-bold">{agentDetails.name}</h3>
-        {agentDetails.agent_id && <p className="text-muted-foreground">{agentDetails.agent_id}</p>}
+        {agentDetails.agentId && <p className="text-muted-foreground">{agentDetails.agentId}</p>}
       </div>
 
       {loadError && (
