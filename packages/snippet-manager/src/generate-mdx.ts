@@ -15,8 +15,7 @@ function ensureDir(dirPath: string): void {
 }
 
 function createMdxContent(snippets: Record<string, string>): string {
-  let mdxContent =
-    '{/* This snippet was auto-generated */}\n<CodeBlocks>\n';
+  let mdxContent = '{/* This snippet was auto-generated */}\n<CodeBlocks>\n';
 
   // Python snippets always appear first
   if (snippets['python']) {

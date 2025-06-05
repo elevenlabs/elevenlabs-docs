@@ -34,6 +34,11 @@ describe.each(config.languages.map((o) => [o.name, o] as [string, Language]))(
         // Snapshot comparison (could be useful eventually to check for backwards compatibility)
         // expect(error).toMatchSnapshot();
 
+        // Print error details for debugging
+        if (error) {
+          console.log('Error details:', error);
+        }
+
         expect(error).toBeNull();
       },
       30000
