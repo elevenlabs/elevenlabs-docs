@@ -52,7 +52,7 @@ The documentation includes tested code snippets that demonstrate how to use Elev
 
 2. **Test Snippets**:
 
-   - Run `pnpm run snippets:test` to verify all snippets work correctly
+   - Run `pnpm run snippets:test` to verify all snippets have valid syntax
    - Run `pnpm run snippets:typecheck` to check TypeScript types
 
 3. **Generate Documentation Snippets**:
@@ -67,7 +67,7 @@ The documentation includes tested code snippets that demonstrate how to use Elev
    <Markdown src="/snippets/generated/quickstart_tts.mdx" />
    ```
 
-This workflow ensures that all code examples in the documentation are tested and working.
+This workflow ensures that all code examples in the documentation have valid syntax and stay up-to-date.
 
 ## Other developer resources
 
