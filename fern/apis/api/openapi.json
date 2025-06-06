@@ -661,267 +661,6 @@
         "x-fern-streaming": true
       }
     },
-    "/v1/shared-sound-generations": {
-      "get": {
-        "operationId": "Get_shared_sound_effects_v1_shared_sound_generations_get",
-        "summary": "Get Shared Sound Effects",
-        "description": "Returns a list of shared sound effects.",
-        "parameters": [
-          {
-            "name": "page_size",
-            "in": "query",
-            "description": "How many sound effects to return at maximum. Can not exceed 100, defaults to 30.",
-            "required": false,
-            "schema": {
-              "description": "How many sound effects to return at maximum. Can not exceed 100, defaults to 30.",
-              "type": "integer",
-              "default": 30,
-              "title": "Page Size"
-            }
-          },
-          {
-            "name": "category",
-            "in": "query",
-            "description": "Sound effect category used for filtering.",
-            "required": false,
-            "schema": {
-              "description": "Sound effect category used for filtering.",
-              "anyOf": [
-                {
-                  "enum": [
-                    "restaurant",
-                    "park",
-                    "industrial",
-                    "school",
-                    "office",
-                    "urban",
-                    "ocean",
-                    "nature",
-                    "weather",
-                    "foley",
-                    "fantasy",
-                    "human",
-                    "device",
-                    "sci-fi",
-                    "horror",
-                    "animal",
-                    "boom",
-                    "braam",
-                    "riser",
-                    "whoosh",
-                    "drone",
-                    "impact",
-                    "weapon",
-                    "transport",
-                    "household",
-                    "percussion",
-                    "cymbal",
-                    "synth",
-                    "bass",
-                    "guitar",
-                    "key",
-                    "string",
-                    "brass",
-                    "woodwind",
-                    "ui element",
-                    "sport",
-                    "vehicle",
-                    "misc"
-                  ],
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "examples": [
-                "Nature"
-              ],
-              "title": "Category"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "description": "Search term used for filtering",
-            "required": false,
-            "schema": {
-              "description": "Search term used for filtering",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "examples": [
-                "Cold water"
-              ],
-              "title": "Search"
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Sort criteria. Can be one of: created_date, download_count, like_count, trending_score. Defaults to trending_score.",
-            "required": false,
-            "schema": {
-              "description": "Sort criteria. Can be one of: created_date, download_count, like_count, trending_score. Defaults to trending_score.",
-              "default": "trending_score",
-              "anyOf": [
-                {
-                  "enum": [
-                    "sharing_date_unix",
-                    "purchased_count",
-                    "like_count",
-                    "trending_score"
-                  ],
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "examples": [
-                "trending_score"
-              ],
-              "title": "Sort"
-            }
-          },
-          {
-            "name": "featured",
-            "in": "query",
-            "description": "Filter featured sound effects.",
-            "required": false,
-            "schema": {
-              "description": "Filter featured sound effects.",
-              "type": "boolean",
-              "default": false,
-              "examples": [
-                true
-              ],
-              "title": "Featured"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 0,
-              "title": "Page"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetSharedSoundGenerationsResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "sound-effects-explore"
-        ]
-      }
-    },
-    "/v1/shared-sound-generations/{sound_effect_generation_id}/purchase": {
-      "post": {
-        "operationId": "Purchases_shared_sound_effect_v1_shared_sound_generations__sound_effect_generation_id__purchase_post",
-        "summary": "Purchases Shared Sound Effect",
-        "description": "Purchases shared sound effect and charges user for the purchase.",
-        "parameters": [
-          {
-            "name": "sound_effect_generation_id",
-            "in": "path",
-            "description": "sound_effect_generation_id to be used, you can use GET https://api.elevenlabs.io/v1/sound-effects-history to receive a list of history items and their sound_effect_generation_ids.",
-            "required": true,
-            "schema": {
-              "description": "sound_effect_generation_id to be used, you can use GET https://api.elevenlabs.io/v1/sound-effects-history to receive a list of history items and their sound_effect_generation_ids.",
-              "type": "string",
-              "examples": [
-                "VW7YKqPnjY4h39yTbx2L"
-              ],
-              "title": "Sound Effect Generation Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "audio/mpeg": {}
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "sound-effects-explore"
-        ]
-      }
-    },
     "/v1/voices/{voice_id}/samples/{sample_id}": {
       "delete": {
         "operationId": "Delete_sample_v1_voices__voice_id__samples__sample_id__delete",
@@ -20970,7 +20709,7 @@
             "title": "Cloud Storage Url"
           },
           "webhook": {
-            "description": "Whether to send the transcription result to configured speech-to-text webhooks.  If set the request will return early without the transcription, which will be delivered later via webhook. Webhooks can be created and assigned to a transcription task in webhook settings page in the UI.",
+            "description": "Whether to send the transcription result to configured speech-to-text webhooks.  If set the request will return early without the transcription, which will be delivered later via webhook.",
             "type": "boolean",
             "default": false,
             "title": "Webhook"
@@ -27995,39 +27734,6 @@
         ],
         "title": "GetPronunciationDictionaryMetadataResponseModel"
       },
-      "GetSharedSoundGenerationsResponseModel": {
-        "type": "object",
-        "properties": {
-          "shared_sound_generations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SharedSoundGenerationResponseModel"
-            },
-            "title": "Shared Sound Generations"
-          },
-          "last_sort_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Sort Id"
-          },
-          "has_more": {
-            "type": "boolean",
-            "title": "Has More"
-          }
-        },
-        "required": [
-          "shared_sound_generations",
-          "last_sort_id",
-          "has_more"
-        ],
-        "title": "GetSharedSoundGenerationsResponseModel"
-      },
       "GetSpeechHistoryResponseModel": {
         "type": "object",
         "properties": {
@@ -33473,77 +33179,6 @@
         ],
         "title": "ShareOptionResponseModel"
       },
-      "SharedSoundGenerationResponseModel": {
-        "type": "object",
-        "properties": {
-          "public_user_id": {
-            "type": "string",
-            "title": "Public User Id"
-          },
-          "history_item_id": {
-            "type": "string",
-            "title": "History Item Id"
-          },
-          "generation_id": {
-            "type": "string",
-            "title": "Generation Id"
-          },
-          "text": {
-            "type": "string",
-            "title": "Text"
-          },
-          "category": {
-            "type": "string",
-            "title": "Category"
-          },
-          "labels": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "title": "Labels"
-          },
-          "purchased_count": {
-            "type": "integer",
-            "title": "Purchased Count"
-          },
-          "like_count": {
-            "type": "integer",
-            "title": "Like Count"
-          },
-          "featured": {
-            "type": "boolean",
-            "title": "Featured"
-          },
-          "preview_url": {
-            "type": "string",
-            "title": "Preview Url"
-          },
-          "purchased": {
-            "type": "boolean",
-            "title": "Purchased"
-          },
-          "icon_url": {
-            "type": "string",
-            "title": "Icon Url"
-          }
-        },
-        "required": [
-          "public_user_id",
-          "history_item_id",
-          "generation_id",
-          "text",
-          "category",
-          "labels",
-          "purchased_count",
-          "like_count",
-          "featured",
-          "preview_url",
-          "purchased",
-          "icon_url"
-        ],
-        "title": "SharedSoundGenerationResponseModel"
-      },
       "SimilarVoice": {
         "type": "object",
         "properties": {
@@ -35409,6 +35044,12 @@
               "$ref": "#/components/schemas/PhoneNumberTransfer"
             },
             "title": "Transfers"
+          },
+          "enable_client_message": {
+            "description": "Whether to play a message to the client while they wait for transfer. Defaults to true for backward compatibility.",
+            "type": "boolean",
+            "default": true,
+            "title": "Enable Client Message"
           }
         },
         "required": [
@@ -38002,6 +37643,10 @@
             "description": "Text contents of the widget",
             "$ref": "#/components/schemas/WidgetTextContents"
           },
+          "styles": {
+            "description": "Styles for the widget",
+            "$ref": "#/components/schemas/WidgetStyles"
+          },
           "language_selector": {
             "description": "Whether to show the language selector",
             "type": "boolean",
@@ -38317,6 +37962,10 @@
           "text_contents": {
             "description": "Text contents of the widget",
             "$ref": "#/components/schemas/WidgetTextContents"
+          },
+          "styles": {
+            "description": "Styles for the widget",
+            "$ref": "#/components/schemas/WidgetStyles"
           },
           "language_selector": {
             "description": "Whether to show the language selector",
@@ -38634,6 +38283,10 @@
             "description": "Text contents of the widget",
             "$ref": "#/components/schemas/WidgetTextContents"
           },
+          "styles": {
+            "description": "Styles for the widget",
+            "$ref": "#/components/schemas/WidgetStyles"
+          },
           "language": {
             "type": "string",
             "title": "Language"
@@ -38790,6 +38443,252 @@
           "bottom-right"
         ],
         "title": "WidgetPlacement"
+      },
+      "WidgetStyles": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "description": "The base background color.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base"
+          },
+          "base_hover": {
+            "description": "The color of the base background when hovered.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Hover"
+          },
+          "base_active": {
+            "description": "The color of the base background when active (clicked).",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Active"
+          },
+          "base_border": {
+            "description": "The color of the border against the base background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Border"
+          },
+          "base_subtle": {
+            "description": "The color of subtle text against the base background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Subtle"
+          },
+          "base_primary": {
+            "description": "The color of primary text against the base background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Primary"
+          },
+          "base_error": {
+            "description": "The color of error text against the base background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Error"
+          },
+          "accent": {
+            "description": "The accent background color.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accent"
+          },
+          "accent_hover": {
+            "description": "The color of the accent background when hovered.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accent Hover"
+          },
+          "accent_active": {
+            "description": "The color of the accent background when active (clicked).",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accent Active"
+          },
+          "accent_border": {
+            "description": "The color of the border against the accent background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accent Border"
+          },
+          "accent_subtle": {
+            "description": "The color of subtle text against the accent background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accent Subtle"
+          },
+          "accent_primary": {
+            "description": "The color of primary text against the accent background.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accent Primary"
+          },
+          "overlay_padding": {
+            "description": "The padding around the edges of the viewport.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overlay Padding"
+          },
+          "button_radius": {
+            "description": "The radius of the buttons.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Button Radius"
+          },
+          "input_radius": {
+            "description": "The radius of the input fields.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Radius"
+          },
+          "bubble_radius": {
+            "description": "The radius of the chat bubbles.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bubble Radius"
+          },
+          "sheet_radius": {
+            "description": "The default radius of sheets.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sheet Radius"
+          },
+          "compact_sheet_radius": {
+            "description": "The radius of the sheet in compact mode.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Compact Sheet Radius"
+          },
+          "dropdown_sheet_radius": {
+            "description": "The radius of the dropdown sheet.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dropdown Sheet Radius"
+          }
+        },
+        "title": "WidgetStyles"
       },
       "WidgetTextContents": {
         "type": "object",
