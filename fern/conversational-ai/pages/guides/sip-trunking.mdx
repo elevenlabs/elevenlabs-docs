@@ -18,10 +18,10 @@ With SIP trunking, you can:
 
 SIP trunking establishes a direct connection between your telephony infrastructure and the ElevenLabs platform:
 
-1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform using our origination URI.
-2. **Outbound calls**: Calls initiated by ElevenLabs are routed to your SIP trunk using your termination URI, enabling your agents to make outgoing calls.
+1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform using your configured SIP INVITE address.
+2. **Outbound calls**: Calls initiated by ElevenLabs are routed to your SIP trunk using your configured hostname, enabling your agents to make outgoing calls.
 3. **Authentication**: Connection security for the signaling is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication based on the signaling source IP.
-4. **Signaling and Media**: The initial call setup (signaling) uses TCP. Once the call is established, the actual audio data (RTP stream) is transmitted over UDP for low latency.
+4. **Signaling and Media**: The initial call setup (signaling) can use either TCP or UDP based on your transport selection. Once the call is established, the actual audio data (RTP stream) is transmitted over UDP for low latency.
 
 ## Requirements
 
@@ -50,47 +50,66 @@ Before setting up SIP trunking, ensure you have:
       <img src="/assets/images/conversational-ai/sip-trunk.png" alt="SIP trunk configuration dialog" />
     </Frame>
 
-    When you import a SIP trunk, the system automatically configures the ElevenLabs origination URI for inbound calls:
-    `sip:sip.rtc.elevenlabs.io:5060;transport=tcp`
-
-    This pre-populated URI cannot be modified and serves as the destination endpoint where your system should route all inbound calls (calls from your system to ElevenLabs).
-
-    <Note>
-      The `transport=tcp` parameter specifies that the initial SIP signaling connection uses TCP. However, the actual audio data (RTP stream) is transmitted over UDP for low-latency performance, which is standard for real-time communication. This distinction is important: only the call setup uses TCP; the voice data itself uses UDP.
-    </Note>
-
   </Step>
-  <Step title="Enter configuration details">
-    Complete the form with the following information:
+  <Step title="Enter basic configuration">
+    Complete the basic configuration with the following information:
 
     - **Label**: A descriptive name for the phone number
     - **Phone Number**: The E.164 formatted phone number to connect (e.g., +15551234567)
-    - **Termination URI**: Your SIP trunk's termination URI (where ElevenLabs will send outbound calls)
 
     <Frame background="subtle">
-      <img src="/assets/images/conversational-ai/sip-trunk-inbound.png" alt="SIP trunk inbound configuration" />
+      <img src="/assets/images/conversational-ai/sip-trunk-inbound.png" alt="SIP trunk basic configuration" />
     </Frame>
 
   </Step>
-  <Step title="Configure authentication (optional)">
+  <Step title="Configure outbound settings">
+    Configure where ElevenLabs should send calls for your phone number:
 
-    If your SIP provider requires digest authentication:
-
-    - Enter the username for SIP digest authentication
-    - Enter the password for SIP digest authentication
+    - **Address**: Hostname or IP address where the SIP INVITE is sent (e.g., `sip.telnyx.com`). This should be a hostname or IP address only, not a full SIP URI.
+    - **Transport Type**: Select the transport protocol for SIP signaling:
+      - **TCP**: Standard TCP transport
+      - **UDP**: Standard UDP transport
+      - **TLS**: Encrypted TLS transport for enhanced security
+    - **Media Encryption**: Configure encryption for RTP media streams:
+      - **Allowed**: Permits encrypted media streams
+      - **Required**: Enforces encrypted media streams
 
     <Frame background="subtle">
-      <img src="/assets/images/conversational-ai/sip-trunk-outbound.png" alt="SIP trunk outbound configuration" />
+      <img src="/assets/images/conversational-ai/sip-outbound.png" alt="SIP trunk outbound configuration" />
     </Frame>
 
-    If left empty, Access Control List (ACL) authentication based on the source IP address will be attempted. In this case, you'll need to ensure your system sends SIP requests from an IP address that you allowlist in your provider's settings, and that your firewall allows return traffic from ElevenLabs.
+    <Note>
+      The **Address** field specifies where ElevenLabs will send outbound calls from your AI agents. Enter only the hostname or IP address without the `sip:` protocol prefix.
+    </Note>
+
+  </Step>
+  <Step title="Add custom headers (optional)">
+    If your SIP trunk provider requires specific headers for call routing or identification:
+
+    - Click "Add Header" to add custom SIP headers
+    - Enter the header name and value as required by your provider
+    - You can add multiple headers as needed
+
+    Custom headers are included with all outbound calls and can be used for:
+    - Call routing and identification
+    - Billing and tracking purposes
+    - Provider-specific requirements
+
+  </Step>
+  <Step title="Configure authentication (optional)">
+    Provide digest authentication credentials if required by your SIP trunk provider:
+
+    - **SIP Trunk Username**: Username for SIP digest authentication
+    - **SIP Trunk Password**: Password for SIP digest authentication
+
+    If left empty, Access Control List (ACL) authentication will be used, which requires you to allowlist ElevenLabs IP addresses in your provider's settings.
 
     <Info>
-      **Signaling vs. Media IPs**:
-      - The **SIP signaling** connection originates from `sip.rtc.elevenlabs.io` (currently resolving to `34.49.132.122`). This IP is static and can be allowlisted if using ACL authentication.
-      - The **RTP media stream** (audio data) uses dynamic IP addresses from an autoscaling pool. These IPs change and **cannot be reliably allowlisted**.
+      **Authentication Methods**:
+      - **Digest Authentication**: Uses username/password credentials for secure authentication
+      - **ACL Authentication**: Uses IP address allowlisting for access control
 
-      For robust security without relying on IP allowlisting for media, **Digest Authentication is strongly recommended**.
+      **Digest Authentication is strongly recommended** as it provides better security without relying on IP allowlisting, which can be complex to manage with dynamic IP addresses.
     </Info>
 
   </Step>
@@ -116,19 +135,28 @@ After importing your SIP trunk phone number, you can assign it to a conversation
     If you're experiencing connection problems: 
     
     1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side. 
-    2. Check that your firewall allows SIP signaling traffic
-    (TCP/UDP port 5060) *to* `sip.rtc.elevenlabs.io` (`34.49.132.122`) and allows RTP traffic 
-    3. Confirm that your termination URI is correctly formatted. 
-    4. Test with and without digest authentication credentials.
+    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port
+    3. Confirm that your address hostname is correctly formatted and accessible
+    4. Test with and without digest authentication credentials
+    5. If using TLS transport, ensure your certificates are valid and properly configured
     
   </Accordion>
   <Accordion title="Authentication Failures">
     If calls are failing due to authentication issues:
 
-    1. Double-check your username and password if using digest authentication.
-    2. If using ACL authentication, ensure your provider is configured to trust signaling traffic from `sip.rtc.elevenlabs.io` (`34.49.132.122`). Remember that ACL does not
-    apply to the media stream IPs.
-    3. Check your SIP trunk provider's logs for specific authenticatio nerror messages.
+    1. Double-check your SIP trunk username and password if using digest authentication
+    2. If using ACL authentication, ensure your provider is configured to trust signaling traffic from ElevenLabs IP addresses (contact support for current IP ranges)
+    3. Check your SIP trunk provider's logs for specific authentication error messages
+    4. Verify that custom headers, if configured, match your provider's requirements
+
+  </Accordion>
+  <Accordion title="TLS/Encryption Issues">
+    If you're experiencing issues with TLS transport or media encryption:
+
+    1. Verify that your SIP trunk provider supports the selected transport type (TLS)
+    2. Check certificate validity and trust chains
+    3. Ensure your provider supports the configured media encryption settings
+    4. Test with different transport types to isolate the issue
 
   </Accordion>
   <Accordion title="No Audio or One-Way Audio">
@@ -170,7 +198,19 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 <Accordion title="What SIP trunk providers are compatible with ElevenLabs?">
   ElevenLabs is compatible with most standard SIP trunk providers including Twilio, Vonage,
   RingCentral, Sinch, Infobip, Telnyx, Exotel, Plivo, Bandwidth, and others that support SIP
-  protocol standards.
+  protocol standards. TLS transport and media encryption are supported for enhanced security.
+</Accordion>
+
+<Accordion title="Should I use TLS transport for better security?">
+  Yes, TLS transport provides encrypted SIP signaling which enhances security for your calls.
+  Combined with media encryption, it ensures end-to-end protection of your communications. However,
+  ensure your SIP trunk provider supports TLS before enabling it.
+</Accordion>
+
+<Accordion title="What are custom headers used for?">
+  Custom SIP headers allow you to include provider-specific information with outbound calls. Common
+  uses include call routing, billing codes, caller identification, and meeting specific provider
+  requirements. Check with your SIP trunk provider for any required headers.
 </Accordion>
 
 <Accordion title="How many concurrent calls are supported?">
