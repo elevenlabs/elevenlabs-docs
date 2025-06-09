@@ -75,23 +75,20 @@ Evaluation criteria allow you to define custom goals and success metrics for you
 ### Best Practices
 
 <AccordionGroup>
+
   <Accordion title="Writing effective evaluation prompts">
     - Be specific about what constitutes success vs. failure
     - Include edge cases and examples in your prompt
     - Use clear, measurable criteria when possible
     - Test your prompts with various conversation scenarios
   </Accordion>
-
-{' '}
-
-<Accordion title="Common evaluation criteria">
-  - **Customer satisfaction**: "Mark as successful if the customer expresses satisfaction or their
-  issue was resolved" - **Goal completion**: "Mark as successful if the customer completed the
-  requested action (booking, purchase, etc.)" - **Compliance**: "Mark as successful if the agent
-  followed all required compliance procedures" - **Issue resolution**: "Mark as successful if the
-  customer's technical issue was resolved during the call"
-</Accordion>
-
+  <Accordion title="Common evaluation criteria">
+    - **Customer satisfaction**: "Mark as successful if the customer expresses satisfaction or their
+    issue was resolved" - **Goal completion**: "Mark as successful if the customer completed the
+    requested action (booking, purchase, etc.)" - **Compliance**: "Mark as successful if the agent
+    followed all required compliance procedures" - **Issue resolution**: "Mark as successful if the
+    customer's technical issue was resolved during the call"
+  </Accordion>
   <Accordion title="Handling ambiguous results">
     The `unknown` result is returned when the LLM cannot determine success or failure from the transcript. This often happens with:
     - Incomplete conversations
@@ -100,6 +97,7 @@ Evaluation criteria allow you to define custom goals and success metrics for you
     
     Monitor `unknown` results to identify areas where your criteria prompts may need refinement.
   </Accordion>
+
 </AccordionGroup>
 
 ## Data Collection
@@ -195,11 +193,13 @@ Data collection supports four data types:
   </Card>
 
 {' '}
+
 <Card title="Lead Qualification" icon="user-check">
   Extract contact information, qualification criteria, and interest levels from sales conversations.
 </Card>
 
 {' '}
+
 <Card title="Compliance Monitoring" icon="shield-check">
   Ensure agents follow required procedures and capture necessary consent or disclosure
   confirmations.
@@ -215,7 +215,7 @@ Data collection supports four data types:
 
 Evaluation criteria and data collection integrate seamlessly with other platform features:
 
-- **[Post-call Webhooks](/docs/conversational-ai/workflows/post-call-webhook)**: Receive evaluation results and extracted data via webhooks for integration with external systems
+- **[Post-call Webhooks](/docs/conversational-ai/workflows/post-call-webhooks)**: Receive evaluation results and extracted data via webhooks for integration with external systems
 - **[Analytics Dashboard](/docs/conversational-ai/convai-dashboard)**: View aggregated performance metrics and trends across all conversations
 - **[Agent Transfer](/docs/conversational-ai/customization/tools/agent-transfer)**: Use evaluation criteria to determine when conversations should be escalated
 
@@ -227,25 +227,23 @@ Evaluation criteria and data collection integrate seamlessly with other platform
 ## Troubleshooting
 
 <AccordionGroup>
+
   <Accordion title="Evaluation criteria returning unexpected results">
     - Review your prompt for clarity and specificity
     - Test with sample conversations to validate logic
     - Consider edge cases in your evaluation criteria
     - Check if the transcript contains sufficient information for evaluation
   </Accordion>
-
-{' '}
-
-<Accordion title="Data extraction returning empty values">
-  - Verify the data exists in the conversation transcript - Check if your extraction prompt is
-  specific enough - Ensure the data type matches the expected format - Consider if the information
-  was communicated clearly during the conversation
-</Accordion>
-
+  <Accordion title="Data extraction returning empty values">
+    - Verify the data exists in the conversation transcript - Check if your extraction prompt is
+    specific enough - Ensure the data type matches the expected format - Consider if the information
+    was communicated clearly during the conversation
+  </Accordion>
   <Accordion title="Performance considerations">
     - Each evaluation criterion and data collection rule adds processing time
     - Complex prompts may take longer to evaluate
     - Consider the trade-off between comprehensive analysis and response time
     - Monitor your usage to optimize for your specific needs
   </Accordion>
+  
 </AccordionGroup>
