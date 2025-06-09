@@ -1,0 +1,247 @@
+---
+title: Evaluation & Data Collection
+subtitle: Define evaluation criteria and extract structured data from conversations to measure performance and gather insights.
+---
+
+**Evaluation criteria** and **data collection** enable you to systematically analyze conversation quality and extract valuable information from customer interactions. These features allow you to define custom metrics to evaluate agent performance and automatically extract structured data from conversation transcripts.
+
+## Overview
+
+The Conversational AI platform provides two powerful analysis capabilities:
+
+- **Evaluation Criteria**: Define custom metrics to assess conversation quality, goal achievement, and customer satisfaction
+- **Data Collection**: Extract specific data points from conversations such as contact information, issue details, or any structured information
+
+Both features use LLM-powered analysis to process conversation transcripts and provide actionable insights that help improve agent performance and business outcomes.
+
+## Evaluation Criteria
+
+Evaluation criteria allow you to define custom goals and success metrics for your conversations. Each criterion is evaluated against the conversation transcript and returns a result of `success`, `failure`, or `unknown`, along with a detailed rationale.
+
+### Types of Evaluation Criteria
+
+<Tabs>
+  <Tab title="Goal Prompt Criteria">
+    **Goal prompt criteria** pass the conversation transcript along with a custom prompt to an LLM to verify if a specific goal was met. This is the most flexible type of evaluation and can be used for complex business logic.
+
+    **Examples:**
+    - Customer satisfaction assessment
+    - Issue resolution verification
+    - Compliance checking
+    - Custom business rule validation
+
+    The LLM analyzes the transcript and returns:
+    - **Result**: `success`, `failure`, or `unknown`
+    - **Rationale**: Detailed explanation of why the result was chosen
+
+  </Tab>
+</Tabs>
+
+### Configuration
+
+<Steps>
+  <Step title="Access agent settings">
+    Navigate to your agent's dashboard and select the **Analysis** tab to configure evaluation criteria.
+
+    <Frame background="subtle">
+      ![Analysis settings](/assets/images/conversational-ai/analysis-settings.png)
+    </Frame>
+
+  </Step>
+
+  <Step title="Add evaluation criteria">
+    Click **Add criteria** to create a new evaluation criterion.
+
+    Define your criterion with:
+    - **Identifier**: A unique name for the criterion (e.g., `user_was_not_upset`)
+    - **Description**: Detailed prompt describing what should be evaluated
+
+    <Frame background="subtle">
+      ![Setting up evaluation criteria](/assets/images/conversational-ai/evaluation.gif)
+    </Frame>
+
+  </Step>
+
+  <Step title="View results">
+    After conversations complete, evaluation results appear in your conversation history dashboard. Each conversation shows the evaluation outcome and rationale for every configured criterion.
+
+    <Frame background="subtle">
+      ![Evaluation results in conversation history](/assets/images/conversational-ai/evaluation_result.gif)
+    </Frame>
+
+  </Step>
+</Steps>
+
+### Best Practices
+
+<AccordionGroup>
+
+  <Accordion title="Writing effective evaluation prompts">
+    - Be specific about what constitutes success vs. failure
+    - Include edge cases and examples in your prompt
+    - Use clear, measurable criteria when possible
+    - Test your prompts with various conversation scenarios
+  </Accordion>
+  <Accordion title="Common evaluation criteria">
+    - **Customer satisfaction**: "Mark as successful if the customer expresses satisfaction or their issue was resolved"
+    - **Goal completion**: "Mark as successful if the customer completed the requested action (booking, purchase, etc.)"
+    - **Compliance**: "Mark as successful if the agent followed all required compliance procedures"
+    - **Issue resolution**: "Mark as successful if the customer's technical issue was resolved during the call"
+  </Accordion>
+  <Accordion title="Handling ambiguous results">
+    The `unknown` result is returned when the LLM cannot determine success or failure from the transcript. This often happens with:
+    - Incomplete conversations
+    - Ambiguous customer responses
+    - Missing information in the transcript
+    
+    Monitor `unknown` results to identify areas where your criteria prompts may need refinement.
+  </Accordion>
+</AccordionGroup>
+
+## Data Collection
+
+Data collection automatically extracts structured information from conversation transcripts. This enables you to capture valuable data points without manual processing.
+
+### Supported Data Types
+
+Data collection supports four data types:
+
+- **String**: Text-based information (names, emails, addresses)
+- **Boolean**: True/false values (agreement status, eligibility)
+- **Integer**: Whole numbers (quantity, age, ratings)
+- **Number**: Decimal numbers (prices, percentages, measurements)
+
+### Configuration
+
+<Steps>
+  <Step title="Access data collection settings">
+    In the **Analysis** tab of your agent settings, navigate to the **Data collection** section.
+
+    <Frame background="subtle">
+      ![Setting up data collection](/assets/images/conversational-ai/collection.gif)
+    </Frame>
+
+  </Step>
+
+  <Step title="Add data collection items">
+    Click **Add item** to create a new data extraction rule.
+
+    Configure each item with:
+    - **Identifier**: Unique name for the data field (e.g., `email`, `customer_rating`)
+    - **Data type**: Select from string, boolean, integer, or number
+    - **Description**: Detailed instructions on how to extract the data from the transcript
+
+    <Info>
+      The description field is passed to the LLM and should be as specific as possible about what to extract and how to format it.
+    </Info>
+
+  </Step>
+
+  <Step title="Review extracted data">
+    Extracted data appears in your conversation history, allowing you to review what information was captured from each interaction.
+
+    <Frame background="subtle">
+      ![Data collection results in conversation history](/assets/images/conversational-ai/collection_result.gif)
+    </Frame>
+
+  </Step>
+</Steps>
+
+### Best Practices
+
+<AccordionGroup>
+  <Accordion title="Writing effective extraction prompts">
+    - Be explicit about the expected format (e.g., "email address in the format user@domain.com")
+    - Specify what to do when information is missing or unclear
+    - Include examples of valid and invalid data
+    - Mention any validation requirements
+  </Accordion>
+
+  <Accordion title="Common data collection examples">
+    **Contact Information:**
+    - `email`: "Extract the customer's email address in standard format (user@domain.com)"
+    - `phone_number`: "Extract the customer's phone number including area code"
+    - `full_name`: "Extract the customer's complete name as provided"
+
+    **Business Data:**
+    - `issue_category`: "Classify the customer's issue into one of: technical, billing, account, or general"
+    - `satisfaction_rating`: "Extract any numerical satisfaction rating given by the customer (1-10 scale)"
+    - `order_number`: "Extract any order or reference number mentioned by the customer"
+
+    **Behavioral Data:**
+    - `was_angry`: "Determine if the customer expressed anger or frustration during the call"
+    - `requested_callback`: "Determine if the customer requested a callback or follow-up"
+
+  </Accordion>
+
+  <Accordion title="Handling missing or unclear data">
+    When the requested data cannot be found or is ambiguous in the transcript, the extraction will return null or empty values. Consider:
+    - Using conditional logic in your applications to handle missing data
+    - Creating fallback criteria for incomplete extractions
+    - Training agents to consistently gather required information
+  </Accordion>
+</AccordionGroup>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Customer Support Analytics" icon="chart-line">
+    Track issue resolution rates, customer satisfaction, and support quality metrics to improve
+    service delivery.
+  </Card>
+
+{' '}
+
+<Card title="Lead Qualification" icon="user-check">
+  Extract contact information, qualification criteria, and interest levels from sales conversations.
+</Card>
+
+{' '}
+
+<Card title="Compliance Monitoring" icon="shield-check">
+  Ensure agents follow required procedures and capture necessary consent or disclosure
+  confirmations.
+</Card>
+
+  <Card title="Business Intelligence" icon="brain">
+    Gather structured data about customer preferences, feedback, and behavior patterns for strategic
+    insights.
+  </Card>
+</CardGroup>
+
+## Integration with Workflows
+
+Evaluation criteria and data collection integrate seamlessly with other platform features:
+
+- **[Post-call Webhooks](/docs/conversational-ai/workflows/post-call-webhooks)**: Receive evaluation results and extracted data via webhooks for integration with external systems
+- **[Analytics Dashboard](/docs/conversational-ai/convai-dashboard)**: View aggregated performance metrics and trends across all conversations
+- **[Agent Transfer](/docs/conversational-ai/customization/tools/agent-transfer)**: Use evaluation criteria to determine when conversations should be escalated
+
+<Tip>
+  Start with a small set of evaluation criteria and data collection rules, then expand based on your
+  specific business needs and use cases.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+
+  <Accordion title="Evaluation criteria returning unexpected results">
+    - Review your prompt for clarity and specificity
+    - Test with sample conversations to validate logic
+    - Consider edge cases in your evaluation criteria
+    - Check if the transcript contains sufficient information for evaluation
+  </Accordion>
+  <Accordion title="Data extraction returning empty values">
+    - Verify the data exists in the conversation transcript - Check if your extraction prompt is
+    specific enough - Ensure the data type matches the expected format - Consider if the information
+    was communicated clearly during the conversation
+  </Accordion>
+  <Accordion title="Performance considerations">
+    - Each evaluation criterion and data collection rule adds processing time
+    - Complex prompts may take longer to evaluate
+    - Consider the trade-off between comprehensive analysis and response time
+    - Monitor your usage to optimize for your specific needs
+  </Accordion>
+  
+</AccordionGroup>

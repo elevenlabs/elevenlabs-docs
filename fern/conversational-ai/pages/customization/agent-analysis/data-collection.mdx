@@ -1,0 +1,206 @@
+---
+title: Data Collection
+subtitle: Extract structured information from conversations such as contact details and business data.
+---
+
+Data collection automatically extracts structured information from conversation transcripts using LLM-powered analysis. This enables you to capture valuable data points without manual processing, improving operational efficiency and data accuracy.
+
+## Overview
+
+Data collection analyzes conversation transcripts to identify and extract specific information you define. The extracted data is structured according to your specifications and made available for downstream processing and analysis.
+
+### Supported Data Types
+
+Data collection supports four data types to handle various information formats:
+
+- **String**: Text-based information (names, emails, addresses)
+- **Boolean**: True/false values (agreement status, eligibility)
+- **Integer**: Whole numbers (quantity, age, ratings)
+- **Number**: Decimal numbers (prices, percentages, measurements)
+
+## Configuration
+
+<Steps>
+  <Step title="Access data collection settings">
+    In the **Analysis** tab of your agent settings, navigate to the **Data collection** section.
+
+    <Frame background="subtle">
+      ![Setting up data collection](/assets/images/conversational-ai/collection.gif)
+    </Frame>
+
+  </Step>
+
+  <Step title="Add data collection items">
+    Click **Add item** to create a new data extraction rule.
+
+    Configure each item with:
+    - **Identifier**: Unique name for the data field (e.g., `email`, `customer_rating`)
+    - **Data type**: Select from string, boolean, integer, or number
+    - **Description**: Detailed instructions on how to extract the data from the transcript
+
+    <Info>
+      The description field is passed to the LLM and should be as specific as possible about what to extract and how to format it.
+    </Info>
+
+  </Step>
+
+  <Step title="Review extracted data">
+    Extracted data appears in your conversation history, allowing you to review what information was captured from each interaction.
+
+    <Frame background="subtle">
+      ![Data collection results in conversation history](/assets/images/conversational-ai/collection_result.gif)
+    </Frame>
+
+  </Step>
+</Steps>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Writing effective extraction prompts">
+    - Be explicit about the expected format (e.g., "email address in the format user@domain.com")
+    - Specify what to do when information is missing or unclear
+    - Include examples of valid and invalid data
+    - Mention any validation requirements
+  </Accordion>
+
+  <Accordion title="Common data collection examples">
+    **Contact Information:**
+    - `email`: "Extract the customer's email address in standard format (user@domain.com)"
+    - `phone_number`: "Extract the customer's phone number including area code"
+    - `full_name`: "Extract the customer's complete name as provided"
+
+    **Business Data:**
+    - `issue_category`: "Classify the customer's issue into one of: technical, billing, account, or general"
+    - `satisfaction_rating`: "Extract any numerical satisfaction rating given by the customer (1-10 scale)"
+    - `order_number`: "Extract any order or reference number mentioned by the customer"
+
+    **Behavioral Data:**
+    - `was_angry`: "Determine if the customer expressed anger or frustration during the call"
+    - `requested_callback`: "Determine if the customer requested a callback or follow-up"
+
+  </Accordion>
+
+  <Accordion title="Handling missing or unclear data">
+    When the requested data cannot be found or is ambiguous in the transcript, the extraction will return null or empty values. Consider:
+    - Using conditional logic in your applications to handle missing data
+    - Creating fallback criteria for incomplete extractions
+    - Training agents to consistently gather required information
+  </Accordion>
+</AccordionGroup>
+
+## Data Type Guidelines
+
+<Tabs>
+  <Tab title="String">
+    Use for text-based information that doesn't fit other types.
+    
+    **Examples:**
+    - Customer names
+    - Email addresses 
+    - Product categories
+    - Issue descriptions
+    
+    **Best practices:**
+    - Specify expected format when relevant
+    - Include validation requirements
+    - Consider standardization needs
+  </Tab>
+
+  <Tab title="Boolean">
+    Use for yes/no, true/false determinations.
+    
+    **Examples:**
+    - Customer agreement status
+    - Eligibility verification
+    - Feature requests
+    - Complaint indicators
+    
+    **Best practices:**
+    - Clearly define what constitutes true vs. false
+    - Handle ambiguous responses
+    - Consider default values for unclear cases
+  </Tab>
+  <Tab title="Integer">
+    Use for whole number values.
+    
+    **Examples:**
+    - Customer age
+    - Product quantities
+    - Rating scores
+    - Number of issues
+    
+    **Best practices:**
+    - Specify valid ranges when applicable
+    - Handle non-numeric responses
+    - Consider rounding rules if needed
+  </Tab>
+  <Tab title="Number">
+    Use for decimal or floating-point values.
+    
+    **Examples:**
+    - Monetary amounts
+    - Percentages
+    - Measurements
+    - Calculated scores
+    
+    **Best practices:**
+    - Specify precision requirements
+    - Include currency or unit context
+    - Handle different number formats
+  </Tab>
+</Tabs>
+
+## Use Cases
+
+<CardGroup cols={2}>
+
+<Card title="Lead Qualification" icon="user-check">
+  Extract contact information, qualification criteria, and interest levels from sales conversations.
+</Card>
+
+<Card title="Customer Intelligence" icon="brain">
+  Gather structured data about customer preferences, feedback, and behavior patterns for strategic
+  insights.
+</Card>
+
+<Card title="Support Analytics" icon="chart-line">
+  Capture issue categories, resolution details, and satisfaction scores for operational
+  improvements.
+</Card>
+
+<Card title="Compliance Documentation" icon="clipboard-check">
+  Extract required disclosures, consents, and regulatory information for audit trails.
+</Card>
+
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+
+  <Accordion title="Data extraction returning empty values">
+    - Verify the data exists in the conversation transcript
+    - Check if your extraction prompt is specific enough
+    - Ensure the data type matches the expected format
+    - Consider if the information was communicated clearly during the conversation
+  </Accordion>
+  <Accordion title="Inconsistent data formats">
+    - Review extraction prompts for format specifications 
+    - Add validation requirements to prompts 
+    - Consider post-processing for data standardization 
+    - Test with various conversation scenarios
+  </Accordion>
+  <Accordion title="Performance considerations">
+    - Each data collection rule adds processing time
+    - Complex extraction logic may take longer to evaluate
+    - Monitor extraction accuracy vs. speed requirements
+    - Optimize prompts for efficiency when possible
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+  Extracted data is available through [Post-call
+  Webhooks](/docs/conversational-ai/workflows/post-call-webhooks) for integration with CRM systems,
+  databases, and analytics platforms.
+</Info>

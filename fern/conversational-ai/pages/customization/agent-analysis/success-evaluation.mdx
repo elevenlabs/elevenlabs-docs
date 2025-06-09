@@ -1,0 +1,147 @@
+---
+title: Success Evaluation
+subtitle: Define custom criteria to assess conversation quality, goal achievement, and customer satisfaction.
+---
+
+Success evaluation allows you to define custom goals and success metrics for your conversations. Each criterion is evaluated against the conversation transcript and returns a result of `success`, `failure`, or `unknown`, along with a detailed rationale.
+
+## Overview
+
+Success evaluation uses LLM-powered analysis to assess conversation quality against your specific business objectives. This enables systematic performance measurement and quality assurance across all customer interactions.
+
+### How It Works
+
+Each evaluation criterion analyzes the conversation transcript using a custom prompt and returns:
+
+- **Result**: `success`, `failure`, or `unknown`
+- **Rationale**: Detailed explanation of why the result was chosen
+
+### Types of Evaluation Criteria
+
+<Tabs>
+  <Tab title="Goal Prompt Criteria">
+    **Goal prompt criteria** pass the conversation transcript along with a custom prompt to an LLM to verify if a specific goal was met. This is the most flexible type of evaluation and can be used for complex business logic.
+
+    **Examples:**
+    - Customer satisfaction assessment
+    - Issue resolution verification
+    - Compliance checking
+    - Custom business rule validation
+
+  </Tab>
+</Tabs>
+
+## Configuration
+
+<Steps>
+  <Step title="Access agent settings">
+    Navigate to your agent's dashboard and select the **Analysis** tab to configure evaluation criteria.
+
+    <Frame background="subtle">
+      ![Analysis settings](/assets/images/conversational-ai/analysis-settings.png)
+    </Frame>
+
+  </Step>
+
+  <Step title="Add evaluation criteria">
+    Click **Add criteria** to create a new evaluation criterion.
+
+    Define your criterion with:
+    - **Identifier**: A unique name for the criterion (e.g., `user_was_not_upset`)
+    - **Description**: Detailed prompt describing what should be evaluated
+
+    <Frame background="subtle">
+      ![Setting up evaluation criteria](/assets/images/conversational-ai/evaluation.gif)
+    </Frame>
+
+  </Step>
+
+  <Step title="View results">
+    After conversations complete, evaluation results appear in your conversation history dashboard. Each conversation shows the evaluation outcome and rationale for every configured criterion.
+
+    <Frame background="subtle">
+      ![Evaluation results in conversation history](/assets/images/conversational-ai/evaluation_result.gif)
+    </Frame>
+
+  </Step>
+</Steps>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Writing effective evaluation prompts">
+    - Be specific about what constitutes success vs. failure
+    - Include edge cases and examples in your prompt
+    - Use clear, measurable criteria when possible
+    - Test your prompts with various conversation scenarios
+  </Accordion>
+
+<Accordion title="Common evaluation criteria">
+  - **Customer satisfaction**: "Mark as successful if the customer expresses satisfaction or their
+  issue was resolved" - **Goal completion**: "Mark as successful if the customer completed the
+  requested action (booking, purchase, etc.)" - **Compliance**: "Mark as successful if the agent
+  followed all required compliance procedures" - **Issue resolution**: "Mark as successful if the
+  customer's technical issue was resolved during the call"
+</Accordion>
+
+  <Accordion title="Handling ambiguous results">
+    The `unknown` result is returned when the LLM cannot determine success or failure from the transcript. This often happens with:
+    - Incomplete conversations
+    - Ambiguous customer responses
+    - Missing information in the transcript
+    
+    Monitor `unknown` results to identify areas where your criteria prompts may need refinement.
+  </Accordion>
+</AccordionGroup>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Customer Support Quality" icon="headset">
+    Measure issue resolution rates, customer satisfaction, and support quality metrics to improve
+    service delivery.
+  </Card>
+
+    <Card title="Sales Performance" icon="chart-up">
+    Track goal achievement, objection handling, and conversion rates across sales conversations.
+    </Card>
+
+
+    <Card title="Compliance Monitoring" icon="shield-check">
+    Ensure agents follow required procedures and capture necessary consent or disclosure
+    confirmations.
+    </Card>
+
+  <Card title="Training & Development" icon="graduation-cap">
+    Identify coaching opportunities and measure improvement in agent performance over time.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+
+  <Accordion title="Evaluation criteria returning unexpected results">
+    - Review your prompt for clarity and specificity
+    - Test with sample conversations to validate logic
+    - Consider edge cases in your evaluation criteria
+    - Check if the transcript contains sufficient information for evaluation
+  </Accordion>
+  <Accordion title="High frequency of 'unknown' results">
+    - Ensure your prompts are specific about what information to look for - Consider if conversations
+    contain enough context for evaluation - Review transcript quality and completeness - Adjust
+    criteria to handle common edge cases
+  </Accordion>
+  <Accordion title="Performance considerations">
+    - Each evaluation criterion adds processing time to conversation analysis
+    - Complex prompts may take longer to evaluate
+    - Consider the trade-off between comprehensive analysis and response time
+    - Monitor your usage to optimize for your specific needs
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+  Success evaluation results are available through [Post-call
+  Webhooks](/docs/conversational-ai/workflows/post-call-webhooks) for integration with external
+  systems and analytics platforms.
+</Info>
