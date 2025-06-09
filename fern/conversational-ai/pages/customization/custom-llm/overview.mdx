@@ -171,7 +171,8 @@ This creates natural pauses that flow well into subsequent content that the LLM 
 
 Here's how to modify your custom LLM server to implement buffer words:
 
-```python
+<CodeBlocks>
+```python title="server.py"
 @app.post("/v1/chat/completions")
 async def create_chat_completion(request: ChatCompletionRequest) -> StreamingResponse:
     oai_request = request.dict(exclude_none=True)
@@ -207,7 +208,60 @@ async def create_chat_completion(request: ChatCompletionRequest) -> StreamingRes
             yield f"data: {json.dumps({'error': 'Internal error occurred!'})}\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
-```
+
+````
+
+```typescript title="server.ts"
+app.post('/v1/chat/completions', async (req: Request, res: Response) => {
+  const request = req.body as ChatCompletionRequest;
+  const oaiRequest = { ...request };
+
+  if (oaiRequest.user_id) {
+    oaiRequest.user = oaiRequest.user_id;
+    delete oaiRequest.user_id;
+  }
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  try {
+    // Send initial buffer chunk while processing
+    const initialChunk = {
+      id: "chatcmpl-buffer",
+      object: "chat.completion.chunk",
+      created: Math.floor(Date.now() / 1000),
+      model: request.model,
+      choices: [{
+        delta: { content: "Let me think about that... " },
+        index: 0,
+        finish_reason: null
+      }]
+    };
+    res.write(`data: ${JSON.stringify(initialChunk)}\n\n`);
+
+    // Process the actual LLM response
+    const stream = await openai.chat.completions.create({
+      ...oaiRequest,
+      stream: true
+    });
+
+    for await (const chunk of stream) {
+      res.write(`data: ${JSON.stringify(chunk)}\n\n`);
+    }
+
+    res.write('data: [DONE]\n\n');
+    res.end();
+
+  } catch (error) {
+    console.error('An error occurred:', error);
+    res.write(`data: ${JSON.stringify({ error: 'Internal error occurred!' })}\n\n`);
+    res.end();
+  }
+});
+````
+
+</CodeBlocks>
 
 ## System tools integration
 
