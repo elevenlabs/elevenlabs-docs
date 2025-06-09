@@ -2486,10 +2486,10 @@
           {
             "name": "voice_type",
             "in": "query",
-            "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace', 'non-default'. 'non-default' is equal to 'personal' plus 'community'.",
+            "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace', 'non-default'. 'non-default' is equal to all but 'default'.",
             "required": false,
             "schema": {
-              "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace', 'non-default'. 'non-default' is equal to 'personal' plus 'community'.",
+              "description": "Type of the voice to filter by. One of 'personal', 'community', 'default', 'workspace', 'non-default'. 'non-default' is equal to all but 'default'.",
               "anyOf": [
                 {
                   "type": "string"
@@ -9270,6 +9270,47 @@
         ],
         "x-fern-sdk-group-name": "pronunciation_dictionaries",
         "x-fern-sdk-method-name": "list"
+      }
+    },
+    "/v1/workspace/user-auto-provisioning": {
+      "post": {
+        "operationId": "update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post",
+        "summary": "Update User Auto Provisioning",
+        "description": "Update user auto provisioning settings for the workspace.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace",
+          "workspace"
+        ]
       }
     },
     "/v1/workspace/groups/search": {
@@ -22218,6 +22259,19 @@
         ],
         "title": "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post"
       },
+      "Body_update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "title": "Body_update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post"
+      },
       "BreakdownTypes": {
         "description": "How to break down the information. Cannot be \"user\" or \"api_key\" if include_workspace_metrics is False.",
         "type": "string",
@@ -34589,6 +34643,55 @@
                 "type": "null"
               }
             ]
+          },
+          "optimize_streaming_latency": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stability": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1,
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stability"
+          },
+          "speed": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.2,
+                "minimum": 0.7
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed"
+          },
+          "similarity_boost": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1,
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Similarity Boost"
           }
         },
         "required": [
