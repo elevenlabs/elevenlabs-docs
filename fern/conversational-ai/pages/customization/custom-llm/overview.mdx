@@ -158,6 +158,111 @@ Direct your server URL to ngrok endpoint, setup "Limit token usage" to 5000 and 
 
 You can start interacting with Conversational AI with your own LLM server
 
+## Optimizing for slow processing LLMs
+
+If your custom LLM has slow processing times (perhaps due to agentic reasoning or pre-processing requirements) you can improve the conversational flow by implementing **buffer words** in your streaming responses. This technique helps maintain natural speech prosody while your LLM generates the complete response.
+
+### Buffer words
+
+When your LLM needs more time to process the full response, return an initial response ending with `"... "` (ellipsis followed by a space). This allows the Text to Speech system to maintain natural flow while keeping the conversation feeling dynamic.
+This creates natural pauses that flow well into subsequent content that the LLM can reason longer about. The extra space is crucial to ensure that the subsequent content is not appended to the "..." which can lead to audio distortions.
+
+### Implementation
+
+Here's how to modify your custom LLM server to implement buffer words:
+
+<CodeBlocks>
+```python title="server.py"
+@app.post("/v1/chat/completions")
+async def create_chat_completion(request: ChatCompletionRequest) -> StreamingResponse:
+    oai_request = request.dict(exclude_none=True)
+    if "user_id" in oai_request:
+        oai_request["user"] = oai_request.pop("user_id")
+
+    async def event_stream():
+        try:
+            # Send initial buffer chunk while processing
+            initial_chunk = {
+                "id": "chatcmpl-buffer",
+                "object": "chat.completion.chunk",
+                "created": 1234567890,
+                "model": request.model,
+                "choices": [{
+                    "delta": {"content": "Let me think about that... "},
+                    "index": 0,
+                    "finish_reason": None
+                }]
+            }
+            yield f"data: {json.dumps(initial_chunk)}\n\n"
+
+            # Process the actual LLM response
+            chat_completion_coroutine = await oai_client.chat.completions.create(**oai_request)
+
+            async for chunk in chat_completion_coroutine:
+                chunk_dict = chunk.model_dump()
+                yield f"data: {json.dumps(chunk_dict)}\n\n"
+            yield "data: [DONE]\n\n"
+
+        except Exception as e:
+            logging.error("An error occurred: %s", str(e))
+            yield f"data: {json.dumps({'error': 'Internal error occurred!'})}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+````
+
+```typescript title="server.ts"
+app.post('/v1/chat/completions', async (req: Request, res: Response) => {
+  const request = req.body as ChatCompletionRequest;
+  const oaiRequest = { ...request };
+
+  if (oaiRequest.user_id) {
+    oaiRequest.user = oaiRequest.user_id;
+    delete oaiRequest.user_id;
+  }
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  try {
+    // Send initial buffer chunk while processing
+    const initialChunk = {
+      id: "chatcmpl-buffer",
+      object: "chat.completion.chunk",
+      created: Math.floor(Date.now() / 1000),
+      model: request.model,
+      choices: [{
+        delta: { content: "Let me think about that... " },
+        index: 0,
+        finish_reason: null
+      }]
+    };
+    res.write(`data: ${JSON.stringify(initialChunk)}\n\n`);
+
+    // Process the actual LLM response
+    const stream = await openai.chat.completions.create({
+      ...oaiRequest,
+      stream: true
+    });
+
+    for await (const chunk of stream) {
+      res.write(`data: ${JSON.stringify(chunk)}\n\n`);
+    }
+
+    res.write('data: [DONE]\n\n');
+    res.end();
+
+  } catch (error) {
+    console.error('An error occurred:', error);
+    res.write(`data: ${JSON.stringify({ error: 'Internal error occurred!' })}\n\n`);
+    res.end();
+  }
+});
+````
+
+</CodeBlocks>
+
 ## System tools integration
 
 Your custom LLM can trigger [system tools](/docs/conversational-ai/customization/tools/system-tools) to control conversation flow and state. These tools are automatically included in the `tools` parameter of your chat completion requests when configured in your agent.
