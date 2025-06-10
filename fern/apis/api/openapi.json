@@ -1496,8 +1496,7 @@
           "text-to-dialogue"
         ],
         "x-fern-sdk-group-name": "text_to_dialogue",
-        "x-fern-sdk-method-name": "convert",
-        "x-fern-streaming": true
+        "x-fern-sdk-method-name": "convert"
       }
     },
     "/v1/text-to-dialogue/stream": {
@@ -20754,6 +20753,20 @@
             "type": "boolean",
             "default": false,
             "title": "Webhook"
+          },
+          "temperature": {
+            "description": "Controls the randomness of the transcription output. Accepts values between 0.0 and 2.0, where higher values result in more diverse and less deterministic results. If omitted, we will use a temperature based on the model you selected which is usually 0.",
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2,
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature"
           }
         },
         "required": [
@@ -22290,6 +22303,67 @@
         ],
         "title": "BreakdownTypes"
       },
+      "BuiltInTools": {
+        "type": "object",
+        "properties": {
+          "end_call": {
+            "description": "The end call tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_detection": {
+            "description": "The language detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_agent": {
+            "description": "The transfer to agent tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_number": {
+            "description": "The transfer to number tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "skip_turn": {
+            "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "BuiltInTools"
+      },
       "ChapterContentBlockExtendableNodeResponseModel": {
         "description": "Not used. Make sure you anticipate new types in the future.",
         "type": "object",
@@ -22897,10 +22971,10 @@
           "agent_response",
           "agent_response_correction",
           "client_tool_call",
+          "mcp_tool_call",
           "vad_score",
           "internal_turn_probability",
-          "internal_tentative_agent_response",
-          "internal_native_mcp_tool_call"
+          "internal_tentative_agent_response"
         ],
         "title": "ClientEvent"
       },
@@ -28197,6 +28271,14 @@
         },
         "title": "ImageAvatar"
       },
+      "IntegrationType": {
+        "type": "string",
+        "enum": [
+          "mcp_server",
+          "mcp_integration"
+        ],
+        "title": "IntegrationType"
+      },
       "InvoiceResponseModel": {
         "type": "object",
         "properties": {
@@ -29036,18 +29118,18 @@
         ],
         "title": "LiteralJsonSchemaProperty"
       },
-      "MCPApprovalRequiredModel": {
-        "description": "Defines the approval model for an MCP tool",
+      "MCPApprovalPolicy": {
+        "description": "Defines the MCP server-level approval policy for tool execution.",
         "type": "string",
         "enum": [
-          "user_approval_always_given",
-          "user_approval_never_given",
-          "user_approval_required_per_tool"
+          "auto_approve_all",
+          "require_approval_all",
+          "require_approval_per_tool"
         ],
-        "title": "MCPApprovalRequiredModel"
+        "title": "MCPApprovalPolicy"
       },
       "MCPToolConfig-Input": {
-        "description": "A MCP tool is a tool that is used to call a MCP server",
+        "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
           "id": {
@@ -29073,11 +29155,14 @@
             "title": "Response Timeout Secs"
           },
           "type": {
-            "description": "The type of tool",
             "type": "string",
             "default": "mcp",
             "const": "mcp",
             "title": "Type"
+          },
+          "integration_type": {
+            "description": "The type of MCP tool",
+            "$ref": "#/components/schemas/IntegrationType"
           },
           "parameters": {
             "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
@@ -29090,32 +29175,57 @@
               }
             ]
           },
+          "approval_policy": {
+            "description": "The approval policy for the MCP tool",
+            "default": "require_approval_all",
+            "$ref": "#/components/schemas/MCPApprovalPolicy"
+          },
           "mcp_tool_name": {
             "description": "The name of the MCP tool to call",
             "type": "string",
             "title": "Mcp Tool Name"
+          },
+          "mcp_tool_description": {
+            "description": "The description of the MCP tool to call",
+            "type": "string",
+            "title": "Mcp Tool Description"
           },
           "mcp_server_id": {
             "description": "The id of the MCP server to call",
             "type": "string",
             "title": "Mcp Server Id"
           },
-          "approval_mode": {
-            "description": "If set to approved, the tool will be pre-approved and not require user approval before executing",
-            "default": "user_approval_never_given",
-            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
+          "mcp_server_name": {
+            "description": "The name of the MCP server to call",
+            "type": "string",
+            "title": "Mcp Server Name"
+          },
+          "mcp_input_schema": {
+            "description": "Original inputSchema dict for consistent hashing (pure MCP format)",
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mcp Input Schema"
           }
         },
         "required": [
           "name",
           "description",
+          "integration_type",
           "mcp_tool_name",
-          "mcp_server_id"
+          "mcp_tool_description",
+          "mcp_server_id",
+          "mcp_server_name"
         ],
         "title": "MCPToolConfig"
       },
       "MCPToolConfig-Output": {
-        "description": "A MCP tool is a tool that is used to call a MCP server",
+        "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
           "id": {
@@ -29141,11 +29251,14 @@
             "title": "Response Timeout Secs"
           },
           "type": {
-            "description": "The type of tool",
             "type": "string",
             "default": "mcp",
             "const": "mcp",
             "title": "Type"
+          },
+          "integration_type": {
+            "description": "The type of MCP tool",
+            "$ref": "#/components/schemas/IntegrationType"
           },
           "parameters": {
             "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
@@ -29158,27 +29271,52 @@
               }
             ]
           },
+          "approval_policy": {
+            "description": "The approval policy for the MCP tool",
+            "default": "require_approval_all",
+            "$ref": "#/components/schemas/MCPApprovalPolicy"
+          },
           "mcp_tool_name": {
             "description": "The name of the MCP tool to call",
             "type": "string",
             "title": "Mcp Tool Name"
+          },
+          "mcp_tool_description": {
+            "description": "The description of the MCP tool to call",
+            "type": "string",
+            "title": "Mcp Tool Description"
           },
           "mcp_server_id": {
             "description": "The id of the MCP server to call",
             "type": "string",
             "title": "Mcp Server Id"
           },
-          "approval_mode": {
-            "description": "If set to approved, the tool will be pre-approved and not require user approval before executing",
-            "default": "user_approval_never_given",
-            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
+          "mcp_server_name": {
+            "description": "The name of the MCP server to call",
+            "type": "string",
+            "title": "Mcp Server Name"
+          },
+          "mcp_input_schema": {
+            "description": "Original inputSchema dict for consistent hashing (pure MCP format)",
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mcp Input Schema"
           }
         },
         "required": [
           "name",
           "description",
+          "integration_type",
           "mcp_tool_name",
-          "mcp_server_id"
+          "mcp_tool_description",
+          "mcp_server_id",
+          "mcp_server_name"
         ],
         "title": "MCPToolConfig"
       },
@@ -29578,142 +29716,6 @@
           "on_watchlist"
         ],
         "title": "ModerationStatusResponseModel"
-      },
-      "NativeMCPToolConfig-Input": {
-        "description": "A Native MCP tool is a tool that is used to call a Native MCP server",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 0,
-            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
-            "title": "Name"
-          },
-          "description": {
-            "type": "string",
-            "minLength": 0,
-            "title": "Description"
-          },
-          "response_timeout_secs": {
-            "description": "The maximum time in seconds to wait for the tool call to complete.",
-            "type": "integer",
-            "default": 20,
-            "title": "Response Timeout Secs"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "native_mcp",
-            "const": "native_mcp",
-            "title": "Type"
-          },
-          "parameters": {
-            "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "mcp_tool_name": {
-            "description": "The name of the MCP tool to call",
-            "type": "string",
-            "title": "Mcp Tool Name"
-          },
-          "mcp_server_id": {
-            "description": "The id of the MCP server to call",
-            "type": "string",
-            "title": "Mcp Server Id"
-          },
-          "approval_mode": {
-            "description": "If set to always accept, the tool will be pre-approved and not require user approval before executing",
-            "default": "user_approval_never_given",
-            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
-          }
-        },
-        "required": [
-          "name",
-          "description",
-          "mcp_tool_name",
-          "mcp_server_id"
-        ],
-        "title": "NativeMCPToolConfig"
-      },
-      "NativeMCPToolConfig-Output": {
-        "description": "A Native MCP tool is a tool that is used to call a Native MCP server",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 0,
-            "pattern": "^[a-zA-Z0-9_-]{1,64}$",
-            "title": "Name"
-          },
-          "description": {
-            "type": "string",
-            "minLength": 0,
-            "title": "Description"
-          },
-          "response_timeout_secs": {
-            "description": "The maximum time in seconds to wait for the tool call to complete.",
-            "type": "integer",
-            "default": 20,
-            "title": "Response Timeout Secs"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "native_mcp",
-            "const": "native_mcp",
-            "title": "Type"
-          },
-          "parameters": {
-            "description": "Schema for any parameters the LLM needs to provide to the MCP tool.",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ObjectJsonSchemaProperty-Output"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "mcp_tool_name": {
-            "description": "The name of the MCP tool to call",
-            "type": "string",
-            "title": "Mcp Tool Name"
-          },
-          "mcp_server_id": {
-            "description": "The id of the MCP server to call",
-            "type": "string",
-            "title": "Mcp Server Id"
-          },
-          "approval_mode": {
-            "description": "If set to always accept, the tool will be pre-approved and not require user approval before executing",
-            "default": "user_approval_never_given",
-            "$ref": "#/components/schemas/MCPApprovalRequiredModel"
-          }
-        },
-        "required": [
-          "name",
-          "description",
-          "mcp_tool_name",
-          "mcp_server_id"
-        ],
-        "title": "NativeMCPToolConfig"
       },
       "ObjectJsonSchemaProperty-Input": {
         "type": "object",
@@ -31363,9 +31365,6 @@
                 },
                 {
                   "$ref": "#/components/schemas/MCPToolConfig-Input"
-                },
-                {
-                  "$ref": "#/components/schemas/NativeMCPToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -31374,7 +31373,6 @@
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
                   "mcp": "#/components/schemas/MCPToolConfig-Input",
-                  "native_mcp": "#/components/schemas/NativeMCPToolConfig-Input",
                   "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
@@ -31499,9 +31497,6 @@
                 },
                 {
                   "$ref": "#/components/schemas/MCPToolConfig-Output"
-                },
-                {
-                  "$ref": "#/components/schemas/NativeMCPToolConfig-Output"
                 }
               ],
               "description": "The type of tool",
@@ -31510,7 +31505,6 @@
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Output",
                   "mcp": "#/components/schemas/MCPToolConfig-Output",
-                  "native_mcp": "#/components/schemas/NativeMCPToolConfig-Output",
                   "system": "#/components/schemas/SystemToolConfig-Output",
                   "webhook": "#/components/schemas/WebhookToolConfig-Output"
                 }
@@ -31635,9 +31629,6 @@
                 },
                 {
                   "$ref": "#/components/schemas/MCPToolConfig-Input"
-                },
-                {
-                  "$ref": "#/components/schemas/NativeMCPToolConfig-Input"
                 }
               ],
               "description": "The type of tool",
@@ -31646,7 +31637,6 @@
                 "mapping": {
                   "client": "#/components/schemas/ClientToolConfig-Input",
                   "mcp": "#/components/schemas/MCPToolConfig-Input",
-                  "native_mcp": "#/components/schemas/NativeMCPToolConfig-Input",
                   "system": "#/components/schemas/SystemToolConfig-Input",
                   "webhook": "#/components/schemas/WebhookToolConfig-Input"
                 }
@@ -31722,6 +31712,9 @@
               "type": "string"
             },
             "title": "Knowledge Base Document Ids"
+          },
+          "built_in_tools": {
+            "$ref": "#/components/schemas/BuiltInTools"
           }
         },
         "example": {
@@ -39138,7 +39131,7 @@
           "convai_secrets",
           "music_latent",
           "convai_phone_numbers",
-          "convai_mcps",
+          "convai_mcp_servers",
           "convai_batch_calls"
         ],
         "title": "WorkspaceResourceType"
