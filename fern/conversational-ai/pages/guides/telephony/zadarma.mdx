@@ -38,9 +38,11 @@ Before setting up the Zadarma integration, ensure you have:
 Zadarma integration supports two main configuration scenarios:
 
 ### Without PBX (Direct SIP routing)
+
 Direct routing sends calls straight from Zadarma to your ElevenLabs AI agents without intermediate processing.
 
 ### With PBX
+
 PBX integration allows for advanced call routing, multiple extensions, and additional telephony features before connecting to ElevenLabs.
 
 ---
@@ -70,6 +72,7 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
 
     4. Click "Import" to save the configuration.
     5. Assign your AI agent to this imported number.
+
   </Step>
 
   <Step title="Configure call forwarding in Zadarma">
@@ -91,6 +94,7 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
     ```
 
     6. Click **"Save"** to apply the configuration.
+
   </Step>
 
   <Step title="Test the integration">
@@ -106,18 +110,17 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
 ## Setup for PBX Configuration
 
 <Steps>
+
   <Step title="Configure your PBX system">
     1. Set up your PBX to receive calls from Zadarma virtual numbers.
     2. Configure SIP trunk settings in your PBX to connect with both Zadarma and ElevenLabs.
     3. Create routing rules that determine which calls should be forwarded to ElevenLabs AI agents.
   </Step>
-
   <Step title="Create or configure your ElevenLabs agent">
     1. Log in to your ElevenLabs account and navigate to the [Conversational AI section](https://elevenlabs.io/app/conversational-ai).
     2. Create a new agent or select an existing one that will handle calls routed through your PBX.
     3. Configure your agent's settings according to your business requirements.
   </Step>
-
   <Step title="Import your number into ElevenLabs">
     1. Go to the [Phone Numbers section](https://elevenlabs.io/app/conversational-ai/phone-numbers) in the ElevenLabs dashboard.
     2. Click "Import number" and select "From SIP Trunk".
@@ -134,8 +137,8 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
 
     4. Click "Import" to save the configuration.
     5. Assign your AI agent to this imported number.
-  </Step>
 
+  </Step>
   <Step title="Configure Zadarma to route to your PBX">
     1. Log in to your Zadarma account and navigate to **Settings → Virtual Phone Numbers**.
     2. Next to your virtual number, click the ⚙ (gear) icon.
@@ -146,7 +149,6 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
     YOUR_PHONE_NUMBER@sip.rtc.elevenlabs.io:5060;transport=tcp
     ```
   </Step>
-
   <Step title="Configure PBX call routing">
     1. Set up call routing rules in your PBX that determine when to forward calls to ElevenLabs.
     2. Common routing scenarios include:
@@ -156,14 +158,15 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
        - **Department-specific**: Route certain departments or extensions to AI agents
 
     3. Configure the SIP URI for ElevenLabs forwarding in your PBX routing rules.
-  </Step>
 
+  </Step>
   <Step title="Test the complete call flow">
     1. Test calls to your Zadarma number to ensure proper PBX routing.
     2. Verify that calls intended for AI agents reach ElevenLabs correctly.
     3. Test various routing scenarios based on your PBX configuration.
     4. Validate both inbound and outbound call functionality.
   </Step>
+
 </Steps>
 
 ---
@@ -171,13 +174,14 @@ PBX integration allows for advanced call routing, multiple extensions, and addit
 ## Authentication and Security
 
 ### SIP Authentication
+
 Zadarma uses digest authentication for SIP connections. Ensure you have:
 
 - **Valid SIP credentials**: Username and password from your Zadarma account
 - **Secure password storage**: Keep your SIP credentials secure and rotate them regularly
-- **IP allowlisting**: Consider configuring IP restrictions in your Zadarma account for additional security
 
 ### Network Security
+
 - Use TCP transport for SIP signaling as configured in the examples above
 - Ensure your firewall allows SIP traffic on the appropriate ports
 - Consider using TLS transport for enhanced security if supported by your setup
@@ -193,6 +197,7 @@ Zadarma uses digest authentication for SIP connections. Ensure you have:
     3. **Test SIP credentials**: Verify that your Zadarma SIP username and password are correct
     4. **Review Zadarma logs**: Check your Zadarma account for call logs and error messages
     5. **Network connectivity**: Ensure your network allows outbound SIP traffic to ElevenLabs
+
   </Accordion>
 
   <Accordion title="Authentication failures">
@@ -202,6 +207,7 @@ Zadarma uses digest authentication for SIP connections. Ensure you have:
     2. **Password generation**: If needed, generate a new SIP password in your Zadarma account
     3. **Case sensitivity**: Ensure credentials are entered with correct case sensitivity
     4. **Special characters**: Check for any special characters in passwords that might need escaping
+
   </Accordion>
 
   <Accordion title="PBX routing issues">
@@ -211,6 +217,7 @@ Zadarma uses digest authentication for SIP connections. Ensure you have:
     2. **SIP trunk status**: Check that the SIP trunk between your PBX and ElevenLabs is active
     3. **Routing rules**: Review your PBX routing rules to ensure calls are directed correctly
     4. **Extension mapping**: Verify that extensions or DIDs are properly mapped in your routing configuration
+
   </Accordion>
 
   <Accordion title="Audio quality issues">
@@ -220,17 +227,20 @@ Zadarma uses digest authentication for SIP connections. Ensure you have:
     2. **Codec compatibility**: Verify that audio codecs are compatible between all systems
     3. **Network latency**: Check for high latency or jitter that could affect voice quality
     4. **Firewall configuration**: Ensure RTP traffic is not being blocked or throttled
+
   </Accordion>
 </AccordionGroup>
 
 ## Best Practices
 
 ### For Non-PBX Setups
+
 - **Keep credentials secure**: Store your Zadarma SIP credentials securely
 - **Monitor call quality**: Regularly test call quality and adjust network settings as needed
 - **Update configurations**: Keep your SIP configurations updated when Zadarma or ElevenLabs systems change
 
 ### For PBX Setups
+
 - **Plan routing logic**: Carefully design your call routing rules to provide the best customer experience
 - **Implement fallback**: Configure fallback options in case the AI agent or ElevenLabs service is unavailable
 - **Load balancing**: Consider load balancing if you have high call volumes
@@ -249,4 +259,4 @@ After successfully setting up your Zadarma integration:
 
 - [Learn about optimizing your conversational AI agents](/docs/conversational-ai/best-practices)
 - [Explore advanced agent customization options](/docs/conversational-ai/customization)
-- [Set up call analytics and monitoring](/docs/conversational-ai/analytics)
+- [Set up call analytics and monitoring](/docs/conversational-ai/customization/agent-analysis)
