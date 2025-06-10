@@ -65,9 +65,15 @@ Burst pricing is configured per agent in the call limits settings.
 <CodeBlocks>
 
 ```python title="Python"
-from elevenlabs import ElevenLabs
+from dotenv import load_dotenv
+from elevenlabs.client import ElevenLabs
+import os
 
-elevenlabs = ElevenLabs(api_key="your-api-key")
+load_dotenv()
+
+elevenlabs = ElevenLabs(
+    api_key=os.getenv("ELEVENLABS_API_KEY"),
+)
 
 # Update agent with burst pricing enabled
 response = elevenlabs.conversational_ai.agents.update(
@@ -86,10 +92,8 @@ response = elevenlabs.conversational_ai.agents.update(
 
 ```javascript title="JavaScript"
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
-
-const elevenlabs = new ElevenLabsClient({
-  apiKey: 'your-api-key',
-});
+import "dotenv/config";
+const elevenlabs = new ElevenLabsClient();
 
 // Update agent with burst pricing enabled
 const response = await elevenlabs.conversationalAi.agents.update({
