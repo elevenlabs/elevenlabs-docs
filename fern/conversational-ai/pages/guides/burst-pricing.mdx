@@ -94,22 +94,23 @@ response = elevenlabs.conversational_ai.agents.update(
 
 ```javascript title="JavaScript"
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
-import "dotenv/config";
+import 'dotenv/config';
+
 const elevenlabs = new ElevenLabsClient();
 
-// Update agent with burst pricing enabled
-const response = await elevenlabs.conversationalAi.agents.update({
-  agentId: 'your-agent-id',
-  agentConfig: {
-    platformSettings: {
-      callLimits: {
-        agentConcurrencyLimit: -1, // Use workspace limit
-        dailyLimit: 1000,
-        burstingEnabled: true,
-      },
+// Configure agent with burst pricing enabled
+const updatedConfig = {
+  platformSettings: {
+    callLimits: {
+      agentConcurrencyLimit: -1, // Use workspace limit
+      dailyLimit: 1000,
+      burstingEnabled: true,
     },
   },
-});
+};
+
+// Update the agent configuration
+const response = await elevenlabs.conversationalAi.agents.update('your-agent-id', updatedConfig);
 ```
 
 </CodeBlocks>
