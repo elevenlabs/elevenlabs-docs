@@ -1,0 +1,111 @@
+---
+title: Troubleshooting
+subtitle: Explore common issues and solutions.
+---
+
+Our models are non-deterministic, meaning outputs can vary based on inputs. While we strive to enhance predictability, some variability is inherent. This guide outlines common issues and preventive measures.
+
+## General
+
+<AccordionGroup>
+
+  <Accordion title="Inconsistencies in volume and quality">
+    If the generated voice output varies in volume or tone, it is often due to inconsistencies in the voice clone training audio.
+
+    - **Apply compression**: Compress the training audio to reduce dynamic range and ensure consistent audio. Aim for a RMS between -23 dB and -18 dB and the true peak below -3 dB.
+    - **Background noise**: Ensure the training audio contains only the voice you want to clone — no music, noise, or pops. Background noise, sudden bursts of energy or consistent low-frequency energy can make the AI less stable.
+    - **Speaker consistency**: Ensure the speaker maintains a consistent distance from the microphone and avoids whispering or shouting. Variations can lead to inconsistent volume or tonality.
+    - **Audio length**:
+      - **Instant Voice Cloning**: Use 1–2 minutes of consistent audio. Consistency in tonality, performance, accent, and quality is crucial.
+      - **Professional Voice Cloning**: Use at least 30 minutes, ideally 2+ hours, of consistent audio for best results.
+
+    To minimize issues, consider breaking your text into smaller segments. This approach helps maintain consistent volume and reduces degradation over longer audio generations. Utilize our Studio feature to generate several smaller audio segments simultaneously, ensuring better quality and consistency.
+
+    <Note>
+      Refer to our guides for optimizing Instant and Professional Voice Clones for best practices and
+      advice.
+    </Note>
+
+  </Accordion>
+
+  <Accordion title="Mispronunciation">
+    The multilingual models may rarely mispronounce certain words, even in English. This issue appears to be somewhat arbitrary but seems to be voice and text-dependent. It occurs more frequently with certain voices and text, especially when using words that also appear in other languages.
+
+    - **Use Studio**: This feature helps minimize mispronunciation issues, which are more prevalent in longer text sections when using Speech Synthesis. While it won't completely eliminate the problem, it can help avoid it and make it easier to regenerate specific sections without redoing the entire text.
+    - **Properly cloned voices**: Similar to addressing inconsistency issues, using a properly cloned voice in the desired languages can help reduce mispronunciation.
+    - **Specify pronunciation**: When using our Studio feature, consider specifying the pronunciation of certain words, such as character names and brand names, or how acronyms should be read. For more information, refer to the Pronunciation Dictionary section of our guide to Studio.
+
+  </Accordion>
+
+  <Accordion title="Language switching and accent drift">
+    The AI can sometimes switch languages or accents throughout a single generation, especially if that generation is longer in length. This issue is similar to the mispronunciation problem and is something we are actively working to improve.
+
+    - **Use properly cloned voices**: Using an Instant Voice Clone or a Professional Voice Clone trained on high-quality, consistent audio in the desired language can help mitigate this issue. Pairing this with the Studio feature can further enhance stability.
+    - **Understand voice limitations**: Default and generated voices are primarily English and may carry an English accent when used for other languages. Cloning a voice that speaks the target language with the desired accent provides the AI with better context, reducing the likelihood of language switching.
+    - **Language selection**: Currently, the AI determines the language based on the input text. Writing in the desired language is crucial, especially when using pre-made voices that are English-based, as they may introduce an English accent.
+    - **Optimal text length**: The AI tends to maintain a consistent accent over shorter text segments. For best results, keep text generations under 800-900 characters when using Text-to-Speech. The Studio workflow can help manage longer texts by breaking them into smaller, more manageable segments.
+
+  </Accordion>
+
+  <Accordion title="Mispronounced numbers, symbols or acronyms">
+    The models may mispronounce certain numbers, symbols and acronyms. For example, the numbers "1, 2, 3" might be pronounced as "one," "two," "three" in English. To ensure correct pronunciation in another language, write them out phonetically or in words as you want them to be spoken.
+
+    - **Example**: For the number "1" to be pronounced in French, write "un."
+    - **Symbols**: Specify how symbols should be read, e.g., "$" as "dollar" or "euro."
+    - **Acronyms**: Spell out acronyms phonetically.
+
+  </Accordion>
+
+  <Accordion title="Corrupt speech">
+
+    Corrupt speech is a rare issue where the model generates muffled or distorted audio. This occurs
+    unpredictably, and we have not identified a cause. If encountered, regenerate the section to
+    resolve the issue.
+
+  </Accordion>
+
+  <Accordion title="Audio degradation over longer generations">
+    Audio quality may degrade during extended text-to-speech conversions, especially with the Multilingual v1 model. To mitigate this, break text into sections under 800 characters.
+
+    - **Voice Selection**: Some voices are more susceptible to degradation. Use high-quality samples for cloned voices to minimize artifacts.
+    - **Stability and Similarity**: Adjust these settings to influence voice behavior and artifact prominence. Hover over each setting for more details.
+
+  </Accordion>
+
+  <Accordion title="Style exaggeration">
+
+    For some voices, this voice setting can lead to instability, including inconsistent speed,
+    mispronunciation and the addition of extra sounds. We recommend keeping this setting at 0,
+    especially if you find you are experiencing these issues in your generated audio.
+
+  </Accordion>
+
+</AccordionGroup>
+
+## Studio (formerly Projects)
+
+<AccordionGroup>
+
+  <Accordion title="File imports">
+    The import function attempts to import the file you provide to the website. Given the variability in website structures and book formatting, including images, always verify the import for accuracy.
+
+    - **Chapter images**: If a book's chapters start with an image as the first letter, the AI may not recognize the letter. Manually add the letter to each chapter.
+    - **Paragraph structure**: If text imports as a single long paragraph instead of following the original book's structure, it may not function correctly. Ensure the text maintains its original line breaks. If issues persist, try copying and pasting. If this fails, the text format may need conversion or rewriting.
+    - **Preferred format**: EPUB is the recommended file format for creating a project in Studio. A well-structured EPUB will automatically split each chapter in Studio, facilitating navigation. Ensure each chapter heading is formatted as "Heading 1" for proper recognition.
+
+    <Note>Always double-check imported content for accuracy and structure.</Note>
+
+  </Accordion>
+
+<Accordion title="Glitches between paragraphs">
+  Occasionally, glitches or sharp breaths may occur between paragraphs. This is rare and differs
+  from standard Text to Speech issues. If encountered, regenerate the preceding paragraph, as the
+  problem often originates there.
+</Accordion>
+
+</AccordionGroup>
+
+<Note>
+  If an issue persists after following this troubleshooting guide, please [contact our support
+  team](https://help.elevenlabs.io/hc/en-us/requests/new?ticket_form_id=13145996177937).
+</Note>
