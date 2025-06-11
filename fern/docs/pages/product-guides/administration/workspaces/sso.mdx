@@ -79,6 +79,11 @@ Single Sign-On (SSO) allows your team to log in to ElevenLabs by using your exis
   <Accordion title="OneLogin - SAML">
     - Please fill Recipient field with the value of Redirect URL.
   </Accordion>
+  <Accordion title="OIDC - Common Errors">
+    Please ensure that **email** and **email_verified** are included in the custom attributes returned in the OIDC response. Without these, the following errors may be hit:
+    - *No email address was received*: Fixed by adding **email** to the response.
+    - *Account exists with different credentials*: Fixed by adding **email_verified** to the response
+  </Accordion>
   <Accordion title="I am getting the error 'Unable to login with saml.workspace...'">
     - One known error: Inside the `<saml:Subject>` field of the SAML response, make sure `<saml:NameID>` is set to the email address of the user.
   </Accordion>
