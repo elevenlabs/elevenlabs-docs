@@ -25,13 +25,13 @@ export default function AgentSelector({ defaultAgent }: AgentSelectorProps) {
   const searchParams = useSearchParams();
 
   const [selectedAgent, setSelectedAgent] = useState<string | null>(
-    searchParams.get('agentId') || defaultAgent || null
+    searchParams.get('agent_id') || defaultAgent || null
   );
 
   useEffect(() => {
     if (selectedAgent) {
       const params = new URLSearchParams(searchParams);
-      params.set('agentId', selectedAgent);
+      params.set('agent_id', selectedAgent);
 
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
