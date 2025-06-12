@@ -5,7 +5,7 @@ subtitle: Learn how to integrate our Conversational AI platform with HubSpot CRM
 
 ## Overview
 
-With a HubSpot integration, your agent can interact with your CRM both to retrieve and write relevant information about contacts, interactions, or follow ups. 
+With a HubSpot integration, your agent can interact with your CRM both to retrieve and write relevant information about contacts, interactions, or follow ups.
 
 ## Demo Video
 
@@ -24,7 +24,7 @@ Watch the demonstration of the HubSpot + Conversational AI integration.
 
 ## How it works
 
-We lay out below an example of how we have configured the Conversational AI agent to leverage your HubSpot CRM using tool calling. 
+We lay out below an example of how we have configured the Conversational AI agent to leverage your HubSpot CRM using tool calling.
 Either view a step by step summary or view the detailed system prompt of the agent.
 
 <Tabs>
@@ -41,11 +41,11 @@ Either view a step by step summary or view the detailed system prompt of the age
       <Step title="Get previous interactions">
         While previous interactions can also be fetched and passed at the beginning of the conversation (see [Personalization](/docs/conversational-ai/customization/personalization)). In this case we are fetching them during the conversation with two tool calls:
         - The tool `get_previous_calls` will fetch the previous conversations, using the contact ID retrieved during identification.
-        - The response does not include the content of those conversations, so we need to use another endpoint to fetch the content with those call IDs. 
+        - The response does not include the content of those conversations, so we need to use another endpoint to fetch the content with those call IDs.
       </Step>
 
       <Step title="Ticket Creation">
-        - The agent can discuss the issue at hand, relating to previous interactions. 
+        - The agent can discuss the issue at hand, relating to previous interactions.
         - Use the `create_ticket` tool to create a ticket for a follow up item
         - Associate the ticket created to the CRM contact
       </Step>
@@ -71,10 +71,10 @@ Either view a step by step summary or view the detailed system prompt of the age
 
     Your primary goal is to efficiently create a support ticket for the customer.
 
-    1.  **Verify Identity:** Ask the caller for their email address to verify their identity. Silently use the `search_contact` tool to verify the caller exists. Use their name after this. 
-    2.  **Understand Issue:** Ask the customer what they are calling about and actively listen to capture their intent. 
+    1.  **Verify Identity:** Ask the caller for their email address to verify their identity. Silently use the `search_contact` tool to verify the caller exists. Use their name after this.
+    2.  **Understand Issue:** Ask the customer what they are calling about and actively listen to capture their intent.
     3.  **Get previous interactions:**: Silently (without saying you will do it) call get_previous_calls and immediately after call get_call_content with the call ids, to see if previous interactions are relevant to the issue. Ask about their problem, and reference previous conversations if relevant. Use this information with the user.
-    4.  **Create Ticket:** If the user wants to report an issue, make a new purchase, or discuss something else, use the `create_ticket` tool to create a ticket with the details of the customer's issue. Extract the description from the conversation. 
+    4.  **Create Ticket:** If the user wants to report an issue, make a new purchase, or discuss something else, use the `create_ticket` tool to create a ticket with the details of the customer's issue. Extract the description from the conversation.
     5.  **Confirmation:** Confirm the ticket details with the customer and communicate the ticket number to the caller, and mention a dedicated advisor will be in touch.
 
     # Guardrails
@@ -110,15 +110,17 @@ Before configuring the tools, you must set up authentication with HubSpot.
 
 1. Log into your HubSpot account
 2. Navigate to **Account Management → Integrations → Private Apps**
-3. Create a **Private App** 
-4. Add the required scopes to the private app, to ensure it can interact with the required endpoints 
-  ```
-  crm.objects.contacts.read
-  crm.objects.contacts.write
-  crm.schemas.contacts.read
-  crm.schemas.contacts.write
-  tickets
-   ```
+3. Create a **Private App**
+4. Add the required scopes to the private app, to ensure it can interact with the required endpoints
+
+```
+crm.objects.contacts.read
+crm.objects.contacts.write
+crm.schemas.contacts.read
+crm.schemas.contacts.write
+tickets
+```
+
 5. Save and get the Access token from the Auth section
 
 ### Step 2: Create Authentication Secret
@@ -131,7 +133,7 @@ The HubSpot API requires Bearer authentication. You need to create a properly fo
    Bearer amRvZUBleGFtcGxlLmNvbS90b2tlbjo2d2lJQldiR2tCTW8xbVJETXVWd2t3MUVQc05rZVVqOTVQSXoyYWt2
    ```
 
-4. **Save this as a secret** in your agent's secrets with name `hubspot_key`
+2. **Save this as a secret** in your agent's secrets with name `hubspot_key`
 
 ## Tool Configurations
 
@@ -154,7 +156,7 @@ This sample integration with HubSpot employs four webhook tools. Use the tabs be
         - **filters:** An array containing:
           - An object containing:
             - **value:** A string with description: Set to the email provided by the user. Email should be in format: "name@address.com"
-            - **propertyName:** A string with description: Set to: "email"  
+            - **propertyName:** A string with description: Set to: "email"
             - **operator:** A string with description: Set to: "CONTAINS_TOKEN"
 
   </Tab>
