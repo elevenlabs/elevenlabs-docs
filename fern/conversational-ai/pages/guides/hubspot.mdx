@@ -158,6 +158,100 @@ This sample integration with HubSpot employs four webhook tools. Use the tabs be
             - **value:** A string with description: `Set to the email provided by the user. Email should be in format: "name@address.com"`
             - **propertyName:** A string with description: `Set to: "email"`
             - **operator:** A string with description: `Set to: "CONTAINS_TOKEN"`
+    
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config: 
+
+    ```json
+    {
+      "id": "tool_01jxftmwvxfgersp4aw0xhyhea",
+      "type": "webhook",
+      "name": "search_contact",
+      "description": "search for a contact using phone",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "filters for searching contacts",
+          "required": false,
+          "properties": [
+            {
+              "id": "filterGroups",
+              "type": "array",
+              "description": "filters group",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "filters",
+                "properties": [
+                  {
+                    "id": "filters",
+                    "type": "array",
+                    "description": "filters",
+                    "required": true,
+                    "items": {
+                      "type": "object",
+                      "description": "filters",
+                      "properties": [
+                        {
+                          "id": "value",
+                          "type": "string",
+                          "description": "Set to the email provided by the user. Email should be in format: \n\n\"oscar@gmail.com\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        },
+                        {
+                          "id": "propertyName",
+                          "type": "string",
+                          "description": "Set to: \"email\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        },
+                        {
+                          "id": "operator",
+                          "type": "string",
+                          "description": "Set to: \"CONTAINS_TOKEN\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
 
   </Tab>
 
@@ -172,6 +266,47 @@ This sample integration with HubSpot employs four webhook tools. Use the tabs be
 
     **Path Parameters:**
     - **CONTACT_ID:** An string with description: `Use the contact ID from the results of the search_contact tool`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config: 
+
+    ```json
+    {
+      "id": "tool_01jxfv4pttep6bbjaqe9tjk28n",
+      "type": "webhook",
+      "name": "get_previous_calls",
+      "description": "This API retrieves the calls associated with a contact",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/{CONTACT_ID}/associations/calls?limit=100",
+        "method": "GET",
+        "path_params_schema": [
+          {
+            "id": "CONTACT_ID",
+            "type": "string",
+            "description": "use the contact ID from the results of the search_contact tool",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": false,
+            "value_type": "llm_prompt"
+          }
+        ],
+        "query_params_schema": [],
+        "request_body_schema": null,
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
 
   </Tab>
 
@@ -192,6 +327,264 @@ This sample integration with HubSpot employs four webhook tools. Use the tabs be
         - **body:** Detailed description of the support issue.
     - **properties:** An Array containing.
       - A string with description: `Set to: "hs_call_body"`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config: 
+
+    ```json
+    {
+      "id": "tool_01jxhmfbg4e35s59kg6994vtt5",
+      "type": "webhook",
+      "name": "get_call_content",
+      "description": "Use the call ids to get call content",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/calls/batch/read",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "body params",
+          "required": false,
+          "properties": [
+            {
+              "id": "inputs",
+              "type": "array",
+              "description": "inputs",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "inputs",
+                "properties": [
+                  {
+                    "id": "id",
+                    "type": "string",
+                    "description": "pass the ID of the call from the get_previous_calls response",
+                    "dynamic_variable": "",
+                    "constant_value": "",
+                    "required": true,
+                    "value_type": "llm_prompt"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "properties",
+              "type": "array",
+              "description": "properties",
+              "required": true,
+              "items": {
+                "type": "string",
+                "description": "Set to: \n\n\"hs_call_body\"",
+                "constant_value": ""
+              }
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+
+  <Tab title="create_ticket">
+    **Name:** create_ticket  
+    **Description:** Call this tool to create a ticket.  
+    **Method:** POST  
+    **URL:** `https://api.hubapi.com/crm/v3/objects/tickets`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `hubspot_key`)*
+
+    **Body Parameters:**
+    - **associations:** An Array containing:
+      - An Object containing:
+        - **to:** An object containing:
+          - **id:** A string with description: `Set to the contact ID derived from the search_contact tool response`
+          - **types:** An array containing:
+            - An Object containing:
+              - **associationCategory:** An string with description: `set to: "HUBSPOT_DEFINED"`
+              - **associationTypeId:** An number with description: `Set to: 16"`
+    - **properties:** An Object containing:
+      - **content:** A string with description: `The content of the ticket`
+      - **subject:** A string with description: `The subject of the ticket`
+      - **hs_pipeline:** A string with description: `Default to "0"`
+      - **hs_ticket_priority:** A string with description: `Default to "HIGH"`
+      - **hs_pipeline_stage:** A string with description: `Default to "1"`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config: 
+
+    ```json
+    {
+      "id": "tool_01jxftnpj8fx6rx2bwgbgmyjy7",
+      "type": "webhook",
+      "name": "create_ticket",
+      "description": "Call this tool to create a ticket",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/tickets",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "The properties of the ticket",
+          "required": false,
+          "properties": [
+            {
+              "id": "associations",
+              "type": "array",
+              "description": "associations",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "associations",
+                "properties": [
+                  {
+                    "id": "to",
+                    "type": "object",
+                    "description": "to",
+                    "required": true,
+                    "properties": [
+                      {
+                        "id": "id",
+                        "type": "string",
+                        "description": "set to the contact ID derived from the search_contact tool response",
+                        "dynamic_variable": "",
+                        "constant_value": "",
+                        "required": true,
+                        "value_type": "llm_prompt"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "types",
+                    "type": "array",
+                    "description": "types",
+                    "required": true,
+                    "items": {
+                      "type": "object",
+                      "description": "types",
+                      "properties": [
+                        {
+                          "id": "associationCategory",
+                          "type": "string",
+                          "description": "set to: \"HUBSPOT_DEFINED\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        },
+                        {
+                          "id": "associationTypeId",
+                          "type": "number",
+                          "description": "Set to: 16",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "properties",
+              "type": "object",
+              "description": "The properties of the ticket",
+              "required": true,
+              "properties": [
+                {
+                  "id": "content",
+                  "type": "string",
+                  "description": "The content of the ticket",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "subject",
+                  "type": "string",
+                  "description": "The subject of the ticket",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "hs_pipeline",
+                  "type": "string",
+                  "description": "Default to \"0\"",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "hs_ticket_priority",
+                  "type": "string",
+                  "description": "Default to \"HIGH\"",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "hs_pipeline_stage",
+                  "type": "string",
+                  "description": "Default to \"1\"",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                }
+              ]
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
 
   </Tab>
 </Tabs>
