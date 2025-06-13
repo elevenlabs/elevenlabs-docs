@@ -35485,8 +35485,9 @@
             "title": "Xi Api Key"
           },
           "can_use_delayed_payment_methods": {
-            "description": "Whether the user can use delayed payment methods.",
+            "description": "This field is deprecated and will be removed in a future major version. Instead use subscription.trust_on_invoice_creation.",
             "type": "boolean",
+            "deprecated": true,
             "title": "Can Use Delayed Payment Methods"
           },
           "is_onboarding_completed": {
@@ -35897,18 +35898,22 @@
         "type": "object",
         "properties": {
           "audio_base_64": {
+            "description": "The base64 encoded audio of the preview.",
             "type": "string",
             "title": "Audio Base 64"
           },
           "generated_voice_id": {
+            "description": "The ID of the generated voice. Use it to create a voice from the preview.",
             "type": "string",
             "title": "Generated Voice Id"
           },
           "media_type": {
+            "description": "The media type of the preview.",
             "type": "string",
             "title": "Media Type"
           },
           "duration_secs": {
+            "description": "The duration of the preview in seconds.",
             "type": "number",
             "title": "Duration Secs"
           }
@@ -36017,6 +36022,7 @@
         "type": "object",
         "properties": {
           "previews": {
+            "description": "The previews of the generated voices.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/VoicePreviewResponseModel"
@@ -36024,6 +36030,7 @@
             "title": "Previews"
           },
           "text": {
+            "description": "The text used to preview the voices.",
             "type": "string",
             "title": "Text"
           }
