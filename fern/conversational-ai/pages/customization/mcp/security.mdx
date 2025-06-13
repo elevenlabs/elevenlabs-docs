@@ -15,6 +15,36 @@ Integrating external servers via the Model Context Protocol (MCP) can greatly en
 
 This guide outlines key security practices to consider when using MCP server integrations within ElevenLabs.
 
+## Tool approval controls
+
+ElevenLabs provides built-in security controls through tool approval modes that help you manage the security risks associated with MCP tool usage. These controls allow you to balance functionality with security based on your specific needs.
+
+<Frame background="subtle">
+  ![Tool approval mode settings](/assets/images/conversational-ai/mcp-approval.png)
+</Frame>
+
+### Approval mode options
+
+- **Always Ask (Recommended)**: Provides maximum security by requiring explicit approval for every tool execution. This mode ensures you maintain full control over all MCP tool usage.
+- **Fine-Grained Tool Approval**: Allows you to configure approval requirements on a per-tool basis, enabling automatic execution of trusted tools while requiring approval for sensitive operations.
+- **No Approval**: Permits unrestricted tool usage without approval prompts. Only use this mode with thoroughly vetted and highly trusted MCP servers.
+
+### Fine-grained security controls
+
+Fine-Grained Tool Approval mode provides the most flexible security configuration, allowing you to classify each tool based on its risk profile:
+
+<Frame background="subtle">
+  ![Fine-grained tool approval settings](/assets/images/conversational-ai/mcp-finegrained-approvals.png)
+</Frame>
+
+- **Auto-approved tools**: Suitable for low-risk, read-only operations or tools you completely trust
+- **Approval-required tools**: For tools that modify data, access sensitive information, or perform potentially risky operations
+- **Disabled tools**: Completely block tools that are unnecessary or pose security risks
+
+<Warning>
+  Even with approval controls in place, carefully evaluate the trustworthiness of MCP servers and understand what each tool can access or modify before integration.
+</Warning>
+
 ## Security tips
 
 ### 1. Vet your MCP servers
@@ -43,11 +73,13 @@ This guide outlines key security practices to consider when using MCP server int
 ### 5. Add guardrails
 
 - **Prompt Injections**: Connecting to untrusted external MCP servers exposes the risk of prompt injection attacks. Ensure to add thorough guardrails to your system prompt to reduce the risk of exposure to a malicious attack.
+- **Tool Approval Configuration**: Use the appropriate approval mode for your security requirements. Start with "Always Ask" for new integrations and only move to less restrictive modes after thorough testing and trust establishment.
 
 ### 6. Monitor and review
 
 - **Logging (Server-Side)**: If you control the MCP server, implement comprehensive logging of tool invocations and data access.
 - **Regular Review**: Periodically review your integrated MCP servers. Check if their security posture has changed or if new tools have been added that require re-assessment.
+- **Approval Patterns**: Monitor tool approval requests to identify unusual patterns that might indicate security issues or misuse.
 
 ## Disclaimer
 
