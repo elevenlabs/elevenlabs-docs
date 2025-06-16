@@ -16194,10 +16194,17 @@
             "type": "integer",
             "default": 100000,
             "title": "Daily Limit"
+          },
+          "bursting_enabled": {
+            "description": "Whether to enable bursting. If true, exceeding workspace concurrency limit will be allowed up to 3 times the limit. Calls will be charged at double rate when exceeding the limit.",
+            "type": "boolean",
+            "default": true,
+            "title": "Bursting Enabled"
           }
         },
         "example": {
           "agent_concurrency_limit": -1,
+          "bursting_enabled": true,
           "daily_limit": 100000
         },
         "title": "AgentCallLimits"
@@ -23260,6 +23267,11 @@
             "type": "boolean",
             "default": false,
             "title": "Dev Discount"
+          },
+          "is_burst": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Burst"
           },
           "tier": {
             "anyOf": [
@@ -34530,10 +34542,7 @@
           "trialing",
           "active",
           "incomplete",
-          "incomplete_expired",
           "past_due",
-          "canceled",
-          "unpaid",
           "free",
           "free_disabled"
         ],
@@ -35556,7 +35565,6 @@
           }
         },
         "example": {
-          "can_use_delayed_payment_methods": true,
           "first_name": "John",
           "is_api_key_hashed": false,
           "is_new_user": false,
