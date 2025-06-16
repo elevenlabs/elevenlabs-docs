@@ -17,7 +17,7 @@ jobs:
         env:
           FERN_TOKEN: ${{ secrets.FERN_API_KEY }}
         run: |
-          OUTPUT=$(pnpm dlx fern-api generate --docs --preview) || true
+          OUTPUT=$(pnpm dlx fern-api generate --docs --preview --disable-snippets) || true
           echo "$OUTPUT"
           URL=$(echo "$OUTPUT" | grep -oP 'Published docs to \K.*(?= \()')
           echo "Preview URL: $URL"
