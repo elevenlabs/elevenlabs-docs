@@ -13,6 +13,7 @@ With SIP trunking, you can:
 - Connect your Private Branch Exchange (PBX) or SIP-enabled phone system to ElevenLabs' voice AI platform
 - Route calls to AI agents without changing your existing phone infrastructure
 - Handle both inbound and outbound calls
+- Leverage encrypted TLS transport and media encryption for enhanced security
 
 ## How SIP trunking works
 
@@ -21,7 +22,7 @@ SIP trunking establishes a direct connection between your telephony infrastructu
 1. **Inbound calls**: Calls from your SIP trunk are routed to the ElevenLabs platform using your configured SIP INVITE address.
 2. **Outbound calls**: Calls initiated by ElevenLabs are routed to your SIP trunk using your configured hostname, enabling your agents to make outgoing calls.
 3. **Authentication**: Connection security for the signaling is maintained through either digest authentication (username/password) or Access Control List (ACL) authentication based on the signaling source IP.
-4. **Signaling and Media**: The initial call setup (signaling) can use either TCP or UDP based on your transport selection. Once the call is established, the actual audio data (RTP stream) is transmitted over UDP for low latency.
+4. **Signaling and Media**: The initial call setup (signaling) supports multiple transport protocols including TLS for encrypted communication. Once the call is established, the actual audio data (RTP stream) can be encrypted based on your media encryption settings.
 
 ## Requirements
 
@@ -31,7 +32,8 @@ Before setting up SIP trunking, ensure you have:
 2. Phone numbers that you want to connect to ElevenLabs
 3. Administrator access to your SIP trunk configuration
 4. Appropriate firewall settings to allow SIP traffic
-5. **Audio codec compatibility**: Your system must support **48kHz audio** or be capable of resampling audio on your end, as ElevenLabs' SIP deployment outputs and receives audio at this sample rate. This is independent of any audio format configured on the agent for direct websocket connections.
+5. **TLS Support**: For enhanced security, ensure your SIP trunk provider supports TLS transport
+6. **Audio codec compatibility**: Your system must support **48kHz audio** or be capable of resampling audio on your end, as ElevenLabs' SIP deployment outputs and receives audio at this sample rate. This is independent of any audio format configured on the agent for direct websocket connections.
 
 ## Setting up SIP trunking
 
@@ -67,16 +69,22 @@ Before setting up SIP trunking, ensure you have:
 
     - **Address**: Hostname or IP address where the SIP INVITE is sent (e.g., `sip.telnyx.com`). This should be a hostname or IP address only, not a full SIP URI.
     - **Transport Type**: Select the transport protocol for SIP signaling:
+      - **Auto**: Automatically selects the best available transport
       - **TCP**: Standard TCP transport
       - **UDP**: Standard UDP transport
       - **TLS**: Encrypted TLS transport for enhanced security
     - **Media Encryption**: Configure encryption for RTP media streams:
+      - **Disabled**: No media encryption
       - **Allowed**: Permits encrypted media streams
       - **Required**: Enforces encrypted media streams
 
     <Frame background="subtle">
       <img src="/assets/images/conversational-ai/sip-outbound.png" alt="SIP trunk outbound configuration" />
     </Frame>
+
+    <Tip>
+      **Security Best Practice**: Use TLS transport with Required media encryption for maximum security. This ensures both signaling and media are encrypted end-to-end.
+    </Tip>
 
     <Note>
       The **Address** field specifies where ElevenLabs will send outbound calls from your AI agents. Enter only the hostname or IP address without the `sip:` protocol prefix.
@@ -106,7 +114,7 @@ Before setting up SIP trunking, ensure you have:
 
     <Info>
       **Authentication Methods**:
-      - **Digest Authentication**: Uses username/password credentials for secure authentication
+      - **Digest Authentication**: Uses username/password credentials for secure authentication (recommended)
       - **ACL Authentication**: Uses IP address allowlisting for access control
 
       **Digest Authentication is strongly recommended** as it provides better security without relying on IP allowlisting, which can be complex to manage with dynamic IP addresses.
@@ -134,11 +142,12 @@ After importing your SIP trunk phone number, you can assign it to a conversation
   <Accordion title="Connection Issues">
     If you're experiencing connection problems: 
     
-    1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side. 
-    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port
+    1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side
+    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port (5060 for UDP/TCP, 5061 for TLS)
     3. Confirm that your address hostname is correctly formatted and accessible
     4. Test with and without digest authentication credentials
-    5. If using TLS transport, ensure your certificates are valid and properly configured
+    5. If using TLS transport, ensure your provider's TLS certificates are valid and properly configured
+    6. Try different transport types (Auto, UDP, TCP) to isolate TLS-specific issues
     
   </Accordion>
   <Accordion title="Authentication Failures">
@@ -148,33 +157,48 @@ After importing your SIP trunk phone number, you can assign it to a conversation
     2. If using ACL authentication, ensure your provider is configured to trust signaling traffic from ElevenLabs IP addresses (contact support for current IP ranges)
     3. Check your SIP trunk provider's logs for specific authentication error messages
     4. Verify that custom headers, if configured, match your provider's requirements
+    5. Test with simplified configurations (no custom headers) to isolate authentication issues
 
   </Accordion>
-  <Accordion title="TLS/Encryption Issues">
+  <Accordion title="TLS and Encryption Issues">
     If you're experiencing issues with TLS transport or media encryption:
 
-    1. Verify that your SIP trunk provider supports the selected transport type (TLS)
-    2. Check certificate validity and trust chains
-    3. Ensure your provider supports the configured media encryption settings
-    4. Test with different transport types to isolate the issue
+    1. Verify that your SIP trunk provider supports TLS transport on port 5061
+    2. Check certificate validity, expiration dates, and trust chains
+    3. Ensure your provider supports SRTP media encryption if using "Required" media encryption
+    4. Test with "Allowed" media encryption before using "Required" to isolate encryption issues
+    5. Try different transport types (TCP, UDP) to isolate TLS-specific problems
+    6. Contact your SIP trunk provider to confirm TLS and SRTP support
+
+  </Accordion>
+  <Accordion title="Custom Headers Issues">
+    If you're having problems with custom headers:
+
+    1. Verify the exact header names and values required by your provider
+    2. Check for case sensitivity in header names
+    3. Ensure header values don't contain special characters that need escaping
+    4. Test without custom headers first, then add them incrementally
+    5. Review your provider's documentation for supported custom headers
 
   </Accordion>
   <Accordion title="No Audio or One-Way Audio">
     If the call connects but there's no audio or audio only flows one way:
 
-    1. Verify that your firewall allows UDP traffic for the RTP media stream (typically ports 10000-60000).
-    Since these IPs change, ensure the rule is not restricted to specific static IPs.
-    2. Check for Network Address Translation (NAT) issues that might be blocking the RTP
-    stream.
+    1. Verify that your firewall allows UDP traffic for the RTP media stream (typically ports 10000-60000)
+    2. Since RTP uses dynamic IP addresses, ensure firewall rules are not restricted to specific static IPs
+    3. Check for Network Address Translation (NAT) issues that might be blocking the RTP stream
+    4. If using "Required" media encryption, ensure both endpoints support SRTP
+    5. Test with "Disabled" media encryption to isolate encryption-related audio issues
 
   </Accordion>
   <Accordion title="Audio Quality Issues">
     If you experience poor audio quality:
 
-    1. Ensure your network has sufficient bandwidth (at least
-      100 Kbps per call) and low latency/jitter for UDP traffic.
-    2. Check for network congestion or packet loss, particularly on the UDP path.
-    3. Verify codec settings match on both ends.
+    1. Ensure your network has sufficient bandwidth (at least 100 Kbps per call) and low latency/jitter for UDP traffic
+    2. Check for network congestion or packet loss, particularly on the UDP path
+    3. Verify codec settings match on both ends
+    4. If using media encryption, ensure both endpoints efficiently handle SRTP processing
+    5. Test with different media encryption settings to isolate quality issues
 
   </Accordion>
 
@@ -185,6 +209,8 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 - Support for multiple concurrent calls depends on your subscription tier
 - Call recording and analytics features are available but may require additional configuration
 - Outbound calling capabilities may be limited by your SIP trunk provider
+- **TLS Support**: Ensure your SIP trunk provider supports TLS 1.2 or higher for encrypted transport
+- **Media Encryption**: SRTP support varies by provider; verify compatibility before requiring encryption
 - **Audio format**: ElevenLabs' SIP deployment outputs and receives audio at **48kHz sample rate**. This is independent of any audio format configured on the agent for direct websocket connections. Your SIP trunk system must either support this format natively or perform resampling to match your system's requirements
 
 ## FAQ
@@ -195,33 +221,38 @@ After importing your SIP trunk phone number, you can assign it to a conversation
     conversational AI platform without porting them.
   </Accordion>
 
-<Accordion title="What SIP trunk providers are compatible with ElevenLabs?">
-  ElevenLabs is compatible with most standard SIP trunk providers including Twilio, Vonage,
-  RingCentral, Sinch, Infobip, Telnyx, Exotel, Plivo, Bandwidth, and others that support SIP
-  protocol standards. TLS transport and media encryption are supported for enhanced security.
-</Accordion>
+  <Accordion title="What SIP trunk providers are compatible with ElevenLabs?">
+    ElevenLabs is compatible with most standard SIP trunk providers including Twilio, Vonage,
+    RingCentral, Sinch, Infobip, Telnyx, Exotel, Plivo, Bandwidth, and others that support SIP
+    protocol standards. TLS transport and SRTP media encryption are supported for enhanced security.
+  </Accordion>
 
-<Accordion title="Should I use TLS transport for better security?">
-  Yes, TLS transport provides encrypted SIP signaling which enhances security for your calls.
-  Combined with media encryption, it ensures end-to-end protection of your communications. However,
-  ensure your SIP trunk provider supports TLS before enabling it.
-</Accordion>
+  <Accordion title="Should I use TLS transport for better security?">
+    Yes, TLS transport is highly recommended for production environments. It provides encrypted SIP
+    signaling which enhances security for your calls. Combined with required media encryption, it
+    ensures comprehensive protection of your communications. Always verify your SIP trunk provider
+    supports TLS before enabling it.
+  </Accordion>
 
-<Accordion title="What are custom headers used for?">
-  Custom SIP headers allow you to include provider-specific information with outbound calls. Common
-  uses include call routing, billing codes, caller identification, and meeting specific provider
-  requirements. Check with your SIP trunk provider for any required headers.
-</Accordion>
+  <Accordion title="What's the difference between transport types?">
+    - **Auto**: Automatically selects the best available transport protocol  
+    - **UDP**: Fastest but unencrypted signaling (good for internal networks)
+    - **TCP**: Reliable but unencrypted signaling
+    - **TLS**: Encrypted and reliable signaling (recommended for production)
+    
+    For security-critical applications, always use TLS transport.
+  </Accordion>
 
-<Accordion title="How many concurrent calls are supported?">
-  The number of concurrent calls depends on your subscription plan. Enterprise plans typically allow
-  for higher volumes of concurrent calls.
-</Accordion>
+  <Accordion title="What are custom headers used for?">
+    Custom SIP headers allow you to include provider-specific information with outbound calls. Common
+    uses include call routing, billing codes, caller identification, and meeting specific provider
+    requirements.
+  </Accordion>
 
-<Accordion title="Is call encryption supported?">
-  Yes, ElevenLabs supports encrypted SIP communications (SIPS) for enhanced security. Contact
-  support for specific configuration requirements.
-</Accordion>
+  <Accordion title="How many concurrent calls are supported?">
+    The number of concurrent calls depends on your subscription plan. Enterprise plans typically allow
+    for higher volumes of concurrent calls.
+  </Accordion>
 
   <Accordion title="Can I route calls conditionally to different agents?">
     Yes, you can use your existing PBX system's routing rules to direct calls to different phone
