@@ -10085,6 +10085,72 @@
         "x-fern-sdk-method-name": "unshare"
       }
     },
+    "/v1/workspace/webhooks/": {
+      "get": {
+        "operationId": "get_workspace_webhooks_route_v1_workspace_webhooks__get",
+        "summary": "Get Workspace Webhooks Route",
+        "parameters": [
+          {
+            "name": "include_usages",
+            "in": "query",
+            "description": "Whether to include active usages of the webhook, only usable by admins",
+            "required": false,
+            "schema": {
+              "description": "Whether to include active usages of the webhook, only usable by admins",
+              "type": "boolean",
+              "default": false,
+              "examples": [
+                false
+              ],
+              "title": "Include Usages"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceWebhookListResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ]
+      }
+    },
     "/v1/speech-to-text": {
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
@@ -17339,7 +17405,7 @@
             "title": "Name"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -17409,7 +17475,7 @@
             "title": "Default Model Id"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -17424,7 +17490,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -17435,6 +17501,14 @@
               }
             ],
             "title": "From Document"
+          },
+          "from_content_json": {
+            "description": "An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
+            "type": "string",
+            "examples": [
+              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
+            ],
+            "title": "From Content Json"
           },
           "quality_preset": {
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
@@ -17636,7 +17710,7 @@
             "title": "Pronunciation Dictionary Locators"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -18222,7 +18296,7 @@
             "title": "Default Model Id"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -18237,7 +18311,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -18248,6 +18322,14 @@
               }
             ],
             "title": "From Document"
+          },
+          "from_content_json": {
+            "description": "An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
+            "type": "string",
+            "examples": [
+              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
+            ],
+            "title": "From Content Json"
           },
           "quality_preset": {
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
@@ -18449,7 +18531,7 @@
             "title": "Pronunciation Dictionary Locators"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -18734,7 +18816,7 @@
             "title": "Name"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -18942,7 +19024,7 @@
             "title": "Highlights"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -19099,7 +19181,7 @@
             "title": "Highlights"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -19746,7 +19828,7 @@
         "type": "object",
         "properties": {
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -19761,7 +19843,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -21993,7 +22075,7 @@
         "type": "object",
         "properties": {
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -22008,7 +22090,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -22406,6 +22488,13 @@
             ],
             "title": "Sub Type"
           },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChapterContentParagraphTtsNodeInputModel"
+            },
+            "title": "Nodes"
+          },
           "block_id": {
             "anyOf": [
               {
@@ -22416,13 +22505,6 @@
               }
             ],
             "title": "Block Id"
-          },
-          "nodes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChapterContentParagraphTtsNodeInputModel"
-            },
-            "title": "Nodes"
           }
         },
         "required": [
@@ -22979,6 +23061,7 @@
           "agent_response_correction",
           "client_tool_call",
           "mcp_tool_call",
+          "mcp_connection_status",
           "agent_tool_response",
           "vad_score",
           "internal_turn_probability",
@@ -24602,6 +24685,29 @@
               "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Input"
             },
             "title": "Partial Conversation History"
+          },
+          "dynamic_variables": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
           }
         },
         "required": [
@@ -34542,6 +34648,7 @@
           "trialing",
           "active",
           "incomplete",
+          "incomplete_expired",
           "past_due",
           "free",
           "free_disabled"
@@ -37184,6 +37291,14 @@
         ],
         "title": "VoiceVerificationResponseModel"
       },
+      "WebhookAuthMethodType": {
+        "type": "string",
+        "enum": [
+          "hmac",
+          "oauth2"
+        ],
+        "title": "WebhookAuthMethodType"
+      },
       "WebhookToolApiSchemaConfig-Input": {
         "description": "Configuration for a webhook that will be called by an LLM tool.",
         "type": "object",
@@ -37489,6 +37604,16 @@
           "api_schema"
         ],
         "title": "WebhookToolConfig"
+      },
+      "WebhookUsageType": {
+        "type": "string",
+        "enum": [
+          "ConvAI Agent Settings",
+          "ConvAI Settings",
+          "Voice Library Removal Notices",
+          "Speech to Text"
+        ],
+        "title": "WebhookUsageType"
       },
       "WidgetConfig-Input": {
         "type": "object",
@@ -39163,6 +39288,143 @@
           "convai_batch_calls"
         ],
         "title": "WorkspaceResourceType"
+      },
+      "WorkspaceWebhookListResponseModel": {
+        "type": "object",
+        "properties": {
+          "webhooks": {
+            "description": "List of webhooks currently configured for the workspace",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceWebhookResponseModel"
+            },
+            "title": "Webhooks"
+          }
+        },
+        "example": {
+          "webhooks": [
+            {
+              "auth_type": "hmac",
+              "created_at_unix": 123456789,
+              "is_auto_disabled": false,
+              "is_disabled": false,
+              "most_recent_failure_error_code": 404,
+              "most_recent_failure_timestamp": 123456799,
+              "name": "My Webhook",
+              "usage": [
+                {
+                  "usage_type": "CONVAI_PLATFORM"
+                }
+              ],
+              "webhook_id": "123",
+              "webhook_url": "https://elevenlabs.io/example-callback-url"
+            }
+          ]
+        },
+        "required": [
+          "webhooks"
+        ],
+        "title": "WorkspaceWebhookListResponseModel"
+      },
+      "WorkspaceWebhookResponseModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The display name for this webhook.",
+            "type": "string",
+            "title": "Name"
+          },
+          "webhook_id": {
+            "description": "The unique ID for this webhook.",
+            "type": "string",
+            "title": "Webhook Id"
+          },
+          "webhook_url": {
+            "description": "The HTTPS callback URL that is called when this webhook is triggered in the platform.",
+            "type": "string",
+            "title": "Webhook Url"
+          },
+          "is_disabled": {
+            "description": "Whether the webhook has been manually disabled by a user.",
+            "type": "boolean",
+            "title": "Is Disabled"
+          },
+          "is_auto_disabled": {
+            "description": "Whether the webhook has been automatically disabled due to repeated consecutive failures over a long period of time.",
+            "type": "boolean",
+            "title": "Is Auto Disabled"
+          },
+          "created_at_unix": {
+            "description": "Original creation time of the webhook.",
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "auth_type": {
+            "description": "The authentication mode used to secure the webhook.",
+            "$ref": "#/components/schemas/WebhookAuthMethodType"
+          },
+          "usage": {
+            "description": "The list of products that are currently configured to trigger this webhook.",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/WorkspaceWebhookUsageResponseModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage"
+          },
+          "most_recent_failure_error_code": {
+            "description": "The most recent error code returned from the callback URL.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Most Recent Failure Error Code"
+          },
+          "most_recent_failure_timestamp": {
+            "description": "The most recent time the webhook failed, failures are any non-200 codes returned by the callback URL.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Most Recent Failure Timestamp"
+          }
+        },
+        "required": [
+          "name",
+          "webhook_id",
+          "webhook_url",
+          "is_disabled",
+          "is_auto_disabled",
+          "created_at_unix",
+          "auth_type"
+        ],
+        "title": "WorkspaceWebhookResponseModel"
+      },
+      "WorkspaceWebhookUsageResponseModel": {
+        "type": "object",
+        "properties": {
+          "usage_type": {
+            "$ref": "#/components/schemas/WebhookUsageType"
+          }
+        },
+        "required": [
+          "usage_type"
+        ],
+        "title": "WorkspaceWebhookUsageResponseModel"
       }
     }
   },
