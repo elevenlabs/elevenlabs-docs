@@ -311,6 +311,17 @@ navigation:
               - page: Webhooks
                 icon: duotone webhook
                 path: docs/pages/product-guides/administration/webhooks.mdx
+      - section: SERVICES
+        skip-slug: false
+        contents:
+          - section: Productions
+            contents:
+              - page: Overview
+                icon: duotone clapperboard
+                path: docs/pages/services/productions/overview.mdx
+              - page: Transcripts
+                icon: duotone pen-clip
+                path: docs/pages/services/productions/transcripts.mdx
       - section: RESOURCES
         skip-slug: false
         contents:
@@ -478,6 +489,13 @@ navigation:
               - page: Zero Retention Mode
                 icon: duotone shield-check
                 path: conversational-ai/pages/customization/privacy/zrm.mdx
+          - section: MCP
+            icon: duotone chart-network
+            path: conversational-ai/pages/customization/mcp/guide.mdx
+            contents:
+              - page: Security
+                icon: duotone hexagon-exclamation
+                path: conversational-ai/pages/customization/mcp/security.mdx
 
       - section: PHONE NUMBERS
         contents:
@@ -549,6 +567,9 @@ navigation:
       - section: GUIDES
         skip-slug: false
         contents:
+          - page: Burst pricing
+            icon: duotone burst
+            path: conversational-ai/pages/guides/burst-pricing.mdx
           - page: ElevenLabs' docs agent
             icon: duotone message-bot
             path: conversational-ai/pages/best-practices/our-docs-agent.mdx
@@ -600,6 +621,9 @@ navigation:
               - page: Zendesk
                 icon: duotone z
                 path: conversational-ai/pages/guides/zendesk.mdx
+              - page: HubSpot
+                icon: duotone h
+                path: conversational-ai/pages/guides/hubspot.mdx
       - section: LEGAL
         contents:
           - page: HIPAA
@@ -611,6 +635,9 @@ navigation:
           - page: GDPR
             icon: duotone circle-euro
             path: conversational-ai/pages/legal/gdpr.mdx
+          - page: Disclosure Requirement
+            icon: duotone file-contract
+            path: conversational-ai/pages/legal/disclosure.mdx
       - section: RESOURCES
         skip-slug: true
         contents:
@@ -791,6 +818,24 @@ navigation:
                 contents:
                   - endpoint: POST /v1/convai/llm-usage/calculate
                     title: Calculate expected LLM usage
+              - section: MCP
+                contents:
+                  - endpoint: POST /v1/convai/mcp-servers
+                    title: Create MCP server
+                  - endpoint: GET /v1/convai/mcp-servers
+                    title: List MCP servers
+                  - endpoint: GET /v1/convai/mcp-servers/{mcp_server_id}
+                    title: Get MCP server
+                  - endpoint: GET /v1/convai/mcp-servers/{mcp_server_id}/tools
+                    title: List MCP server tools
+                  - section: Approval Policies
+                    contents:
+                      - endpoint: PATCH /v1/convai/mcp-servers/{mcp_server_id}/approval-policy
+                        title: Update MCP server approval policy
+                      - endpoint: POST /v1/convai/mcp-servers/{mcp_server_id}/tool-approvals
+                        title: Create MCP server tool approval
+                      - endpoint: DELETE /v1/convai/mcp-servers/{mcp_server_id}/tool-approvals/{tool_name}
+                        title: Delete MCP server tool approval
   - tab: api-reference
     layout:
       - api: API REFERENCE
@@ -992,6 +1037,7 @@ navigation:
                   - GET /v1/shared-voices
                   - POST /v1/voices/add/{public_user_id}/{voice_id}
               - workspace
+              - webhooks
           - section: CONVERSATIONAL AI
             skip-slug: true
             contents: *convai-endpoints
@@ -1524,3 +1570,69 @@ redirects:
     destination: /docs/api-reference/twilio/outbound-call
   - source: /docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input
     destination: /docs/api-reference/text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input
+  - source: /docs/api-reference/quick-start/introduction
+    destination: /docs/api-reference/introduction
+  - source: /docs/api-reference/getting-started
+    destination: /docs/api-reference/introduction
+  - source: /docs/api-reference/gaming-text-to-speech-guide
+    destination: /docs/quickstart
+  - source: /docs/api-reference/react-text-to-speech-guide
+    destination: /docs/quickstart
+  - source: /docs/product-guides/voices/voice-cloning/projects/overview
+    destination: /docs/product-guides/voices/voice-cloning
+  - source: /docs/api-reference/audio-isolation/create
+    destination: /docs/api-reference/audio-isolation/convert
+  - source: /docs/api-reference/agents/create-agent
+    destination: /docs/api-reference/agents/create
+  - source: /docs/api-reference/quick-start/authentication
+    destination: /docs/api-reference/authentication
+  - source: /docs/developer-guides/cookbooks/dubbing/python-node-js-guide
+    destination: /docs/cookbooks/dubbing
+  - source: /docs/voice-library/overview
+    destination: /docs/product-guides/voices/voice-library
+  - source: /docs/voicelab/instant-voice-cloning
+    destination: /docs/product-guides/voices/voice-cloning/instant-voice-cloning
+  - source: /docs/cookbooks/sound-effects/python-guide
+    destination: /docs/cookbooks/sound-effects
+  - source: /docs/api-reference/dubbing/dub-a-video-or-an-audio-file
+    destination: /docs/api-reference/dubbing/create
+  - source: /docs/api-reference/user/get-subscription
+    destination: /docs/api-reference/user/subscription/get
+  - source: /docs/api-reference/text-to-speech-stream
+    destination: /docs/api-reference/text-to-speech/stream
+  - source: /docs/api-reference/history/get-all
+    destination: /docs/api-reference/history/list
+  - source: /docs/conversational-ai/customization/custom-llm
+    destination: /docs/conversational-ai/customization/llm/custom-llm
+  - source: /docs/product-guides/voices/voice-cloning/voice-design
+    destination: /docs/product-guides/voices/voice-design
+  - source: /docs/conversational-ai/api-reference/websocket
+    destination: /docs/conversational-ai/api-reference/conversational-ai/websocket
+  - source: /docs/api-reference/voices/add
+    destination: /docs/api-reference/voices/ivc/create
+  - source: /docs/developer-guides/cookbooks/sound-effects/python-guide
+    destination: /docs/cookbooks/sound-effects
+  - source: /docs/api-reference/voices/get-all
+    destination: /docs/api-reference/voices/search
+  - source: /docs/conversational-ai/customization/tools-events/client-tools
+    destination: /docs/conversational-ai/customization/tools/client-tools
+  - source: /docs/api-reference/websocket
+    destination: /docs/api-reference/text-to-speech/v-1-text-to-speech-voice-id-stream-input
+  - source: /docs/api-reference/models/get-all
+    destination: /docs/api-reference/models/list
+  - source: /docs/api-reference/conversational-ai
+    destination: /docs/conversational-ai/api-reference/conversational-ai/websocket
+  - source: /docs/developer-guides/cookbooks/text-to-speech/request-stitching
+    destination: /docs/cookbooks/text-to-speech/request-stitching
+  - source: /docs/api-reference/voices/get-default-settings
+    destination: /docs/api-reference/voices/settings/get-default
+  - source: /docs/product-guides/voices/voice-cloning/dubbing/studio
+    destination: /docs/product-guides/products/dubbing/dubbing-studio
+  - source: /docs/conversational-ai/customization/custom-llm/together-ai
+    destination: /docs/conversational-ai/customization/llm/custom-llm/together-ai
+  - source: /docs/conversational-ai/customization/custom-llm/groq-cloud
+    destination: /docs/conversational-ai/customization/llm/custom-llm/groq-cloud
+  - source: /docs/api-reference/voices/get-settings
+    destination: /docs/api-reference/voices/settings/get
+  - source: /docs/voicelab/pre-made-voices
+    destination: /docs/product-guides/voices/voice-library

@@ -1,0 +1,138 @@
+---
+title: Model Context Protocol
+subtitle: Connect your ElevenLabs conversational agents to external tools and data sources using the Model Context Protocol.
+---
+
+<Error title="User Responsibility">
+  You are responsible for the security, compliance, and behavior of any third-party MCP server you
+  integrate with your ElevenLabs conversational agents. ElevenLabs provides the platform for
+  integration but does not manage, endorse, or secure external MCP servers.
+</Error>
+
+## Overview
+
+The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that defines how applications provide context to Large Language Models (LLMs). Think of MCP as a universal connector that enables AI models to seamlessly interact with diverse data sources and tools. By integrating servers that implement MCP, you can significantly extend the capabilities of your ElevenLabs conversational agents.
+
+<Frame background="subtle">
+  <iframe
+    width="100%"
+    height="400"
+    src="https://www.youtube.com/embed/7WLfKp7FpD8"
+    title="ElevenLabs Model Context Protocol integration"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+</Frame>
+
+<Note>
+  MCP support is not currently available for users on Zero Retention Mode or those requiring HIPAA
+  compliance.
+</Note>
+
+ElevenLabs allows you to connect your conversational agents to external MCP servers. This enables your agents to:
+
+- Access and process information from various data sources via the MCP server
+- Utilize specialized tools and functionalities exposed by the MCP server
+- Create more dynamic, knowledgeable, and interactive conversational experiences
+
+## Getting started
+
+<Note>
+  ElevenLabs currently supports SSE transport MCP servers only. Streamable HTTP servers will be
+  supported soon.
+</Note>
+
+1. Retrieve the URL of your MCP server. In this example, we'll use [Zapier MCP](https://zapier.com/mcp), which lets you connect Conversational AI to hundreds of tools and services.
+
+2. Navigate to the [MCP server integrations dashboard](https://elevenlabs.io/app/conversational-ai/integrations) and click "Add Custom MCP Server".
+
+   <Frame background="subtle">
+     ![Creating your first MCP server](/assets/images/conversational-ai/mcp-create.png)
+   </Frame>
+
+3. Configure the MCP server with the following details:
+
+   - **Name**: The name of the MCP server (e.g., "Zapier MCP Server")
+   - **Description**: A description of what the MCP server can do (e.g., "An MCP server with access to Zapier's tools and services")
+   - **Server URL**: The URL of the MCP server. In some cases this contains a secret key, treat it like a password and store it securely as a workspace secret.
+   - **Secret Token (Optional)**: If the MCP server requires a secret token (Authorization header), enter it here.
+   - **HTTP Headers (Optional)**: If the MCP server requires additional HTTP headers, enter them here.
+
+4. Click "Add Integration" to save the integration and test the connection to list available tools.
+
+   <Frame background="subtle">
+     ![Zapier example tools](/assets/images/conversational-ai/mcp-zapier.png)
+   </Frame>
+
+5. The MCP server is now available to add to your agents. Note that MCP servers can currently only be added to agents with `Security > Enable authentication` enabled.
+
+   <Frame background="subtle">
+     ![Adding the MCP server to an agent](/assets/images/conversational-ai/mcp-add.png)
+   </Frame>
+
+## Tool approval modes
+
+ElevenLabs provides flexible approval controls to manage how agents request permission to use tools from MCP servers. You can configure approval settings at both the MCP server level and individual tool level for maximum security control.
+
+<Frame background="subtle">
+  ![Tool approval mode settings](/assets/images/conversational-ai/mcp-approval.png)
+</Frame>
+
+### Available approval modes
+
+- **Always Ask (Recommended)**: Maximum security. The agent will request your permission before each tool use.
+- **Fine-Grained Tool Approval**: Disable and pre-select tools which can run automatically and those requiring approval.
+- **No Approval**: The assistant can use any tool without approval.
+
+### Fine-grained tool control
+
+The Fine-Grained Tool Approval mode allows you to configure individual tools with different approval requirements, giving you precise control over which tools can run automatically and which require explicit permission.
+
+<Frame background="subtle">
+  ![Fine-grained tool approval
+  settings](/assets/images/conversational-ai/mcp-finegrained-approvals.png)
+</Frame>
+
+For each tool, you can set:
+
+- **Auto-approved**: Tool runs automatically without requiring permission
+- **Requires approval**: Tool requires explicit permission before execution
+- **Disabled**: Tool is completely disabled and cannot be used
+
+<Tip>
+  Use Fine-Grained Tool Approval to allow low-risk read-only tools to run automatically while
+  requiring approval for tools that modify data or perform sensitive operations.
+</Tip>
+
+## Key considerations for ElevenLabs integration
+
+- **External servers**: You are responsible for selecting the external MCP servers you wish to integrate. ElevenLabs provides the means to connect to them.
+- **Supported features**: ElevenLabs currently supports MCP servers that communicate over SSE (Server-Sent Events) for real-time interactions.
+- **Dynamic tools**: The tools and capabilities available from an integrated MCP server are defined by that external server and can change if the server's configuration is updated.
+
+## Security and disclaimer
+
+Integrating external MCP servers can expose your agents and data to third-party services. It is crucial to understand the security implications.
+
+<Warning title="Important Disclaimer">
+  By enabling MCP server integrations, you acknowledge that this may involve data sharing with
+  third-party services not controlled by ElevenLabs. This could incur additional security risks.
+  Please ensure you fully understand the implications, vet the security of any MCP server you
+  integrate, and review our [MCP Integration Security
+  Guidelines](/docs/conversational-ai/customization/mcp/security) before proceeding.
+</Warning>
+
+Refer to our [MCP Integration Security Guidelines](/docs/conversational-ai/customization/mcp/security) for detailed best practices.
+
+## Finding or building MCP servers
+
+- Utilize publicly available MCP servers from trusted providers
+- Develop your own MCP server to expose your proprietary data or tools
+- Explore the Model Context Protocol community and resources for examples and server implementations
+
+### Resources
+
+- [Anthropic's MCP server examples](https://docs.anthropic.com/en/docs/agents-and-tools/remote-mcp-servers#remote-mcp-server-examples) - A list of example servers by Anthropic
+- [Awesome Remote MCP Servers](https://github.com/jaw9c/awesome-remote-mcp-servers) - A curated, open-source list of remote MCP servers
+- [Remote MCP Server Directory](https://remote-mcp.com/) - A searchable list of Remote MCP servers

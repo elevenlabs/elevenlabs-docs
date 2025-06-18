@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "ElevenLabs API Documentation",
-    "description": "This is the documentation for the ElevenLabs API. You can use this API to use our service programmatically, this is done by using your xi-api-key. <br/> You can view your xi-api-key using the 'Profile' tab on https://elevenlabs.io. Our API is experimental so all endpoints are subject to change.",
+    "description": "This is the documentation for the ElevenLabs API. You can use this API to use our service programmatically, this is done by using your API key. You can find your API key in the dashboard at https://elevenlabs.io/app/settings/api-keys.",
     "version": "1.0"
   },
   "paths": {
@@ -10085,6 +10085,75 @@
         "x-fern-sdk-method-name": "unshare"
       }
     },
+    "/v1/workspace/webhooks": {
+      "get": {
+        "operationId": "List_workspace_webhooks_v1_workspace_webhooks_get",
+        "summary": "List Workspace Webhooks",
+        "description": "List all webhooks for a workspace",
+        "parameters": [
+          {
+            "name": "include_usages",
+            "in": "query",
+            "description": "Whether to include active usages of the webhook, only usable by admins",
+            "required": false,
+            "schema": {
+              "description": "Whether to include active usages of the webhook, only usable by admins",
+              "type": "boolean",
+              "default": false,
+              "examples": [
+                false
+              ],
+              "title": "Include Usages"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceWebhookListResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": "webhooks",
+        "x-fern-sdk-method-name": "list"
+      }
+    },
     "/v1/speech-to-text": {
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
@@ -14643,6 +14712,506 @@
         "x-fern-sdk-method-name": "outbound_call"
       }
     },
+    "/v1/convai/mcp-servers": {
+      "post": {
+        "operationId": "Create_MCP_server_v1_convai_mcp_servers_post",
+        "summary": "Create Mcp Server",
+        "description": "Create a new MCP server configuration in the workspace.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Configuration for an MCP Server.",
+                "$ref": "#/components/schemas/MCPServerRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPServerResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers"
+        ],
+        "x-fern-sdk-method-name": "create"
+      },
+      "get": {
+        "operationId": "List_MCP_servers_v1_convai_mcp_servers_get",
+        "summary": "List Mcp Servers",
+        "description": "Retrieve all MCP server configurations available in the workspace.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPServersResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
+    "/v1/convai/mcp-servers/{mcp_server_id}": {
+      "get": {
+        "operationId": "Get_MCP_server_v1_convai_mcp_servers__mcp_server_id__get",
+        "summary": "Get Mcp Server",
+        "description": "Retrieve a specific MCP server configuration from the workspace.",
+        "parameters": [
+          {
+            "name": "mcp_server_id",
+            "in": "path",
+            "description": "ID of the MCP Server.",
+            "required": true,
+            "schema": {
+              "description": "ID of the MCP Server.",
+              "type": "string",
+              "title": "Mcp Server Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPServerResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers"
+        ],
+        "x-fern-sdk-method-name": "get"
+      }
+    },
+    "/v1/convai/mcp-servers/{mcp_server_id}/tools": {
+      "get": {
+        "operationId": "List_MCP_server_tools_v1_convai_mcp_servers__mcp_server_id__tools_get",
+        "summary": "List Mcp Server Tools",
+        "description": "Retrieve all tools available for a specific MCP server configuration.",
+        "parameters": [
+          {
+            "name": "mcp_server_id",
+            "in": "path",
+            "description": "ID of the MCP Server.",
+            "required": true,
+            "schema": {
+              "description": "ID of the MCP Server.",
+              "type": "string",
+              "title": "Mcp Server Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListMCPToolsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
+    "/v1/convai/mcp-servers/{mcp_server_id}/approval-policy": {
+      "patch": {
+        "operationId": "Update_MCP_server_approval_policy_v1_convai_mcp_servers__mcp_server_id__approval_policy_patch",
+        "summary": "Update Mcp Server Approval Policy",
+        "description": "Update the approval policy configuration for an MCP server.",
+        "parameters": [
+          {
+            "name": "mcp_server_id",
+            "in": "path",
+            "description": "ID of the MCP Server.",
+            "required": true,
+            "schema": {
+              "description": "ID of the MCP Server.",
+              "type": "string",
+              "title": "Mcp Server Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Approval policy update for an MCP Server.",
+                "$ref": "#/components/schemas/MCPApprovalPolicyUpdateRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPServerResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers",
+          "approval_policy"
+        ],
+        "x-fern-sdk-method-name": "update"
+      }
+    },
+    "/v1/convai/mcp-servers/{mcp_server_id}/tool-approvals": {
+      "post": {
+        "operationId": "Create_MCP_server_tool_approval_v1_convai_mcp_servers__mcp_server_id__tool_approvals_post",
+        "summary": "Create Mcp Server Tool Approval",
+        "description": "Add approval for a specific MCP tool when using per-tool approval mode.",
+        "parameters": [
+          {
+            "name": "mcp_server_id",
+            "in": "path",
+            "description": "ID of the MCP Server.",
+            "required": true,
+            "schema": {
+              "description": "ID of the MCP Server.",
+              "type": "string",
+              "title": "Mcp Server Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Tool approval details to add for an MCP Server.",
+                "$ref": "#/components/schemas/MCPToolAddApprovalRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPServerResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers",
+          "tool_approvals"
+        ],
+        "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/convai/mcp-servers/{mcp_server_id}/tool-approvals/{tool_name}": {
+      "delete": {
+        "operationId": "Delete_MCP_server_tool_approval_v1_convai_mcp_servers__mcp_server_id__tool_approvals__tool_name__delete",
+        "summary": "Delete Mcp Server Tool Approval",
+        "description": "Remove approval for a specific MCP tool when using per-tool approval mode.",
+        "parameters": [
+          {
+            "name": "mcp_server_id",
+            "in": "path",
+            "description": "ID of the MCP Server.",
+            "required": true,
+            "schema": {
+              "description": "ID of the MCP Server.",
+              "type": "string",
+              "title": "Mcp Server Id"
+            }
+          },
+          {
+            "name": "tool_name",
+            "in": "path",
+            "description": "Name of the MCP tool to remove approval for.",
+            "required": true,
+            "schema": {
+              "description": "Name of the MCP tool to remove approval for.",
+              "type": "string",
+              "title": "Tool Name"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPServerResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "mcp_servers",
+          "tool_approvals"
+        ],
+        "x-fern-sdk-method-name": "delete"
+      }
+    },
     "/v1/voices/pvc": {
       "post": {
         "operationId": "Create_PVC_voice_v1_voices_pvc_post",
@@ -16194,10 +16763,17 @@
             "type": "integer",
             "default": 100000,
             "title": "Daily Limit"
+          },
+          "bursting_enabled": {
+            "description": "Whether to enable bursting. If true, exceeding workspace concurrency limit will be allowed up to 3 times the limit. Calls will be charged at double rate when exceeding the limit.",
+            "type": "boolean",
+            "default": true,
+            "title": "Bursting Enabled"
           }
         },
         "example": {
           "agent_concurrency_limit": -1,
+          "bursting_enabled": true,
           "daily_limit": 100000
         },
         "title": "AgentCallLimits"
@@ -17332,7 +17908,7 @@
             "title": "Name"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -17402,7 +17978,7 @@
             "title": "Default Model Id"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -17417,7 +17993,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -17428,6 +18004,14 @@
               }
             ],
             "title": "From Document"
+          },
+          "from_content_json": {
+            "description": "An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
+            "type": "string",
+            "examples": [
+              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
+            ],
+            "title": "From Content Json"
           },
           "quality_preset": {
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
@@ -17629,7 +18213,7 @@
             "title": "Pronunciation Dictionary Locators"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -18215,7 +18799,7 @@
             "title": "Default Model Id"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -18230,7 +18814,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -18241,6 +18825,14 @@
               }
             ],
             "title": "From Document"
+          },
+          "from_content_json": {
+            "description": "An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
+            "type": "string",
+            "examples": [
+              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
+            ],
+            "title": "From Content Json"
           },
           "quality_preset": {
             "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
@@ -18442,7 +19034,7 @@
             "title": "Pronunciation Dictionary Locators"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -18727,7 +19319,7 @@
             "title": "Name"
           },
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -18935,7 +19527,7 @@
             "title": "Highlights"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -19092,7 +19684,7 @@
             "title": "Highlights"
           },
           "callback_url": {
-            "description": "A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion",
+            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
             "anyOf": [
               {
                 "type": "string"
@@ -19739,7 +20331,7 @@
         "type": "object",
         "properties": {
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -19754,7 +20346,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -21986,7 +22578,7 @@
         "type": "object",
         "properties": {
           "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' must be null. If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string"
@@ -22001,7 +22593,7 @@
             "title": "From Url"
           },
           "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' must be null.  If neither 'from_url' or 'from_document' are provided we will initialize the Studio project as blank.",
+            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
             "anyOf": [
               {
                 "type": "string",
@@ -22399,6 +22991,13 @@
             ],
             "title": "Sub Type"
           },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChapterContentParagraphTtsNodeInputModel"
+            },
+            "title": "Nodes"
+          },
           "block_id": {
             "anyOf": [
               {
@@ -22409,13 +23008,6 @@
               }
             ],
             "title": "Block Id"
-          },
-          "nodes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChapterContentParagraphTtsNodeInputModel"
-            },
-            "title": "Nodes"
           }
         },
         "required": [
@@ -22972,6 +23564,8 @@
           "agent_response_correction",
           "client_tool_call",
           "mcp_tool_call",
+          "mcp_connection_status",
+          "agent_tool_response",
           "vad_score",
           "internal_turn_probability",
           "internal_tentative_agent_response"
@@ -23207,6 +23801,35 @@
         ],
         "title": "ConvAIStoredSecretDependencies"
       },
+      "ConvAIUserSecretDBModel": {
+        "description": "User-specific secret model that are not shared with other users in a workspace.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "encrypted_value": {
+            "type": "string",
+            "title": "Encrypted Value"
+          },
+          "nonce": {
+            "type": "string",
+            "title": "Nonce"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "encrypted_value",
+          "nonce"
+        ],
+        "title": "ConvAIUserSecretDBModel"
+      },
       "ConvAIWebhooks": {
         "type": "object",
         "properties": {
@@ -23259,6 +23882,11 @@
             "type": "boolean",
             "default": false,
             "title": "Dev Discount"
+          },
+          "is_burst": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Burst"
           },
           "tier": {
             "anyOf": [
@@ -24589,6 +25217,29 @@
               "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Input"
             },
             "title": "Partial Conversation History"
+          },
+          "dynamic_variables": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
           }
         },
         "required": [
@@ -28299,6 +28950,18 @@
             ],
             "title": "Discount Percent Off"
           },
+          "discount_amount_off": {
+            "description": "The discount applied to the invoice. E.g. [20.0f] for 20% off.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discount Amount Off"
+          },
           "next_payment_attempt_unix": {
             "description": "The Unix timestamp of the next payment attempt.",
             "type": "integer",
@@ -28807,7 +29470,6 @@
               "cloned",
               "premade",
               "professional",
-              "famous",
               "high_quality"
             ],
             "title": "Category"
@@ -29063,6 +29725,72 @@
         ],
         "title": "LibraryVoiceResponseModel"
       },
+      "ListMCPToolsResponseModel": {
+        "description": "Response model for testing tools available on an MCP server.",
+        "type": "object",
+        "properties": {
+          "success": {
+            "description": "Indicates if the operation was successful.",
+            "type": "boolean",
+            "title": "Success"
+          },
+          "tools": {
+            "description": "A list of tools available on the MCP server.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tool"
+            },
+            "title": "Tools"
+          },
+          "error_message": {
+            "description": "Error message if the operation was not successful.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          }
+        },
+        "example": {
+          "success": true,
+          "tools": [
+            {
+              "description": "Gets tomorrow's forecasted weather conditions for a location.",
+              "inputSchema": {
+                "properties": {
+                  "latitude": {
+                    "description": "Latitude",
+                    "type": "string"
+                  },
+                  "longitude": {
+                    "description": "Longitude",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "latitude",
+                  "longitude"
+                ],
+                "type": "object"
+              },
+              "name": "weather_by_zapier_get_tomorrow"
+            },
+            {
+              "description": "Description of tool2",
+              "name": "tool2"
+            }
+          ]
+        },
+        "required": [
+          "success",
+          "tools"
+        ],
+        "title": "ListMCPToolsResponseModel"
+      },
       "LiteralJsonSchemaProperty": {
         "type": "object",
         "properties": {
@@ -29127,6 +29855,362 @@
           "require_approval_per_tool"
         ],
         "title": "MCPApprovalPolicy"
+      },
+      "MCPApprovalPolicyUpdateRequestModel": {
+        "description": "Request model for updating MCP Server approval mode.",
+        "type": "object",
+        "properties": {
+          "approval_policy": {
+            "description": "The approval mode to set for the MCP server",
+            "$ref": "#/components/schemas/MCPApprovalPolicy"
+          }
+        },
+        "required": [
+          "approval_policy"
+        ],
+        "title": "MCPApprovalPolicyUpdateRequestModel"
+      },
+      "MCPServerConfig-Input": {
+        "type": "object",
+        "properties": {
+          "approval_policy": {
+            "default": "require_approval_all",
+            "$ref": "#/components/schemas/MCPApprovalPolicy"
+          },
+          "tool_approval_hashes": {
+            "description": "List of tool approval hashes for per-tool approval when approval_policy is REQUIRE_APPROVAL_PER_TOOL",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MCPToolApprovalHash"
+            },
+            "title": "Tool Approval Hashes"
+          },
+          "transport": {
+            "description": "The transport type used to connect to the MCP server",
+            "default": "SSE",
+            "$ref": "#/components/schemas/MCPServerTransport"
+          },
+          "url": {
+            "description": "The URL of the MCP server, if this contains a secret please store as a workspace secret, otherwise store as a plain string. Must use https",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/ConvAISecretLocator"
+              }
+            ],
+            "title": "Url"
+          },
+          "secret_token": {
+            "description": "The secret token (Authorization header) stored as a workspace secret or in-place secret",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConvAISecretLocator"
+              },
+              {
+                "$ref": "#/components/schemas/ConvAIUserSecretDBModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secret Token"
+          },
+          "request_headers": {
+            "description": "The headers included in the request",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/ConvAISecretLocator"
+                }
+              ]
+            },
+            "title": "Request Headers"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "default": "",
+            "title": "Description"
+          }
+        },
+        "required": [
+          "url",
+          "name"
+        ],
+        "title": "MCPServerConfig"
+      },
+      "MCPServerConfig-Output": {
+        "type": "object",
+        "properties": {
+          "approval_policy": {
+            "default": "require_approval_all",
+            "$ref": "#/components/schemas/MCPApprovalPolicy"
+          },
+          "tool_approval_hashes": {
+            "description": "List of tool approval hashes for per-tool approval when approval_policy is REQUIRE_APPROVAL_PER_TOOL",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MCPToolApprovalHash"
+            },
+            "title": "Tool Approval Hashes"
+          },
+          "transport": {
+            "description": "The transport type used to connect to the MCP server",
+            "default": "SSE",
+            "$ref": "#/components/schemas/MCPServerTransport"
+          },
+          "url": {
+            "description": "The URL of the MCP server, if this contains a secret please store as a workspace secret, otherwise store as a plain string. Must use https",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/ConvAISecretLocator"
+              }
+            ],
+            "title": "Url"
+          },
+          "secret_token": {
+            "description": "The secret token (Authorization header) stored as a workspace secret or in-place secret",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConvAISecretLocator"
+              },
+              {
+                "$ref": "#/components/schemas/ConvAIUserSecretDBModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secret Token"
+          },
+          "request_headers": {
+            "description": "The headers included in the request",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/components/schemas/ConvAISecretLocator"
+                }
+              ]
+            },
+            "title": "Request Headers"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "default": "",
+            "title": "Description"
+          }
+        },
+        "required": [
+          "url",
+          "name"
+        ],
+        "title": "MCPServerConfig"
+      },
+      "MCPServerMetadataResponseModel": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "integer",
+            "title": "Created At"
+          },
+          "owner_user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner User Id"
+          }
+        },
+        "required": [
+          "created_at"
+        ],
+        "title": "MCPServerMetadataResponseModel"
+      },
+      "MCPServerRequestModel": {
+        "description": "Request model for creating/updating an MCP Server configuration.",
+        "type": "object",
+        "properties": {
+          "config": {
+            "description": "Configuration details for the MCP Server.",
+            "$ref": "#/components/schemas/MCPServerConfig-Input"
+          }
+        },
+        "required": [
+          "config"
+        ],
+        "title": "MCPServerRequestModel"
+      },
+      "MCPServerResponseModel": {
+        "description": "Response model representing an MCP Server configuration.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "config": {
+            "$ref": "#/components/schemas/MCPServerConfig-Output"
+          },
+          "access_info": {
+            "description": "The access information of the MCP Server",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResourceAccessInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dependent_agents": {
+            "description": "List of agents that depend on this MCP Server.",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependentAvailableAgentIdentifier"
+                },
+                {
+                  "$ref": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "available": "#/components/schemas/DependentAvailableAgentIdentifier",
+                  "unknown": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              }
+            },
+            "title": "Dependent Agents"
+          },
+          "metadata": {
+            "description": "The metadata of the MCP Server",
+            "$ref": "#/components/schemas/MCPServerMetadataResponseModel"
+          }
+        },
+        "required": [
+          "id",
+          "config",
+          "metadata"
+        ],
+        "title": "MCPServerResponseModel"
+      },
+      "MCPServerTransport": {
+        "description": "Supported MCP server transport types.",
+        "type": "string",
+        "enum": [
+          "SSE",
+          "STREAMABLE_HTTP"
+        ],
+        "title": "MCPServerTransport"
+      },
+      "MCPServersResponseModel": {
+        "description": "Response model for a list of MCP Server configurations.",
+        "type": "object",
+        "properties": {
+          "mcp_servers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MCPServerResponseModel"
+            },
+            "title": "Mcp Servers"
+          }
+        },
+        "required": [
+          "mcp_servers"
+        ],
+        "title": "MCPServersResponseModel"
+      },
+      "MCPToolAddApprovalRequestModel": {
+        "description": "Request model for adding approval for a single MCP tool.",
+        "type": "object",
+        "properties": {
+          "tool_name": {
+            "description": "The name of the MCP tool",
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "tool_description": {
+            "description": "The description of the MCP tool",
+            "type": "string",
+            "title": "Tool Description"
+          },
+          "input_schema": {
+            "description": "The input schema of the MCP tool (the schema defined on the MCP server before ElevenLabs does any extra processing)",
+            "type": "object",
+            "title": "Input Schema"
+          },
+          "approval_policy": {
+            "description": "The tool-level approval policy",
+            "default": "requires_approval",
+            "$ref": "#/components/schemas/MCPToolApprovalPolicy"
+          }
+        },
+        "required": [
+          "tool_name",
+          "tool_description"
+        ],
+        "title": "MCPToolAddApprovalRequestModel"
+      },
+      "MCPToolApprovalHash": {
+        "description": "Model for storing tool approval hashes for per-tool approval.",
+        "type": "object",
+        "properties": {
+          "tool_name": {
+            "description": "The name of the MCP tool",
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "tool_hash": {
+            "description": "SHA256 hash of the tool's parameters and description",
+            "type": "string",
+            "title": "Tool Hash"
+          },
+          "approval_policy": {
+            "description": "The approval policy for this tool",
+            "default": "requires_approval",
+            "$ref": "#/components/schemas/MCPToolApprovalPolicy"
+          }
+        },
+        "required": [
+          "tool_name",
+          "tool_hash"
+        ],
+        "title": "MCPToolApprovalHash"
+      },
+      "MCPToolApprovalPolicy": {
+        "description": "Defines the tool-level approval policy.",
+        "type": "string",
+        "enum": [
+          "auto_approved",
+          "requires_approval"
+        ],
+        "title": "MCPToolApprovalPolicy"
       },
       "MCPToolConfig-Input": {
         "description": "An MCP tool configuration that can be used to call MCP servers",
@@ -33243,8 +34327,7 @@
               "premade",
               "cloned",
               "generated",
-              "professional",
-              "famous"
+              "professional"
             ],
             "title": "Category"
           },
@@ -34519,8 +35602,6 @@
           "incomplete",
           "incomplete_expired",
           "past_due",
-          "canceled",
-          "unpaid",
           "free",
           "free_disabled"
         ],
@@ -35087,6 +36168,110 @@
         ],
         "title": "TelephonyProvider"
       },
+      "Tool": {
+        "description": "Definition for a tool the client can call.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "inputSchema": {
+            "type": "object",
+            "title": "Inputschema"
+          },
+          "annotations": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ToolAnnotations"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "inputSchema"
+        ],
+        "title": "Tool"
+      },
+      "ToolAnnotations": {
+        "description": "Additional properties describing a Tool to clients.\n\nNOTE: all properties in ToolAnnotations are **hints**.\nThey are not guaranteed to provide a faithful description of\ntool behavior (including descriptive properties like `title`).\n\nClients should never make tool use decisions based on ToolAnnotations\nreceived from untrusted servers.",
+        "type": "object",
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "readOnlyHint": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Readonlyhint"
+          },
+          "destructiveHint": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destructivehint"
+          },
+          "idempotentHint": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idempotenthint"
+          },
+          "openWorldHint": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Openworldhint"
+          }
+        },
+        "additionalProperties": true,
+        "title": "ToolAnnotations"
+      },
       "ToolMockConfig": {
         "type": "object",
         "properties": {
@@ -35472,8 +36657,9 @@
             "title": "Xi Api Key"
           },
           "can_use_delayed_payment_methods": {
-            "description": "Whether the user can use delayed payment methods.",
+            "description": "This field is deprecated and will be removed in a future major version. Instead use subscription.trust_on_invoice_creation.",
             "type": "boolean",
+            "deprecated": true,
             "title": "Can Use Delayed Payment Methods"
           },
           "is_onboarding_completed": {
@@ -35542,7 +36728,6 @@
           }
         },
         "example": {
-          "can_use_delayed_payment_methods": true,
           "first_name": "John",
           "is_api_key_hashed": false,
           "is_new_user": false,
@@ -35884,18 +37069,22 @@
         "type": "object",
         "properties": {
           "audio_base_64": {
+            "description": "The base64 encoded audio of the preview.",
             "type": "string",
             "title": "Audio Base 64"
           },
           "generated_voice_id": {
+            "description": "The ID of the generated voice. Use it to create a voice from the preview.",
             "type": "string",
             "title": "Generated Voice Id"
           },
           "media_type": {
+            "description": "The media type of the preview.",
             "type": "string",
             "title": "Media Type"
           },
           "duration_secs": {
+            "description": "The duration of the preview in seconds.",
             "type": "number",
             "title": "Duration Secs"
           }
@@ -36004,6 +37193,7 @@
         "type": "object",
         "properties": {
           "previews": {
+            "description": "The previews of the generated voices.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/VoicePreviewResponseModel"
@@ -36011,6 +37201,7 @@
             "title": "Previews"
           },
           "text": {
+            "description": "The text used to preview the voices.",
             "type": "string",
             "title": "Text"
           }
@@ -36057,7 +37248,6 @@
               "cloned",
               "premade",
               "professional",
-              "famous",
               "high_quality"
             ],
             "title": "Category"
@@ -36810,7 +38000,6 @@
               "cloned",
               "premade",
               "professional",
-              "famous",
               "high_quality"
             ],
             "title": "Category"
@@ -37156,6 +38345,14 @@
         ],
         "title": "VoiceVerificationResponseModel"
       },
+      "WebhookAuthMethodType": {
+        "type": "string",
+        "enum": [
+          "hmac",
+          "oauth2"
+        ],
+        "title": "WebhookAuthMethodType"
+      },
       "WebhookToolApiSchemaConfig-Input": {
         "description": "Configuration for a webhook that will be called by an LLM tool.",
         "type": "object",
@@ -37461,6 +38658,16 @@
           "api_schema"
         ],
         "title": "WebhookToolConfig"
+      },
+      "WebhookUsageType": {
+        "type": "string",
+        "enum": [
+          "ConvAI Agent Settings",
+          "ConvAI Settings",
+          "Voice Library Removal Notices",
+          "Speech to Text"
+        ],
+        "title": "WebhookUsageType"
       },
       "WidgetConfig-Input": {
         "type": "object",
@@ -39135,6 +40342,143 @@
           "convai_batch_calls"
         ],
         "title": "WorkspaceResourceType"
+      },
+      "WorkspaceWebhookListResponseModel": {
+        "type": "object",
+        "properties": {
+          "webhooks": {
+            "description": "List of webhooks currently configured for the workspace",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceWebhookResponseModel"
+            },
+            "title": "Webhooks"
+          }
+        },
+        "example": {
+          "webhooks": [
+            {
+              "auth_type": "hmac",
+              "created_at_unix": 123456789,
+              "is_auto_disabled": false,
+              "is_disabled": false,
+              "most_recent_failure_error_code": 404,
+              "most_recent_failure_timestamp": 123456799,
+              "name": "My Webhook",
+              "usage": [
+                {
+                  "usage_type": "CONVAI_PLATFORM"
+                }
+              ],
+              "webhook_id": "123",
+              "webhook_url": "https://elevenlabs.io/example-callback-url"
+            }
+          ]
+        },
+        "required": [
+          "webhooks"
+        ],
+        "title": "WorkspaceWebhookListResponseModel"
+      },
+      "WorkspaceWebhookResponseModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The display name for this webhook.",
+            "type": "string",
+            "title": "Name"
+          },
+          "webhook_id": {
+            "description": "The unique ID for this webhook.",
+            "type": "string",
+            "title": "Webhook Id"
+          },
+          "webhook_url": {
+            "description": "The HTTPS callback URL that is called when this webhook is triggered in the platform.",
+            "type": "string",
+            "title": "Webhook Url"
+          },
+          "is_disabled": {
+            "description": "Whether the webhook has been manually disabled by a user.",
+            "type": "boolean",
+            "title": "Is Disabled"
+          },
+          "is_auto_disabled": {
+            "description": "Whether the webhook has been automatically disabled due to repeated consecutive failures over a long period of time.",
+            "type": "boolean",
+            "title": "Is Auto Disabled"
+          },
+          "created_at_unix": {
+            "description": "Original creation time of the webhook.",
+            "type": "integer",
+            "title": "Created At Unix"
+          },
+          "auth_type": {
+            "description": "The authentication mode used to secure the webhook.",
+            "$ref": "#/components/schemas/WebhookAuthMethodType"
+          },
+          "usage": {
+            "description": "The list of products that are currently configured to trigger this webhook.",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/WorkspaceWebhookUsageResponseModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage"
+          },
+          "most_recent_failure_error_code": {
+            "description": "The most recent error code returned from the callback URL.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Most Recent Failure Error Code"
+          },
+          "most_recent_failure_timestamp": {
+            "description": "The most recent time the webhook failed, failures are any non-200 codes returned by the callback URL.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Most Recent Failure Timestamp"
+          }
+        },
+        "required": [
+          "name",
+          "webhook_id",
+          "webhook_url",
+          "is_disabled",
+          "is_auto_disabled",
+          "created_at_unix",
+          "auth_type"
+        ],
+        "title": "WorkspaceWebhookResponseModel"
+      },
+      "WorkspaceWebhookUsageResponseModel": {
+        "type": "object",
+        "properties": {
+          "usage_type": {
+            "$ref": "#/components/schemas/WebhookUsageType"
+          }
+        },
+        "required": [
+          "usage_type"
+        ],
+        "title": "WorkspaceWebhookUsageResponseModel"
       }
     }
   },
@@ -39149,7 +40493,7 @@
     },
     {
       "name": "speech-to-text",
-      "description": "Transcribe your audio files with detailed speaker annotations and precise timestamps using our cutting-edge model. Speech-to-text is currently in alpha and available to a select group of users. We plan to roll it out more broadly soon."
+      "description": "Transcribe your audio files with detailed speaker annotations and precise timestamps using our cutting-edge model."
     },
     {
       "name": "forced-alignment",
@@ -39161,7 +40505,7 @@
     },
     {
       "name": "voices",
-      "description": "Access to voices created either by you or us."
+      "description": "Access to voices created either by you or ElevenLabs."
     },
     {
       "name": "samples",
@@ -39172,8 +40516,8 @@
       "description": "Accesses your speech history. Your speech history is a list of all your created audio including its metadata using our text-to-speech and speech-to-speech models."
     },
     {
-      "name": "projects",
-      "description": "Access, create and convert Projects programmatically, only specifically whitelisted accounts can access the Projects API. If you need access please contact our sales team."
+      "name": "studios",
+      "description": "Access, create and convert Studio Projects programmatically, only specifically whitelisted accounts can access the Projects API. If you need access please contact our sales team."
     }
   ]
 }

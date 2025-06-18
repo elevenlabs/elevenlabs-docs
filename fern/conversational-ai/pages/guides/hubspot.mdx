@@ -1,0 +1,604 @@
+---
+title: HubSpot
+subtitle: Learn how to integrate our Conversational AI platform with HubSpot CRM
+---
+
+## Overview
+
+Leveraging the HubSpot integration, your agent can interact with your CRM both to retrieve and write relevant information about contacts, interactions, or follow ups.
+
+## Demo video
+
+Watch the demonstration of the HubSpot + Conversational AI integration.
+
+<Frame background="subtle" caption="HubSpot Integration Demo">
+  <iframe
+    src="https://www.loom.com/embed/cfb64cb7fc2a406489ef96e7c47d14c0?sid=f29bd120-8f33-4e34-a02b-85184da8deb2"
+    frameBorder="0"
+    webkitallowfullscreen
+    mozallowfullscreen
+    allowFullScreen
+    style={{ width: '100%', height: '360px' }}
+  ></iframe>
+</Frame>
+
+## How it works
+
+Here is an example of how a Conversational AI agent can interact with your HubSpot CRM using tool calling.
+Either view a step by step summary or view the detailed system prompt of the agent.
+
+<Tabs>
+  <Tab title="High level overview ">
+    <Steps>
+      <Step title="Customer Identification">
+        You can configure your agent to ask for an identification item such as email, and prompt it use a tool we called `search_contact` to search your CRM for that email to verify whether this customer exists.
+      </Step>
+
+      <Step title="Understand Call Intent">
+        Configure the agent to ask about the caller's intent. This can be adapted to meet your particular workflow.
+      </Step>
+
+      <Step title="Get previous interactions">
+        While previous interactions can also be fetched and passed at the beginning of the conversation (see [Personalization](/docs/conversational-ai/customization/personalization)). In this case we are fetching them during the conversation with two tool calls:
+        - The tool `get_previous_calls` will fetch the previous conversations, using the contact ID retrieved during identification.
+        - The response does not include the content of those conversations, so we need to use another endpoint to fetch the content with those call IDs.
+      </Step>
+
+      <Step title="Ticket Creation">
+        - The agent can discuss the issue at hand, relating to previous interactions.
+        - Use the `create_ticket` tool to create a ticket for a follow up item
+        - Associate the ticket created to the CRM contact
+      </Step>
+    </Steps>
+
+  </Tab>
+
+  <Tab title="Detailed system prompt">
+    ```
+    # Personality
+
+    You are a customer support agent. You are helpful, efficient, and polite. Your goal is to quickly understand the caller's issue and create a support ticket.
+
+    # Environment
+
+    You are answering a phone call from a customer. You have access to tools to search for customer contact information, previous calls and create tickets.
+
+    # Tone
+
+    You are professional and courteous. You speak clearly and concisely. You use a friendly tone and show empathy for the customer's situation. You confirm information to ensure accuracy.
+
+    # Goal
+
+    Your primary goal is to efficiently create a support ticket for the customer.
+
+    1.  **Verify Identity:** Ask the caller for their email address to verify their identity. Silently use the `search_contact` tool to verify the caller exists. Use their name after this.
+    2.  **Understand Issue:** Ask the customer what they are calling about and actively listen to capture their intent.
+    3.  **Get previous interactions:**: Silently (without saying you will do it) call get_previous_calls and immediately after call get_call_content with the call ids, to see if previous interactions are relevant to the issue. Ask about their problem, and reference previous conversations if relevant. Use this information with the user.
+    4.  **Create Ticket:** If the user wants to report an issue, make a new purchase, or discuss something else, use the `create_ticket` tool to create a ticket with the details of the customer's issue. Extract the description from the conversation.
+    5.  **Confirmation:** Confirm the ticket details with the customer and communicate the ticket number to the caller, and mention a dedicated advisor will be in touch.
+
+    # Guardrails
+
+    *   Only use the tools provided.
+    *   Do not provide information that is not related to the customer.
+    *   Do not ask for personal information beyond what is needed to verify identity.
+    *   Remain polite and professional at all times, even if the customer is upset.
+    *   If you cannot create a ticket, explain why and offer alternative solutions.
+
+    # Tools
+
+    *   `search_contact`: Use this tool to search for customer contact information using phone number or other identifying details.
+    *   `create_ticket`: Use this tool to create a support ticket with the customer's issue. Capture the customer's description of the issue accurately.
+    *   `get_previous_calls`: Use this tool to fetch previous interactions with the customer.
+    *   `get_call_content`: Use this tool to get the content of the previous interactions with the customer.
+
+    ```
+
+  </Tab>
+</Tabs>
+
+<Tip>
+  This integration enhances agent efficiency by leveraging CRM interactions. All API calls require
+  proper secret handling in the authorization headers.
+</Tip>
+
+## Authentication Setup
+
+Before configuring the tools, you must set up authentication with HubSpot.
+
+### Step 1: Generate HubsPot API Token
+
+1. Log into your HubSpot account
+2. Navigate to **Account Management → Integrations → Private Apps**
+3. Create a **Private App**
+4. Add the required scopes to the private app, to ensure it can interact with the required endpoints
+
+```
+crm.objects.contacts.read
+crm.objects.contacts.write
+crm.schemas.contacts.read
+crm.schemas.contacts.write
+tickets
+```
+
+5. Save and get the Access token from the Auth section
+
+### Step 2: Create Authentication Secret
+
+The HubSpot API requires Bearer authentication. You need to create a properly formatted secret:
+
+1. **Create the secret value** by adding "Bearer " prefix:
+
+   ```
+   Bearer pat-eu1-12345678-abcdefgh-ijklmnop-qrstuvwx
+   ```
+
+2. **Save this as a secret** in your agent's secrets with name `hubspot_key`
+
+## Tool Configurations
+
+This sample integration with HubSpot employs four webhook tools. Use the tabs below to review each tool's configuration.
+
+<Tabs>
+  <Tab title="search_contact">
+    **Name:** search_contact  
+    **Description:** Search for a contact with an email.  
+    **Method:** POST  
+    **URL:** `https://api.hubapi.com/crm/v3/objects/contacts/search`
+    
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `hubspot_key`)*
+
+    **Body Parameters:**
+    - **filtersGroups:** An array containing:
+      - An object containing:
+        - **filters:** An array containing:
+          - An object containing:
+            - **value:** A string with description: `Set to the email provided by the user. Email should be in format: "name@address.com"`
+            - **propertyName:** A string with description: `Set to: "email"`
+            - **operator:** A string with description: `Set to: "CONTAINS_TOKEN"`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "id": "tool_01jxftmwvxfgersp4aw0xhyhea",
+      "type": "webhook",
+      "name": "search_contact",
+      "description": "search for a contact using phone",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "filters for searching contacts",
+          "required": false,
+          "properties": [
+            {
+              "id": "filterGroups",
+              "type": "array",
+              "description": "filters group",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "filters",
+                "properties": [
+                  {
+                    "id": "filters",
+                    "type": "array",
+                    "description": "filters",
+                    "required": true,
+                    "items": {
+                      "type": "object",
+                      "description": "filters",
+                      "properties": [
+                        {
+                          "id": "value",
+                          "type": "string",
+                          "description": "Set to the email provided by the user. Email should be in format: \n\n\"oscar@gmail.com\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        },
+                        {
+                          "id": "propertyName",
+                          "type": "string",
+                          "description": "Set to: \"email\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        },
+                        {
+                          "id": "operator",
+                          "type": "string",
+                          "description": "Set to: \"CONTAINS_TOKEN\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+
+  <Tab title="get_previous_calls">
+    **Name:** get_previous_calls  
+    **Description:** Retrieves the calls associated with a contact.  
+    **Method:** GET  
+    **URL:** `https://api.hubapi.com/crm/v3/objects/contacts/{CONTACT_ID}/associations/calls?limit=100`
+
+    **Headers:**
+    - **Authorization:** *(Secret: `hubspot_key`)*
+
+    **Path Parameters:**
+    - **CONTACT_ID:** An string with description: `Use the contact ID from the results of the search_contact tool`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "id": "tool_01jxfv4pttep6bbjaqe9tjk28n",
+      "type": "webhook",
+      "name": "get_previous_calls",
+      "description": "This API retrieves the calls associated with a contact",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/{CONTACT_ID}/associations/calls?limit=100",
+        "method": "GET",
+        "path_params_schema": [
+          {
+            "id": "CONTACT_ID",
+            "type": "string",
+            "description": "use the contact ID from the results of the search_contact tool",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": false,
+            "value_type": "llm_prompt"
+          }
+        ],
+        "query_params_schema": [],
+        "request_body_schema": null,
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+
+  <Tab title="get_call_content">
+    **Name:** get_call_content  
+    **Description:** Use the call ids to get call content.  
+    **Method:** POST  
+    **URL:** `https://api.hubapi.com/crm/v3/objects/calls/batch/read`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `hubspot_key`)*
+
+    **Body Parameters:**
+    - **inputs:** An Array containing:
+      - An Object containing:
+        - **id:** A string with description: `Pass the ID of the call from the get_previous_calls response`
+        - **body:** Detailed description of the support issue.
+    - **properties:** An Array containing.
+      - A string with description: `Set to: "hs_call_body"`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "id": "tool_01jxhmfbg4e35s59kg6994vtt5",
+      "type": "webhook",
+      "name": "get_call_content",
+      "description": "Use the call ids to get call content",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/calls/batch/read",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "body params",
+          "required": false,
+          "properties": [
+            {
+              "id": "inputs",
+              "type": "array",
+              "description": "inputs",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "inputs",
+                "properties": [
+                  {
+                    "id": "id",
+                    "type": "string",
+                    "description": "pass the ID of the call from the get_previous_calls response",
+                    "dynamic_variable": "",
+                    "constant_value": "",
+                    "required": true,
+                    "value_type": "llm_prompt"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "properties",
+              "type": "array",
+              "description": "properties",
+              "required": true,
+              "items": {
+                "type": "string",
+                "description": "Set to: \n\n\"hs_call_body\"",
+                "constant_value": ""
+              }
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+
+  <Tab title="create_ticket">
+    **Name:** create_ticket  
+    **Description:** Call this tool to create a ticket.  
+    **Method:** POST  
+    **URL:** `https://api.hubapi.com/crm/v3/objects/tickets`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+    - **Authorization:** *(Secret: `hubspot_key`)*
+
+    **Body Parameters:**
+    - **associations:** An Array containing:
+      - An Object containing:
+        - **to:** An object containing:
+          - **id:** A string with description: `Set to the contact ID derived from the search_contact tool response`
+          - **types:** An array containing:
+            - An Object containing:
+              - **associationCategory:** An string with description: `set to: "HUBSPOT_DEFINED"`
+              - **associationTypeId:** An number with description: `Set to: 16"`
+    - **properties:** An Object containing:
+      - **content:** A string with description: `The content of the ticket`
+      - **subject:** A string with description: `The subject of the ticket`
+      - **hs_pipeline:** A string with description: `Default to "0"`
+      - **hs_ticket_priority:** A string with description: `Default to "HIGH"`
+      - **hs_pipeline_stage:** A string with description: `Default to "1"`
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "id": "tool_01jxftnpj8fx6rx2bwgbgmyjy7",
+      "type": "webhook",
+      "name": "create_ticket",
+      "description": "Call this tool to create a ticket",
+      "api_schema": {
+        "url": "https://api.hubapi.com/crm/v3/objects/tickets",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "The properties of the ticket",
+          "required": false,
+          "properties": [
+            {
+              "id": "associations",
+              "type": "array",
+              "description": "associations",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "associations",
+                "properties": [
+                  {
+                    "id": "to",
+                    "type": "object",
+                    "description": "to",
+                    "required": true,
+                    "properties": [
+                      {
+                        "id": "id",
+                        "type": "string",
+                        "description": "set to the contact ID derived from the search_contact tool response",
+                        "dynamic_variable": "",
+                        "constant_value": "",
+                        "required": true,
+                        "value_type": "llm_prompt"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "types",
+                    "type": "array",
+                    "description": "types",
+                    "required": true,
+                    "items": {
+                      "type": "object",
+                      "description": "types",
+                      "properties": [
+                        {
+                          "id": "associationCategory",
+                          "type": "string",
+                          "description": "set to: \"HUBSPOT_DEFINED\"",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        },
+                        {
+                          "id": "associationTypeId",
+                          "type": "number",
+                          "description": "Set to: 16",
+                          "dynamic_variable": "",
+                          "constant_value": "",
+                          "required": true,
+                          "value_type": "llm_prompt"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "properties",
+              "type": "object",
+              "description": "The properties of the ticket",
+              "required": true,
+              "properties": [
+                {
+                  "id": "content",
+                  "type": "string",
+                  "description": "The content of the ticket",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "subject",
+                  "type": "string",
+                  "description": "The subject of the ticket",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "hs_pipeline",
+                  "type": "string",
+                  "description": "Default to \"0\"",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "hs_ticket_priority",
+                  "type": "string",
+                  "description": "Default to \"HIGH\"",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "hs_pipeline_stage",
+                  "type": "string",
+                  "description": "Default to \"1\"",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                }
+              ]
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "xWPfWcvnJ6mr6cx2aeN8"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
+<Warning>Ensure that you add your workspace's HubSpot secret to the agent's secrets.</Warning>
+
+## Security Considerations
+
+- Use HTTPS endpoints for all webhook calls.
+- Store sensitive values as secrets using the ElevenLabs Secrets Manager.
+- Validate that all authorization headers follow the required format.
+
+## Conclusion
+
+This guide details how to integrate HubSpot CRM with our conversational AI platform. By leveraging webhook tools, the integration empowers AI agents to act more effectively in usecases such as sales, customer management, or support.
+
+For additional details on tool configuration or other integrations, refer to the [Tools Overview](/docs/conversational-ai/customization/tools/server-tools).
