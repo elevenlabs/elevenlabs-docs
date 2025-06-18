@@ -64,14 +64,36 @@ Before setting up SIP trunking, ensure you have:
     </Frame>
 
   </Step>
+    <Step title="Configure transport and encryption">
+    Configure the transport protocol and media encryption settings for enhanced security:
+
+    - **Transport Type**: Select the transport protocol for SIP signaling:
+      - **TCP**: Standard TCP transport
+      - **TLS**: Encrypted TLS transport for enhanced security
+    - **Media Encryption**: Configure encryption for RTP media streams:
+      - **Disabled**: No media encryption
+      - **Allowed**: Permits encrypted media streams
+      - **Required**: Enforces encrypted media streams
+
+    <Frame background="subtle">
+      <img src="/assets/images/conversational-ai/siptrunktls.png" alt="Select TLS or TCP transport" />
+    </Frame>
+
+    <Frame background="subtle">
+      <img src="/assets/images/conversational-ai/siptrunkmediaencryption.png" alt="Select media encryption setting" />
+    </Frame>
+
+    <Tip>
+      **Security Best Practice**: Use TLS transport with Required media encryption for maximum security. This ensures both signaling and media are encrypted end-to-end.
+    </Tip>
+
+  </Step>
   <Step title="Configure outbound settings">
     Configure where ElevenLabs should send calls for your phone number:
 
     - **Address**: Hostname or IP address where the SIP INVITE is sent (e.g., `sip.telnyx.com`). This should be a hostname or IP address only, not a full SIP URI.
     - **Transport Type**: Select the transport protocol for SIP signaling:
-      - **Auto**: Automatically selects the best available transport
       - **TCP**: Standard TCP transport
-      - **UDP**: Standard UDP transport
       - **TLS**: Encrypted TLS transport for enhanced security
     - **Media Encryption**: Configure encryption for RTP media streams:
       - **Disabled**: No media encryption
