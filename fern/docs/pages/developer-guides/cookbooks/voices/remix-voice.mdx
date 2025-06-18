@@ -1,0 +1,145 @@
+---
+title: Remix a voice
+subtitle: Learn how to remix an existing voice to create a new one.
+---
+
+This guide will show you how to create an entirely new voice by remixing an existing one.
+
+<Warning>
+  Remixing is only possible with the Eleven v3 model. Eleven v3 API access is currently not publicly
+  available, but will be soon. To request access, please [contact our sales
+  team](https://elevenlabs.io/contact-sales).
+</Warning>
+
+## Using the Voice Design API
+
+<Steps>
+    <Step title="Create an API key">
+        <Markdown src="/snippets/quickstart-api-key.mdx" />
+    </Step>
+    <Step title="Install the SDK">
+        <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+
+        <Note>
+            To play the audio through your speakers, you may be prompted to install [MPV](https://mpv.io/)
+            and/or [ffmpeg](https://ffmpeg.org/).
+        </Note>
+    </Step>
+    <Step title="Make the API request">
+        Remixing a voice is a two step process:
+
+        1. Generate a preview of the new voice by providing a voice ID and a prompt.
+        2. Create the new voice from the preview.
+
+        We'll start by generating a preview of the new voice.
+
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+
+        <Warning>
+            You can only remix voices that were created by you. For example previously designed voices, IVC or PVC voices. You cannot remix voices from the voice library.
+        </Warning>
+
+        <CodeBlocks>
+            ```python maxLines=0
+            # example.py
+            from dotenv import load_dotenv
+            from elevenlabs.client import ElevenLabs
+            from elevenlabs import play
+            import base64
+
+            load_dotenv()
+
+            elevenlabs = ElevenLabs(
+                api_key=os.getenv("ELEVENLABS_API_KEY"),
+            )
+
+            voices = elevenlabs.text_to_voice.remix(
+                voice_id="JBFqnCBsd6RMkjVDRZzb"
+                voice_description="Use a higher pitch and change to a Boston accent.",
+                text="Of course I'm a Bostonian, I've lived here all my life!",
+            )
+
+            for preview in voices.previews:
+                # Convert base64 to audio buffer
+                audio_buffer = base64.b64decode(preview.audio_base_64)
+
+                print(f"Playing preview: {preview.generated_voice_id}")
+
+                play(audio_buffer)
+            ```
+
+            ```typescript maxLines=0
+            // example.ts
+            import { ElevenLabsClient, play } from "@elevenlabs/elevenlabs-js";
+            import "dotenv/config";
+            import { Readable } from 'node:stream';
+            import { Buffer } from 'node:buffer';
+
+            const elevenlabs = new ElevenLabsClient();
+
+            const { previews } = await elevenlabs.textToVoice.remix("JBFqnCBsd6RMkjVDRZzb", {
+                voiceDescription: "Use a higher pitch and change to a Boston accent.",
+                text: "Of course I'm a Bostonian, I've lived here all my life!",
+            });
+
+            for (const preview of previews) {
+                // Convert base64 to buffer and create a Readable stream
+                const audioStream = Readable.from(Buffer.from(preview.audioBase64, 'base64'));
+
+                console.log(`Playing preview: ${preview.generatedVoiceId}`);
+
+                // Play the audio using the stream
+                await play(audioStream);
+            }
+            ```
+        </CodeBlocks>
+    </Step>
+    <Step title="Execute the code">
+        <CodeBlocks>
+            ```python
+            python example.py
+            ```
+
+            ```typescript
+            npx tsx example.mts
+            ```
+        </CodeBlocks>
+
+        You should hear the generated voice previews playing through your speakers, one at a time.
+    </Step>
+    <Step title="Add generated voice to your library">
+        Once you've generated the previews and picked your favorite, you can add it to your voice library via the generated voice ID so it can be used with other APIs.
+
+        <CodeBlocks>
+        ```python
+        voice = elevenlabs.text_to_voice.create(
+            voice_name="Bostonian",
+            voice_description="A high pitched Bostonian accent.",
+            # The generated voice ID of the preview you want to use,
+            # using the first in the list for this example
+            generated_voice_id=voices.previews[0].generated_voice_id
+        )
+
+        print(voice.voice_id)
+        ```
+
+        ```typescript
+        const voice = await elevenlabs.textToVoice.create({
+            voiceName: "Bostonian",
+            voiceDescription: "A high pitched Bostonian accent.",
+            // The generated voice ID of the preview you want to use,
+            // using the first in the list for this example
+            generatedVoiceId: previews[0].generatedVoiceId
+        });
+
+        // The ID of the newly created voice, use this to reference the voice in other APIs
+        console.log(voice.voiceId);
+        ```
+        </CodeBlocks>
+    </Step>
+
+</Steps>
+
+## Next steps
+
+Explore the [API reference](/docs/api-reference/text-to-voice/remix) for more information on the Voice Design API and its options.
