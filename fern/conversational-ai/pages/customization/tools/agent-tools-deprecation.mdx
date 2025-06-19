@@ -5,9 +5,7 @@ subtitle: Migrate from legacy `prompt.tools` to the new `prompt.tool_ids` field.
 
 ## Overview
 
-<Info>
-The way you wire tools into your ConvAI agents is getting a refresh.
-</Info>
+<Info>The way you wire tools into your ConvAI agents is getting a refresh.</Info>
 
 ### What's changing?
 
@@ -17,20 +15,19 @@ The way you wire tools into your ConvAI agents is getting a refresh.
 ### Critical deadlines
 
 <Check>
-**June 30, 2024** - Last day for full backwards compatibility. You can continue using `prompt.tools` until this date.
+  **June 30, 2024** - Last day for full backwards compatibility. You can continue using
+  `prompt.tools` until this date.
 </Check>
 
 <Note>
-**July 1, 2024** - GET endpoints will stop returning the `tools` field. Only `prompt.tool_ids` will be included in responses.
+  **July 1, 2024** - GET endpoints will stop returning the `tools` field. Only `prompt.tool_ids`
+  will be included in responses.
 </Note>
 
 <Warning>
-**July 16, 2024** - Legacy `prompt.tools` field will be permanently removed. All requests containing this field will be rejected.
+  **July 16, 2024** - Legacy `prompt.tools` field will be permanently removed. All requests
+  containing this field will be rejected.
 </Warning>
-
-
-
-
 
 ## Why the change?
 
@@ -43,7 +40,9 @@ Decoupling tools from agents brings several advantages:
 ## What has already happened?
 
 <Check>
-Good news — we've already migrated your data! Every tool that previously lived in `prompt.tools` now exists as a standalone record, and its ID is present in the agent's `prompt.tool_ids` array. No scripts required.
+  Good news — we've already migrated your data! Every tool that previously lived in `prompt.tools`
+  now exists as a standalone record, and its ID is present in the agent's `prompt.tool_ids` array.
+  No scripts required.
 </Check>
 
 We have **automatically migrated all existing data**:
@@ -55,12 +54,11 @@ No one-off scripts are required — your agents continue to work unchanged.
 
 ## Deprecation timeline
 
-| Date | Status | Behaviour |
-| --- | --- | --- |
-| **June 30, 2024** | ✅ Full compatibility | You may keep sending `prompt.tools`. GET responses include the `tools` field. |
-| **July 1, 2024** | ⚠️ Partial compatibility | GET endpoints stop returning the `tools` field. Only `prompt.tool_ids` included. |
-| **July 16, 2024** | ❌ No compatibility | POST and PATCH endpoints **reject** any request containing `prompt.tools`. |
-
+| Date              | Status                   | Behaviour                                                                        |
+| ----------------- | ------------------------ | -------------------------------------------------------------------------------- |
+| **June 30, 2024** | ✅ Full compatibility    | You may keep sending `prompt.tools`. GET responses include the `tools` field.    |
+| **July 1, 2024**  | ⚠️ Partial compatibility | GET endpoints stop returning the `tools` field. Only `prompt.tool_ids` included. |
+| **July 16, 2024** | ❌ No compatibility      | POST and PATCH endpoints **reject** any request containing `prompt.tools`.       |
 
 ## Toolbox endpoint
 
@@ -86,16 +84,21 @@ If you are still using the legacy field, follow the steps below.
   ### 1. Stop sending `prompt.tools`
   Remove the `tools` array from your agent configuration.
 
-  ### 2. Send the tool IDs instead
-  Replace it with `prompt.tool_ids`, containing the IDs of the tools the agent should use.
+### 2. Send the tool IDs instead
 
-  ### 3. (Optional) Clean up
-  After 16 July, delete any unused standalone tools via the toolbox endpoint.
+Replace it with `prompt.tool_ids`, containing the IDs of the tools the agent should use.
+
+### 3. (Optional) Clean up
+
+After 16 July, delete any unused standalone tools via the toolbox endpoint.
+
 </Steps>
 
 ## Example payloads
+
 <Note>
-A request must include **either** `prompt.tool_ids` **or** the legacy `prompt.tools` array — **never both**. Sending both fields results in an error.
+  A request must include **either** `prompt.tool_ids` **or** the legacy `prompt.tools` array —
+  **never both**. Sending both fields results in an error.
 </Note>
 
 <CodeBlocks>
@@ -122,21 +125,22 @@ A request must include **either** `prompt.tool_ids` **or** the legacy `prompt.to
   "conversation_config": {
     "agent": {
       "prompt": {
-        "tool_ids": [
-          "tool_123456789abcdef0"
-        ]
+        "tool_ids": ["tool_123456789abcdef0"]
       }
     }
   }
 }
 ```
+
 </CodeBlocks>
 
 ## FAQ
 
 <AccordionGroup>
   <Accordion title="Will my existing integrations break?">
-    No. Until 30 June, the API will silently migrate any `prompt.tools` array you send and return full tool objects in GET responses. After 1 July the GET responses will no longer include those objects, and after 16 July POST/PATCH requests containing `prompt.tools` will be rejected.
+    No. Until 30 June, the API will silently migrate any `prompt.tools` array you send and return
+    full tool objects in GET responses. After 1 July the GET responses will no longer include those
+    objects, and after 16 July POST/PATCH requests containing `prompt.tools` will be rejected.
   </Accordion>
   <Accordion title="Can I mix both fields in one request?">
     No. A request must use **either** `prompt.tool_ids` **or** `prompt.tools` — never both.
@@ -144,4 +148,4 @@ A request must include **either** `prompt.tool_ids` **or** the legacy `prompt.to
   <Accordion title="How do I find a tool's ID?">
     List your tools via `GET /v1/convai/tools` or inspect the response when you create one.
   </Accordion>
-</AccordionGroup> 
+</AccordionGroup>{' '}
