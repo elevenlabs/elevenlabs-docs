@@ -13798,6 +13798,423 @@
         "x-fern-sdk-method-name": "get"
       }
     },
+    "/v1/convai/tools": {
+      "post": {
+        "operationId": "Add_tool_v1_convai_tools_post",
+        "summary": "Add Tool",
+        "description": "Add a new tool to the available tools in the workspace.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "A tool that an agent can provide to LLM.",
+                "$ref": "#/components/schemas/ToolRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "add_tool"
+      },
+      "get": {
+        "operationId": "Get_tools_v1_convai_tools_get",
+        "summary": "Get Tools",
+        "description": "Get all available tools available in the workspace.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "get_tools"
+      }
+    },
+    "/v1/convai/tools/{tool_id}": {
+      "get": {
+        "operationId": "Get_tool_v1_convai_tools__tool_id__get",
+        "summary": "Get Tool",
+        "description": "Get tool that is available in the workspace.",
+        "parameters": [
+          {
+            "name": "tool_id",
+            "in": "path",
+            "description": "ID of the requested tool.",
+            "required": true,
+            "schema": {
+              "description": "ID of the requested tool.",
+              "type": "string",
+              "title": "Tool Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "get_tool"
+      },
+      "patch": {
+        "operationId": "Update_tool_v1_convai_tools__tool_id__patch",
+        "summary": "Update Tool",
+        "description": "Update tool that is available in the workspace.",
+        "parameters": [
+          {
+            "name": "tool_id",
+            "in": "path",
+            "description": "ID of the requested tool.",
+            "required": true,
+            "schema": {
+              "description": "ID of the requested tool.",
+              "type": "string",
+              "title": "Tool Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "A tool that an agent can provide to LLM.",
+                "$ref": "#/components/schemas/ToolRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "update_tool"
+      },
+      "delete": {
+        "operationId": "Delete_tool_v1_convai_tools__tool_id__delete",
+        "summary": "Delete Tool",
+        "description": "Delete tool from the workspace.",
+        "parameters": [
+          {
+            "name": "tool_id",
+            "in": "path",
+            "description": "ID of the requested tool.",
+            "required": true,
+            "schema": {
+              "description": "ID of the requested tool.",
+              "type": "string",
+              "title": "Tool Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "remove_tool"
+      }
+    },
+    "/v1/convai/tools/{tool_id}/dependent-agents": {
+      "get": {
+        "operationId": "Get_dependent_agents_list_v1_convai_tools__tool_id__dependent_agents_get",
+        "summary": "Get Dependent Agents List",
+        "description": "Get a list of agents depending on this tool",
+        "parameters": [
+          {
+            "name": "tool_id",
+            "in": "path",
+            "description": "ID of the requested tool.",
+            "required": true,
+            "schema": {
+              "description": "ID of the requested tool.",
+              "type": "string",
+              "title": "Tool Id"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Used for fetching next page. Cursor is returned in the response.",
+            "required": false,
+            "schema": {
+              "description": "Used for fetching next page. Cursor is returned in the response.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "How many documents to return at maximum. Can not exceed 100, defaults to 30.",
+            "required": false,
+            "schema": {
+              "description": "How many documents to return at maximum. Can not exceed 100, defaults to 30.",
+              "type": "integer",
+              "default": 30,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetToolDependentAgentsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "get_agents"
+      }
+    },
     "/v1/convai/settings": {
       "get": {
         "operationId": "Get_Convai_settings_v1_convai_settings_get",
@@ -16802,7 +17219,7 @@
           },
           "prompt": {
             "description": "The prompt for the agent",
-            "$ref": "#/components/schemas/PromptAgent-Input"
+            "$ref": "#/components/schemas/PromptAgentAPIModel-Input"
           }
         },
         "example": {
@@ -16835,7 +17252,7 @@
           },
           "prompt": {
             "description": "The prompt for the agent",
-            "$ref": "#/components/schemas/PromptAgent-Output"
+            "$ref": "#/components/schemas/PromptAgentAPIModel-Output"
           }
         },
         "example": {
@@ -16910,7 +17327,7 @@
             "description": "The prompt for the agent",
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PromptAgentOverride"
+                "$ref": "#/components/schemas/PromptAgentAPIModelOverride"
               },
               {
                 "type": "null"
@@ -16944,7 +17361,7 @@
           },
           "prompt": {
             "description": "Configures overrides for nested fields.",
-            "$ref": "#/components/schemas/PromptAgentOverrideConfig"
+            "$ref": "#/components/schemas/PromptAgentAPIModelOverrideConfig"
           }
         },
         "title": "AgentConfigOverrideConfig"
@@ -20115,6 +20532,18 @@
               }
             ],
             "title": "Mode"
+          },
+          "csv_fps": {
+            "description": "Frames per second to use when parsing a CSV file for dubbing. If not provided, FPS will be inferred from timecodes.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csv Fps"
           }
         },
         "title": "Body_Dub_a_video_or_an_audio_file_v1_dubbing_post"
@@ -22895,7 +23324,7 @@
         ],
         "title": "BreakdownTypes"
       },
-      "BuiltInTools": {
+      "BuiltInTools-Input": {
         "type": "object",
         "properties": {
           "end_call": {
@@ -22947,6 +23376,67 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "BuiltInTools"
+      },
+      "BuiltInTools-Output": {
+        "type": "object",
+        "properties": {
+          "end_call": {
+            "description": "The end call tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_detection": {
+            "description": "The language detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_agent": {
+            "description": "The transfer to agent tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_number": {
+            "description": "The transfer to number tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "skip_turn": {
+            "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
               },
               {
                 "type": "null"
@@ -23576,11 +24066,6 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -23643,11 +24128,6 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -23758,26 +24238,26 @@
             },
             "title": "Tools"
           },
-          "agent_tools": {
+          "agents": {
             "type": "array",
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/DependentAvailableAgentToolIdentifier"
+                  "$ref": "#/components/schemas/DependentAvailableAgentIdentifier"
                 },
                 {
-                  "$ref": "#/components/schemas/DependentUnknownAgentToolIdentifier"
+                  "$ref": "#/components/schemas/DependentUnknownAgentIdentifier"
                 }
               ],
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
-                  "available": "#/components/schemas/DependentAvailableAgentToolIdentifier",
-                  "unknown": "#/components/schemas/DependentUnknownAgentToolIdentifier"
+                  "available": "#/components/schemas/DependentAvailableAgentIdentifier",
+                  "unknown": "#/components/schemas/DependentUnknownAgentIdentifier"
                 }
               }
             },
-            "title": "Agent Tools"
+            "title": "Agents"
           },
           "others": {
             "type": "array",
@@ -23796,7 +24276,7 @@
         },
         "required": [
           "tools",
-          "agent_tools",
+          "agents",
           "others"
         ],
         "title": "ConvAIStoredSecretDependencies"
@@ -26013,53 +26493,6 @@
         ],
         "title": "DependentAvailableAgentIdentifier"
       },
-      "DependentAvailableAgentToolIdentifier": {
-        "type": "object",
-        "properties": {
-          "agent_id": {
-            "type": "string",
-            "title": "Agent Id"
-          },
-          "agent_name": {
-            "type": "string",
-            "title": "Agent Name"
-          },
-          "used_by": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Used By"
-          },
-          "type": {
-            "type": "string",
-            "default": "available",
-            "const": "available",
-            "title": "Type"
-          },
-          "created_at_unix_secs": {
-            "type": "integer",
-            "title": "Created At Unix Secs"
-          },
-          "access_level": {
-            "type": "string",
-            "enum": [
-              "admin",
-              "editor",
-              "viewer"
-            ],
-            "title": "Access Level"
-          }
-        },
-        "required": [
-          "agent_id",
-          "agent_name",
-          "used_by",
-          "created_at_unix_secs",
-          "access_level"
-        ],
-        "title": "DependentAvailableAgentToolIdentifier"
-      },
       "DependentAvailableToolIdentifier": {
         "type": "object",
         "properties": {
@@ -26138,19 +26571,6 @@
           }
         },
         "title": "DependentUnknownAgentIdentifier"
-      },
-      "DependentUnknownAgentToolIdentifier": {
-        "description": "A model that represents an tool dependent on a knowledge base/tools\nto which the user has no direct access.",
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "default": "unknown",
-            "const": "unknown",
-            "title": "Type"
-          }
-        },
-        "title": "DependentUnknownAgentToolIdentifier"
       },
       "DependentUnknownToolIdentifier": {
         "description": "A model that represents an tool dependent on a knowledge base/tools\nto which the user has no direct access.",
@@ -28580,6 +29000,52 @@
         ],
         "title": "GetSpeechHistoryResponseModel"
       },
+      "GetToolDependentAgentsResponseModel": {
+        "type": "object",
+        "properties": {
+          "agents": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependentAvailableAgentIdentifier"
+                },
+                {
+                  "$ref": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "available": "#/components/schemas/DependentAvailableAgentIdentifier",
+                  "unknown": "#/components/schemas/DependentUnknownAgentIdentifier"
+                }
+              }
+            },
+            "title": "Agents"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "agents",
+          "has_more"
+        ],
+        "title": "GetToolDependentAgentsResponseModel"
+      },
       "GetVoicesResponseModel": {
         "type": "object",
         "properties": {
@@ -30222,11 +30688,6 @@
         "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -30318,11 +30779,6 @@
         "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -32412,7 +32868,7 @@
         ],
         "title": "ProjectSnapshotsResponseModel"
       },
-      "PromptAgent-Input": {
+      "PromptAgentAPIModel-Input": {
         "type": "object",
         "properties": {
           "prompt": {
@@ -32439,8 +32895,74 @@
             "default": -1,
             "title": "Max Tokens"
           },
+          "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Tool Ids"
+          },
+          "built_in_tools": {
+            "description": "Built-in system tools to be used by the agent",
+            "$ref": "#/components/schemas/BuiltInTools-Input"
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Native Mcp Server Ids"
+          },
+          "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KnowledgeBaseLocator"
+            },
+            "title": "Knowledge Base"
+          },
+          "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CustomLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
+          },
+          "rag": {
+            "description": "Configuration for RAG",
+            "$ref": "#/components/schemas/RagConfig"
+          },
           "tools": {
-            "description": "A list of tools that the agent can use over the course of the conversation",
+            "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
             "type": "array",
             "items": {
               "oneOf": [
@@ -32468,7 +32990,47 @@
                 }
               }
             },
+            "deprecated": true,
             "title": "Tools"
+          }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
+        },
+        "title": "PromptAgentAPIModel"
+      },
+      "PromptAgentAPIModel-Output": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "The prompt for the agent",
+            "type": "string",
+            "default": "",
+            "title": "Prompt",
+            "x-convai-client-override": true
+          },
+          "llm": {
+            "description": "The LLM to query with the prompt and the chat history",
+            "default": "gemini-2.0-flash",
+            "$ref": "#/components/schemas/LLM"
+          },
+          "temperature": {
+            "description": "The temperature for the LLM",
+            "type": "number",
+            "default": 0,
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
+            "type": "integer",
+            "default": -1,
+            "title": "Max Tokens"
           },
           "tool_ids": {
             "description": "A list of IDs of tools used by the agent",
@@ -32477,6 +33039,10 @@
               "type": "string"
             },
             "title": "Tool Ids"
+          },
+          "built_in_tools": {
+            "description": "Built-in system tools to be used by the agent",
+            "$ref": "#/components/schemas/BuiltInTools-Output"
           },
           "mcp_server_ids": {
             "description": "A list of MCP server ids to be used by the agent",
@@ -32531,48 +33097,9 @@
           "rag": {
             "description": "Configuration for RAG",
             "$ref": "#/components/schemas/RagConfig"
-          }
-        },
-        "example": {
-          "knowledge_base": [],
-          "llm": "gemini-2.0-flash-001",
-          "max_tokens": -1,
-          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
-          "temperature": 0,
-          "tool_ids": [],
-          "tools": []
-        },
-        "title": "PromptAgent"
-      },
-      "PromptAgent-Output": {
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "description": "The prompt for the agent",
-            "type": "string",
-            "default": "",
-            "title": "Prompt",
-            "x-convai-client-override": true
-          },
-          "llm": {
-            "description": "The LLM to query with the prompt and the chat history",
-            "default": "gemini-2.0-flash",
-            "$ref": "#/components/schemas/LLM"
-          },
-          "temperature": {
-            "description": "The temperature for the LLM",
-            "type": "number",
-            "default": 0,
-            "title": "Temperature"
-          },
-          "max_tokens": {
-            "description": "If greater than 0, maximum number of tokens the LLM can predict",
-            "type": "integer",
-            "default": -1,
-            "title": "Max Tokens"
           },
           "tools": {
-            "description": "A list of tools that the agent can use over the course of the conversation",
+            "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
             "type": "array",
             "items": {
               "oneOf": [
@@ -32600,69 +33127,8 @@
                 }
               }
             },
+            "deprecated": true,
             "title": "Tools"
-          },
-          "tool_ids": {
-            "description": "A list of IDs of tools used by the agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Tool Ids"
-          },
-          "mcp_server_ids": {
-            "description": "A list of MCP server ids to be used by the agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 10,
-            "title": "Mcp Server Ids"
-          },
-          "native_mcp_server_ids": {
-            "description": "A list of Native MCP server ids to be used by the agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 10,
-            "title": "Native Mcp Server Ids"
-          },
-          "knowledge_base": {
-            "description": "A list of knowledge bases to be used by the agent",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/KnowledgeBaseLocator"
-            },
-            "title": "Knowledge Base"
-          },
-          "custom_llm": {
-            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/CustomLLM"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "ignore_default_personality": {
-            "description": "Whether to ignore the default personality",
-            "default": false,
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Ignore Default Personality"
-          },
-          "rag": {
-            "description": "Configuration for RAG",
-            "$ref": "#/components/schemas/RagConfig"
           }
         },
         "example": {
@@ -32674,7 +33140,41 @@
           "tool_ids": [],
           "tools": []
         },
-        "title": "PromptAgent"
+        "title": "PromptAgentAPIModel"
+      },
+      "PromptAgentAPIModelOverride": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt",
+            "x-convai-client-override": true
+          }
+        },
+        "example": {
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation."
+        },
+        "title": "PromptAgentAPIModelOverride"
+      },
+      "PromptAgentAPIModelOverrideConfig": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "Whether to allow overriding the prompt field.",
+            "type": "boolean",
+            "default": false,
+            "title": "Prompt"
+          }
+        },
+        "title": "PromptAgentAPIModelOverrideConfig"
       },
       "PromptAgentDBModel": {
         "type": "object",
@@ -32703,37 +33203,6 @@
             "default": -1,
             "title": "Max Tokens"
           },
-          "tools": {
-            "description": "A list of tools that the agent can use over the course of the conversation",
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/WebhookToolConfig-Input"
-                },
-                {
-                  "$ref": "#/components/schemas/ClientToolConfig-Input"
-                },
-                {
-                  "$ref": "#/components/schemas/SystemToolConfig-Input"
-                },
-                {
-                  "$ref": "#/components/schemas/MCPToolConfig-Input"
-                }
-              ],
-              "description": "The type of tool",
-              "discriminator": {
-                "propertyName": "type",
-                "mapping": {
-                  "client": "#/components/schemas/ClientToolConfig-Input",
-                  "mcp": "#/components/schemas/MCPToolConfig-Input",
-                  "system": "#/components/schemas/SystemToolConfig-Input",
-                  "webhook": "#/components/schemas/WebhookToolConfig-Input"
-                }
-              }
-            },
-            "title": "Tools"
-          },
           "tool_ids": {
             "description": "A list of IDs of tools used by the agent",
             "type": "array",
@@ -32741,6 +33210,10 @@
               "type": "string"
             },
             "title": "Tool Ids"
+          },
+          "built_in_tools": {
+            "description": "Built-in system tools to be used by the agent",
+            "$ref": "#/components/schemas/BuiltInTools-Input"
           },
           "mcp_server_ids": {
             "description": "A list of MCP server ids to be used by the agent",
@@ -32802,9 +33275,6 @@
               "type": "string"
             },
             "title": "Knowledge Base Document Ids"
-          },
-          "built_in_tools": {
-            "$ref": "#/components/schemas/BuiltInTools"
           }
         },
         "example": {
@@ -32817,40 +33287,6 @@
           "tools": []
         },
         "title": "PromptAgentDBModel"
-      },
-      "PromptAgentOverride": {
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "description": "The prompt for the agent",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Prompt",
-            "x-convai-client-override": true
-          }
-        },
-        "example": {
-          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation."
-        },
-        "title": "PromptAgentOverride"
-      },
-      "PromptAgentOverrideConfig": {
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "description": "Whether to allow overriding the prompt field.",
-            "type": "boolean",
-            "default": false,
-            "title": "Prompt"
-          }
-        },
-        "title": "PromptAgentOverrideConfig"
       },
       "PromptEvaluationCriteria": {
         "description": "An evaluation using the transcript and a prompt for a yes/no achieved answer",
@@ -35786,11 +36222,6 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -35860,11 +36291,6 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -36295,6 +36721,103 @@
           }
         },
         "title": "ToolMockConfig"
+      },
+      "ToolRequestModel": {
+        "type": "object",
+        "properties": {
+          "tool_config": {
+            "description": "The type of tool",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "client": "#/components/schemas/ClientToolConfig-Input",
+                "mcp": "#/components/schemas/MCPToolConfig-Input",
+                "system": "#/components/schemas/SystemToolConfig-Input",
+                "webhook": "#/components/schemas/WebhookToolConfig-Input"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/WebhookToolConfig-Input"
+              },
+              {
+                "$ref": "#/components/schemas/ClientToolConfig-Input"
+              },
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "$ref": "#/components/schemas/MCPToolConfig-Input"
+              }
+            ],
+            "title": "Tool Config"
+          }
+        },
+        "required": [
+          "tool_config"
+        ],
+        "title": "ToolRequestModel"
+      },
+      "ToolResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "tool_config": {
+            "description": "The type of tool",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "client": "#/components/schemas/ClientToolConfig-Output",
+                "mcp": "#/components/schemas/MCPToolConfig-Output",
+                "system": "#/components/schemas/SystemToolConfig-Output",
+                "webhook": "#/components/schemas/WebhookToolConfig-Output"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/WebhookToolConfig-Output"
+              },
+              {
+                "$ref": "#/components/schemas/ClientToolConfig-Output"
+              },
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "$ref": "#/components/schemas/MCPToolConfig-Output"
+              }
+            ],
+            "title": "Tool Config"
+          },
+          "access_info": {
+            "$ref": "#/components/schemas/ResourceAccessInfo"
+          }
+        },
+        "required": [
+          "id",
+          "tool_config",
+          "access_info"
+        ],
+        "title": "ToolResponseModel"
+      },
+      "ToolsResponseModel": {
+        "type": "object",
+        "properties": {
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ToolResponseModel"
+            },
+            "title": "Tools"
+          }
+        },
+        "required": [
+          "tools"
+        ],
+        "title": "ToolsResponseModel"
       },
       "TransferToAgentToolConfig": {
         "type": "object",
@@ -38563,11 +39086,6 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -38618,11 +39136,6 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "default": "",
-            "title": "Id"
-          },
           "name": {
             "type": "string",
             "minLength": 0,
