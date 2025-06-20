@@ -10,7 +10,8 @@ subtitle: Migrate from legacy `prompt.tools` to the new `prompt.tool_ids` field.
 ### What's changing?
 
 - The old request field `body.conversation_config.agent.prompt.tools` is **deprecated**.
-- Use `body.conversation_config.agent.prompt.tool_ids` to list the IDs of the tools your agent should use.
+- Use `body.conversation_config.agent.prompt.tool_ids` to list the IDs of the client or server tools your agent should use.
+- **New field** `prompt.built_in_tools` is introduced for **system tools** (e.g., `end_call`, `language_detection`). These tools are referenced by **name**, not by ID.
 
 ### Critical deadlines
 
@@ -78,6 +79,11 @@ Anything that once sat in the old `tools` array now belongs here.
 
 ## Migration guide
 
+<Error>
+  System tools are **not** supported in `prompt.tool_ids`. Instead, specify them in the **new**
+  `prompt.built_in_tools` field.
+</Error>
+
 If you are still using the legacy field, follow the steps below.
 
 <Steps>
@@ -86,7 +92,8 @@ If you are still using the legacy field, follow the steps below.
 
 ### 2. Send the tool IDs instead
 
-Replace it with `prompt.tool_ids`, containing the IDs of the tools the agent should use.
+Replace it with `prompt.tool_ids`, containing the IDs of the client or server tools the agent
+should use.
 
 ### 3. (Optional) Clean up
 
@@ -109,9 +116,18 @@ After 16 July, delete any unused standalone tools via the toolbox endpoint.
       "prompt": {
         "tools": [
           {
-            "name": "transfer_to_agent",
+            "type": "client", 
+            "name": "open_url",
+            "description": "Open a provided URL in the user's browser."
+          },
+          {
             "type": "system",
-            "params": { … }
+            "name": "end_call", 
+            "description": "",
+            "response_timeout_secs": 20,
+            "params": {
+              "system_tool_type": "end_call"
+            }
           }
         ]
       }
@@ -120,12 +136,27 @@ After 16 July, delete any unused standalone tools via the toolbox endpoint.
 }
 ```
 
-```json title="New format (recommended)"
+```json title="New format (recommended) – client tool via ID + system tool"
 {
   "conversation_config": {
     "agent": {
       "prompt": {
-        "tool_ids": ["tool_123456789abcdef0"]
+        "tool_ids": ["tool_123456789abcdef0"],
+        "built_in_tools": {
+          "end_call": {
+            "name": "end_call", 
+            "description": "",
+            "response_timeout_secs": 20,
+            "type": "system",
+            "params": {
+              "system_tool_type": "end_call"
+            }
+          },
+          "language_detection": null,
+          "transfer_to_agent": null,
+          "transfer_to_number": null,
+          "skip_turn": null
+        }
       }
     }
   }
