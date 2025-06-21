@@ -1,0 +1,318 @@
+# Conversational AI Analytics API Documentation
+
+<Warning>
+  This API is subject to change and improvements on a regular basis. While we strive to maintain
+  backwards compatibility, endpoints, parameters, and response formats may evolve. Please monitor
+  for updates and test thoroughly in your integration.
+</Warning>
+
+## Authentication
+
+All endpoints require authentication via one of the following methods:
+
+- **Authorization Header**: `Authorization: Bearer <token>`
+- **API Key Header**: `Xi-Api-Key: <api-key>`
+
+## Base URL
+
+All endpoints are prefixed with your API base URL.
+
+---
+
+## Endpoints
+
+### 1. Get Call Analytics
+
+**GET** `/v1/convai/analytics/calls`
+
+Retrieve call metrics and statistics for a specified time period.
+
+#### Parameters
+
+| Parameter    | Type   | Required | Default | Description                             |
+| ------------ | ------ | -------- | ------- | --------------------------------------- |
+| `agent_id`   | string | No       | null    | Filter analytics to a specific agent ID |
+| `date_range` | string | No       | "day"   | Time period: "day", "week", or "month"  |
+
+#### Response
+
+```json
+{
+  "metrics": [
+    {
+      "count": 150,
+      "cost": 2500,
+      "average_cost": 16.67,
+      "llm_cost": 1200.5,
+      "average_llm_cost": 8.0,
+      "duration": 45000,
+      "average_duration": 300,
+      "dt": 1672531200
+    }
+  ],
+  "count": 150,
+  "cost": 2500,
+  "average_cost": 16.67,
+  "llm_cost": 1200.5,
+  "average_llm_cost": 8.0,
+  "duration": 45000,
+  "average_duration": 300
+}
+```
+
+---
+
+### 2. Get Language Analytics
+
+**GET** `/v1/convai/analytics/language`
+
+Retrieve language distribution analytics for conversations.
+
+#### Parameters
+
+| Parameter    | Type   | Required | Default | Description                             |
+| ------------ | ------ | -------- | ------- | --------------------------------------- |
+| `agent_id`   | string | No       | null    | Filter analytics to a specific agent ID |
+| `date_range` | string | No       | "day"   | Time period: "day", "week", or "month"  |
+
+#### Response
+
+```json
+{
+  "metrics": [
+    {
+      "languageCode": "en",
+      "usage": 0.75,
+      "count": 120
+    },
+    {
+      "languageCode": "es",
+      "usage": 0.25,
+      "count": 40
+    }
+  ]
+}
+```
+
+---
+
+### 3. Get Evaluation Criteria Analytics
+
+**GET** `/v1/convai/analytics/criteria`
+
+Retrieve analytics for evaluation criteria results (success/failure/unknown).
+
+#### Parameters
+
+| Parameter     | Type   | Required | Default | Description                                |
+| ------------- | ------ | -------- | ------- | ------------------------------------------ |
+| `criteria_id` | string | No       | null    | Specific evaluation criteria ID to analyse |
+| `agent_id`    | string | No       | null    | Filter analytics to a specific agent ID    |
+| `date_range`  | string | No       | "day"   | Time period: "day", "week", or "month"     |
+
+#### Response
+
+```json
+{
+  "metrics": [
+    {
+      "success": 45,
+      "failure": 12,
+      "unknown": 3,
+      "dt": 1672531200
+    }
+  ],
+  "success": 45,
+  "failure": 12,
+  "unknown": 3
+}
+```
+
+---
+
+### 4. Get Data Collection Analytics
+
+**GET** `/v1/convai/analytics/data-collection`
+
+Retrieve analytics for specific data collection results.
+
+#### Parameters
+
+| Parameter            | Type   | Required | Default | Description                             |
+| -------------------- | ------ | -------- | ------- | --------------------------------------- |
+| `data_collection_id` | string | **Yes**  | -       | The data collection ID to analyse       |
+| `agent_id`           | string | No       | null    | Filter analytics to a specific agent ID |
+| `date_range`         | string | No       | "day"   | Time period: "day", "week", or "month"  |
+
+#### Response
+
+```json
+{
+  "metrics": [
+    {
+      "result": "positive_sentiment",
+      "count": 85
+    },
+    {
+      "result": "negative_sentiment",
+      "count": 15
+    }
+  ]
+}
+```
+
+---
+
+### 5. Get Agents Analytics
+
+**GET** `/v1/convai/analytics/agents`
+
+Retrieve analytics for the top 3 performing agents.
+
+#### Parameters
+
+| Parameter    | Type   | Required | Default | Description                            |
+| ------------ | ------ | -------- | ------- | -------------------------------------- |
+| `date_range` | string | No       | "day"   | Time period: "day", "week", or "month" |
+
+#### Response
+
+```json
+{
+  "agents": [
+    {
+      "agent_id": "21m00Tcm4TlvDq8ikWAM",
+      "agent_name": "Customer Support Bot",
+      "agent_avatar": {
+        "type": "orb",
+        "color": "#3B82F6"
+      },
+      "count": 245,
+      "cost": 1250,
+      "llm_cost": 850.75,
+      "duration": 73500
+    }
+  ],
+  "total_count": 12
+}
+```
+
+---
+
+### 6. Get Live Count
+
+**GET** `/v1/convai/analytics/live-count`
+
+Get the current number of active/ongoing conversations.
+
+#### Parameters
+
+| Parameter  | Type   | Required | Default | Description                                             |
+| ---------- | ------ | -------- | ------- | ------------------------------------------------------- |
+| `agent_id` | string | No       | null    | Filter to a specific agent ID, otherwise workspace-wide |
+
+#### Response
+
+```json
+{
+  "count": 7
+}
+```
+
+---
+
+### 7. Get Available Evaluation Criteria
+
+**GET** `/v1/convai/analytics/criteria/options`
+
+Retrieve all evaluation criteria IDs that have been used in the specified period.
+
+#### Parameters
+
+| Parameter    | Type   | Required | Default | Description                            |
+| ------------ | ------ | -------- | ------- | -------------------------------------- |
+| `date_range` | string | No       | "day"   | Time period: "day", "week", or "month" |
+
+#### Response
+
+```json
+["call_quality_score", "customer_satisfaction", "resolution_success"]
+```
+
+---
+
+### 8. Get Available Data Collections
+
+**GET** `/v1/convai/analytics/data-collection/options`
+
+Retrieve all data collection IDs that have been used in the specified period.
+
+#### Parameters
+
+| Parameter    | Type   | Required | Default | Description                            |
+| ------------ | ------ | -------- | ------- | -------------------------------------- |
+| `date_range` | string | No       | "day"   | Time period: "day", "week", or "month" |
+
+#### Response
+
+```json
+["sentiment_analysis", "topic_classification", "customer_intent"]
+```
+
+---
+
+## Common Data Types
+
+### Date Range Values
+
+- `"day"` - Last 24 hours (hourly granularity)
+- `"week"` - Last 7 days (daily granularity)
+- `"month"` - Last 30 days (daily granularity)
+
+### Timestamp Format
+
+All `dt` (datetime) fields are Unix timestamps in seconds.
+
+### Cost Fields
+
+- `cost` - Total cost in the smallest currency unit (e.g., cents for USD)
+- `llm_cost` - Cost specifically attributed to LLM usage
+- `average_cost` - Average cost per conversation/call
+
+### Duration Fields
+
+Duration values are in seconds.
+
+---
+
+## Error Responses
+
+All endpoints may return standard HTTP error codes:
+
+- `400` - Bad Request (invalid parameters)
+- `401` - Unauthorised (missing or invalid authentication)
+- `403` - Forbidden (insufficient permissions)
+- `404` - Not Found (invalid agent_id or criteria_id)
+- `500` - Internal Server Error
+
+Example error response:
+
+```json
+{
+  "detail": "Agent not found or access denied"
+}
+```
+
+---
+
+## Rate Limits
+
+Please be mindful of API rate limits. For high-frequency polling of live counts or analytics, consider implementing appropriate caching and request throttling in your application.
+
+## Notes
+
+- Analytics data may have a slight delay (typically a few minutes) from real-time activity
+- Empty result sets will return appropriate zero values or empty arrays
+- All monetary values are workspace currency dependent
+- Language codes follow standard ISO language code format
+- Agent avatars can be of type "orb", "image", or "url" with different properties for each type
