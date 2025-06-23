@@ -1,0 +1,28 @@
+## Custom LLM integration
+
+**Purpose**: Automatically terminate conversations when appropriate conditions are met.
+
+**Trigger conditions**: The LLM should call this tool when:
+
+- The main task has been completed and user is satisfied
+- The conversation reached natural conclusion with mutual agreement
+- The user explicitly indicates they want to end the conversation
+
+**Parameters**:
+
+- `reason` (string, required): The reason for ending the call
+- `message` (string, optional): A farewell message to send to the user before ending the call
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "end_call",
+    "arguments": "{\"reason\": \"Task completed successfully\", \"message\": \"Thank you for using our service. Have a great day!\"}"
+  }
+}
+```
+
+**Implementation**: Configure as a system tool in your agent settings. The LLM will receive detailed instructions about when to call this function.

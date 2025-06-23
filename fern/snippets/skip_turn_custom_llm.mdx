@@ -1,0 +1,27 @@
+## Custom LLM integration
+
+**Purpose**: Allow the agent to pause and wait for user input without speaking.
+
+**Trigger conditions**: The LLM should call this tool when:
+
+- User indicates they need a moment ("Give me a second", "Let me think")
+- User requests pause in conversation flow
+- Agent detects user needs time to process information
+
+**Parameters**:
+
+- `reason` (string, optional): Free-form reason explaining why the pause is needed
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "skip_turn",
+    "arguments": "{\"reason\": \"User requested time to think\"}"
+  }
+}
+```
+
+**Implementation**: No additional configuration needed. The tool simply signals the agent to remain silent until the user speaks again.
