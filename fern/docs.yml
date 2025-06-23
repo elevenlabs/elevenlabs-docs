@@ -134,6 +134,8 @@ navigation:
                     path: docs/pages/developer-guides/cookbooks/voices/professional-voice-cloning.mdx
                   - page: Voice design
                     path: docs/pages/developer-guides/cookbooks/voices/voice-design.mdx
+                  # - page: Remix a voice
+                  #   path: docs/pages/developer-guides/cookbooks/voices/remix-voice.mdx
               - page: Forced Alignment
                 icon: duotone objects-align-left
                 path: docs/pages/developer-guides/cookbooks/forced-alignment/quickstart.mdx
@@ -699,6 +701,8 @@ navigation:
                     title: Update agent
                   - endpoint: DELETE /v1/convai/agents/{agent_id}
                     title: Delete agent
+                  - endpoint: POST /v1/convai/agents/{agent_id}/duplicate
+                    title: Duplicate agent
                   - endpoint: GET /v1/convai/agents/{agent_id}/link
                     title: Get link
                   - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation
@@ -899,8 +903,15 @@ navigation:
               - textToSoundEffects:
                   title: Sound Effects
               - audioIsolation
-              - textToVoice
+              - textToVoice:
+                  title: Text to Voice
+                  contents:
+                    - endpoint: POST /v1/text-to-voice/design
+                      title: Design a voice
+                    - endpoint: POST /v1/text-to-voice
+                      title: Create a voice
               - dubbing:
+                  title: Dubbing
                   contents:
                     - section: Resources (Enterprise, Closed Beta)
                       slug: /resources
@@ -941,6 +952,7 @@ navigation:
 
               - audioNative
               - voices:
+                  title: Voices
                   contents:
                     - section: PVC
                       contents:
@@ -1064,6 +1076,8 @@ navigation:
               - section: Voices
                 contents:
                   - GET /v1/voices
+                  - POST /v1/text-to-voice/create-previews
+                  - POST /v1/text-to-voice/create-voice-from-preview
               - section: Knowledge Base
                 contents:
                   - POST /v1/convai/knowledge-base
@@ -1240,9 +1254,9 @@ redirects:
   - source: /docs/api-reference/text-to-speech-with-timestamps
     destination: /docs/api-reference/text-to-speech/convert-with-timestamps
   - source: /docs/api-reference/ttv-create-previews
-    destination: /docs/api-reference/text-to-voice/create-previews
+    destination: /docs/api-reference/legacy/voices/create-previews
   - source: /docs/api-reference/ttv-create-voice-from-preview
-    destination: /docs/api-reference/text-to-voice/create-voice-from-preview
+    destination: /docs/api-reference/legacy/voices/create-voice-from-preview
   - source: /docs/api-reference/usage-get-character-stats
     destination: /docs/api-reference/usage/get-characters-usage-metrics
   - source: /docs/api-reference/websockets
