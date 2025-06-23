@@ -1,0 +1,28 @@
+## Custom LLM integration
+
+**Purpose**: Automatically switch to the user's detected language during conversations.
+
+**Trigger conditions**: The LLM should call this tool when:
+
+- User speaks in a different language than the current conversation language
+- User explicitly requests to switch languages
+- Multi-language support is needed for the conversation
+
+**Parameters**:
+
+- `reason` (string, required): The reason for the language switch
+- `language` (string, required): The language code to switch to (must be in supported languages list)
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "language_detection",
+    "arguments": "{\"reason\": \"User requested Spanish\", \"language\": \"es\"}"
+  }
+}
+```
+
+**Implementation**: Configure supported languages in agent settings and add the language detection system tool. The agent will automatically switch voice and responses to match detected languages.

@@ -1,0 +1,31 @@
+## Custom LLM integration
+
+**Purpose**: Seamlessly hand off conversations to human operators when AI assistance is insufficient.
+
+**Trigger conditions**: The LLM should call this tool when:
+
+- Complex issues requiring human judgment
+- User explicitly requests human assistance
+- AI reaches limits of capability for the specific request
+- Escalation protocols are triggered
+
+**Parameters**:
+
+- `reason` (string, optional): The reason for the transfer
+- `transfer_number` (string, required): The phone number to transfer to (must match configured numbers)
+- `client_message` (string, required): Message read to the client while waiting for transfer
+- `agent_message` (string, required): Message for the human operator receiving the call
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "transfer_to_number",
+    "arguments": "{\"reason\": \"Complex billing issue\", \"transfer_number\": \"+15551234567\", \"client_message\": \"I'm transferring you to a billing specialist who can help with your account.\", \"agent_message\": \"Customer has a complex billing dispute about order #12345 from last month.\"}"
+  }
+}
+```
+
+**Implementation**: Configure transfer phone numbers and conditions. Define messages for both customer and receiving human operator. Works with both Twilio and SIP trunking.

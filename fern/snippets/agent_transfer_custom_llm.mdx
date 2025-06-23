@@ -1,0 +1,28 @@
+## Custom LLM integration
+
+**Purpose**: Transfer conversations between specialized AI agents based on user needs.
+
+**Trigger conditions**: The LLM should call this tool when:
+
+- User request requires specialized knowledge or different agent capabilities
+- Current agent cannot adequately handle the query
+- Conversation flow indicates need for different agent type
+
+**Parameters**:
+
+- `reason` (string, optional): The reason for the agent transfer
+- `agent_number` (integer, required): Zero-indexed number of the agent to transfer to (based on configured transfer rules)
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "transfer_to_agent",
+    "arguments": "{\"reason\": \"User needs billing support\", \"agent_number\": 0}"
+  }
+}
+```
+
+**Implementation**: Define transfer rules mapping conditions to specific agent IDs. Configure which agents the current agent can transfer to. Agents are referenced by zero-indexed numbers in the transfer configuration.
