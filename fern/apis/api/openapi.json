@@ -11294,6 +11294,84 @@
         "x-fern-sdk-method-name": "calculate"
       }
     },
+    "/v1/convai/agents/{agent_id}/duplicate": {
+      "post": {
+        "operationId": "Duplicate_Agent_v1_convai_agents__agent_id__duplicate_post",
+        "summary": "Duplicate Agent",
+        "description": "Create a new agent by duplicating an existing one",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "The id of an agent. This is returned on agent creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of an agent. This is returned on agent creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Duplicate_Agent_v1_convai_agents__agent_id__duplicate_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAgentResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": "conversational_ai",
+        "x-fern-sdk-method-name": "duplicate_agent"
+      }
+    },
     "/v1/convai/agents/{agent_id}/simulate-conversation": {
       "post": {
         "operationId": "Simulates_a_conversation_v1_convai_agents__agent_id__simulate_conversation_post",
@@ -13859,8 +13937,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "add_tool"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "create"
       },
       "get": {
         "operationId": "Get_tools_v1_convai_tools_get",
@@ -13911,8 +13992,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_tools"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/tools/{tool_id}": {
@@ -13976,8 +14060,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "get_tool"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "get"
       },
       "patch": {
         "operationId": "Update_tool_v1_convai_tools__tool_id__patch",
@@ -14050,8 +14137,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "update_tool"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "update"
       },
       "delete": {
         "operationId": "Delete_tool_v1_convai_tools__tool_id__delete",
@@ -14111,8 +14201,11 @@
         "tags": [
           "Conversational AI"
         ],
-        "x-fern-sdk-group-name": "conversational_ai",
-        "x-fern-sdk-method-name": "remove_tool"
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "tools"
+        ],
+        "x-fern-sdk-method-name": "delete"
       }
     },
     "/v1/convai/tools/{tool_id}/dependent-agents": {
@@ -14212,7 +14305,7 @@
           "conversational_ai",
           "tools"
         ],
-        "x-fern-sdk-method-name": "get_agents"
+        "x-fern-sdk-method-name": "get_dependent_agents"
       }
     },
     "/v1/convai/settings": {
@@ -20582,6 +20675,28 @@
         ],
         "title": "Body_Dubs_all_or_some_segments_and_languages_v1_dubbing_resource__dubbing_id__dub_post"
       },
+      "Body_Duplicate_Agent_v1_convai_agents__agent_id__duplicate_post": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "A name to make the agent easier to find",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "My agent"
+            ],
+            "optional": true,
+            "title": "Name"
+          }
+        },
+        "title": "Body_Duplicate_Agent_v1_convai_agents__agent_id__duplicate_post"
+      },
       "Body_Edit_PVC_voice_v1_voices_pvc__voice_id__post": {
         "type": "object",
         "properties": {
@@ -24393,6 +24508,28 @@
               }
             ],
             "title": "Llm Price"
+          },
+          "llm_charge": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Charge"
+          },
+          "call_charge": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Charge"
           }
         },
         "title": "ConversationChargingCommonModel"
@@ -36727,7 +36864,7 @@
         "type": "object",
         "properties": {
           "tool_config": {
-            "description": "The type of tool",
+            "description": "Configuration for the tool",
             "discriminator": {
               "propertyName": "type",
               "mapping": {
