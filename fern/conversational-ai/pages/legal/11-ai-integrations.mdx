@@ -1,0 +1,52 @@
+---
+title: 11.ai integrations
+subtitle: Learn about third-party integrations and their automatic Zero Retention Mode (ZRM) requirements for data privacy and compliance.
+---
+
+## Overview
+
+11.ai supports various third-party integrations to seamlessly connect with your everyday applications. Some integrations automatically enable Zero Retention Mode (ZRM) to ensure compliance with industry regulations and data privacy requirements.
+
+<Warning>
+  When any integration marked with ZRM is added to an agent, all conversation data is processed in
+  Zero Retention Mode, meaning no conversation transcripts, audio recordings, or personally
+  identifiable information (PII) is stored or logged by ElevenLabs.
+</Warning>
+
+## Zero Retention Mode enforcement
+
+As soon as any integration that requires ZRM is added to an agent, the entire agent automatically operates in Zero Retention Mode. This ensures:
+
+- No call recordings are stored
+- No conversation transcripts containing PII are logged
+- All data is processed only in volatile memory during the request
+- Compliance with healthcare (HIPAA), financial, and other regulatory requirements
+
+## Integrations with Zero Retention Mode
+
+The following integrations automatically enforce Zero Retention Mode to ensure compliance with data privacy policies:
+
+| Integration     | Description                     | ZRM | Use Case                     | Compliance Requirements                  |
+| --------------- | ------------------------------- | :-: | ---------------------------- | ---------------------------------------- |
+| Gmail           | Email management service        | ✅  | Email reading, organization  | Google Workspace APIs Limited Use policy |
+| Google Calendar | Calendar and scheduling service | ✅  | Event management, scheduling | Google Workspace APIs Limited Use policy |
+
+## Google Workspace API compliance
+
+Google integrations require Zero Retention Mode to comply with Google's Workspace APIs data policy requirements:
+
+- **Limited Use requirements**: User data from Workspace APIs cannot be used for foundational AI/ML model training
+- **Data retention restrictions**: No permanent copies of user content are created or cached beyond permitted timeframes
+- **Express permission mandate**: All content access requires explicit user consent
+- **Security assessment**: CASA (Cloud Application Security Assessment) certification required for restricted API scopes
+
+<Warning>
+  Google Workspace integrations are subject to additional compliance requirements and security
+  assessments. Data from these integrations is processed exclusively in Zero Retention Mode with no
+  storage or logging of user content.
+</Warning>
+
+<Note>
+  This list is regularly updated as new integrations become available. For the most current
+  information about specific integrations, please contact your ElevenLabs representative.
+</Note>
