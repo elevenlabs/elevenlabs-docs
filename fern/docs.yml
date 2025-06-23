@@ -701,6 +701,8 @@ navigation:
                     title: Update agent
                   - endpoint: DELETE /v1/convai/agents/{agent_id}
                     title: Delete agent
+                  - endpoint: POST /v1/convai/agents/{agent_id}/duplicate
+                    title: Duplicate agent
                   - endpoint: GET /v1/convai/agents/{agent_id}/link
                     title: Get link
                   - endpoint: POST /v1/convai/agents/{agent_id}/simulate-conversation
@@ -901,8 +903,15 @@ navigation:
               - textToSoundEffects:
                   title: Sound Effects
               - audioIsolation
-              - textToVoice
+              - textToVoice:
+                  title: Text to Voice
+                  contents:
+                    - endpoint: POST /v1/text-to-voice/design
+                      title: Design a voice
+                    - endpoint: POST /v1/text-to-voice
+                      title: Create a voice
               - dubbing:
+                  title: Dubbing
                   contents:
                     - section: Resources (Enterprise, Closed Beta)
                       slug: /resources
@@ -943,6 +952,7 @@ navigation:
 
               - audioNative
               - voices:
+                  title: Voices
                   contents:
                     - section: PVC
                       contents:
@@ -1066,6 +1076,8 @@ navigation:
               - section: Voices
                 contents:
                   - GET /v1/voices
+                  - POST /v1/text-to-voice/create-previews
+                  - POST /v1/text-to-voice/create-voice-from-preview
               - section: Knowledge Base
                 contents:
                   - POST /v1/convai/knowledge-base
