@@ -33,37 +33,166 @@ After generating, you'll have the option to select and save one of the generatio
 
 ## Prompting guide
 
-### Voice design types
+The prompt is the foundation of your voice. It tells the model what kind of voice you’re trying to create — everything from the accent and character-type to the gender and vibe of the voice. A well-crafted prompt can be the difference between a generic voice and one that truly fits your vision. In general, more descriptive and granular prompts tend to yield more accurate and nuanced results. The more detail you provide — including age, gender, tone, accent, pacing, emotion, style, and more - the better the model can interpret and deliver a voice that feels intentional and tailored.
 
-| Type                   | Description                                                                                                                     | Example Prompts                                                                                                                                                                                                                                                                                                                                                                                 |
-| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Realistic Voice Design | Create an original, realistic voice by specifying age, accent/nationality, gender, tone, pitch, intonation, speed, and emotion. | - "An Indian woman with a soft, high voice. Conversational, slow and calm."<br></br> - "An old British male with a raspy, deep voice. Professional, relaxed and assertive."<br></br> - "A middle-aged Australian female with a warm, low voice. Corporate, fast and happy."                                                                                                                     |
-| Character Voice Design | Generate unique voices for creative characters using simpler prompts.                                                           | - "A massive evil ogre, troll"<br></br>- "A cute little squeaky mouse"<br></br>- "An angry old pirate, shouting" <br></br><br></br> Some other characters we've had success with include Goblin, Vampire, Elf, Troll, Werewolf, Ghost, Alien, Giant, Witch, Wizard, Zombie, Demon, Devil, Pirate, Genie, Ogre, Orc, Knight, Samurai, Banshee, Yeti, Druid, Robot, Elf, Monkey, Monster, Dracula |
+However, sometimes short and simple prompts can also work, especially when you're aiming for a more neutral or broadly usable voice. For example, “A calm male narrator” might give you exactly what you need without going into detail — particularly if you're not trying to create a very specific character or style. The right level of detail depends on your use case. Are you building a fantasy character? A virtual assistant? A tired New Yorker in her 60s with a dry sense of humor? The more clearly you define it in your prompt, the closer the output will be to what you're imagining.
+
+### Audio Quality
+
+Audio quality refers to the clarity, cleanliness, and overall fidelity of the generated voice. By default, ElevenLabs aims to produce clean and natural-sounding audio — but if your project requires a specific level of quality, it's best to explicitly include it in your prompt.
+
+For high-quality results, you can help the model by adding a phrase such as “**perfect audio quality**” or “**studio-quality recording**” to your voice description. This helps ensure the voice is rendered with maximum clarity, minimal distortion, and a polished finish.
 
 <Warning>
-  Generating child or child-like voices violates our [Prohibited Use
-  Policy](https://elevenlabs.io/use-policy).
+  Including these types of phrases can sometimes reduce the accuracy of the prompt in general if the
+  voice is very specific or niche.
 </Warning>
 
-### Voice attributes
+There may also be creative cases where lower audio quality is intentional, such as when simulating a phone call, old radio broadcast, or found footage. In those situations, either leave out quality descriptors entirely or explicitly include phrases like:
 
-| Attribute          | Importance      | Options                                                             |
-| :----------------- | :-------------- | :------------------------------------------------------------------ |
-| Age                | High Importance | Adult, Middle-Aged, Old, etc...                                     |
-| Accent/Nationality | High Importance | British, Indian, Polish, American, etc...                           |
-| Gender             | High Importance | Male, Female, Gender Neutral                                        |
-| Tone               | Not Needed      | Gruff, Soft, Warm, Raspy, etc...                                    |
-| Pitch              | Not Needed      | Deep, Low, High, Squeaky, etc...                                    |
-| Intonation         | Not Needed      | Conversational, Professional, Corporate, Urban, Posh, etc...        |
-| Speed              | Not Needed      | Fast, Quick, Slow, Relaxed, etc...                                  |
-| Emotion/Delivery   | Not Needed      | Angry, Calm, Scared, Happy, Assertive, Whispering, Shouting, etc... |
+- “Low-fidelity audio”
+- “Poor audio quality”
+- “Sounds like a voicemail”
+- “Muffled and distant, like on an old tape recorder”
 
-### Voice design with Eleven v3 (alpha)
+The placement of this phrase in your prompt is flexible — it can appear at the beginning or end, though we’ve found it works well at either.
 
-With the new [Eleven v3 model](/docs/models#eleven-v3-alpha), you can design voices in a more fine-tuned manner.
+### Age, Tone/Timbre and Gender
 
-- **Audio Quality**: To control the output audio quality, be sure to explicitly write it in your prompt (e.g. “Perfect Audio Quality”). The location of this doesn’t matter too much, but we find either the beginning or the end of the prompt is most appropriate. There might be situations where perfect, studio-grade audio quality is not desired. In these cases, it’s generally fine to either omit it from your prompt or explicitly add it in (e.g. “poor audio quality”).
-- **Age, Tone and Gender**: These characteristics are the core of the voice, and the more information you provide the easier it is for the AI to create the voice accurately. The qualities you can prompt with are endless, but find some helpful ones below to get you started.
-- **Accent**: Certain words work better than others in a prompt. For example, using the word “thick” before an accent works better than “strong”. Example: “An elderly man with a thick European accent.”
-- **Pacing**: Language about the pace or speed of an individual’s voice can be crucial in getting it to sound exactly the way you want it to. We recommend stating this explicitly if the pacing matters to you. Examples include:
-  “Speaking quickly”, “at a normal pace”, “slowly” “drawn out” “speaking with a fast cadence”
+These three characteristics are the foundation of voice design, shaping the overall identity and emotional resonance of the voice. The more detail you provide, the easier it is for the AI to produce a voice that fits your creative vision — whether you're building a believable character, crafting a compelling narrator, or designing a virtual assistant.
+
+#### Age
+
+Describing the perceived age of the voice helps define its maturity, vocal texture, and energy. Use specific terms to guide the AI toward the right vocal quality.
+
+**Useful descriptors:**
+
+- “Adolscent male” / “adolescent female”
+- “Young adult” / “in their 20s” / “early 30s”
+- “Middle-aged man” / “woman in her 40s”
+- “Elderly man” / “older woman” / “man in his 80s”
+
+#### Tone/Timbre
+
+Refers to the physical quality of the voice, shaped by pitch, resonance, and vocal texture. It’s distinct from emotional delivery or attitude.
+
+**Common tone/timbre descriptors:**
+
+- “Deep” / “low-pitched”
+- “Smooth” / “rich”
+- “Gravelly” / “raspy”
+- “Nasally” / “shrill”
+- “Airy” / “breathy”
+- “Booming” / “resonant”
+- “Light” / “thin”
+- “Warm” / “mellow”
+- “Tinny” / “metallic”
+
+#### Gender
+
+Gender often typically influences pitch, vocal weight, and tonal presence — but you can push beyond simple categories by describing the sound instead of the identity.
+
+**Examples:**
+
+- “A lower-pitched, husky female voice”
+- “A masculine male voice, deep and resonant”
+- “A neutral gender — soft and mid-pitched”
+
+#### Accent
+
+Accent plays a critical role in defining a voice’s regional, cultural, and emotional identity. If your project depends on an authentic sound — whether it's grounded in realism or stylized for character — being clear and deliberate about the desired accent is essential.
+
+Phrase choice matters - certain terms tend to produce more consistent results. For example, “thick” often yields better results than “strong” when describing how prominent an accent should be. There is lots of trial and error to be had, and we encourage you to experiment with the wording and to be as creative and descriptive as possible.
+
+- **Examples of clear accent prompts:**
+  - “A middle-aged man with a thick French accent”
+  - “A young woman with a slight Southern drawl”
+  - “An old man with a heavy Eastern European accent”
+  - “A cheerful woman speaking with a crisp British accent”
+  - “A younger male with a soft Irish lilt”
+  - “An authoritative voice with a neutral American accent”
+  - “A man with a regional Australian accent, laid-back and nasal”
+
+Avoid overly vague descriptors like “foreign” or “exotic” — they’re imprecise and can produce inconsistent results.
+
+Combine accent with other traits like tone, age, or pacing for better control. E.g., “A sarcastic old woman with a thick New York accent, speaking slowly.”
+
+For fantasy or fictional voices, you can suggest real-world accents as inspiration:
+
+- “An elf with a proper thick British accent. He is regal and lyrical.”
+- “A goblin with a raspy Eastern European accent.”
+
+### Pacing
+
+Pacing refers to the speed and rhythm at which a voice speaks. It's a key component in shaping the personality, emotional tone, and clarity of the voice. Being explicit about pacing is essential, especially when designing voices for specific use cases like storytelling, advertising, character dialogue, or instructional content.
+
+Use clear language to describe how fast or slow the voice should speak. You can also describe how the pacing feels — whether it's steady, erratic, deliberate, or breezy. If the pacing shifts, be sure to indicate where and why.
+
+**Examples of pacing descriptors:**
+
+- “Speaking quickly” / “at a fast pace”
+- “At a normal pace” / “speaking normally”
+- “Speaking slowly” / “with a slow rhythm”
+- “Deliberate and measured pacing”
+- “Drawn out, as if savoring each word”
+- “With a hurried cadence, like they’re in a rush”
+- “Relaxed and conversational pacing”
+- “Rhythmic and musical in pace”
+- “Erratic pacing, with abrupt pauses and bursts”
+- “Even pacing, with consistent timing between words”
+- “Staccato delivery”
+
+### Text to preview
+
+Once you've written a strong voice prompt, the text you use to preview that voice plays a crucial role in shaping how it actually sounds. The preview text acts like a performance script — it sets the tone, pacing, and emotional delivery that the voice will attempt to match.
+
+To get the best results, your preview text should complement the voice description, not contradict it. For example, if your prompt describes a “calm and reflective younger female voice with a slight Japanese accent,” using a sentence like “Hey! I can't stand what you’ve done with the darn place!!!” will clash with that intent. The model will try to reconcile that mismatch, often leading to unnatural or inconsistent results.
+
+Instead, use sample text that reflects the voice’s intended personality and emotional tone. For the example above, something like “It’s been quiet lately... I’ve had time to think, and maybe that’s what I needed most.” supports the prompt and helps generate a more natural, coherent voice.
+
+Additionally, we’ve found that longer preview texts tend to produce more stable and expressive results. Short phrases can sometimes sound abrupt or inconsistent, especially when testing subtle qualities like tone or pacing. Giving the model more context — a full sentence or even a short paragraph — allows it to deliver a smoother and more accurate representation of the voice.
+
+### Parameters
+
+#### Loudness
+
+Controls the volume of the Text to Preview generation, and ultimately the voice once saved.
+
+#### Guidance Scale
+
+Dictates how closely the Prompt is adhered to. higher/lower values will stick to the prompt more strictly but could result in poorer audio quality if the prompt is very niche, while higher/lower/ values will allow the model to be more creative at the cost of prompt accuracy. Use a high value in this case if the performance and audio quality is more important than nailing the prompt. High/low values are recommended when accent or tone accuracy is of paramount importance
+
+### Attributes and Examples
+
+<Note>
+  Experiment with the way in which these descriptors are written. For example, “Perfect audio
+  quality” can also be written as “the audio quality is perfect”. These can sometimes produce
+  different results!
+</Note>
+
+| Attribute              | Examples                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| Age                    | Young, younger, adult, old, elderly, in his/her 40s                                              |
+| Accent                 | "thick" Scottish accent, "slight" Asian-American accent, Southern American accent                |
+| Gender                 | Male, female, gender-neutral, ambiguous gender                                                   |
+| Tone/Timbre/pitch      | Deep, warm, gravelly, smooth, shrill, buttery, raspy, nasally, throaty, harsh, robotic, ethereal |
+| Pacing                 | Normal cadence, fast-paced, quickly, slowly, drawn out, calm pace, natural/conversational pace   |
+| Audio Quality          | Perfect audio quality, audio quality is 'ok', poor audio quality                                 |
+| Character / Profession | Pirate, businessman, farmer, politician, therapist, ogre, godlike being, TV announcer            |
+| Emotion                | Energetic, excited, sad, emotional, sarcastic, dry                                               |
+| Pitch                  | Low-pitched, high-pitched, normal pitch                                                          |
+
+### Example Prompts and Text Previews
+
+| Voice Type                     | Prompt/Description                                                                                                                                                                                                                                                                                     | Text Preview                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Prompt Adherence |
+| :----------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------- |
+| Female Sports Commentator      | A high-energy female sports commentator with a thick British accent, passionately delivering play-by-play coverage of a football match in a very quick pace. Her voice is lively, enthusiastic, and fully immersed in the action.                                                                      | OH MY WORD — WHAT A GOAL! She picks it up just past midfield, dances through TWO defenders like they're not even THERE, and absolutely SMASHES it into the top corner! The goalkeeper had NO CHANCE! That is WORLD-CLASS from the young forward, and the crowd is on their FEET! This match has come ALIVE, and you can FEEL the momentum SHIFTING!                                                                                                                                                                                                      | 25%              |
+| Drill Sergeant                 | An army drill sergeant shouting at his team of soldiers. He sounds angry and is speaking at a fast pace.                                                                                                                                                                                               | LISTEN UP, you sorry lot! I didn't come here to babysit — I came to BUILD SOLDIERS! You move when I say move, and you breathe when I say breathe! You've got ten seconds to fall in line or you'll regret it!!                                                                                                                                                                                                                                                                                                                                           | 25%              |
+| Evil Ogre                      | A massive evil ogre speaking at a quick pace. He has a silly and resonant tone.                                                                                                                                                                                                                        | "Your weapons are but toothpicks to me. [laughs] Surrender now and I may grant you a swift end. I've toppled kingdoms and devoured armies. What hope do you have against me?"                                                                                                                                                                                                                                                                                                                                                                            | 30%              |
+| Relatable British Entrepreneur | Excellent audio quality. A man in his 30s to early 40s with a thick British accent speaking at a natural pace like he's talking to a friend.                                                                                                                                                           | [laughs] See, that's the thing. YOU see a company, while I see... [lip smacks] I see a promise, ya know what I mean? [exhales] We don't build just to profit, we build to, to UPLIFT! If our technology doesn't leave the world kinder, smarter, and more connected than we found it… [sighs] then what are we even doing here?                                                                                                                                                                                                                          | 40%              |
+| Southern Woman                 | An older woman with a thick Southern accent. She is sweet and sarcastic.                                                                                                                                                                                                                               | "Well sugar, if all we ever do is chase titles and trophies, we're gonna miss the whole darn point. [light chuckle] I'd rather build somethin' that makes folks' lives easier—and if I can do it in heels with a smile and a touch of sass, even better."                                                                                                                                                                                                                                                                                                | 35%              |
+| Movie Trailer Voice            | Dramatic voice, used to build anticipation in movie trailers, typically associated with action or thrillers                                                                                                                                                                                            | "In a world on the brink of chaos, one hero will rise. Prepare yourself for a story of epic proportions, coming soon to the big screen."                                                                                                                                                                                                                                                                                                                                                                                                                 | 20%              |
+| Squeaky Mouse                  | A cute little squeaky mouse                                                                                                                                                                                                                                                                            | "I may be small, but my attitude is anything but! [giggles] Watch it, big feet, or I'll give your toes a nibble you won't forget!"                                                                                                                                                                                                                                                                                                                                                                                                                       | 20%              |
+| Angry Pirate                   | An angry old pirate, loud and boisterous                                                                                                                                                                                                                                                               | "I've faced storms that would turn your hair white and sea monsters that would make your knees quake. You think you can cross Captain Blackheart and live to tell the tale?"                                                                                                                                                                                                                                                                                                                                                                             | 30%              |
+| New Yorker                     | Deep, gravelly thick New York accent, tough and world-weary, often cynical                                                                                                                                                                                                                             | "I've been walking these streets longer than you can imagine, kid. There's nothing you can say or do that'll surprise me anymore."                                                                                                                                                                                                                                                                                                                                                                                                                       | 40%              |
+| Mad Scientist                  | A voice of an eccentric scientific genius with rapid, erratic speech patterns that accelerate with excitement. His German-tinged accent becomes more pronounced when agitated. The pitch varies widely from contemplative murmurs to manic exclamations, with frequent eruptions of maniacal laughter. | "I am doctor Heinrich, revolutionary genius rejected by the narrow-minded scientific establishment! Bah! They called my theories impossible, my methods unethical—but who is laughing now? (maniacal laughter) For twenty years I have perfected my creation in this mountain laboratory, harnessing energies beyond mortal comprehension! The fools at the academy will regret their mockery when my quantum destabilizer reveals the multiverse. Or perhaps new life forms... the experiment has certain unpredictable variables... FASCINATING ones!" | 38%              |
