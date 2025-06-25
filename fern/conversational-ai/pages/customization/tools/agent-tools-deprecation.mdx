@@ -16,12 +16,12 @@ subtitle: Migrate from legacy `prompt.tools` to the new `prompt.tool_ids` field.
 ### Critical deadlines
 
 <Check>
-  **July 7, 2025** - Last day for full backwards compatibility. You can continue using
+  **July 14, 2025** - Last day for full backwards compatibility. You can continue using
   `prompt.tools` until this date.
 </Check>
 
 <Note>
-  **July 8, 2025** - GET endpoints will stop returning the `tools` field. Only `prompt.tool_ids`
+  **July 15, 2025** - GET endpoints will stop returning the `tools` field. Only `prompt.tool_ids`
   will be included in responses.
 </Note>
 
@@ -57,8 +57,8 @@ No one-off scripts are required — your agents continue to work unchanged.
 
 | Date              | Status                   | Behaviour                                                                        |
 | ----------------- | ------------------------ | -------------------------------------------------------------------------------- |
-| **July 7, 2025**  | ✅ Full compatibility    | You may keep sending `prompt.tools`. GET responses include the `tools` field.    |
-| **July 8, 2025**  | ⚠️ Partial compatibility | GET endpoints stop returning the `tools` field. Only `prompt.tool_ids` included. |
+| **July 14, 2025**  | ✅ Full compatibility    | You may keep sending `prompt.tools`. GET responses include the `tools` field.    |
+| **July 15, 2025**  | ⚠️ Partial compatibility | GET endpoints stop returning the `tools` field. Only `prompt.tool_ids` included. |
 | **July 23, 2025** | ❌ No compatibility      | POST and PATCH endpoints **reject** any request containing `prompt.tools`.       |
 
 ## Toolbox endpoint
@@ -170,7 +170,7 @@ After 23 July, delete any unused standalone tools via the toolbox endpoint.
 <AccordionGroup>
   <Accordion title="Will my existing integrations break?">
     No. Until July 23, the API will silently migrate any `prompt.tools` array you send. However,
-    starting July 8, GET and PATCH responses will no longer include full tool objects. After July
+    starting July 15, GET and PATCH responses will no longer include full tool objects. After July
     23, any POST/PATCH requests containing `prompt.tools` will be rejected.
   </Accordion>
   <Accordion title="Can I mix both fields in one request?">
