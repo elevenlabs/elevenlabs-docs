@@ -400,8 +400,7 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
-                },
-                "description": "ZIP file containing multiple audio files when multiple history items are requested"
+                }
               }
             }
           },
@@ -409,6 +408,17 @@
             "description": "Invalid request",
             "content": {
               "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
                 "example": {
                   "error": "invalid_output_format",
                   "message": "output_format must be wav or none"
@@ -737,7 +747,7 @@
           }
         },
         "tags": [
-          "Samples"
+          "samples"
         ],
         "x-fern-sdk-group-name": "samples",
         "x-fern-sdk-method-name": "delete"
@@ -815,7 +825,7 @@
           }
         },
         "tags": [
-          "Samples"
+          "samples"
         ],
         "x-fern-sdk-group-name": [
           "voices",
@@ -2405,7 +2415,7 @@
           }
         },
         "tags": [
-          "User"
+          "user"
         ],
         "x-fern-sdk-group-name": [
           "user",
@@ -2462,7 +2472,7 @@
           }
         },
         "tags": [
-          "User"
+          "user"
         ],
         "x-fern-sdk-group-name": "user",
         "x-fern-sdk-method-name": "get"
@@ -8033,7 +8043,7 @@
           }
         },
         "tags": [
-          "Models"
+          "models"
         ],
         "x-fern-sdk-group-name": "models",
         "x-fern-sdk-method-name": "list"
@@ -8843,7 +8853,7 @@
           }
         },
         "tags": [
-          "Usage"
+          "usage"
         ],
         "x-fern-sdk-group-name": "usage",
         "x-fern-sdk-method-name": "get"
@@ -9432,46 +9442,6 @@
         "x-fern-sdk-method-name": "list"
       }
     },
-    "/v1/workspace/user-auto-provisioning": {
-      "post": {
-        "operationId": "update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post",
-        "summary": "Update User Auto Provisioning",
-        "description": "Update user auto provisioning settings for the workspace.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Workspace"
-        ]
-      }
-    },
     "/v1/workspace/groups/search": {
       "get": {
         "operationId": "Search_user_groups_v1_workspace_groups_search_get",
@@ -9535,7 +9505,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -9613,7 +9583,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -9692,7 +9662,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -9760,7 +9730,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -9827,7 +9797,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -9894,7 +9864,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -9961,7 +9931,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -10006,7 +9976,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -10084,7 +10054,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -10160,7 +10130,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
@@ -10236,119 +10206,13 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": [
           "workspace",
           "resources"
         ],
         "x-fern-sdk-method-name": "unshare"
-      }
-    },
-    "/v1/workspace/default-sharing-preferences": {
-      "get": {
-        "operationId": "get_default_sharing_preferences_v1_workspace_default_sharing_preferences_get",
-        "summary": "Get Default Sharing Preferences",
-        "description": "Get the user's default sharing preferences.",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DefaultSharingPreferencesResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Workspace"
-        ]
-      },
-      "post": {
-        "operationId": "update_default_sharing_preferences_v1_workspace_default_sharing_preferences_post",
-        "summary": "Update Default Sharing Preferences",
-        "description": "Update the user's default sharing preferences.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_update_default_sharing_preferences_v1_workspace_default_sharing_preferences_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Workspace"
-        ]
-      }
-    },
-    "/v1/workspace/share-options": {
-      "get": {
-        "operationId": "get_share_options_v1_workspace_share_options_get",
-        "summary": "Get Share Options",
-        "description": "Get the share options for a workspace.",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ShareOptionResponseModel"
-                  },
-                  "title": "Response Get Share Options V1 Workspace Share Options Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Workspace"
-        ]
       }
     },
     "/v1/workspace/webhooks": {
@@ -10414,7 +10278,7 @@
           }
         },
         "tags": [
-          "Workspace"
+          "workspace"
         ],
         "x-fern-sdk-group-name": "webhooks",
         "x-fern-sdk-method-name": "list"
@@ -12694,6 +12558,16 @@
         "description": "Uploads a file or reference a webpage to use as part of the shared knowledge base",
         "parameters": [
           {
+            "name": "agent_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Agent Id"
+            }
+          },
+          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -12908,6 +12782,16 @@
         "description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
         "parameters": [
           {
+            "name": "agent_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Agent Id"
+            }
+          },
+          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -12970,6 +12854,15 @@
         "summary": "Add To Knowledge Base",
         "description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
         "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Agent Id"
+            }
+          },
           {
             "name": "xi-api-key",
             "in": "header",
@@ -13350,6 +13243,16 @@
                 "21m00Tcm4TlvDq8ikWAM"
               ],
               "title": "Documentation Id"
+            }
+          },
+          {
+            "name": "agent_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Agent Id"
             }
           },
           {
@@ -13812,6 +13715,15 @@
                 "21m00Tcm4TlvDq8ikWAM"
               ],
               "title": "Documentation Id"
+            }
+          },
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Agent Id"
             }
           },
           {
@@ -17367,7 +17279,9 @@
           "description": "This is a test dictionary",
           "id": "5xM3yVvZQKV0EfqQpLrJ",
           "name": "My Dictionary",
-          "version_id": "5xM3yVvZQKV0EfqQpLrJ"
+          "permission_on_resource": "admin",
+          "version_id": "5xM3yVvZQKV0EfqQpLrJ",
+          "version_rules_num": 5
         },
         "required": [
           "id",
@@ -17882,6 +17796,12 @@
           }
         },
         "example": {
+          "access_info": {
+            "creator_email": "john@example.com",
+            "creator_name": "John Doe",
+            "is_creator": true,
+            "role": "admin"
+          },
           "agent_id": "J3Pbu5gP6NNKBscdCdwB",
           "created_at_unix_secs": 1716153600,
           "name": "My Agent",
@@ -18786,7 +18706,7 @@
             "title": "From Document"
           },
           "from_content_json": {
-            "description": "An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
+            "description": "\n    An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.\n    \n    Example:\n    [{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]\n    ",
             "type": "string",
             "examples": [
               "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
@@ -19607,7 +19527,7 @@
             "title": "From Document"
           },
           "from_content_json": {
-            "description": "An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
+            "description": "\n    An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.\n    \n    Example:\n    [{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]\n    ",
             "type": "string",
             "examples": [
               "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
@@ -21244,6 +21164,14 @@
               }
             ],
             "title": "From Document"
+          },
+          "from_content_json": {
+            "description": "\n    An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.\n    \n    Example:\n    [{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]\n    ",
+            "type": "string",
+            "examples": [
+              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
+            ],
+            "title": "From Content Json"
           },
           "auto_convert": {
             "description": "Whether to auto convert the Studio project to audio or not.",
@@ -23492,6 +23420,14 @@
             ],
             "title": "From Document"
           },
+          "from_content_json": {
+            "description": "\n    An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.\n    \n    Example:\n    [{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]\n    ",
+            "type": "string",
+            "examples": [
+              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
+            ],
+            "title": "From Content Json"
+          },
           "auto_convert": {
             "description": "Whether to auto convert the Studio project to audio or not.",
             "type": "boolean",
@@ -23751,36 +23687,6 @@
         ],
         "title": "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post"
       },
-      "Body_update_default_sharing_preferences_v1_workspace_default_sharing_preferences_post": {
-        "type": "object",
-        "properties": {
-          "default_sharing_groups": {
-            "description": "List of group IDs to share with by default",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Default Sharing Groups"
-          }
-        },
-        "required": [
-          "default_sharing_groups"
-        ],
-        "title": "Body_update_default_sharing_preferences_v1_workspace_default_sharing_preferences_post"
-      },
-      "Body_update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post": {
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "type": "boolean",
-            "title": "Enabled"
-          }
-        },
-        "required": [
-          "enabled"
-        ],
-        "title": "Body_update_user_auto_provisioning_v1_workspace_user_auto_provisioning_post"
-      },
       "BreakdownTypes": {
         "description": "How to break down the information. Cannot be \"user\" or \"api_key\" if include_workspace_metrics is False.",
         "type": "string",
@@ -23795,7 +23701,9 @@
           "product_type",
           "model",
           "resource",
-          "request_queue"
+          "request_queue",
+          "region",
+          "subresource_id"
         ],
         "title": "BreakdownTypes"
       },
@@ -23848,6 +23756,17 @@
           },
           "skip_turn": {
             "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "play_keypad_touch_tone": {
+            "description": "The play DTMF tool",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/SystemToolConfig-Input"
@@ -23909,6 +23828,17 @@
           },
           "skip_turn": {
             "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "play_keypad_touch_tone": {
+            "description": "The play DTMF tool",
             "anyOf": [
               {
                 "$ref": "#/components/schemas/SystemToolConfig-Output"
@@ -24225,6 +24155,7 @@
         "example": {
           "chapter_id": "aw1NgEzBg83R7vgmiJt3",
           "chapter_snapshot_id": "aw1NgEzBg83R7vgmiJt1",
+          "character_alignments": [],
           "created_at_unix": 1714204800,
           "name": "My Chapter Snapshot",
           "project_id": "aw1NgEzBg83R7vgmiJt2"
@@ -24431,16 +24362,18 @@
         "example": {
           "can_be_downloaded": true,
           "chapter_id": "aw1NgEzBg83R7vgmiJt6",
+          "content": {
+            "blocks": []
+          },
           "conversion_progress": 0.5,
           "last_conversion_date_unix": 1714204800,
-          "last_conversion_error": "Error message",
           "name": "Chapter 1",
-          "state": "converting",
+          "state": "default",
           "statistics": {
-            "characters_converted": 500,
-            "characters_unconverted": 1000,
-            "paragraphs_converted": 20,
-            "paragraphs_unconverted": 10
+            "characters_converted": 200,
+            "characters_unconverted": 100,
+            "paragraphs_converted": 5,
+            "paragraphs_unconverted": 3
           }
         },
         "required": [
@@ -26781,23 +26714,6 @@
         ],
         "title": "DataCollectionResultCommonModel"
       },
-      "DefaultSharingPreferencesResponseModel": {
-        "type": "object",
-        "properties": {
-          "default_sharing_groups": {
-            "description": "List of groups that the user shares with by default",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WorkspaceGroupResponseModel"
-            },
-            "title": "Default Sharing Groups"
-          }
-        },
-        "required": [
-          "default_sharing_groups"
-        ],
-        "title": "DefaultSharingPreferencesResponseModel"
-      },
       "DeleteChapterResponseModel": {
         "type": "object",
         "properties": {
@@ -27852,11 +27768,30 @@
           }
         },
         "example": {
+          "allowed_to_extend_character_limit": true,
+          "billing_period": "monthly_period",
+          "can_extend_character_limit": true,
+          "can_extend_voice_limit": true,
+          "can_use_instant_voice_cloning": true,
+          "can_use_professional_voice_cloning": true,
+          "character_count": 1000,
+          "character_limit": 10000,
+          "character_refresh_period": "monthly_period",
+          "currency": "usd",
           "has_open_invoices": false,
+          "max_character_limit_extension": 10000,
+          "next_character_count_reset_unix": 1738356858,
           "next_invoice": {
             "amount_due_cents": 1000,
             "next_payment_attempt_unix": 1738356858
-          }
+          },
+          "professional_voice_limit": 1,
+          "professional_voice_slots_used": 0,
+          "status": "active",
+          "tier": "starter",
+          "voice_add_edit_counter": 0,
+          "voice_limit": 10,
+          "voice_slots_used": 1
         },
         "required": [
           "tier",
@@ -28426,6 +28361,24 @@
           }
         },
         "example": {
+          "agents": [
+            {
+              "access_info": {
+                "creator_email": "john@example.com",
+                "creator_name": "John Doe",
+                "is_creator": true,
+                "role": "admin"
+              },
+              "agent_id": "J3Pbu5gP6NNKBscdCdwB",
+              "created_at_unix_secs": 1716153600,
+              "name": "My Agent",
+              "tags": [
+                "Customer Support",
+                "Technical Help",
+                "Eleven"
+              ]
+            }
+          ],
           "has_more": false,
           "next_cursor": "123"
         },
@@ -29127,29 +29080,40 @@
         },
         "example": {
           "has_more": false,
-          "voices": {
-            "accent": "american",
-            "age": "young",
-            "category": "professional",
-            "cloned_by_count": 11,
-            "date_unix": 1714423232,
-            "description": "Perfectly calm, neutral and strong voice. Great for a young female protagonist.",
-            "descriptive": "calm",
-            "featured": false,
-            "free_users_allowed": true,
-            "gender": "Female",
-            "language": "en",
-            "live_moderation_enabled": false,
-            "name": "Alita",
-            "play_api_usage_character_count_1y": 12852,
-            "preview_url": "https://storage.googleapis.com/eleven-public-prod/wqkMCd9huxXHX1dy5mLJn4QEQHj1/voices/sB1b5zUrxQVAFl2PhZFp/55e71aac-5cb7-4b3d-8241-429388160509.mp3",
-            "public_owner_id": "63e84100a6bf7874ba37a1bab9a31828a379ec94b891b401653b655c5110880f",
-            "rate": 1,
-            "usage_character_count_1y": 12852,
-            "usage_character_count_7d": 12852,
-            "use_case": "characters_animation",
-            "voice_id": "sB1b5zUrxQVAFl2PhZFp"
-          }
+          "voices": [
+            {
+              "accent": "american",
+              "age": "young",
+              "category": "professional",
+              "cloned_by_count": 11,
+              "date_unix": 1714423232,
+              "description": "Perfectly calm, neutral and strong voice. Great for a young female protagonist.",
+              "descriptive": "calm",
+              "featured": false,
+              "free_users_allowed": true,
+              "gender": "Female",
+              "language": "en",
+              "live_moderation_enabled": false,
+              "name": "Alita",
+              "play_api_usage_character_count_1y": 12852,
+              "preview_url": "https://storage.googleapis.com/eleven-public-prod/wqkMCd9huxXHX1dy5mLJn4QEQHj1/voices/sB1b5zUrxQVAFl2PhZFp/55e71aac-5cb7-4b3d-8241-429388160509.mp3",
+              "public_owner_id": "63e84100a6bf7874ba37a1bab9a31828a379ec94b891b401653b655c5110880f",
+              "rate": 1,
+              "usage_character_count_1y": 12852,
+              "usage_character_count_7d": 12852,
+              "use_case": "characters_animation",
+              "verified_languages": [
+                {
+                  "accent": "american",
+                  "language": "en",
+                  "locale": "en-US",
+                  "model_id": "eleven_multilingual_v2",
+                  "preview_url": "https://storage.googleapis.com/eleven-public-prod/wqkMCd9huxXHX1dy5mLJn4QEQHj1/voices/sB1b5zUrxQVAFl2PhZFp/55e71aac-5cb7-4b3d-8241-429388160509.mp3"
+                }
+              ],
+              "voice_id": "sB1b5zUrxQVAFl2PhZFp"
+            }
+          ]
         },
         "required": [
           "voices",
@@ -29205,7 +29169,10 @@
           }
         },
         "example": {
-          "phone_number_id": "X3Pbu5gP6NNKBscdCdwB"
+          "label": "Sales Team",
+          "phone_number": "+1987654321",
+          "phone_number_id": "phone_456",
+          "provider": "sip_trunk"
         },
         "required": [
           "phone_number",
@@ -29252,7 +29219,10 @@
           }
         },
         "example": {
-          "phone_number_id": "X3Pbu5gP6NNKBscdCdwB"
+          "label": "Customer Support",
+          "phone_number": "+1234567890",
+          "phone_number_id": "phone_123",
+          "provider": "twilio"
         },
         "required": [
           "phone_number",
@@ -29306,7 +29276,7 @@
               "quality_check_on": false,
               "quality_check_on_when_bulk_convert": false,
               "state": "default",
-              "target_audience": "Young Adults",
+              "target_audience": "young adult",
               "title": "My Project",
               "volume_normalization": true
             }
@@ -29348,7 +29318,19 @@
         },
         "example": {
           "has_more": false,
-          "next_cursor": "5xM3yVvZQKV0EfqQpLr2"
+          "next_cursor": "5xM3yVvZQKV0EfqQpLr2",
+          "pronunciation_dictionaries": [
+            {
+              "created_by": "ar6633Es2kUjFXBdR1iVc9ztsXl1",
+              "creation_time_unix": 1714156800,
+              "description": "This is a test dictionary",
+              "id": "5xM3yVvZQKV0EfqQpLrJ",
+              "latest_version_id": "5xM3yVvZQKV0EfqQpLr2",
+              "latest_version_rules_num": 2,
+              "name": "My Dictionary",
+              "permission_on_resource": "admin"
+            }
+          ]
         },
         "required": [
           "pronunciation_dictionaries",
@@ -29438,7 +29420,8 @@
           "id": "5xM3yVvZQKV0EfqQpLrJ",
           "latest_version_id": "5xM3yVvZQKV0EfqQpLr2",
           "latest_version_rules_num": 2,
-          "name": "My Dictionary"
+          "name": "My Dictionary",
+          "permission_on_resource": "admin"
         },
         "required": [
           "id",
@@ -29447,8 +29430,7 @@
           "name",
           "permission_on_resource",
           "created_by",
-          "creation_time_unix",
-          "archived_time_unix"
+          "creation_time_unix"
         ],
         "title": "GetPronunciationDictionaryMetadataResponseModel"
       },
@@ -29573,139 +29555,145 @@
           }
         },
         "example": {
-          "voices": {
-            "available_for_tiers": [
-              "creator",
-              "enterprise"
-            ],
-            "category": "professional",
-            "description": "A warm, expressive voice with a touch of humor.",
-            "fine_tuning": {
-              "is_allowed_to_fine_tune": true,
-              "manual_verification_requested": false,
-              "state": {
-                "eleven_multilingual_v2": "fine_tuned"
-              },
-              "verification_attempts_count": 2,
-              "verification_failures": []
-            },
-            "high_quality_base_model_ids": [
-              "eleven_v2_flash",
-              "eleven_flash_v2",
-              "eleven_turbo_v2_5",
-              "eleven_multilingual_v2",
-              "eleven_v2_5_flash",
-              "eleven_flash_v2_5",
-              "eleven_turbo_v2"
-            ],
-            "is_legacy": false,
-            "is_mixed": false,
-            "is_owner": false,
-            "labels": {
-              "accent": "American",
-              "age": "middle-aged",
-              "description": "expressive",
-              "gender": "female",
-              "use_case": "social media"
-            },
-            "name": "Rachel",
-            "preview_url": "https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3",
-            "settings": {
-              "similarity_boost": 1,
-              "speed": 1,
-              "stability": 1,
-              "style": 0,
-              "use_speaker_boost": true
-            },
-            "sharing": {
+          "voices": [
+            {
+              "available_for_tiers": [
+                "creator",
+                "enterprise"
+              ],
               "category": "professional",
-              "cloned_by_count": 50,
-              "date_unix": 1714204800,
-              "description": "A female voice with a soft and friendly tone.",
-              "disable_at_unix": 1714204800,
-              "enabled_in_library": true,
-              "featured": true,
-              "financial_rewards_enabled": true,
-              "free_users_allowed": true,
-              "history_item_sample_id": "DCwhRBWXzGAHq8TQ4Fs18",
+              "description": "A warm, expressive voice with a touch of humor.",
+              "fine_tuning": {
+                "is_allowed_to_fine_tune": true,
+                "manual_verification_requested": false,
+                "state": {
+                  "eleven_multilingual_v2": "fine_tuned"
+                },
+                "verification_attempts_count": 2,
+                "verification_failures": []
+              },
+              "high_quality_base_model_ids": [
+                "eleven_v2_flash",
+                "eleven_flash_v2",
+                "eleven_turbo_v2_5",
+                "eleven_multilingual_v2",
+                "eleven_v2_5_flash",
+                "eleven_flash_v2_5",
+                "eleven_turbo_v2"
+              ],
+              "is_legacy": false,
+              "is_mixed": false,
+              "is_owner": false,
               "labels": {
                 "accent": "American",
-                "gender": "female"
-              },
-              "liked_by_count": 100,
-              "live_moderation_enabled": true,
-              "moderation_check": {
-                "captcha_checks": [
-                  0.95,
-                  0.98
-                ],
-                "captcha_ids": [
-                  "captcha1",
-                  "captcha2"
-                ],
-                "date_checked_unix": 1714204800,
-                "description_check": true,
-                "description_value": "A female voice with a soft and friendly tone.",
-                "name_check": true,
-                "name_value": "Rachel",
-                "sample_checks": [
-                  0.95,
-                  0.98
-                ],
-                "sample_ids": [
-                  "sample1",
-                  "sample2"
-                ]
+                "age": "middle-aged",
+                "description": "expressive",
+                "gender": "female",
+                "use_case": "social media"
               },
               "name": "Rachel",
-              "notice_period": 30,
-              "original_voice_id": "DCwhRBWXzGAHq8TQ4Fs18",
-              "public_owner_id": "DCwhRBWXzGAHq8TQ4Fs18",
-              "rate": 0.05,
-              "reader_app_enabled": true,
-              "reader_restricted_on": [
+              "preview_url": "https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3",
+              "settings": {
+                "similarity_boost": 1,
+                "speed": 1,
+                "stability": 1,
+                "style": 0,
+                "use_speaker_boost": true
+              },
+              "sharing": {
+                "category": "professional",
+                "cloned_by_count": 50,
+                "date_unix": 1714204800,
+                "description": "A female voice with a soft and friendly tone.",
+                "disable_at_unix": 1714204800,
+                "enabled_in_library": true,
+                "featured": true,
+                "financial_rewards_enabled": true,
+                "free_users_allowed": true,
+                "history_item_sample_id": "DCwhRBWXzGAHq8TQ4Fs18",
+                "labels": {
+                  "accent": "American",
+                  "gender": "female"
+                },
+                "liked_by_count": 100,
+                "live_moderation_enabled": true,
+                "moderation_check": {
+                  "captcha_checks": [
+                    0.95,
+                    0.98
+                  ],
+                  "captcha_ids": [
+                    "captcha1",
+                    "captcha2"
+                  ],
+                  "date_checked_unix": 1714204800,
+                  "description_check": true,
+                  "description_value": "A female voice with a soft and friendly tone.",
+                  "name_check": true,
+                  "name_value": "Rachel",
+                  "sample_checks": [
+                    0.95,
+                    0.98
+                  ],
+                  "sample_ids": [
+                    "sample1",
+                    "sample2"
+                  ]
+                },
+                "name": "Rachel",
+                "notice_period": 30,
+                "original_voice_id": "DCwhRBWXzGAHq8TQ4Fs18",
+                "public_owner_id": "DCwhRBWXzGAHq8TQ4Fs18",
+                "rate": 0.05,
+                "reader_app_enabled": true,
+                "reader_restricted_on": [
+                  {
+                    "resource_id": "FCwhRBWXzGAHq8TQ4Fs18",
+                    "resource_type": "read"
+                  }
+                ],
+                "review_status": "allowed",
+                "status": "enabled",
+                "voice_mixing_allowed": false,
+                "whitelisted_emails": [
+                  "example@example.com"
+                ]
+              },
+              "verified_languages": [
                 {
-                  "resource_id": "FCwhRBWXzGAHq8TQ4Fs18",
-                  "resource_type": "read"
+                  "accent": "american",
+                  "language": "en",
+                  "locale": "en-US",
+                  "model_id": "eleven_multilingual_v2",
+                  "preview_url": "https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3"
                 }
               ],
-              "review_status": "allowed",
-              "status": "enabled",
-              "voice_mixing_allowed": false,
-              "whitelisted_emails": [
-                "example@example.com"
-              ]
-            },
-            "verified_languages": {
-              "accent": "American",
-              "language": "en",
-              "model_id": "eleven_turbo_v2_5"
-            },
-            "voice_id": "21m00Tcm4TlvDq8ikWAM",
-            "voice_verification": {
-              "is_verified": true,
-              "language": "en",
-              "requires_verification": false,
-              "verification_attempts": [
-                {
-                  "accepted": true,
-                  "date_unix": 1714204800,
-                  "levenshtein_distance": 2,
-                  "recording": {
-                    "mime_type": "audio/mpeg",
-                    "recording_id": "CwhRBWXzGAHq8TQ4Fs17",
-                    "size_bytes": 1000000,
-                    "transcription": "Hello, how are you?",
-                    "upload_date_unix": 1714204800
-                  },
-                  "similarity": 0.95,
-                  "text": "Hello, how are you?"
-                }
-              ],
-              "verification_attempts_count": 0,
-              "verification_failures": []
+              "voice_id": "21m00Tcm4TlvDq8ikWAM",
+              "voice_verification": {
+                "is_verified": true,
+                "language": "en",
+                "requires_verification": false,
+                "verification_attempts": [
+                  {
+                    "accepted": true,
+                    "date_unix": 1714204800,
+                    "levenshtein_distance": 2,
+                    "recording": {
+                      "mime_type": "audio/mpeg",
+                      "recording_id": "CwhRBWXzGAHq8TQ4Fs17",
+                      "size_bytes": 1000000,
+                      "transcription": "Hello, how are you?",
+                      "upload_date_unix": 1714204800
+                    },
+                    "similarity": 0.95,
+                    "text": "Hello, how are you?"
+                  }
+                ],
+                "verification_attempts_count": 0,
+                "verification_failures": []
+              }
             }
-          }
+          ]
         },
         "required": [
           "voices"
@@ -30688,6 +30676,15 @@
           "usage_character_count_1y": 12852,
           "usage_character_count_7d": 12852,
           "use_case": "characters_animation",
+          "verified_languages": [
+            {
+              "accent": "american",
+              "language": "en",
+              "locale": "en-US",
+              "model_id": "eleven_multilingual_v2",
+              "preview_url": "https://storage.googleapis.com/eleven-public-prod/wqkMCd9huxXHX1dy5mLJn4QEQHj1/voices/sB1b5zUrxQVAFl2PhZFp/55e71aac-5cb7-4b3d-8241-429388160509.mp3"
+            }
+          ],
           "voice_id": "sB1b5zUrxQVAFl2PhZFp"
         },
         "required": [
@@ -30745,7 +30742,7 @@
           "success": true,
           "tools": [
             {
-              "description": "Gets tomorrow's forecasted weather conditions for a location.",
+              "description": "Gets current weather conditions for a location.",
               "inputSchema": {
                 "properties": {
                   "latitude": {
@@ -30763,10 +30760,14 @@
                 ],
                 "type": "object"
               },
-              "name": "weather_by_zapier_get_tomorrow"
+              "name": "weather_by_zapier_get_current"
             },
             {
               "description": "Description of tool2",
+              "inputSchema": {
+                "properties": {},
+                "type": "object"
+              },
               "name": "tool2"
             }
           ]
@@ -30825,7 +30826,8 @@
         "example": {
           "constant_value": "Constant value",
           "description": "My property",
-          "dynamic_variable": "Dynamic variable"
+          "dynamic_variable": "Dynamic variable",
+          "type": "string"
         },
         "required": [
           "type"
@@ -31488,7 +31490,8 @@
           "request_count",
           "ttfb_avg",
           "ttfb_p95",
-          "fiat_units_spent"
+          "fiat_units_spent",
+          "concurrency"
         ],
         "title": "MetricType"
       },
@@ -32166,6 +32169,19 @@
         ],
         "title": "PhoneNumberTransfer"
       },
+      "PlayDTMFToolConfig": {
+        "description": "Allows the agent to play DTMF tones during a phone call.\n\nThis tool can be used to interact with automated phone systems, such as\nnavigating phone menus, entering extensions, or inputting numeric codes.",
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "play_keypad_touch_tone",
+            "const": "play_keypad_touch_tone",
+            "title": "System Tool Type"
+          }
+        },
+        "title": "PlayDTMFToolConfig"
+      },
       "PodcastBulletinMode": {
         "type": "object",
         "properties": {
@@ -32822,15 +32838,33 @@
             "title": "Apply Text Normalization"
           },
           "experimental": {
-            "description": "Experimental features of the project.",
+            "description": "Experimental features for the project.",
             "type": "object",
             "title": "Experimental"
           }
         },
         "example": {
           "access_level": "viewer",
+          "apply_text_normalization": "auto",
           "author": "John Doe",
           "can_be_downloaded": true,
+          "chapters": [
+            {
+              "can_be_downloaded": true,
+              "chapter_id": "aw1NgEzBg83R7vgmiJt6",
+              "conversion_progress": 0.5,
+              "last_conversion_date_unix": 1714204800,
+              "last_conversion_error": "Error message",
+              "name": "Chapter 1",
+              "state": "converting",
+              "statistics": {
+                "characters_converted": 500,
+                "characters_unconverted": 1000,
+                "paragraphs_converted": 20,
+                "paragraphs_unconverted": 10
+              }
+            }
+          ],
           "content_type": "Novel",
           "cover_image_url": "https://example.com/cover.jpg",
           "create_date_unix": 1714204800,
@@ -32843,6 +32877,7 @@
           "default_paragraph_voice_id": "JBFqnCBsd6RMkjVDRZzb",
           "default_title_voice_id": "JBFqnCBsd6RMkjVDRZzb",
           "description": "This is a description of my project.",
+          "experimental": {},
           "fiction": "fiction",
           "genres": [
             "Novel",
@@ -32855,10 +32890,13 @@
           "name": "My Project",
           "original_publication_date": "2025-01-01",
           "project_id": "aw1NgEzBg83R7vgmiJt6",
+          "pronunciation_dictionary_locators": [],
+          "pronunciation_dictionary_versions": [],
           "quality_check_on": false,
           "quality_check_on_when_bulk_convert": false,
+          "quality_preset": "standard",
           "state": "default",
-          "target_audience": "Young Adults",
+          "target_audience": "young adult",
           "title": "My Project",
           "volume_normalization": true
         },
@@ -32879,8 +32917,7 @@
           "chapters",
           "pronunciation_dictionary_versions",
           "pronunciation_dictionary_locators",
-          "apply_text_normalization",
-          "experimental"
+          "apply_text_normalization"
         ],
         "title": "ProjectExtendedResponseModel"
       },
@@ -33203,7 +33240,7 @@
           "quality_check_on": false,
           "quality_check_on_when_bulk_convert": false,
           "state": "default",
-          "target_audience": "Young Adults",
+          "target_audience": "young adult",
           "title": "My Project",
           "volume_normalization": true
         },
@@ -33279,6 +33316,7 @@
           }
         },
         "example": {
+          "character_alignments": [],
           "created_at_unix": 1714204800,
           "name": "My Project Snapshot",
           "project_id": "aw1NgEzBg83R7vgmiJt6",
@@ -33838,6 +33876,7 @@
         "example": {
           "conversation_goal_prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
           "id": "1234567890",
+          "name": "Customer satisfaction check",
           "use_knowledge_base": false
         },
         "required": [
@@ -33964,7 +34003,8 @@
         },
         "example": {
           "id": "5xM3yVvZQKV0EfqQpLrJ",
-          "version_id": "5xM3yVvZQKV0EfqQpLr2"
+          "version_id": "5xM3yVvZQKV0EfqQpLr2",
+          "version_rules_num": 5
         },
         "required": [
           "id",
@@ -35836,9 +35876,9 @@
           }
         },
         "example": {
-          "char": "H",
           "end": 0.1,
-          "start": 0
+          "start": 0,
+          "text": "H"
         },
         "required": [
           "text"
@@ -35902,6 +35942,7 @@
           "words": [
             {
               "end": 0.5,
+              "logprob": -0.124,
               "speaker_id": "speaker_1",
               "start": 0,
               "text": "Hello",
@@ -35909,6 +35950,7 @@
             },
             {
               "end": 0.5,
+              "logprob": 0,
               "speaker_id": "speaker_1",
               "start": 0.5,
               "text": " ",
@@ -35916,6 +35958,7 @@
             },
             {
               "end": 1.2,
+              "logprob": -0.089,
               "speaker_id": "speaker_1",
               "start": 0.5,
               "text": "world!",
@@ -36010,29 +36053,29 @@
         "example": {
           "characters": [
             {
-              "char": "H",
               "end": 0.1,
-              "start": 0
+              "start": 0,
+              "text": "H"
             },
             {
-              "char": "e",
               "end": 0.2,
-              "start": 0.1
+              "start": 0.1,
+              "text": "e"
             },
             {
-              "char": "l",
               "end": 0.3,
-              "start": 0.2
+              "start": 0.2,
+              "text": "l"
             },
             {
-              "char": "l",
               "end": 0.4,
-              "start": 0.3
+              "start": 0.3,
+              "text": "l"
             },
             {
-              "char": "o",
               "end": 0.5,
-              "start": 0.4
+              "start": 0.4,
+              "text": "o"
             }
           ],
           "end": 0.5,
@@ -36522,6 +36565,7 @@
           "character_limit": 100000,
           "character_refresh_period": "monthly_period",
           "currency": "usd",
+          "max_character_limit_extension": 10000,
           "max_voice_add_edits": 230,
           "next_character_count_reset_unix": 1738356858,
           "professional_voice_limit": 1,
@@ -36766,6 +36810,7 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "play_keypad_touch_tone": "#/components/schemas/PlayDTMFToolConfig",
                 "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
                 "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
@@ -36786,12 +36831,20 @@
               },
               {
                 "$ref": "#/components/schemas/SkipTurnToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/PlayDTMFToolConfig"
               }
             ],
             "title": "Params"
           }
         },
         "example": {
+          "description": "Ends the current conversation",
+          "name": "end_call",
+          "params": {
+            "system_tool_type": "end_call"
+          },
           "type": "system"
         },
         "required": [
@@ -36835,6 +36888,7 @@
               "mapping": {
                 "end_call": "#/components/schemas/EndCallToolConfig",
                 "language_detection": "#/components/schemas/LanguageDetectionToolConfig",
+                "play_keypad_touch_tone": "#/components/schemas/PlayDTMFToolConfig",
                 "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
                 "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig"
@@ -36855,12 +36909,20 @@
               },
               {
                 "$ref": "#/components/schemas/SkipTurnToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/PlayDTMFToolConfig"
               }
             ],
             "title": "Params"
           }
         },
         "example": {
+          "description": "Ends the current conversation",
+          "name": "end_call",
+          "params": {
+            "system_tool_type": "end_call"
+          },
           "type": "system"
         },
         "required": [
@@ -37773,6 +37835,7 @@
           }
         },
         "example": {
+          "can_use_delayed_payment_methods": false,
           "first_name": "John",
           "is_api_key_hashed": false,
           "is_new_user": false,
@@ -37789,6 +37852,7 @@
             "character_limit": 100000,
             "character_refresh_period": "monthly_period",
             "currency": "usd",
+            "max_character_limit_extension": 10000,
             "max_voice_add_edits": 230,
             "next_character_count_reset_unix": 1738356858,
             "professional_voice_limit": 1,
@@ -38717,11 +38781,15 @@
               "example@example.com"
             ]
           },
-          "verified_languages": {
-            "accent": "American",
-            "language": "en",
-            "model_id": "eleven_turbo_v2_5"
-          },
+          "verified_languages": [
+            {
+              "accent": "american",
+              "language": "en",
+              "locale": "en-US",
+              "model_id": "eleven_multilingual_v2",
+              "preview_url": "https://storage.googleapis.com/eleven-public-prod/premade/voices/9BWtsMINqrJLrRacOk9x/405766b8-1f4e-4d3c-aba1-6f25333823ec.mp3"
+            }
+          ],
           "voice_id": "21m00Tcm4TlvDq8ikWAM",
           "voice_verification": {
             "is_verified": true,
@@ -40818,30 +40886,15 @@
           }
         },
         "example": {
-          "action_text": "Call",
-          "bg_color": "#ffffff",
-          "border_color": "#e1e1e1",
-          "border_radius": 10,
-          "btn_color": "#000000",
-          "btn_radius": 10,
-          "btn_text_color": "#ffffff",
-          "disable_banner": false,
-          "end_call_text": "End Call",
-          "expand_text": "Expand",
-          "expandable": "never",
-          "feedback_mode": "none",
-          "focus_color": "#000000",
-          "listening_text": "Listening...",
-          "mic_muting_enabled": false,
-          "shareable_page_show_terms": true,
-          "shareable_page_text": "Share",
-          "speaking_text": "Speaking...",
-          "start_call_text": "Start Call",
-          "terms_html": "<p>Terms and Conditions</p>",
-          "terms_key": "terms",
-          "terms_text": "Terms and Conditions",
-          "text_color": "#000000",
-          "variant": "full"
+          "first_message": "Hello! How can I help you today?",
+          "language": "en",
+          "language_presets": {},
+          "supported_language_overrides": [
+            "es",
+            "fr"
+          ],
+          "supports_text_only": true,
+          "text_only": false
         },
         "required": [
           "language"
@@ -41499,69 +41552,6 @@
         ],
         "title": "WorkspaceGroupByNameResponseModel"
       },
-      "WorkspaceGroupPermission": {
-        "type": "string",
-        "enum": [
-          "text_to_speech",
-          "speech_to_speech",
-          "voice_lab",
-          "sound_effects",
-          "projects",
-          "voiceover_studio",
-          "dubbing",
-          "audio_native",
-          "conversational_ai",
-          "voice_isolator",
-          "ai_speech_classifier",
-          "add_voice_from_voice_library",
-          "create_instant_voice_clone",
-          "create_professional_voice_clone",
-          "create_user_api_key",
-          "publish_studio_project"
-        ],
-        "title": "WorkspaceGroupPermission"
-      },
-      "WorkspaceGroupResponseModel": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "members": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Members"
-          },
-          "permissions": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/WorkspaceGroupPermission"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Permissions"
-          }
-        },
-        "required": [
-          "name",
-          "id",
-          "members",
-          "permissions"
-        ],
-        "title": "WorkspaceGroupResponseModel"
-      },
       "WorkspaceResourceType": {
         "description": "Resource types that can be shared in the workspace. The name always need to match the collection names",
         "type": "string",
@@ -41576,6 +41566,7 @@
           "convai_tools",
           "convai_settings",
           "convai_secrets",
+          "workspace_auth_connections",
           "music_latent",
           "convai_phone_numbers",
           "convai_mcp_servers",
@@ -41607,7 +41598,7 @@
               "name": "My Webhook",
               "usage": [
                 {
-                  "usage_type": "CONVAI_PLATFORM"
+                  "usage_type": "ConvAI Settings"
                 }
               ],
               "webhook_id": "123",
@@ -41758,6 +41749,10 @@
     {
       "name": "studios",
       "description": "Access, create and convert Studio Projects programmatically, only specifically whitelisted accounts can access the Projects API. If you need access please contact our sales team."
+    },
+    {
+      "name": "workspace",
+      "description": "Access to workspace related endpoints."
     }
   ]
 }
