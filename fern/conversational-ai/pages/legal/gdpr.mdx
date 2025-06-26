@@ -8,8 +8,8 @@ subtitle: Learn how ElevenLabs supports GDPR compliance and offers European data
 ElevenLabs is committed to robust data protection and compliance with regulations such as the General Data Protection Regulation (GDPR). For organizations operating in the EEA or Switzerland, ElevenLabs offers European data residency as a feature for Enterprise customers. This allows businesses to leverage our advanced voice AI technology while limiting the processing of data outside of the EEA.
 
 <Note>
-  With EU residency enabled, Gemini and Claude LLMs, as well as custom LLMs are available in
-  Conversational AI. An agreement to use OpenAI models with EU data residency mode is pending.
+  With EU residency enabled, Gemini, Claude and OpenAI LLMs as well as custom LLMs are available in
+  Conversational AI.
 </Note>
 
 Enabling European data residency may also provide the benefit of reduced latency for users located in Europe due to localized data processing
@@ -54,9 +54,13 @@ European data residency is an exclusive feature available to ElevenLabs Enterpri
 
 ## Developer Considerations
 
-For developers, the implementation of European data residency is primarily a back-end configuration managed by ElevenLabs for your Enterprise account.
+The European data residency environment is a separate ElevenLabs platforms available at
+`https://eu.residency.elevenlabs.io` - rerouting to the correct region **isn't done automatically**.
+Our team will set you up with a fresh account.
 
-- **API Endpoints**: Standard API endpoints and integration methods remain the same. Your application code typically does not require changes to benefit from European data residency once enabled for your account.
+- **API Endpoints**: Standard API endpoints and integration methods remain the same. However, you will need to use
+  API keys linked to your European data residency account. For API calls, you will need to hit the EU API with the
+  base URL `https://api.eu.residency.elevenlabs.io`. This ensures that all requests are processed within the European data residency environment.
 - **Data Handling**: While ElevenLabs manages the residency of data on our servers in accordance with your Enterprise agreement, developers should continue to adhere to best practices for data handling and GDPR compliance within their own applications and systems. This includes aspects like obtaining user consent, managing data subject rights requests, and ensuring data minimization.
 - **Zero Retention Mode**: Consider using Zero Retention Mode in conjunction with European data residency if minimizing data storage on ElevenLabs servers is a critical requirement for your use case.
 
@@ -85,8 +89,10 @@ For developers, the implementation of European data residency is primarily a bac
     ElevenLabs adheres to.
   </Accordion>
   <Accordion title="Do I need to change my API calls or SDK usage?">
-    No, typically no changes are required in your application code or API integration. European data
-    residency is configured at the account level by ElevenLabs.
+    Yes, the API base URL will change to `https://api.eu.residency.elevenlabs.io` and you will need
+    to use API keys associated with your European data residency account. For the SDK, you can
+    change the base URL by changing the environment parameter when you initialize the client. Other
+    than that, the API functionality remains consistent.
   </Accordion>
 </AccordionGroup>
 
