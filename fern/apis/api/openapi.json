@@ -18212,6 +18212,20 @@
         ],
         "title": "AudioWithTimestampsResponseModel"
       },
+      "AuthConnectionLocator": {
+        "description": "Used to reference an auth connection from the workspace's auth connection store.",
+        "type": "object",
+        "properties": {
+          "auth_connection_id": {
+            "type": "string",
+            "title": "Auth Connection Id"
+          }
+        },
+        "required": [
+          "auth_connection_id"
+        ],
+        "title": "AuthConnectionLocator"
+      },
       "AuthSettings": {
         "type": "object",
         "properties": {
@@ -39677,6 +39691,17 @@
               ]
             },
             "title": "Request Headers"
+          },
+          "auth_connection": {
+            "description": "Optional auth connection to use for authentication with this webhook",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AuthConnectionLocator"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "example": {
@@ -39775,6 +39800,17 @@
               ]
             },
             "title": "Request Headers"
+          },
+          "auth_connection": {
+            "description": "Optional auth connection to use for authentication with this webhook",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AuthConnectionLocator"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "example": {
