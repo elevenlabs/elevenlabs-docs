@@ -5,26 +5,15 @@ subtitle: Use the ElevenLabs Provider in the Vercel AI SDK to transcribe speech 
 
 # ElevenLabs Provider
 
-The [ElevenLabs](https://elevenlabs.io/) provider contains language model support for the ElevenLabs transcription API.
+The [ElevenLabs provider](https://ai-sdk.dev/providers/ai-sdk-providers/elevenlabs) provides support for the [ElevenLabs transcription API](https://elevenlabs.io/speech-to-text).
 
 ## Setup
 
-The ElevenLabs provider is available in the `@ai-sdk/elevenlabs` module. You can install it with
+The ElevenLabs provider is available in the `@ai-sdk/elevenlabs` module. You can install it with npm:
 
-<CodeBlocks>
-    ```pnpm
-    pnpm add @ai-sdk/elevenlabs
-    ```
-
-    ```npm
-    npm install @ai-sdk/elevenlabs
-    ```
-
-    ```yarn
-    yarn add @ai-sdk/elevenlabs
-    ```
-
-</CodeBlocks>
+```npm
+npm install @ai-sdk/elevenlabs
+```
 
 ## Provider Instance
 
@@ -76,7 +65,7 @@ const model = elevenlabs.transcription('scribe_v1');
 
 You can also pass additional provider-specific options using the `providerOptions` argument. For example, supplying the input language in ISO-639-1 (e.g. `en`) format can sometimes improve transcription performance if known beforehand.
 
-```ts highlight="6"
+```ts {6}
 import { elevenlabs } from '@ai-sdk/elevenlabs';
 import { experimental_transcribe as transcribe } from 'ai';
 
@@ -125,10 +114,3 @@ The following provider options are available:
   Allowed values: `'pcm_s16le_16'`, `'other'`.
   For `'pcm_s16le_16'`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order.
   Latency will be lower than with passing an encoded waveform.
-
-### Model Capabilities
-
-| Model                    | Transcription       | Duration            | Segments            | Language            |
-| ------------------------ | ------------------- | ------------------- | ------------------- | ------------------- |
-| `scribe_v1`              | <Check size={18} /> | <Check size={18} /> | <Check size={18} /> | <Check size={18} /> |
-| `scribe_v1_experimental` | <Check size={18} /> | <Check size={18} /> | <Check size={18} /> | <Check size={18} /> |
