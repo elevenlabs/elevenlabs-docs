@@ -144,8 +144,8 @@ The Zendesk API requires Basic authentication. You need to create a properly for
 The integration with zendesk employs three webhook tools to create the support agent. Use the tabs below to review each tool's configuration.
 
 <Tabs>
-  <Tab title="get_ticket_comments">
-    **Name:** get_ticket_comments  
+  <Tab title="zendesk_get_ticket_comments">
+    **Name:** zendesk_get_ticket_comments  
     **Description:** Retrieves the comments of a ticket.  
     **Method:** GET  
     **URL:** `https://your-subdomain.zendesk.com/api/v2/tickets/{ticket_id}/comments.json`
@@ -157,10 +157,56 @@ The integration with zendesk employs three webhook tools to create the support a
     **Path Parameters:**
     - **ticket_id:** Extract the value from the `id` field in the get_resolved_tickets results.
 
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "type": "webhook",
+      "name": "zendesk_get_ticket_comments",
+      "description": "Retrieves the comments of a ticket.",
+      "api_schema": {
+        "url": "https://your-subdomain.zendesk.com/api/v2/tickets/{ticket_id}/comments.json",
+        "method": "GET",
+        "path_params_schema": [
+          {
+            "id": "ticket_id",
+            "type": "string",
+            "description": "Extract the value from the id field in the get_resolved_tickets results.",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": false,
+            "value_type": "llm_prompt"
+          }
+        ],
+        "query_params_schema": [],
+        "request_body_schema": null,
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "YOUR SECRET"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
   </Tab>
 
-  <Tab title="get_resolved_tickets">
-    **Name:** get_resolved_tickets  
+  <Tab title="zendesk_get_resolved_tickets">
+    **Name:** zendesk_get_resolved_tickets  
     **Description:** Retrieves all resolved support tickets from Zendesk.  
     **Method:** GET  
     **URL:** `https://your-subdomain.zendesk.com/api/v2/search.json?query=type:ticket+status:solved`
@@ -168,6 +214,41 @@ The integration with zendesk employs three webhook tools to create the support a
     **Headers:**
     - **Content-Type:** `application/json`
     - **Authorization:** *(Secret: `zendesk_key`)*
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "type": "webhook",
+      "name": "zendesk_get_resolved_tickets",
+      "description": "Retrieves all resolved support tickets from Zendesk.",
+      "api_schema": {
+        "url": "https://your-subdomain.zendesk.com/api/v2/search.json?query=type:ticket+status:solved",
+        "method": "GET",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": null,
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "YOUR SECRET"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
 
   </Tab>
 
@@ -189,6 +270,108 @@ The integration with zendesk employs three webhook tools to create the support a
       - **requester:**
         - **name:** The full name of the requester.
         - **email:** A valid email address.
+
+    **Tool JSON:**
+
+    Here is the tool JSON that can be copied into the tool config:
+
+    ```json
+    {
+      "type": "webhook",
+      "name": "zendesk_open_ticket",
+      "description": "API endpoint to open a customer support ticket\nMake sure the authorization header is formated as \"Authorization: Basic <auth>\".",
+      "api_schema": {
+        "url": "https://your-subdomain.zendesk.com/api/v2/tickets.js",
+        "method": "POST",
+        "path_params_schema": [],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "body",
+          "type": "object",
+          "description": "Details for the support ticket",
+          "required": false,
+          "properties": [
+            {
+              "id": "ticket",
+              "type": "object",
+              "description": "This is the main ticket body which contains all of the information needed to open a ticket.",
+              "required": true,
+              "properties": [
+                {
+                  "id": "comment",
+                  "type": "object",
+                  "description": "This is the comment with information about the issue.",
+                  "required": true,
+                  "properties": [
+                    {
+                      "id": "body",
+                      "type": "string",
+                      "description": "Body of the issue. Include all relevant details for the issue. ",
+                      "dynamic_variable": "",
+                      "constant_value": "",
+                      "required": true,
+                      "value_type": "llm_prompt"
+                    }
+                  ]
+                },
+                {
+                  "id": "subject",
+                  "type": "string",
+                  "description": "Create a short subject line for the support issue. Add \"DEMO: \" before the subject.",
+                  "dynamic_variable": "",
+                  "constant_value": "",
+                  "required": true,
+                  "value_type": "llm_prompt"
+                },
+                {
+                  "id": "requester",
+                  "type": "object",
+                  "description": "The details of the support requester",
+                  "required": true,
+                  "properties": [
+                    {
+                      "id": "email",
+                      "type": "string",
+                      "description": "The email address of the requester. This should look like \njohnsmith@hotmail.com\nYou MUST use the @ symbol and remove any spaces.",
+                      "dynamic_variable": "",
+                      "constant_value": "",
+                      "required": true,
+                      "value_type": "llm_prompt"
+                    },
+                    {
+                      "id": "name",
+                      "type": "string",
+                      "description": "The full name of the requester. ",
+                      "dynamic_variable": "",
+                      "constant_value": "",
+                      "required": true,
+                      "value_type": "llm_prompt"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "secret",
+            "name": "Authorization",
+            "secret_id": "YOUR SECRET"
+          },
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 20,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
 
   </Tab>
 </Tabs>
