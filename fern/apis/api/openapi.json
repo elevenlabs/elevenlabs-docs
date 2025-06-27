@@ -9240,9 +9240,9 @@
         "x-fern-sdk-method-name": "download"
       }
     },
-    "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/": {
+    "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}": {
       "get": {
-        "operationId": "Get_metadata_for_a_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id___get",
+        "operationId": "Get_metadata_for_a_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__get",
         "summary": "Get Metadata For A Pronunciation Dictionary",
         "description": "Get metadata for a pronunciation dictionary",
         "parameters": [
@@ -9308,9 +9308,9 @@
         "x-fern-sdk-method-name": "get"
       }
     },
-    "/v1/pronunciation-dictionaries/": {
+    "/v1/pronunciation-dictionaries": {
       "get": {
-        "operationId": "Get_Pronunciation_Dictionaries_v1_pronunciation_dictionaries__get",
+        "operationId": "Get_Pronunciation_Dictionaries_v1_pronunciation_dictionaries_get",
         "summary": "Get Pronunciation Dictionaries",
         "description": "Get a list of the pronunciation dictionaries you have access to and their metadata",
         "parameters": [
@@ -12429,9 +12429,9 @@
         "x-fern-sdk-method-name": "update"
       }
     },
-    "/v1/convai/phone-numbers/": {
+    "/v1/convai/phone-numbers": {
       "get": {
-        "operationId": "List_phone_numbers_v1_convai_phone_numbers__get",
+        "operationId": "List_phone_numbers_v1_convai_phone_numbers_get",
         "summary": "List Phone Numbers",
         "description": "Retrieve all Phone Numbers",
         "parameters": [
@@ -12478,7 +12478,7 @@
                       }
                     }
                   },
-                  "title": "Response List Phone Numbers V1 Convai Phone Numbers  Get"
+                  "title": "Response List Phone Numbers V1 Convai Phone Numbers Get"
                 }
               }
             }
@@ -16350,6 +16350,22 @@
             }
           },
           {
+            "name": "remove_background_noise",
+            "in": "query",
+            "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
+            "required": false,
+            "schema": {
+              "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
+              "type": "boolean",
+              "default": false,
+              "embed": true,
+              "examples": [
+                true
+              ],
+              "title": "Remove Background Noise"
+            }
+          },
+          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -16368,15 +16384,6 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -21684,21 +21691,6 @@
           "files"
         ],
         "title": "Body_Request_manual_verification_v1_voices_pvc__voice_id__verification_post"
-      },
-      "Body_Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get": {
-        "type": "object",
-        "properties": {
-          "remove_background_noise": {
-            "description": "If set will remove background noise for voice samples using our audio isolation model. If the samples do not include background noise, it can make the quality worse.",
-            "type": "boolean",
-            "default": false,
-            "examples": [
-              true
-            ],
-            "title": "Remove Background Noise"
-          }
-        },
-        "title": "Body_Retrieve_voice_sample_audio_v1_voices_pvc__voice_id__samples__sample_id__audio_get"
       },
       "Body_Run_PVC_training_v1_voices_pvc__voice_id__train_post": {
         "type": "object",
