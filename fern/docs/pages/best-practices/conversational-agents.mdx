@@ -66,7 +66,8 @@ This guide will walk you through connecting to the multi-context WebSocket, mana
 When a user interrupts your agent, you should [close the current context](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Close-Context) and [create a new one](/docs/api-reference/multi-context-text-to-speech/v-1-text-to-speech-voice-id-multi-stream-input#send.Initialise-Context):
 
 <CodeBlocks>
-```python 
+
+```python
 async def handle_interruption(websocket, old_context_id, new_context_id, new_response):
     # Close the existing context that was interrupted
     await websocket.send(json.dumps({
@@ -74,12 +75,12 @@ async def handle_interruption(websocket, old_context_id, new_context_id, new_res
         "close_context": True
     }))
     print(f"Closed interrupted context '{old_context_id}'")
-    
+
     # Create a new context for the new response
     await send_text_in_context(websocket, new_response, new_context_id)
 ```
 
-```
+```javascript
 function handleInterruption(websocket: WebSocket, oldContextId: string, newContextId: string, newResponse: string) {
   // Close the existing context that was interrupted
   websocket.send(JSON.stringify({
@@ -267,7 +268,7 @@ async def conversation_agent_demo():
     async with websockets.connect(
         WEBSOCKET_URI,
         max_size=16 * 1024 * 1024,
-        extra_headers={"xi-api-key": ELEVENLABS_API_KEY}
+        additional_headers={"xi-api-key": ELEVENLABS_API_KEY}
     ) as websocket:
         # Start receiving messages in background
         receive_task = asyncio.create_task(receive_messages(websocket))
