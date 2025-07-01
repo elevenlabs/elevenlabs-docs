@@ -98,7 +98,7 @@ paths:
           query-parameters:
             output_format: mp3_44100_128
           request:
-            text: "The first move is what sets everything in motion."
+            text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
         - required: true
@@ -118,7 +118,7 @@ paths:
           query-parameters:
             output_format: mp3_44100_128
           request:
-            text: "The first move is what sets everything in motion."
+            text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
         - required: true
@@ -135,7 +135,7 @@ paths:
           query-parameters:
             output_format: mp3_44100_128
           request:
-            text: "The first move is what sets everything in motion."
+            text: 'The first move is what sets everything in motion.'
             model_id: eleven_multilingual_v2
       parameters:
         - required: true
@@ -200,8 +200,8 @@ paths:
           request:
             inputs:
               [
-                { text: "Knock knock", voice_id: "JBFqnCBsd6RMkjVDRZzb" },
-                { text: "Who is there?", voice_id: "Aw4FAjKCGjjNkVhN1Xmq" },
+                { text: 'Knock knock', voice_id: 'JBFqnCBsd6RMkjVDRZzb' },
+                { text: 'Who is there?', voice_id: 'Aw4FAjKCGjjNkVhN1Xmq' },
               ]
   /v1/text-to-dialogue/stream:
     post:
@@ -213,8 +213,8 @@ paths:
           request:
             inputs:
               [
-                { text: "Knock knock", voice_id: "JBFqnCBsd6RMkjVDRZzb" },
-                { text: "Who is there?", voice_id: "Aw4FAjKCGjjNkVhN1Xmq" },
+                { text: 'Knock knock', voice_id: 'JBFqnCBsd6RMkjVDRZzb' },
+                { text: 'Who is there?', voice_id: 'Aw4FAjKCGjjNkVhN1Xmq' },
               ]
   /v1/sound-generation:
     post:
@@ -223,7 +223,7 @@ paths:
         - headers:
             xi-api-key: xi-api-key
           request:
-            text: "Spacious braam suitable for high-impact movie trailer moments"
+            text: 'Spacious braam suitable for high-impact movie trailer moments'
   /v1/history:
     get:
       summary: Get generated items
@@ -336,7 +336,7 @@ paths:
   /v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}/stream:
     post:
       responses:
-        "200":
+        '200':
           content:
             audio/mpeg:
               schema:
@@ -499,22 +499,14 @@ paths:
         - headers:
             xi-api-key: xi-api-key
           path-parameters:
-            conversation_id: "123"
+            conversation_id: '123'
           response:
             body:
-              agent_id: "123"
-              conversation_id: "123"
-              status: "processing"
-              transcript:
-                [
-                  {
-                    role: "user",
-                    message: "Hello, how are you?",
-                    time_in_call_secs: 10,
-                  },
-                ]
-              metadata:
-                { "start_time_unix_secs": 1714423232, "call_duration_secs": 10 }
+              agent_id: '123'
+              conversation_id: '123'
+              status: 'processing'
+              transcript: [{ role: 'user', message: 'Hello, how are you?', time_in_call_secs: 10 }]
+              metadata: { 'start_time_unix_secs': 1714423232, 'call_duration_secs': 10 }
               has_audio: true
               has_user_audio: true
               has_response_audio: true
@@ -855,9 +847,9 @@ components:
       x-fern-type-name: UpdateAgentRequest
       properties:
         conversation_config:
-          $ref: "#/components/schemas/ConversationalConfigAPIModel-Input"
+          $ref: '#/components/schemas/ConversationalConfigAPIModel-Input'
         platform_settings:
-          $ref: "#/components/schemas/AgentPlatformSettingsRequestModel"
+          $ref: '#/components/schemas/AgentPlatformSettingsRequestModel'
     OutputFormat:
       type: string
       enum:
