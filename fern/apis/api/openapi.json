@@ -19015,7 +19015,8 @@
                   "blank",
                   "book",
                   "article",
-                  "genfm"
+                  "genfm",
+                  "video"
                 ]
               },
               {
@@ -19836,7 +19837,8 @@
                   "blank",
                   "book",
                   "article",
-                  "genfm"
+                  "genfm",
+                  "video"
                 ]
               },
               {
@@ -22113,6 +22115,20 @@
             "default": false,
             "title": "Diarize"
           },
+          "diarization_threshold": {
+            "description": "Diarization threshold to apply during speaker diarization. A higher value means there will be a lower chance of one speaker being diarized as two different speakers but also a higher chance of two different speakers being diarized as one speaker (less total speakers predicted). A low value means there will be a higher chance of one speaker being diarized as two different speakers but also a lower chance of two different speakers being diarized as one speaker (more total speakers predicted). Can only be set when diarize=True and num_speakers=None. Defaults to None, in which case we will choose a threshold based on the model_id (0.22 usually).",
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 0.4,
+                "minimum": 0.1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Diarization Threshold"
+          },
           "additional_formats": {
             "description": "A list of additional formats to export the transcript to.",
             "$ref": "#/components/schemas/AdditionalFormats",
@@ -24075,6 +24091,18 @@
             ],
             "title": "State"
           },
+          "has_video": {
+            "description": "Whether the chapter has a video.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Has Video"
+          },
           "statistics": {
             "description": "The statistics of the chapter.",
             "anyOf": [
@@ -24337,6 +24365,18 @@
               "converting"
             ],
             "title": "State"
+          },
+          "has_video": {
+            "description": "Whether the chapter has a video.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Has Video"
           },
           "statistics": {
             "description": "The statistics of the chapter.",
@@ -28160,11 +28200,17 @@
               "$ref": "#/components/schemas/ForcedAlignmentWordResponseModel"
             },
             "title": "Words"
+          },
+          "loss": {
+            "description": "The average alignment loss/confidence score for the entire transcript, calculated from all characters.",
+            "type": "number",
+            "title": "Loss"
           }
         },
         "required": [
           "characters",
-          "words"
+          "words",
+          "loss"
         ],
         "title": "ForcedAlignmentResponseModel"
       },
@@ -28186,17 +28232,24 @@
             "description": "The end time of the word in seconds.",
             "type": "number",
             "title": "End"
+          },
+          "loss": {
+            "description": "The average alignment loss/confidence score for this word, calculated from its constituent characters.",
+            "type": "number",
+            "title": "Loss"
           }
         },
         "example": {
           "end": 1.02,
+          "loss": 0.12,
           "start": 0,
           "text": "Hello"
         },
         "required": [
           "text",
           "start",
-          "end"
+          "end",
+          "loss"
         ],
         "title": "ForcedAlignmentWordResponseModel"
       },
@@ -32774,7 +32827,8 @@
                   "blank",
                   "book",
                   "article",
-                  "genfm"
+                  "genfm",
+                  "video"
                 ]
               },
               {
@@ -33192,7 +33246,8 @@
                   "blank",
                   "book",
                   "article",
-                  "genfm"
+                  "genfm",
+                  "video"
                 ]
               },
               {
