@@ -28200,11 +28200,17 @@
               "$ref": "#/components/schemas/ForcedAlignmentWordResponseModel"
             },
             "title": "Words"
+          },
+          "loss": {
+            "description": "The average alignment loss/confidence score for the entire transcript, calculated from all characters.",
+            "type": "number",
+            "title": "Loss"
           }
         },
         "required": [
           "characters",
-          "words"
+          "words",
+          "loss"
         ],
         "title": "ForcedAlignmentResponseModel"
       },
@@ -28226,17 +28232,24 @@
             "description": "The end time of the word in seconds.",
             "type": "number",
             "title": "End"
+          },
+          "loss": {
+            "description": "The average alignment loss/confidence score for this word, calculated from its constituent characters.",
+            "type": "number",
+            "title": "Loss"
           }
         },
         "example": {
           "end": 1.02,
+          "loss": 0.12,
           "start": 0,
           "text": "Hello"
         },
         "required": [
           "text",
           "start",
-          "end"
+          "end",
+          "loss"
         ],
         "title": "ForcedAlignmentWordResponseModel"
       },
