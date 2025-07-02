@@ -12102,9 +12102,9 @@
         "x-fern-sdk-method-name": "create"
       }
     },
-    "/v1/convai/phone-numbers/create": {
+    "/v1/convai/phone-numbers": {
       "post": {
-        "operationId": "Import_phone_number_v1_convai_phone_numbers_create_post",
+        "operationId": "Import_phone_number_v1_convai_phone_numbers_post",
         "summary": "Import Phone Number",
         "description": "Import Phone Number from provider configuration (Twilio or SIP trunk)",
         "parameters": [
@@ -12138,7 +12138,7 @@
                     "$ref": "#/components/schemas/CreateTwilioPhoneNumberRequest"
                   },
                   {
-                    "$ref": "#/components/schemas/CreateSIPTrunkPhoneNumberRequest"
+                    "$ref": "#/components/schemas/CreateSIPTrunkPhoneNumberRequestV2"
                   }
                 ],
                 "title": "Phone Request"
@@ -12176,6 +12176,79 @@
           "phone_numbers"
         ],
         "x-fern-sdk-method-name": "create"
+      },
+      "get": {
+        "operationId": "List_phone_numbers_v1_convai_phone_numbers_get",
+        "summary": "List Phone Numbers",
+        "description": "Retrieve all Phone Numbers",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
+                      },
+                      {
+                        "$ref": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                      }
+                    ],
+                    "discriminator": {
+                      "propertyName": "provider",
+                      "mapping": {
+                        "twilio": "#/components/schemas/GetPhoneNumberTwilioResponseModel",
+                        "sip_trunk": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
+                      }
+                    }
+                  },
+                  "title": "Response List Phone Numbers V1 Convai Phone Numbers Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "phone_numbers"
+        ],
+        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/phone-numbers/{phone_number_id}": {
@@ -12427,81 +12500,6 @@
           "phone_numbers"
         ],
         "x-fern-sdk-method-name": "update"
-      }
-    },
-    "/v1/convai/phone-numbers": {
-      "get": {
-        "operationId": "List_phone_numbers_v1_convai_phone_numbers_get",
-        "summary": "List Phone Numbers",
-        "description": "Retrieve all Phone Numbers",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "oneOf": [
-                      {
-                        "$ref": "#/components/schemas/GetPhoneNumberTwilioResponseModel"
-                      },
-                      {
-                        "$ref": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
-                      }
-                    ],
-                    "discriminator": {
-                      "propertyName": "provider",
-                      "mapping": {
-                        "twilio": "#/components/schemas/GetPhoneNumberTwilioResponseModel",
-                        "sip_trunk": "#/components/schemas/GetPhoneNumberSIPTrunkResponseModel"
-                      }
-                    }
-                  },
-                  "title": "Response List Phone Numbers V1 Convai Phone Numbers Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Conversational AI"
-        ],
-        "x-fern-sdk-group-name": [
-          "conversational_ai",
-          "phone_numbers"
-        ],
-        "x-fern-sdk-method-name": "list"
       }
     },
     "/v1/convai/llm-usage/calculate": {
@@ -17544,38 +17542,6 @@
           "language": "en"
         },
         "title": "AgentConfigAPIModel"
-      },
-      "AgentConfigDBModel": {
-        "type": "object",
-        "properties": {
-          "first_message": {
-            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
-            "type": "string",
-            "default": "",
-            "title": "First Message",
-            "x-convai-client-override": true,
-            "x-convai-language-override": true
-          },
-          "language": {
-            "description": "Language of the agent - used for ASR and TTS",
-            "type": "string",
-            "default": "en",
-            "title": "Language",
-            "x-convai-client-override": true
-          },
-          "dynamic_variables": {
-            "description": "Configuration for dynamic variables",
-            "$ref": "#/components/schemas/DynamicVariablesConfig"
-          },
-          "prompt": {
-            "$ref": "#/components/schemas/PromptAgentDBModel"
-          }
-        },
-        "example": {
-          "first_message": "Hello, how can I help you today?",
-          "language": "en"
-        },
-        "title": "AgentConfigDBModel"
       },
       "AgentConfigOverride": {
         "type": "object",
@@ -25765,12 +25731,16 @@
                   },
                   {
                     "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallClientDetails"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallMCPDetails"
                   }
                 ],
                 "discriminator": {
                   "propertyName": "type",
                   "mapping": {
                     "client": "#/components/schemas/ConversationHistoryTranscriptToolCallClientDetails",
+                    "mcp": "#/components/schemas/ConversationHistoryTranscriptToolCallMCPDetails",
                     "webhook": "#/components/schemas/ConversationHistoryTranscriptToolCallWebhookDetails"
                   }
                 }
@@ -25789,6 +25759,62 @@
           "tool_has_been_called"
         ],
         "title": "ConversationHistoryTranscriptToolCallCommonModel"
+      },
+      "ConversationHistoryTranscriptToolCallMCPDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
+          "mcp_server_id": {
+            "type": "string",
+            "title": "Mcp Server Id"
+          },
+          "mcp_server_name": {
+            "type": "string",
+            "title": "Mcp Server Name"
+          },
+          "integration_type": {
+            "type": "string",
+            "title": "Integration Type"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Parameters",
+            "type": "object"
+          },
+          "approval_policy": {
+            "type": "string",
+            "title": "Approval Policy"
+          },
+          "requires_approval": {
+            "type": "boolean",
+            "default": false,
+            "title": "Requires Approval"
+          },
+          "mcp_tool_name": {
+            "type": "string",
+            "default": "",
+            "title": "Mcp Tool Name"
+          },
+          "mcp_tool_description": {
+            "type": "string",
+            "default": "",
+            "title": "Mcp Tool Description"
+          }
+        },
+        "required": [
+          "mcp_server_id",
+          "mcp_server_name",
+          "integration_type",
+          "approval_policy"
+        ],
+        "title": "ConversationHistoryTranscriptToolCallMCPDetails"
       },
       "ConversationHistoryTranscriptToolCallWebhookDetails": {
         "type": "object",
@@ -26157,7 +26183,7 @@
         "type": "object",
         "properties": {
           "simulated_user_config": {
-            "$ref": "#/components/schemas/AgentConfigDBModel"
+            "$ref": "#/components/schemas/AgentConfigAPIModel-Input"
           },
           "tool_mock_config": {
             "type": "object",
@@ -26490,8 +26516,7 @@
         ],
         "title": "CreatePronunciationDictionaryResponseModel"
       },
-      "CreateSIPTrunkPhoneNumberRequest": {
-        "description": "SIP trunk phone number request\n\nIncludes termination URI and optional digest authentication credentials.\nIf credentials are provided, both username and password must be included.\nIf credentials are not provided, ACL authentication is assumed. (user needs to add our ips in their settings)",
+      "CreateSIPTrunkPhoneNumberRequestV2": {
         "type": "object",
         "properties": {
           "phone_number": {
@@ -26510,51 +26535,20 @@
             "const": "sip_trunk",
             "title": "Provider"
           },
-          "termination_uri": {
-            "description": "SIP trunk termination URI",
-            "type": "string",
-            "title": "Termination Uri"
-          },
-          "address": {
-            "description": "Hostname or IP the SIP INVITE is sent to.",
+          "inbound_trunk_config": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/InboundSIPTrunkConfigRequestModel"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Address"
+            ]
           },
-          "transport": {
-            "description": "Protocol to use for SIP transport (signalling layer).",
-            "default": "auto",
-            "$ref": "#/components/schemas/SIPTrunkTransportEnum"
-          },
-          "media_encryption": {
-            "description": "Whether or not to encrypt media (data layer).",
-            "default": "allowed",
-            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
-          },
-          "inbound_media_encryption": {
-            "description": "Whether or not to encrypt media (data layer) for inbound calls.",
-            "default": "allowed",
-            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
-          },
-          "headers": {
-            "description": "SIP X-* headers for INVITE request. These headers are sent as-is and may help identify this call.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "title": "Headers"
-          },
-          "credentials": {
-            "description": "Optional digest authentication credentials (username/password). If not provided, ACL authentication is assumed.",
+          "outbound_trunk_config": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SIPTrunkCredentials"
+                "$ref": "#/components/schemas/OutboundSIPTrunkConfigRequestModel"
               },
               {
                 "type": "null"
@@ -26564,10 +26558,9 @@
         },
         "required": [
           "phone_number",
-          "label",
-          "termination_uri"
+          "label"
         ],
-        "title": "CreateSIPTrunkPhoneNumberRequest"
+        "title": "CreateSIPTrunkPhoneNumberRequestV2"
       },
       "CreateTwilioPhoneNumberRequest": {
         "type": "object",
@@ -29180,6 +29173,118 @@
         ],
         "title": "GetLibraryVoicesResponseModel"
       },
+      "GetPhoneNumberInboundSIPTrunkConfigResponseModel": {
+        "type": "object",
+        "properties": {
+          "allowed_addresses": {
+            "description": "List of IP addresses that are allowed to use the trunk. Each item in the list can be an individual IP address or a Classless Inter-Domain Routing notation representing a CIDR block.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Allowed Addresses"
+          },
+          "allowed_numbers": {
+            "description": "List of phone numbers that are allowed to use the trunk.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Numbers"
+          },
+          "media_encryption": {
+            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
+          },
+          "has_auth_credentials": {
+            "description": "Whether authentication credentials are configured",
+            "type": "boolean",
+            "title": "Has Auth Credentials"
+          },
+          "username": {
+            "description": "SIP trunk username (if available)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          }
+        },
+        "required": [
+          "allowed_addresses",
+          "allowed_numbers",
+          "media_encryption",
+          "has_auth_credentials"
+        ],
+        "title": "GetPhoneNumberInboundSIPTrunkConfigResponseModel"
+      },
+      "GetPhoneNumberOutboundSIPTrunkConfigResponseModel": {
+        "description": "SIP Trunk configuration details for a phone number",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "Hostname or IP the SIP INVITE is sent to",
+            "type": "string",
+            "title": "Address"
+          },
+          "transport": {
+            "description": "Protocol to use for SIP transport",
+            "$ref": "#/components/schemas/SIPTrunkTransportEnum"
+          },
+          "media_encryption": {
+            "description": "Whether or not to encrypt media (data layer).",
+            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
+          },
+          "headers": {
+            "description": "SIP headers for INVITE request",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Headers"
+          },
+          "has_auth_credentials": {
+            "description": "Whether authentication credentials are configured",
+            "type": "boolean",
+            "title": "Has Auth Credentials"
+          },
+          "username": {
+            "description": "SIP trunk username (if available)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "has_outbound_trunk": {
+            "description": "Whether a LiveKit SIP outbound trunk is configured",
+            "type": "boolean",
+            "default": false,
+            "title": "Has Outbound Trunk"
+          }
+        },
+        "required": [
+          "address",
+          "transport",
+          "media_encryption",
+          "has_auth_credentials"
+        ],
+        "title": "GetPhoneNumberOutboundSIPTrunkConfigResponseModel"
+      },
       "GetPhoneNumberSIPTrunkResponseModel": {
         "type": "object",
         "properties": {
@@ -29219,7 +29324,30 @@
           "provider_config": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/SIPTrunkConfigResponseModel"
+                "$ref": "#/components/schemas/GetPhoneNumberOutboundSIPTrunkConfigResponseModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "deprecated": true
+          },
+          "outbound_trunk": {
+            "description": "Configuration of the Outbound SIP trunk - if configured.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GetPhoneNumberOutboundSIPTrunkConfigResponseModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inbound_trunk": {
+            "description": "Configuration of the Inbound SIP trunk - if configured.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GetPhoneNumberInboundSIPTrunkConfigResponseModel"
               },
               {
                 "type": "null"
@@ -29953,6 +30081,58 @@
           }
         },
         "title": "ImageAvatar"
+      },
+      "InboundSIPTrunkConfigRequestModel": {
+        "type": "object",
+        "properties": {
+          "allowed_addresses": {
+            "description": "List of IP addresses that are allowed to use the trunk. Each item in the list can be an individual IP address or a Classless Inter-Domain Routing notation representing a CIDR block.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Addresses"
+          },
+          "allowed_numbers": {
+            "description": "List of phone numbers that are allowed to use the trunk.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Numbers"
+          },
+          "media_encryption": {
+            "description": "Whether or not to encrypt media (data layer).",
+            "default": "allowed",
+            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
+          },
+          "credentials": {
+            "description": "Optional digest authentication credentials (username/password).",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SIPTrunkCredentialsRequestModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "InboundSIPTrunkConfigRequestModel"
       },
       "IntegrationType": {
         "type": "string",
@@ -32041,6 +32221,49 @@
         ],
         "title": "OutboundCallRecipientResponseModel"
       },
+      "OutboundSIPTrunkConfigRequestModel": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "Hostname or IP the SIP INVITE is sent to.",
+            "type": "string",
+            "title": "Address"
+          },
+          "transport": {
+            "description": "Protocol to use for SIP transport (signalling layer).",
+            "default": "auto",
+            "$ref": "#/components/schemas/SIPTrunkTransportEnum"
+          },
+          "media_encryption": {
+            "description": "Whether or not to encrypt media (data layer).",
+            "default": "allowed",
+            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
+          },
+          "headers": {
+            "description": "SIP X-* headers for INVITE request. These headers are sent as-is and may help identify this call.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Headers"
+          },
+          "credentials": {
+            "description": "Optional digest authentication credentials (username/password). If not provided, ACL authentication is assumed.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SIPTrunkCredentialsRequestModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "title": "OutboundSIPTrunkConfigRequestModel"
+      },
       "PatchConvAIDashboardSettingsRequest": {
         "type": "object",
         "properties": {
@@ -33789,118 +34012,6 @@
         },
         "title": "PromptAgentAPIModelOverrideConfig"
       },
-      "PromptAgentDBModel": {
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "description": "The prompt for the agent",
-            "type": "string",
-            "default": "",
-            "title": "Prompt",
-            "x-convai-client-override": true
-          },
-          "llm": {
-            "description": "The LLM to query with the prompt and the chat history",
-            "default": "gemini-2.0-flash",
-            "$ref": "#/components/schemas/LLM"
-          },
-          "temperature": {
-            "description": "The temperature for the LLM",
-            "type": "number",
-            "default": 0,
-            "title": "Temperature"
-          },
-          "max_tokens": {
-            "description": "If greater than 0, maximum number of tokens the LLM can predict",
-            "type": "integer",
-            "default": -1,
-            "title": "Max Tokens"
-          },
-          "tool_ids": {
-            "description": "A list of IDs of tools used by the agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Tool Ids"
-          },
-          "built_in_tools": {
-            "description": "Built-in system tools to be used by the agent",
-            "$ref": "#/components/schemas/BuiltInTools-Input"
-          },
-          "mcp_server_ids": {
-            "description": "A list of MCP server ids to be used by the agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 10,
-            "title": "Mcp Server Ids"
-          },
-          "native_mcp_server_ids": {
-            "description": "A list of Native MCP server ids to be used by the agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 10,
-            "title": "Native Mcp Server Ids"
-          },
-          "knowledge_base": {
-            "description": "A list of knowledge bases to be used by the agent",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/KnowledgeBaseLocator"
-            },
-            "title": "Knowledge Base"
-          },
-          "custom_llm": {
-            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/CustomLLM"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "ignore_default_personality": {
-            "description": "Whether to ignore the default personality",
-            "default": false,
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Ignore Default Personality"
-          },
-          "rag": {
-            "description": "Configuration for RAG",
-            "$ref": "#/components/schemas/RagConfig"
-          },
-          "knowledge_base_document_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Knowledge Base Document Ids"
-          }
-        },
-        "example": {
-          "knowledge_base": [],
-          "llm": "gemini-2.0-flash-001",
-          "max_tokens": -1,
-          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
-          "temperature": 0,
-          "tool_ids": [],
-          "tools": []
-        },
-        "title": "PromptAgentDBModel"
-      },
       "PromptEvaluationCriteria": {
         "description": "An evaluation using the transcript and a prompt for a yes/no achieved answer",
         "type": "object",
@@ -34779,64 +34890,7 @@
         ],
         "title": "SIPMediaEncryptionEnum"
       },
-      "SIPTrunkConfigResponseModel": {
-        "description": "SIP Trunk configuration details for a phone number",
-        "type": "object",
-        "properties": {
-          "address": {
-            "description": "Hostname or IP the SIP INVITE is sent to",
-            "type": "string",
-            "title": "Address"
-          },
-          "transport": {
-            "description": "Protocol to use for SIP transport",
-            "$ref": "#/components/schemas/SIPTrunkTransportEnum"
-          },
-          "media_encryption": {
-            "description": "Whether or not to encrypt media (data layer).",
-            "$ref": "#/components/schemas/SIPMediaEncryptionEnum"
-          },
-          "headers": {
-            "description": "SIP headers for INVITE request",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "title": "Headers"
-          },
-          "has_auth_credentials": {
-            "description": "Whether authentication credentials are configured",
-            "type": "boolean",
-            "title": "Has Auth Credentials"
-          },
-          "username": {
-            "description": "SIP trunk username (if available)",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Username"
-          },
-          "has_outbound_trunk": {
-            "description": "Whether a LiveKit SIP outbound trunk is configured",
-            "type": "boolean",
-            "default": false,
-            "title": "Has Outbound Trunk"
-          }
-        },
-        "required": [
-          "address",
-          "transport",
-          "media_encryption",
-          "has_auth_credentials"
-        ],
-        "title": "SIPTrunkConfigResponseModel"
-      },
-      "SIPTrunkCredentials": {
+      "SIPTrunkCredentialsRequestModel": {
         "type": "object",
         "properties": {
           "username": {
@@ -34854,7 +34908,7 @@
           "username",
           "password"
         ],
-        "title": "SIPTrunkCredentials"
+        "title": "SIPTrunkCredentialsRequestModel"
       },
       "SIPTrunkOutboundCallResponse": {
         "type": "object",
@@ -41653,7 +41707,8 @@
           "music_latent",
           "convai_phone_numbers",
           "convai_mcp_servers",
-          "convai_batch_calls"
+          "convai_batch_calls",
+          "convai_agent_response_tests"
         ],
         "title": "WorkspaceResourceType"
       },
