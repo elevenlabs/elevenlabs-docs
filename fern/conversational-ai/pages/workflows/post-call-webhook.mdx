@@ -190,18 +190,22 @@ Since audio webhooks are delivered via chunked transfer encoding, you'll need to
 
 <CodeBlocks>
 ```python
+
 import base64
 import json
 from aiohttp import web
 
-async def handle_webhook(request): # Check if this is a chunked/streaming request
-if request.headers.get("transfer-encoding", "").lower() == "chunked": # Read streaming data in chunks
-chunked_body = bytearray()
-while True:
-chunk = await request.content.read(8192) # 8KB chunks
-if not chunk:
-break
-chunked_body.extend(chunk)
+async def handle_webhook(request):
+
+    # Check if this is a chunked/streaming request
+    if request.headers.get("transfer-encoding", "").lower() == "chunked":
+        # Read streaming data in chunks
+        chunked_body = bytearray()
+        while True:
+            chunk = await request.content.read(8192)  # 8KB chunks
+            if not chunk:
+                break
+            chunked_body.extend(chunk)
 
         # Parse the complete payload
         request_body = json.loads(chunked_body.decode("utf-8"))
