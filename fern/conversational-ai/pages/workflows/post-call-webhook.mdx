@@ -156,6 +156,76 @@ The webhook payload contains the same data you would receive from a GET request 
 }
 ```
 
+## Audio webhooks
+
+In addition to the post-call transcription webhook, ElevenLabs can support sending a second webhook containing the full reconstructed audio. This audio webhook is delivered as a streaming HTTP request with the `transfer-encoding: chunked` header to the same webhook URL.
+
+<Note>
+  Audio webhooks can be enabled or disabled using the "Send audio data" toggle in your webhook settings. This setting can be configured at both the workspace level (in the Conversational AI settings) and at the agent level (in individual agent webhook overrides).
+</Note>
+
+### Audio webhook structure
+
+The audio webhook payload contains:
+
+| Field              | Type   | Description                                                |
+| ------------------ | ------ | ---------------------------------------------------------- |
+| `type`             | string | Type of event (always `post_call_audio` for audio webhooks) |
+| `data`             | object | Audio data containing agent_id, conversation_id, and full_audio |
+| `event_timestamp`  | number | When this event occurred in unix time UTC                  |
+
+### Audio data fields
+
+| Field              | Type   | Description                                                |
+| ------------------ | ------ | ---------------------------------------------------------- |
+| `agent_id`         | string | The ID of the agent that handled the call                 |
+| `conversation_id`  | string | Unique identifier for the conversation                     |
+| `full_audio`       | string | Base64-encoded string containing the complete conversation audio in MP3 format |
+
+### Processing audio webhooks
+
+Since audio webhooks are delivered via chunked transfer encoding, you'll need to handle streaming data properly:
+
+```python
+import base64
+import json
+from aiohttp import web
+
+async def handle_webhook(request):
+    # Check if this is a chunked/streaming request
+    if request.headers.get("transfer-encoding", "").lower() == "chunked":
+        # Read streaming data in chunks
+        chunked_body = bytearray()
+        while True:
+            chunk = await request.content.read(8192)  # 8KB chunks
+            if not chunk:
+                break
+            chunked_body.extend(chunk)
+
+        # Parse the complete payload
+        request_body = json.loads(chunked_body.decode("utf-8"))
+    else:
+        # Handle regular requests
+        body_bytes = await request.read()
+        request_body = json.loads(body_bytes.decode('utf-8'))
+
+    # Process audio webhook
+    if request_body["type"] == "post_call_audio":
+        # Decode base64 audio data
+        audio_bytes = base64.b64decode(request_body["data"]["full_audio"])
+
+        # Save or process the audio file
+        conversation_id = request_body["data"]["conversation_id"]
+        with open(f"conversation_{conversation_id}.mp3", "wb") as f:
+            f.write(audio_bytes)
+
+    return web.json_response({"status": "ok"})
+```
+
+<Note>
+  Audio webhooks can be large files, so ensure your webhook endpoint can handle streaming requests and has sufficient memory/storage capacity. The audio is delivered in MP3 format.
+</Note>
+
 ## Use cases
 
 ### Automated call follow-ups
