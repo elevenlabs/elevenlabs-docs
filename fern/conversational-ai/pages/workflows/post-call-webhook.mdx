@@ -161,26 +161,28 @@ The webhook payload contains the same data you would receive from a GET request 
 In addition to the post-call transcription webhook, ElevenLabs can support sending a second webhook containing the full reconstructed audio. This audio webhook is delivered as a streaming HTTP request with the `transfer-encoding: chunked` header to the same webhook URL.
 
 <Note>
-  Audio webhooks can be enabled or disabled using the "Send audio data" toggle in your webhook settings. This setting can be configured at both the workspace level (in the Conversational AI settings) and at the agent level (in individual agent webhook overrides).
+  Audio webhooks can be enabled or disabled using the "Send audio data" toggle in your webhook
+  settings. This setting can be configured at both the workspace level (in the Conversational AI
+  settings) and at the agent level (in individual agent webhook overrides).
 </Note>
 
 ### Audio webhook structure
 
 The audio webhook payload contains:
 
-| Field              | Type   | Description                                                |
-| ------------------ | ------ | ---------------------------------------------------------- |
-| `type`             | string | Type of event (always `post_call_audio` for audio webhooks) |
-| `data`             | object | Audio data containing agent_id, conversation_id, and full_audio |
-| `event_timestamp`  | number | When this event occurred in unix time UTC                  |
+| Field             | Type   | Description                                                     |
+| ----------------- | ------ | --------------------------------------------------------------- |
+| `type`            | string | Type of event (always `post_call_audio` for audio webhooks)     |
+| `data`            | object | Audio data containing agent_id, conversation_id, and full_audio |
+| `event_timestamp` | number | When this event occurred in unix time UTC                       |
 
 ### Audio data fields
 
-| Field              | Type   | Description                                                |
-| ------------------ | ------ | ---------------------------------------------------------- |
-| `agent_id`         | string | The ID of the agent that handled the call                 |
-| `conversation_id`  | string | Unique identifier for the conversation                     |
-| `full_audio`       | string | Base64-encoded string containing the complete conversation audio in MP3 format |
+| Field             | Type   | Description                                                                    |
+| ----------------- | ------ | ------------------------------------------------------------------------------ |
+| `agent_id`        | string | The ID of the agent that handled the call                                      |
+| `conversation_id` | string | Unique identifier for the conversation                                         |
+| `full_audio`      | string | Base64-encoded string containing the complete conversation audio in MP3 format |
 
 ### Processing audio webhooks
 
@@ -223,7 +225,8 @@ async def handle_webhook(request):
 ```
 
 <Note>
-  Audio webhooks can be large files, so ensure your webhook endpoint can handle streaming requests and has sufficient memory/storage capacity. The audio is delivered in MP3 format.
+  Audio webhooks can be large files, so ensure your webhook endpoint can handle streaming requests
+  and has sufficient memory/storage capacity. The audio is delivered in MP3 format.
 </Note>
 
 ## Use cases
