@@ -5,9 +5,16 @@ subtitle: Seamlessly transfer the user to a human operator via phone number base
 
 ## Overview
 
-Human transfer allows a Conversational AI agent to transfer the ongoing call to a specified phone number when certain conditions are met. This enables agents to hand off complex issues, specific requests, or situations requiring human intervention to a live operator.
+Human transfer allows a Conversational AI agent to transfer the ongoing call to a specified phone number or SIP URI when certain conditions are met. This enables agents to hand off complex issues, specific requests, or situations requiring human intervention to a live operator.
 
 This feature utilizes the `transfer_to_number` system tool which supports transfers via Twilio and SIP trunk numbers. When triggered, the agent can provide a message to the user while they wait and a separate message summarizing the situation for the human operator receiving the call.
+
+## Transfer Types
+
+The system supports two types of transfers:
+
+- **Conference Transfer**: Default behavior that calls the destination and adds the participant to a conference room, then removes the AI agent so only the caller and transferred participant remain.
+- **SIP REFER Transfer**: Uses the SIP REFER protocol to transfer calls directly to the destination. Works with both phone numbers and SIP URIs, but only available when using SIP protocol during the conversation and requires your SIP Trunk to allow transfer via SIP REFER.
 
 <Markdown src="/snippets/human_transfer_custom_llm.mdx" />
 
@@ -40,11 +47,20 @@ Human transfer is configured using the `transfer_to_number` system tool.
     </Step>
 
     <Step title="Define transfer rules">
-        Configure the specific rules for transferring to phone numbers. For each rule, specify:
-        - **Phone Number**: The target phone number in E.164 format (e.g., +12125551234) to transfer the call to.
+        Configure the specific rules for transferring to phone numbers or SIP URIs. For each rule, specify:
+
+        - **Transfer Type**: Choose between Conference (default) or SIP REFER transfer methods
+        - **Number Type**: Select Phone for regular phone numbers or SIP URI for SIP addresses
+        - **Phone Number/SIP URI**: The target destination in the appropriate format:
+          - Phone numbers: E.164 format (e.g., +12125551234)
+          - SIP URIs: SIP format (e.g., sip:1234567890@example.com)
         - **Condition**: A natural language description of the circumstances under which the transfer should occur (e.g., "User explicitly requests to speak to a human", "User needs to update sensitive account information").
 
-        The LLM will use these conditions, along with the tool description, to decide when and to which phone number to transfer.
+        The LLM will use these conditions, along with the tool description, to decide when and to which destination to transfer.
+
+        <Note>
+            **SIP REFER transfers** require SIP protocol during the conversation and your SIP Trunk must allow transfer via SIP REFER. Only SIP REFER supports transferring to a SIP URI.
+        </Note>
 
         <Frame background="subtle" caption="Define transfer rules with phone number and condition">
             {/* Placeholder for image showing transfer rules configuration */}
@@ -52,7 +68,9 @@ Human transfer is configured using the `transfer_to_number` system tool.
         </Frame>
 
         <Note>
-            Ensure the phone number is correctly formatted (E.164) and associated with a properly configured Twilio account capable of receiving calls.
+            Ensure destinations are correctly formatted:
+            - Phone numbers: E.164 format and associated with a properly configured account
+            - SIP URIs: Valid SIP format (sip:user@domain or sips:user@domain)
         </Note>
     </Step>
 
@@ -80,8 +98,16 @@ elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
 # Define transfer rules
 transfer_rules = [
-    PhoneNumberTransfer(phone_number="+15551234567", condition="When the user asks for billing support."),
-    PhoneNumberTransfer(phone_number="+15559876543", condition="When the user requests to file a formal complaint.")
+    PhoneNumberTransfer(
+        transfer_destination={"type": "phone", "phone_number": "+15551234567"},
+        condition="When the user asks for billing support.",
+        transfer_type="conference"
+    ),
+    PhoneNumberTransfer(
+        transfer_destination={"type": "sip_uri", "sip_uri": "sip:support@example.com"},
+        condition="When the user requests to file a formal complaint.",
+        transfer_type="sip_refer"
+    )
 ]
 
 # Create the transfer tool configuration
@@ -126,8 +152,16 @@ const elevenlabs = new ElevenLabs({
 
 // Define transfer rules
 const transferRules = [
-  { phoneNumber: '+15551234567', condition: 'When the user asks for billing support.' },
-  { phoneNumber: '+15559876543', condition: 'When the user requests to file a formal complaint.' },
+  {
+    transferDestination: { type: 'phone', phoneNumber: '+15551234567' },
+    condition: 'When the user asks for billing support.',
+    transferType: 'conference'
+  },
+  {
+    transferDestination: { type: 'sip_uri', sipUri: 'sip:support@example.com' },
+    condition: 'When the user requests to file a formal complaint.',
+    transferType: 'sip_refer'
+  },
 ];
 
 // Create the agent with the transfer tool
