@@ -25158,6 +25158,17 @@
         ],
         "title": "ConversationHistoryBatchCallModel"
       },
+      "ConversationHistoryElevenAssistantCommonModel": {
+        "type": "object",
+        "properties": {
+          "is_eleven_assistant": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Eleven Assistant"
+          }
+        },
+        "title": "ConversationHistoryElevenAssistantCommonModel"
+      },
       "ConversationHistoryErrorCommonModel": {
         "type": "object",
         "properties": {
@@ -25354,6 +25365,9 @@
           },
           "features_usage": {
             "$ref": "#/components/schemas/FeaturesUsageCommonModel"
+          },
+          "eleven_assistant": {
+            "$ref": "#/components/schemas/ConversationHistoryElevenAssistantCommonModel"
           }
         },
         "required": [
@@ -41503,6 +41517,18 @@
             ],
             "title": "Start Call"
           },
+          "start_chat": {
+            "description": "Text and ARIA label for the start chat button (text only)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Chat"
+          },
           "new_call": {
             "description": "Text and ARIA label for the new call button. Displayed when the caller already finished at least one call in order ot start the next one.",
             "anyOf": [
@@ -41647,6 +41673,18 @@
             ],
             "title": "Connecting Status"
           },
+          "chatting_status": {
+            "description": "Status displayed when the agent is chatting (text only)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chatting Status"
+          },
           "input_label": {
             "description": "ARIA label for the text message input.",
             "anyOf": [
@@ -41670,6 +41708,30 @@
               }
             ],
             "title": "Input Placeholder"
+          },
+          "input_placeholder_text_only": {
+            "description": "Placeholder text for the text message input (text only)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Placeholder Text Only"
+          },
+          "input_placeholder_new_conversation": {
+            "description": "Placeholder text for the text message input when starting a new conversation (text only)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Placeholder New Conversation"
           },
           "user_ended_conversation": {
             "description": "Information message displayed when the user ends the conversation.",
