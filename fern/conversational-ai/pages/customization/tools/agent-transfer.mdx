@@ -59,6 +59,9 @@ Agent transfer is configured using the `transfer_to_agent` system tool.
         Configure the specific rules for transferring to other agents. For each rule, specify:
         - **Agent**: The target agent to transfer the conversation to.
         - **Condition**: A natural language description of the circumstances under which the transfer should occur (e.g., "User asks about billing details", "User requests technical support for product X").
+        - **Delay before transfer (milliseconds)**: The minimum delay (in milliseconds) before the transfer occurs. Defaults to 0 for immediate transfer.
+        - **Transfer Message**: An optional custom message to play during the transfer. If left blank, the transfer will occur silently.
+        - **Enable First Message**: Whether the transferred agent should play its first message after the transfer. Defaults to off.
 
         The LLM will use these conditions, along with the tool description, to decide when and to which agent (by number) to transfer.
 
@@ -93,10 +96,22 @@ from elevenlabs import (
 # Initialize the client
 elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
 
-# Define transfer rules
+# Define transfer rules with new options
 transfer_rules = [
-    AgentTransfer(agent_id="AGENT_ID_1", condition="When the user asks for billing support."),
-    AgentTransfer(agent_id="AGENT_ID_2", condition="When the user requests advanced technical help.")
+    AgentTransfer(
+        agent_id="AGENT_ID_1",
+        condition="When the user asks for billing support.",
+        delay_ms=1000,  # 1 second delay
+        transfer_message="I'm connecting you to our billing specialist.",
+        enable_transferred_agent_first_message=True
+    ),
+    AgentTransfer(
+        agent_id="AGENT_ID_2",
+        condition="When the user requests advanced technical help.",
+        delay_ms=0,  # Immediate transfer
+        transfer_message=None,  # Silent transfer
+        enable_transferred_agent_first_message=False
+    )
 ]
 
 # Create the transfer tool configuration
@@ -136,10 +151,22 @@ const elevenlabs = new ElevenLabs({
   apiKey: 'YOUR_API_KEY',
 });
 
-// Define transfer rules
+// Define transfer rules with new options
 const transferRules = [
-  { agentId: 'AGENT_ID_1', condition: 'When the user asks for billing support.' },
-  { agentId: 'AGENT_ID_2', condition: 'When the user requests advanced technical help.' },
+  {
+    agentId: 'AGENT_ID_1',
+    condition: 'When the user asks for billing support.',
+    delayMs: 1000, // 1 second delay
+    transferMessage: "I'm connecting you to our billing specialist.",
+    enableTransferredAgentFirstMessage: true,
+  },
+  {
+    agentId: 'AGENT_ID_2',
+    condition: 'When the user requests advanced technical help.',
+    delayMs: 0, // Immediate transfer
+    transferMessage: null, // Silent transfer
+    enableTransferredAgentFirstMessage: false,
+  },
 ];
 
 // Create the agent with the transfer tool
