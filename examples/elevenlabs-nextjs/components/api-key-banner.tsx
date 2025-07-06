@@ -70,7 +70,7 @@ export function ApiKeyBanner({ variant = 'header' }: ApiKeyBannerProps) {
               <>
                 <span className="flex items-center gap-2">
                   <KeyIcon className="h-4 w-4" />
-                  <span>{variant === 'sidebar' ? 'API Key Set' : 'API Key Set'}</span>
+                  <span>API Key Set</span>
                 </span>
                 {variant === 'sidebar' && (
                   <span className="h-2 w-2 rounded-full bg-green-500"></span>
@@ -79,8 +79,8 @@ export function ApiKeyBanner({ variant = 'header' }: ApiKeyBannerProps) {
             ) : (
               <>
                 <span className="flex items-center gap-2">
-                  <AlertTriangleIcon className={cn('h-4 w-4', !hasApiKey && 'animate-pulse')} />
-                  <span>{variant === 'sidebar' ? 'Set API Key' : 'Set API Key'}</span>
+                  <AlertTriangleIcon className="h-4 w-4 animate-pulse" />
+                  <span>Set API Key</span>
                 </span>
                 {variant === 'sidebar' && (
                   <span className="h-2 w-2 animate-pulse rounded-full bg-red-500"></span>
