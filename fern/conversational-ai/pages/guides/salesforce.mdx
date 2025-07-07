@@ -79,9 +79,10 @@ Either view a step by step summary or view the detailed system prompt of the age
     Then, ask relevant qualification questions to understand their requirements, one question at a time, and wait for their response before proceeding.
 
     Once you have basic information about the customer, say you will check for any existing records in the system.
-    - Call salesforce_search_records to look for existing contacts, accounts, or leads
+    - Call salesforce_search_records to look for existing contacts, accounts, or leads (always include Name fields and human-readable information in your SOQL queries)
     - If found, call salesforce_get_record to get detailed information about the existing record
     - Use any existing information to personalize the conversation and avoid asking for data you already have
+    - When discussing opportunities, always reference them by name (e.g., "Q1 Enterprise Deal") rather than by ID
 
     After checking existing records, qualify the customer by gathering:
     - Company name and size
@@ -115,7 +116,7 @@ Either view a step by step summary or view the detailed system prompt of the age
 </Tabs>
 
 <Tip>
-  This integration enhances sales efficiency by leveraging existing customer data and automating lead qualification. All API calls require proper OAuth authentication and secret handling.
+  This integration enhances sales efficiency by leveraging existing customer data and automating lead qualification. All API calls require proper OAuth authentication and secret handling. The tools are configured to return human-readable names and descriptions rather than technical IDs to improve conversation quality.
 </Tip>
 
 ## Authentication Setup
@@ -206,7 +207,7 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 4. **Create Authentication Secret**:
    - Format the authorization header as: `Bearer {access_token}`
    - Save this as a secret in your agent's secrets with name `salesforce_auth`
-   - Example: `Bearer 00D5g000004PZoH!AQEAQIQEUqKKOYTsoK01jQx79...`
+   - Example: `Bearer 00D5g0000XXXXXX12341QIQEUqKKOYTsoK01jQx79...`
 
 <Note>
   Access tokens expire and will need to be refreshed periodically. Consider implementing token refresh logic or using a longer-lived approach for production use.
@@ -221,7 +222,7 @@ The integration with Salesforce employs three primary webhook tools to manage cu
 <Tabs>
   <Tab title="salesforce_search_records">
     **Name:** salesforce_search_records  
-    **Description:** Searches for existing records in Salesforce using SOQL queries.  
+    **Description:** Searches for existing records in Salesforce using SOQL queries. Always returns human-readable information including Names, not just IDs.  
     **Method:** GET  
     **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/query/?q={soql_query}`
     
@@ -238,7 +239,7 @@ The integration with Salesforce employs three primary webhook tools to manage cu
     {
       "type": "webhook",
       "name": "salesforce_search_records",
-      "description": "Searches for existing records in Salesforce using SOQL queries.",
+      "description": "Searches for existing records in Salesforce using SOQL queries. Always returns human-readable names and details, not just IDs.",
       "api_schema": {
         "url": "https://your-domain.my.salesforce.com/services/data/v58.0/query/",
         "method": "GET",
@@ -247,7 +248,7 @@ The integration with Salesforce employs three primary webhook tools to manage cu
           {
             "id": "q",
             "type": "string",
-            "description": "SOQL query string to search for records. Example: SELECT Id, Name, Email FROM Contact WHERE Email = 'customer@example.com'",
+            "description": "SOQL query string to search for records. Always include Name fields and other human-readable information. Example: SELECT Id, Name, Email, Phone, Company FROM Contact WHERE Email = 'customer@example.com'. For Opportunities, include: SELECT Id, Name, StageName, Amount, CloseDate, Account.Name FROM Opportunity",
             "dynamic_variable": "",
             "constant_value": "",
             "required": true,
@@ -492,26 +493,31 @@ The integration with Salesforce employs three primary webhook tools to manage cu
 
 ## Common SOQL Queries
 
-Here are some commonly used SOQL queries for the `salesforce_search_records` tool:
+Here are some commonly used SOQL queries for the `salesforce_search_records` tool. All queries prioritize human-readable information over technical IDs:
 
 ### Search for Contacts by Email
 ```sql
-SELECT Id, Name, Email, Phone, Account.Name FROM Contact WHERE Email = 'customer@example.com'
+SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type FROM Contact WHERE Email = 'customer@example.com'
 ```
 
 ### Search for Leads by Email or Phone
 ```sql
-SELECT Id, Name, Email, Phone, Company, Status FROM Lead WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
+SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title FROM Lead WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
 ```
 
 ### Search for Accounts by Name
 ```sql
-SELECT Id, Name, Type, Industry, Phone FROM Account WHERE Name LIKE '%Company Name%'
+SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website FROM Account WHERE Name LIKE '%Company Name%'
 ```
 
 ### Search for Recent Opportunities
 ```sql
-SELECT Id, Name, StageName, Amount, CloseDate, Account.Name FROM Opportunity WHERE CreatedDate = THIS_MONTH
+SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description FROM Opportunity WHERE CreatedDate = THIS_MONTH
+```
+
+### Search for Opportunities by Account
+```sql
+SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name FROM Opportunity WHERE Account.Name LIKE '%Company Name%'
 ```
 
 ## Integration Testing
@@ -528,9 +534,9 @@ After setting up your External Client App and configuring the webhook tools, tes
 
 You can test individual components using curl commands or tools like Postman:
 
-1. **Test Search Tool**:
+1. **Test Search Tool** (notice the query includes Name and human-readable fields):
    ```bash
-   curl -X GET "https://your-domain.my.salesforce.com/services/data/v58.0/query/?q=SELECT%20Id%2C%20Name%2C%20Email%20FROM%20Contact%20LIMIT%205" \
+   curl -X GET "https://your-domain.my.salesforce.com/services/data/v58.0/query/?q=SELECT%20Id%2C%20Name%2C%20Email%2C%20Phone%2C%20Title%2C%20Account.Name%20FROM%20Contact%20LIMIT%205" \
    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
    -H "Content-Type: application/json"
    ```
@@ -567,9 +573,10 @@ Test your integration with your conversational AI agent:
 ### What to Validate
 
 A successful integration should demonstrate:
-- ✅ **Search Records**: Can find existing contacts/leads using SOQL
-- ✅ **Get Record**: Can retrieve detailed record information
+- ✅ **Search Records**: Can find existing contacts/leads using SOQL with human-readable names
+- ✅ **Get Record**: Can retrieve detailed record information including names and descriptions
 - ✅ **Create Record**: Can create new leads/contacts with proper data
+- ✅ **Human-Readable Output**: Returns opportunity names, account names, and other descriptive fields rather than just IDs
 - ✅ **Error Handling**: Graceful handling of API errors and edge cases
 
 ## Evaluation Configuration
