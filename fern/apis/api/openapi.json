@@ -17803,6 +17803,27 @@
           "condition": {
             "type": "string",
             "title": "Condition"
+          },
+          "delay_ms": {
+            "type": "integer",
+            "default": 0,
+            "title": "Delay Ms"
+          },
+          "transfer_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfer Message"
+          },
+          "enable_transferred_agent_first_message": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enable Transferred Agent First Message"
           }
         },
         "required": [
@@ -22164,6 +22185,23 @@
               }
             ],
             "title": "Temperature"
+          },
+          "seed": {
+            "description": "If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed. Must be an integer between 0 and 2147483647.",
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2147483647,
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              12345
+            ],
+            "title": "Seed"
           }
         },
         "required": [
@@ -23693,7 +23731,8 @@
           "resource",
           "request_queue",
           "region",
-          "subresource_id"
+          "subresource_id",
+          "reporting_workspace_id"
         ],
         "title": "BreakdownTypes"
       },
@@ -24500,10 +24539,10 @@
             "title": "Description"
           },
           "response_timeout_secs": {
-            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 30 seconds (inclusive).",
+            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 120 seconds (inclusive).",
             "type": "integer",
             "default": 20,
-            "maximum": 30,
+            "maximum": 120,
             "minimum": 1,
             "title": "Response Timeout Secs"
           },
@@ -24562,10 +24601,10 @@
             "title": "Description"
           },
           "response_timeout_secs": {
-            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 30 seconds (inclusive).",
+            "description": "The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 120 seconds (inclusive).",
             "type": "integer",
             "default": 20,
-            "maximum": 30,
+            "maximum": 120,
             "minimum": 1,
             "title": "Response Timeout Secs"
           },
@@ -25368,6 +25407,17 @@
           },
           "eleven_assistant": {
             "$ref": "#/components/schemas/ConversationHistoryElevenAssistantCommonModel"
+          },
+          "initiator_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Initiator Id"
           }
         },
         "required": [
@@ -26053,6 +26103,18 @@
             "type": "object",
             "title": "Custom Llm Extra Body"
           },
+          "user_id": {
+            "description": "ID of the end user participating in this conversation (for agent owner's user identification)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
           "dynamic_variables": {
             "type": "object",
             "additionalProperties": {
@@ -26089,6 +26151,18 @@
             "type": "object",
             "title": "Custom Llm Extra Body"
           },
+          "user_id": {
+            "description": "ID of the end user participating in this conversation (for agent owner's user identification)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
           "dynamic_variables": {
             "type": "object",
             "additionalProperties": {
@@ -26124,6 +26198,18 @@
           "custom_llm_extra_body": {
             "type": "object",
             "title": "Custom Llm Extra Body"
+          },
+          "user_id": {
+            "description": "ID of the end user participating in this conversation (for agent owner's user identification)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
           },
           "dynamic_variables": {
             "type": "object",
@@ -28616,6 +28702,17 @@
               "failed"
             ],
             "title": "Status"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
           },
           "transcript": {
             "type": "array",
