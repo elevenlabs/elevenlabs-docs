@@ -32,6 +32,5 @@ Voice/audio AI alignment
 Developer platform focus (integrating our speech to text/text to speech etc models in projects)
 Creator focus
 
-
 Create a priority report with top recommendations
 Include URLs, dates, and draft a short outreach that is slightly customised. If you can find emails to reach out to include them please.
