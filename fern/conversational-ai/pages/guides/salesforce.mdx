@@ -107,20 +107,21 @@ Either view a step by step summary or view the detailed system prompt of the age
 
 ## Authentication Setup
 
-Before configuring the tools, you must set up OAuth 2.0 authentication with Salesforce using a Connected App.
+Before configuring the tools, you must set up OAuth 2.0 authentication with Salesforce using an External Client App.
 
-### Step 1: Create a Connected App in Salesforce
+### Step 1: Create an External Client App in Salesforce
 
 1. Log into your Salesforce org as an administrator
-2. Go to **Setup** → **App Manager** (or **Setup** → **Build** → **Create** → **Apps** in Classic)
-3. Click **New Connected App**
+2. Go to **Setup** → **External Client App Manager** (or search "External Client App Manager" in Quick Find)
+3. Click **New External Client App**
 4. Complete the basic information:
-   - **Connected App Name**: ElevenLabs Conversational AI
+   - **External Client App Name**: ElevenLabs Conversational AI
    - **API Name**: ElevenLabs_Conversational_AI
    - **Contact Email**: Your administrator email
 5. In the **API (Enable OAuth Settings)** section:
    - Check **Enable OAuth Settings**
    - **Callback URL**: `https://api.elevenlabs.io/oauth/callback` (or your specific callback URL)
+   - **OAuth Start URL**: `https://api.elevenlabs.io/oauth/start` (required field)
    - **Selected OAuth Scopes**: Add these scopes:
      - **Full access (full)**
      - **Perform requests on your behalf at any time (refresh_token, offline_access)**
@@ -135,30 +136,70 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 </Warning>
 
 1. **Enable Client Credentials Flow**:
-   - In your Connected App, go to **Manage** → **Edit Policies**
+   - In your External Client App, go to **Manage** → **Edit Policies**
    - In **OAuth Policies**, select **Client Credentials Flow**
+   - **Run As**: Select your admin user (or a dedicated service account user)
    - Set **Permitted Users** to **Admin approved users are pre-authorized**
    - Click **Save**
 
-2. **Create the OAuth Token**:
-   - Method: `POST`
-   - URL: `https://your-domain.my.salesforce.com/services/oauth2/token`
-   - Headers: `Content-Type: application/x-www-form-urlencoded`
-   - Body parameters:
-     ```
-     grant_type=client_credentials
-     client_id=YOUR_CONSUMER_KEY
-     client_secret=YOUR_CONSUMER_SECRET
-     ```
+   **Important**: The "Run As" user determines the permissions for all API calls. Choose a user with:
+   - System Administrator profile, OR
+   - A custom profile with the necessary permissions for your use case
+   - Access to the objects you want to query/create (Contact, Lead, Account, etc.)
+   - **API Enabled** permission must be checked
 
-3. **Create Authentication Secret**:
-   - The response will include an `access_token`
+2. **Find Your Salesforce Domain**:
+   Your Salesforce domain is required for API calls. Here's how to find it:
+   
+   **Method 1: Check Your Current URL (Easiest)**
+   When logged into Salesforce, look at your browser's address bar:
+   - **Lightning Experience**: `https://yourcompany.lightning.force.com/`
+   - **My Domain**: `https://yourcompany.my.salesforce.com/`
+   
+   **Method 2: Setup → Company Information**
+   - Go to **Setup** → **Company Information**
+   - Look for your **My Domain** URL or Organization information
+   
+   **Method 3: Setup → Domain Management**
+   - Go to **Setup** → **Domain Management** → **My Domain**
+   - Your domain will be shown at the top of the page
+   
+   **Common Domain Formats:**
+   - `https://yourcompany.my.salesforce.com` (My Domain)
+   - `https://yourcompany.lightning.force.com` (Lightning)
+   - `https://yourcompany.develop.my.salesforce.com` (Sandbox)
+   
+   **Note**: Use the full domain without trailing slash for API calls.
+
+3. **Generate the OAuth Token**:
+   
+   Use the Client Credentials flow to generate an access token:
+   
+   ```bash
+   curl -X POST "https://your-domain.my.salesforce.com/services/oauth2/token" \
+   -H "Content-Type: application/x-www-form-urlencoded" \
+   -d "grant_type=client_credentials&client_id=YOUR_CONSUMER_KEY&client_secret=YOUR_CONSUMER_SECRET"
+   ```
+   
+   The response will include an `access_token`:
+   ```json
+   {
+     "access_token": "00D...",
+     "instance_url": "https://your-domain.my.salesforce.com",
+     "token_type": "Bearer"
+   }
+   ```
+
+4. **Create Authentication Secret**:
    - Format the authorization header as: `Bearer {access_token}`
    - Save this as a secret in your agent's secrets with name `salesforce_auth`
+   - Example: `Bearer 00D5g000004PZoH!AQEAQIQEUqKKOYTsoK01jQx79...`
 
 <Note>
   Access tokens expire and will need to be refreshed periodically. Consider implementing token refresh logic or using a longer-lived approach for production use.
 </Note>
+
+
 
 ## Tool Configurations
 
@@ -460,6 +501,64 @@ SELECT Id, Name, Type, Industry, Phone FROM Account WHERE Name LIKE '%Company Na
 SELECT Id, Name, StageName, Amount, CloseDate, Account.Name FROM Opportunity WHERE CreatedDate = THIS_MONTH
 ```
 
+## Integration Testing
+
+<Tip>
+  Test your Salesforce integration thoroughly before deploying to production. The following steps will help you validate that all components are working correctly.
+</Tip>
+
+### Testing Your Integration
+
+After setting up your External Client App and configuring the webhook tools, test your integration to ensure everything works correctly:
+
+### Manual API Testing
+
+You can test individual components using curl commands or tools like Postman:
+
+1. **Test Search Tool**:
+   ```bash
+   curl -X GET "https://your-domain.my.salesforce.com/services/data/v58.0/query/?q=SELECT%20Id%2C%20Name%2C%20Email%20FROM%20Contact%20LIMIT%205" \
+   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+   -H "Content-Type: application/json"
+   ```
+
+2. **Test Create Tool**:
+   ```bash
+   curl -X POST "https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/Lead/" \
+   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+   -H "Content-Type: application/json" \
+   -d '{
+     "FirstName": "Test",
+     "LastName": "Lead",
+     "Email": "test@example.com",
+     "Company": "Test Company"
+   }'
+   ```
+
+3. **Test Get Record Tool**:
+   ```bash
+   curl -X GET "https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/Lead/YOUR_RECORD_ID" \
+   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+   -H "Content-Type: application/json"
+   ```
+
+### Agent Testing
+
+Test your integration with your conversational AI agent:
+
+1. **Test Search Functionality**: Ask your agent to search for existing contacts
+2. **Test Record Creation**: Have your agent create a new lead or contact
+3. **Test Data Retrieval**: Verify your agent can get detailed customer information
+4. **Test SOQL Queries**: Ensure complex queries work correctly
+
+### What to Validate
+
+A successful integration should demonstrate:
+- ✅ **Search Records**: Can find existing contacts/leads using SOQL
+- ✅ **Get Record**: Can retrieve detailed record information
+- ✅ **Create Record**: Can create new leads/contacts with proper data
+- ✅ **Error Handling**: Graceful handling of API errors and edge cases
+
 ## Evaluation Configuration
 
 To improve the observability of customer interactions, configure the agent with the following evaluation criteria and data collection parameters.
@@ -531,7 +630,7 @@ With this integration in place, you can:
 - Use HTTPS endpoints for all API calls
 - Store sensitive values as secrets using the ElevenLabs Secrets Manager
 - Implement proper OAuth 2.0 token management and refresh logic
-- Follow Salesforce security best practices for Connected Apps
+- Follow Salesforce security best practices for External Client Apps
 - Ensure proper field-level security is configured in Salesforce
 - Regularly audit API access and usage
 
@@ -553,10 +652,35 @@ With this integration in place, you can:
     
     **Solutions**:
     - Verify your Consumer Key and Consumer Secret are correct
-    - Check that the Connected App is properly configured
+    - Check that the External Client App is properly configured
     - Ensure the OAuth scope includes necessary permissions
     - Verify your access token hasn't expired
+    - Confirm your domain format is correct (e.g., `https://yourcompany.my.salesforce.com`)
   </Accordion>
+
+  <Accordion title="Valid Execution User Error">
+    **Problem**: "Enter a valid execution user for the OAuth client credentials flow"
+    
+    **Solutions**:
+    - Ensure the selected user is **active** (not deactivated)
+    - Verify the user has **API Enabled** permission
+    - Check that the user has a proper **Salesforce license** (not just Community)
+    - Try selecting a different System Administrator user
+    - Create a new dedicated service account user with proper permissions
+  </Accordion>
+
+  <Accordion title="Domain Resolution Issues">
+    **Problem**: DNS resolution errors or "nodename nor servname provided"
+    
+    **Solutions**:
+    - Verify your domain format is correct
+    - Try different domain formats: `.my.salesforce.com`, `.lightning.force.com`, `.develop.my.salesforce.com`
+    - Check your browser's address bar when logged into Salesforce
+    - Remove any trailing slashes from the domain
+    - Ensure you're using HTTPS, not HTTP
+  </Accordion>
+
+
 
   <Accordion title="SOQL Query Errors">
     **Problem**: Getting SOQL syntax errors
@@ -593,11 +717,26 @@ With this integration in place, you can:
 
 This guide details how to integrate Salesforce into our conversational AI platform for comprehensive customer relationship management. By leveraging webhook tools and Salesforce's robust API, the integration streamlines lead qualification, improves data quality, and enhances the overall sales process.
 
+
+
+### Quick Start Checklist
+
+- [ ] Create External Client App in Salesforce
+- [ ] Configure OAuth settings with Start URL and Callback URL
+- [ ] Enable Client Credentials Flow with valid "Run As" user
+- [ ] Find your correct Salesforce domain
+- [ ] Generate access token using OAuth Client Credentials flow
+- [ ] Configure agent secrets with the Bearer token
+- [ ] Import the three webhook tool configurations
+- [ ] Update tool configurations with your Salesforce domain
+- [ ] Test your integration with manual API calls
+- [ ] Validate functionality with your conversational AI agent
+
 For additional details on tool configuration or other integrations, refer to the [Tools Overview](/docs/conversational-ai/customization/tools/server-tools).
 
 ## Additional Resources
 
 - [Salesforce REST API Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/)
 - [SOQL Query Language Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
-- [Connected Apps and OAuth 2.0](https://help.salesforce.com/s/articleView?id=sf.connected_app_overview.htm)
+- [External Client Apps and OAuth 2.0](https://help.salesforce.com/s/articleView?id=sf.connected_app_overview.htm)
 - [Salesforce Security Best Practices](https://help.salesforce.com/s/articleView?id=sf.security_overview.htm) 
