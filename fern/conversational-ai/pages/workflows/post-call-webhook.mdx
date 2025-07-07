@@ -5,8 +5,15 @@ subtitle: Get notified when calls end and analysis is complete through webhooks.
 
 ## Overview
 
-Post-call [Webhooks](/docs/product-guides/administration/webhooks) allow you to receive detailed information about a call after analysis is complete. When enabled, ElevenLabs will send a POST request to your specified endpoint with comprehensive call data, including transcripts, analysis results, and metadata.
-The data that is returned is the same data that is returned from the [Conversation API](/docs/conversational-ai/api-reference/conversations/get-conversations).
+Post-call [Webhooks](/docs/product-guides/administration/webhooks) allow you to receive detailed information about a call after analysis is complete. When enabled, ElevenLabs will send a POST request to your specified endpoint with comprehensive call data.
+
+ElevenLabs supports two types of post-call webhooks:
+- **Transcription webhooks** (`post_call_transcription`): Contains full conversation data including transcripts, analysis results, and metadata
+- **Audio webhooks** (`post_call_audio`): Contains minimal data with base64-encoded audio of the full conversation
+
+<Note>
+  The webhook data structure differs from the [Conversation API](/docs/conversational-ai/api-reference/conversations/get-conversations) GET endpoint response. Webhooks use a specialized data model optimized for event delivery.
+</Note>
 
 ## Enabling post-call webhooks
 
@@ -51,17 +58,68 @@ If your infrastructure requires strict IP-based access controls, adding these IP
 
 ## Webhook response structure
 
-The webhook payload contains the same data you would receive from a GET request to the Conversation API endpoint, with additional fields for event timing and type information.
+ElevenLabs sends two distinct types of post-call webhooks, each with different data structures:
 
-### Top-level fields
+### Transcription webhooks (`post_call_transcription`)
+
+Contains comprehensive conversation data including full transcripts, analysis results, and metadata.
+
+#### Top-level fields
+
+| Field             | Type   | Description                                                           |
+| ----------------- | ------ | --------------------------------------------------------------------- |
+| `type`            | string | Type of event (always `post_call_transcription`)                      |
+| `data`            | object | Conversation data using the `ConversationHistoryCommonModel` structure |
+| `event_timestamp` | number | When this event occurred in unix time UTC                             |
+
+#### Data object structure
+
+The `data` object contains:
+
+| Field                                 | Type   | Description                                    |
+| ------------------------------------- | ------ | ---------------------------------------------- |
+| `agent_id`                            | string | The ID of the agent that handled the call      |
+| `conversation_id`                     | string | Unique identifier for the conversation         |
+| `status`                              | string | Status of the conversation (e.g., "done")     |
+| `user_id`                             | string | User identifier if available                   |
+| `transcript`                          | array  | Complete conversation transcript with turns    |
+| `metadata`                            | object | Call timing, costs, and phone details         |
+| `analysis`                            | object | Evaluation results and conversation summary    |
+| `conversation_initiation_client_data` | object | Configuration overrides and dynamic variables |
+
+<Note>
+  Transcription webhooks do NOT include the `has_audio`, `has_user_audio`, or `has_response_audio` fields that are available in the GET API response.
+</Note>
+
+### Audio webhooks (`post_call_audio`)
+
+Contains minimal data with the full conversation audio as base64-encoded MP3.
+
+#### Top-level fields
 
 | Field             | Type   | Description                                                    |
 | ----------------- | ------ | -------------------------------------------------------------- |
-| `type`            | string | Type of event (always `post_call_transcription` in this case)  |
-| `data`            | object | Data for the conversation, what would be returned from the API |
+| `type`            | string | Type of event (always `post_call_audio`)                       |
+| `data`            | object | Minimal audio data                                             |
 | `event_timestamp` | number | When this event occurred in unix time UTC                      |
 
-## Example webhook payload
+#### Data object structure
+
+The `data` object contains only:
+
+| Field             | Type   | Description                                                                    |
+| ----------------- | ------ | ------------------------------------------------------------------------------ |
+| `agent_id`        | string | The ID of the agent that handled the call                                      |
+| `conversation_id` | string | Unique identifier for the conversation                                         |
+| `full_audio`      | string | Base64-encoded string containing the complete conversation audio in MP3 format |
+
+<Warning>
+  Audio webhooks contain only the three fields listed above. They do NOT include transcript data, metadata, analysis results, or any other conversation details.
+</Warning>
+
+## Example webhook payloads
+
+### Transcription webhook example
 
 ```json
 {
@@ -71,6 +129,7 @@ The webhook payload contains the same data you would receive from a GET request 
     "agent_id": "xyz",
     "conversation_id": "abc",
     "status": "done",
+    "user_id": "user123",
     "transcript": [
       {
         "role": "agent",
@@ -156,33 +215,31 @@ The webhook payload contains the same data you would receive from a GET request 
 }
 ```
 
-## Audio webhooks
+### Audio webhook example
 
-In addition to the post-call transcription webhook, ElevenLabs can support sending a second webhook containing the full reconstructed audio. This audio webhook is delivered as a streaming HTTP request with the `transfer-encoding: chunked` header to the same webhook URL.
+```json
+{
+  "type": "post_call_audio",
+  "event_timestamp": 1739537319,
+  "data": {
+    "agent_id": "xyz",
+    "conversation_id": "abc",
+    "full_audio": "SUQzBAAAAAAA...base64_encoded_mp3_data...AAAAAAAAAA=="
+  }
+}
+```
+
+## Audio webhook delivery
+
+Audio webhooks are delivered separately from transcription webhooks and contain only the essential fields needed to identify the conversation along with the base64-encoded audio data.
 
 <Note>
-  Audio webhooks can be enabled or disabled using the "Send audio data" toggle in your webhook
-  settings. This setting can be configured at both the workspace level (in the Conversational AI
-  settings) and at the agent level (in individual agent webhook overrides).
+  Audio webhooks can be enabled or disabled using the "Send audio data" toggle in your webhook settings. This setting can be configured at both the workspace level (in the Conversational AI settings) and at the agent level (in individual agent webhook overrides).
 </Note>
 
-### Audio webhook structure
+### Streaming delivery
 
-The audio webhook payload contains:
-
-| Field             | Type   | Description                                                     |
-| ----------------- | ------ | --------------------------------------------------------------- |
-| `type`            | string | Type of event (always `post_call_audio` for audio webhooks)     |
-| `data`            | object | Audio data containing agent_id, conversation_id, and full_audio |
-| `event_timestamp` | number | When this event occurred in unix time UTC                       |
-
-### Audio data fields
-
-| Field             | Type   | Description                                                                    |
-| ----------------- | ------ | ------------------------------------------------------------------------------ |
-| `agent_id`        | string | The ID of the agent that handled the call                                      |
-| `conversation_id` | string | Unique identifier for the conversation                                         |
-| `full_audio`      | string | Base64-encoded string containing the complete conversation audio in MP3 format |
+Audio webhooks are delivered as streaming HTTP requests with the `transfer-encoding: chunked` header to handle large audio files efficiently.
 
 ### Processing audio webhooks
 
@@ -215,17 +272,24 @@ async def handle_webhook(request):
         body_bytes = await request.read()
         request_body = json.loads(body_bytes.decode('utf-8'))
 
-    # Process audio webhook
-    if request_body["type"] == "post_call_audio":
-        # Decode base64 audio data
-        audio_bytes = base64.b64decode(request_body["data"]["full_audio"])
-
-        # Save or process the audio file
-        conversation_id = request_body["data"]["conversation_id"]
-        with open(f"conversation_{conversation_id}.mp3", "wb") as f:
-            f.write(audio_bytes)
+    # Process different webhook types
+    if request_body["type"] == "post_call_transcription":
+        # Handle transcription webhook with full conversation data
+        handle_transcription_webhook(request_body["data"])
+    elif request_body["type"] == "post_call_audio":
+        # Handle audio webhook with minimal data
+        handle_audio_webhook(request_body["data"])
 
     return web.json_response({"status": "ok"})
+
+def handle_audio_webhook(data):
+    # Decode base64 audio data
+    audio_bytes = base64.b64decode(data["full_audio"])
+    
+    # Save or process the audio file
+    conversation_id = data["conversation_id"]
+    with open(f"conversation_{conversation_id}.mp3", "wb") as f:
+        f.write(audio_bytes)
 
 ```
 
@@ -244,14 +308,13 @@ app.post('/webhook/elevenlabs', (req, res) => {
     try {
       const requestBody = JSON.parse(body);
 
-      // Process audio webhook
-      if (requestBody.type === 'post_call_audio') {
-        // Decode base64 audio data
-        const audioBytes = Buffer.from(requestBody.data.full_audio, 'base64');
-
-        // Save or process the audio file
-        const conversationId = requestBody.data.conversation_id;
-        fs.writeFileSync(`conversation_${conversationId}.mp3`, audioBytes);
+      // Process different webhook types
+      if (requestBody.type === 'post_call_transcription') {
+        // Handle transcription webhook with full conversation data
+        handleTranscriptionWebhook(requestBody.data);
+      } else if (requestBody.type === 'post_call_audio') {
+        // Handle audio webhook with minimal data
+        handleAudioWebhook(requestBody.data);
       }
 
       res.status(200).json({ status: 'ok' });
@@ -261,13 +324,21 @@ app.post('/webhook/elevenlabs', (req, res) => {
     }
   });
 });
+
+function handleAudioWebhook(data) {
+  // Decode base64 audio data
+  const audioBytes = Buffer.from(data.full_audio, 'base64');
+  
+  // Save or process the audio file
+  const conversationId = data.conversation_id;
+  fs.writeFileSync(`conversation_${conversationId}.mp3`, audioBytes);
+}
 ```
 
 </CodeBlocks>
 
 <Note>
-  Audio webhooks can be large files, so ensure your webhook endpoint can handle streaming requests
-  and has sufficient memory/storage capacity. The audio is delivered in MP3 format.
+  Audio webhooks can be large files, so ensure your webhook endpoint can handle streaming requests and has sufficient memory/storage capacity. The audio is delivered in MP3 format.
 </Note>
 
 ## Use cases
