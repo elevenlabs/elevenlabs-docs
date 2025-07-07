@@ -16,4 +16,19 @@ Please run `./changelog-context-generation.sh` which:
 
 The required dependencies are the gh cli and openapi-diff. Install them if errors arise.
 
-With that infromation, please create a changelog entry following the format you should have already read. Thanks! Think carefully.
+## Data Sources (Temporary Files)
+The script outputs data to these temporary locations:
+- **OpenAPI diff**: `/tmp/openapi_diff.md` - Markdown diff of API changes
+- **Recent PRs**: `/tmp/prs.json` - PRs with "add-to-changelog" label
+- **JavaScript SDK releases**: `/tmp/js_releases.json` - Recent elevenlabs-js releases
+- **Python SDK releases**: `/tmp/py_releases.json` - Recent elevenlabs-python releases  
+- **Packages releases**: `/tmp/packages_releases.json` - Recent packages releases
+
+## Instructions
+1. Run the script to generate the data files
+2. Read and analyze the content from each temporary file
+3. Create a changelog entry following the format from the example files
+4. Focus on developer impact and group changes logically
+5. Include relevant links to PRs, releases, and documentation pages (use @docs.yml for URL structure where necessary)
+
+Think carefully about how to present the information in a way that's most valuable to developers using the ElevenLabs API.
