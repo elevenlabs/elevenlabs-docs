@@ -86,7 +86,7 @@ export default function ConversationUI() {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      const conversationTokenResult = await getConversationToken(selectedAgent)
+      const conversationTokenResult = await getConversationToken(selectedAgent);
 
       if (!conversationTokenResult.ok) {
         console.error('Failed to get conversation token:', conversationTokenResult.error);
