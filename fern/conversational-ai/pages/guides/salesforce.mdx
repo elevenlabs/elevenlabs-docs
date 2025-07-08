@@ -28,10 +28,9 @@ Watch the demonstration of the Salesforce + Conversational AI integration.
 - [ ] Configure OAuth settings with Start URL and Callback URL
 - [ ] Enable Client Credentials Flow with valid "Run As" user
 - [ ] Find your correct Salesforce domain
-- [ ] Generate access token using OAuth Client Credentials flow
-- [ ] Configure agent secrets with the Bearer token
 - [ ] Import the three webhook tool configurations
 - [ ] Update tool configurations with your Salesforce domain
+- [ ] Configure tool authorization (Workplace Auth Connections or manual secrets)
 - [ ] Test your integration with manual API calls
 - [ ] Validate functionality with your conversational AI agent
 
@@ -69,6 +68,7 @@ Either view a step by step summary or view the detailed system prompt of the age
         - Inform them about next steps in the sales process
       </Step>
     </Steps>
+
   </Tab>
 
   <Tab title="Detailed system prompt">
@@ -112,11 +112,15 @@ Either view a step by step summary or view the detailed system prompt of the age
     - Always maintain professional communication
     - Protect customer privacy and handle data securely
     ```
+
   </Tab>
 </Tabs>
 
 <Tip>
-  This integration enhances sales efficiency by leveraging existing customer data and automating lead qualification. All API calls require proper OAuth authentication and secret handling. The tools are configured to return human-readable names and descriptions rather than technical IDs to improve conversation quality.
+  This integration enhances sales efficiency by leveraging existing customer data and automating
+  lead qualification. Tool authorization can be managed using either manual secrets or Workplace
+  Auth Connections (recommended for automatic token refresh). The tools are configured to return
+  human-readable names and descriptions rather than technical IDs to improve conversation quality.
 </Tip>
 
 ## Authentication Setup
@@ -126,7 +130,7 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 ### Step 1: Create an External Client App in Salesforce
 
 1. Log into your Salesforce org as an administrator
-2. Go to **Setup** → **External Client App Manager** (or search "External Client App Manager" in Quick Find)
+2. Go to **Setup** → **App Manager** (or search "App Manager" in Quick Find)
 3. Click **New External Client App**
 4. Complete the basic information:
    - **External Client App Name**: ElevenLabs Conversational AI
@@ -146,10 +150,12 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 ### Step 2: Configure OAuth Client Credentials Flow
 
 <Warning>
-  The Client Credentials Flow is recommended for server-to-server integrations where no user interaction is required. Ensure your Salesforce admin has enabled this flow.
+  The Client Credentials Flow is recommended for server-to-server integrations where no user
+  interaction is required. Ensure your Salesforce admin has enabled this flow.
 </Warning>
 
 1. **Enable Client Credentials Flow**:
+
    - In your External Client App, go to **Manage** → **Edit Policies**
    - In **OAuth Policies**, select **Client Credentials Flow**
    - **Run As**: Select your admin user (or a dedicated service account user)
@@ -157,6 +163,7 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
    - Click **Save**
 
    **Important**: The "Run As" user determines the permissions for all API calls. Choose a user with:
+
    - System Administrator profile, OR
    - A custom profile with the necessary permissions for your use case
    - Access to the objects you want to query/create (Contact, Lead, Account, etc.)
@@ -164,60 +171,143 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 
 2. **Find Your Salesforce Domain**:
    Your Salesforce domain is required for API calls. Here's how to find it:
-   
+
    **Method 1: Check Your Current URL (Easiest)**
    When logged into Salesforce, look at your browser's address bar:
+
    - **Lightning Experience**: `https://yourcompany.lightning.force.com/`
    - **My Domain**: `https://yourcompany.my.salesforce.com/`
-   
+
    **Method 2: Setup → Company Information**
+
    - Go to **Setup** → **Company Information**
    - Look for your **My Domain** URL or Organization information
-   
+
    **Method 3: Setup → Domain Management**
+
    - Go to **Setup** → **Domain Management** → **My Domain**
    - Your domain will be shown at the top of the page
-   
+
    **Common Domain Formats:**
+
    - `https://yourcompany.my.salesforce.com` (My Domain)
    - `https://yourcompany.lightning.force.com` (Lightning)
    - `https://yourcompany.develop.my.salesforce.com` (Sandbox)
-   
+
    **Note**: Use the full domain without trailing slash for API calls.
 
-3. **Generate the OAuth Token**:
-   
-   Use the Client Credentials flow to generate an access token:
-   
-   ```bash
-   curl -X POST "https://your-domain.my.salesforce.com/services/oauth2/token" \
-   -H "Content-Type: application/x-www-form-urlencoded" \
-   -d "grant_type=client_credentials&client_id=YOUR_CONSUMER_KEY&client_secret=YOUR_CONSUMER_SECRET"
-   ```
-   
-   The response will include an `access_token`:
-   ```json
-   {
-     "access_token": "00D...",
-     "instance_url": "https://your-domain.my.salesforce.com",
-     "token_type": "Bearer"
-   }
-   ```
-
-4. **Create Authentication Secret**:
-   - Format the authorization header as: `Bearer {access_token}`
-   - Save this as a secret in your agent's secrets with name `salesforce_auth`
-   - Example: `Bearer 00D5g0000XXXXXX12341QIQEUqKKOYTsoK01jQx79...`
-
-<Note>
-  Access tokens expire and will need to be refreshed periodically. Consider implementing token refresh logic or using a longer-lived approach for production use.
-</Note>
-
-
+3. **Setup Complete**: You have now created the External Client App and configured Client Credentials Flow. The Consumer Key and Consumer Secret will be used for token generation in the tool authorization step.
 
 ## Tool Configurations
 
-The integration with Salesforce employs three primary webhook tools to manage customer relationships. Use the tabs below to review each tool's configuration.
+The integration with Salesforce employs three primary webhook tools to manage customer relationships. You can configure authorization for these tools using either manual secrets or Workplace Auth Connections.
+
+### Authorization Options
+
+<Tabs>
+  <Tab title="Workplace Auth Connections">
+    **Recommended**: Configure automatic token management through the ElevenLabs dashboard.
+    
+    <Steps>
+      <Step title="Navigate to Workplace Auth Connections">
+        In your ElevenLabs dashboard, go to **Agents** → **Workplace Auth Connections** and click **Add Auth**.
+      </Step>
+
+      <Step title="Configure Salesforce Connection">
+        Fill in the following fields for your Salesforce integration:
+
+        **Connection Name**: `Salesforce CRM`
+
+        **Client ID**
+        - Your Consumer Key from the External Client App
+        - Example: `3MVG9JJlvRU3L4pRiOu8pQt5xXB4xGZGm0yW...`
+
+        **Client Secret**
+        - Your Consumer Secret from the External Client App
+        - Example: `1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF...`
+
+        **Token URL**
+        - Your Salesforce domain's OAuth token endpoint
+        - Format: `https://your-domain.my.salesforce.com/services/oauth2/token`
+        - Example: `https://mycompany.my.salesforce.com/services/oauth2/token`
+
+        **Scopes (optional)**
+        - OAuth scopes for Salesforce API access
+        - Recommended: `full, api, refresh_token`
+        - Leave blank to use default scopes from your External Client App
+
+        **Extra Parameters (JSON)**
+        - Additional OAuth parameters specific to your setup
+        - Example for Client Credentials flow:
+        ```json
+        {
+          "grant_type": "client_credentials"
+        }
+        ```
+      </Step>
+
+      <Step title="Test Connection">
+        Click **Test Connection** to verify your configuration. The system will attempt to retrieve an access token using your provided credentials.
+      </Step>
+
+      <Step title="Use in Tool Configurations">
+        Once the connection is successful, save it and reference it in your webhook tool configurations in the **Authentication** section instead of using manual secrets.
+      </Step>
+    </Steps>
+
+    <Tip>
+      Workplace Auth Connections automatically handles token refresh, eliminating the need for manual token management and improving reliability of your Salesforce integration.
+    </Tip>
+
+  </Tab>
+  
+  <Tab title="Manual OAuth Token">
+    Generate OAuth tokens manually and manage them as secrets. This requires manual token refresh when tokens expire.
+    
+    <Steps>
+      <Step title="Generate the OAuth Token">
+        Use the Client Credentials flow to generate an access token:
+
+        ```bash
+        curl -X POST "https://your-domain.my.salesforce.com/services/oauth2/token" \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=client_credentials&client_id=YOUR_CONSUMER_KEY&client_secret=YOUR_CONSUMER_SECRET"
+        ```
+
+        The response will include an `access_token`:
+
+        ```json
+        {
+          "access_token": "00D...",
+          "instance_url": "https://your-domain.my.salesforce.com",
+          "token_type": "Bearer"
+        }
+        ```
+      </Step>
+
+      <Step title="Create Authentication Secret">
+        - Format the authorization header as: `Bearer {access_token}`
+        - Save this as a secret in your agent's secrets with name `salesforce_auth`
+        - Example: `Bearer 00D5g0000XXXXXX12341QIQEUqKKOYTsoK01jQx79...`
+      </Step>
+
+      <Step title="Configure Tool Authorization">
+        In your webhook tool configurations, set:
+        - **Authorization**: *(Secret: `salesforce_auth`)*
+      </Step>
+    </Steps>
+
+    <Note>
+      Access tokens expire and will need to be refreshed periodically. Consider implementing token
+      refresh logic or using a longer-lived approach for production use.
+    </Note>
+
+  </Tab>
+</Tabs>
+
+### Tool Configurations
+
+Use the tabs below to review each tool's configuration.
 
 <Tabs>
   <Tab title="salesforce_search_records">
@@ -488,7 +578,10 @@ The integration with Salesforce employs three primary webhook tools to manage cu
 </Tabs>
 
 <Warning>
-  Ensure that you add your workspace's Salesforce authentication secret to the agent's secrets. Replace `YOUR_SALESFORCE_SECRET` with your actual secret ID.
+  Ensure that you configure tool authorization for your Salesforce webhook tools using either: -
+  **Workplace Auth Connections**: Configure the connection in your ElevenLabs dashboard and
+  reference it in your webhook tool configurations' **Authentication** section, OR - **Manual OAuth
+  Token**: Replace `YOUR_SALESFORCE_SECRET` with your actual secret ID in the tool configurations.
 </Warning>
 
 ## Common SOQL Queries
@@ -496,26 +589,31 @@ The integration with Salesforce employs three primary webhook tools to manage cu
 Here are some commonly used SOQL queries for the `salesforce_search_records` tool. All queries prioritize human-readable information over technical IDs:
 
 ### Search for Contacts by Email
+
 ```sql
 SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type FROM Contact WHERE Email = 'customer@example.com'
 ```
 
 ### Search for Leads by Email or Phone
+
 ```sql
 SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title FROM Lead WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
 ```
 
 ### Search for Accounts by Name
+
 ```sql
 SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website FROM Account WHERE Name LIKE '%Company Name%'
 ```
 
 ### Search for Recent Opportunities
+
 ```sql
 SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description FROM Opportunity WHERE CreatedDate = THIS_MONTH
 ```
 
 ### Search for Opportunities by Account
+
 ```sql
 SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name FROM Opportunity WHERE Account.Name LIKE '%Company Name%'
 ```
@@ -523,7 +621,8 @@ SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name
 ## Integration Testing
 
 <Tip>
-  Test your Salesforce integration thoroughly before deploying to production. The following steps will help you validate that all components are working correctly.
+  Test your Salesforce integration thoroughly before deploying to production. The following steps
+  will help you validate that all components are working correctly.
 </Tip>
 
 ### Testing Your Integration
@@ -535,6 +634,7 @@ After setting up your External Client App and configuring the webhook tools, tes
 You can test individual components using curl commands or tools like Postman:
 
 1. **Test Search Tool** (notice the query includes Name and human-readable fields):
+
    ```bash
    curl -X GET "https://your-domain.my.salesforce.com/services/data/v58.0/query/?q=SELECT%20Id%2C%20Name%2C%20Email%2C%20Phone%2C%20Title%2C%20Account.Name%20FROM%20Contact%20LIMIT%205" \
    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
@@ -542,6 +642,7 @@ You can test individual components using curl commands or tools like Postman:
    ```
 
 2. **Test Create Tool**:
+
    ```bash
    curl -X POST "https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/Lead/" \
    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
@@ -573,12 +674,12 @@ Test your integration with your conversational AI agent:
 ### What to Validate
 
 A successful integration should demonstrate:
+
 - ✅ **Search Records**: Can find existing contacts/leads using SOQL with human-readable names
 - ✅ **Get Record**: Can retrieve detailed record information including names and descriptions
 - ✅ **Create Record**: Can create new leads/contacts with proper data
 - ✅ **Human-Readable Output**: Returns opportunity names, account names, and other descriptive fields rather than just IDs
 - ✅ **Error Handling**: Graceful handling of API errors and edge cases
-
 
 ## Impact
 
@@ -601,13 +702,13 @@ With this integration in place, you can:
 
 ## Common Salesforce Objects
 
-| Object | Purpose | Common Fields |
-|--------|---------|---------------|
-| **Lead** | Potential customers not yet qualified | FirstName, LastName, Email, Phone, Company, Industry, Status |
-| **Contact** | Qualified individuals associated with accounts | FirstName, LastName, Email, Phone, AccountId, Title |
-| **Account** | Organizations or companies | Name, Type, Industry, Phone, BillingAddress |
-| **Opportunity** | Sales deals in progress | Name, StageName, Amount, CloseDate, AccountId |
-| **Case** | Customer service requests | Subject, Description, Status, Priority, ContactId |
+| Object          | Purpose                                        | Common Fields                                                |
+| --------------- | ---------------------------------------------- | ------------------------------------------------------------ |
+| **Lead**        | Potential customers not yet qualified          | FirstName, LastName, Email, Phone, Company, Industry, Status |
+| **Contact**     | Qualified individuals associated with accounts | FirstName, LastName, Email, Phone, AccountId, Title          |
+| **Account**     | Organizations or companies                     | Name, Type, Industry, Phone, BillingAddress                  |
+| **Opportunity** | Sales deals in progress                        | Name, StageName, Amount, CloseDate, AccountId                |
+| **Case**        | Customer service requests                      | Subject, Description, Status, Priority, ContactId            |
 
 ## Troubleshooting
 
@@ -623,49 +724,41 @@ With this integration in place, you can:
     - Confirm your domain format is correct (e.g., `https://yourcompany.my.salesforce.com`)
   </Accordion>
 
-  <Accordion title="Valid Execution User Error">
-    **Problem**: "Enter a valid execution user for the OAuth client credentials flow"
-    
-    **Solutions**:
-    - Ensure the selected user is **active** (not deactivated)
-    - Verify the user has **API Enabled** permission
-    - Check that the user has a proper **Salesforce license** (not just Community)
-    - Try selecting a different System Administrator user
-    - Create a new dedicated service account user with proper permissions
-  </Accordion>
+{' '}
 
-  <Accordion title="Domain Resolution Issues">
-    **Problem**: DNS resolution errors or "nodename nor servname provided"
-    
-    **Solutions**:
-    - Verify your domain format is correct
-    - Try different domain formats: `.my.salesforce.com`, `.lightning.force.com`, `.develop.my.salesforce.com`
-    - Check your browser's address bar when logged into Salesforce
-    - Remove any trailing slashes from the domain
-    - Ensure you're using HTTPS, not HTTP
-  </Accordion>
+<Accordion title="Valid Execution User Error">
+  **Problem**: "Enter a valid execution user for the OAuth client credentials flow" **Solutions**: -
+  Ensure the selected user is **active** (not deactivated) - Verify the user has **API Enabled**
+  permission - Check that the user has a proper **Salesforce license** (not just Community) - Try
+  selecting a different System Administrator user - Create a new dedicated service account user with
+  proper permissions
+</Accordion>
 
+{' '}
 
+<Accordion title="Domain Resolution Issues">
+  **Problem**: DNS resolution errors or "nodename nor servname provided" **Solutions**: - Verify
+  your domain format is correct - Try different domain formats: `.my.salesforce.com`,
+  `.lightning.force.com`, `.develop.my.salesforce.com` - Check your browser's address bar when
+  logged into Salesforce - Remove any trailing slashes from the domain - Ensure you're using HTTPS,
+  not HTTP
+</Accordion>
 
-  <Accordion title="SOQL Query Errors">
-    **Problem**: Getting SOQL syntax errors
-    
-    **Solutions**:
-    - Ensure all field names are spelled correctly
-    - Check that you have permission to access the fields
-    - Verify the object name is correct
-    - Use proper SOQL syntax (no SELECT * allowed)
-  </Accordion>
+{' '}
 
-  <Accordion title="Record Creation Failures">
-    **Problem**: Unable to create records
-    
-    **Solutions**:
-    - Verify required fields are included
-    - Check field-level security permissions
-    - Ensure data types match field requirements
-    - Validate that picklist values are correct
-  </Accordion>
+<Accordion title="SOQL Query Errors">
+  **Problem**: Getting SOQL syntax errors **Solutions**: - Ensure all field names are spelled
+  correctly - Check that you have permission to access the fields - Verify the object name is
+  correct - Use proper SOQL syntax (no SELECT * allowed)
+</Accordion>
+
+{' '}
+
+<Accordion title="Record Creation Failures">
+  **Problem**: Unable to create records **Solutions**: - Verify required fields are included - Check
+  field-level security permissions - Ensure data types match field requirements - Validate that
+  picklist values are correct
+</Accordion>
 
   <Accordion title="API Rate Limits">
     **Problem**: Hitting API rate limits
@@ -682,8 +775,6 @@ With this integration in place, you can:
 
 This guide details how to integrate Salesforce into our conversational AI platform for comprehensive customer relationship management. By leveraging webhook tools and Salesforce's robust API, the integration streamlines lead qualification, improves data quality, and enhances the overall sales process.
 
-
-
 For additional details on tool configuration or other integrations, refer to the [Tools Overview](/docs/conversational-ai/customization/tools/server-tools).
 
 ## Additional Resources
@@ -691,4 +782,4 @@ For additional details on tool configuration or other integrations, refer to the
 - [Salesforce REST API Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/)
 - [SOQL Query Language Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
 - [External Client Apps and OAuth 2.0](https://help.salesforce.com/s/articleView?id=sf.connected_app_overview.htm)
-- [Salesforce Security Best Practices](https://help.salesforce.com/s/articleView?id=sf.security_overview.htm) 
+- [Salesforce Security Best Practices](https://help.salesforce.com/s/articleView?id=sf.security_overview.htm)
