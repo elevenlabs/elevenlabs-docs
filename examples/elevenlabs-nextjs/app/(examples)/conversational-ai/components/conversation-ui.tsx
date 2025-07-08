@@ -88,9 +88,6 @@ export default function ConversationUI() {
 
       const conversationTokenResult = await getConversationToken(selectedAgent)
 
-      console.log('conversationTokenResult', conversationTokenResult);
-
-
       if (!conversationTokenResult.ok) {
         console.error('Failed to get conversation token:', conversationTokenResult.error);
         return;
