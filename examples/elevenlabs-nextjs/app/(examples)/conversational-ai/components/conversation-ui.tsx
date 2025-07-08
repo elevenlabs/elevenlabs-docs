@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useConversationalAI } from '@/app/(examples)/conversational-ai/components/conversational-ai-provider';
-import { getAgent, getAgentSignedUrl } from '@/app/actions/manage-agents';
+import { getAgent, getConversationToken } from '@/app/actions/manage-agents';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -86,17 +86,16 @@ export default function ConversationUI() {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      const signedUrlResult = await getAgentSignedUrl({
-        agentId: selectedAgent,
-      });
+      const conversationTokenResult = await getConversationToken(selectedAgent);
 
-      if (!signedUrlResult.ok) {
-        console.error('Failed to get signed URL:', signedUrlResult.error);
+      if (!conversationTokenResult.ok) {
+        console.error('Failed to get conversation token:', conversationTokenResult.error);
         return;
       }
 
       await conversation.startSession({
-        signedUrl: signedUrlResult.value.signedUrl,
+        connectionType: 'webrtc',
+        conversationToken: conversationTokenResult.value.token,
         overrides: {
           agent: {
             prompt: {
