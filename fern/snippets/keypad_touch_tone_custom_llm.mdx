@@ -1,0 +1,18 @@
+## Custom LLM integration
+
+**Parameters**:
+
+- `reason` (string, optional): The reason for playing the DTMF tones (e.g., "navigating to extension", "entering PIN")
+- `dtmf_tones` (string, required): The DTMF sequence to play. Valid characters: 0-9, \*, #, w (0.5s pause), W (1s pause)
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "play_keypad_touch_tone",
+    "arguments": "{"reason": "Navigating to customer service", "dtmf_tones": "2"}"
+  }
+}
+```

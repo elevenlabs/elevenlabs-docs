@@ -1,0 +1,118 @@
+---
+title: Play keypad touch tone
+subtitle: Enable agents to play DTMF tones to interact with automated phone systems and navigate menus.
+---
+
+## Overview
+
+The keypad touch tone tool allows Conversational AI agents to play DTMF (Dual-Tone Multi-Frequency) tones during phone calls; these are the tones that are played when you press numbers on your keypad. This enables agents to interact with automated phone systems, navigate voice menus, enter extensions, input PIN codes, and perform other touch-tone operations that would typically require a human caller to press keys on their phone keypad.
+
+This system tool supports standard DTMF tones (0-9, \*, #) as well as pause commands for timing control. It works seamlessly with both Twilio and SIP trunking phone integrations, automatically generating the appropriate audio tones for the underlying telephony infrastructure.
+
+## Functionality
+
+- **Standard DTMF tones**: Supports all standard keypad characters (0-9, \*, #)
+- **Pause control**: Includes pause commands for precise timing (w = 0.5s, W = 1.0s)
+- **Multi-provider support**: Works with both Twilio and SIP trunking integrations
+
+This system tool can be used to navigate phone menus, enter extensions and input codes.
+The LLM determines when and what tones to play based on conversation context.
+
+The default tool description explains to the LLM powering the conversation that it has access to play these tones,
+and we recommend updating your agent's system prompt to explain when the agent should call this tool.
+
+<Markdown src="/snippets/keypad_touch_tone_custom_llm.mdx" />
+
+## Supported characters
+
+The tool supports the following DTMF characters and commands:
+
+- **Digits**: `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
+- **Special tones**: `*` (star), `#` (pound/hash)
+- **Pause commands**:
+  - `w` - Short pause (0.5 seconds)
+  - `W` - Long pause (1.0 second)
+
+## API Implementation
+
+You can configure the `play_keypad_touch_tone` system tool when creating or updating an agent via the API. This tool requires no additional configuration parameters beyond enabling it.
+
+<CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentInputToolsItem_System,
+    SystemToolConfigInputParams_PlayKeypadTouchTone,
+)
+
+# Initialize the client
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create the keypad touch tone tool configuration
+keypad_tool = PromptAgentInputToolsItem_System(
+    type="system",
+    name="play_keypad_touch_tone",
+    description="Play DTMF tones to interact with automated phone systems.", # Optional custom description
+    params=SystemToolConfigInputParams_PlayKeypadTouchTone(
+        system_tool_type="play_keypad_touch_tone"
+    )
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            prompt="You are a helpful assistant that can interact with phone systems.",
+            first_message="Hi, I can help you navigate phone systems. How can I assist you today?",
+            tools=[keypad_tool],
+        )
+    )
+)
+
+# Create the agent
+response = elevenlabs.conversational_ai.agents.create(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
+
+// Initialize the client
+const elevenlabs = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with the keypad touch tone tool
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
+    agent: {
+      prompt: {
+        prompt: 'You are a helpful assistant that can interact with phone systems.',
+        firstMessage: 'Hi, I can help you navigate phone systems. How can I assist you today?',
+        tools: [
+          {
+            type: 'system',
+            name: 'play_keypad_touch_tone',
+            description: 'Play DTMF tones to interact with automated phone systems.', // Optional custom description
+            params: {
+              systemToolType: 'play_keypad_touch_tone',
+            },
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+</CodeBlocks>
+
+<Note>
+  The tool only works during active phone calls powered by Twilio or SIP trunking. It will return an
+  error if called outside of a phone conversation context.
+</Note>
