@@ -2367,6 +2367,80 @@
         "x-fern-sdk-method-name": "design"
       }
     },
+    "/v1/text-to-voice/{generated_voice_id}/stream": {
+      "get": {
+        "operationId": "Text_to_voice_preview_streaming_v1_text_to_voice__generated_voice_id__stream_get",
+        "summary": "Text To Voice Preview Streaming",
+        "description": "Stream a the voice preview for a generated voice as it is being generated.",
+        "parameters": [
+          {
+            "name": "generated_voice_id",
+            "in": "path",
+            "description": "The generated_voice_id to stream.",
+            "required": true,
+            "schema": {
+              "description": "The generated_voice_id to stream.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "37HceQefKmEi3bGovXjL"
+              ],
+              "title": "Generated Voice Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Streaming audio data",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-voice"
+        ],
+        "x-fern-sdk-group-name": [
+          "text_to_voice",
+          "preview"
+        ],
+        "x-fern-sdk-method-name": "stream",
+        "x-fern-streaming": true
+      }
+    },
     "/v1/user/subscription": {
       "get": {
         "operationId": "Get_user_subscription_info_v1_user_subscription_get",
@@ -15272,7 +15346,7 @@
       "post": {
         "operationId": "Retry_a_batch_call__v1_convai_batch_calling__batch_id__retry_post",
         "summary": "Retry A Batch Call.",
-        "description": "Retry a batch call by setting completed recipients back to pending status.",
+        "description": "Retry a batch call, calling failed and no-response recipients again.",
         "parameters": [
           {
             "name": "batch_id",
@@ -20287,6 +20361,54 @@
             ],
             "title": "Language"
           },
+          "intro": {
+            "description": "The intro text that will always be added to the beginning of the podcast.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Welcome to the podcast."
+            ],
+            "title": "Intro"
+          },
+          "outro": {
+            "description": "The outro text that will always be added to the end of the podcast.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Thank you for listening!"
+            ],
+            "title": "Outro"
+          },
+          "instructions_prompt": {
+            "description": "Additional instructions prompt for the podcast generation used to adjust the podcast's style and tone.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 3000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Ensure the podcast remains factual, accurate and appropriate for all audiences."
+            ],
+            "title": "Instructions Prompt"
+          },
           "highlights": {
             "description": "A brief summary or highlights of the Studio project's content, providing key points or themes. This should be between 10 and 70 characters.",
             "anyOf": [
@@ -20443,6 +20565,54 @@
               "en"
             ],
             "title": "Language"
+          },
+          "intro": {
+            "description": "The intro text that will always be added to the beginning of the podcast.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Welcome to the podcast."
+            ],
+            "title": "Intro"
+          },
+          "outro": {
+            "description": "The outro text that will always be added to the end of the podcast.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Thank you for listening!"
+            ],
+            "title": "Outro"
+          },
+          "instructions_prompt": {
+            "description": "Additional instructions prompt for the podcast generation used to adjust the podcast's style and tone.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 3000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Ensure the podcast remains factual, accurate and appropriate for all audiences."
+            ],
+            "title": "Instructions Prompt"
           },
           "highlights": {
             "description": "A brief summary or highlights of the Studio project's content, providing key points or themes. This should be between 10 and 70 characters.",
@@ -38533,6 +38703,15 @@
             "maximum": 100,
             "minimum": 0,
             "title": "Guidance Scale"
+          },
+          "stream_previews": {
+            "description": "Determines whether the Text to Voice previews should be included in the response. If true, only the generated IDs will be returned which can then be streamed via the /v1/text-to-voice/:generated_voice_id/stream endpoint.",
+            "type": "boolean",
+            "default": false,
+            "examples": [
+              true
+            ],
+            "title": "Stream Previews"
           },
           "quality": {
             "description": "Higher quality results in better voice output but less variety.",
