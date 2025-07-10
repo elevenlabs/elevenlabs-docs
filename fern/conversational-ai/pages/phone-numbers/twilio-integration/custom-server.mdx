@@ -1,0 +1,78 @@
+---
+title: Twilio custom server
+subtitle: Set up a custom server to handle advanced Twilio integrations with ElevenLabs conversational AI.
+---
+
+## Overview
+
+This guide shows you how to set up a custom server to handle advanced Twilio integrations with your ElevenLabs conversational AI agents. A custom server approach gives you more control over call handling, webhook processing, and integration with your existing systems.
+
+## Prerequisites
+
+- A [Twilio account](https://twilio.com/)
+- A purchased & provisioned Twilio [phone number](https://www.twilio.com/docs/phone-numbers)
+- A server capable of handling HTTP webhooks
+- Basic knowledge of Twilio's Voice API
+
+## Setup
+
+### Configure Twilio webhooks
+
+Configure your Twilio phone number to send webhook requests to your custom server:
+
+1. In your Twilio Console, navigate to Phone Numbers > Manage > Active numbers
+2. Select your phone number
+3. Set the webhook URL for voice calls to your server endpoint
+4. Configure the HTTP method (POST recommended)
+
+### Handle incoming calls
+
+Your custom server should handle incoming webhook requests from Twilio and integrate with ElevenLabs:
+
+```python
+from flask import Flask, request
+import requests
+
+app = Flask(__name__)
+
+@app.route('/voice', methods=['POST'])
+def handle_voice():
+    # Extract call information from Twilio webhook
+    call_sid = request.form.get('CallSid')
+    from_number = request.form.get('From')
+    to_number = request.form.get('To')
+
+    # Process call with ElevenLabs
+    # Your integration logic here
+
+    return twiml_response
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### Integration with ElevenLabs
+
+Connect your custom server to ElevenLabs conversational AI:
+
+1. Use the ElevenLabs API to initiate conversations
+2. Handle audio streaming between Twilio and ElevenLabs
+3. Process conversation events and responses
+
+## Advanced features
+
+- Custom call routing logic
+- Integration with existing CRM systems
+- Advanced analytics and logging
+- Custom authentication and security measures
+
+## Security considerations
+
+- Use HTTPS for all webhook endpoints
+- Validate Twilio webhook signatures
+- Implement proper authentication for sensitive operations
+- Store credentials securely
+
+## Next steps
+
+For simpler integrations, consider using the [native Twilio integration](/docs/conversational-ai/phone-numbers/twilio-integration/native-integration) instead.

@@ -1,0 +1,139 @@
+---
+title: Twilio outbound calling
+subtitle: Learn how to initiate outbound calls with ElevenLabs conversational AI using Twilio.
+---
+
+## Overview
+
+This guide shows you how to initiate outbound calls using your ElevenLabs conversational AI agents with Twilio phone numbers. Outbound calling enables your agents to proactively reach out to customers for notifications, surveys, follow-ups, and other business communications.
+
+## Prerequisites
+
+- A [Twilio account](https://twilio.com/)
+- A purchased & provisioned Twilio [phone number](https://www.twilio.com/docs/phone-numbers)
+- An ElevenLabs conversational AI agent
+- Integration set up between Twilio and ElevenLabs
+
+## Making outbound calls
+
+### Using the dashboard
+
+The easiest way to make outbound calls is through the ElevenLabs dashboard:
+
+1. Navigate to [Phone Numbers](https://elevenlabs.io/app/conversational-ai/phone-numbers)
+2. Find your Twilio phone number
+3. Click the **Outbound call** button
+4. Configure the call parameters:
+   - Select the agent to handle the conversation
+   - Enter the destination phone number
+   - Add any personalization data if needed
+5. Click **Send Test Call** to initiate the call
+
+### Using the API
+
+For programmatic outbound calling, use the ElevenLabs API:
+
+```python
+import requests
+
+# API endpoint for outbound calls
+url = "https://api.elevenlabs.io/v1/convai/conversations/phone"
+
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "agent_id": "your-agent-id",
+    "phone_number": "+1234567890",
+    "phone_number_id": "your-twilio-phone-number-id"
+}
+
+response = requests.post(url, headers=headers, json=data)
+```
+
+### Batch calling
+
+For calling multiple recipients, use the [batch calling feature](/docs/conversational-ai/workflows/batch-calling):
+
+1. Upload a CSV file with recipient phone numbers
+2. Select your agent and phone number
+3. Schedule or send immediately
+4. Monitor progress in the dashboard
+
+## Best practices
+
+### Compliance
+
+- Follow [TCPA regulations](/docs/conversational-ai/legal/tcpa) for outbound calls
+- Maintain proper consent records
+- Respect do-not-call lists
+- Include clear identification and opt-out options
+
+### Call timing
+
+- Respect local time zones
+- Avoid early morning or late evening calls
+- Consider business hours for B2B communications
+
+### Personalization
+
+- Use [dynamic variables](/docs/conversational-ai/customization/personalization/dynamic-variables) for personalized greetings
+- Customize messages based on recipient context
+- Include relevant account or interaction history
+
+### Monitoring
+
+- Track call success rates and completion rates
+- Monitor conversation quality through analytics
+- Review call recordings for optimization opportunities
+
+## Advanced features
+
+### Call scheduling
+
+Schedule outbound calls for optimal timing:
+
+- Time zone-aware scheduling
+- Batch processing for large campaigns
+- Retry logic for failed calls
+
+### Integration with CRM
+
+Connect your outbound calling with existing systems:
+
+- Pull contact data from CRM
+- Update call outcomes automatically
+- Trigger follow-up actions based on results
+
+### Analytics and reporting
+
+Monitor outbound call performance:
+
+- Success and completion rates
+- Average call duration
+- Customer satisfaction metrics
+- Cost per successful connection
+
+## Troubleshooting
+
+### Common issues
+
+- **Call not connecting**: Check phone number format and validity
+- **No audio**: Verify Twilio webhook configuration
+- **Agent not responding**: Ensure agent is properly configured and active
+
+### Support
+
+For technical issues, contact ElevenLabs support with:
+
+- Call SID from Twilio
+- Agent ID and configuration
+- Error messages or unexpected behavior
+
+## Next steps
+
+- Learn about [native Twilio integration](/docs/conversational-ai/phone-numbers/twilio-integration/native-integration) for setup
+- Explore [batch calling](/docs/conversational-ai/workflows/batch-calling) for larger campaigns
+- Review [TCPA compliance](/docs/conversational-ai/legal/tcpa) guidelines
