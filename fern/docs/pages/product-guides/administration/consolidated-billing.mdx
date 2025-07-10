@@ -1,0 +1,73 @@
+---
+title: Consolidated billing
+subtitle: Manage multiple workspaces with unified billing and shared credit pools.
+---
+
+<Info>Consolidated billing is an Enterprise feature that allows you to link multiple workspaces under a single billing account.</Info>
+
+## Overview
+
+Consolidated billing enables you to manage multiple workspaces across different environments while maintaining a single billing account.
+This feature is particularly useful for organizations that need to operate in multiple regions or maintain separate workspaces for different teams while keeping billing centralized.
+
+With consolidated billing, you have:
+
+- **Unified billing** – Receive a single invoice for all linked workspaces.
+- **Shared credit pools** – All workspaces share the same credit allocation.
+- **Cross-environment support** – Link workspaces from isolated environments (e.g., EU, India) to the US billing workspace.
+- **Independent management** – Each workspace maintains its own members, SSO configurations, and settings.
+
+## How it works
+
+Consolidated billing creates a relationship between workspaces where one workspace (the "billing workspace") receives usage reports from other workspaces (the "reporting workspaces"). All usage is then billed through the billing workspace.
+
+### Billing workspace
+
+The billing workspace must be located in the US environment (`elevenlabs.io`). This workspace:
+
+- Receives usage reports from all linked workspaces.
+- Issues a single monthly invoice.
+- Shows general usage coming from each reporting workspace.
+
+### Reporting workspaces
+
+Reporting workspaces can be located on elevenlabs.io or in an isolated environment. These workspaces:
+
+- Report their usage to the billing workspace.
+- Maintain their own members and configurations.
+- Show, as usual, granular usage analytics for that workspace.
+
+<Note>
+  Within the same region, users cannot be members of multiple workspaces. This limitation only applies within the same environment.
+</Note>
+
+## Setup process
+
+Consolidated billing is an Enterprise feature that requires configuration by our team. To enable consolidated billing for your organization, contact your dedicated Customer Success Manager.
+
+## Usage tracking
+
+The billing workspace will be able to see the usage of all linked workspaces.
+
+<img
+  src="/assets/images/product-guides/administration/consolidated-billing-reporting.png"
+  alt="Consolidated billing reporting view"
+  className="w-full rounded-lg"
+/>
+
+The reporting workspace will only be able to see analytics for its own usage. However, the total credits left shown in the sidebar will be the sum of all linked workspaces.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can I set credit limits for each workspace?">
+    No, all workspaces share the same credit pool. However, you can closely track the usage of each workspace.
+  </Accordion>
+  <Accordion title="Can I have different subscription tiers for different workspaces?">
+    No, all workspaces must share the same subscription. The billing workspace determines the subscription level for all linked workspaces.
+  </Accordion>
+  <Accordion title="Can I unlink a workspace from consolidated billing?">
+    Yes, you can disable consolidated billing on any reporting workspace. This will require setting up a new subscription for that workspace or removing that workspace entirely.
+    To do so, get in touch with your dedicated Customer Success Manager.
+  </Accordion>
+</AccordionGroup> 
