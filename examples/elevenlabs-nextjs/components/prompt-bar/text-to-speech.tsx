@@ -379,9 +379,9 @@ export function TextToSpeechPromptBar({
                   <Slider
                     value={[settings.speed]}
                     onValueChange={(values) => updateSetting('speed', values[0])}
-                    max={1.2}
-                    min={0.7}
-                    step={0.1}
+                    max={2.0}
+                    min={0.5}
+                    step={0.05}
                     className="[&>.relative>.bg-primary]:bg-white"
                   />
                   <div className="text-muted-foreground mt-1 flex justify-between text-xs">
