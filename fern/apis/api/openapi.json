@@ -25588,6 +25588,10 @@
               }
             ],
             "title": "Initiator Id"
+          },
+          "conversation_initiation_source": {
+            "default": "unknown",
+            "$ref": "#/components/schemas/ConversationInitiationSource"
           }
         },
         "required": [
@@ -26442,6 +26446,24 @@
           "request_headers"
         ],
         "title": "ConversationInitiationClientDataWebhook"
+      },
+      "ConversationInitiationSource": {
+        "description": "Enum representing the possible sources for conversation initiation.",
+        "type": "string",
+        "enum": [
+          "unknown",
+          "android_sdk",
+          "node_js_sdk",
+          "react_native_sdk",
+          "react_sdk",
+          "js_sdk",
+          "python_sdk",
+          "widget",
+          "sip_trunk",
+          "twilio",
+          "genesys"
+        ],
+        "title": "ConversationInitiationSource"
       },
       "ConversationSignedUrlResponseModel": {
         "type": "object",
