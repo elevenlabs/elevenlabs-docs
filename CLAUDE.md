@@ -116,6 +116,23 @@ pnpm run openapi:lint
 - Changelog files: `YYYY-MM-DD.md` format in `/fern/docs/pages/changelog/`
 - Snippet files: Consistent naming across languages (e.g., `quickstart_tts.py` and `quickstart_tts.mts`)
 
+## Changelog Style Guidelines
+
+When writing changelog entries:
+
+- **Format**: Use `YYYY-MM-DD.md` filename format with frontmatter containing `title: "Month Day, Year"`
+- **Language**: Use descriptive, professional language without marketing jargon
+- **Formatting**: Avoid all-caps formatting like `**NEW**`, `**ENHANCED**`, `**MOVED**`, `**UPDATED**`, `**DEPRECATED**`, `**REMOVED**`
+- **Style**: Use natural language instead:
+  - "Added support for..." instead of "**NEW**: Support for..."
+  - "Phone number endpoint moved from..." instead of "**MOVED**: Phone number endpoint from..."
+  - "Deprecated `field_name`..." instead of "**DEPRECATED**: `field_name`..."
+  - "Removed `schema_name`..." instead of "**REMOVED**: `schema_name`..."
+- **Links**: Always include relevant links to documentation pages, API references, and guides
+- **Structure**: Follow the established pattern of other changelog files with clear sections and subsections
+- **Features**: Lead with feature names in bold (e.g., "**HIPAA Compliance**:", "**Post-call Audio**:")
+- **Consistency**: Maintain consistent formatting and structure across all changelog entries
+
 ## Important Notes
 
 - Never commit sensitive information (API keys, tokens)
