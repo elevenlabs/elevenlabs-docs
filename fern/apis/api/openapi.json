@@ -9516,6 +9516,317 @@
         "x-fern-sdk-method-name": "list"
       }
     },
+    "/v1/workspace/api-keys": {
+      "get": {
+        "operationId": "get_workspace_api_keys_v1_workspace_api_keys_get",
+        "summary": "Get Workspace Api Keys",
+        "description": "Get all API keys in the workspace",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceApiKeyListResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "service-accounts"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
+    "/v1/workspace/api-keys/add": {
+      "post": {
+        "operationId": "create_workspace_api_key_v1_workspace_api_keys_add_post",
+        "summary": "Create Workspace Api Key",
+        "description": "Create a new API key in the workspace for a service account",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_workspace_api_key_v1_workspace_api_keys_add_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceCreateApiKeyResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "service-accounts"
+        ],
+        "x-fern-sdk-method-name": "add"
+      }
+    },
+    "/v1/workspace/api-keys/edit": {
+      "post": {
+        "operationId": "edit_workspace_api_key_v1_workspace_api_keys_edit_post",
+        "summary": "Edit Workspace Api Key",
+        "description": "Edit an existing API key in the workspace",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_edit_workspace_api_key_v1_workspace_api_keys_edit_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "service-accounts"
+        ],
+        "x-fern-sdk-method-name": "edit"
+      }
+    },
+    "/v1/workspace/api-keys/{key_id}": {
+      "delete": {
+        "operationId": "delete_workspace_api_key_route_v1_workspace_api_keys__key_id__delete",
+        "summary": "Delete Workspace Api Key Route",
+        "description": "Delete an existing API key in the workspace",
+        "parameters": [
+          {
+            "name": "key_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace",
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "service-accounts"
+        ],
+        "x-fern-sdk-method-name": "delete"
+      }
+    },
+    "/v1/workspace/service-accounts": {
+      "get": {
+        "operationId": "get_workspace_service_accounts_v1_workspace_service_accounts_get",
+        "summary": "Get Workspace Service Accounts",
+        "description": "Get all service accounts in the workspace",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceServiceAccountListResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "workspace",
+          "service-accounts"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
     "/v1/workspace/groups/search": {
       "get": {
         "operationId": "Search_user_groups_v1_workspace_groups_search_get",
@@ -23884,6 +24195,162 @@
           "recording"
         ],
         "title": "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post"
+      },
+      "Body_create_workspace_api_key_v1_workspace_api_keys_add_post": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "service_account_user_id": {
+            "type": "string",
+            "title": "Service Account User Id"
+          },
+          "permissions": {
+            "description": "The permissions of the XI API.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "text_to_speech",
+                    "speech_to_speech",
+                    "speech_to_text",
+                    "models_read",
+                    "models_write",
+                    "voices_read",
+                    "voices_write",
+                    "speech_history_read",
+                    "speech_history_write",
+                    "sound_generation",
+                    "audio_isolation",
+                    "voice_generation",
+                    "dubbing_read",
+                    "dubbing_write",
+                    "pronunciation_dictionaries_read",
+                    "pronunciation_dictionaries_write",
+                    "user_read",
+                    "user_write",
+                    "projects_read",
+                    "projects_write",
+                    "audio_native_read",
+                    "audio_native_write",
+                    "workspace_read",
+                    "workspace_write",
+                    "forced_alignment"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "string",
+                "const": "all"
+              }
+            ],
+            "title": "Permissions"
+          },
+          "character_limit": {
+            "description": "The character limit of the XI API key. If provided this will limit the usage of this api key to n characters per month where n is the chosen value. Requests that incur charges will fail after reaching this monthly limit.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Limit"
+          }
+        },
+        "required": [
+          "name",
+          "service_account_user_id",
+          "permissions"
+        ],
+        "title": "Body_create_workspace_api_key_v1_workspace_api_keys_add_post"
+      },
+      "Body_edit_workspace_api_key_v1_workspace_api_keys_edit_post": {
+        "type": "object",
+        "properties": {
+          "key_id": {
+            "type": "string",
+            "title": "Key Id"
+          },
+          "is_enabled": {
+            "description": "Whether to enable or disable the API key.",
+            "type": "boolean",
+            "title": "Is Enabled"
+          },
+          "name": {
+            "description": "The name of the XI API key to use (used for identification purposes only).",
+            "type": "string",
+            "examples": [
+              "Sneaky Fox"
+            ],
+            "title": "Name"
+          },
+          "permissions": {
+            "description": "The permissions of the XI API.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "text_to_speech",
+                    "speech_to_speech",
+                    "speech_to_text",
+                    "models_read",
+                    "models_write",
+                    "voices_read",
+                    "voices_write",
+                    "speech_history_read",
+                    "speech_history_write",
+                    "sound_generation",
+                    "audio_isolation",
+                    "voice_generation",
+                    "dubbing_read",
+                    "dubbing_write",
+                    "pronunciation_dictionaries_read",
+                    "pronunciation_dictionaries_write",
+                    "user_read",
+                    "user_write",
+                    "projects_read",
+                    "projects_write",
+                    "audio_native_read",
+                    "audio_native_write",
+                    "workspace_read",
+                    "workspace_write",
+                    "forced_alignment"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissions"
+          },
+          "character_limit": {
+            "description": "The character limit of the XI API key. If provided this will limit the usage of this api key to n characters per month where n is the chosen value. Requests that incur charges will fail after reaching this monthly limit.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Limit"
+          }
+        },
+        "required": [
+          "key_id",
+          "is_enabled",
+          "name"
+        ],
+        "title": "Body_edit_workspace_api_key_v1_workspace_api_keys_edit_post"
       },
       "BreakdownTypes": {
         "description": "How to break down the information. Cannot be \"user\" or \"api_key\" if include_workspace_metrics is False.",
@@ -42094,6 +42561,129 @@
         },
         "title": "WidgetTextContents"
       },
+      "WorkspaceApiKeyListResponseModel": {
+        "type": "object",
+        "properties": {
+          "api-keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceApiKeyResponseModel"
+            },
+            "title": "Api-Keys"
+          }
+        },
+        "required": [
+          "api-keys"
+        ],
+        "title": "WorkspaceApiKeyListResponseModel"
+      },
+      "WorkspaceApiKeyResponseModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "hint": {
+            "type": "string",
+            "title": "Hint"
+          },
+          "key_id": {
+            "type": "string",
+            "title": "Key Id"
+          },
+          "service_account_user_id": {
+            "type": "string",
+            "title": "Service Account User Id"
+          },
+          "created_at_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At Unix"
+          },
+          "is_disabled": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Disabled"
+          },
+          "permissions": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "text_to_speech",
+                    "speech_to_speech",
+                    "speech_to_text",
+                    "models_read",
+                    "models_write",
+                    "voices_read",
+                    "voices_write",
+                    "speech_history_read",
+                    "speech_history_write",
+                    "sound_generation",
+                    "audio_isolation",
+                    "voice_generation",
+                    "dubbing_read",
+                    "dubbing_write",
+                    "pronunciation_dictionaries_read",
+                    "pronunciation_dictionaries_write",
+                    "user_read",
+                    "user_write",
+                    "projects_read",
+                    "projects_write",
+                    "audio_native_read",
+                    "audio_native_write",
+                    "workspace_read",
+                    "workspace_write",
+                    "forced_alignment"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissions"
+          },
+          "character_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Limit"
+          },
+          "character_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Count"
+          }
+        },
+        "required": [
+          "name",
+          "hint",
+          "key_id",
+          "service_account_user_id"
+        ],
+        "title": "WorkspaceApiKeyResponseModel"
+      },
       "WorkspaceBatchCallsResponse": {
         "type": "object",
         "properties": {
@@ -42127,6 +42717,19 @@
           "batch_calls"
         ],
         "title": "WorkspaceBatchCallsResponse"
+      },
+      "WorkspaceCreateApiKeyResponseModel": {
+        "type": "object",
+        "properties": {
+          "xi-api-key": {
+            "type": "string",
+            "title": "Xi-Api-Key"
+          }
+        },
+        "required": [
+          "xi-api-key"
+        ],
+        "title": "WorkspaceCreateApiKeyResponseModel"
       },
       "WorkspaceGroupByNameResponseModel": {
         "type": "object",
@@ -42187,6 +42790,59 @@
           "convai_agent_response_tests"
         ],
         "title": "WorkspaceResourceType"
+      },
+      "WorkspaceServiceAccountListResponseModel": {
+        "type": "object",
+        "properties": {
+          "service-accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceServiceAccountResponseModel"
+            },
+            "title": "Service-Accounts"
+          }
+        },
+        "required": [
+          "service-accounts"
+        ],
+        "title": "WorkspaceServiceAccountListResponseModel"
+      },
+      "WorkspaceServiceAccountResponseModel": {
+        "type": "object",
+        "properties": {
+          "service_account_user_id": {
+            "type": "string",
+            "title": "Service Account User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "created_at_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At Unix"
+          },
+          "api-keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceApiKeyResponseModel"
+            },
+            "title": "Api-Keys"
+          }
+        },
+        "required": [
+          "service_account_user_id",
+          "name",
+          "api-keys"
+        ],
+        "title": "WorkspaceServiceAccountResponseModel"
       },
       "WorkspaceWebhookListResponseModel": {
         "type": "object",
