@@ -118,9 +118,9 @@ The Genesys integration supports only the following client events:
 
 ## Session variables
 
-You can pass dynamic context from your Genesys flow to your ElevenLabs agent using input session variables:
+You can pass dynamic context from your Genesys flow to your ElevenLabs agent using input session variables and receive data back through output session variables:
 
-### Setting up session variables
+### Input session variables
 
 1. **In Genesys flow**: Define input session variables in your "Call Audio Connector" action
 2. **In ElevenLabs agent**: These variables are automatically available as dynamic variables
@@ -134,10 +134,61 @@ Genesys Flow input session variable: customer_name = "John Smith"
 
 ElevenLabs agent prompt: Hi {{customer_name}}, how can I help you today?
 
-<Info>
-  Output session variables from ElevenLabs agents back to Genesys flows are coming soon. This
-  feature will allow you to capture conversation outcomes and route calls accordingly.
-</Info>
+### Output session variables
+
+You can now receive data from your ElevenLabs agent back to your Genesys flow using output session variables.
+
+Any data collected through [Data Collection](/docs/conversational-ai/customization/agent-analysis/data-collection) in your ElevenLabs agent will be available as output session variables in your Genesys flow after the conversation ends.
+
+### Example usage
+
+After your ElevenLabs agent conversation completes, you can use the output variables in your Genesys flow:
+
+1. **Decision logic**: Use output variables in decision nodes to route calls
+2. **Data processing**: Pass conversation data to external systems
+3. **Reporting**: Include conversation outcomes in your contact center analytics
+
+## Transfer to number functionality
+
+The ElevenLabs integration now supports call transfers back to Genesys for routing to specific numbers or queues.
+
+### Setting up transfers
+
+<Steps>
+
+<Step title="Configure a data collection items">
+  In your ElevenLabs agent, add data collection item with a detailed identifier and description to collect where the user should be transferred to.
+
+</Step>
+
+<Step title="Update agent prompt">
+  Add instructions to your agent's system prompt to use the end_call tool when a transfer is requested. For example:
+
+```
+If the caller requests to be transferred to a specific department or asks to
+speak with a human agent, use the end_call tool to end the conversation.
+```
+
+</Step>
+
+<Step title="Configure Genesys flow logic">
+  In your Genesys Architect flow, add decision nodes after the Audio Connector action to check output variables and route the call accordingly:
+
+1. Use output session variables to determine if a transfer was requested
+2. Configure routing logic based on the transfer type or destination
+3. Use Genesys native transfer capabilities to complete the transfer
+
+</Step>
+
+</Steps>
+
+### Example transfer flow
+
+1. **Customer request**: "I need to speak with billing"
+2. **Agent response**: "I'll transfer you to our billing department"
+3. **Agent action**: Uses end_call tool
+4. **Data collection**: Data collection field is populated
+5. **Genesys flow**: Checks output variable and routes to billing queue
 
 ## Limitations and unsupported features
 
@@ -146,7 +197,6 @@ The following tools and features are not supported in the Genesys integration:
 ### Unsupported tools
 
 - **Client tool**: Not compatible with Genesys WebSocket integration
-- **Transfer to number**: Use Genesys native transfer capabilities instead
 
 ## Troubleshooting
 
