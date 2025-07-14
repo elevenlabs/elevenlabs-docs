@@ -50,3 +50,11 @@ title: "July 14, 2025"
 You can read the output of the context generated in changelog_data/
 
 Discard the generated context before finishing
+
+The structure of the changelog should be 
+
+first product updates grouped by product, in order of importance of the update
+
+then sdk releases 
+
+then api schema updates in an accordion. you can read the other changelog updates to get a sense of the desired format.
