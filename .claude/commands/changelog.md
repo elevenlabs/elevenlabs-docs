@@ -24,11 +24,11 @@ The required dependencies are the gh cli and openapi-diff. Install them if error
 
 The script outputs data to these temporary locations:
 
-- **OpenAPI diff**: `/tmp/openapi_diff.md` - Markdown diff of API changes
-- **Recent PRs**: `/tmp/prs.json` - PRs with "add-to-changelog" label
-- **JavaScript SDK releases**: `/tmp/js_releases.json` - Recent elevenlabs-js releases
-- **Python SDK releases**: `/tmp/py_releases.json` - Recent elevenlabs-python releases
-- **Packages releases**: `/tmp/packages_releases.json` - Recent packages releases
+- **OpenAPI diff**: `/changelog_data/openapi_diff.md` - Markdown diff of API changes
+- **Recent PRs**: `/changelog_data/prs.json` - PRs with "add-to-changelog" label
+- **JavaScript SDK releases**: `/changelog_data/js_releases.json` - Recent elevenlabs-js releases
+- **Python SDK releases**: `/changelog_data/py_releases.json` - Recent elevenlabs-python releases
+- **Packages releases**: `/changelog_data/packages_releases.json` - Recent packages releases
 
 ## Instructions
 
@@ -41,3 +41,20 @@ The script outputs data to these temporary locations:
 Think carefully about how to present the information in a way that's most valuable to developers using the ElevenLabs API.
 
 Please run pnpm fmt when you are done to ensure ci/cd will pass.
+
+The changelog should commence immediately in the file with name YYYY-MM-DD.md, do not add a title like 
+---
+title: "July 14, 2025"
+---
+
+You can read the output of the context generated in changelog_data/
+
+Discard the generated context before finishing
+
+The structure of the changelog should be 
+
+first product updates grouped by product, in order of importance of the update
+
+then sdk releases 
+
+then api schema updates in an accordion. you can read the other changelog updates to get a sense of the desired format.
