@@ -41,3 +41,8 @@ The script outputs data to these temporary locations:
 Think carefully about how to present the information in a way that's most valuable to developers using the ElevenLabs API.
 
 Please run pnpm fmt when you are done to ensure ci/cd will pass.
+
+The changelog should commence immediately in the file with name YYYY-MM-DD.md, do not add a title like 
+---
+title: "July 14, 2025"
+---
