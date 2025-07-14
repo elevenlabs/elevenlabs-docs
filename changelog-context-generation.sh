@@ -155,15 +155,15 @@ collect_releases() {
     
     # JavaScript SDK releases
     gh release list --repo elevenlabs/elevenlabs-js --limit 5 \
-        --json name,tagName,publishedAt,body,url > "$JS_RELEASES_FILE"
+        --json name,tagName,publishedAt,isLatest > "$JS_RELEASES_FILE"
     
     # Python SDK releases  
     gh release list --repo elevenlabs/elevenlabs-python --limit 5 \
-        --json name,tagName,publishedAt,body,url > "$PY_RELEASES_FILE"
+        --json name,tagName,publishedAt,isLatest > "$PY_RELEASES_FILE"
     
     # Packages releases
     gh release list --repo elevenlabs/packages --limit 5 \
-        --json name,tagName,publishedAt,body,url > "$PACKAGES_RELEASES_FILE"
+        --json name,tagName,publishedAt,isLatest > "$PACKAGES_RELEASES_FILE"
     
     echo "   ✅ Release data collected"
 }
