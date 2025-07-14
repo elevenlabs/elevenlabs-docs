@@ -228,7 +228,7 @@ Client events are essential for maintaining the real-time nature of conversation
 
   <Accordion title="agent_tool_response">
     - Indicates when the agent has executed a tool function
-    - Contains tool metadata and execution status
+    - Contains tool metadata, execution status, and result value
     - Provides visibility into agent tool usage during conversations
 
     ```javascript
@@ -239,7 +239,8 @@ Client events are essential for maintaining the real-time nature of conversation
         "tool_name": "skip_turn",
         "tool_call_id": "skip_turn_c82ca55355c840bab193effb9a7e8101",
         "tool_type": "system",
-        "is_error": false
+        "is_error": false,
+        "result_value": "Turn skipped successfully"
       }
     }
     ```
@@ -248,12 +249,13 @@ Client events are essential for maintaining the real-time nature of conversation
     // Example agent tool response handler
     websocket.on('agent_tool_response', (event) => {
       const { agent_tool_response } = event;
-      const { tool_name, tool_call_id, tool_type, is_error } = agent_tool_response;
+      const { tool_name, tool_call_id, tool_type, is_error, result_value } = agent_tool_response;
 
       if (is_error) {
         console.error(`Agent tool ${tool_name} failed:`, tool_call_id);
       } else {
         console.log(`Agent executed ${tool_type} tool: ${tool_name}`);
+        console.log(`Tool result: ${result_value}`);
       }
     });
     ```
