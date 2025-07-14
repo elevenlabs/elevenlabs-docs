@@ -24,11 +24,11 @@ The required dependencies are the gh cli and openapi-diff. Install them if error
 
 The script outputs data to these temporary locations:
 
-- **OpenAPI diff**: `/tmp/openapi_diff.md` - Markdown diff of API changes
-- **Recent PRs**: `/tmp/prs.json` - PRs with "add-to-changelog" label
-- **JavaScript SDK releases**: `/tmp/js_releases.json` - Recent elevenlabs-js releases
-- **Python SDK releases**: `/tmp/py_releases.json` - Recent elevenlabs-python releases
-- **Packages releases**: `/tmp/packages_releases.json` - Recent packages releases
+- **OpenAPI diff**: `/changelog_data/openapi_diff.md` - Markdown diff of API changes
+- **Recent PRs**: `/changelog_data/prs.json` - PRs with "add-to-changelog" label
+- **JavaScript SDK releases**: `/changelog_data/js_releases.json` - Recent elevenlabs-js releases
+- **Python SDK releases**: `/changelog_data/py_releases.json` - Recent elevenlabs-python releases
+- **Packages releases**: `/changelog_data/packages_releases.json` - Recent packages releases
 
 ## Instructions
 
@@ -46,3 +46,7 @@ The changelog should commence immediately in the file with name YYYY-MM-DD.md, d
 ---
 title: "July 14, 2025"
 ---
+
+You can read the output of the context generated in changelog_data/
+
+Discard the generated context before finishing
