@@ -17742,10 +17742,6 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Input"
-          },
-          "testing": {
-            "description": "Testing configuration for the agent",
-            "$ref": "#/components/schemas/AgentTestingSettings"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -17788,10 +17784,6 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Output"
-          },
-          "testing": {
-            "description": "Testing configuration for the agent",
-            "$ref": "#/components/schemas/AgentTestingSettings"
           },
           "safety": {
             "$ref": "#/components/schemas/SafetyResponseModel"
@@ -17874,29 +17866,6 @@
           "access_info"
         ],
         "title": "AgentSummaryResponseModel"
-      },
-      "AgentTestingSettings": {
-        "description": "Settings for agent testing configuration.",
-        "type": "object",
-        "properties": {
-          "test_ids": {
-            "description": "List of test IDs that should be run for this agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "minItems": 0,
-            "title": "Test Ids"
-          }
-        },
-        "example": {
-          "test_ids": [
-            "test_123",
-            "test_456"
-          ]
-        },
-        "title": "AgentTestingSettings"
       },
       "AgentTransfer": {
         "type": "object",
