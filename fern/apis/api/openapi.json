@@ -17742,6 +17742,10 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Input"
+          },
+          "testing": {
+            "description": "Testing configuration for the agent",
+            "$ref": "#/components/schemas/AgentTestingSettings"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -17784,6 +17788,10 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Output"
+          },
+          "testing": {
+            "description": "Testing configuration for the agent",
+            "$ref": "#/components/schemas/AgentTestingSettings"
           },
           "safety": {
             "$ref": "#/components/schemas/SafetyResponseModel"
@@ -17866,6 +17874,29 @@
           "access_info"
         ],
         "title": "AgentSummaryResponseModel"
+      },
+      "AgentTestingSettings": {
+        "description": "Settings for agent testing configuration.",
+        "type": "object",
+        "properties": {
+          "test_ids": {
+            "description": "List of test IDs that should be run for this agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "minItems": 0,
+            "title": "Test Ids"
+          }
+        },
+        "example": {
+          "test_ids": [
+            "test_123",
+            "test_456"
+          ]
+        },
+        "title": "AgentTestingSettings"
       },
       "AgentTransfer": {
         "type": "object",
@@ -25592,6 +25623,17 @@
           "conversation_initiation_source": {
             "default": "unknown",
             "$ref": "#/components/schemas/ConversationInitiationSource"
+          },
+          "conversation_initiation_source_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Initiation Source Version"
           }
         },
         "required": [
@@ -26829,6 +26871,18 @@
             "type": "string",
             "title": "Label"
           },
+          "supports_inbound": {
+            "description": "Whether this phone number supports inbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Inbound"
+          },
+          "supports_outbound": {
+            "description": "Whether this phone number supports outbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Outbound"
+          },
           "provider": {
             "type": "string",
             "default": "sip_trunk",
@@ -26874,6 +26928,18 @@
             "description": "Label for the phone number",
             "type": "string",
             "title": "Label"
+          },
+          "supports_inbound": {
+            "description": "Whether this phone number supports inbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Inbound"
+          },
+          "supports_outbound": {
+            "description": "Whether this phone number supports outbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Outbound"
           },
           "provider": {
             "type": "string",
@@ -26948,6 +27014,18 @@
               ]
             },
             "title": "Request Headers"
+          },
+          "api_version": {
+            "description": "The API version to use for the request",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Version"
           }
         },
         "required": [
@@ -29609,6 +29687,18 @@
             "type": "string",
             "title": "Label"
           },
+          "supports_inbound": {
+            "description": "Whether this phone number supports inbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Inbound"
+          },
+          "supports_outbound": {
+            "description": "Whether this phone number supports outbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Outbound"
+          },
           "phone_number_id": {
             "description": "The ID of the phone number",
             "type": "string",
@@ -29670,7 +29760,9 @@
           "label": "Sales Team",
           "phone_number": "+1987654321",
           "phone_number_id": "phone_456",
-          "provider": "sip_trunk"
+          "provider": "sip_trunk",
+          "supports_inbound": true,
+          "supports_outbound": true
         },
         "required": [
           "phone_number",
@@ -29691,6 +29783,18 @@
             "description": "Label for the phone number",
             "type": "string",
             "title": "Label"
+          },
+          "supports_inbound": {
+            "description": "Whether this phone number supports inbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Inbound"
+          },
+          "supports_outbound": {
+            "description": "Whether this phone number supports outbound calls",
+            "type": "boolean",
+            "default": true,
+            "title": "Supports Outbound"
           },
           "phone_number_id": {
             "description": "The ID of the phone number",
@@ -29720,7 +29824,9 @@
           "label": "Customer Support",
           "phone_number": "+1234567890",
           "phone_number_id": "phone_123",
-          "provider": "twilio"
+          "provider": "twilio",
+          "supports_inbound": true,
+          "supports_outbound": true
         },
         "required": [
           "phone_number",
