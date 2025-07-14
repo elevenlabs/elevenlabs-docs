@@ -125,7 +125,7 @@ generate_openapi_diff() {
     
     # Generate diff
     echo "   🔀 Generating OpenAPI diff..."
-    if openapi-diff "$old_spec" "$new_spec" --format markdown > "$OPENAPI_DIFF_FILE" 2>/dev/null; then
+    if openapi-diff "$old_spec" "$new_spec" --markdown "$OPENAPI_DIFF_FILE" 2>/dev/null; then
         echo "   ✅ OpenAPI diff generated successfully"
         
         # Check if there are actually any changes
