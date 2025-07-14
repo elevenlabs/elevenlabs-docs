@@ -195,9 +195,7 @@ generate_changelog_data() {
     echo ""
     echo "## Recent PRs (add-to-changelog label)"
     if [ -s "$PRS_FILE" ] && [ "$(jq length "$PRS_FILE")" -gt 0 ]; then
-        echo "```json"
-        jq -r '.[] | "- \(.title) (#\(.number)) by @\(.author.login)\n  URL: \(.url)\n  Merged: \(.mergedAt)\n"' "$PRS_FILE"
-        echo "```"
+        jq -r '.[] | "- \(.title) (#\(.number)) by @\(.author.login)\n  URL: \(.url)\n  Merged: \(.mergedAt // "Not merged")"' "$PRS_FILE"
     else
         echo "- No PRs with changelog label found this week"
     fi
@@ -213,7 +211,7 @@ generate_changelog_data() {
     if [ "$js_recent" = "[]" ]; then
         echo "- No releases this week"
     else
-        echo "$js_recent" | jq -r '.[] | "- \(.name) (\(.tagName)) - Published: \(.publishedAt)\n  URL: \(.url)"'
+        echo "$js_recent" | jq -r '.[] | "- \(.name) (\(.tagName)) - Published: \(.publishedAt)"'
     fi
     
     # Python SDK
@@ -223,7 +221,7 @@ generate_changelog_data() {
     if [ "$py_recent" = "[]" ]; then
         echo "- No releases this week"
     else
-        echo "$py_recent" | jq -r '.[] | "- \(.name) (\(.tagName)) - Published: \(.publishedAt)\n  URL: \(.url)"'
+        echo "$py_recent" | jq -r '.[] | "- \(.name) (\(.tagName)) - Published: \(.publishedAt)"'
     fi
     
     # Packages
@@ -233,7 +231,7 @@ generate_changelog_data() {
     if [ "$pkg_recent" = "[]" ]; then
         echo "- No releases this week"
     else
-        echo "$pkg_recent" | jq -r '.[] | "- \(.name) (\(.tagName)) - Published: \(.publishedAt)\n  URL: \(.url)"'
+        echo "$pkg_recent" | jq -r '.[] | "- \(.name) (\(.tagName)) - Published: \(.publishedAt)"'
     fi
 }
 
