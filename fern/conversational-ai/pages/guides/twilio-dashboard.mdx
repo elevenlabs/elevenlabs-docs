@@ -13,12 +13,38 @@ You will learn to:
 - Link it to your agent to handle inbound calls.
 - Initiate outbound calls using your agent.
 
+## Phone Number Types & Capabilities
+
+ElevenLabs supports two types of Twilio phone numbers with different capabilities:
+
+### Purchased Twilio Numbers (Full Support)
+
+- **Inbound calls**: Supported - Can receive calls and route them to agents
+- **Outbound calls**: Supported - Can make calls using agents
+- **Requirements**: Number must be purchased through Twilio and appear in your "Phone Numbers" section
+
+### Verified Caller IDs (Outbound Only)
+
+- **Inbound calls**: Not supported - Cannot receive calls or be assigned to agents
+- **Outbound calls**: Supported - Can make calls using agents
+- **Requirements**: Number must be verified in Twilio's "Verified Caller IDs" section
+- **Use case**: Ideal for using your existing business number for outbound AI calls
+
+Learn more about [verifying caller IDs at scale](https://www.twilio.com/docs/voice/api/verifying-caller-ids-scale) in Twilio's documentation.
+
+<Note>
+  During phone number import, ElevenLabs automatically detects the capabilities of your number based
+  on its configuration in Twilio.
+</Note>
+
 ## Guide
 
 ### Prerequisites
 
 - A [Twilio account](https://twilio.com/).
-- A purchased & provisioned Twilio [phone number](https://www.twilio.com/docs/phone-numbers).
+- Either:
+  - A purchased & provisioned Twilio [phone number](https://www.twilio.com/docs/phone-numbers) (for inbound + outbound)
+  - OR a [verified caller ID](https://www.twilio.com/docs/voice/make-calls#verify-your-caller-id) in Twilio (for outbound only)
 
 <Steps>
 
@@ -73,14 +99,30 @@ You can find your account SID and auth token [**in the Twilio admin console**](h
   </Frame>
 </Accordion>
 
+<Info>
+**Phone Number Detection**: ElevenLabs will automatically detect whether your number supports:
+- **Inbound + Outbound**: Numbers purchased through Twilio
+- **Outbound Only**: Numbers verified as caller IDs in Twilio
+
+If your number is not found in either category, you'll receive an error asking you to verify it exists in your Twilio account.
+
+</Info>
+
 </Step>
 
-<Step title="Assign your agent">
-Once the number is imported, select the agent that will handle inbound calls for this phone number.
+<Step title="Assign your agent (Inbound-capable numbers only)">
+
+If your phone number supports inbound calls, you can assign an agent to handle incoming calls.
 
 <Frame background="subtle">
   ![Select agent for inbound calls](/assets/images/conversational-ai/twilio-assigned-agent.png)
 </Frame>
+
+<Note>
+  Numbers that only support outbound calls (verified caller IDs) cannot be assigned to agents and
+  will show as disabled in the agent dropdown.
+</Note>
+
 </Step>
 
 </Steps>
@@ -94,6 +136,11 @@ Test the agent by giving the phone number a call. Your agent is now ready to han
 </Tip>
 
 ## Making Outbound Calls
+
+<Info>
+  Both purchased Twilio numbers and verified caller IDs can be used for outbound calls. The outbound
+  call button will be disabled for numbers that don't support outbound calling.
+</Info>
 
 Your imported Twilio phone number can also be used to initiate outbound calls where your agent calls a specified phone number.
 
