@@ -17742,10 +17742,6 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Input"
-          },
-          "testing": {
-            "description": "Testing configuration for the agent",
-            "$ref": "#/components/schemas/AgentTestingSettings"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -17788,10 +17784,6 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Output"
-          },
-          "testing": {
-            "description": "Testing configuration for the agent",
-            "$ref": "#/components/schemas/AgentTestingSettings"
           },
           "safety": {
             "$ref": "#/components/schemas/SafetyResponseModel"
@@ -17874,29 +17866,6 @@
           "access_info"
         ],
         "title": "AgentSummaryResponseModel"
-      },
-      "AgentTestingSettings": {
-        "description": "Settings for agent testing configuration.",
-        "type": "object",
-        "properties": {
-          "test_ids": {
-            "description": "List of test IDs that should be run for this agent",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "minItems": 0,
-            "title": "Test Ids"
-          }
-        },
-        "example": {
-          "test_ids": [
-            "test_123",
-            "test_456"
-          ]
-        },
-        "title": "AgentTestingSettings"
       },
       "AgentTransfer": {
         "type": "object",
@@ -22373,18 +22342,6 @@
             "default": false,
             "title": "Webhook"
           },
-          "webhook_id": {
-            "description": "Optional specific webhook ID to send the transcription result to. Only valid when webhook is set to true. If not provided, transcription will be sent to all configured speech-to-text webhooks.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Webhook Id"
-          },
           "temperature": {
             "description": "Controls the randomness of the transcription output. Accepts values between 0.0 and 2.0, where higher values result in more diverse and less deterministic results. If omitted, we will use a temperature based on the model you selected which is usually 0.",
             "anyOf": [
@@ -25639,8 +25596,7 @@
           "conversation_initiation_source_version": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 50
+                "type": "string"
               },
               {
                 "type": "null"
@@ -30734,6 +30690,8 @@
           "claude-3-haiku",
           "grok-beta",
           "custom-llm",
+          "gemini-2.5-flash-preview-05-20",
+          "gemini-2.5-flash-preview-04-17",
           "gemini-2.0-flash-lite-001",
           "gemini-2.0-flash-001",
           "gemini-1.5-flash-002",
