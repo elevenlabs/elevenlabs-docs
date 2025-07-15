@@ -19,14 +19,14 @@ ElevenLabs supports two types of Twilio phone numbers with different capabilitie
 
 ### Purchased Twilio Numbers (Full Support)
 
-- **Inbound calls**: ✅ Supported - Can receive calls and route them to agents
-- **Outbound calls**: ✅ Supported - Can make calls using agents
+- **Inbound calls**: Supported - Can receive calls and route them to agents
+- **Outbound calls**: Supported - Can make calls using agents
 - **Requirements**: Number must be purchased through Twilio and appear in your "Phone Numbers" section
 
 ### Verified Caller IDs (Outbound Only)
 
-- **Inbound calls**: ❌ Not supported - Cannot receive calls or be assigned to agents
-- **Outbound calls**: ✅ Supported - Can make calls using agents
+- **Inbound calls**: Not supported - Cannot receive calls or be assigned to agents
+- **Outbound calls**: Supported - Can make calls using agents
 - **Requirements**: Number must be verified in Twilio's "Verified Caller IDs" section
 - **Use case**: Ideal for using your existing business number for outbound AI calls
 
@@ -184,28 +184,3 @@ Once initiated, the recipient will receive a call from your Twilio number. When 
   When making outbound calls, your agent will be the initiator of the conversation, so ensure your
   agent has appropriate initial messages configured to start the conversation effectively.
 </Note>
-
-## Troubleshooting
-
-### "Phone number not found" Error
-
-If you receive this error during import:
-
-1. **For inbound support**: Ensure the number is purchased and appears in your Twilio Console under "Phone Numbers" → "Manage" → "Active numbers"
-2. **For outbound support**: Verify the number in Twilio Console under "Phone Numbers" → "Manage" → "Verified Caller IDs"
-3. Check that your Twilio SID and Auth Token are correct
-
-### Outbound Call Button Disabled
-
-If the outbound call button is disabled with a tooltip about outbound not being supported:
-
-- This number was not found in your Twilio verified caller IDs
-- Add the number to your verified caller IDs in Twilio Console
-- Contact support if you believe this is an error
-
-### Cannot Assign Agent (Dropdown Disabled)
-
-If the agent assignment dropdown is disabled:
-
-- This number only supports outbound calls (verified caller ID)
-- To enable inbound calls, purchase this number through Twilio instead of just verifying it
