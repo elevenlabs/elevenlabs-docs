@@ -17219,6 +17219,69 @@
         },
         "title": "ASRConversationalConfig"
       },
+      "ASRConversationalConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "quality": {
+            "description": "The quality of the transcription",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRQuality"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider": {
+            "description": "The provider of the transcription service",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRProvider"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "user_input_audio_format": {
+            "description": "The format of the audio to be transcribed",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRInputFormat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "keywords": {
+            "description": "Keywords to boost prediction probability for",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keywords"
+          }
+        },
+        "example": {
+          "keywords": [
+            "hello",
+            "world"
+          ],
+          "provider": "elevenlabs",
+          "quality": "high",
+          "user_input_audio_format": "pcm_16000"
+        },
+        "title": "ASRConversationalConfigWorkflowOverride"
+      },
       "ASRInputFormat": {
         "type": "string",
         "enum": [
@@ -17617,6 +17680,152 @@
         },
         "title": "AgentConfigAPIModel"
       },
+      "AgentConfigAPIModelWorkflowOverride-Input": {
+        "type": "object",
+        "properties": {
+          "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "language": {
+            "description": "Language of the agent - used for ASR and TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language",
+            "x-convai-client-override": true
+          },
+          "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DynamicVariablesConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PromptAgentAPIModelWorkflowOverride-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "dynamic_variables": {
+            "dynamic_variable_placeholders": {
+              "user_name": "John Doe"
+            }
+          },
+          "first_message": "Hello, how can I help you today?",
+          "language": "en",
+          "prompt": {
+            "knowledge_base": [],
+            "llm": "gemini-2.0-flash-001",
+            "max_tokens": -1,
+            "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+            "temperature": 0,
+            "tool_ids": [],
+            "tools": []
+          }
+        },
+        "title": "AgentConfigAPIModelWorkflowOverride"
+      },
+      "AgentConfigAPIModelWorkflowOverride-Output": {
+        "type": "object",
+        "properties": {
+          "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "language": {
+            "description": "Language of the agent - used for ASR and TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language",
+            "x-convai-client-override": true
+          },
+          "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DynamicVariablesConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PromptAgentAPIModelWorkflowOverride-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "dynamic_variables": {
+            "dynamic_variable_placeholders": {
+              "user_name": "John Doe"
+            }
+          },
+          "first_message": "Hello, how can I help you today?",
+          "language": "en",
+          "prompt": {
+            "knowledge_base": [],
+            "llm": "gemini-2.0-flash-001",
+            "max_tokens": -1,
+            "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+            "temperature": 0,
+            "tool_ids": [],
+            "tools": []
+          }
+        },
+        "title": "AgentConfigAPIModelWorkflowOverride"
+      },
       "AgentConfigOverride": {
         "type": "object",
         "properties": {
@@ -17742,6 +17951,10 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Input"
+          },
+          "testing": {
+            "description": "Testing configuration for the agent",
+            "$ref": "#/components/schemas/AgentTestingSettings"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -17784,6 +17997,10 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Output"
+          },
+          "testing": {
+            "description": "Testing configuration for the agent",
+            "$ref": "#/components/schemas/AgentTestingSettings"
           },
           "safety": {
             "$ref": "#/components/schemas/SafetyResponseModel"
@@ -17867,6 +18084,29 @@
         ],
         "title": "AgentSummaryResponseModel"
       },
+      "AgentTestingSettings": {
+        "description": "Settings for agent testing configuration.",
+        "type": "object",
+        "properties": {
+          "test_ids": {
+            "description": "List of test IDs that should be run for this agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "minItems": 0,
+            "title": "Test Ids"
+          }
+        },
+        "example": {
+          "test_ids": [
+            "test_123",
+            "test_456"
+          ]
+        },
+        "title": "AgentTestingSettings"
+      },
       "AgentTransfer": {
         "type": "object",
         "properties": {
@@ -17905,6 +18145,117 @@
           "condition"
         ],
         "title": "AgentTransfer"
+      },
+      "AgentWorkflowRequestModel": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "description": "Whether the workflow is enabled.",
+            "type": "boolean",
+            "default": false,
+            "title": "Enabled"
+          },
+          "edges": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WorkflowEdgeModel-Input"
+            },
+            "title": "Edges"
+          },
+          "nodes": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowStartNodeModel-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowEndNodeModel-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowPhoneNumberNodeModel-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowOverrideAgentNodeModel-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowStandaloneAgentNodeModel-Input"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "end": "#/components/schemas/WorkflowEndNodeModel-Input",
+                  "override_agent": "#/components/schemas/WorkflowOverrideAgentNodeModel-Input",
+                  "phone_number": "#/components/schemas/WorkflowPhoneNumberNodeModel-Input",
+                  "standalone_agent": "#/components/schemas/WorkflowStandaloneAgentNodeModel-Input",
+                  "start": "#/components/schemas/WorkflowStartNodeModel-Input"
+                }
+              }
+            },
+            "minProperties": 1,
+            "title": "Nodes"
+          }
+        },
+        "title": "AgentWorkflowRequestModel"
+      },
+      "AgentWorkflowResponseModel": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "description": "Whether the workflow is enabled.",
+            "type": "boolean",
+            "default": false,
+            "title": "Enabled"
+          },
+          "edges": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WorkflowEdgeModel-Output"
+            },
+            "title": "Edges"
+          },
+          "nodes": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowStartNodeModel-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowEndNodeModel-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowPhoneNumberNodeModel-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowOverrideAgentNodeModel-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowStandaloneAgentNodeModel-Output"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "end": "#/components/schemas/WorkflowEndNodeModel-Output",
+                  "override_agent": "#/components/schemas/WorkflowOverrideAgentNodeModel-Output",
+                  "phone_number": "#/components/schemas/WorkflowPhoneNumberNodeModel-Output",
+                  "standalone_agent": "#/components/schemas/WorkflowStandaloneAgentNodeModel-Output",
+                  "start": "#/components/schemas/WorkflowStartNodeModel-Output"
+                }
+              }
+            },
+            "minProperties": 1,
+            "title": "Nodes"
+          }
+        },
+        "required": [
+          "enabled",
+          "edges",
+          "nodes"
+        ],
+        "title": "AgentWorkflowResponseModel"
       },
       "AgentWorkspaceOverrides-Input": {
         "type": "object",
@@ -19406,6 +19757,17 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/AgentPlatformSettingsRequestModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "workflow": {
+            "description": "Workflow for the agent. This is used to define the flow of the conversation and how the agent interacts with tools.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentWorkflowRequestModel"
               },
               {
                 "type": "null"
@@ -21733,6 +22095,17 @@
             ],
             "title": "Platform Settings"
           },
+          "workflow": {
+            "description": "Workflow for the agent. This is used to define the flow of the conversation and how the agent interacts with tools.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentWorkflowRequestModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "name": {
             "description": "A name to make the agent easier to find",
             "anyOf": [
@@ -22341,6 +22714,18 @@
             "type": "boolean",
             "default": false,
             "title": "Webhook"
+          },
+          "webhook_id": {
+            "description": "Optional specific webhook ID to send the transcription result to. Only valid when webhook is set to true. If not provided, transcription will be sent to all configured speech-to-text webhooks.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Id"
           },
           "temperature": {
             "description": "Controls the randomness of the transcription output. Accepts values between 0.0 and 2.0, where higher values result in more diverse and less deterministic results. If omitted, we will use a temperature based on the model you selected which is usually 0.",
@@ -24050,6 +24435,150 @@
         },
         "title": "BuiltInTools"
       },
+      "BuiltInToolsWorkflowOverride-Input": {
+        "type": "object",
+        "properties": {
+          "end_call": {
+            "description": "The end call tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_detection": {
+            "description": "The language detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_agent": {
+            "description": "The transfer to agent tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_number": {
+            "description": "The transfer to number tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "skip_turn": {
+            "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "play_keypad_touch_tone": {
+            "description": "The play DTMF tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "BuiltInToolsWorkflowOverride"
+      },
+      "BuiltInToolsWorkflowOverride-Output": {
+        "type": "object",
+        "properties": {
+          "end_call": {
+            "description": "The end call tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_detection": {
+            "description": "The language detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_agent": {
+            "description": "The transfer to agent tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_number": {
+            "description": "The transfer to number tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "skip_turn": {
+            "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "play_keypad_touch_tone": {
+            "description": "The play DTMF tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "BuiltInToolsWorkflowOverride"
+      },
       "ChapterContentBlockExtendableNodeResponseModel": {
         "description": "Not used. Make sure you anticipate new types in the future.",
         "type": "object",
@@ -25258,6 +25787,59 @@
         },
         "title": "ConversationConfigOverrideConfig"
       },
+      "ConversationConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "text_only": {
+            "description": "If enabled audio will not be processed and only text will be used, use to avoid audio pricing.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Only",
+            "x-convai-client-override": true
+          },
+          "max_duration_seconds": {
+            "description": "The maximum duration of a conversation in seconds",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Duration Seconds"
+          },
+          "client_events": {
+            "description": "The events that will be sent to the client",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ClientEvent"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Events"
+          }
+        },
+        "example": {
+          "client_events": [
+            "audio",
+            "interruption"
+          ],
+          "max_duration_seconds": 600
+        },
+        "title": "ConversationConfigWorkflowOverride"
+      },
       "ConversationDeletionSettings": {
         "type": "object",
         "properties": {
@@ -25596,7 +26178,8 @@
           "conversation_initiation_source_version": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 50
               },
               {
                 "type": "null"
@@ -26745,6 +27328,260 @@
         },
         "title": "ConversationalConfigAPIModel"
       },
+      "ConversationalConfigAPIModelWorkflowOverride-Input": {
+        "type": "object",
+        "properties": {
+          "asr": {
+            "description": "Configuration for conversational transcription",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRConversationalConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "turn": {
+            "description": "Configuration for turn detection",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TurnConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tts": {
+            "description": "Configuration for conversational text to speech",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSConversationalConfigWorkflowOverride-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conversation": {
+            "description": "Configuration for conversational events",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_presets": {
+            "description": "Language presets for conversations",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/LanguagePreset-Input"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language Presets"
+          },
+          "agent": {
+            "description": "Agent specific configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentConfigAPIModelWorkflowOverride-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "agent": {
+            "dynamic_variables": {
+              "dynamic_variable_placeholders": {
+                "user_name": "John Doe"
+              }
+            },
+            "first_message": "Hello, how can I help you today?",
+            "language": "en",
+            "prompt": {
+              "knowledge_base": [],
+              "llm": "gemini-2.0-flash-001",
+              "max_tokens": -1,
+              "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+              "temperature": 0,
+              "tool_ids": [],
+              "tools": []
+            }
+          },
+          "asr": {
+            "keywords": [
+              "hello",
+              "world"
+            ],
+            "provider": "elevenlabs",
+            "quality": "high",
+            "user_input_audio_format": "pcm_16000"
+          },
+          "conversation": {
+            "client_events": [
+              "audio",
+              "interruption"
+            ],
+            "max_duration_seconds": 600
+          },
+          "tts": {
+            "agent_output_audio_format": "pcm_16000",
+            "model_id": "eleven_turbo_v2",
+            "optimize_streaming_latency": 3,
+            "pronunciation_dictionary_locators": [],
+            "similarity_boost": 0.8,
+            "speed": 1,
+            "stability": 0.5,
+            "voice_id": "cjVigY5qzO86Huf0OWal"
+          },
+          "turn": {
+            "mode": "turn",
+            "silence_end_call_timeout": -1,
+            "turn_timeout": 7
+          }
+        },
+        "title": "ConversationalConfigAPIModelWorkflowOverride"
+      },
+      "ConversationalConfigAPIModelWorkflowOverride-Output": {
+        "type": "object",
+        "properties": {
+          "asr": {
+            "description": "Configuration for conversational transcription",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRConversationalConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "turn": {
+            "description": "Configuration for turn detection",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TurnConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tts": {
+            "description": "Configuration for conversational text to speech",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSConversationalConfigWorkflowOverride-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conversation": {
+            "description": "Configuration for conversational events",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_presets": {
+            "description": "Language presets for conversations",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/LanguagePreset-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language Presets"
+          },
+          "agent": {
+            "description": "Agent specific configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentConfigAPIModelWorkflowOverride-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "agent": {
+            "dynamic_variables": {
+              "dynamic_variable_placeholders": {
+                "user_name": "John Doe"
+              }
+            },
+            "first_message": "Hello, how can I help you today?",
+            "language": "en",
+            "prompt": {
+              "knowledge_base": [],
+              "llm": "gemini-2.0-flash-001",
+              "max_tokens": -1,
+              "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+              "temperature": 0,
+              "tool_ids": [],
+              "tools": []
+            }
+          },
+          "asr": {
+            "keywords": [
+              "hello",
+              "world"
+            ],
+            "provider": "elevenlabs",
+            "quality": "high",
+            "user_input_audio_format": "pcm_16000"
+          },
+          "conversation": {
+            "client_events": [
+              "audio",
+              "interruption"
+            ],
+            "max_duration_seconds": 600
+          },
+          "tts": {
+            "agent_output_audio_format": "pcm_16000",
+            "model_id": "eleven_turbo_v2",
+            "optimize_streaming_latency": 3,
+            "pronunciation_dictionary_locators": [],
+            "similarity_boost": 0.8,
+            "speed": 1,
+            "stability": 0.5,
+            "voice_id": "cjVigY5qzO86Huf0OWal"
+          },
+          "turn": {
+            "mode": "turn",
+            "silence_end_call_timeout": -1,
+            "turn_timeout": 7
+          }
+        },
+        "title": "ConversationalConfigAPIModelWorkflowOverride"
+      },
       "ConvertChapterResponseModel": {
         "type": "object",
         "properties": {
@@ -27834,6 +28671,45 @@
         },
         "title": "DynamicVariablesConfig"
       },
+      "DynamicVariablesConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "dynamic_variable_placeholders": {
+            "description": "A dictionary of dynamic variable placeholders and their values",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dynamic Variable Placeholders"
+          }
+        },
+        "example": {
+          "dynamic_variable_placeholders": {
+            "user_name": "John Doe"
+          }
+        },
+        "title": "DynamicVariablesConfigWorkflowOverride"
+      },
       "EditChapterResponseModel": {
         "type": "object",
         "properties": {
@@ -28697,6 +29573,10 @@
               }
             },
             "title": "Phone Numbers"
+          },
+          "workflow": {
+            "description": "The workflow of the agent",
+            "$ref": "#/components/schemas/AgentWorkflowResponseModel"
           },
           "access_info": {
             "description": "The access information of the agent for the user",
@@ -30690,8 +31570,6 @@
           "claude-3-haiku",
           "grok-beta",
           "custom-llm",
-          "gemini-2.5-flash-preview-05-20",
-          "gemini-2.5-flash-preview-04-17",
           "gemini-2.0-flash-lite-001",
           "gemini-2.0-flash-001",
           "gemini-1.5-flash-002",
@@ -33062,6 +33940,42 @@
         ],
         "title": "PodcastURLSource"
       },
+      "Position-Input": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "default": 0,
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "default": 0,
+            "title": "Y"
+          }
+        },
+        "title": "Position"
+      },
+      "Position-Output": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "default": 0,
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "default": 0,
+            "title": "Y"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "Position"
+      },
       "PostAgentAvatarResponseModel": {
         "type": "object",
         "properties": {
@@ -34453,6 +35367,418 @@
         },
         "title": "PromptAgentAPIModelOverrideConfig"
       },
+      "PromptAgentAPIModelWorkflowOverride-Input": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt",
+            "x-convai-client-override": true
+          },
+          "llm": {
+            "description": "The LLM to query with the prompt and the chat history. If using data residency, the LLM must be supported in the data residency environment",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "temperature": {
+            "description": "The temperature for the LLM",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Tokens"
+          },
+          "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Ids"
+          },
+          "built_in_tools": {
+            "description": "Built-in system tools to be used by the agent",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BuiltInToolsWorkflowOverride-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Native Mcp Server Ids"
+          },
+          "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KnowledgeBaseLocator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knowledge Base"
+          },
+          "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CustomLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
+          },
+          "rag": {
+            "description": "Configuration for RAG",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RagConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tools": {
+            "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/WebhookToolConfig-Input"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClientToolConfig-Input"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SystemToolConfig-Input"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MCPToolConfig-Input"
+                    }
+                  ],
+                  "description": "The type of tool",
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "client": "#/components/schemas/ClientToolConfig-Input",
+                      "mcp": "#/components/schemas/MCPToolConfig-Input",
+                      "system": "#/components/schemas/SystemToolConfig-Input",
+                      "webhook": "#/components/schemas/WebhookToolConfig-Input"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tools"
+          }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
+        },
+        "title": "PromptAgentAPIModelWorkflowOverride"
+      },
+      "PromptAgentAPIModelWorkflowOverride-Output": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt",
+            "x-convai-client-override": true
+          },
+          "llm": {
+            "description": "The LLM to query with the prompt and the chat history. If using data residency, the LLM must be supported in the data residency environment",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "temperature": {
+            "description": "The temperature for the LLM",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Tokens"
+          },
+          "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Ids"
+          },
+          "built_in_tools": {
+            "description": "Built-in system tools to be used by the agent",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BuiltInToolsWorkflowOverride-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Native Mcp Server Ids"
+          },
+          "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KnowledgeBaseLocator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knowledge Base"
+          },
+          "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CustomLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
+          },
+          "rag": {
+            "description": "Configuration for RAG",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RagConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tools": {
+            "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/WebhookToolConfig-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClientToolConfig-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SystemToolConfig-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MCPToolConfig-Output"
+                    }
+                  ],
+                  "description": "The type of tool",
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "client": "#/components/schemas/ClientToolConfig-Output",
+                      "mcp": "#/components/schemas/MCPToolConfig-Output",
+                      "system": "#/components/schemas/SystemToolConfig-Output",
+                      "webhook": "#/components/schemas/WebhookToolConfig-Output"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tools"
+          }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
+        },
+        "title": "PromptAgentAPIModelWorkflowOverride"
+      },
       "PromptEvaluationCriteria": {
         "description": "An evaluation using the transcript and a prompt for a yes/no achieved answer",
         "type": "object",
@@ -34997,6 +36323,78 @@
           }
         },
         "title": "RagConfig"
+      },
+      "RagConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "embedding_model": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddingModelEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "max_vector_distance": {
+            "description": "Maximum vector distance of retrieved chunks.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              0.5
+            ],
+            "title": "Max Vector Distance"
+          },
+          "max_documents_length": {
+            "description": "Maximum total length of document chunks retrieved from RAG.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "50000"
+            ],
+            "title": "Max Documents Length"
+          },
+          "max_retrieved_rag_chunks_count": {
+            "description": "Maximum number of RAG document chunks to initially retrieve from the vector store. These are then further filtered by vector distance and total length.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              5
+            ],
+            "title": "Max Retrieved Rag Chunks Count"
+          }
+        },
+        "title": "RagConfigWorkflowOverride"
       },
       "RagRetrievalInfo": {
         "type": "object",
@@ -37700,6 +39098,264 @@
         },
         "title": "TTSConversationalConfigOverrideConfig"
       },
+      "TTSConversationalConfigWorkflowOverride-Input": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "description": "The model to use for TTS",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSConversationalModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "voice_id": {
+            "description": "The voice ID to use for TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SupportedVoice"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supported Voices"
+          },
+          "agent_output_audio_format": {
+            "description": "The audio format to use for TTS",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOutputFormat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "optimize_streaming_latency": {
+            "description": "The optimization for streaming latency",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stability": {
+            "description": "The stability of generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stability"
+          },
+          "speed": {
+            "description": "The speed of generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed"
+          },
+          "similarity_boost": {
+            "description": "The similarity boost for generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Similarity Boost"
+          },
+          "pronunciation_dictionary_locators": {
+            "description": "The pronunciation dictionary locators",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PydanticPronunciationDictionaryVersionLocator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pronunciation Dictionary Locators"
+          }
+        },
+        "example": {
+          "agent_output_audio_format": "pcm_16000",
+          "model_id": "eleven_turbo_v2",
+          "optimize_streaming_latency": 3,
+          "pronunciation_dictionary_locators": [],
+          "similarity_boost": 0.8,
+          "speed": 1,
+          "stability": 0.5,
+          "voice_id": "cjVigY5qzO86Huf0OWal"
+        },
+        "title": "TTSConversationalConfigWorkflowOverride"
+      },
+      "TTSConversationalConfigWorkflowOverride-Output": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "description": "The model to use for TTS",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSConversationalModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "voice_id": {
+            "description": "The voice ID to use for TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SupportedVoice"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supported Voices"
+          },
+          "agent_output_audio_format": {
+            "description": "The audio format to use for TTS",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOutputFormat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "optimize_streaming_latency": {
+            "description": "The optimization for streaming latency",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stability": {
+            "description": "The stability of generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stability"
+          },
+          "speed": {
+            "description": "The speed of generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed"
+          },
+          "similarity_boost": {
+            "description": "The similarity boost for generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Similarity Boost"
+          },
+          "pronunciation_dictionary_locators": {
+            "description": "The pronunciation dictionary locators",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PydanticPronunciationDictionaryVersionLocator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pronunciation Dictionary Locators"
+          }
+        },
+        "example": {
+          "agent_output_audio_format": "pcm_16000",
+          "model_id": "eleven_turbo_v2",
+          "optimize_streaming_latency": 3,
+          "pronunciation_dictionary_locators": [],
+          "similarity_boost": 0.8,
+          "speed": 1,
+          "stability": 0.5,
+          "voice_id": "cjVigY5qzO86Huf0OWal"
+        },
+        "title": "TTSConversationalConfigWorkflowOverride"
+      },
       "TTSConversationalModel": {
         "type": "string",
         "enum": [
@@ -38081,6 +39737,52 @@
           "turn_timeout": 7
         },
         "title": "TurnConfig"
+      },
+      "TurnConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "turn_timeout": {
+            "description": "Maximum wait time for the user's reply before re-engaging the user",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Turn Timeout"
+          },
+          "silence_end_call_timeout": {
+            "description": "Maximum wait time since the user last spoke before terminating the call",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Silence End Call Timeout"
+          },
+          "mode": {
+            "description": "The mode of turn detection",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TurnMode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "mode": "turn",
+          "silence_end_call_timeout": -1,
+          "turn_timeout": 7
+        },
+        "title": "TurnConfigWorkflowOverride"
       },
       "TurnMode": {
         "type": "string",
@@ -42168,6 +43870,493 @@
           }
         },
         "title": "WidgetTextContents"
+      },
+      "WorkflowEdgeModel-Input": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          },
+          "forward_condition": {
+            "description": "Condition that must be met for the edge to be traversed in the forward direction.",
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkflowUnconditionalModel-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowLLMConditionModel-Input"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "llm": "#/components/schemas/WorkflowLLMConditionModel-Input",
+                    "unconditional": "#/components/schemas/WorkflowUnconditionalModel-Input"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forward Condition"
+          },
+          "backward_condition": {
+            "description": "Condition that must be met for the edge to be traversed in the backward direction.",
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkflowUnconditionalModel-Input"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowLLMConditionModel-Input"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "llm": "#/components/schemas/WorkflowLLMConditionModel-Input",
+                    "unconditional": "#/components/schemas/WorkflowUnconditionalModel-Input"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backward Condition"
+          }
+        },
+        "required": [
+          "source",
+          "target"
+        ],
+        "title": "WorkflowEdgeModel"
+      },
+      "WorkflowEdgeModel-Output": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          },
+          "forward_condition": {
+            "description": "Condition that must be met for the edge to be traversed in the forward direction.",
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkflowUnconditionalModel-Output"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowLLMConditionModel-Output"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "llm": "#/components/schemas/WorkflowLLMConditionModel-Output",
+                    "unconditional": "#/components/schemas/WorkflowUnconditionalModel-Output"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forward Condition"
+          },
+          "backward_condition": {
+            "description": "Condition that must be met for the edge to be traversed in the backward direction.",
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkflowUnconditionalModel-Output"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowLLMConditionModel-Output"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "llm": "#/components/schemas/WorkflowLLMConditionModel-Output",
+                    "unconditional": "#/components/schemas/WorkflowUnconditionalModel-Output"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backward Condition"
+          }
+        },
+        "required": [
+          "source",
+          "target",
+          "forward_condition",
+          "backward_condition"
+        ],
+        "title": "WorkflowEdgeModel"
+      },
+      "WorkflowEndNodeModel-Input": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "end",
+            "const": "end",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Input"
+          }
+        },
+        "title": "WorkflowEndNodeModel"
+      },
+      "WorkflowEndNodeModel-Output": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "end",
+            "const": "end",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Output"
+          }
+        },
+        "required": [
+          "type",
+          "position"
+        ],
+        "title": "WorkflowEndNodeModel"
+      },
+      "WorkflowLLMConditionModel-Input": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "llm",
+            "const": "llm",
+            "title": "Type"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "condition"
+        ],
+        "title": "WorkflowLLMConditionModel"
+      },
+      "WorkflowLLMConditionModel-Output": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "llm",
+            "const": "llm",
+            "title": "Type"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "type",
+          "condition"
+        ],
+        "title": "WorkflowLLMConditionModel"
+      },
+      "WorkflowOverrideAgentNodeModel-Input": {
+        "type": "object",
+        "properties": {
+          "conversation_config": {
+            "$ref": "#/components/schemas/ConversationalConfigAPIModelWorkflowOverride-Input"
+          },
+          "additional_prompt": {
+            "type": "string",
+            "default": "",
+            "title": "Additional Prompt"
+          },
+          "type": {
+            "type": "string",
+            "default": "override_agent",
+            "const": "override_agent",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Input"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "title": "WorkflowOverrideAgentNodeModel"
+      },
+      "WorkflowOverrideAgentNodeModel-Output": {
+        "type": "object",
+        "properties": {
+          "conversation_config": {
+            "$ref": "#/components/schemas/ConversationalConfigAPIModelWorkflowOverride-Output"
+          },
+          "additional_prompt": {
+            "type": "string",
+            "default": "",
+            "title": "Additional Prompt"
+          },
+          "type": {
+            "type": "string",
+            "default": "override_agent",
+            "const": "override_agent",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Output"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "required": [
+          "conversation_config",
+          "additional_prompt",
+          "type",
+          "position",
+          "label"
+        ],
+        "title": "WorkflowOverrideAgentNodeModel"
+      },
+      "WorkflowPhoneNumberNodeModel-Input": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "phone_number",
+            "const": "phone_number",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Input"
+          },
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          }
+        },
+        "required": [
+          "phone_number"
+        ],
+        "title": "WorkflowPhoneNumberNodeModel"
+      },
+      "WorkflowPhoneNumberNodeModel-Output": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "phone_number",
+            "const": "phone_number",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Output"
+          },
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number"
+          }
+        },
+        "required": [
+          "type",
+          "position",
+          "phone_number"
+        ],
+        "title": "WorkflowPhoneNumberNodeModel"
+      },
+      "WorkflowStandaloneAgentNodeModel-Input": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "standalone_agent",
+            "const": "standalone_agent",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Input"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "delay_ms": {
+            "type": "integer",
+            "default": 0,
+            "title": "Delay Ms"
+          },
+          "transfer_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfer Message"
+          },
+          "enable_transferred_agent_first_message": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enable Transferred Agent First Message"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "WorkflowStandaloneAgentNodeModel"
+      },
+      "WorkflowStandaloneAgentNodeModel-Output": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "standalone_agent",
+            "const": "standalone_agent",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Output"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "delay_ms": {
+            "type": "integer",
+            "default": 0,
+            "title": "Delay Ms"
+          },
+          "transfer_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfer Message"
+          },
+          "enable_transferred_agent_first_message": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enable Transferred Agent First Message"
+          }
+        },
+        "required": [
+          "type",
+          "position",
+          "agent_id",
+          "delay_ms",
+          "transfer_message",
+          "enable_transferred_agent_first_message"
+        ],
+        "title": "WorkflowStandaloneAgentNodeModel"
+      },
+      "WorkflowStartNodeModel-Input": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "start",
+            "const": "start",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Input"
+          }
+        },
+        "title": "WorkflowStartNodeModel"
+      },
+      "WorkflowStartNodeModel-Output": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "start",
+            "const": "start",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position-Output"
+          }
+        },
+        "required": [
+          "type",
+          "position"
+        ],
+        "title": "WorkflowStartNodeModel"
+      },
+      "WorkflowUnconditionalModel-Input": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "unconditional",
+            "const": "unconditional",
+            "title": "Type"
+          }
+        },
+        "title": "WorkflowUnconditionalModel"
+      },
+      "WorkflowUnconditionalModel-Output": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "unconditional",
+            "const": "unconditional",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "WorkflowUnconditionalModel"
       },
       "WorkspaceBatchCallsResponse": {
         "type": "object",
