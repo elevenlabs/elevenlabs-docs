@@ -119,9 +119,9 @@ Client events are essential for maintaining the real-time nature of conversation
   </Accordion>
 
   <Accordion title="internal_tentative_agent_response">
-    - Contains partial agent response before TTS generation
-    - Provides streaming text before speech starts
-    - Useful for displaying text alongside audio
+    - Contains partial agent message
+    - Sent before first audio chunk
+    - Useful for streaming text alongside audio
 
     ```javascript
     // Example internal tentative agent response event structure
@@ -134,7 +134,7 @@ Client events are essential for maintaining the real-time nature of conversation
     ```
 
     ```javascript
-    // Example tentative response handler (via onDebug in SDK)
+    // Example tentative response handler
     websocket.on('internal_tentative_agent_response', (event) => {
       const { tentative_agent_response_internal_event } = event;
       const { tentative_agent_response } = tentative_agent_response_internal_event;
