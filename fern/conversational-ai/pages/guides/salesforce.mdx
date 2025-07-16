@@ -30,8 +30,8 @@ Watch the demonstration of the Salesforce + Conversational AI integration.
 - Find your correct Salesforce domain
 - Import the three webhook tool configurations
 - Update tool configurations with your Salesforce domain
-- Configure tool authorization via Workplace Auth Connections
-- Test your integration
+- Configure tool authorization via Workplace Auth Connections 
+- Test your integration 
 - Validate functionality with your conversational AI agent
 
 ## How it works
@@ -136,9 +136,9 @@ Either view a step by step summary or view the detailed system prompt of the age
 
 <Tip>
   This integration enhances sales efficiency by leveraging existing customer data and automating
-  lead qualification. Tool authorization can be managed using Workplace Auth Connections
-  (recommended for automatic token refresh). The tools are configured to return human-readable names
-  and descriptions rather than technical IDs to improve conversation quality.
+  lead qualification. Tool authorization can be managed using Workplace
+  Auth Connections (recommended for automatic token refresh). The tools are configured to return
+  human-readable names and descriptions rather than technical IDs to improve conversation quality.
 </Tip>
 
 ## Authentication Setup
@@ -220,8 +220,7 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 
 The integration with Salesforce employs three primary webhook tools to manage customer relationships. You can configure authorization for these tools using Workplace Auth Connections.
 
-## Authorization - Workplace OAuth2 Connection
-
+## Authorization - Workplace OAuth2 Connection    
     <Steps>
       <Step title="Navigate to Workplace Auth Connections">
         In your ElevenLabs dashboard, go to **Agents** → **Workplace Auth Connections** and click **Add Auth**.
@@ -272,6 +271,9 @@ The integration with Salesforce employs three primary webhook tools to manage cu
     <Tip>
       Workplace Auth Connections automatically handles token refresh, eliminating the need for manual token management and improving reliability of your Salesforce integration.
     </Tip>
+
+  
+    
 
 ### Tool Configurations
 
@@ -545,12 +547,6 @@ Use the tabs below to review each tool's configuration.
   </Tab>
 </Tabs>
 
-<Warning>
-  Ensure that you configure tool authorization for your Salesforce webhook tools using either: -
-  **Workplace Auth Connections**: Configure the connection in your ElevenLabs dashboard and
-  reference it in your webhook tool configurations' **Authentication** section, Replace
-  `YOUR_SALESFORCE_SECRET` with your actual secret ID in the tool configurations.
-</Warning>
 
 ## Common SOQL Queries
 
@@ -605,6 +601,7 @@ Test your integration with your conversational AI agent:
 2. **Test Record Creation**: Have your agent create a new lead or contact
 3. **Test Data Retrieval**: Verify your agent can get detailed customer information
 
+
 ## Impact
 
 With this integration in place, you can:
@@ -633,6 +630,67 @@ With this integration in place, you can:
 | **Account**     | Organizations or companies                     | Name, Type, Industry, Phone, BillingAddress                  |
 | **Opportunity** | Sales deals in progress                        | Name, StageName, Amount, CloseDate, AccountId                |
 | **Case**        | Customer service requests                      | Subject, Description, Status, Priority, ContactId            |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication Issues">
+    **Problem**: Getting 401 Unauthorized errors
+    
+    **Solutions**:
+    - Verify your Consumer Key and Consumer Secret are correct
+    - Check that the External Client App is properly configured
+    - Ensure the OAuth scope includes necessary permissions
+    - Verify your access token hasn't expired
+    - Confirm your domain format is correct (e.g., `https://yourcompany.my.salesforce.com`)
+  </Accordion>
+
+{' '}
+
+<Accordion title="Valid Execution User Error">
+  **Problem**: "Enter a valid execution user for the OAuth client credentials flow" **Solutions**: -
+  Ensure the selected user is **active** (not deactivated) - Verify the user has **API Enabled**
+  permission - Check that the user has a proper **Salesforce license** (not just Community) - Try
+  selecting a different System Administrator user - Create a new dedicated service account user with
+  proper permissions
+</Accordion>
+
+{' '}
+
+<Accordion title="Domain Resolution Issues">
+  **Problem**: DNS resolution errors or "nodename nor servname provided" **Solutions**: - Verify
+  your domain format is correct - Try different domain formats: `.my.salesforce.com`,
+  `.lightning.force.com`, `.develop.my.salesforce.com` - Check your browser's address bar when
+  logged into Salesforce - Remove any trailing slashes from the domain - Ensure you're using HTTPS,
+  not HTTP
+</Accordion>
+
+{' '}
+
+<Accordion title="SOQL Query Errors">
+  **Problem**: Getting SOQL syntax errors **Solutions**: - Ensure all field names are spelled
+  correctly - Check that you have permission to access the fields - Verify the object name is
+  correct - Use proper SOQL syntax (no SELECT * allowed)
+</Accordion>
+
+{' '}
+
+<Accordion title="Record Creation Failures">
+  **Problem**: Unable to create records **Solutions**: - Verify required fields are included - Check
+  field-level security permissions - Ensure data types match field requirements - Validate that
+  picklist values are correct
+</Accordion>
+
+  <Accordion title="API Rate Limits">
+    **Problem**: Hitting API rate limits
+    
+    **Solutions**:
+    - Implement proper error handling and retry logic
+    - Use bulk operations when possible
+    - Monitor API usage in Salesforce Setup
+    - Consider upgrading your Salesforce edition for higher limits
+  </Accordion>
+</AccordionGroup>
 
 ## Conclusion
 
