@@ -7616,6 +7616,129 @@
       }
     },
     "/v1/dubbing": {
+      "get": {
+        "operationId": "List_dubs_v1_dubbing_get",
+        "summary": "List Dubs",
+        "description": "List the dubs you have access to.",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Used for fetching next page. Cursor is returned in the response.",
+            "required": false,
+            "schema": {
+              "description": "Used for fetching next page. Cursor is returned in the response.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "How many dubs to return at maximum. Can not exceed 200, defaults to 100.",
+            "required": false,
+            "schema": {
+              "description": "How many dubs to return at maximum. Can not exceed 200, defaults to 100.",
+              "type": "integer",
+              "default": 100,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "dubbing_status",
+            "in": "query",
+            "description": "Status of the dubbing, either 'in_progress', 'completed' or 'failed'.",
+            "required": false,
+            "schema": {
+              "description": "Status of the dubbing, either 'in_progress', 'completed' or 'failed'.",
+              "type": "string",
+              "embed": true,
+              "enum": [
+                "dubbing",
+                "dubbed",
+                "failed"
+              ],
+              "title": "Dubbing Status"
+            }
+          },
+          {
+            "name": "filter_by_creator",
+            "in": "query",
+            "description": "Filters who created the resources being listed, whether it was the user running the request or someone else that shared the resource with them.",
+            "required": false,
+            "schema": {
+              "description": "Filters who created the resources being listed, whether it was the user running the request or someone else that shared the resource with them.",
+              "type": "string",
+              "default": "all",
+              "enum": [
+                "personal",
+                "others",
+                "all"
+              ],
+              "examples": [
+                "all"
+              ],
+              "title": "Filter By Creator"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DubbingMetadataPageResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "dubbing",
+          "dubbing",
+          "dubbing"
+        ],
+        "x-fern-sdk-group-name": "dubbing",
+        "x-fern-sdk-method-name": "list"
+      },
       "post": {
         "operationId": "Dub_a_video_or_an_audio_file_v1_dubbing_post",
         "summary": "Dub A Video Or An Audio File",
@@ -17742,6 +17865,10 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Input"
+          },
+          "testing": {
+            "description": "Testing configuration for the agent",
+            "$ref": "#/components/schemas/AgentTestingSettings"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -17784,6 +17911,10 @@
           "workspace_overrides": {
             "description": "Workspace overrides for the agent",
             "$ref": "#/components/schemas/AgentWorkspaceOverrides-Output"
+          },
+          "testing": {
+            "description": "Testing configuration for the agent",
+            "$ref": "#/components/schemas/AgentTestingSettings"
           },
           "safety": {
             "$ref": "#/components/schemas/SafetyResponseModel"
@@ -17866,6 +17997,29 @@
           "access_info"
         ],
         "title": "AgentSummaryResponseModel"
+      },
+      "AgentTestingSettings": {
+        "description": "Settings for agent testing configuration.",
+        "type": "object",
+        "properties": {
+          "test_ids": {
+            "description": "List of test IDs that should be run for this agent",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "minItems": 0,
+            "title": "Test Ids"
+          }
+        },
+        "example": {
+          "test_ids": [
+            "test_123",
+            "test_456"
+          ]
+        },
+        "title": "AgentTestingSettings"
       },
       "AgentTransfer": {
         "type": "object",
@@ -19411,6 +19565,10 @@
                 "type": "null"
               }
             ]
+          },
+          "workflow": {
+            "description": "Workflow for the agent. This is used to define the flow of the conversation and how the agent interacts with tools.",
+            "title": "Workflow"
           },
           "name": {
             "description": "A name to make the agent easier to find",
@@ -21733,6 +21891,10 @@
             ],
             "title": "Platform Settings"
           },
+          "workflow": {
+            "description": "Workflow for the agent. This is used to define the flow of the conversation and how the agent interacts with tools.",
+            "title": "Workflow"
+          },
           "name": {
             "description": "A name to make the agent easier to find",
             "anyOf": [
@@ -22341,6 +22503,18 @@
             "type": "boolean",
             "default": false,
             "title": "Webhook"
+          },
+          "webhook_id": {
+            "description": "Optional specific webhook ID to send the transcription result to. Only valid when webhook is set to true. If not provided, transcription will be sent to all configured speech-to-text webhooks.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Id"
           },
           "temperature": {
             "description": "Controls the randomness of the transcription output. Accepts values between 0.0 and 2.0, where higher values result in more diverse and less deterministic results. If omitted, we will use a temperature based on the model you selected which is usually 0.",
@@ -25596,13 +25770,25 @@
           "conversation_initiation_source_version": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 50
               },
               {
                 "type": "null"
               }
             ],
             "title": "Conversation Initiation Source Version"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
           }
         },
         "required": [
@@ -27645,6 +27831,39 @@
         ],
         "title": "DubbingMediaReference"
       },
+      "DubbingMetadataPageResponseModel": {
+        "type": "object",
+        "properties": {
+          "dubs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DubbingMetadataResponse"
+            },
+            "title": "Dubs"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "dubs",
+          "next_cursor",
+          "has_more"
+        ],
+        "title": "DubbingMetadataPageResponseModel"
+      },
       "DubbingMetadataResponse": {
         "type": "object",
         "properties": {
@@ -27671,6 +27890,18 @@
             },
             "title": "Target Languages"
           },
+          "editable": {
+            "description": "Whether this dubbing project is editable in Dubbing Studio.",
+            "type": "boolean",
+            "default": false,
+            "title": "Editable"
+          },
+          "created_at": {
+            "description": "Timestamp this dub was created.",
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
           "media_metadata": {
             "description": "The media metadata of the dubbing project.",
             "anyOf": [
@@ -27696,7 +27927,9 @@
           }
         },
         "example": {
+          "created_at": "2025-07-15T14:49:41.149000",
           "dubbing_id": "21m00Tcm4TlvDq8ikWAM",
+          "editable": true,
           "media_metadata": {
             "content_type": "video/mp4",
             "duration": 127.5
@@ -27713,7 +27946,8 @@
           "dubbing_id",
           "name",
           "status",
-          "target_languages"
+          "target_languages",
+          "created_at"
         ],
         "title": "DubbingMetadataResponse"
       },
@@ -28697,6 +28931,10 @@
               }
             },
             "title": "Phone Numbers"
+          },
+          "workflow": {
+            "description": "The workflow of the agent",
+            "title": "Workflow"
           },
           "access_info": {
             "description": "The access information of the agent for the user",
@@ -30690,8 +30928,6 @@
           "claude-3-haiku",
           "grok-beta",
           "custom-llm",
-          "gemini-2.5-flash-preview-05-20",
-          "gemini-2.5-flash-preview-04-17",
           "gemini-2.0-flash-lite-001",
           "gemini-2.0-flash-001",
           "gemini-1.5-flash-002",
@@ -34238,6 +34474,18 @@
             "description": "Configuration for RAG",
             "$ref": "#/components/schemas/RagConfig"
           },
+          "timezone": {
+            "description": "Timezone for displaying current time in system prompt. If set, the current time will be included in the system prompt using this timezone. Must be a valid timezone name (e.g., 'America/New_York', 'Europe/London', 'UTC').",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
           "tools": {
             "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
             "type": "array",
@@ -34374,6 +34622,18 @@
           "rag": {
             "description": "Configuration for RAG",
             "$ref": "#/components/schemas/RagConfig"
+          },
+          "timezone": {
+            "description": "Timezone for displaying current time in system prompt. If set, the current time will be included in the system prompt using this timezone. Must be a valid timezone name (e.g., 'America/New_York', 'Europe/London', 'UTC').",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
           },
           "tools": {
             "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
