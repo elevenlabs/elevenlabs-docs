@@ -1,0 +1,364 @@
+---
+title: Conversational AI CLI
+subtitle: Manage ElevenLabs conversational AI agents using an "agents as code" approach with local configuration files.
+---
+
+## Overview
+
+The ElevenLabs ConvAI CLI transforms how you build and deploy conversational AI agents by treating them as code. Instead of manually configuring agents through web interfaces, you define them in version-controlled configuration files and deploy them like any other application.
+
+The CLI also provides a local scratch pad that coding agents like claude code can use to reason about your voice agents. Whether you're auto-generating customer support bots from your existing documentation, creating personalized sales agents for each client, or building docs agents that stay synchronized with your codebase, the CLI makes it effortless.
+
+<Tip title="Prefer to jump straight to the code?" icon="lightbulb">
+  Find the [complete source code and contribute on
+  GitHub](https://github.com/elevenlabs/packages/tree/main/packages/convai-cli).
+</Tip>
+
+### What you can build
+
+- **Instant docs agents**: Generate agents from your API documentation that are always up-to-date with your latest changes
+- **Site-aware assistants**: Parse your Vercel app routes and components to create agents that understand your application structure
+- **Integration-ready bots**: Connect to your existing APIs, databases, and tools through webhook and client-side integrations
+
+## Key features
+
+- **Agents as Code**: Version control your AI agents alongside your application code—never lose track of changes or accidentally overwrite production configurations
+- **Multi-environment Support**: Deploy the same agent logic across dev, staging, and production with environment-specific configurations and API keys
+- **Secure Authentication**: Production-ready security with OS keychain integration and environment variable support for CI/CD pipelines
+- **Tool Management**: Connect to any API, database, or service through webhook and client-side tool integrations with built-in authentication
+
+## Installation
+
+The CLI requires Node.js version 16.0.0 or higher.
+
+<CodeBlocks>
+```bash title="npm"
+npm install -g @elevenlabs/convai-cli
+```
+
+```bash title="pnpm"
+pnpm add -g @elevenlabs/convai-cli
+```
+
+```bash title="yarn"
+yarn global add @elevenlabs/convai-cli
+```
+
+</CodeBlocks>
+
+After installation, the `convai` command will be available globally in your terminal.
+
+## Quick start
+
+<Steps>
+### Initialize a new project
+
+```bash
+convai init
+```
+
+This creates the project structure with configuration directories and registry files.
+
+### Authenticate with ElevenLabs
+
+```bash
+convai login
+```
+
+Enter your ElevenLabs API key when prompted. The CLI will verify the key and store it securely.
+
+### Create your first agent
+
+```bash
+convai add agent "My Assistant" --template assistant
+```
+
+This creates a new agent configuration using the assistant template.
+
+### Synchronize with ElevenLabs platform
+
+```bash
+convai sync
+```
+
+This uploads your local agent configuration to the ElevenLabs platform.
+
+</Steps>
+
+## Project structure
+
+The CLI creates a structured project directory:
+
+```
+your_project/
+├── agents.json              # Central agent configuration registry
+├── tools.json               # Tool definitions registry
+├── agent_configs/           # Environment-specific agent configs
+│   ├── prod/                # Production environment configs
+│   ├── dev/                 # Development environment configs
+│   └── staging/             # Staging environment configs
+├── tool_configs/            # Tool configuration files
+└── convai.lock             # Lock file with agent IDs and hashes
+```
+
+## Authentication
+
+The CLI uses a multi-layered authentication system for secure API key management:
+
+<Accordion title="Authentication methods (by priority)">
+  1. **Environment variables** (highest priority): `ELEVENLABS_API_KEY` 2. **OS keychain/credential
+  store**: Uses the keytar library for secure storage 3. **Secure file storage**:`~/.convai/api_key`
+  with restricted permissions (600)
+</Accordion>
+
+### Authentication commands
+
+<CodeBlocks>
+```bash title="Login"
+convai login
+```
+
+```bash title="Check login status"
+convai whoami
+```
+
+```bash title="Logout"
+convai logout
+```
+
+</CodeBlocks>
+
+## Agent management
+
+### Creating agents
+
+Create agents using pre-built templates:
+
+```bash
+convai add agent "Agent Name" [options]
+```
+
+**Options:**
+
+- `--template <type>`: Choose from available templates (default: default)
+- `--env <env>`: Target environment (default: dev)
+- `--skip-upload`: Create locally without uploading to platform
+
+**Example:**
+
+```bash
+convai add agent "Customer Support Bot" --template customer-service --env prod
+```
+
+### Templates
+
+The CLI provides six pre-built templates for common use cases:
+
+<AccordionGroup>
+<Accordion title="default">
+Complete configuration with all available fields, sensible defaults, full voice/text support, widget customization, and evaluation criteria.
+</Accordion>
+
+<Accordion title="minimal">
+  Essential fields only including basic prompt, language, TTS, and conversation settings.
+</Accordion>
+
+<Accordion title="voice-only">
+  Optimized for voice interactions with disabled text input and advanced voice settings.
+</Accordion>
+
+<Accordion title="text-only">Text-focused conversations with disabled voice features.</Accordion>
+
+<Accordion title="customer-service">
+  Professional empathetic prompts, low temperature (0.1), 30-minute duration, and evaluation
+  criteria.
+</Accordion>
+
+<Accordion title="assistant">
+General-purpose AI assistant with balanced creativity (temperature 0.3) and versatile voice/text support.
+</Accordion>
+</AccordionGroup>
+
+### Template commands
+
+<CodeBlocks>
+```bash title="List available templates"
+convai templates list
+```
+
+```bash title="Show template configuration"
+convai templates show <template>
+```
+
+</CodeBlocks>
+
+### Synchronization
+
+Keep your local configurations synchronized with the ElevenLabs platform:
+
+<CodeBlocks>
+```bash title="Sync all agents"
+convai sync
+```
+
+```bash title="Sync specific agent"
+convai sync --agent "Agent Name"
+```
+
+```bash title="Sync specific environment"
+convai sync --env prod
+```
+
+```bash title="Preview changes (dry run)"
+convai sync --dry-run
+```
+
+</CodeBlocks>
+
+### Status and monitoring
+
+<CodeBlocks>
+```bash title="Check agent status"
+convai status
+```
+
+```bash title="Check specific agent"
+convai status --agent "Agent Name"
+```
+
+</CodeBlocks>
+
+### Import and export
+
+<CodeBlocks>
+```bash title="Import existing agents"
+convai fetch --env prod
+```
+
+```bash title="Search and import agents"
+convai fetch --search "customer"
+```
+
+```bash title="List all agents"
+convai list-agents
+```
+
+</CodeBlocks>
+
+## Tool management
+
+The CLI supports two types of tools for extending agent capabilities:
+
+### Webhook tools
+
+HTTP API integrations with authentication and timeout configuration:
+
+```bash
+convai add webhook-tool "API Integration" --config-path ./tool-config.json
+```
+
+### Client tools
+
+Direct client-side integrations:
+
+```bash
+convai add client-tool "Client Function" --config-path ./client-config.json
+```
+
+## Widget generation
+
+Generate HTML embed code for web integration:
+
+```bash
+convai widget "Agent Name" --env prod
+```
+
+This outputs HTML code like:
+
+```html
+<elevenlabs-convai agent-id="agent_id_here"></elevenlabs-convai>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async></script>
+```
+
+## Configuration files
+
+### Agent configuration structure
+
+Each agent configuration includes:
+
+```json focus={1-20}
+{
+  "name": "Agent Name",
+  "conversation_config": {
+    "agent": {
+      "prompt": "You are a helpful assistant...",
+      "llm": {
+        "model": "eleven-multilingual-v1",
+        "temperature": 0.3
+      },
+      "language": "en",
+      "tools": []
+    },
+    "tts": {
+      "model": "eleven-multilingual-v1",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "audio_format": {
+        "format": "pcm",
+        "sample_rate": 44100
+      }
+    },
+    "asr": {
+      "model": "nova-2-general",
+      "language": "auto"
+    },
+    "conversation": {
+      "max_duration_seconds": 1800,
+      "text_only": false,
+      "client_events": []
+    }
+  },
+  "platform_settings": {
+    "widget": {
+      "conversation_starters": [],
+      "branding": {}
+    }
+  },
+  "tags": ["environment:dev"]
+}
+```
+
+### Environment management
+
+The CLI supports multiple environments with separate configurations:
+
+<Tabs>
+<Tab title="Development">
+```bash
+convai add agent "Test Bot" --env dev
+convai sync --env dev
+```
+</Tab>
+
+<Tab title="Staging">
+  ```bash convai add agent "Test Bot" --env staging convai sync --env staging ```
+</Tab>
+
+<Tab title="Production">
+```bash
+convai add agent "Test Bot" --env prod
+convai sync --env prod
+```
+</Tab>
+</Tabs>
+### CI/CD pipeline integration
+
+```bash
+# In your GitHub Actions workflow
+- name: Deploy ConvAI agents
+  run: |
+    npm install -g @elevenlabs/convai-cli
+    export ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+    convai sync --env prod --dry-run  # Preview changes
+    convai sync --env prod            # Deploy
+    convai status --env prod          # Verify deployment
+```
