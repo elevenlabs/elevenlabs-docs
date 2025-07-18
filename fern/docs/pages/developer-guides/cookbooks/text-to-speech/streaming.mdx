@@ -62,8 +62,11 @@ To convert text to speech and save it as a file, we’ll use the `convert` metho
 
 import os
 import uuid
+from dotenv import load_dotenv
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
+
+load_dotenv()
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 elevenlabs = ElevenLabs(
@@ -177,8 +180,11 @@ If you prefer to stream the audio directly without saving it to a file, you can 
 import os
 from typing import IO
 from io import BytesIO
+from dotenv import load_dotenv
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
+
+load_dotenv()
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 elevenlabs = ElevenLabs(
