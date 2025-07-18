@@ -21142,6 +21142,18 @@
             ],
             "title": "Target Lang"
           },
+          "target_accent": {
+            "description": "[Experimental] An accent to apply when selecting voices from the library and to use to inform translation of the dialect to prefer.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Accent"
+          },
           "num_speakers": {
             "description": "Number of speakers to use for the dubbing. Set to 0 to automatically detect the number of speakers",
             "type": "integer",
@@ -24890,6 +24902,14 @@
             "minimum": 1,
             "title": "Response Timeout Secs"
           },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -24951,6 +24971,14 @@
             "maximum": 120,
             "minimum": 1,
             "title": "Response Timeout Secs"
+          },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
           },
           "type": {
             "description": "The type of tool",
@@ -26353,6 +26381,13 @@
             "type": "number",
             "default": 0,
             "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
           }
         },
         "required": [
@@ -28035,6 +28070,85 @@
           "renders"
         ],
         "title": "DubbingResource"
+      },
+      "DynamicVariableAssignment": {
+        "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables.",
+        "type": "object",
+        "properties": {
+          "source": {
+            "description": "The source to extract the value from. Currently only 'response' is supported.",
+            "type": "string",
+            "default": "response",
+            "const": "response",
+            "title": "Source"
+          },
+          "dynamic_variable": {
+            "description": "The name of the dynamic variable to assign the extracted value to",
+            "type": "string",
+            "title": "Dynamic Variable"
+          },
+          "value_path": {
+            "description": "Dot notation path to extract the value from the source (e.g., 'user.name' or 'data.0.id')",
+            "type": "string",
+            "title": "Value Path"
+          }
+        },
+        "example": {
+          "dynamic_variable": "user_name",
+          "source": "response",
+          "value_path": "user.name"
+        },
+        "required": [
+          "dynamic_variable",
+          "value_path"
+        ],
+        "title": "DynamicVariableAssignment"
+      },
+      "DynamicVariableUpdateCommonModel": {
+        "description": "Tracks a dynamic variable update that occurred during tool execution.",
+        "type": "object",
+        "properties": {
+          "variable_name": {
+            "type": "string",
+            "title": "Variable Name"
+          },
+          "old_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old Value"
+          },
+          "new_value": {
+            "type": "string",
+            "title": "New Value"
+          },
+          "updated_at": {
+            "type": "number",
+            "title": "Updated At"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "tool_request_id": {
+            "type": "string",
+            "title": "Tool Request Id"
+          }
+        },
+        "required": [
+          "variable_name",
+          "old_value",
+          "new_value",
+          "updated_at",
+          "tool_name",
+          "tool_request_id"
+        ],
+        "title": "DynamicVariableUpdateCommonModel"
       },
       "DynamicVariablesConfig": {
         "type": "object",
@@ -30920,6 +31034,7 @@
           "gemini-1.5-flash",
           "gemini-2.0-flash",
           "gemini-2.0-flash-lite",
+          "gemini-2.5-flash-lite",
           "gemini-2.5-flash",
           "claude-sonnet-4",
           "claude-3-7-sonnet",
@@ -30928,6 +31043,7 @@
           "claude-3-haiku",
           "grok-beta",
           "custom-llm",
+          "gemini-2.5-flash-lite-preview-06-17",
           "gemini-2.0-flash-lite-001",
           "gemini-2.0-flash-001",
           "gemini-1.5-flash-002",
@@ -32082,6 +32198,14 @@
             "default": 20,
             "title": "Response Timeout Secs"
           },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
+          },
           "type": {
             "type": "string",
             "default": "mcp",
@@ -32172,6 +32296,14 @@
             "type": "integer",
             "default": 20,
             "title": "Response Timeout Secs"
+          },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
           },
           "type": {
             "type": "string",
@@ -37630,6 +37762,14 @@
             "default": 20,
             "title": "Response Timeout Secs"
           },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -37707,6 +37847,14 @@
             "type": "integer",
             "default": 20,
             "title": "Response Timeout Secs"
+          },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
           },
           "type": {
             "description": "The type of tool",
@@ -38019,6 +38167,17 @@
             "type": "string",
             "title": "Name"
           },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
           "description": {
             "anyOf": [
               {
@@ -38034,6 +38193,17 @@
             "type": "object",
             "title": "Inputschema"
           },
+          "outputSchema": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outputschema"
+          },
           "annotations": {
             "anyOf": [
               {
@@ -38043,6 +38213,17 @@
                 "type": "null"
               }
             ]
+          },
+          "_meta": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meta"
           }
         },
         "additionalProperties": true,
@@ -39485,7 +39666,6 @@
                   "NONE",
                   "BAN",
                   "CAPTCHA",
-                  "CAPTCHA_AND_MODERATION",
                   "ENTERPRISE_BAN",
                   "ENTERPRISE_CAPTCHA"
                 ]
@@ -40727,6 +40907,14 @@
             "minimum": 5,
             "title": "Response Timeout Secs"
           },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
+          },
           "type": {
             "description": "The type of tool",
             "type": "string",
@@ -40776,6 +40964,14 @@
             "maximum": 120,
             "minimum": 5,
             "title": "Response Timeout Secs"
+          },
+          "assignments": {
+            "description": "Configuration for extracting values from tool responses and assigning them to dynamic variables",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableAssignment"
+            },
+            "title": "Assignments"
           },
           "type": {
             "description": "The type of tool",
