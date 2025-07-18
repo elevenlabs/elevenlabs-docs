@@ -1,21 +1,28 @@
 ---
-title: ConvAI CLI
+title: Conversational AI CLI
 subtitle: Manage ElevenLabs conversational AI agents using an "agents as code" approach with local configuration files.
 ---
 
 ## Overview
 
-The ElevenLabs ConvAI CLI is a TypeScript-based command-line tool that treats conversational AI agents as code. It provides local configuration management, multi-environment support, template system, and seamless synchronization with the ElevenLabs platform.
+The ElevenLabs ConvAI CLI transforms how you build and deploy conversational AI agents by treating them as code. Instead of manually configuring agents through web interfaces, you define them in version-controlled configuration files and deploy them like any other application.
+
+The CLI also provides a local scratch pad that coding agents like claude code can use to reason about your voice agents. Whether you're auto-generating customer support bots from your existing documentation, creating personalized sales agents for each client, or building docs agents that stay synchronized with your codebase, the CLI makes it effortless.
+
+### What you can build
+
+- **Instant docs agents**: Generate agents from your API documentation that are always up-to-date with your latest changes
+- **Site-aware assistants**: Parse your Vercel app routes and components to create agents that understand your application structure
+- **Multi-tenant voice agents**: Deploy different agent configurations for each client or environment with a single command
+- **Integration-ready bots**: Connect to your existing APIs, databases, and tools through webhook and client-side integrations
+- **Embeddable widgets**: Generate HTML embed codes for seamless web integration across multiple sites
 
 ## Key features
 
-- **Agents as Code**: Manage conversational AI agents through local configuration files
-- **Multi-environment Support**: Separate configurations for development, staging, and production environments
-- **Template System**: Six pre-built templates for common use cases
-- **Secure Authentication**: Multi-layered security with OS keychain integration
-- **Real-time Synchronization**: Watch mode for automatic config updates
-- **Tool Management**: Webhook and client-side tool integration
-- **Widget Generation**: Generate HTML embed code for web integration
+- **Agents as Code**: Version control your AI agents alongside your application code—never lose track of changes or accidentally overwrite production configurations
+- **Multi-environment Support**: Deploy the same agent logic across dev, staging, and production with environment-specific configurations and API keys
+- **Secure Authentication**: Production-ready security with OS keychain integration and environment variable support for CI/CD pipelines
+- **Tool Management**: Connect to any API, database, or service through webhook and client-side tool integrations with built-in authentication
 
 ## Installation
 
@@ -97,8 +104,8 @@ The CLI uses a multi-layered authentication system for secure API key management
 
 <Accordion title="Authentication methods (by priority)">
   1. **Environment variables** (highest priority): `ELEVENLABS_API_KEY` 2. **OS keychain/credential
-  store**: Uses the keytar library for secure storage 3. **Secure file storage**:
-  `~/.convai/api_key` with restricted permissions (600)
+  store**: Uses the keytar library for secure storage 3. **Secure file storage**:`~/.convai/api_key`
+  with restricted permissions (600)
 </Accordion>
 
 ### Authentication commands
@@ -165,7 +172,7 @@ Complete configuration with all available fields, sensible defaults, full voice/
 </Accordion>
 
 <Accordion title="assistant">
-General-purpose AI assistant with balanced creativity (0.3) and versatile voice/text support.
+General-purpose AI assistant with balanced creativity (temperature 0.3) and versatile voice/text support.
 </Accordion>
 </AccordionGroup>
 
@@ -214,10 +221,6 @@ convai status
 
 ```bash title="Check specific agent"
 convai status --agent "Agent Name"
-```
-
-```bash title="Watch for changes"
-convai watch --interval 5
 ```
 
 </CodeBlocks>
@@ -344,220 +347,15 @@ convai sync --env prod
 ```
 </Tab>
 </Tabs>
-
-## Development workflows
-
-### New project setup
-
-<Steps>
-### Initialize the project
-```bash
-convai init
-```
-
-### Authenticate
+### CI/CD pipeline integration
 
 ```bash
-convai login
+# In your GitHub Actions workflow
+- name: Deploy ConvAI agents
+  run: |
+    npm install -g @elevenlabs/convai-cli
+    export ELEVENLABS_API_KEY=${{ secrets.ELEVENLABS_API_KEY }}
+    convai sync --env prod --dry-run  # Preview changes
+    convai sync --env prod            # Deploy
+    convai status --env prod          # Verify deployment
 ```
-
-### Create your first agent
-
-```bash
-convai add agent "My Agent" --template assistant
-```
-
-### Sync to platform
-
-```bash
-convai sync
-```
-
-</Steps>
-
-### Multi-environment development
-
-<Steps>
-### Create development version
-```bash
-convai add agent "Support Bot" --env dev --template customer-service
-```
-
-### Create production version
-
-```bash
-convai add agent "Support Bot" --env prod --template customer-service
-```
-
-### Sync environments separately
-
-```bash
-convai sync --env dev
-convai sync --env prod
-```
-
-</Steps>
-
-### Import existing agents
-
-<Steps>
-### Initialize project
-```bash
-convai init
-convai login
-```
-
-### Import from production
-
-```bash
-convai fetch --env prod
-```
-
-### Sync local changes
-
-```bash
-convai sync
-```
-
-</Steps>
-
-### Development with watch mode
-
-```bash
-# Start watch mode for automatic syncing
-convai watch --env dev --interval 5
-
-# In another terminal, edit your configurations
-# Changes will be automatically synced
-```
-
-## Advanced features
-
-### Hash-based change detection
-
-The CLI uses MD5 hashes to detect configuration changes and prevent unnecessary updates. This information is stored in the `convai.lock` file.
-
-### Atomic operations
-
-All synchronization operations are atomic - either all changes succeed or none are applied.
-
-### Dynamic variables
-
-Tool configurations support parameterized variables for flexible integrations:
-
-```json
-{
-  "tool_name": "API Call",
-  "parameters": {
-    "endpoint": "${API_ENDPOINT}",
-    "timeout": "${TIMEOUT:-5000}"
-  }
-}
-```
-
-## Troubleshooting
-
-<AccordionGroup>
-<Accordion title="Authentication issues">
-**Problem**: CLI reports authentication errors
-
-**Solutions**:
-
-1. Check your login status: `convai whoami`
-2. Re-login with fresh credentials: `convai logout && convai login`
-3. Set environment variable: `export ELEVENLABS_API_KEY=your_key`
-4. Verify API key has correct permissions in ElevenLabs dashboard
-   </Accordion>
-
-<Accordion title="Agent not found errors">
-**Problem**: CLI cannot find expected agents
-
-**Solutions**:
-
-1. List available agents: `convai list-agents`
-2. Check agent status: `convai status --env <environment>`
-3. Verify environment configuration
-4. Check agent name spelling and case sensitivity
-   </Accordion>
-
-<Accordion title="Sync failures">
-**Problem**: Synchronization fails or produces errors
-
-**Solutions**:
-
-1. Use dry-run to preview changes: `convai sync --dry-run`
-2. Check the lock file for corrupted entries: `cat convai.lock`
-3. Reset project state: Remove `convai.lock`, run `convai init`
-4. Verify network connectivity and API key permissions
-   </Accordion>
-
-<Accordion title="Configuration validation errors">
-**Problem**: Configuration files contain invalid data
-
-**Solutions**:
-
-1. Validate JSON syntax using a JSON validator
-2. Compare against template configurations: `convai templates show <template>`
-3. Check required fields are present
-4. Verify field value types match expected schema
-   </Accordion>
-</AccordionGroup>
-
-### Common error messages
-
-| Error                   | Cause                           | Solution                        |
-| ----------------------- | ------------------------------- | ------------------------------- |
-| `API key not found`     | Missing authentication          | Run `convai login`              |
-| `Agent not found`       | Agent doesn't exist on platform | Check with `convai list-agents` |
-| `Invalid configuration` | Malformed JSON                  | Validate configuration syntax   |
-| `Sync failed`           | Network or permission issue     | Check API key and connectivity  |
-
-## Technical details
-
-### Core modules
-
-- **cli.ts**: Main command interface using commander.js
-- **config.ts**: Configuration and credential management
-- **auth.ts**: Multi-layered authentication system
-- **templates.ts**: Agent template system with TypeScript interfaces
-- **utils.ts**: Configuration hashing, file operations, lock file management
-- **elevenlabs-api.ts**: ElevenLabs API integration layer
-- **tools.ts**: Tool management and configuration
-
-### Type safety
-
-The CLI is built with full TypeScript implementation including:
-
-- Comprehensive interfaces for all configuration objects
-- Type guards for API responses
-- Strict configuration validation
-- Runtime type checking
-
-### Security features
-
-- **Secure credential storage**: OS keychain integration via keytar library
-- **File permissions**: Restricted access (600/700) on Unix systems
-- **Cross-platform support**: Windows, macOS, and Linux compatibility
-- **Environment variable support**: For CI/CD and containerized environments
-
-## API reference
-
-### Global options
-
-All commands support these global options:
-
-- `--help, -h`: Show command help
-- `--version, -v`: Show CLI version
-- `--verbose`: Enable verbose logging
-- `--config <path>`: Specify custom config directory
-
-### Exit codes
-
-- `0`: Success
-- `1`: General error
-- `2`: Authentication error
-- `3`: Configuration error
-- `4`: Network error
-- `5`: File system error
-
-For additional support, visit the [ElevenLabs documentation](https://elevenlabs.io/docs) or contact our support team.
