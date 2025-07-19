@@ -165,11 +165,19 @@ After importing your SIP trunk phone number, you can assign it to a conversation
     If you're experiencing connection problems: 
     
     1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side
-    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port (5060 for UDP/TCP, 5061 for TLS)
+    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port (5060 for UDP/TCP, 5061 for TLS) and ensure there is no whitelisting applied
     3. Confirm that your address hostname is correctly formatted and accessible
     4. Test with and without digest authentication credentials
     5. If using TLS transport, ensure your provider's TLS certificates are valid and properly configured
     6. Try different transport types (Auto, UDP, TCP) to isolate TLS-specific issues
+    
+    **Important Network Architecture Information:**
+    
+    - ElevenLabs runs multiple SIP servers behind the load balancer `sip.rtc.elevenlabs.io`
+    - The SIP servers communicate directly with your SIP server, bypassing the load balancer
+    - Subsequent SIP requests (BYE, REFER, NOTIFY, etc.) may come from a different IP address than `34.49.132.122` (`sip.rtc.elevenlabs.io`)
+    - Our SIP servers currently don't have static IP addresses to allow for dynamic scaling, so it's not possible to whitelist inbound communication on your side
+    - If your security policy requires whitelisting inbound traffic, please contact our support team for assistance
     
   </Accordion>
   <Accordion title="Authentication Failures">
