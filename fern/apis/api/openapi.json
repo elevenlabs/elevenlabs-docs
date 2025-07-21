@@ -2441,6 +2441,55 @@
         "x-fern-streaming": true
       }
     },
+    "/v1/text-to-voice/remixing-sessions/{remixing_session_id}": {
+      "delete": {
+        "operationId": "Delete_voice_remixing_session_v1_text_to_voice_remixing_sessions__remixing_session_id__delete",
+        "summary": "Delete Voice Remixing Session",
+        "description": "Delete voice remixing session",
+        "parameters": [
+          {
+            "name": "remixing_session_id",
+            "in": "path",
+            "description": "The remixing session id.",
+            "required": true,
+            "schema": {
+              "description": "The remixing session id.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "123"
+              ],
+              "title": "Remixing Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVoiceRemixingSessionResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-voice"
+        ]
+      }
+    },
     "/v1/user/subscription": {
       "get": {
         "operationId": "Get_user_subscription_info_v1_user_subscription_get",
@@ -7656,10 +7705,10 @@
           {
             "name": "dubbing_status",
             "in": "query",
-            "description": "Status of the dubbing, either 'in_progress', 'completed' or 'failed'.",
+            "description": "What state the dub is currently in.",
             "required": false,
             "schema": {
-              "description": "Status of the dubbing, either 'in_progress', 'completed' or 'failed'.",
+              "description": "What state the dub is currently in.",
               "type": "string",
               "embed": true,
               "enum": [
@@ -10769,6 +10818,146 @@
           "Conversational AI"
         ],
         "x-skip-spec": true
+      }
+    },
+    "/v1/convai/conversation/token": {
+      "get": {
+        "operationId": "Get_WebRTC_Token_v1_convai_conversation_token_get",
+        "summary": "Get Webrtc Token",
+        "description": "Get a WebRTC session token for real-time communication.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "query",
+            "description": "The id of the agent you're taking the action on.",
+            "required": true,
+            "schema": {
+              "description": "The id of the agent you're taking the action on.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "participant_name",
+            "in": "query",
+            "description": "Optional custom participant name. If not provided, user ID will be used",
+            "required": false,
+            "schema": {
+              "description": "Optional custom participant name. If not provided, user ID will be used",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Participant Name"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "The source of the conversation initiation.",
+            "required": false,
+            "schema": {
+              "description": "The source of the conversation initiation.",
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationInitiationSource"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "unknown",
+                "android_sdk",
+                "node_js_sdk",
+                "react_native_sdk",
+                "react_sdk",
+                "js_sdk",
+                "python_sdk",
+                "widget",
+                "sip_trunk",
+                "twilio",
+                "genesys"
+              ],
+              "title": "Source"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "The SDK version number for tracking purposes.",
+            "required": false,
+            "schema": {
+              "description": "The SDK version number for tracking purposes.",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 50,
+                  "pattern": "^[0-9]+(\\.[0-9]+)*$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
+        "x-fern-sdk-method-name": "get_webrtc_token"
       }
     },
     "/v1/convai/twilio/outbound-call": {
@@ -22145,6 +22334,12 @@
               }
             ],
             "title": "Extra Evaluation Criteria"
+          },
+          "new_turns_limit": {
+            "description": "Maximum number of new turns to generate in the conversation simulation",
+            "type": "integer",
+            "default": 10000,
+            "title": "New Turns Limit"
           }
         },
         "required": [
@@ -22173,6 +22368,12 @@
               }
             ],
             "title": "Extra Evaluation Criteria"
+          },
+          "new_turns_limit": {
+            "description": "Maximum number of new turns to generate in the conversation simulation",
+            "type": "integer",
+            "default": 10000,
+            "title": "New Turns Limit"
           }
         },
         "required": [
@@ -27405,6 +27606,19 @@
           "status"
         ],
         "title": "DeleteSampleResponseModel"
+      },
+      "DeleteVoiceRemixingSessionResponseModel": {
+        "type": "object",
+        "properties": {
+          "voice_remixing_session_id": {
+            "type": "string",
+            "title": "Voice Remixing Session Id"
+          }
+        },
+        "required": [
+          "voice_remixing_session_id"
+        ],
+        "title": "DeleteVoiceRemixingSessionResponseModel"
       },
       "DeleteVoiceResponseModel": {
         "type": "object",
@@ -38159,6 +38373,19 @@
         ],
         "title": "TelephonyProvider"
       },
+      "TokenResponseModel": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "TokenResponseModel"
+      },
       "Tool": {
         "description": "Definition for a tool the client can call.",
         "type": "object",
@@ -39250,6 +39477,36 @@
               true
             ],
             "title": "Stream Previews"
+          },
+          "remixing_session_id": {
+            "description": "The remixing session id.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "123"
+            ],
+            "title": "Remixing Session Id"
+          },
+          "remixing_session_iteration_id": {
+            "description": "The id of the remixing session iteration where these generations should be attached to. If not provided, a new iteration will be created.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "123"
+            ],
+            "title": "Remixing Session Iteration Id"
           },
           "quality": {
             "description": "Higher quality results in better voice output but less variety.",
@@ -42715,7 +42972,8 @@
           "convai_phone_numbers",
           "convai_mcp_servers",
           "convai_batch_calls",
-          "convai_agent_response_tests"
+          "convai_agent_response_tests",
+          "convai_test_suite_invocations"
         ],
         "title": "WorkspaceResourceType"
       },
