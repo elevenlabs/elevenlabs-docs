@@ -12,24 +12,19 @@ ElevenLabs supports two types of post-call webhooks:
 - **Transcription webhooks** (`post_call_transcription`): Contains full conversation data including transcripts, analysis results, and metadata
 - **Audio webhooks** (`post_call_audio`): Contains minimal data with base64-encoded audio of the full conversation
 
-<Note>
-  Prior to August 15th, 2025, the webhook data structure differs from the [Conversation
-  API](/docs/conversational-ai/api-reference/conversations/get-conversations) GET endpoint response.
-  After the migration, webhooks will use the same data model as the GET endpoint for enhanced consistency.
-</Note>
-
 ## Migration Notice: Enhanced Webhook Format
 
 <Warning>
-  **Important:** Starting August 15th, 2025, post-call webhooks will be migrated to include additional audio-related fields for enhanced compatibility and consistency.
+  **Important:** Starting August 15th, 2025, post-call transcription webhooks will be migrated to
+  include additional fields for enhanced compatibility and consistency.
 </Warning>
 
 ### What's Changing
 
-From August 15th, 2025, all post-call webhooks will be updated to match the same format as the [GET Conversation response](/docs/api-reference/conversations/get). The webhook `data` object will include three additional boolean fields:
+From August 15th, 2025, post-call transcription webhooks will be updated to match the same format as the [GET Conversation response](/docs/api-reference/conversations/get). The webhook `data` object will include three additional boolean fields:
 
 - `has_audio`: Boolean indicating whether the conversation has any audio available
-- `has_user_audio`: Boolean indicating whether user audio is available for the conversation  
+- `has_user_audio`: Boolean indicating whether user audio is available for the conversation
 - `has_response_audio`: Boolean indicating whether agent response audio is available for the conversation
 
 ### Migration Requirements
@@ -46,9 +41,6 @@ Once the migration is complete:
 
 - **Unified data model**: Webhook responses will match the GET Conversation API format exactly
 - **SDK compatibility**: Webhook handlers can be provided in the SDK and automatically stay up-to-date with the GET response model
-- **Enhanced audio information**: Know exactly what audio components are available for each conversation
-
-
 
 ## Enabling post-call webhooks
 
@@ -123,9 +115,10 @@ The `data` object contains:
 | `conversation_initiation_client_data` | object | Configuration overrides and dynamic variables |
 
 <Note>
-  As of August 15th, 2025, transcription webhooks will include the `has_audio`, `has_user_audio`, and `has_response_audio`
-  fields to match the [GET Conversation
-  response](/docs/api-reference/conversations/get) format exactly. Prior to this date, these fields are not included in webhook payloads.
+  As of August 15th, 2025, transcription webhooks will include the `has_audio`, `has_user_audio`,
+  and `has_response_audio` fields to match the [GET Conversation
+  response](/docs/api-reference/conversations/get) format exactly. Prior to this date, these fields
+  are not included in webhook payloads.
 </Note>
 
 ### Audio webhooks (`post_call_audio`)
