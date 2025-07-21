@@ -13,7 +13,7 @@ ElevenLabs supports two types of post-call webhooks:
 - **Audio webhooks** (`post_call_audio`): Contains minimal data with base64-encoded audio of the full conversation
 
 <Note>
-  Prior to August 15th, 2024, the webhook data structure differs from the [Conversation
+  Prior to August 15th, 2025, the webhook data structure differs from the [Conversation
   API](/docs/conversational-ai/api-reference/conversations/get-conversations) GET endpoint response.
   After the migration, webhooks will use the same data model as the GET endpoint for enhanced consistency.
 </Note>
@@ -21,12 +21,12 @@ ElevenLabs supports two types of post-call webhooks:
 ## Migration Notice: Enhanced Webhook Format
 
 <Warning>
-  **Important:** Starting August 15th, 2024, post-call webhooks will be migrated to include additional audio-related fields for enhanced compatibility and consistency.
+  **Important:** Starting August 15th, 2025, post-call webhooks will be migrated to include additional audio-related fields for enhanced compatibility and consistency.
 </Warning>
 
 ### What's Changing
 
-From August 15th, 2024, all post-call webhooks will be updated to match the same format as the [GET Conversation response](/docs/api-reference/conversations/get). The webhook `data` object will include three additional boolean fields:
+From August 15th, 2025, all post-call webhooks will be updated to match the same format as the [GET Conversation response](/docs/api-reference/conversations/get). The webhook `data` object will include three additional boolean fields:
 
 - `has_audio`: Boolean indicating whether the conversation has any audio available
 - `has_user_audio`: Boolean indicating whether user audio is available for the conversation  
@@ -37,7 +37,7 @@ From August 15th, 2024, all post-call webhooks will be updated to match the same
 To ensure your webhook handlers continue working after the migration:
 
 1. **Update your webhook parsing logic** to handle these three new boolean fields
-2. **Test your webhook endpoints** with the new field structure before August 15th
+2. **Test your webhook endpoints** with the new field structure before August 15th, 2025
 3. **Ensure your JSON parsing** can gracefully handle additional fields without breaking
 
 ### Benefits After Migration
@@ -48,25 +48,7 @@ Once the migration is complete:
 - **SDK compatibility**: Webhook handlers can be provided in the SDK and automatically stay up-to-date with the GET response model
 - **Enhanced audio information**: Know exactly what audio components are available for each conversation
 
-### Example of New Format
 
-After migration, your webhook `data` object will include:
-
-```json
-{
-  "agent_id": "xyz",
-  "conversation_id": "abc",
-  "status": "done",
-  "has_audio": true,
-  "has_user_audio": true,
-  "has_response_audio": true,
-  // ... existing fields continue as before
-}
-```
-
-<Note>
-  These new fields will be automatically included in all webhook payloads. No action is required on your part other than ensuring your webhook handlers can process boolean values for these three fields.
-</Note>
 
 ## Enabling post-call webhooks
 
@@ -141,7 +123,7 @@ The `data` object contains:
 | `conversation_initiation_client_data` | object | Configuration overrides and dynamic variables |
 
 <Note>
-  As of August 15th, 2024, transcription webhooks will include the `has_audio`, `has_user_audio`, and `has_response_audio`
+  As of August 15th, 2025, transcription webhooks will include the `has_audio`, `has_user_audio`, and `has_response_audio`
   fields to match the [GET Conversation
   response](/docs/api-reference/conversations/get) format exactly. Prior to this date, these fields are not included in webhook payloads.
 </Note>
