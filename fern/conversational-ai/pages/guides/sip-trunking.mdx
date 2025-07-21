@@ -148,6 +148,31 @@ Before setting up SIP trunking, ensure you have:
   </Step>
 </Steps>
 
+## Client Data and Personalization
+
+To ensure proper forwarding and traceability of call metadata, include the following custom SIP headers in your webhook payload and SIP INVITE request:
+
+- **X-CALL-ID**: Unique identifier for the call
+- **X-CALLER-ID**: Identifier for the calling party
+
+These headers enable the system to associate call metadata with the conversation and provide context for personalization.
+
+### Fallback Header Support
+
+If the standard headers above are not present, the system will automatically look for the Twilio-specific SIP header:
+
+- **sip.twilio.callSid**: Twilio's unique call identifier
+
+This fallback ensures compatibility with Twilio's Elastic SIP Trunking without requiring configuration changes.
+
+### Custom Provider Headers
+
+If you're using a SIP provider other than Twilio and your platform uses different headers for call or caller identification please contact our support team.
+
+### Processing Flow
+
+Once the relevant metadata is received through any of the supported headers, the `caller_id` and/or `call_id` are available in the [pre-call webhook](/docs/conversational-ai/customization/personalization/twilio-personalization#how-it-works) and as [system dynamic variables](/docs/conversational-ai/customization/personalization/dynamic-variables#system-dynamic-variables).
+
 ## Assigning Agents to Phone Numbers
 
 After importing your SIP trunk phone number, you can assign it to a conversational AI agent:
