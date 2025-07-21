@@ -2441,6 +2441,55 @@
         "x-fern-streaming": true
       }
     },
+    "/v1/text-to-voice/remixing-sessions/{remixing_session_id}": {
+      "delete": {
+        "operationId": "Delete_voice_remixing_session_v1_text_to_voice_remixing_sessions__remixing_session_id__delete",
+        "summary": "Delete Voice Remixing Session",
+        "description": "Delete voice remixing session",
+        "parameters": [
+          {
+            "name": "remixing_session_id",
+            "in": "path",
+            "description": "The remixing session id.",
+            "required": true,
+            "schema": {
+              "description": "The remixing session id.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "123"
+              ],
+              "title": "Remixing Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVoiceRemixingSessionResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "text-to-voice"
+        ]
+      }
+    },
     "/v1/user/subscription": {
       "get": {
         "operationId": "Get_user_subscription_info_v1_user_subscription_get",
@@ -10771,6 +10820,141 @@
         "x-skip-spec": true
       }
     },
+    "/v1/convai/conversation/token": {
+      "get": {
+        "operationId": "Get_WebRTC_Token_v1_convai_conversation_token_get",
+        "summary": "Get Webrtc Token",
+        "description": "Get a WebRTC session token for real-time communication.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "query",
+            "description": "The id of the agent you're taking the action on.",
+            "required": true,
+            "schema": {
+              "description": "The id of the agent you're taking the action on.",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "participant_name",
+            "in": "query",
+            "description": "Optional custom participant name. If not provided, user ID will be used",
+            "required": false,
+            "schema": {
+              "description": "Optional custom participant name. If not provided, user ID will be used",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Participant Name"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "The source of the conversation initiation.",
+            "required": false,
+            "schema": {
+              "description": "The source of the conversation initiation.",
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationInitiationSource"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "unknown",
+                "android_sdk",
+                "node_js_sdk",
+                "react_native_sdk",
+                "react_sdk",
+                "js_sdk",
+                "python_sdk",
+                "widget",
+                "sip_trunk",
+                "twilio",
+                "genesys"
+              ],
+              "title": "Source"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "The SDK version number for tracking purposes.",
+            "required": false,
+            "schema": {
+              "description": "The SDK version number for tracking purposes.",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 50,
+                  "pattern": "^[0-9]+(\\.[0-9]+)*$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveKitTokenResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ]
+      }
+    },
     "/v1/convai/twilio/outbound-call": {
       "post": {
         "operationId": "Handle_an_outbound_call_via_Twilio_v1_convai_twilio_outbound_call_post",
@@ -12297,6 +12481,73 @@
           "feedback"
         ],
         "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/convai/conversations/ask-ai": {
+      "post": {
+        "operationId": "Ask_AI_About_Conversations_v1_convai_conversations_ask_ai_post",
+        "summary": "Ask Ai About Conversations",
+        "description": "Ask AI to analyze conversation history and answer questions about it",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskAIRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskAIResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
+        "x-fern-sdk-method-name": "ask_ai"
       }
     },
     "/v1/convai/phone-numbers": {
@@ -18184,6 +18435,113 @@
         ],
         "title": "ArrayJsonSchemaProperty"
       },
+      "AskAIRequestModel": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "description": "The user's question about the conversation history",
+            "type": "string",
+            "maxLength": 1000,
+            "title": "Question"
+          },
+          "agent_id": {
+            "description": "Filter by specific agent ID",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Id"
+          },
+          "call_successful": {
+            "description": "Filter by call success status",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EvaluationSuccessResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "call_start_after_unix": {
+            "description": "Filter conversations after this timestamp",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Start After Unix"
+          },
+          "call_start_before_unix": {
+            "description": "Filter conversations before this timestamp",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Start Before Unix"
+          },
+          "page_size": {
+            "description": "Number of conversations to analyze",
+            "type": "integer",
+            "default": 20,
+            "maximum": 20,
+            "title": "Page Size"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "title": "AskAIRequestModel"
+      },
+      "AskAIResponseModel": {
+        "type": "object",
+        "properties": {
+          "answer": {
+            "description": "The AI's response to the user's question about conversation history",
+            "type": "string",
+            "title": "Answer"
+          },
+          "analyzed_conversations_count": {
+            "description": "Number of conversations analyzed",
+            "type": "integer",
+            "title": "Analyzed Conversations Count"
+          },
+          "conversation_ids": {
+            "description": "List of conversation IDs that were analyzed",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Conversation Ids"
+          }
+        },
+        "example": {
+          "analyzed_conversations_count": 15,
+          "answer": "Based on the conversation history, I can see that most calls have been successful with an average duration of 3.2 minutes. The primary issues users face are related to product pricing inquiries [CONV_ID: abc123].",
+          "conversation_ids": [
+            "abc123",
+            "def456",
+            "ghi789"
+          ]
+        },
+        "required": [
+          "answer",
+          "analyzed_conversations_count",
+          "conversation_ids"
+        ],
+        "title": "AskAIResponseModel"
+      },
       "AudioNativeCreateProjectResponseModel": {
         "type": "object",
         "properties": {
@@ -22145,6 +22503,12 @@
               }
             ],
             "title": "Extra Evaluation Criteria"
+          },
+          "new_turns_limit": {
+            "description": "Maximum number of new turns to generate in the conversation simulation",
+            "type": "integer",
+            "default": 10000,
+            "title": "New Turns Limit"
           }
         },
         "required": [
@@ -22173,6 +22537,12 @@
               }
             ],
             "title": "Extra Evaluation Criteria"
+          },
+          "new_turns_limit": {
+            "description": "Maximum number of new turns to generate in the conversation simulation",
+            "type": "integer",
+            "default": 10000,
+            "title": "New Turns Limit"
           }
         },
         "required": [
@@ -27406,6 +27776,19 @@
         ],
         "title": "DeleteSampleResponseModel"
       },
+      "DeleteVoiceRemixingSessionResponseModel": {
+        "type": "object",
+        "properties": {
+          "voice_remixing_session_id": {
+            "type": "string",
+            "title": "Voice Remixing Session Id"
+          }
+        },
+        "required": [
+          "voice_remixing_session_id"
+        ],
+        "title": "DeleteVoiceRemixingSessionResponseModel"
+      },
       "DeleteVoiceResponseModel": {
         "type": "object",
         "properties": {
@@ -31810,6 +32193,19 @@
           "type"
         ],
         "title": "LiteralJsonSchemaProperty"
+      },
+      "LiveKitTokenResponseModel": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "LiveKitTokenResponseModel"
       },
       "MCPApprovalPolicy": {
         "description": "Defines the MCP server-level approval policy for tool execution.",
@@ -39250,6 +39646,36 @@
               true
             ],
             "title": "Stream Previews"
+          },
+          "remixing_session_id": {
+            "description": "The remixing session id.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "123"
+            ],
+            "title": "Remixing Session Id"
+          },
+          "remixing_session_iteration_id": {
+            "description": "The id of the remixing session iteration where these generations should be attached to. If not provided, a new iteration will be created.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "123"
+            ],
+            "title": "Remixing Session Iteration Id"
           },
           "quality": {
             "description": "Higher quality results in better voice output but less variety.",
