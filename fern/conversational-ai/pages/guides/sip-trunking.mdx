@@ -148,6 +148,43 @@ Before setting up SIP trunking, ensure you have:
   </Step>
 </Steps>
 
+## Client Data and Personalization
+
+ElevenLabs now supports initiation client data for SIP trunking, enabling personalized conversation experiences based on call metadata. This feature works similarly to [Twilio personalization](/docs/conversational-ai/customization/personalization/twilio-personalization) but uses SIP-specific headers for metadata forwarding.
+
+### Required SIP Headers
+
+To ensure proper forwarding and traceability of call metadata, include the following custom SIP headers in your webhook payload and SIP INVITE request:
+
+- **X-CALL-ID**: Unique identifier for the call
+- **X-CALLER-ID**: Identifier for the calling party
+
+These headers enable the system to associate call metadata with the conversation and provide context for personalization.
+
+### Fallback Header Support
+
+If the standard headers above are not present, the system will automatically look for the Twilio-specific SIP header:
+
+- **sip.twilio.callSid**: Twilio's unique call identifier
+
+This fallback ensures compatibility with Twilio's Elastic SIP Trunking without requiring configuration changes.
+
+### Custom Provider Headers
+
+If you're using a SIP provider other than Twilio and your platform uses different headers for call or caller identification:
+
+1. Contact our support team with details of your provider's header format
+2. We can work with the ConvAI team to add support for your specific headers
+3. Custom headers will be accommodated provided your provider cannot remap them to the standard `X-CALL-ID` or `X-CALLER-ID` format
+
+### Processing Flow
+
+Once the relevant metadata is received through any of the supported headers, the processing flow remains the same as for Twilio-based calls. For detailed information on how to use this metadata for conversation personalization, see the [Twilio personalization guide](/docs/conversational-ai/customization/personalization/twilio-personalization).
+
+<Note>
+  This feature requires developer documentation that is currently pending. Contact support for early access or specific implementation guidance.
+</Note>
+
 ## Assigning Agents to Phone Numbers
 
 After importing your SIP trunk phone number, you can assign it to a conversational AI agent:
