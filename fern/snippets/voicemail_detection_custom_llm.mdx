@@ -1,0 +1,24 @@
+## Custom LLM integration
+
+**Parameters**:
+
+- `reason` (string, required): The specific reason for detecting voicemail, referencing the exact wording that indicated voicemail (e.g., "automated greeting detected: 'You have reached the voicemail of...'")
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "voicemail_detection",
+    "arguments": "{\"reason\": \"automated greeting detected: 'Hi, you've reached Sarah. I'm not available right now. Please leave a message after the beep.'\"}"
+  }
+}
+```
+
+**Important considerations**:
+
+- This tool is designed specifically for **outbound calls** and will not work effectively on inbound calls or transfer scenarios
+- The agent must provide a specific reason that references the actual voicemail content heard
+- After calling this function, the call will end immediately (or after playing a configured voicemail message)
+- Only use when you're certain the call has been answered by an automated voicemail system, not a human

@@ -1,0 +1,147 @@
+---
+title: Voicemail detection
+subtitle: Automatically detect voicemail systems during outbound calls and optionally leave a message.
+---
+
+## Overview
+
+The voicemail detection tool enables Conversational AI agents to automatically identify when a call has been answered by a voicemail system rather than a human. This system tool is specifically designed for **outbound calling scenarios** where agents need to distinguish between human responses and automated voicemail greetings.
+
+When voicemail is detected, the agent can optionally play a configured message before ending the call. This allows for professional handling of voicemail situations without requiring manual intervention or wasting conversation time on automated systems.
+
+<Note>
+  This tool is optimized for **outbound calls only** and will not function effectively in inbound
+  call scenarios or when using transfer-to-number features.
+</Note>
+
+## Functionality
+
+- **Automatic detection**: Identifies voicemail systems based on common indicators like automated greetings and recording instructions
+- **Optional messaging**: Configurable voicemail message that can be left when detection occurs
+- **Call termination**: Automatically ends the call after voicemail detection (with or without leaving a message)
+
+The LLM determines when voicemail has been detected based on conversation context and must provide specific reasoning referencing the actual voicemail content heard.
+
+## Common voicemail indicators
+
+The tool is designed to detect various types of voicemail systems:
+
+- **Automated greeting messages**: "You have reached the voicemail of..."
+- **Recording instructions**: "Please leave a message after the beep/tone"
+- **Voicemail system prompts**: "Please leave your name and number"
+- **Generic unavailable messages**: "The number you have dialed is not available"
+
+<Markdown src="/snippets/voicemail_detection_custom_llm.mdx" />
+
+## API Implementation
+
+You can configure the `voicemail_detection` system tool when creating or updating an agent via the API. The tool accepts an optional `voicemail_message` parameter.
+
+<CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentInputToolsItem_System,
+    SystemToolConfigInputParams_VoicemailDetection,
+)
+
+# Initialize the client
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create the voicemail detection tool configuration
+voicemail_tool = PromptAgentInputToolsItem_System(
+    type="system",
+    name="voicemail_detection",
+    description="Detect voicemail systems during outbound calls.", # Optional custom description
+    params=SystemToolConfigInputParams_VoicemailDetection(
+        system_tool_type="voicemail_detection",
+        voicemail_message="Hello, this is an automated call from [Your Company]. Please call us back at your convenience. Thank you."
+    )
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            prompt="You are an outbound sales agent. When you detect voicemail, use the voicemail detection tool.",
+            first_message="Hi, this is calling from [Your Company]. Is this a good time to talk?",
+            tools=[voicemail_tool],
+        )
+    )
+)
+
+# Create the agent
+response = elevenlabs.conversational_ai.agents.create(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
+
+// Initialize the client
+const elevenlabs = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with the voicemail detection tool
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
+    agent: {
+      prompt: {
+        prompt:
+          'You are an outbound sales agent. When you detect voicemail, use the voicemail detection tool.',
+        firstMessage: 'Hi, this is calling from [Your Company]. Is this a good time to talk?',
+        tools: [
+          {
+            type: 'system',
+            name: 'voicemail_detection',
+            description: 'Detect voicemail systems during outbound calls.', // Optional custom description
+            params: {
+              systemToolType: 'voicemail_detection',
+              voicemailMessage:
+                'Hello, this is an automated call from [Your Company]. Please call us back at your convenience. Thank you.',
+            },
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+</CodeBlocks>
+
+## Configuration options
+
+### Voicemail message
+
+The `voicemail_message` parameter is optional:
+
+- **With message**: When provided, the message will be played before ending the call
+- **Without message**: The call ends immediately when voicemail is detected
+- **Best practices**: Keep messages concise, professional, and include callback information
+
+### System prompt recommendations
+
+Update your agent's system prompt to provide clear guidance on when to use this tool:
+
+```
+When you detect that the call has been answered by a voicemail system rather than a human,
+immediately call the voicemail_detection tool with a specific reason describing what you heard
+that indicated voicemail (e.g., automated greeting, recording instructions).
+
+Do not attempt to have a conversation with voicemail systems.
+```
+
+## Best practices
+
+1. **Clear detection criteria**: Train your agents to recognize common voicemail patterns
+2. **Professional messaging**: Use clear, concise voicemail messages with callback information
+3. **Prompt engineering**: Include specific instructions in your system prompt about when to use this tool
+4. **Testing**: Test with various voicemail systems to ensure reliable detection
+5. **Analytics**: Monitor detection reasons to improve accuracy over time
