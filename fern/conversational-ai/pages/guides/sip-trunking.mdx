@@ -150,10 +150,6 @@ Before setting up SIP trunking, ensure you have:
 
 ## Client Data and Personalization
 
-ElevenLabs now supports initiation client data for SIP trunking, enabling personalized conversation experiences based on call metadata. This feature works similarly to [Twilio personalization](/docs/conversational-ai/customization/personalization/twilio-personalization) but uses SIP-specific headers for metadata forwarding.
-
-### Required SIP Headers
-
 To ensure proper forwarding and traceability of call metadata, include the following custom SIP headers in your webhook payload and SIP INVITE request:
 
 - **X-CALL-ID**: Unique identifier for the call
@@ -171,19 +167,11 @@ This fallback ensures compatibility with Twilio's Elastic SIP Trunking without r
 
 ### Custom Provider Headers
 
-If you're using a SIP provider other than Twilio and your platform uses different headers for call or caller identification:
-
-1. Contact our support team with details of your provider's header format
-2. We can work with the ConvAI team to add support for your specific headers
-3. Custom headers will be accommodated provided your provider cannot remap them to the standard `X-CALL-ID` or `X-CALLER-ID` format
+If you're using a SIP provider other than Twilio and your platform uses different headers for call or caller identification please contact our support team.
 
 ### Processing Flow
 
-Once the relevant metadata is received through any of the supported headers, the processing flow remains the same as for Twilio-based calls. For detailed information on how to use this metadata for conversation personalization, see the [Twilio personalization guide](/docs/conversational-ai/customization/personalization/twilio-personalization).
-
-<Note>
-  This feature requires developer documentation that is currently pending. Contact support for early access or specific implementation guidance.
-</Note>
+Once the relevant metadata is received through any of the supported headers, the `caller_id` and/or `call_id` are available in the [pre-call webhook](/docs/conversational-ai/customization/personalization/twilio-personalization#how-it-works) and as [system dynamic variables](/docs/conversational-ai/customization/personalization/dynamic-variables#system-dynamic-variables).
 
 ## Assigning Agents to Phone Numbers
 
