@@ -21,6 +21,213 @@ Your application can send contextual information to the server to improve conver
 
 ## Event types
 
+### Audio chunks
+
+Audio chunks are raw audio data sent from the client to the server for speech-to-text processing.
+
+**Key characteristics:**
+
+- Contains base64-encoded audio data from user's microphone input.
+- Sent continuously during user speech for real-time processing.
+- Essential for voice-based interactions.
+
+```javascript
+// User audio chunk event structure
+{
+  "user_audio_chunk": "base64EncodedAudioData=="
+}
+```
+
+```javascript
+// Example sending audio chunks
+function sendAudioChunk(audioData) {
+  websocket.send(
+    JSON.stringify({
+      user_audio_chunk: audioData,
+    })
+  );
+}
+
+// Usage with audio recording
+navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+  const mediaRecorder = new MediaRecorder(stream);
+  mediaRecorder.ondataavailable = (event) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result.split(',')[1];
+      sendAudioChunk(base64);
+    };
+    reader.readAsDataURL(event.data);
+  };
+  mediaRecorder.start(100); // 100ms chunks
+});
+```
+
+### Pong responses
+
+Pong responses are sent in reply to server ping messages for connection health monitoring.
+
+**Key characteristics:**
+
+- Required response to server ping events.
+- Used for latency measurement and connection maintenance.
+- Must include the same event ID as the received ping.
+
+```javascript
+// Pong response event structure
+{
+  "type": "pong",
+  "event_id": 12345
+}
+```
+
+```javascript
+// Example pong response handler
+websocket.on('message', (data) => {
+  const event = JSON.parse(data);
+
+  if (event.type === 'ping') {
+    websocket.send(
+      JSON.stringify({
+        type: 'pong',
+        event_id: event.ping_event.event_id,
+      })
+    );
+  }
+});
+```
+
+### Conversation initialization
+
+Conversation initialization data allows you to override default agent configuration when starting a conversation.
+
+**Key characteristics:**
+
+- Sent at the beginning of a conversation to customize agent behavior.
+- Can override agent prompts, voice settings, and LLM parameters.
+- Supports dynamic variables for personalized conversations.
+
+```javascript
+// Conversation initiation event structure
+{
+  "type": "conversation_initiation_client_data",
+  "conversation_config_override": {
+    "agent": {
+      "prompt": {
+        "prompt": "You are a helpful customer support agent named Alexis."
+      },
+      "first_message": "Hi, I'm Alexis from ElevenLabs support. How can I help you today?",
+      "language": "en"
+    },
+    "tts": {
+      "voice_id": "21m00Tcm4TlvDq8ikWAM"
+    }
+  },
+  "custom_llm_extra_body": {
+    "temperature": 0.7,
+    "max_tokens": 150
+  },
+  "dynamic_variables": {
+    "user_name": "John",
+    "account_type": "premium"
+  }
+}
+```
+
+```javascript
+// Example conversation initialization
+function initializeConversation(config) {
+  websocket.send(
+    JSON.stringify({
+      type: 'conversation_initiation_client_data',
+      conversation_config_override: config.agent,
+      custom_llm_extra_body: config.llm,
+      dynamic_variables: config.variables,
+    })
+  );
+}
+
+// Usage
+initializeConversation({
+  agent: {
+    prompt: { prompt: 'You are a sales assistant.' },
+    first_message: 'Hello! How can I help you today?',
+    language: 'en',
+  },
+  llm: {
+    temperature: 0.8,
+    max_tokens: 200,
+  },
+  variables: {
+    customer_tier: 'gold',
+    region: 'US',
+  },
+});
+```
+
+### Tool results
+
+Tool results are responses to server requests for client-side tool execution.
+
+**Key characteristics:**
+
+- Sent in response to client_tool_call events from the server.
+- Contains the result of executing a requested tool or function.
+- Must include the same tool_call_id as the original request.
+
+```javascript
+// Client tool result event structure
+{
+  "type": "client_tool_result",
+  "tool_call_id": "tool_call_123",
+  "result": "Account is active and in good standing",
+  "is_error": false
+}
+```
+
+```javascript
+// Example tool result handler
+const toolRegistry = {
+  check_account_status: async (params) => {
+    const response = await fetch(`/api/account/${params.user_id}`);
+    return await response.json();
+  },
+  search_database: async (params) => {
+    return await performDatabaseSearch(params.query, params.filters);
+  },
+};
+
+websocket.on('message', async (data) => {
+  const event = JSON.parse(data);
+
+  if (event.type === 'client_tool_call') {
+    const { tool_name, tool_call_id, parameters } = event.client_tool_call;
+
+    try {
+      const result = await toolRegistry[tool_name](parameters);
+
+      websocket.send(
+        JSON.stringify({
+          type: 'client_tool_result',
+          tool_call_id: tool_call_id,
+          result: JSON.stringify(result),
+          is_error: false,
+        })
+      );
+    } catch (error) {
+      websocket.send(
+        JSON.stringify({
+          type: 'client_tool_result',
+          tool_call_id: tool_call_id,
+          result: error.message,
+          is_error: true,
+        })
+      );
+    }
+  }
+});
+```
+
 ### Contextual updates
 
 Contextual updates allow your application to send non-interrupting background information to the conversation.

@@ -299,6 +299,8 @@ components:
     UserAudioChunk:
       type: object
       description: Schema for chunks of user audio data
+      required:
+        - user_audio_chunk
       properties:
         user_audio_chunk:
           type: string
@@ -308,6 +310,7 @@ components:
       description: Schema for pong response messages
       required:
         - type
+        - event_id
       properties:
         type:
           x-fern-type: literal<"pong">
@@ -374,6 +377,9 @@ components:
       description: Schema for tool execution results from client
       required:
         - type
+        - tool_call_id
+        - result
+        - is_error
       properties:
         type:
           x-fern-type: literal<"client_tool_result">
