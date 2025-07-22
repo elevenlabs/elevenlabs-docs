@@ -143,63 +143,27 @@ Either view a step by step summary or view the detailed system prompt of the age
 
 ## Authentication Setup
 
-<Warning>
-  **Prerequisites**: You must have Salesforce Administrator privileges to complete this setup.
-</Warning>
-
 Before configuring the tools, you must set up OAuth 2.0 authentication with Salesforce using an External Client App.
-
-<Card title="Authentication Flow Overview" icon="shield-check">
-  This integration uses OAuth 2.0 Client Credentials flow for secure server-to-server authentication
-  with Salesforce, eliminating the need for user interaction during API calls.
-</Card>
 
 ### Step 1: Create an External Client App in Salesforce
 
-<Steps>
-  ### Access App Manager
-  Log into your Salesforce org as an administrator and navigate to **Setup** → **App Manager** (or search "App Manager" in Quick Find).
-
-### Create New External Client App
-
-Click **New External Client App** and complete the basic information:
-
-{' '}
-
-<CardGroup cols={2}>
-  <Card title="App Details" icon="cog">
-    - **External Client App Name**: `ElevenLabs Conversational AI` - **API Name**:
-    `ElevenLabs_Conversational_AI` - **Contact Email**: Your administrator email
-  </Card>
-  <Card title="OAuth Settings" icon="key">
-    - Check **Enable OAuth Settings** - **Callback URL**: `https://api.elevenlabs.io/oauth/callback`
-    - **OAuth Start URL**: `https://api.elevenlabs.io/oauth/start`
-  </Card>
-</CardGroup>
-
-### Configure OAuth Scopes
-
-In the **Selected OAuth Scopes** section, add these essential scopes:
-
-{' '}
-
-<AccordionGroup>
-  <Accordion title="Required OAuth Scopes">
-    - **Full access (full)** - Complete access to your data and applications - **Perform requests on
-    your behalf at any time (refresh_token, offline_access)** - Enables token refresh - **Manage
-    user data via api** - Allows CRUD operations on user data
-  </Accordion>
-</AccordionGroup>
-
-### Save and Collect Credentials
-
-1. Click **Save**
-2. **Important**: Copy the **Consumer Key** and **Consumer Secret** - you'll need these for authentication
-
-  <Tip>
-    Store your Consumer Key and Consumer Secret securely. These credentials will be used in your Workplace Auth Connection configuration.
-  </Tip>
-</Steps>
+1. Log into your Salesforce org as an administrator
+2. Go to **Setup** → **App Manager** (or search "App Manager" in Quick Find)
+3. Click **New External Client App**
+4. Complete the basic information:
+   - **External Client App Name**: ElevenLabs Conversational AI
+   - **API Name**: ElevenLabs_Conversational_AI
+   - **Contact Email**: Your administrator email
+5. In the **API (Enable OAuth Settings)** section:
+   - Check **Enable OAuth Settings**
+   - **Callback URL**: `https://api.elevenlabs.io/oauth/callback` (or your specific callback URL)
+   - **OAuth Start URL**: `https://api.elevenlabs.io/oauth/start` (required field)
+   - **Selected OAuth Scopes**: Add these scopes:
+     - **Full access (full)**
+     - **Perform requests on your behalf at any time (refresh_token, offline_access)**
+     - **Manage user data via api**
+6. Click **Save**
+7. Copy the **Consumer Key** and **Consumer Secret** - you'll need these for authentication
 
 ### Step 2: Configure OAuth Client Credentials Flow
 
@@ -208,109 +172,49 @@ In the **Selected OAuth Scopes** section, add these essential scopes:
   interaction is required. Ensure your Salesforce admin has enabled this flow.
 </Warning>
 
-<Steps>
-  ### Enable Client Credentials Flow
-  Navigate to your External Client App and select **Manage** → **Edit Policies**:
+1. **Enable Client Credentials Flow**:
 
-{' '}
+   - In your External Client App, go to **Manage** → **Edit Policies**
+   - In **OAuth Policies**, select **Client Credentials Flow**
+   - **Run As**: Select your admin user (or a dedicated service account user)
+   - Set **Permitted Users** to **Admin approved users are pre-authorized**
+   - Click **Save**
 
-<CardGroup cols={2}>
-  <Card title="OAuth Policy Settings" icon="settings">
-    - **OAuth Policies**: Select **Client Credentials Flow** - **Permitted Users**: Choose **Admin
-    approved users are pre-authorized**
-  </Card>
-  <Card title="Run As User" icon="user">
-    - **Run As**: Select your admin user (or dedicated service account) - This user's permissions
-    will apply to all API calls
-  </Card>
-</CardGroup>
+   **Important**: The "Run As" user determines the permissions for all API calls. Choose a user with:
 
-### Configure Run As User Permissions
+   - System Administrator profile, OR
+   - A custom profile with the necessary permissions for your use case
+   - Access to the objects you want to query/create (Contact, Lead, Account, etc.)
+   - **API Enabled** permission must be checked
 
-{' '}
+2. **Find Your Salesforce Domain**:
+   Your Salesforce domain is required for API calls. Here's how to find it:
 
-<Info>
-  The "Run As" user determines the permissions for all API calls. Choose a user with appropriate
-  access.
-</Info>
+   **Method 1: Check Your Current URL (Easiest)**
+   When logged into Salesforce, look at your browser's address bar:
 
-**Required User Permissions:**
+   - **Lightning Experience**: `https://yourcompany.lightning.force.com/`
+   - **My Domain**: `https://yourcompany.my.salesforce.com/`
 
-- System Administrator profile, **OR**
-- Custom profile with necessary permissions for your use case
-- Access to objects you want to query/create (Contact, Lead, Account, etc.)
-- **API Enabled** permission must be checked
+   **Method 2: Setup → Company Information**
 
-### Save Configuration
+   - Go to **Setup** → **Company Information**
+   - Look for your **My Domain** URL or Organization information
 
-Click **Save** to apply your OAuth policy changes.
+   **Method 3: Setup → Domain Management**
 
-</Steps>
+   - Go to **Setup** → **Domain Management** → **My Domain**
+   - Your domain will be shown at the top of the page
 
-### Step 3: Find Your Salesforce Domain
+   **Common Domain Formats:**
 
-<Card title="Domain Requirements" icon="globe-alt">
-  Your Salesforce domain is required for all API calls. Choose the method below that works best for
-  you.
-</Card>
+   - `https://yourcompany.my.salesforce.com` (My Domain)
+   - `https://yourcompany.lightning.force.com` (Lightning)
+   - `https://yourcompany.develop.my.salesforce.com` (Sandbox)
 
-<Tabs>
-  <Tab title="Method 1: Browser URL (Easiest)">
-    When logged into Salesforce, check your browser's address bar:
+   **Note**: Use the full domain without trailing slash for API calls.
 
-    **Common URL Patterns:**
-    - **Lightning Experience**: `https://yourcompany.lightning.force.com/`
-    - **My Domain**: `https://yourcompany.my.salesforce.com/`
-    - **Sandbox**: `https://yourcompany.develop.my.salesforce.com/`
-
-    <Tip>
-      Copy the domain portion only (without the trailing slash) for your API configuration.
-    </Tip>
-
-  </Tab>
-
-  <Tab title="Method 2: Company Information">
-    <Steps>
-      ### Navigate to Setup
-      Go to **Setup** → **Company Information**
-
-      ### Locate Domain Information
-      Look for your **My Domain** URL or Organization information in the company details section.
-    </Steps>
-
-  </Tab>
-
-  <Tab title="Method 3: Domain Management">
-    <Steps>
-      ### Access Domain Management
-      Go to **Setup** → **Domain Management** → **My Domain**
-
-      ### Copy Domain URL
-      Your domain will be displayed at the top of the page.
-    </Steps>
-
-  </Tab>
-</Tabs>
-
-**Domain Format Examples:**
-
-<CardGroup cols={3}>
-  <Card title="Production" icon="building-office">
-    `https://yourcompany.my.salesforce.com`
-  </Card>
-  <Card title="Lightning" icon="bolt">
-    `https://yourcompany.lightning.force.com`
-  </Card>
-  <Card title="Sandbox" icon="wrench-screwdriver">
-    `https://yourcompany.develop.my.salesforce.com`
-  </Card>
-</CardGroup>
-
-<Check>
-  **Setup Complete**: You have successfully created the External Client App and configured Client
-  Credentials Flow. The Consumer Key and Consumer Secret will be used for token generation in the
-  tool authorization step.
-</Check>
+3. **Setup Complete**: You have now created the External Client App and configured Client Credentials Flow. The Consumer Key and Consumer Secret will be used for token generation in the tool authorization step.
 
 ## Tool Configurations
 
@@ -371,28 +275,23 @@ The integration with Salesforce employs three primary webhook tools to manage cu
 
 ### Tool Configurations
 
-Use the tabs below to review each tool's configuration. Remember to add Workplace Auth Connection to the tool (OAuth2).
+Use the tabs below to review each tool's configuration.  Remember to add Workplace Auth Connection to the tool (OAuth2).
 
 <Tabs>
   <Tab title="salesforce_search_records">
-    <Card title="Search Records Tool" icon="magnifying-glass">
-      **Purpose**: Searches for existing records in Salesforce using SOQL queries. Always returns human-readable information including Names, not just IDs.
-    </Card>
-
-    <br />
-
-    **Configuration Details:**
-    - **Name:** `salesforce_search_records`
-    - **Method:** `GET`
-    - **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/query/?q={soql_query}`
-
+    **Name:** salesforce_search_records  
+    **Description:** Searches for existing records in Salesforce using SOQL queries. Always returns human-readable information including Names, not just IDs.  
+    **Method:** GET  
+    **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/query/?q={soql_query}`
+    
     **Headers:**
     - **Content-Type:** `application/json`
 
     **Query Parameters:**
     - **q:** SOQL query string (e.g., "SELECT Id, Name, Email FROM Contact WHERE Email = 'example@email.com'")
 
-    <Accordion title="View Complete Tool JSON Configuration">
+    **Tool JSON:**
+
     ```json
     {
       "type": "webhook",
@@ -428,21 +327,14 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
       }
     }
     ```
-    </Accordion>
 
   </Tab>
 
   <Tab title="salesforce_get_record">
-    <Card title="Get Record Details Tool" icon="document-text">
-      **Purpose**: Retrieves detailed information about a specific Salesforce record using its ID.
-    </Card>
-
-    <br />
-
-    **Configuration Details:**
-    - **Name:** `salesforce_get_record`
-    - **Method:** `GET`
-    - **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/{record_id}`
+    **Name:** salesforce_get_record  
+    **Description:** Retrieves detailed information about a specific Salesforce record.  
+    **Method:** GET  
+    **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/{record_id}`
 
     **Headers:**
     - **Content-Type:** `application/json`
@@ -451,7 +343,8 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     - **object_type:** The Salesforce object type (Contact, Lead, Account, etc.)
     - **record_id:** The unique Salesforce record ID
 
-    <Accordion title="View Complete Tool JSON Configuration">
+    **Tool JSON:**
+
     ```json
     {
       "type": "webhook",
@@ -496,21 +389,14 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
       }
     }
     ```
-    </Accordion>
 
   </Tab>
 
   <Tab title="salesforce_create_record">
-    <Card title="Create Record Tool" icon="plus-circle">
-      **Purpose**: Creates new records in Salesforce such as Leads, Contacts, Accounts, or Opportunities.
-    </Card>
-
-    <br />
-
-    **Configuration Details:**
-    - **Name:** `salesforce_create_record`
-    - **Method:** `POST`
-    - **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/`
+    **Name:** salesforce_create_record  
+    **Description:** Creates a new record in Salesforce.  
+    **Method:** POST  
+    **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/`
 
     **Headers:**
     - **Content-Type:** `application/json`
@@ -521,11 +407,8 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     **Body Parameters:**
     - **Dynamic JSON object** containing the record fields and values
 
-    <Info>
-      **Required Fields**: Different Salesforce objects have different required fields. For Leads, `LastName`, `Email`, and `Company` are typically required.
-    </Info>
+    **Tool JSON:**
 
-    <Accordion title="View Complete Tool JSON Configuration">
     ```json
     {
       "type": "webhook",
@@ -640,263 +523,81 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
       }
     }
     ```
-    </Accordion>
 
   </Tab>
 </Tabs>
 
 ## Common SOQL Queries
 
-<Info>
-  Use these SOQL query examples with the `salesforce_search_records` tool. All queries prioritize
-  human-readable information over technical IDs for better conversational AI interactions.
-</Info>
+Here are some commonly used SOQL queries for the `salesforce_search_records` tool. It can be useful to consider this structure when customizing system/tool prompt. All queries prioritize human-readable information over technical IDs:
 
-<Tabs>
-  <Tab title="Contact Queries">
-    <Card title="Search Contacts by Email" icon="at-symbol">
-      **Purpose**: Find existing contacts using their email address
-    </Card>
+### Search for Contacts by Email
 
-    ```sql focus=1
-    SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type
-    FROM Contact
-    WHERE Email = 'customer@example.com'
-    ```
+```sql
+SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type FROM Contact WHERE Email = 'customer@example.com'
+```
 
-    **Returns**: Contact details with associated account information for personalized conversations.
+### Search for Leads by Email or Phone
 
-  </Tab>
+```sql
+SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title FROM Lead WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
+```
 
-  <Tab title="Lead Queries">
-    <Card title="Search Leads by Email or Phone" icon="phone">
-      **Purpose**: Find potential customers by their contact information
-    </Card>
+### Search for Accounts by Name
 
-    ```sql focus=1-2
-    SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title
-    FROM Lead
-    WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
-    ```
+```sql
+SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website FROM Account WHERE Name LIKE '%Company Name%'
+```
 
-    **Returns**: Lead qualification status and source information to guide conversation flow.
+### Search for Recent Opportunities
 
-  </Tab>
+```sql
+SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description FROM Opportunity WHERE CreatedDate = THIS_MONTH
+```
 
-  <Tab title="Account Queries">
-    <Card title="Search Accounts by Company Name" icon="building-office">
-      **Purpose**: Find company records using partial name matching
-    </Card>
+### Search for Opportunities by Account
 
-    ```sql focus=1-2
-    SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website
-    FROM Account
-    WHERE Name LIKE '%Company Name%'
-    ```
-
-    **Returns**: Company details including location and industry for context-aware responses.
-
-  </Tab>
-
-  <Tab title="Opportunity Queries">
-    <CardGroup cols={2}>
-      <Card title="Recent Opportunities" icon="trending-up">
-        **Purpose**: Find deals created this month
-      </Card>
-      <Card title="Account Opportunities" icon="briefcase">
-        **Purpose**: Find all deals for a specific company
-      </Card>
-    </CardGroup>
-
-    **Recent Opportunities:**
-    ```sql focus=1-2
-    SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description
-    FROM Opportunity
-    WHERE CreatedDate = THIS_MONTH
-    ```
-
-    **Opportunities by Account:**
-    ```sql focus=1-2
-    SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name
-    FROM Opportunity
-    WHERE Account.Name LIKE '%Company Name%'
-    ```
-
-    **Returns**: Deal pipeline information with human-readable names and sales stages.
-
-  </Tab>
-</Tabs>
-
-<Tip title="Query Best Practices">
-  - Always include `Name` fields for human-readable results - Use relationship queries (e.g.,
-  `Account.Name`) to get contextual information - Include relevant fields that help personalize
-  conversations - Use `LIKE` with wildcards for flexible text matching
-</Tip>
+```sql
+SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name FROM Opportunity WHERE Account.Name LIKE '%Company Name%'
+```
 
 ## Integration Testing
 
 <Tip>
-  Test your Salesforce integration thoroughly before deploying to production. Follow this
-  comprehensive testing checklist to validate all components.
+  Test your Salesforce integration thoroughly before deploying to production. The following steps
+  will help you validate that all components are working correctly.
 </Tip>
 
-<Card title="Testing Prerequisites" icon="clipboard-check">
-  Ensure you have completed all previous setup steps before starting integration testing.
-</Card>
+### Testing Your Integration
 
-### Testing Checklist
+After setting up your External Client App and configuring the webhook tools, test your integration to ensure everything works correctly:
 
-<Steps>
-  ### Authentication Testing
-  Verify your Workplace Auth Connection can successfully authenticate with Salesforce:
-  
-  <CardGroup cols={2}>
-    <Card title="Connection Test" icon="link">
-      - Test OAuth token generation
-      - Verify token refresh functionality
-      - Confirm API endpoint accessibility
-    </Card>
-    <Card title="Permissions Test" icon="shield-check">
-      - Validate "Run As" user permissions
-      - Test object-level access (Contact, Lead, Account)
-      - Confirm field-level security settings
-    </Card>
-  </CardGroup>
+### Agent Testing
 
-### Tool Functionality Testing
+Test your integration with your conversational AI agent:
 
-Test each webhook tool individually:
-
-  <Tabs>
-    <Tab title="Search Records">
-      **Test the `salesforce_search_records` tool:**
-      - Search for existing contacts by email
-      - Query leads using phone numbers
-      - Test account searches with company names
-      - Verify human-readable results are returned
-    </Tab>
-
-    <Tab title="Get Record Details">
-      **Test the `salesforce_get_record` tool:**
-      - Retrieve contact details using record IDs
-      - Fetch lead information from search results
-      - Get account information for context
-      - Confirm all relevant fields are accessible
-    </Tab>
-
-    <Tab title="Create Records">
-      **Test the `salesforce_create_record` tool:**
-      - Create test leads with required fields
-      - Generate contact records with account associations
-      - Verify data validation and error handling
-      - Confirm successful record creation in Salesforce
-    </Tab>
-
-  </Tabs>
-
-### Agent Integration Testing
-
-Test your complete conversational AI workflow:
-
-  <AccordionGroup>
-    <Accordion title="End-to-End Customer Journey">
-      1. **Customer Inquiry**: Have your agent handle initial customer questions
-      2. **Data Lookup**: Verify agent searches for existing customer records
-      3. **Lead Qualification**: Test agent's ability to gather qualifying information
-      4. **Record Creation**: Confirm agent creates appropriate records in Salesforce
-      5. **Follow-up**: Validate next steps are communicated to the customer
-    </Accordion>
-    <Accordion title="Error Handling">
-      - Test behavior when Salesforce is unavailable
-      - Verify graceful handling of invalid data
-      - Confirm proper error messages are displayed
-      - Test token refresh during long conversations
-    </Accordion>
-  </AccordionGroup>
-</Steps>
-
-### Validation Criteria
-
-<Check>
-  **Integration is ready for production when:** - All authentication tests pass successfully - Tools
-  return expected data formats - Agent handles customer interactions naturally - Error scenarios are
-  managed gracefully - Data appears correctly in Salesforce
-</Check>
+1. **Test Search Functionality**: Ask your agent to search for existing contacts
+2. **Test Record Creation**: Have your agent create a new lead or contact
+3. **Test Data Retrieval**: Verify your agent can get detailed customer information
 
 ## Impact
 
-<Card title="Business Benefits" icon="chart-bar">
-  Transform your customer relationship management with automated, intelligent Salesforce
-  integration.
-</Card>
+With this integration in place, you can:
 
-<CardGroup cols={2}>
-  <Card title="Sales Efficiency" icon="trending-up">
-    - **Accelerate Lead Qualification**: Automatically qualify leads and gather essential
-    information - **Increase Sales Efficiency**: Reduce manual data entry and focus on high-value
-    activities - **Track Performance**: Monitor conversion rates and lead quality metrics
-  </Card>
-  <Card title="Customer Experience" icon="heart">
-    - **Improve Data Quality**: Ensure consistent and accurate customer data entry - **Enhance
-    Customer Experience**: Provide personalized interactions based on existing customer data -
-    **Streamlined Processes**: Seamless flow from inquiry to qualified opportunity
-  </Card>
-</CardGroup>
-
-<Info>
-  **ROI Indicators**: Organizations typically see 25-40% reduction in lead qualification time and
-  15-30% improvement in data accuracy after implementing this integration.
-</Info>
+- **Accelerate Lead Qualification**: Automatically qualify leads and gather essential information
+- **Improve Data Quality**: Ensure consistent and accurate customer data entry
+- **Enhance Customer Experience**: Provide personalized interactions based on existing customer data
+- **Increase Sales Efficiency**: Reduce manual data entry and focus on high-value activities
+- **Track Performance**: Monitor conversion rates and lead quality metrics
 
 ## Security Considerations
 
-<Warning>
-  **Security First**: Proper security configuration is essential for protecting customer data and
-  maintaining compliance.
-</Warning>
-
-<Tabs>
-  <Tab title="API Security">
-    <Card title="Secure Communication" icon="shield-check">
-      **Essential security measures for API communication**
-    </Card>
-
-    - **HTTPS Endpoints**: Use secure HTTPS endpoints for all API calls
-    - **Token Management**: Implement proper OAuth 2.0 token management and refresh logic
-    - **Secret Storage**: Store sensitive values using ElevenLabs Secrets Manager
-    - **API Access**: Regularly audit API access logs and usage patterns
-
-  </Tab>
-
-  <Tab title="Salesforce Security">
-    <Card title="CRM Security" icon="lock-closed">
-      **Salesforce-specific security best practices**
-    </Card>
-
-    - **External Client Apps**: Follow Salesforce security best practices for External Client Apps
-    - **Field-Level Security**: Configure proper field-level security permissions in Salesforce
-    - **User Permissions**: Ensure "Run As" user has minimal required permissions
-    - **IP Restrictions**: Consider implementing IP restrictions for additional security
-
-  </Tab>
-
-  <Tab title="Monitoring & Compliance">
-    <Card title="Ongoing Security" icon="eye">
-      **Continuous security monitoring and compliance**
-    </Card>
-
-    - **Access Reviews**: Conduct regular security reviews of user access and permissions
-    - **Audit Trails**: Enable and monitor Salesforce audit trails for API activities
-    - **Data Retention**: Implement appropriate data retention and deletion policies
-    - **Compliance**: Ensure configuration meets your industry compliance requirements (GDPR, CCPA, etc.)
-
-  </Tab>
-</Tabs>
-
-<Check>
-  **Security Checklist**: All endpoints use HTTPS, secrets are properly stored, permissions are
-  minimal but sufficient, and monitoring is in place.
-</Check>
+- Use HTTPS endpoints for all API calls
+- Store sensitive values as secrets using the ElevenLabs Secrets Manager
+- Implement proper OAuth 2.0 token management and refresh logic
+- Follow Salesforce security best practices for External Client Apps
+- Ensure proper field-level security is configured in Salesforce
+- Regularly audit API access and usage
 
 ## Common Salesforce Objects
 
