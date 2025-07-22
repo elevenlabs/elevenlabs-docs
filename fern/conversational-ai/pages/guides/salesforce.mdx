@@ -150,7 +150,8 @@ Either view a step by step summary or view the detailed system prompt of the age
 Before configuring the tools, you must set up OAuth 2.0 authentication with Salesforce using an External Client App.
 
 <Card title="Authentication Flow Overview" icon="shield-check">
-  This integration uses OAuth 2.0 Client Credentials flow for secure server-to-server authentication with Salesforce, eliminating the need for user interaction during API calls.
+  This integration uses OAuth 2.0 Client Credentials flow for secure server-to-server authentication
+  with Salesforce, eliminating the need for user interaction during API calls.
 </Card>
 
 ### Step 1: Create an External Client App in Salesforce
@@ -159,36 +160,39 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
   ### Access App Manager
   Log into your Salesforce org as an administrator and navigate to **Setup** → **App Manager** (or search "App Manager" in Quick Find).
 
-  ### Create New External Client App
-  Click **New External Client App** and complete the basic information:
+### Create New External Client App
 
-  <CardGroup cols={2}>
-    <Card title="App Details" icon="cog">
-      - **External Client App Name**: `ElevenLabs Conversational AI`
-      - **API Name**: `ElevenLabs_Conversational_AI`
-      - **Contact Email**: Your administrator email
-    </Card>
-    <Card title="OAuth Settings" icon="key">
-      - Check **Enable OAuth Settings**
-      - **Callback URL**: `https://api.elevenlabs.io/oauth/callback`
-      - **OAuth Start URL**: `https://api.elevenlabs.io/oauth/start`
-    </Card>
-  </CardGroup>
+Click **New External Client App** and complete the basic information:
 
-  ### Configure OAuth Scopes
-  In the **Selected OAuth Scopes** section, add these essential scopes:
-  
-  <AccordionGroup>
-    <Accordion title="Required OAuth Scopes">
-      - **Full access (full)** - Complete access to your data and applications
-      - **Perform requests on your behalf at any time (refresh_token, offline_access)** - Enables token refresh
-      - **Manage user data via api** - Allows CRUD operations on user data
-    </Accordion>
-  </AccordionGroup>
+{' '}
+<CardGroup cols={2}>
+  <Card title="App Details" icon="cog">
+    - **External Client App Name**: `ElevenLabs Conversational AI` - **API Name**:
+    `ElevenLabs_Conversational_AI` - **Contact Email**: Your administrator email
+  </Card>
+  <Card title="OAuth Settings" icon="key">
+    - Check **Enable OAuth Settings** - **Callback URL**: `https://api.elevenlabs.io/oauth/callback`
+    - **OAuth Start URL**: `https://api.elevenlabs.io/oauth/start`
+  </Card>
+</CardGroup>
 
-  ### Save and Collect Credentials
-  1. Click **Save**
-  2. **Important**: Copy the **Consumer Key** and **Consumer Secret** - you'll need these for authentication
+### Configure OAuth Scopes
+
+In the **Selected OAuth Scopes** section, add these essential scopes:
+
+{' '}
+<AccordionGroup>
+  <Accordion title="Required OAuth Scopes">
+    - **Full access (full)** - Complete access to your data and applications - **Perform requests on
+    your behalf at any time (refresh_token, offline_access)** - Enables token refresh - **Manage
+    user data via api** - Allows CRUD operations on user data
+  </Accordion>
+</AccordionGroup>
+
+### Save and Collect Credentials
+
+1. Click **Save**
+2. **Important**: Copy the **Consumer Key** and **Consumer Secret** - you'll need these for authentication
 
   <Tip>
     Store your Consumer Key and Consumer Secret securely. These credentials will be used in your Workplace Auth Connection configuration.
@@ -198,43 +202,52 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 ### Step 2: Configure OAuth Client Credentials Flow
 
 <Warning>
-  The Client Credentials Flow is recommended for server-to-server integrations where no user interaction is required. Ensure your Salesforce admin has enabled this flow.
+  The Client Credentials Flow is recommended for server-to-server integrations where no user
+  interaction is required. Ensure your Salesforce admin has enabled this flow.
 </Warning>
 
 <Steps>
   ### Enable Client Credentials Flow
   Navigate to your External Client App and select **Manage** → **Edit Policies**:
 
-  <CardGroup cols={2}>
-    <Card title="OAuth Policy Settings" icon="settings">
-      - **OAuth Policies**: Select **Client Credentials Flow**
-      - **Permitted Users**: Choose **Admin approved users are pre-authorized**
-    </Card>
-    <Card title="Run As User" icon="user">
-      - **Run As**: Select your admin user (or dedicated service account)
-      - This user's permissions will apply to all API calls
-    </Card>
-  </CardGroup>
+{' '}
+<CardGroup cols={2}>
+  <Card title="OAuth Policy Settings" icon="settings">
+    - **OAuth Policies**: Select **Client Credentials Flow** - **Permitted Users**: Choose **Admin
+    approved users are pre-authorized**
+  </Card>
+  <Card title="Run As User" icon="user">
+    - **Run As**: Select your admin user (or dedicated service account) - This user's permissions
+    will apply to all API calls
+  </Card>
+</CardGroup>
 
-  ### Configure Run As User Permissions
-  <Info>
-    The "Run As" user determines the permissions for all API calls. Choose a user with appropriate access.
-  </Info>
+### Configure Run As User Permissions
 
-  **Required User Permissions:**
-  - System Administrator profile, **OR**
-  - Custom profile with necessary permissions for your use case
-  - Access to objects you want to query/create (Contact, Lead, Account, etc.)
-  - **API Enabled** permission must be checked
+{' '}
+<Info>
+  The "Run As" user determines the permissions for all API calls. Choose a user with appropriate
+  access.
+</Info>
 
-  ### Save Configuration
-  Click **Save** to apply your OAuth policy changes.
+**Required User Permissions:**
+
+- System Administrator profile, **OR**
+- Custom profile with necessary permissions for your use case
+- Access to objects you want to query/create (Contact, Lead, Account, etc.)
+- **API Enabled** permission must be checked
+
+### Save Configuration
+
+Click **Save** to apply your OAuth policy changes.
+
 </Steps>
 
 ### Step 3: Find Your Salesforce Domain
 
 <Card title="Domain Requirements" icon="globe-alt">
-  Your Salesforce domain is required for all API calls. Choose the method below that works best for you.
+  Your Salesforce domain is required for all API calls. Choose the method below that works best for
+  you.
 </Card>
 
 <Tabs>
@@ -249,6 +262,7 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
     <Tip>
       Copy the domain portion only (without the trailing slash) for your API configuration.
     </Tip>
+
   </Tab>
 
   <Tab title="Method 2: Company Information">
@@ -256,9 +270,10 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
       ### Navigate to Setup
       Go to **Setup** → **Company Information**
 
-      ### Locate Domain Information  
+      ### Locate Domain Information
       Look for your **My Domain** URL or Organization information in the company details section.
     </Steps>
+
   </Tab>
 
   <Tab title="Method 3: Domain Management">
@@ -269,10 +284,12 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
       ### Copy Domain URL
       Your domain will be displayed at the top of the page.
     </Steps>
+
   </Tab>
 </Tabs>
 
 **Domain Format Examples:**
+
 <CardGroup cols={3}>
   <Card title="Production" icon="building-office">
     `https://yourcompany.my.salesforce.com`
@@ -286,7 +303,9 @@ Before configuring the tools, you must set up OAuth 2.0 authentication with Sale
 </CardGroup>
 
 <Check>
-  **Setup Complete**: You have successfully created the External Client App and configured Client Credentials Flow. The Consumer Key and Consumer Secret will be used for token generation in the tool authorization step.
+  **Setup Complete**: You have successfully created the External Client App and configured Client
+  Credentials Flow. The Consumer Key and Consumer Secret will be used for token generation in the
+  tool authorization step.
 </Check>
 
 ## Tool Configurations
@@ -360,9 +379,9 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
 
     **Configuration Details:**
     - **Name:** `salesforce_search_records`
-    - **Method:** `GET`  
+    - **Method:** `GET`
     - **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/query/?q={soql_query}`
-    
+
     **Headers:**
     - **Content-Type:** `application/json`
 
@@ -625,7 +644,8 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
 ## Common SOQL Queries
 
 <Info>
-  Use these SOQL query examples with the `salesforce_search_records` tool. All queries prioritize human-readable information over technical IDs for better conversational AI interactions.
+  Use these SOQL query examples with the `salesforce_search_records` tool. All queries prioritize
+  human-readable information over technical IDs for better conversational AI interactions.
 </Info>
 
 <Tabs>
@@ -635,12 +655,13 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     </Card>
 
     ```sql focus=1
-    SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type 
-    FROM Contact 
+    SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type
+    FROM Contact
     WHERE Email = 'customer@example.com'
     ```
 
     **Returns**: Contact details with associated account information for personalized conversations.
+
   </Tab>
 
   <Tab title="Lead Queries">
@@ -649,12 +670,13 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     </Card>
 
     ```sql focus=1-2
-    SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title 
-    FROM Lead 
+    SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title
+    FROM Lead
     WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
     ```
 
     **Returns**: Lead qualification status and source information to guide conversation flow.
+
   </Tab>
 
   <Tab title="Account Queries">
@@ -663,12 +685,13 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     </Card>
 
     ```sql focus=1-2
-    SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website 
-    FROM Account 
+    SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website
+    FROM Account
     WHERE Name LIKE '%Company Name%'
     ```
 
     **Returns**: Company details including location and industry for context-aware responses.
+
   </Tab>
 
   <Tab title="Opportunity Queries">
@@ -683,33 +706,34 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
 
     **Recent Opportunities:**
     ```sql focus=1-2
-    SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description 
-    FROM Opportunity 
+    SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description
+    FROM Opportunity
     WHERE CreatedDate = THIS_MONTH
     ```
 
     **Opportunities by Account:**
     ```sql focus=1-2
-    SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name 
-    FROM Opportunity 
+    SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name
+    FROM Opportunity
     WHERE Account.Name LIKE '%Company Name%'
     ```
 
     **Returns**: Deal pipeline information with human-readable names and sales stages.
+
   </Tab>
 </Tabs>
 
 <Tip title="Query Best Practices">
-  - Always include `Name` fields for human-readable results
-  - Use relationship queries (e.g., `Account.Name`) to get contextual information
-  - Include relevant fields that help personalize conversations
-  - Use `LIKE` with wildcards for flexible text matching
+  - Always include `Name` fields for human-readable results - Use relationship queries (e.g.,
+  `Account.Name`) to get contextual information - Include relevant fields that help personalize
+  conversations - Use `LIKE` with wildcards for flexible text matching
 </Tip>
 
 ## Integration Testing
 
 <Tip>
-  Test your Salesforce integration thoroughly before deploying to production. Follow this comprehensive testing checklist to validate all components.
+  Test your Salesforce integration thoroughly before deploying to production. Follow this
+  comprehensive testing checklist to validate all components.
 </Tip>
 
 <Card title="Testing Prerequisites" icon="clipboard-check">
@@ -735,8 +759,9 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     </Card>
   </CardGroup>
 
-  ### Tool Functionality Testing
-  Test each webhook tool individually:
+### Tool Functionality Testing
+
+Test each webhook tool individually:
 
   <Tabs>
     <Tab title="Search Records">
@@ -750,7 +775,7 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     <Tab title="Get Record Details">
       **Test the `salesforce_get_record` tool:**
       - Retrieve contact details using record IDs
-      - Fetch lead information from search results  
+      - Fetch lead information from search results
       - Get account information for context
       - Confirm all relevant fields are accessible
     </Tab>
@@ -762,10 +787,12 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
       - Verify data validation and error handling
       - Confirm successful record creation in Salesforce
     </Tab>
+
   </Tabs>
 
-  ### Agent Integration Testing
-  Test your complete conversational AI workflow:
+### Agent Integration Testing
+
+Test your complete conversational AI workflow:
 
   <AccordionGroup>
     <Accordion title="End-to-End Customer Journey">
@@ -787,41 +814,41 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
 ### Validation Criteria
 
 <Check>
-  **Integration is ready for production when:**
-  - All authentication tests pass successfully
-  - Tools return expected data formats
-  - Agent handles customer interactions naturally
-  - Error scenarios are managed gracefully
-  - Data appears correctly in Salesforce
+  **Integration is ready for production when:** - All authentication tests pass successfully - Tools
+  return expected data formats - Agent handles customer interactions naturally - Error scenarios are
+  managed gracefully - Data appears correctly in Salesforce
 </Check>
 
 ## Impact
 
 <Card title="Business Benefits" icon="chart-bar">
-  Transform your customer relationship management with automated, intelligent Salesforce integration.
+  Transform your customer relationship management with automated, intelligent Salesforce
+  integration.
 </Card>
 
 <CardGroup cols={2}>
   <Card title="Sales Efficiency" icon="trending-up">
-    - **Accelerate Lead Qualification**: Automatically qualify leads and gather essential information
-    - **Increase Sales Efficiency**: Reduce manual data entry and focus on high-value activities
-    - **Track Performance**: Monitor conversion rates and lead quality metrics
+    - **Accelerate Lead Qualification**: Automatically qualify leads and gather essential
+    information - **Increase Sales Efficiency**: Reduce manual data entry and focus on high-value
+    activities - **Track Performance**: Monitor conversion rates and lead quality metrics
   </Card>
   <Card title="Customer Experience" icon="heart">
-    - **Improve Data Quality**: Ensure consistent and accurate customer data entry
-    - **Enhance Customer Experience**: Provide personalized interactions based on existing customer data
-    - **Streamlined Processes**: Seamless flow from inquiry to qualified opportunity
+    - **Improve Data Quality**: Ensure consistent and accurate customer data entry - **Enhance
+    Customer Experience**: Provide personalized interactions based on existing customer data -
+    **Streamlined Processes**: Seamless flow from inquiry to qualified opportunity
   </Card>
 </CardGroup>
 
 <Info>
-  **ROI Indicators**: Organizations typically see 25-40% reduction in lead qualification time and 15-30% improvement in data accuracy after implementing this integration.
+  **ROI Indicators**: Organizations typically see 25-40% reduction in lead qualification time and
+  15-30% improvement in data accuracy after implementing this integration.
 </Info>
 
 ## Security Considerations
 
 <Warning>
-  **Security First**: Proper security configuration is essential for protecting customer data and maintaining compliance.
+  **Security First**: Proper security configuration is essential for protecting customer data and
+  maintaining compliance.
 </Warning>
 
 <Tabs>
@@ -834,6 +861,7 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     - **Token Management**: Implement proper OAuth 2.0 token management and refresh logic
     - **Secret Storage**: Store sensitive values using ElevenLabs Secrets Manager
     - **API Access**: Regularly audit API access logs and usage patterns
+
   </Tab>
 
   <Tab title="Salesforce Security">
@@ -845,6 +873,7 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     - **Field-Level Security**: Configure proper field-level security permissions in Salesforce
     - **User Permissions**: Ensure "Run As" user has minimal required permissions
     - **IP Restrictions**: Consider implementing IP restrictions for additional security
+
   </Tab>
 
   <Tab title="Monitoring & Compliance">
@@ -856,11 +885,13 @@ Use the tabs below to review each tool's configuration. Remember to add Workplac
     - **Audit Trails**: Enable and monitor Salesforce audit trails for API activities
     - **Data Retention**: Implement appropriate data retention and deletion policies
     - **Compliance**: Ensure configuration meets your industry compliance requirements (GDPR, CCPA, etc.)
+
   </Tab>
 </Tabs>
 
 <Check>
-  **Security Checklist**: All endpoints use HTTPS, secrets are properly stored, permissions are minimal but sufficient, and monitoring is in place.
+  **Security Checklist**: All endpoints use HTTPS, secrets are properly stored, permissions are
+  minimal but sufficient, and monitoring is in place.
 </Check>
 
 ## Common Salesforce Objects
