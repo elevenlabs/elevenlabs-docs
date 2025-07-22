@@ -275,7 +275,7 @@ The integration with Salesforce employs three primary webhook tools to manage cu
 
 ### Tool Configurations
 
-Use the tabs below to review each tool's configuration.
+Use the tabs below to review each tool's configuration.  Remember to add Workplace Auth Connection to the tool (OAuth2).
 
 <Tabs>
   <Tab title="salesforce_search_records">
@@ -286,7 +286,6 @@ Use the tabs below to review each tool's configuration.
     
     **Headers:**
     - **Content-Type:** `application/json`
-    - **Authorization:** *(Secret: `salesforce_auth`)*
 
     **Query Parameters:**
     - **q:** SOQL query string (e.g., "SELECT Id, Name, Email FROM Contact WHERE Email = 'example@email.com'")
@@ -316,11 +315,6 @@ Use the tabs below to review each tool's configuration.
         "request_body_schema": null,
         "request_headers": [
           {
-            "type": "secret",
-            "name": "Authorization",
-            "secret_id": "YOUR_SALESFORCE_SECRET"
-          },
-          {
             "type": "value",
             "name": "Content-Type",
             "value": "application/json"
@@ -344,7 +338,6 @@ Use the tabs below to review each tool's configuration.
 
     **Headers:**
     - **Content-Type:** `application/json`
-    - **Authorization:** *(Secret: `salesforce_auth`)*
 
     **Path Parameters:**
     - **object_type:** The Salesforce object type (Contact, Lead, Account, etc.)
@@ -384,11 +377,6 @@ Use the tabs below to review each tool's configuration.
         "request_body_schema": null,
         "request_headers": [
           {
-            "type": "secret",
-            "name": "Authorization",
-            "secret_id": "YOUR_SALESFORCE_SECRET"
-          },
-          {
             "type": "value",
             "name": "Content-Type",
             "value": "application/json"
@@ -412,7 +400,6 @@ Use the tabs below to review each tool's configuration.
 
     **Headers:**
     - **Content-Type:** `application/json`
-    - **Authorization:** *(Secret: `salesforce_auth`)*
 
     **Path Parameters:**
     - **object_type:** The Salesforce object type to create (Lead, Contact, Account, etc.)
@@ -523,11 +510,6 @@ Use the tabs below to review each tool's configuration.
           ]
         },
         "request_headers": [
-          {
-            "type": "secret",
-            "name": "Authorization",
-            "secret_id": "YOUR_SALESFORCE_SECRET"
-          },
           {
             "type": "value",
             "name": "Content-Type",
