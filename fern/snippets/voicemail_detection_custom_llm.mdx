@@ -1,0 +1,28 @@
+## Custom LLM integration
+
+**Purpose**: Automatically detect when a voicemail system is encountered and optionally leave a message.
+
+**Trigger conditions**: The LLM should call this tool when:
+
+- Call is answered by an automated voicemail greeting instead of a human
+- Detection of phrases like "leave a message after the beep"
+- No human response after initial greeting attempts
+- Automated voice prompts indicating voicemail system
+
+**Parameters**:
+
+- `reason` (string, required): The reason for detecting voicemail (e.g., "automated greeting detected", "no human response")
+
+**Function call format**:
+
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "voicemail_detection",
+    "arguments": "{\"reason\": \"Automated greeting detected with request to leave message\"}"
+  }
+}
+```
+
+**Implementation**: Configure the voicemail detection system tool with an optional voicemail message. When the tool is triggered, the agent will either play the configured message or end the call immediately if no message is provided.
