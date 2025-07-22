@@ -1,0 +1,95 @@
+---
+title: Voicemail detection
+subtitle: Enable agents to automatically detect voicemail systems and optionally leave messages.
+---
+
+## Overview
+
+The **Voicemail Detection** tool allows your Conversational AI agent to automatically identify when a call has been answered by a voicemail system rather than a human. This system tool enables agents to handle automated voicemail scenarios gracefully by either leaving a pre-configured message or ending the call immediately.
+
+## Functionality
+
+- **Automatic Detection**: The LLM analyzes conversation patterns to identify voicemail systems based on automated greetings and prompts
+- **Configurable Response**: Choose to either leave a custom voicemail message or end the call immediately when voicemail is detected
+- **Call Termination**: After detection and optional message delivery, the call is automatically terminated
+- **Status Tracking**: Voicemail detection events are logged and can be viewed in conversation history and batch call results
+
+<Markdown src="/snippets/voicemail_detection_custom_llm.mdx" />
+
+## Configuration Options
+
+The voicemail detection tool can be configured with the following options:
+
+<Frame background="subtle">
+  ![Voicemail detection configuration
+  interface](/assets/images/conversational-ai/voicemail_detection.png)
+</Frame>
+
+- **Voicemail Message**: You can configure an optional custom message to be played when voicemail is detected
+
+## API Implementation
+
+When creating an agent via API, you can add the Voicemail Detection tool to your agent configuration. It should be defined as a system tool:
+
+<CodeBlocks>
+
+```python
+from elevenlabs import (
+    ConversationalConfig,
+    ElevenLabs,
+    AgentConfig,
+    PromptAgent,
+    PromptAgentInputToolsItem_System
+)
+
+# Initialize the client
+elevenlabs = ElevenLabs(api_key="YOUR_API_KEY")
+
+# Create the voicemail detection tool
+voicemail_detection_tool = PromptAgentInputToolsItem_System(
+    name="voicemail_detection",
+    description=""  # Optional: Customize when the tool should be triggered
+)
+
+# Create the agent configuration
+conversation_config = ConversationalConfig(
+    agent=AgentConfig(
+        prompt=PromptAgent(
+            tools=[voicemail_detection_tool]
+        )
+    )
+)
+
+# Create the agent
+response = elevenlabs.conversational_ai.agents.create(
+    conversation_config=conversation_config
+)
+```
+
+```javascript
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
+
+// Initialize the client
+const elevenlabs = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+});
+
+// Create the agent with voicemail detection tool
+await elevenlabs.conversationalAi.agents.create({
+  conversationConfig: {
+    agent: {
+      prompt: {
+        tools: [
+          {
+            type: 'system',
+            name: 'voicemail_detection',
+            description: '', // Optional: Customize when the tool should be triggered
+          },
+        ],
+      },
+    },
+  },
+});
+```
+
+</CodeBlocks>
