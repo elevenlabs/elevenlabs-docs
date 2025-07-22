@@ -208,6 +208,134 @@ We recommend using these for auth tokens or private IDs that should not be sent 
   </Step>
 </Steps>
 
+## Public Talk-to Page Integration
+
+The public talk-to page supports dynamic variables through URL parameters, enabling you to personalize conversations when sharing agent links. This is particularly useful for embedding personalized agents in websites, emails, or marketing campaigns.
+
+### URL Parameter Methods
+
+There are two methods to pass dynamic variables to the public talk-to page:
+
+#### Method 1: Base64-Encoded JSON
+
+Pass variables as a base64-encoded JSON object using the `vars` parameter:
+
+```
+https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&vars=eyJ1c2VyX25hbWUiOiJKb2huIiwiYWNjb3VudF90eXBlIjoicHJlbWl1bSJ9
+```
+
+The `vars` parameter contains base64-encoded JSON:
+
+```json
+{ "user_name": "John", "account_type": "premium" }
+```
+
+#### Method 2: Individual Query Parameters
+
+Pass variables using `var_` prefixed query parameters:
+
+```
+https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&var_user_name=John&var_account_type=premium
+```
+
+### Parameter Precedence
+
+When both methods are used simultaneously, individual `var_` parameters take precedence over the base64-encoded variables to prevent conflicts:
+
+```
+https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&vars=eyJ1c2VyX25hbWUiOiJKYW5lIn0=&var_user_name=John
+```
+
+In this example, `user_name` will be "John" (from `var_user_name`) instead of "Jane" (from the base64-encoded `vars`).
+
+### Implementation Examples
+
+<Tabs>
+  <Tab title="JavaScript URL Generation">
+    ```javascript
+    // Method 1: Base64-encoded JSON
+    function generateTalkToURL(agentId, variables) {
+      const baseURL = 'https://elevenlabs.io/app/talk-to';
+      const encodedVars = btoa(JSON.stringify(variables));
+      return `${baseURL}?agent_id=${agentId}&vars=${encodedVars}`;
+    }
+
+    // Method 2: Individual parameters
+    function generateTalkToURLWithParams(agentId, variables) {
+      const baseURL = 'https://elevenlabs.io/app/talk-to';
+      const params = new URLSearchParams({ agent_id: agentId });
+
+      Object.entries(variables).forEach(([key, value]) => {
+        params.append(`var_${key}`, encodeURIComponent(value));
+      });
+
+      return `${baseURL}?${params.toString()}`;
+    }
+
+    // Usage
+    const variables = {
+      user_name: "John Doe",
+      account_type: "premium",
+      session_id: "sess_123"
+    };
+
+    const urlMethod1 = generateTalkToURL("your_agent_id", variables);
+    const urlMethod2 = generateTalkToURLWithParams("your_agent_id", variables);
+    ```
+
+  </Tab>
+  
+  <Tab title="Python URL Generation">
+    ```python
+    import base64
+    import json
+    from urllib.parse import urlencode, quote
+
+    def generate_talk_to_url(agent_id, variables):
+        """Generate URL with base64-encoded variables"""
+        base_url = "https://elevenlabs.io/app/talk-to"
+        encoded_vars = base64.b64encode(json.dumps(variables).encode()).decode()
+        return f"{base_url}?agent_id={agent_id}&vars={encoded_vars}"
+
+    def generate_talk_to_url_with_params(agent_id, variables):
+        """Generate URL with individual var_ parameters"""
+        base_url = "https://elevenlabs.io/app/talk-to"
+        params = {"agent_id": agent_id}
+
+        for key, value in variables.items():
+            params[f"var_{key}"] = value
+
+        return f"{base_url}?{urlencode(params)}"
+
+    # Usage
+    variables = {
+        "user_name": "John Doe",
+        "account_type": "premium",
+        "session_id": "sess_123"
+    }
+
+    url_method1 = generate_talk_to_url("your_agent_id", variables)
+    url_method2 = generate_talk_to_url_with_params("your_agent_id", variables)
+    ```
+
+  </Tab>
+
+  <Tab title="Manual URL Construction">
+    ```
+    # Base64-encoded method
+    1. Create JSON: {"user_name": "John", "account_type": "premium"}
+    2. Encode to base64: eyJ1c2VyX25hbWUiOiJKb2huIiwiYWNjb3VudF90eXBlIjoicHJlbWl1bSJ9
+    3. Add to URL: https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&vars=eyJ1c2VyX25hbWUiOiJKb2huIiwiYWNjb3VudF90eXBlIjoicHJlbWl1bSJ9
+
+    # Individual parameters method
+    1. Add each variable with var_ prefix
+    2. URL encode values if needed
+    3. Final URL: https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&var_user_name=John&var_account_type=premium
+    ```
+
+  </Tab>
+</Tabs>
+
 ## Supported Types
 
 Dynamic variables support these value types:
