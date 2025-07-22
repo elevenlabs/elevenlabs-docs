@@ -225,11 +225,12 @@ https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&vars=eyJ1c2VyX25hbWUiOi
 ```
 
 The `vars` parameter contains base64-encoded JSON:
+
 ```json
-{"user_name": "John", "account_type": "premium"}
+{ "user_name": "John", "account_type": "premium" }
 ```
 
-#### Method 2: Individual Query Parameters  
+#### Method 2: Individual Query Parameters
 
 Pass variables using `var_` prefixed query parameters:
 
@@ -263,11 +264,11 @@ In this example, `user_name` will be "John" (from `var_user_name`) instead of "J
     function generateTalkToURLWithParams(agentId, variables) {
       const baseURL = 'https://elevenlabs.io/app/talk-to';
       const params = new URLSearchParams({ agent_id: agentId });
-      
+
       Object.entries(variables).forEach(([key, value]) => {
         params.append(`var_${key}`, encodeURIComponent(value));
       });
-      
+
       return `${baseURL}?${params.toString()}`;
     }
 
@@ -281,6 +282,7 @@ In this example, `user_name` will be "John" (from `var_user_name`) instead of "J
     const urlMethod1 = generateTalkToURL("your_agent_id", variables);
     const urlMethod2 = generateTalkToURLWithParams("your_agent_id", variables);
     ```
+
   </Tab>
   
   <Tab title="Python URL Generation">
@@ -299,22 +301,23 @@ In this example, `user_name` will be "John" (from `var_user_name`) instead of "J
         """Generate URL with individual var_ parameters"""
         base_url = "https://elevenlabs.io/app/talk-to"
         params = {"agent_id": agent_id}
-        
+
         for key, value in variables.items():
             params[f"var_{key}"] = value
-            
+
         return f"{base_url}?{urlencode(params)}"
 
     # Usage
     variables = {
         "user_name": "John Doe",
-        "account_type": "premium", 
+        "account_type": "premium",
         "session_id": "sess_123"
     }
 
     url_method1 = generate_talk_to_url("your_agent_id", variables)
     url_method2 = generate_talk_to_url_with_params("your_agent_id", variables)
     ```
+
   </Tab>
 
   <Tab title="Manual URL Construction">
@@ -329,19 +332,9 @@ In this example, `user_name` will be "John" (from `var_user_name`) instead of "J
     2. URL encode values if needed
     3. Final URL: https://elevenlabs.io/app/talk-to?agent_id=your_agent_id&var_user_name=John&var_account_type=premium
     ```
+
   </Tab>
 </Tabs>
-
-### Use Cases
-
-- **Marketing campaigns**: Personalize agent interactions with campaign-specific data
-- **Customer support**: Pre-populate customer information from support tickets  
-- **E-commerce**: Include order details or customer tier information
-- **Educational platforms**: Pass student information and course context
-
-<Info>
-  These URL-based dynamic variables work the same way as programmatic variables - they're injected into system prompts, first messages, and tool parameters using the `{{variable_name}}` syntax.
-</Info>
 
 ## Supported Types
 
