@@ -304,11 +304,11 @@ async def transcribe_multichannel_with_webhook(audio_file_path):
     mode.
   </Accordion>
 
-  <Accordion title="Providing num_speakers parameter">
-    ``` Error: Cannot specify num_speakers when use_multi_channel is enabled. The number of speakers
-    is automatically determined by the number of channels. ``` **Solution**: Remove the
-    `num_speakers` parameter from your request.
-  </Accordion>
+<Accordion title="Providing num_speakers parameter">
+  ``` Error: Cannot specify num_speakers when use_multi_channel is enabled. The number of speakers
+  is automatically determined by the number of channels. ``` **Solution**: Remove the `num_speakers`
+  parameter from your request.
+</Accordion>
 
   <Accordion title="Audio file with more than 5 channels">
     ``` Error: Multichannel mode supports up to 5 channels, but the audio file contains X channels.
@@ -506,20 +506,20 @@ def process_large_multichannel_file(file_path, api_key, chunk_duration=300):
     diarization enabled.
   </Accordion>
 
-  <Accordion title="What happens if my audio has more than 5 channels?">
-    The API will return an error. You'll need to either select which 5 channels to process or mix
-    down some channels before sending to the API.
-  </Accordion>
+<Accordion title="What happens if my audio has more than 5 channels?">
+  The API will return an error. You'll need to either select which 5 channels to process or mix down
+  some channels before sending to the API.
+</Accordion>
 
-  <Accordion title="Can I process mono audio with multichannel mode?">
-    Yes, but it's unnecessary. If you send mono audio with `use_multi_channel=true`, you'll receive
-    a standard single-channel response, not the multichannel format.
-  </Accordion>
+<Accordion title="Can I process mono audio with multichannel mode?">
+  Yes, but it's unnecessary. If you send mono audio with `use_multi_channel=true`, you'll receive a
+  standard single-channel response, not the multichannel format.
+</Accordion>
 
-  <Accordion title="How are speaker IDs assigned?">
-    Speaker IDs are deterministic based on channel number: channel 0 becomes speaker_0, channel 1
-    becomes speaker_1, and so on.
-  </Accordion>
+<Accordion title="How are speaker IDs assigned?">
+  Speaker IDs are deterministic based on channel number: channel 0 becomes speaker_0, channel 1
+  becomes speaker_1, and so on.
+</Accordion>
 
   <Accordion title="Can channels have different languages?">
     Yes, each channel is processed independently and can detect different languages. The language
