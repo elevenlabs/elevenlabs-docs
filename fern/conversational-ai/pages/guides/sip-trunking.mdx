@@ -190,11 +190,11 @@ After importing your SIP trunk phone number, you can assign it to a conversation
     If you're experiencing connection problems: 
     
     1. Verify your SIP trunk configuration on both the ElevenLabs side and your provider side
-    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port (5060 for UDP/TCP, 5061 for TLS) and ensure there is no whitelisting applied
+    2. Check that your firewall allows SIP signaling traffic on the configured transport protocol and port (5060 for TCP, 5061 for TLS) and ensure there is no whitelisting applied
     3. Confirm that your address hostname is correctly formatted and accessible
     4. Test with and without digest authentication credentials
     5. If using TLS transport, ensure your provider's TLS certificates are valid and properly configured
-    6. Try different transport types (Auto, UDP, TCP) to isolate TLS-specific issues
+    6. Try different transport types (TCP only, as UDP is not currently available) to isolate TLS-specific issues
     
     **Important Network Architecture Information:**
     
@@ -220,7 +220,7 @@ After importing your SIP trunk phone number, you can assign it to a conversation
     2. Check certificate validity, expiration dates, and trust chains
     3. Ensure your provider supports SRTP media encryption if using "Required" media encryption
     4. Test with "Allowed" media encryption before using "Required" to isolate encryption issues
-    5. Try different transport types (TCP, UDP) to isolate TLS-specific problems
+    5. Try TCP transport to isolate TLS-specific problems (UDP is not currently available)
     6. Contact your SIP trunk provider to confirm TLS and SRTP support
 
   </Accordion>
@@ -288,10 +288,12 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 </Accordion>
 
 <Accordion title="What's the difference between transport types?">
-  - **Auto**: Automatically selects the best available transport protocol - **UDP**: Fastest but
-  unencrypted signaling (good for internal networks) - **TCP**: Reliable but unencrypted signaling -
-  **TLS**: Encrypted and reliable signaling (recommended for production) For security-critical
-  applications, always use TLS transport.
+  - **TCP**: Reliable but unencrypted signaling -
+  **TLS**: Encrypted and reliable signaling (recommended for production) 
+  
+  <Note>
+    UDP transport is not currently available. For security-critical applications, always use TLS transport.
+  </Note>
 </Accordion>
 
 <Accordion title="What are custom headers used for?">
