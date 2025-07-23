@@ -1,0 +1,528 @@
+---
+title: Multichannel speech-to-text
+subtitle: Learn how to leverage the multichannel transcription mode.
+---
+
+## Overview
+
+The multichannel speech-to-text feature enables you to transcribe audio files where each channel contains a distinct speaker. This is particularly useful for recordings where speakers are isolated on separate audio channels, providing cleaner transcriptions without the need for speaker diarization.
+
+Each channel is processed independently and automatically assigned a speaker ID based on its channel number (channel 0 → `speaker_0`, channel 1 → `speaker_1`, etc.). The system extracts individual channels from your input audio file and transcribes them in parallel, combining the results sorted by timestamp.
+
+### Common use cases
+
+- **Stereo interview recordings** - Interviewer on left channel, interviewee on right channel
+- **Multi-track podcast recordings** - Each participant recorded on a separate track
+- **Call center recordings** - Agent and customer separated on different channels
+- **Conference recordings** - Individual participants isolated on separate channels
+- **Court proceedings** - Multiple parties recorded on distinct channels
+
+## Requirements
+
+- An ElevenLabs account with an [API key](/app/settings/api-keys)
+- Multichannel audio file (WAV, MP3, or other supported formats)
+- Maximum 5 channels per audio file
+- Each channel should contain only one speaker
+
+## How it works
+
+<Steps>
+  ### Prepare your multichannel audio
+
+Ensure your audio file has speakers isolated on separate channels. The multichannel feature supports up to 5 channels, with each channel mapped to a specific speaker:
+
+- Channel 0 → `speaker_0`
+- Channel 1 → `speaker_1`
+- Channel 2 → `speaker_2`
+- Channel 3 → `speaker_3`
+- Channel 4 → `speaker_4`
+
+### Configure API parameters
+
+When making a speech-to-text request, you must set:
+- `use_multi_channel`: `true`
+- `diarize`: `false` (multichannel mode handles speaker separation via channels)
+
+The `num_speakers` parameter cannot be used with multichannel mode as the speaker count is automatically determined by the number of channels.
+
+### Process the response
+
+The API returns a different response format for multichannel audio:
+
+<CodeBlocks>
+```python title="Single channel response"
+{
+  "language_code": "en",
+  "language_probability": 0.98,
+  "text": "Hello world",
+  "words": [...]
+}
+```
+
+```python title="Multichannel response"
+{
+  "transcripts": [
+    {
+      "language_code": "en",
+      "language_probability": 0.98,
+      "text": "Hello from channel one.",
+      "channel_index": 0,
+      "words": [...]
+    },
+    {
+      "language_code": "en",
+      "language_probability": 0.97,
+      "text": "Greetings from channel two.",
+      "channel_index": 1,
+      "words": [...]
+    }
+  ]
+}
+```
+</CodeBlocks>
+</Steps>
+
+## Implementation
+
+### Basic multichannel transcription
+
+Here's a complete example of transcribing a stereo audio file with two speakers:
+
+<CodeBlocks>
+```python title="Python"
+import requests
+
+def transcribe_multichannel(audio_file_path, api_key):
+    url = "https://api.elevenlabs.io/v1/speech-to-text"
+    
+    with open(audio_file_path, 'rb') as audio_file:
+        files = {'file': audio_file}
+        data = {
+            'model_id': 'scribe_v1',
+            'use_multi_channel': 'true',
+            'diarize': 'false',
+            'timestamps_granularity': 'word'
+        }
+        headers = {'xi-api-key': api_key}
+        
+        response = requests.post(url, files=files, data=data, headers=headers)
+        return response.json()
+
+# Process the response
+result = transcribe_multichannel('stereo_interview.wav', 'YOUR_API_KEY')
+
+if 'transcripts' in result:
+    # Multichannel response
+    for transcript in result['transcripts']:
+        channel = transcript['channel_index']
+        text = transcript['text']
+        print(f"Channel {channel} (speaker_{channel}): {text}")
+else:
+    # Single channel response (fallback)
+    print(f"Text: {result['text']}")
+```
+
+```javascript title="JavaScript"
+import { ElevenLabsClient } from 'elevenlabs';
+import fs from 'fs';
+
+const elevenlabs = new ElevenLabsClient({
+  apiKey: process.env.ELEVENLABS_API_KEY,
+});
+
+async function transcribeMultichannel(audioFilePath) {
+  try {
+    const audioFile = fs.createReadStream(audioFilePath);
+    
+    const result = await elevenlabs.speechToText.convert({
+      file: audioFile,
+      model_id: 'scribe_v1',
+      use_multi_channel: true,
+      diarize: false,
+      timestamps_granularity: 'word'
+    });
+    
+    if (result.transcripts) {
+      // Multichannel response
+      result.transcripts.forEach((transcript, index) => {
+        console.log(`Channel ${transcript.channel_index}: ${transcript.text}`);
+      });
+    } else {
+      // Single channel response
+      console.log(`Text: ${result.text}`);
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Error transcribing audio:', error);
+    throw error;
+  }
+}
+```
+
+```bash title="cURL"
+curl -X POST "https://api.elevenlabs.io/v1/speech-to-text" \
+  -H "xi-api-key: YOUR_API_KEY" \
+  -F "file=@stereo_interview.wav" \
+  -F "model_id=scribe_v1" \
+  -F "use_multi_channel=true" \
+  -F "diarize=false" \
+  -F "timestamps_granularity=word"
+```
+</CodeBlocks>
+
+### Processing results by speaker
+
+Group transcription results by speaker for easier analysis:
+
+```python
+def group_words_by_speaker(multichannel_result):
+    """Group all words by speaker ID across channels"""
+    speakers = {}
+    
+    if 'transcripts' in multichannel_result:
+        for transcript in multichannel_result['transcripts']:
+            for word in transcript.get('words', []):
+                if word['type'] == 'word':
+                    speaker_id = word['speaker_id']
+                    if speaker_id not in speakers:
+                        speakers[speaker_id] = []
+                    speakers[speaker_id].append({
+                        'text': word['text'],
+                        'start': word['start'],
+                        'end': word['end'],
+                        'channel': transcript['channel_index']
+                    })
+    
+    # Sort each speaker's words by timestamp
+    for speaker_id in speakers:
+        speakers[speaker_id].sort(key=lambda w: w['start'])
+    
+    return speakers
+
+# Example usage
+result = transcribe_multichannel('conference_call.wav', api_key)
+speakers = group_words_by_speaker(result)
+
+for speaker_id, words in speakers.items():
+    print(f"\n{speaker_id}:")
+    text = ' '.join(word['text'] for word in words)
+    print(text)
+```
+
+### Creating conversation transcripts
+
+Generate a time-ordered conversation transcript from multichannel audio:
+
+```python
+def create_conversation_transcript(multichannel_result):
+    """Create a conversation-style transcript with speaker labels"""
+    all_words = []
+    
+    if 'transcripts' in multichannel_result:
+        # Collect all words from all channels
+        for transcript in multichannel_result['transcripts']:
+            for word in transcript.get('words', []):
+                if word['type'] == 'word':
+                    all_words.append({
+                        'text': word['text'],
+                        'start': word['start'],
+                        'speaker_id': word['speaker_id'],
+                        'channel': transcript['channel_index']
+                    })
+    
+    # Sort by timestamp
+    all_words.sort(key=lambda w: w['start'])
+    
+    # Group consecutive words by speaker
+    conversation = []
+    current_speaker = None
+    current_text = []
+    
+    for word in all_words:
+        if word['speaker_id'] != current_speaker:
+            if current_text:
+                conversation.append({
+                    'speaker': current_speaker,
+                    'text': ' '.join(current_text)
+                })
+            current_speaker = word['speaker_id']
+            current_text = [word['text']]
+        else:
+            current_text.append(word['text'])
+    
+    # Add the last segment
+    if current_text:
+        conversation.append({
+            'speaker': current_speaker,
+            'text': ' '.join(current_text)
+        })
+    
+    return conversation
+
+# Format the output
+conversation = create_conversation_transcript(result)
+for turn in conversation:
+    print(f"{turn['speaker']}: {turn['text']}")
+```
+
+## Using webhooks with multichannel
+
+Multichannel transcription fully supports webhook delivery for asynchronous processing:
+
+```python
+async def transcribe_multichannel_with_webhook(audio_file_path):
+    result = await elevenlabs.speechToText.convert({
+        'file': audio_file,
+        'model_id': 'scribe_v1',
+        'use_multi_channel': True,
+        'diarize': False,
+        'webhook': True  # Enable webhook delivery
+    })
+    
+    print(f"Transcription started with task ID: {result.task_id}")
+    return result.task_id
+```
+
+<Note>
+When using webhooks with multichannel audio, the webhook payload combines all channels into a single transcript with words sorted by timestamp. Each word retains its `speaker_id` for channel identification.
+</Note>
+
+## Error handling
+
+### Common validation errors
+
+<AccordionGroup>
+  <Accordion title="Setting diarize=true with multichannel mode">
+    ```
+    Error: Multichannel mode does not support diarization and assigns 
+    speakers based on the channel they speak on.
+    ```
+    
+    **Solution**: Always set `diarize=false` when using multichannel mode.
+  </Accordion>
+  
+  <Accordion title="Providing num_speakers parameter">
+    ```
+    Error: Cannot specify num_speakers when use_multi_channel is enabled. 
+    The number of speakers is automatically determined by the number of channels.
+    ```
+    
+    **Solution**: Remove the `num_speakers` parameter from your request.
+  </Accordion>
+  
+  <Accordion title="Audio file with more than 5 channels">
+    ```
+    Error: Multichannel mode supports up to 5 channels, 
+    but the audio file contains X channels.
+    ```
+    
+    **Solution**: Process only the first 5 channels or pre-process your audio to reduce channel count.
+  </Accordion>
+</AccordionGroup>
+
+### Handling errors gracefully
+
+```python
+def transcribe_with_error_handling(audio_file_path, api_key):
+    try:
+        result = transcribe_multichannel(audio_file_path, api_key)
+        
+        if 'error' in result:
+            if 'supports up to 5 channels' in result['error']:
+                print("Audio has too many channels. Please reduce to 5 or fewer.")
+            elif 'does not support diarization' in result['error']:
+                print("Disable diarization when using multichannel mode.")
+            else:
+                print(f"API Error: {result['error']}")
+            return None
+            
+        return result
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return None
+```
+
+## Testing multichannel transcription
+
+### Generate test audio files
+
+Create a test stereo audio file with different content on each channel:
+
+```python
+import numpy as np
+import scipy.io.wavfile as wavfile
+from elevenlabs import generate, Voice
+
+def create_test_stereo_file(text1, text2, output_file="test_stereo.wav"):
+    """Create a stereo file with different text on each channel"""
+    
+    # Generate audio for each channel
+    audio1 = generate(
+        text=text1,
+        voice=Voice(voice_id="21m00Tcm4TlvDq8ikWAM"),  # Rachel
+        model="eleven_monolingual_v1"
+    )
+    
+    audio2 = generate(
+        text=text2,
+        voice=Voice(voice_id="pNInz6obpgDQGcFmaJgB"),  # Adam
+        model="eleven_monolingual_v1"
+    )
+    
+    # Convert to numpy arrays
+    import io
+    from scipy.io import wavfile
+    
+    rate1, data1 = wavfile.read(io.BytesIO(audio1))
+    rate2, data2 = wavfile.read(io.BytesIO(audio2))
+    
+    # Ensure same length
+    min_length = min(len(data1), len(data2))
+    data1 = data1[:min_length]
+    data2 = data2[:min_length]
+    
+    # Create stereo array
+    stereo = np.stack([data1, data2], axis=1)
+    
+    # Save stereo file
+    wavfile.write(output_file, rate1, stereo)
+    print(f"Created stereo test file: {output_file}")
+    
+    return output_file
+```
+
+### Verify channel separation
+
+Test that each channel is correctly identified:
+
+```python
+def verify_channel_separation(audio_file_path, api_key):
+    """Verify that channels are properly separated in transcription"""
+    
+    result = transcribe_multichannel(audio_file_path, api_key)
+    
+    if 'transcripts' not in result:
+        print("Single channel detected - no separation needed")
+        return
+    
+    print(f"Detected {len(result['transcripts'])} channels:\n")
+    
+    for transcript in result['transcripts']:
+        channel = transcript['channel_index']
+        speaker_ids = set()
+        
+        # Check speaker IDs in this channel
+        for word in transcript.get('words', []):
+            if 'speaker_id' in word:
+                speaker_ids.add(word['speaker_id'])
+        
+        print(f"Channel {channel}:")
+        print(f"  - Speaker ID: {', '.join(speaker_ids)}")
+        print(f"  - Text preview: {transcript['text'][:100]}...")
+        print(f"  - Word count: {len([w for w in transcript['words'] if w['type'] == 'word'])}")
+        print()
+```
+
+## Best practices
+
+### Audio preparation
+
+<Tip>
+For optimal results:
+- Use 16kHz sample rate for better performance
+- Remove silent or unused channels before processing
+- Ensure each channel contains only one speaker
+- Use lossless formats (WAV) when possible for best quality
+</Tip>
+
+### Performance optimization
+
+The concurrency cost increases linearly with the number of channels. A 60-second 3-channel file has 3x the concurrency cost of a single-channel file.
+
+```python
+def estimate_processing_time(file_duration_seconds, num_channels):
+    """Estimate processing time for multichannel audio"""
+    
+    # Base processing time per channel (approximate)
+    base_time_per_channel = file_duration_seconds * 0.3  # 30% of real-time
+    
+    # Total time (channels processed in parallel)
+    estimated_time = base_time_per_channel
+    
+    # Add overhead for channel extraction and result combination
+    overhead = 2 + (num_channels * 0.5)
+    
+    return estimated_time + overhead
+
+# Example: 60-second stereo file
+duration = 60
+channels = 2
+est_time = estimate_processing_time(duration, channels)
+print(f"Estimated processing time: {est_time:.1f} seconds")
+```
+
+### Memory considerations
+
+For large multichannel files, consider streaming or chunking:
+
+```python
+def process_large_multichannel_file(file_path, api_key, chunk_duration=300):
+    """Process large files in chunks (5-minute segments)"""
+    
+    from pydub import AudioSegment
+    
+    audio = AudioSegment.from_file(file_path)
+    duration_ms = len(audio)
+    chunk_size_ms = chunk_duration * 1000
+    
+    all_transcripts = []
+    
+    for start_ms in range(0, duration_ms, chunk_size_ms):
+        end_ms = min(start_ms + chunk_size_ms, duration_ms)
+        
+        # Extract chunk
+        chunk = audio[start_ms:end_ms]
+        chunk_file = f"temp_chunk_{start_ms}.wav"
+        chunk.export(chunk_file, format="wav")
+        
+        # Transcribe chunk
+        result = transcribe_multichannel(chunk_file, api_key)
+        
+        # Adjust timestamps
+        if 'transcripts' in result:
+            for transcript in result['transcripts']:
+                for word in transcript.get('words', []):
+                    word['start'] += start_ms / 1000
+                    word['end'] += start_ms / 1000
+            all_transcripts.extend(result['transcripts'])
+        
+        # Clean up
+        os.remove(chunk_file)
+    
+    return {'transcripts': all_transcripts}
+```
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Can I use speaker diarization with multichannel mode?">
+    No, multichannel mode assigns speakers based on channels. Each channel is assumed to contain one speaker. If you need diarization within a channel, process each channel separately with diarization enabled.
+  </Accordion>
+  
+  <Accordion title="What happens if my audio has more than 5 channels?">
+    The API will return an error. You'll need to either select which 5 channels to process or mix down some channels before sending to the API.
+  </Accordion>
+  
+  <Accordion title="Can I process mono audio with multichannel mode?">
+    Yes, but it's unnecessary. If you send mono audio with `use_multi_channel=true`, you'll receive a standard single-channel response, not the multichannel format.
+  </Accordion>
+  
+  <Accordion title="How are speaker IDs assigned?">
+    Speaker IDs are deterministic based on channel number: channel 0 becomes speaker_0, channel 1 becomes speaker_1, and so on.
+  </Accordion>
+  
+  <Accordion title="Can channels have different languages?">
+    Yes, each channel is processed independently and can detect different languages. The language detection happens per channel.
+  </Accordion>
+</AccordionGroup>
