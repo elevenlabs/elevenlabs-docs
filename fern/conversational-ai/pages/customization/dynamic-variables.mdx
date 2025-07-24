@@ -55,6 +55,40 @@ only be used in dynamic variable headers and never sent to an LLM provider as pa
 
 We recommend using these for auth tokens or private IDs that should not be sent to an LLM. To create a secret dynamic variable, simply prefix the dynamic variable with `secret__`.
 
+## Updating dynamic variables from tools
+
+[Tool calls](https://elevenlabs.io/docs/conversational-ai/customization/tools) can create or update dynamic variables if they return a valid JSON object. To specify what should be extracted, set the object path(s) using dot notation. If the field or path doesn't exist, nothing is updated.
+
+Example of a response object and dot notation:
+
+- Status corresponds to the path: `response.status`
+- The first user's email in the users array corresponds to the path: `response.users.0.email`
+
+<CodeGroup>
+```JSON title="JSON"
+{
+  "response": {
+    "status": 200,
+    "message": "Successfully found 5 users",
+    "users": [
+      "user_1": {
+        "user_name": "test_user_1",
+        "email": "test_user_1@email.com"
+      }
+    ]
+  }
+}
+```
+</CodeGroup>
+
+To update a dynamic variable to be the first user's email, set the assignment like so.
+
+<Frame background="subtle">
+  ![Query parameters](/assets/images/conversational-ai/dv-assignment.png)
+</Frame>
+
+Assignments are a field of each server tool, that can be found documented [here](/docs/conversational-ai/api-reference/tools/create#response.body.tool_config.SystemToolConfig.assignments).
+
 ## Guide
 
 ### Prerequisites
