@@ -98,35 +98,31 @@ Here's a complete example of transcribing a stereo audio file with two speakers:
 
 <CodeBlocks>
 ```python title="Python"
-import requests
+from elevenlabs import ElevenLabs
 
-def transcribe_multichannel(audio_file_path, api_key):
-url = "https://api.elevenlabs.io/v1/speech-to-text"
+client = ElevenLabs(api_key="YOUR_API_KEY")
 
+def transcribe_multichannel(audio_file_path):
     with open(audio_file_path, 'rb') as audio_file:
-        files = {'file': audio_file}
-        data = {
-            'model_id': 'scribe_v1',
-            'use_multi_channel': 'true',
-            'diarize': 'false',
-            'timestamps_granularity': 'word'
-        }
-        headers = {'xi-api-key': api_key}
-
-        response = requests.post(url, files=files, data=data, headers=headers)
-        return response.json()
+        result = client.speech_to_text.convert(
+            file=audio_file,
+            model_id='scribe_v1',
+            use_multi_channel=True,
+            diarize=False,
+            timestamps_granularity='word'
+        )
+    return result
 
 # Process the response
+result = transcribe_multichannel('stereo_interview.wav')
 
-result = transcribe_multichannel('stereo_interview.wav', 'YOUR_API_KEY')
-
-if 'transcripts' in result: # Multichannel response
-for transcript in result['transcripts']:
-channel = transcript['channel_index']
-text = transcript['text']
-print(f"Channel {channel} (speaker\_{channel}): {text}")
-else: # Single channel response (fallback)
-print(f"Text: {result['text']}")
+if hasattr(result, 'transcripts'):  # Multichannel response
+    for transcript in result.transcripts:
+        channel = transcript.channel_index
+        text = transcript.text
+        print(f"Channel {channel} (speaker_{channel}): {text}")
+else:  # Single channel response (fallback)
+    print(f"Text: {result.text}")
 
 ````
 
@@ -145,9 +141,9 @@ async function transcribeMultichannel(audioFilePath) {
     const result = await elevenlabs.speechToText.convert({
       file: audioFile,
       modelId: 'scribe_v1',
-      use_multi_channel: true,
+      useMultiChannel: true,
       diarize: false,
-      timestamps_granularity: 'word'
+      timestampsGranularity: 'word'
     });
 
     if (result.transcripts) {
@@ -189,16 +185,16 @@ def create_conversation_transcript(multichannel_result):
     """Create a conversation-style transcript with speaker labels"""
     all_words = []
 
-    if 'transcripts' in multichannel_result:
+    if hasattr(multichannel_result, 'transcripts'):
         # Collect all words from all channels
-        for transcript in multichannel_result['transcripts']:
-            for word in transcript.get('words', []):
-                if word['type'] == 'word':
+        for transcript in multichannel_result.transcripts:
+            for word in transcript.words or []:
+                if word.type == 'word':
                     all_words.append({
-                        'text': word['text'],
-                        'start': word['start'],
-                        'speaker_id': word['speaker_id'],
-                        'channel': transcript['channel_index']
+                        'text': word.text,
+                        'start': word.start,
+                        'speaker_id': word.speaker_id,
+                        'channel': transcript.channel_index
                     })
 
     # Sort by timestamp
@@ -241,15 +237,20 @@ for turn in conversation:
 Multichannel transcription fully supports [webhook delivery](/docs/cookbooks/speech-to-text/webhooks) for asynchronous processing:
 
 ```python
-async def transcribe_multichannel_with_webhook(audio_file_path, audio_file):
-    result = await elevenlabs.speechToText.convert({
-        'file': audio_file,
-        'model_id': 'scribe_v1',
-        'use_multi_channel': True,
-        'diarize': False,
-        'webhook': True  # Enable webhook delivery
-    })
+from elevenlabs import ElevenLabs
 
+client = ElevenLabs(api_key="YOUR_API_KEY")
+
+async def transcribe_multichannel_with_webhook(audio_file_path):
+    with open(audio_file_path, 'rb') as audio_file:
+        result = await client.speech_to_text.convert_async(
+            file=audio_file,
+            model_id='scribe_v1',
+            use_multi_channel=True,
+            diarize=False,
+            webhook=True  # Enable webhook delivery
+        )
+        
     print(f"Transcription started with task ID: {result.task_id}")
     return result.task_id
 ```
@@ -320,12 +321,14 @@ For large multichannel files, consider streaming or chunking:
 
 <CodeBlocks>
 ```python title="Python"
-def process_large_multichannel_file(file_path, api_key, chunk_duration=300):
+def process_large_multichannel_file(file_path, chunk_duration=300):
     """Process large files in chunks (5-minute segments)"""
 
     from pydub import AudioSegment
+    from elevenlabs import ElevenLabs
     import os
 
+    client = ElevenLabs(api_key="YOUR_API_KEY")
     audio = AudioSegment.from_file(file_path)
     duration_ms = len(audio)
     chunk_size_ms = chunk_duration * 1000
@@ -340,21 +343,28 @@ def process_large_multichannel_file(file_path, api_key, chunk_duration=300):
         chunk_file = f"temp_chunk_{start_ms}.wav"
         chunk.export(chunk_file, format="wav")
 
-        # Transcribe chunk
-        result = transcribe_multichannel(chunk_file, api_key)
+        # Transcribe chunk using SDK
+        with open(chunk_file, 'rb') as audio_file:
+            result = client.speech_to_text.convert(
+                file=audio_file,
+                model_id='scribe_v1',
+                use_multi_channel=True,
+                diarize=False,
+                timestamps_granularity='word'
+            )
 
         # Adjust timestamps
-        if 'transcripts' in result:
-            for transcript in result['transcripts']:
-                for word in transcript.get('words', []):
-                    word['start'] += start_ms / 1000
-                    word['end'] += start_ms / 1000
-            all_transcripts.extend(result['transcripts'])
+        if hasattr(result, 'transcripts'):
+            for transcript in result.transcripts:
+                for word in transcript.words or []:
+                    word.start += start_ms / 1000
+                    word.end += start_ms / 1000
+            all_transcripts.extend(result.transcripts)
 
         # Clean up
         os.remove(chunk_file)
 
-    return {'transcripts': all_transcripts}
+    return all_transcripts
 
 ````
 
@@ -399,9 +409,9 @@ async function processLargeMultichannelFile(filePath, chunkDuration = 300) {
       const result = await elevenlabs.speechToText.convert({
         file: audioFile,
         modelId: 'scribe_v1',
-        use_multi_channel: true,
+        useMultiChannel: true,
         diarize: false,
-        timestamps_granularity: 'word'
+        timestampsGranularity: 'word'
       });
 
       // Adjust timestamps
