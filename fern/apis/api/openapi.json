@@ -2142,70 +2142,6 @@
         "x-fern-sdk-method-name": "create_a_previously_generated_voice"
       }
     },
-    "/v1/text-to-voice/create-voice-from-preview": {
-      "post": {
-        "operationId": "Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post",
-        "summary": "Create A New Voice From Voice Preview",
-        "description": "Create a voice from previously generated voice preview. This endpoint should be called after you fetched a generated_voice_id using POST /v1/text-to-voice/create-previews.",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VoiceResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "text-to-voice"
-        ],
-        "x-fern-sdk-group-name": "text_to_voice",
-        "x-fern-sdk-method-name": "create_voice_from_preview"
-      }
-    },
     "/v1/text-to-voice": {
       "post": {
         "operationId": "Create_a_new_voice_from_voice_preview_v1_text_to_voice_post",
@@ -2439,55 +2375,6 @@
         ],
         "x-fern-sdk-method-name": "stream",
         "x-fern-streaming": true
-      }
-    },
-    "/v1/text-to-voice/remixing-sessions/{remixing_session_id}": {
-      "delete": {
-        "operationId": "Delete_voice_remixing_session_v1_text_to_voice_remixing_sessions__remixing_session_id__delete",
-        "summary": "Delete Voice Remixing Session",
-        "description": "Delete voice remixing session",
-        "parameters": [
-          {
-            "name": "remixing_session_id",
-            "in": "path",
-            "description": "The remixing session id.",
-            "required": true,
-            "schema": {
-              "description": "The remixing session id.",
-              "type": "string",
-              "embed": true,
-              "examples": [
-                "123"
-              ],
-              "title": "Remixing Session Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteVoiceRemixingSessionResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "text-to-voice"
-        ]
       }
     },
     "/v1/user/subscription": {
@@ -3533,62 +3420,6 @@
         "x-fern-sdk-method-name": "create_podcast"
       }
     },
-    "/v1/projects/podcast/create": {
-      "post": {
-        "operationId": "Create_podcast_v1_projects_podcast_create_post",
-        "summary": "Create Podcast",
-        "description": "Create and auto-convert a podcast project. Currently, the LLM cost is covered by us but you will still be charged for the audio generation. In the future, you will be charged for both the LLM and audio generation costs.",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "type": "string",
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Create_podcast_v1_projects_podcast_create_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PodcastProjectResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
     "/v1/studio/projects": {
       "get": {
         "operationId": "List_Studio_projects_v1_studio_projects_get",
@@ -3709,122 +3540,6 @@
           "projects"
         ],
         "x-fern-sdk-method-name": "create"
-      }
-    },
-    "/v1/projects": {
-      "get": {
-        "operationId": "Get_projects_v1_projects_get",
-        "summary": "Get Projects",
-        "description": "Returns a list of your projects together and its metadata.",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetProjectsResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
-    "/v1/projects/add": {
-      "post": {
-        "operationId": "Add_project_v1_projects_add_post",
-        "summary": "Add Project",
-        "description": "Creates a new project, it can be either initialized as blank, from a document or from a URL.",
-        "parameters": [
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Add_project_v1_projects_add_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddProjectResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}": {
@@ -4046,211 +3761,6 @@
         "x-fern-sdk-method-name": "delete"
       }
     },
-    "/v1/projects/{project_id}": {
-      "post": {
-        "operationId": "Edit_basic_project_info_v1_projects__project_id__post",
-        "summary": "Edit Basic Project Info",
-        "description": "Edits basic project info.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Edit_basic_project_info_v1_projects__project_id__post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EditProjectResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      },
-      "get": {
-        "operationId": "Get_project_by_ID_v1_projects__project_id__get",
-        "summary": "Get Project By Id",
-        "description": "Returns information about a specific project. This endpoint returns more detailed information about a project than `GET /v1/projects`.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectExtendedResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      },
-      "delete": {
-        "operationId": "Delete_project_v1_projects__project_id__delete",
-        "summary": "Delete Project",
-        "description": "Deletes a project.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
     "/v1/studio/projects/{project_id}/content": {
       "post": {
         "operationId": "Update_Studio_project_content_v1_studio_projects__project_id__content_post",
@@ -4332,82 +3842,6 @@
         "x-fern-sdk-method-name": "update"
       }
     },
-    "/v1/projects/{project_id}/content": {
-      "post": {
-        "operationId": "Edit_project_content_v1_projects__project_id__content_post",
-        "summary": "Edit Project Content",
-        "description": "Edits project content.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Edit_project_content_v1_projects__project_id__content_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EditProjectResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
     "/v1/studio/projects/{project_id}/convert": {
       "post": {
         "operationId": "Convert_Studio_project_v1_studio_projects__project_id__convert_post",
@@ -4477,71 +3911,6 @@
           "projects"
         ],
         "x-fern-sdk-method-name": "convert"
-      }
-    },
-    "/v1/projects/{project_id}/convert": {
-      "post": {
-        "operationId": "Convert_project_v1_projects__project_id__convert_post",
-        "summary": "Convert Project",
-        "description": "Starts conversion of a project and all of its chapters.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}/snapshots": {
@@ -4614,73 +3983,6 @@
           "snapshots"
         ],
         "x-fern-sdk-method-name": "list"
-      }
-    },
-    "/v1/projects/{project_id}/snapshots": {
-      "get": {
-        "operationId": "Get_project_snapshots_v1_projects__project_id__snapshots_get",
-        "summary": "Get Project Snapshots",
-        "description": "Gets the snapshots of a project.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectSnapshotsResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}": {
@@ -4858,89 +4160,6 @@
         "x-fern-streaming": true
       }
     },
-    "/v1/projects/{project_id}/snapshots/{project_snapshot_id}/stream": {
-      "post": {
-        "operationId": "Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post",
-        "summary": "Stream Project Audio",
-        "description": "Stream the audio from a project snapshot.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "project_snapshot_id",
-            "in": "path",
-            "description": "The ID of the Studio project snapshot.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project snapshot.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Snapshot Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
     "/v1/studio/projects/{project_id}/snapshots/{project_snapshot_id}/archive": {
       "post": {
         "operationId": "Stream_archive_with_Studio_project_audio_v1_studio_projects__project_id__snapshots__project_snapshot_id__archive_post",
@@ -5026,80 +4245,6 @@
           "snapshots"
         ],
         "x-fern-sdk-method-name": "stream_archive"
-      }
-    },
-    "/v1/projects/{project_id}/snapshots/{project_snapshot_id}/archive": {
-      "post": {
-        "operationId": "Streams_archive_with_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__archive_post",
-        "summary": "Streams Archive With Project Audio",
-        "description": "Streams archive with project audio.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "project_snapshot_id",
-            "in": "path",
-            "description": "The ID of the Studio project snapshot.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project snapshot.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Snapshot Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}/chapters": {
@@ -5252,73 +4397,6 @@
           "chapters"
         ],
         "x-fern-sdk-method-name": "create"
-      }
-    },
-    "/v1/projects/{project_id}/chapters": {
-      "get": {
-        "operationId": "Get_chapters_v1_projects__project_id__chapters_get",
-        "summary": "Get Chapters",
-        "description": "Returns a list of your chapters for a project together and its metadata.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetChaptersResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}/chapters/{chapter_id}": {
@@ -5584,329 +4662,6 @@
         "x-fern-sdk-method-name": "delete"
       }
     },
-    "/v1/projects/{project_id}/chapters/{chapter_id}": {
-      "get": {
-        "operationId": "Get_chapter_by_ID_v1_projects__project_id__chapters__chapter_id__get",
-        "summary": "Get Chapter By Id",
-        "description": "Returns information about a specific chapter.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "chapter_id",
-            "in": "path",
-            "description": "The ID of the chapter.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChapterWithContentResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      },
-      "patch": {
-        "operationId": "Edit_chapter_v1_projects__project_id__chapters__chapter_id__patch",
-        "summary": "Edit Chapter",
-        "description": "Edits a chapter.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "chapter_id",
-            "in": "path",
-            "description": "The ID of the chapter.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Edit_chapter_v1_projects__project_id__chapters__chapter_id__patch"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EditChapterResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      },
-      "delete": {
-        "operationId": "Delete_chapter_v1_projects__project_id__chapters__chapter_id__delete",
-        "summary": "Delete Chapter",
-        "description": "Deletes a chapter.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "chapter_id",
-            "in": "path",
-            "description": "The ID of the chapter.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
-    "/v1/projects/{project_id}/chapters/add": {
-      "post": {
-        "operationId": "Add_chapter_to_a_project_v1_projects__project_id__chapters_add_post",
-        "summary": "Add Chapter To A Project",
-        "description": "Creates a new chapter either as blank or from a URL.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Add_chapter_to_a_project_v1_projects__project_id__chapters_add_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddChapterResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
     "/v1/studio/projects/{project_id}/chapters/{chapter_id}/convert": {
       "post": {
         "operationId": "Convert_chapter_v1_studio_projects__project_id__chapters__chapter_id__convert_post",
@@ -5991,85 +4746,6 @@
           "chapters"
         ],
         "x-fern-sdk-method-name": "convert"
-      }
-    },
-    "/v1/projects/{project_id}/chapters/{chapter_id}/convert": {
-      "post": {
-        "operationId": "Convert_chapter_v1_projects__project_id__chapters__chapter_id__convert_post",
-        "summary": "Convert Chapter",
-        "description": "Starts conversion of a specific chapter.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "chapter_id",
-            "in": "path",
-            "description": "The ID of the chapter.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}/chapters/{chapter_id}/snapshots": {
@@ -6157,87 +4833,6 @@
           "snapshots"
         ],
         "x-fern-sdk-method-name": "list"
-      }
-    },
-    "/v1/projects/{project_id}/chapters/{chapter_id}/snapshots": {
-      "get": {
-        "operationId": "List_chapter_snapshots_v1_projects__project_id__chapters__chapter_id__snapshots_get",
-        "summary": "List Chapter Snapshots",
-        "description": "Gets information about all the snapshots of a chapter. Each snapshot can be downloaded as audio. Whenever a chapter is converted a snapshot will automatically be created.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "chapter_id",
-            "in": "path",
-            "description": "The ID of the chapter.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChapterSnapshotsResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/studio/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}": {
@@ -6453,103 +5048,6 @@
         "x-fern-streaming": true
       }
     },
-    "/v1/projects/{project_id}/chapters/{chapter_id}/snapshots/{chapter_snapshot_id}/stream": {
-      "post": {
-        "operationId": "Stream_chapter_audio_v1_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post",
-        "summary": "Stream Chapter Audio",
-        "description": "Stream the audio from a chapter snapshot. Use `GET /v1/projects/{project_id}/chapters/{chapter_id}/snapshots` to return the chapter snapshots of a chapter.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "chapter_id",
-            "in": "path",
-            "description": "The ID of the chapter.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Id"
-            }
-          },
-          {
-            "name": "chapter_snapshot_id",
-            "in": "path",
-            "description": "The ID of the chapter snapshot.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the chapter snapshot.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Chapter Snapshot Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Stream_chapter_audio_v1_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
-      }
-    },
     "/v1/studio/projects/{project_id}/pronunciation-dictionaries": {
       "post": {
         "operationId": "Create_Pronunciation_Dictionaries_v1_studio_projects__project_id__pronunciation_dictionaries_post",
@@ -6630,81 +5128,6 @@
           "pronunciation_dictionaries"
         ],
         "x-fern-sdk-method-name": "create"
-      }
-    },
-    "/v1/projects/{project_id}/update-pronunciation-dictionaries": {
-      "post": {
-        "operationId": "Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post",
-        "summary": "Update Pronunciation Dictionaries",
-        "description": "Updates the set of pronunciation dictionaries acting on a project. This will automatically mark text within this project as requiring reconverting where the new dictionary would apply or the old one no longer does.",
-        "parameters": [
-          {
-            "name": "project_id",
-            "in": "path",
-            "description": "The ID of the Studio project.",
-            "required": true,
-            "schema": {
-              "description": "The ID of the Studio project.",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Project Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "projects"
-        ]
       }
     },
     "/v1/dubbing/resource/{dubbing_id}": {
@@ -9688,6 +8111,357 @@
         "x-fern-sdk-method-name": "list"
       }
     },
+    "/v1/service-accounts/{service_account_user_id}/api-keys": {
+      "get": {
+        "operationId": "get_service_account_api_keys_route_v1_service_accounts__service_account_user_id__api_keys_get",
+        "summary": "Get Service Account Api Keys Route",
+        "description": "Get all API keys for a service account",
+        "parameters": [
+          {
+            "name": "service_account_user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Service Account User Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceApiKeyListResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "service_accounts",
+          "api_keys"
+        ],
+        "x-fern-sdk-method-name": "list"
+      },
+      "post": {
+        "operationId": "create_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys_post",
+        "summary": "Create Service Account Api Key",
+        "description": "Create a new API key for a service account",
+        "parameters": [
+          {
+            "name": "service_account_user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Service Account User Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceCreateApiKeyResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "service_accounts",
+          "api_keys"
+        ],
+        "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/service-accounts/{service_account_user_id}/api-keys/{api_key_id}": {
+      "patch": {
+        "operationId": "edit_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__patch",
+        "summary": "Edit Service Account Api Key",
+        "description": "Update an existing API key for a service account",
+        "parameters": [
+          {
+            "name": "service_account_user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Service Account User Id"
+            }
+          },
+          {
+            "name": "api_key_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Api Key Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_edit_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__patch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "service_accounts",
+          "api_keys"
+        ],
+        "x-fern-sdk-method-name": "update"
+      },
+      "delete": {
+        "operationId": "delete_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__delete",
+        "summary": "Delete Service Account Api Key",
+        "description": "Delete an existing API key for a service account",
+        "parameters": [
+          {
+            "name": "service_account_user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Service Account User Id"
+            }
+          },
+          {
+            "name": "api_key_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Api Key Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace",
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "service_accounts",
+          "api_keys"
+        ],
+        "x-fern-sdk-method-name": "delete"
+      }
+    },
+    "/v1/service-accounts": {
+      "get": {
+        "operationId": "get_workspace_service_accounts_v1_service_accounts_get",
+        "summary": "Get Workspace Service Accounts",
+        "description": "List all service accounts in the workspace",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceServiceAccountListResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "workspace"
+        ],
+        "x-fern-sdk-group-name": [
+          "service_accounts"
+        ],
+        "x-fern-sdk-method-name": "list"
+      }
+    },
     "/v1/workspace/groups/search": {
       "get": {
         "operationId": "Search_user_groups_v1_workspace_groups_search_get",
@@ -10534,7 +9308,7 @@
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
         "summary": "Speech To Text",
-        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks.",
+        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks. When use_multi_channel is true and the provided audio has multiple channels, a 'transcripts' object with separate transcripts for each channel is returned. Otherwise, returns a single transcript.",
         "parameters": [
           {
             "name": "enable_logging",
@@ -10583,7 +9357,85 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MultichannelSpeechToTextResponseModel"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MultichannelSpeechToTextResponseModel"
+                    }
+                  ],
+                  "title": "Response Speech To Text V1 Speech To Text Post"
+                },
+                "examples": {
+                  "single_channel": {
+                    "summary": "Single channel response",
+                    "value": {
+                      "language_code": "en",
+                      "language_probability": 0.98,
+                      "text": "Hello world!",
+                      "words": [
+                        {
+                          "text": "Hello",
+                          "start": 0,
+                          "end": 0.5,
+                          "type": "word",
+                          "speaker_id": "speaker_1",
+                          "logprob": -0.124
+                        }
+                      ]
+                    }
+                  },
+                  "multichannel": {
+                    "summary": "Multichannel response",
+                    "value": {
+                      "transcripts": [
+                        {
+                          "language_code": "en",
+                          "language_probability": 0.98,
+                          "text": "Hello from channel one.",
+                          "words": [
+                            {
+                              "text": "Hello",
+                              "start": 0,
+                              "end": 0.5,
+                              "type": "word",
+                              "speaker_id": "speaker_0",
+                              "channel_index": 0,
+                              "logprob": -0.124
+                            }
+                          ]
+                        },
+                        {
+                          "language_code": "en",
+                          "language_probability": 0.97,
+                          "text": "Greetings from channel two.",
+                          "words": [
+                            {
+                              "text": "Greetings",
+                              "start": 0.1,
+                              "end": 0.7,
+                              "type": "word",
+                              "speaker_id": "speaker_1",
+                              "channel_index": 1,
+                              "logprob": -0.156
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -10884,7 +9736,8 @@
                 "widget",
                 "sip_trunk",
                 "twilio",
-                "genesys"
+                "genesys",
+                "swift_sdk"
               ],
               "title": "Source"
             }
@@ -10892,15 +9745,15 @@
           {
             "name": "version",
             "in": "query",
-            "description": "The SDK version number for tracking purposes.",
+            "description": "The SDK version number",
             "required": false,
             "schema": {
-              "description": "The SDK version number for tracking purposes.",
+              "description": "The SDK version number",
               "anyOf": [
                 {
                   "type": "string",
                   "maxLength": 50,
-                  "pattern": "^[0-9]+(\\.[0-9]+)*$"
+                  "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$"
                 },
                 {
                   "type": "null"
@@ -10952,7 +9805,12 @@
         },
         "tags": [
           "Conversational AI"
-        ]
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "conversations"
+        ],
+        "x-fern-sdk-method-name": "get_webrtc_token"
       }
     },
     "/v1/convai/twilio/outbound-call": {
@@ -12146,6 +11004,24 @@
             }
           },
           {
+            "name": "user_id",
+            "in": "query",
+            "description": "Filter conversations by the user ID who initiated them.",
+            "required": false,
+            "schema": {
+              "description": "Filter conversations by the user ID who initiated them.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User Id"
+            }
+          },
+          {
             "name": "page_size",
             "in": "query",
             "description": "How many conversations to return at maximum. Can not exceed 100, defaults to 30.",
@@ -13154,151 +12030,6 @@
         "x-fern-sdk-method-name": "list"
       }
     },
-    "/v1/convai/add-to-knowledge-base": {
-      "post": {
-        "operationId": "Add_to_knowledge_base_v1_convai_add_to_knowledge_base_post",
-        "summary": "Add To Knowledge Base",
-        "description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
-        "parameters": [
-          {
-            "name": "agent_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "",
-              "title": "Agent Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Add_to_knowledge_base_v1_convai_add_to_knowledge_base_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddKnowledgeBaseResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "Conversational AI"
-        ],
-        "x-fern-sdk-group-name": "conversational_ai"
-      }
-    },
-    "/v1/convai/agents/{agent_id}/add-to-knowledge-base": {
-      "post": {
-        "operationId": "Add_to_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post",
-        "summary": "Add To Knowledge Base",
-        "description": "Uploads a file or reference a webpage for the agent to use as part of it's knowledge base",
-        "parameters": [
-          {
-            "name": "agent_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Agent Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_Add_to_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddKnowledgeBaseResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "Conversational AI"
-        ],
-        "x-fern-sdk-group-name": "conversational_ai"
-      }
-    },
     "/v1/convai/knowledge-base/url": {
       "post": {
         "operationId": "Create_URL_document_v1_convai_knowledge_base_url_post",
@@ -14073,103 +12804,6 @@
         ],
         "x-fern-sdk-group-name": "conversational_ai",
         "x-fern-sdk-method-name": "rag_index_overview"
-      }
-    },
-    "/v1/convai/agents/{agent_id}/knowledge-base/{documentation_id}": {
-      "get": {
-        "operationId": "Get_documentation_from_knowledge_base_v1_convai_agents__agent_id__knowledge_base__documentation_id__get",
-        "summary": "Get Documentation From Knowledge Base",
-        "description": "Get details about a specific documentation making up the agent's knowledge base",
-        "parameters": [
-          {
-            "name": "documentation_id",
-            "in": "path",
-            "description": "The id of a document from the knowledge base. This is returned on document addition.",
-            "required": true,
-            "schema": {
-              "description": "The id of a document from the knowledge base. This is returned on document addition.",
-              "type": "string",
-              "embed": true,
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Documentation Id"
-            }
-          },
-          {
-            "name": "agent_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Agent Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "discriminator": {
-                    "propertyName": "type",
-                    "mapping": {
-                      "url": "#/components/schemas/GetKnowledgeBaseURLResponseModel",
-                      "file": "#/components/schemas/GetKnowledgeBaseFileResponseModel",
-                      "text": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
-                    }
-                  },
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/GetKnowledgeBaseURLResponseModel"
-                    },
-                    {
-                      "$ref": "#/components/schemas/GetKnowledgeBaseFileResponseModel"
-                    },
-                    {
-                      "$ref": "#/components/schemas/GetKnowledgeBaseTextResponseModel"
-                    }
-                  ],
-                  "title": "Response Get Documentation From Knowledge Base V1 Convai Agents  Agent Id  Knowledge Base  Documentation Id  Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true,
-        "tags": [
-          "Conversational AI"
-        ],
-        "x-fern-sdk-group-name": "conversational_ai"
       }
     },
     "/v1/convai/knowledge-base/{documentation_id}/dependent-agents": {
@@ -15229,6 +13863,9 @@
             }
           }
         },
+        "tags": [
+          "Conversational AI"
+        ],
         "x-fern-sdk-group-name": [
           "conversational_ai",
           "secrets"
@@ -17471,7 +16108,7 @@
     },
     "/docs": {
       "get": {
-        "operationId": "redirect_to_mintlify_docs_get",
+        "operationId": "redirect_to_mintlify",
         "summary": "Redirect To Mintlify",
         "responses": {
           "200": {
@@ -18778,7 +17415,8 @@
           "in_progress",
           "completed",
           "failed",
-          "cancelled"
+          "cancelled",
+          "voicemail"
         ],
         "title": "BatchCallRecipientStatus"
       },
@@ -19016,38 +17654,6 @@
         ],
         "title": "Body_Add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post"
       },
-      "Body_Add_chapter_to_a_project_v1_projects__project_id__chapters_add_post": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the chapter, used for identification only.",
-            "type": "string",
-            "examples": [
-              "Chapter 1"
-            ],
-            "title": "Name"
-          },
-          "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"
-            ],
-            "title": "From Url"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "title": "Body_Add_chapter_to_a_project_v1_projects__project_id__chapters_add_post"
-      },
       "Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post": {
         "type": "object",
         "properties": {
@@ -19061,380 +17667,6 @@
           "email"
         ],
         "title": "Body_Add_member_to_user_group_v1_workspace_groups__group_id__members_post"
-      },
-      "Body_Add_project_v1_projects_add_post": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the Studio project, used for identification only.",
-            "type": "string",
-            "examples": [
-              "Project 1"
-            ],
-            "title": "Name"
-          },
-          "default_title_voice_id": {
-            "description": "The voice_id that corresponds to the default voice used for new titles.",
-            "type": "string",
-            "examples": [
-              "21m00Tcm4TlvDq8ikWAM"
-            ],
-            "title": "Default Title Voice Id"
-          },
-          "default_paragraph_voice_id": {
-            "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
-            "type": "string",
-            "examples": [
-              "21m00Tcm4TlvDq8ikWAM"
-            ],
-            "title": "Default Paragraph Voice Id"
-          },
-          "default_model_id": {
-            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
-            "type": "string",
-            "examples": [
-              "eleven_multilingual_v2"
-            ],
-            "title": "Default Model Id"
-          },
-          "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"
-            ],
-            "title": "From Url"
-          },
-          "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "binary"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "From Document"
-          },
-          "from_content_json": {
-            "description": "\n    An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.\n    \n    Example:\n    [{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]\n    ",
-            "type": "string",
-            "examples": [
-              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
-            ],
-            "title": "From Content Json"
-          },
-          "quality_preset": {
-            "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
-            "type": "string",
-            "default": "standard",
-            "examples": [
-              "standard"
-            ],
-            "title": "Quality of the generated audio."
-          },
-          "title": {
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Romeo and Juliet"
-            ],
-            "title": "Title"
-          },
-          "author": {
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "William Shakespeare"
-            ],
-            "title": "Author"
-          },
-          "description": {
-            "description": "An optional description of the Studio project.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "A tragic love story between two young lovers."
-            ],
-            "title": "Description"
-          },
-          "genres": {
-            "description": "An optional list of genres associated with the Studio project.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "examples": [
-              [
-                "Romance",
-                "Drama"
-              ]
-            ],
-            "title": "Genres"
-          },
-          "target_audience": {
-            "description": "An optional target audience of the Studio project.",
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "children",
-                  "young adult",
-                  "adult",
-                  "all ages"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "adult"
-            ],
-            "title": "Target Audience"
-          },
-          "language": {
-            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1).",
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 2,
-                "minLength": 2
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "en"
-            ],
-            "title": "Language"
-          },
-          "content_type": {
-            "description": "An optional content type of the Studio project.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Book"
-            ],
-            "title": "Content Type"
-          },
-          "original_publication_date": {
-            "description": "An optional original publication date of the Studio project, in the format YYYY-MM-DD or YYYY.",
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^\\d{4}-\\d{2}-\\d{2}$|^\\d{4}$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "1597-01-01"
-            ],
-            "title": "Original Publication Date"
-          },
-          "mature_content": {
-            "description": "An optional specification of whether this Studio project contains mature content.",
-            "default": false,
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              false
-            ],
-            "title": "Mature Content"
-          },
-          "isbn_number": {
-            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "0-306-40615-2"
-            ],
-            "title": "Isbn Number"
-          },
-          "acx_volume_normalization": {
-            "description": "[Deprecated] When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "type": "boolean",
-            "default": false,
-            "examples": [
-              false
-            ],
-            "title": "Acx Volume Normalization"
-          },
-          "volume_normalization": {
-            "description": "When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "type": "boolean",
-            "default": false,
-            "examples": [
-              false
-            ],
-            "title": "Volume Normalization"
-          },
-          "pronunciation_dictionary_locators": {
-            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "examples": [
-              [
-                "{\"pronunciation_dictionary_id\": \"test\", \"version_id\": \"id2\"}"
-              ]
-            ],
-            "title": "Pronunciation Dictionary Locators"
-          },
-          "callback_url": {
-            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              [
-                "https://www.test.com/my-api/projects-status"
-              ]
-            ],
-            "title": "Callback Url"
-          },
-          "fiction": {
-            "description": "An optional specification of whether the content of this Studio project is fiction.",
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "fiction",
-                  "non-fiction"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "fiction"
-            ],
-            "title": "Fiction"
-          },
-          "apply_text_normalization": {
-            "description": "\n    This parameter controls text normalization with four modes: 'auto', 'on', 'apply_english' and 'off'.\n    When set to 'auto', the system will automatically decide whether to apply text normalization\n    (e.g., spelling out numbers). With 'on', text normalization will always be applied, while\n    with 'off', it will be skipped. 'apply_english' is the same as 'on' but will assume that text is in English.\n    ",
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "auto",
-                  "on",
-                  "off",
-                  "apply_english"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Apply Text Normalization"
-          },
-          "auto_convert": {
-            "description": "Whether to auto convert the Studio project to audio or not.",
-            "type": "boolean",
-            "default": false,
-            "title": "Auto Convert"
-          },
-          "auto_assign_voices": {
-            "description": "[Alpha Feature] Whether automatically assign voices to phrases in the create Project.",
-            "default": false,
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Auto Assign Voices"
-          },
-          "source_type": {
-            "description": "The type of Studio project to create.",
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "blank",
-                  "book",
-                  "article",
-                  "genfm",
-                  "video"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "book"
-            ],
-            "title": "Source Type"
-          }
-        },
-        "required": [
-          "name",
-          "default_title_voice_id",
-          "default_paragraph_voice_id",
-          "default_model_id"
-        ],
-        "title": "Body_Add_project_v1_projects_add_post"
       },
       "Body_Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post": {
         "type": "object",
@@ -19506,66 +17738,6 @@
           "new_name"
         ],
         "title": "Body_Add_shared_voice_v1_voices_add__public_user_id___voice_id__post"
-      },
-      "Body_Add_to_knowledge_base_v1_convai_add_to_knowledge_base_post": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "A custom, human-readable name for the document.",
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          },
-          "url": {
-            "description": "URL to a page of documentation that the agent will have access to in order to interact with users.",
-            "type": "string",
-            "title": "Url"
-          },
-          "file": {
-            "description": "Documentation that the agent will have access to in order to interact with users.",
-            "type": "string",
-            "format": "binary",
-            "title": "File"
-          }
-        },
-        "title": "Body_Add_to_knowledge_base_v1_convai_add_to_knowledge_base_post"
-      },
-      "Body_Add_to_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "A custom, human-readable name for the document.",
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          },
-          "url": {
-            "description": "URL to a page of documentation that the agent will have access to in order to interact with users.",
-            "type": "string",
-            "title": "Url"
-          },
-          "file": {
-            "description": "Documentation that the agent will have access to in order to interact with users.",
-            "type": "string",
-            "format": "binary",
-            "title": "File"
-          }
-        },
-        "title": "Body_Add_to_knowledge_base_v1_convai_agents__agent_id__add_to_knowledge_base_post"
       },
       "Body_Add_to_knowledge_base_v1_convai_knowledge_base_post": {
         "type": "object",
@@ -20289,79 +18461,6 @@
         ],
         "title": "Body_Create_URL_document_v1_convai_knowledge_base_url_post"
       },
-      "Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post": {
-        "type": "object",
-        "properties": {
-          "voice_name": {
-            "description": "Name to use for the created voice.",
-            "type": "string",
-            "examples": [
-              "Sassy squeaky mouse"
-            ],
-            "title": "Voice Name"
-          },
-          "voice_description": {
-            "description": "Description to use for the created voice.",
-            "type": "string",
-            "examples": [
-              "A sassy squeaky mouse"
-            ],
-            "maxLength": 1000,
-            "minLength": 20,
-            "title": "Voice Description"
-          },
-          "generated_voice_id": {
-            "description": "The generated_voice_id to create, call POST /v1/text-to-voice/create-previews and fetch the generated_voice_id from the response header if don't have one yet.",
-            "type": "string",
-            "examples": [
-              "37HceQefKmEi3bGovXjL"
-            ],
-            "title": "Generated Voice Id"
-          },
-          "labels": {
-            "description": "Optional, metadata to add to the created voice. Defaults to None.",
-            "anyOf": [
-              {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              {
-                "language": "en"
-              }
-            ],
-            "name": "Voice metadata",
-            "title": "Labels"
-          },
-          "played_not_selected_voice_ids": {
-            "description": "List of voice ids that the user has played but not selected. Used for RLHF.",
-            "anyOf": [
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Played Not Selected Voice Ids"
-          }
-        },
-        "required": [
-          "voice_name",
-          "voice_description",
-          "generated_voice_id"
-        ],
-        "title": "Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_create_voice_from_preview_post"
-      },
       "Body_Create_a_new_voice_from_voice_preview_v1_text_to_voice_post": {
         "type": "object",
         "properties": {
@@ -20592,211 +18691,6 @@
           "text"
         ],
         "title": "Body_Create_forced_alignment_v1_forced_alignment_post"
-      },
-      "Body_Create_podcast_v1_projects_podcast_create_post": {
-        "type": "object",
-        "properties": {
-          "model_id": {
-            "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
-            "type": "string",
-            "examples": [
-              "eleven_multilingual_v2"
-            ],
-            "title": "Model Id"
-          },
-          "mode": {
-            "description": "The type of podcast to generate. Can be 'conversation', an interaction between two voices, or 'bulletin', a monologue.",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/PodcastConversationMode"
-              },
-              {
-                "$ref": "#/components/schemas/PodcastBulletinMode"
-              }
-            ],
-            "examples": [
-              {
-                "conversation": {
-                  "guest_voice_id": "bYTqZQo3Jz7LQtmGTgwi",
-                  "host_voice_id": "6lCwbsX1yVjD49QmpkTR"
-                },
-                "type": "conversation"
-              }
-            ],
-            "title": "Mode"
-          },
-          "source": {
-            "description": "The source content for the Podcast.",
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/PodcastTextSource"
-              },
-              {
-                "$ref": "#/components/schemas/PodcastURLSource"
-              },
-              {
-                "items": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/PodcastTextSource"
-                    },
-                    {
-                      "$ref": "#/components/schemas/PodcastURLSource"
-                    }
-                  ]
-                },
-                "type": "array"
-              }
-            ],
-            "examples": [
-              {
-                "type": "url",
-                "url": "https://en.wikipedia.org/wiki/Cognitive_science"
-              }
-            ],
-            "title": "Source"
-          },
-          "quality_preset": {
-            "description": "Output quality of the generated audio. Must be one of:\nstandard - standard output format, 128kbps with 44.1kHz sample rate.\nhigh - high quality output format, 192kbps with 44.1kHz sample rate and major improvements on our side. Using this setting increases the credit cost by 20%.\nultra - ultra quality output format, 192kbps with 44.1kHz sample rate and highest improvements on our side. Using this setting increases the credit cost by 50%.\nultra lossless - ultra quality output format, 705.6kbps with 44.1kHz sample rate and highest improvements on our side in a fully lossless format. Using this setting increases the credit cost by 100%.\n",
-            "type": "string",
-            "default": "standard",
-            "enum": [
-              "standard",
-              "high",
-              "highest",
-              "ultra",
-              "ultra_lossless"
-            ],
-            "examples": [
-              "standard"
-            ],
-            "title": "Quality of the generated audio."
-          },
-          "duration_scale": {
-            "description": "Duration of the generated podcast. Must be one of:\nshort - produces podcasts shorter than 3 minutes.\ndefault - produces podcasts roughly between 3-7 minutes.\nlong - produces podcasts longer than 7 minutes.\n",
-            "type": "string",
-            "default": "default",
-            "enum": [
-              "short",
-              "default",
-              "long"
-            ],
-            "examples": [
-              "short"
-            ],
-            "title": "The duration of the generated podcast. This varies depending on the format, voice and language."
-          },
-          "language": {
-            "description": "An optional language of the Studio project. Two-letter language code (ISO 639-1).",
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 2,
-                "minLength": 2
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "en"
-            ],
-            "title": "Language"
-          },
-          "intro": {
-            "description": "The intro text that will always be added to the beginning of the podcast.",
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 1500
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Welcome to the podcast."
-            ],
-            "title": "Intro"
-          },
-          "outro": {
-            "description": "The outro text that will always be added to the end of the podcast.",
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 1500
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Thank you for listening!"
-            ],
-            "title": "Outro"
-          },
-          "instructions_prompt": {
-            "description": "Additional instructions prompt for the podcast generation used to adjust the podcast's style and tone.",
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 3000
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Ensure the podcast remains factual, accurate and appropriate for all audiences."
-            ],
-            "title": "Instructions Prompt"
-          },
-          "highlights": {
-            "description": "A brief summary or highlights of the Studio project's content, providing key points or themes. This should be between 10 and 70 characters.",
-            "anyOf": [
-              {
-                "items": {
-                  "type": "string",
-                  "maxLength": 70,
-                  "minLength": 10
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              [
-                "Emphasize the importance of AI on education"
-              ]
-            ],
-            "title": "Highlights"
-          },
-          "callback_url": {
-            "description": "\n    A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion\n    Messages:\n    1. When project was converted successfully:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"success\",\n        project_snapshot_id: \"22m00Tcm4TlvDq8ikMAT\",\n        error_details: None,\n      }\n    }\n    2. When project conversion failed:\n    {\n      type: \"project_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        conversion_status: \"error\",\n        project_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n\n    3. When chapter was converted successfully:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"success\",\n        chapter_snapshot_id: \"23m00Tcm4TlvDq8ikMAV\",\n        error_details: None,\n      }\n    }\n    4. When chapter conversion failed:\n    {\n      type: \"chapter_conversion_status\",\n      event_timestamp: 1234567890,\n      data: {\n        request_id: \"1234567890\",\n        project_id: \"21m00Tcm4TlvDq8ikWAM\",\n        chapter_id: \"22m00Tcm4TlvDq8ikMAT\",\n        conversion_status: \"error\",\n        chapter_snapshot_id: None,\n        error_details: \"Error details if conversion failed\"\n      }\n    }\n    ",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              [
-                "https://www.test.com/my-api/projects-status"
-              ]
-            ],
-            "title": "Callback Url"
-          }
-        },
-        "required": [
-          "model_id",
-          "mode",
-          "source"
-        ],
-        "title": "Body_Create_podcast_v1_projects_podcast_create_post"
       },
       "Body_Create_podcast_v1_studio_podcasts_post": {
         "type": "object",
@@ -21546,175 +19440,6 @@
           }
         },
         "title": "Body_Edit_PVC_voice_v1_voices_pvc__voice_id__post"
-      },
-      "Body_Edit_basic_project_info_v1_projects__project_id__post": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the Studio project, used for identification only.",
-            "type": "string",
-            "examples": [
-              "Project 1"
-            ],
-            "title": "Name"
-          },
-          "default_title_voice_id": {
-            "description": "The voice_id that corresponds to the default voice used for new titles.",
-            "type": "string",
-            "examples": [
-              "21m00Tcm4TlvDq8ikWAM"
-            ],
-            "title": "Default Title Voice Id"
-          },
-          "default_paragraph_voice_id": {
-            "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
-            "type": "string",
-            "examples": [
-              "21m00Tcm4TlvDq8ikWAM"
-            ],
-            "title": "Default Paragraph Voice Id"
-          },
-          "title": {
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Romeo and Juliet"
-            ],
-            "title": "Title"
-          },
-          "author": {
-            "description": "An optional name of the author of the Studio project, this will be added as metadata to the mp3 file on Studio project or chapter download.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "William Shakespeare"
-            ],
-            "title": "Author"
-          },
-          "isbn_number": {
-            "description": "An optional ISBN number of the Studio project you want to create, this will be added as metadata to the mp3 file on Studio project or chapter download.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "0-306-40615-2"
-            ],
-            "title": "Isbn Number"
-          },
-          "volume_normalization": {
-            "description": "When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements",
-            "type": "boolean",
-            "default": false,
-            "examples": [
-              false
-            ],
-            "title": "Volume Normalization"
-          }
-        },
-        "required": [
-          "name",
-          "default_title_voice_id",
-          "default_paragraph_voice_id"
-        ],
-        "title": "Body_Edit_basic_project_info_v1_projects__project_id__post"
-      },
-      "Body_Edit_chapter_v1_projects__project_id__chapters__chapter_id__patch": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the chapter, used for identification only.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "Chapter 1"
-            ],
-            "title": "Name"
-          },
-          "content": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ChapterContentInputModel"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "The chapter content to use."
-          }
-        },
-        "title": "Body_Edit_chapter_v1_projects__project_id__chapters__chapter_id__patch"
-      },
-      "Body_Edit_project_content_v1_projects__project_id__content_post": {
-        "type": "object",
-        "properties": {
-          "from_url": {
-            "description": "An optional URL from which we will extract content to initialize the Studio project. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "examples": [
-              "https://blog.elevenlabs.io/the_first_ai_that_can_laugh/"
-            ],
-            "title": "From Url"
-          },
-          "from_document": {
-            "description": "An optional .epub, .pdf, .txt or similar file can be provided. If provided, we will initialize the Studio project with its content. If this is set, 'from_url' and 'from_content' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.",
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "binary"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "From Document"
-          },
-          "from_content_json": {
-            "description": "\n    An optional content to initialize the Studio project with. If this is set, 'from_url' and 'from_document' must be null. If neither 'from_url', 'from_document', 'from_content' are provided we will initialize the Studio project as blank.\n    \n    Example:\n    [{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]\n    ",
-            "type": "string",
-            "examples": [
-              "[{\"name\": \"Chapter A\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"A\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"B\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h1\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"C\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"D\", \"type\": \"tts_node\"}]}]}, {\"name\": \"Chapter B\", \"blocks\": [{\"sub_type\": \"p\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"E\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"F\", \"type\": \"tts_node\"}]}, {\"sub_type\": \"h2\", \"nodes\": [{\"voice_id\": \"6lCwbsX1yVjD49QmpkT0\", \"text\": \"G\", \"type\": \"tts_node\"}, {\"voice_id\": \"6lCwbsX1yVjD49QmpkT1\", \"text\": \"H\", \"type\": \"tts_node\"}]}]}]"
-            ],
-            "title": "From Content Json"
-          },
-          "auto_convert": {
-            "description": "Whether to auto convert the Studio project to audio or not.",
-            "type": "boolean",
-            "default": false,
-            "title": "Auto Convert"
-          }
-        },
-        "title": "Body_Edit_project_content_v1_projects__project_id__content_post"
       },
       "Body_Edit_voice_v1_voices__voice_id__edit_post": {
         "type": "object",
@@ -22754,6 +20479,12 @@
               12345
             ],
             "title": "Seed"
+          },
+          "use_multi_channel": {
+            "description": "Whether the audio file contains multiple channels where each channel contains a single speaker. When enabled, each channel will be transcribed independently and the results will be combined. Each word in the response will include a 'channel_index' field indicating which channel it was spoken on. A maximum of 5 channels is supported.",
+            "type": "boolean",
+            "default": false,
+            "title": "Use Multi Channel"
           }
         },
         "required": [
@@ -22773,18 +20504,6 @@
         },
         "title": "Body_Stream_Studio_project_audio_v1_studio_projects__project_id__snapshots__project_snapshot_id__stream_post"
       },
-      "Body_Stream_chapter_audio_v1_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post": {
-        "type": "object",
-        "properties": {
-          "convert_to_mpeg": {
-            "description": "Whether to convert the audio to mpeg format.",
-            "type": "boolean",
-            "default": false,
-            "title": "Convert To Mpeg"
-          }
-        },
-        "title": "Body_Stream_chapter_audio_v1_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post"
-      },
       "Body_Stream_chapter_audio_v1_studio_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post": {
         "type": "object",
         "properties": {
@@ -22796,18 +20515,6 @@
           }
         },
         "title": "Body_Stream_chapter_audio_v1_studio_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post"
-      },
-      "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post": {
-        "type": "object",
-        "properties": {
-          "convert_to_mpeg": {
-            "description": "Whether to convert the audio to mpeg format.",
-            "type": "boolean",
-            "default": false,
-            "title": "Convert To Mpeg"
-          }
-        },
-        "title": "Body_Stream_project_audio_v1_projects__project_id__snapshots__project_snapshot_id__stream_post"
       },
       "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
         "type": "object",
@@ -23938,37 +21645,6 @@
         },
         "title": "Body_Update_PVC_voice_sample_v1_voices_pvc__voice_id__samples__sample_id__post"
       },
-      "Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post": {
-        "type": "object",
-        "properties": {
-          "pronunciation_dictionary_locators": {
-            "description": "A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"Vmd4Zor6fplcA7WrINey\\\",\\\"version_id\\\":\\\"hRPaxjlTdR7wFMhV4w0b\\\"}\"' --form 'pronunciation_dictionary_locators=\"{\\\"pronunciation_dictionary_id\\\":\\\"JzWtcGQMJ6bnlWwyMo7e\\\",\\\"version_id\\\":\\\"lbmwxiLu4q6txYxgdZqn\\\"}\"'. Note that multiple dictionaries are not currently supported by our UI which will only show the first.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PronunciationDictionaryVersionLocatorDBModel"
-            },
-            "examples": [
-              [
-                "{\"pronunciation_dictionary_id\": \"test\", \"version_id\": \"id2\"}"
-              ]
-            ],
-            "title": "Pronunciation Dictionary Locators"
-          },
-          "invalidate_affected_text": {
-            "description": "This will automatically mark text in this project for reconversion when the new dictionary applies or the old one no longer does.",
-            "type": "boolean",
-            "default": true,
-            "examples": [
-              false
-            ],
-            "title": "Invalidate Affected Text"
-          }
-        },
-        "required": [
-          "pronunciation_dictionary_locators"
-        ],
-        "title": "Body_Update_Pronunciation_Dictionaries_v1_projects__project_id__update_pronunciation_dictionaries_post"
-      },
       "Body_Update_Studio_project_content_v1_studio_projects__project_id__content_post": {
         "type": "object",
         "properties": {
@@ -24267,6 +21943,154 @@
         ],
         "title": "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post"
       },
+      "Body_create_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys_post": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "permissions": {
+            "description": "The permissions of the XI API.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "text_to_speech",
+                    "speech_to_speech",
+                    "speech_to_text",
+                    "models_read",
+                    "models_write",
+                    "voices_read",
+                    "voices_write",
+                    "speech_history_read",
+                    "speech_history_write",
+                    "sound_generation",
+                    "audio_isolation",
+                    "voice_generation",
+                    "dubbing_read",
+                    "dubbing_write",
+                    "pronunciation_dictionaries_read",
+                    "pronunciation_dictionaries_write",
+                    "user_read",
+                    "user_write",
+                    "projects_read",
+                    "projects_write",
+                    "audio_native_read",
+                    "audio_native_write",
+                    "workspace_read",
+                    "workspace_write",
+                    "forced_alignment"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "string",
+                "const": "all"
+              }
+            ],
+            "title": "Permissions"
+          },
+          "character_limit": {
+            "description": "The character limit of the XI API key. If provided this will limit the usage of this api key to n characters per month where n is the chosen value. Requests that incur charges will fail after reaching this monthly limit.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Limit"
+          }
+        },
+        "required": [
+          "name",
+          "permissions"
+        ],
+        "title": "Body_create_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys_post"
+      },
+      "Body_edit_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__patch": {
+        "type": "object",
+        "properties": {
+          "is_enabled": {
+            "description": "Whether to enable or disable the API key.",
+            "type": "boolean",
+            "title": "Is Enabled"
+          },
+          "name": {
+            "description": "The name of the XI API key to use (used for identification purposes only).",
+            "type": "string",
+            "examples": [
+              "Sneaky Fox"
+            ],
+            "title": "Name"
+          },
+          "permissions": {
+            "description": "The permissions of the XI API.",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "text_to_speech",
+                    "speech_to_speech",
+                    "speech_to_text",
+                    "models_read",
+                    "models_write",
+                    "voices_read",
+                    "voices_write",
+                    "speech_history_read",
+                    "speech_history_write",
+                    "sound_generation",
+                    "audio_isolation",
+                    "voice_generation",
+                    "dubbing_read",
+                    "dubbing_write",
+                    "pronunciation_dictionaries_read",
+                    "pronunciation_dictionaries_write",
+                    "user_read",
+                    "user_write",
+                    "projects_read",
+                    "projects_write",
+                    "audio_native_read",
+                    "audio_native_write",
+                    "workspace_read",
+                    "workspace_write",
+                    "forced_alignment"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "string",
+                "const": "all"
+              }
+            ],
+            "title": "Permissions"
+          },
+          "character_limit": {
+            "description": "The character limit of the XI API key. If provided this will limit the usage of this api key to n characters per month where n is the chosen value. Requests that incur charges will fail after reaching this monthly limit.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Limit"
+          }
+        },
+        "required": [
+          "is_enabled",
+          "name",
+          "permissions"
+        ],
+        "title": "Body_edit_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__patch"
+      },
       "BreakdownTypes": {
         "description": "How to break down the information. Cannot be \"user\" or \"api_key\" if include_workspace_metrics is False.",
         "type": "string",
@@ -24356,6 +22180,17 @@
                 "type": "null"
               }
             ]
+          },
+          "voicemail_detection": {
+            "description": "The voicemail detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "title": "BuiltInTools"
@@ -24428,9 +22263,207 @@
                 "type": "null"
               }
             ]
+          },
+          "voicemail_detection": {
+            "description": "The voicemail detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "title": "BuiltInTools"
+      },
+      "CaptionStyleHorizontalPlacementModel": {
+        "type": "object",
+        "properties": {
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ],
+            "title": "Align"
+          },
+          "translate_pct": {
+            "type": "number",
+            "title": "Translate Pct"
+          }
+        },
+        "required": [
+          "align",
+          "translate_pct"
+        ],
+        "title": "CaptionStyleHorizontalPlacementModel"
+      },
+      "CaptionStyleModel": {
+        "type": "object",
+        "properties": {
+          "horizontal_placement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleHorizontalPlacementModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vertical_placement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleVerticalPlacementModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "width_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width Pct"
+          },
+          "text_scale": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Scale"
+          },
+          "text_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Color"
+          },
+          "text_align": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "center",
+                  "end"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Align"
+          },
+          "background_enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background Enabled"
+          },
+          "background_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background Color"
+          },
+          "background_opacity": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background Opacity"
+          },
+          "word_highlights_enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Word Highlights Enabled"
+          },
+          "word_highlights_background_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Word Highlights Background Color"
+          },
+          "word_highlights_opacity": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Word Highlights Opacity"
+          }
+        },
+        "title": "CaptionStyleModel"
+      },
+      "CaptionStyleVerticalPlacementModel": {
+        "type": "object",
+        "properties": {
+          "align": {
+            "type": "string",
+            "enum": [
+              "top",
+              "center",
+              "bottom"
+            ],
+            "title": "Align"
+          },
+          "translate_pct": {
+            "type": "number",
+            "title": "Translate Pct"
+          }
+        },
+        "required": [
+          "align",
+          "translate_pct"
+        ],
+        "title": "CaptionStyleVerticalPlacementModel"
       },
       "ChapterContentBlockExtendableNodeResponseModel": {
         "description": "Not used. Make sure you anticipate new types in the future.",
@@ -25995,7 +24028,8 @@
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 50
+                "maxLength": 50,
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$"
               },
               {
                 "type": "null"
@@ -26114,7 +24148,14 @@
           "tool_results": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolResultCommonModel"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptOtherToolsResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                }
+              ]
             },
             "title": "Tool Results"
           },
@@ -26243,7 +24284,14 @@
           "tool_results": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolResultCommonModel"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptOtherToolsResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                }
+              ]
             },
             "title": "Tool Results"
           },
@@ -26340,6 +24388,169 @@
         ],
         "title": "ConversationHistoryTranscriptCommonModel"
       },
+      "ConversationHistoryTranscriptOtherToolsResultCommonModel": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result_value": {
+            "type": "string",
+            "title": "Result Value"
+          },
+          "is_error": {
+            "type": "boolean",
+            "title": "Is Error"
+          },
+          "tool_has_been_called": {
+            "type": "boolean",
+            "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "client",
+              "webhook",
+              "mcp"
+            ],
+            "title": "Type"
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "result_value",
+          "is_error",
+          "tool_has_been_called",
+          "type"
+        ],
+        "title": "ConversationHistoryTranscriptOtherToolsResultCommonModel"
+      },
+      "ConversationHistoryTranscriptSystemToolResultCommonModel": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result_value": {
+            "type": "string",
+            "title": "Result Value"
+          },
+          "is_error": {
+            "type": "boolean",
+            "title": "Is Error"
+          },
+          "tool_has_been_called": {
+            "type": "boolean",
+            "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
+          },
+          "type": {
+            "type": "string",
+            "const": "system",
+            "title": "Type"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/EndCallToolResultModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/LanguageDetectionToolResultModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TransferToAgentToolResultSuccessModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TransferToAgentToolResultErrorModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TransferToNumberResultTwilioSuccessModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TransferToNumberResultSipSuccessModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TransferToNumberResultErrorModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SkipTurnToolResponseModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PlayDTMFResultSuccessModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PlayDTMFResultErrorModel"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "result_type",
+                  "mapping": {
+                    "end_call_success": "#/components/schemas/EndCallToolResultModel",
+                    "language_detection_success": "#/components/schemas/LanguageDetectionToolResultModel",
+                    "play_dtmf_error": "#/components/schemas/PlayDTMFResultErrorModel",
+                    "play_dtmf_success": "#/components/schemas/PlayDTMFResultSuccessModel",
+                    "skip_turn_success": "#/components/schemas/SkipTurnToolResponseModel",
+                    "transfer_to_agent_error": "#/components/schemas/TransferToAgentToolResultErrorModel",
+                    "transfer_to_agent_success": "#/components/schemas/TransferToAgentToolResultSuccessModel",
+                    "transfer_to_number_error": "#/components/schemas/TransferToNumberResultErrorModel",
+                    "transfer_to_number_sip_success": "#/components/schemas/TransferToNumberResultSipSuccessModel",
+                    "transfer_to_number_twilio_success": "#/components/schemas/TransferToNumberResultTwilioSuccessModel"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "result_value",
+          "is_error",
+          "tool_has_been_called",
+          "type"
+        ],
+        "title": "ConversationHistoryTranscriptSystemToolResultCommonModel"
+      },
       "ConversationHistoryTranscriptToolCallClientDetails": {
         "type": "object",
         "properties": {
@@ -26365,13 +24576,12 @@
           "type": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/ToolType"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Type"
+            ]
           },
           "request_id": {
             "type": "string",
@@ -26539,62 +24749,6 @@
         ],
         "title": "ConversationHistoryTranscriptToolCallWebhookDetails"
       },
-      "ConversationHistoryTranscriptToolResultCommonModel": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Type"
-          },
-          "request_id": {
-            "type": "string",
-            "title": "Request Id"
-          },
-          "tool_name": {
-            "type": "string",
-            "title": "Tool Name"
-          },
-          "result_value": {
-            "type": "string",
-            "title": "Result Value"
-          },
-          "is_error": {
-            "type": "boolean",
-            "title": "Is Error"
-          },
-          "tool_has_been_called": {
-            "type": "boolean",
-            "title": "Tool Has Been Called"
-          },
-          "tool_latency_secs": {
-            "type": "number",
-            "default": 0,
-            "title": "Tool Latency Secs"
-          },
-          "dynamic_variable_updates": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
-            },
-            "title": "Dynamic Variable Updates"
-          }
-        },
-        "required": [
-          "request_id",
-          "tool_name",
-          "result_value",
-          "is_error",
-          "tool_has_been_called"
-        ],
-        "title": "ConversationHistoryTranscriptToolResultCommonModel"
-      },
       "ConversationHistoryTwilioPhoneCallModel": {
         "type": "object",
         "properties": {
@@ -26717,6 +24871,9 @@
             ],
             "title": "User Id"
           },
+          "source_info": {
+            "$ref": "#/components/schemas/ConversationInitiationSourceInfo"
+          },
           "dynamic_variables": {
             "type": "object",
             "additionalProperties": {
@@ -26765,6 +24922,9 @@
             ],
             "title": "User Id"
           },
+          "source_info": {
+            "$ref": "#/components/schemas/ConversationInitiationSourceInfo"
+          },
           "dynamic_variables": {
             "type": "object",
             "additionalProperties": {
@@ -26812,6 +24972,9 @@
               }
             ],
             "title": "User Id"
+          },
+          "source_info": {
+            "$ref": "#/components/schemas/ConversationInitiationSourceInfo"
           },
           "dynamic_variables": {
             "type": "object",
@@ -26889,9 +25052,42 @@
           "widget",
           "sip_trunk",
           "twilio",
-          "genesys"
+          "genesys",
+          "swift_sdk"
         ],
         "title": "ConversationInitiationSource"
+      },
+      "ConversationInitiationSourceInfo": {
+        "description": "Information about the source of conversation initiation",
+        "type": "object",
+        "properties": {
+          "source": {
+            "description": "Source of the conversation initiation",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationInitiationSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "description": "The SDK version number",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50,
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "title": "ConversationInitiationSourceInfo"
       },
       "ConversationSignedUrlResponseModel": {
         "type": "object",
@@ -27601,19 +25797,6 @@
           "status"
         ],
         "title": "DeleteSampleResponseModel"
-      },
-      "DeleteVoiceRemixingSessionResponseModel": {
-        "type": "object",
-        "properties": {
-          "voice_remixing_session_id": {
-            "type": "string",
-            "title": "Voice Remixing Session Id"
-          }
-        },
-        "required": [
-          "voice_remixing_session_id"
-        ],
-        "title": "DeleteVoiceRemixingSessionResponseModel"
       },
       "DeleteVoiceResponseModel": {
         "type": "object",
@@ -28478,6 +26661,46 @@
           }
         },
         "title": "EndCallToolConfig"
+      },
+      "EndCallToolResultModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "end_call_success",
+            "const": "end_call_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "title": "EndCallToolResultModel"
       },
       "EvaluationSettings": {
         "description": "Settings to evaluate an agent's performance.\nAgents are evaluated against a set of criteria, with success being defined as meeting some combination of those criteria.",
@@ -31483,6 +29706,46 @@
         },
         "title": "LanguageDetectionToolConfig"
       },
+      "LanguageDetectionToolResultModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "language_detection_success",
+            "const": "language_detection_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          }
+        },
+        "title": "LanguageDetectionToolResultModel"
+      },
       "LanguagePreset-Input": {
         "type": "object",
         "properties": {
@@ -32982,6 +31245,90 @@
         ],
         "title": "ModerationStatusResponseModel"
       },
+      "MultichannelSpeechToTextResponseModel": {
+        "description": "Response model for multichannel speech-to-text transcription.",
+        "type": "object",
+        "properties": {
+          "transcripts": {
+            "description": "List of transcripts, one for each audio channel. Each transcript contains the text and word-level details for its respective channel.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
+            },
+            "title": "Transcripts"
+          }
+        },
+        "example": {
+          "transcripts": [
+            {
+              "language_code": "en",
+              "language_probability": 0.98,
+              "text": "Hello from channel one.",
+              "words": [
+                {
+                  "end": 0.5,
+                  "logprob": -0.124,
+                  "speaker_id": "speaker_0",
+                  "start": 0,
+                  "text": "Hello",
+                  "type": "word"
+                },
+                {
+                  "end": 0.5,
+                  "logprob": 0,
+                  "speaker_id": "speaker_0",
+                  "start": 0.5,
+                  "text": " ",
+                  "type": "spacing"
+                },
+                {
+                  "end": 0.8,
+                  "logprob": -0.089,
+                  "speaker_id": "speaker_0",
+                  "start": 0.5,
+                  "text": "from",
+                  "type": "word"
+                }
+              ]
+            },
+            {
+              "language_code": "en",
+              "language_probability": 0.97,
+              "text": "Greetings from channel two.",
+              "words": [
+                {
+                  "end": 0.7,
+                  "logprob": -0.156,
+                  "speaker_id": "speaker_1",
+                  "start": 0.1,
+                  "text": "Greetings",
+                  "type": "word"
+                },
+                {
+                  "end": 0.7,
+                  "logprob": 0,
+                  "speaker_id": "speaker_1",
+                  "start": 0.7,
+                  "text": " ",
+                  "type": "spacing"
+                },
+                {
+                  "end": 1,
+                  "logprob": -0.078,
+                  "speaker_id": "speaker_1",
+                  "start": 0.7,
+                  "text": "from",
+                  "type": "word"
+                }
+              ]
+            }
+          ]
+        },
+        "required": [
+          "transcripts"
+        ],
+        "title": "MultichannelSpeechToTextResponseModel"
+      },
       "ObjectJsonSchemaProperty-Input": {
         "type": "object",
         "properties": {
@@ -33468,6 +31815,78 @@
           "phone_number"
         ],
         "title": "PhoneNumberTransferDestination"
+      },
+      "PlayDTMFResultErrorModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "play_dtmf_error",
+            "const": "play_dtmf_error",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "error",
+            "const": "error",
+            "title": "Status"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "PlayDTMFResultErrorModel"
+      },
+      "PlayDTMFResultSuccessModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "play_dtmf_success",
+            "const": "play_dtmf_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "dtmf_tones": {
+            "type": "string",
+            "title": "Dtmf Tones"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "required": [
+          "dtmf_tones"
+        ],
+        "title": "PlayDTMFResultSuccessModel"
       },
       "PlayDTMFToolConfig": {
         "description": "Allows the agent to play DTMF tones during a phone call.\n\nThis tool can be used to interact with automated phone systems, such as\nnavigating phone menus, entering extensions, or inputting numeric codes.",
@@ -34091,6 +32510,30 @@
             ],
             "title": "Chapters Enabled"
           },
+          "captions_enabled": {
+            "description": "Whether captions are enabled for the project.",
+            "default": true,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Captions Enabled"
+          },
+          "caption_style": {
+            "description": "Global styling to be applied to all captions",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "quality_preset": {
             "description": "The quality preset level of the project.",
             "type": "string",
@@ -34509,6 +32952,30 @@
               }
             ],
             "title": "Chapters Enabled"
+          },
+          "captions_enabled": {
+            "description": "Whether captions are enabled for the project.",
+            "default": true,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Captions Enabled"
+          },
+          "caption_style": {
+            "description": "Global styling to be applied to all captions",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "example": {
@@ -36563,6 +35030,35 @@
         },
         "title": "SkipTurnToolConfig"
       },
+      "SkipTurnToolResponseModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "skip_turn_success",
+            "const": "skip_turn_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "title": "SkipTurnToolResponseModel"
+      },
       "SpeakerAudioResponseModel": {
         "type": "object",
         "properties": {
@@ -37087,6 +35583,18 @@
               "$ref": "#/components/schemas/SpeechToTextWordResponseModel"
             },
             "title": "Words"
+          },
+          "channel_index": {
+            "description": "The channel index this transcript belongs to (for multichannel audio).",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channel Index"
           },
           "additional_formats": {
             "description": "Requested additional formats of the transcript.",
@@ -37995,7 +36503,8 @@
                 "play_keypad_touch_tone": "#/components/schemas/PlayDTMFToolConfig",
                 "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
-                "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig-Input"
+                "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig-Input",
+                "voicemail_detection": "#/components/schemas/VoicemailDetectionToolConfig"
               }
             },
             "oneOf": [
@@ -38016,6 +36525,9 @@
               },
               {
                 "$ref": "#/components/schemas/PlayDTMFToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/VoicemailDetectionToolConfig"
               }
             ],
             "title": "Params"
@@ -38081,7 +36593,8 @@
                 "play_keypad_touch_tone": "#/components/schemas/PlayDTMFToolConfig",
                 "skip_turn": "#/components/schemas/SkipTurnToolConfig",
                 "transfer_to_agent": "#/components/schemas/TransferToAgentToolConfig",
-                "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig-Output"
+                "transfer_to_number": "#/components/schemas/TransferToNumberToolConfig-Output",
+                "voicemail_detection": "#/components/schemas/VoicemailDetectionToolConfig"
               }
             },
             "oneOf": [
@@ -38102,6 +36615,9 @@
               },
               {
                 "$ref": "#/components/schemas/PlayDTMFToolConfig"
+              },
+              {
+                "$ref": "#/components/schemas/VoicemailDetectionToolConfig"
               }
             ],
             "title": "Params"
@@ -38615,6 +37131,16 @@
         ],
         "title": "ToolResponseModel"
       },
+      "ToolType": {
+        "type": "string",
+        "enum": [
+          "system",
+          "webhook",
+          "client",
+          "mcp"
+        ],
+        "title": "ToolType"
+      },
       "ToolsResponseModel": {
         "type": "object",
         "properties": {
@@ -38652,6 +37178,243 @@
           "transfers"
         ],
         "title": "TransferToAgentToolConfig"
+      },
+      "TransferToAgentToolResultErrorModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "transfer_to_agent_error",
+            "const": "transfer_to_agent_error",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "error",
+            "const": "error",
+            "title": "Status"
+          },
+          "from_agent": {
+            "type": "string",
+            "title": "From Agent"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error"
+          }
+        },
+        "required": [
+          "from_agent",
+          "error"
+        ],
+        "title": "TransferToAgentToolResultErrorModel"
+      },
+      "TransferToAgentToolResultSuccessModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "transfer_to_agent_success",
+            "const": "transfer_to_agent_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "from_agent": {
+            "type": "string",
+            "title": "From Agent"
+          },
+          "to_agent": {
+            "type": "string",
+            "title": "To Agent"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          },
+          "delay_ms": {
+            "type": "integer",
+            "default": 0,
+            "title": "Delay Ms"
+          },
+          "transfer_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfer Message"
+          },
+          "enable_transferred_agent_first_message": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enable Transferred Agent First Message"
+          }
+        },
+        "required": [
+          "from_agent",
+          "to_agent",
+          "condition"
+        ],
+        "title": "TransferToAgentToolResultSuccessModel"
+      },
+      "TransferToNumberResultErrorModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "transfer_to_number_error",
+            "const": "transfer_to_number_error",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "error",
+            "const": "error",
+            "title": "Status"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "TransferToNumberResultErrorModel"
+      },
+      "TransferToNumberResultSipSuccessModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "transfer_to_number_sip_success",
+            "const": "transfer_to_number_sip_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "transfer_number": {
+            "type": "string",
+            "title": "Transfer Number"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "required": [
+          "transfer_number"
+        ],
+        "title": "TransferToNumberResultSipSuccessModel"
+      },
+      "TransferToNumberResultTwilioSuccessModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "transfer_to_number_twilio_success",
+            "const": "transfer_to_number_twilio_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "transfer_number": {
+            "type": "string",
+            "title": "Transfer Number"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "client_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Message"
+          },
+          "agent_message": {
+            "type": "string",
+            "title": "Agent Message"
+          },
+          "conference_name": {
+            "type": "string",
+            "title": "Conference Name"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "required": [
+          "transfer_number",
+          "agent_message",
+          "conference_name"
+        ],
+        "title": "TransferToNumberResultTwilioSuccessModel"
       },
       "TransferToNumberToolConfig-Input": {
         "type": "object",
@@ -40910,6 +39673,31 @@
         ],
         "title": "VoiceVerificationResponseModel"
       },
+      "VoicemailDetectionToolConfig": {
+        "description": "Allows the agent to detect when a voicemail system is encountered.\n\nThis tool should be invoked by the LLM when it detects that the call has been\nanswered by a voicemail system rather than a human. If a voicemail message\nis configured, it will be played; otherwise the call will end immediately.",
+        "type": "object",
+        "properties": {
+          "system_tool_type": {
+            "type": "string",
+            "default": "voicemail_detection",
+            "const": "voicemail_detection",
+            "title": "System Tool Type"
+          },
+          "voicemail_message": {
+            "description": "Optional message to leave on voicemail when detected. If not provided, the call will end immediately when voicemail is detected.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voicemail Message"
+          }
+        },
+        "title": "VoicemailDetectionToolConfig"
+      },
       "WebhookAuthMethodType": {
         "type": "string",
         "enum": [
@@ -42877,6 +41665,129 @@
         },
         "title": "WidgetTextContents"
       },
+      "WorkspaceApiKeyListResponseModel": {
+        "type": "object",
+        "properties": {
+          "api-keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceApiKeyResponseModel"
+            },
+            "title": "Api-Keys"
+          }
+        },
+        "required": [
+          "api-keys"
+        ],
+        "title": "WorkspaceApiKeyListResponseModel"
+      },
+      "WorkspaceApiKeyResponseModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "hint": {
+            "type": "string",
+            "title": "Hint"
+          },
+          "key_id": {
+            "type": "string",
+            "title": "Key Id"
+          },
+          "service_account_user_id": {
+            "type": "string",
+            "title": "Service Account User Id"
+          },
+          "created_at_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At Unix"
+          },
+          "is_disabled": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Disabled"
+          },
+          "permissions": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "text_to_speech",
+                    "speech_to_speech",
+                    "speech_to_text",
+                    "models_read",
+                    "models_write",
+                    "voices_read",
+                    "voices_write",
+                    "speech_history_read",
+                    "speech_history_write",
+                    "sound_generation",
+                    "audio_isolation",
+                    "voice_generation",
+                    "dubbing_read",
+                    "dubbing_write",
+                    "pronunciation_dictionaries_read",
+                    "pronunciation_dictionaries_write",
+                    "user_read",
+                    "user_write",
+                    "projects_read",
+                    "projects_write",
+                    "audio_native_read",
+                    "audio_native_write",
+                    "workspace_read",
+                    "workspace_write",
+                    "forced_alignment"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissions"
+          },
+          "character_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Limit"
+          },
+          "character_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Count"
+          }
+        },
+        "required": [
+          "name",
+          "hint",
+          "key_id",
+          "service_account_user_id"
+        ],
+        "title": "WorkspaceApiKeyResponseModel"
+      },
       "WorkspaceBatchCallsResponse": {
         "type": "object",
         "properties": {
@@ -42910,6 +41821,19 @@
           "batch_calls"
         ],
         "title": "WorkspaceBatchCallsResponse"
+      },
+      "WorkspaceCreateApiKeyResponseModel": {
+        "type": "object",
+        "properties": {
+          "xi-api-key": {
+            "type": "string",
+            "title": "Xi-Api-Key"
+          }
+        },
+        "required": [
+          "xi-api-key"
+        ],
+        "title": "WorkspaceCreateApiKeyResponseModel"
       },
       "WorkspaceGroupByNameResponseModel": {
         "type": "object",
@@ -42971,6 +41895,59 @@
           "convai_test_suite_invocations"
         ],
         "title": "WorkspaceResourceType"
+      },
+      "WorkspaceServiceAccountListResponseModel": {
+        "type": "object",
+        "properties": {
+          "service-accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceServiceAccountResponseModel"
+            },
+            "title": "Service-Accounts"
+          }
+        },
+        "required": [
+          "service-accounts"
+        ],
+        "title": "WorkspaceServiceAccountListResponseModel"
+      },
+      "WorkspaceServiceAccountResponseModel": {
+        "type": "object",
+        "properties": {
+          "service_account_user_id": {
+            "type": "string",
+            "title": "Service Account User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "created_at_unix": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At Unix"
+          },
+          "api-keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceApiKeyResponseModel"
+            },
+            "title": "Api-Keys"
+          }
+        },
+        "required": [
+          "service_account_user_id",
+          "name",
+          "api-keys"
+        ],
+        "title": "WorkspaceServiceAccountResponseModel"
       },
       "WorkspaceWebhookListResponseModel": {
         "type": "object",
