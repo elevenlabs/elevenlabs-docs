@@ -389,6 +389,19 @@ paths:
   /v1/user:
     get:
       summary: Get user
+  /v1/service-accounts:
+    get:
+      summary: Get service accounts
+  /v1/service-accounts/{service_account_user_id}/api-keys:
+    get:
+      summary: Get API keys
+    post:
+      summary: Create API key
+  /v1/service-accounts/{service_account_user_id}/api-keys/{api_key_id}:
+    delete:
+      summary: Delete API key
+    patch:
+      summary: Update API key
   /v1/shared-voices:
     get:
       summary: Get shared voices
@@ -839,6 +852,7 @@ paths:
   /v1/shared-sound-generations/{sound_effect_generation_id}/purchase:
     post:
       x-fern-ignore: true
+
 components:
   schemas:
     PromptAgentDBModel:
