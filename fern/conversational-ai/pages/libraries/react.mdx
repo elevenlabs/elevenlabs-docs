@@ -66,6 +66,8 @@ The `startConversation` method kicks off the WebSocket or WebRTC connection and 
 
 The Agent ID can be acquired through [ElevenLabs UI](https://elevenlabs.io/app/conversational-ai).
 
+We also recommended passing in your own end user IDs to map conversations to your users.
+
 ```js
 const conversation = useConversation();
 
@@ -73,6 +75,7 @@ const conversation = useConversation();
 const conversationId = await conversation.startSession({
   agentId: '<your-agent-id>',
   connectionType: 'webrtc', // either "webrtc" or "websocket"
+  user_id: '<your-end-user-id>', // optional field
 });
 ```
 

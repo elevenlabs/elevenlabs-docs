@@ -106,10 +106,12 @@ conversation = Conversation(
 We are using the `DefaultAudioInterface` which uses the default system audio input/output devices for the conversation.
 You can also implement your own audio interface by subclassing `elevenlabs.conversational_ai.conversation.AudioInterface`.
 
-Now we can start the conversation:
+Now we can start the conversation. Optionally, we recommended passing in your own end user IDs to map conversations to your users.
 
 ```python
-conversation.start_session()
+conversation.start_session(
+    user_id=user_id # optional field
+)
 ```
 
 To get a clean shutdown when the user presses `Ctrl+C` we can add a signal handler which will call `end_session()`:
