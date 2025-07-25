@@ -587,6 +587,9 @@ You may pass additional parameters to your custom LLM implementation.
         stream: Optional[bool] = False
         user_id: Optional[str] = None
         elevenlabs_extra_body: Optional[dict] = None
+        tools: Optional[List[dict]] = None
+        parallel_tool_calls: Optional[bool] = None
+        stream_options: Optional[dict] = None
 
     @app.post("/v1/chat/completions")
     async def create_chat_completion(request: ChatCompletionRequest) -> StreamingResponse:
@@ -643,6 +646,29 @@ With this custom message setup, your LLM will receive requests in this format:
   "temperature": 0.5,
   "max_tokens": 5000,
   "stream": true,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "example_function",
+        "description": "An example function that can be called by the agent",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "param1": {
+              "type": "string",
+              "description": "Example parameter"
+            }
+          },
+          "required": ["param1"]
+        }
+      }
+    }
+  ],
+  "parallel_tool_calls": false,
+  "stream_options": {
+    "include_usage": true
+  },
   "elevenlabs_extra_body": {
     "UUID": "123e4567-e89b-12d3-a456-426614174000",
     "parameter-1": "value-1",
