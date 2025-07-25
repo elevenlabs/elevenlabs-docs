@@ -69,6 +69,76 @@ The documentation includes tested code snippets that demonstrate how to use Elev
 
 This workflow ensures that all code examples in the documentation have valid syntax and stay up-to-date.
 
+## Organizing API Documentation
+
+When you run `pnpm run openapi:update` to update the OpenAPI spec, new endpoints may appear at the bottom of the API reference instead of being organized into the appropriate sections. This is because the documentation organization is controlled by the `fern/docs.yml` file.
+
+### How docs.yml Works
+
+The `fern/docs.yml` file controls how API endpoints are organized and displayed in the documentation. It has two main sections:
+
+1. **Product Guides** (`docs` tab): Contains user-facing documentation, tutorials, and guides
+2. **API Reference** (`api-reference` tab): Contains the actual API endpoints organized from the OpenAPI spec
+
+### Adding New Endpoints to Existing Sections
+
+When new API endpoints are added to the OpenAPI spec, you need to manually organize them in `docs.yml`. There are two ways to reference endpoints:
+
+1. **Endpoint Groups**: Reference entire groups of related endpoints using their OpenAPI tag name:
+   ```yaml
+   contents:
+     - workspace
+     - textToSpeech
+     - speechToText
+   ```
+
+2. **Individual Endpoints**: Reference specific endpoints with custom organization:
+   ```yaml
+   contents:
+     - section: Service Accounts
+       contents:
+         - endpoint: GET /v1/workspace/service-accounts
+           title: Get Workspace Service Accounts
+         - endpoint: POST /v1/workspace/service-accounts
+           title: Create Service Account API Key
+         - endpoint: DELETE /v1/workspace/service-accounts/{api_key_id}
+           title: Delete Service Account API Key
+   ```
+
+### Example: Adding Service Accounts to Administration
+
+To add new Service Accounts endpoints under the Administration section:
+
+1. Locate the `ADMINISTRATION` section in the `api-reference` layout (around line 1027 in `docs.yml`)
+2. Add the endpoints to the appropriate subsection:
+   ```yaml
+   - section: ADMINISTRATION
+     skip-slug: true
+     contents:
+       - history
+       - models
+       - section: Studio
+         # ... existing studio endpoints
+       - section: Service Accounts  # Add this new section
+         contents:
+           - endpoint: GET /v1/workspace/service-accounts
+             title: Get Workspace Service Accounts
+           - endpoint: POST /v1/workspace/service-accounts
+             title: Create Service Account API Key
+           # ... other service account endpoints
+       - pronunciationDictionaries
+       # ... rest of administration endpoints
+   ```
+
+### Best Practices
+
+- **Group Related Endpoints**: Organize endpoints into logical sections (e.g., Service Accounts, Webhooks, Studio)
+- **Use Descriptive Titles**: Provide clear, action-oriented titles for endpoints
+- **Maintain Hierarchy**: Place new sections in logical positions within existing structures
+- **Test Locally**: Run `pnpm run dev` to preview changes before committing
+
+This organization ensures that new API endpoints appear in the correct sections of the documentation rather than being automatically placed at the bottom of the list.
+
 ## Other developer resources
 
 ### SDKs
