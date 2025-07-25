@@ -105,9 +105,12 @@ const conversation = useConversation({
 
 ##### startSession
 
-The `startSession` method kicks off the WebRTC connection and starts using the microphone to communicate with the ElevenLabs Conversational AI agent. The method accepts a configuration object with the `agentId` being required.
+The `startSession` method kicks off the WebRTC connection and starts using the microphone to communicate with the ElevenLabs Conversational AI agent. The method accepts a configuration object with the `agentId` being conditionally required based on whether the agent is public or private.
 
-The Agent ID can be acquired through the [ElevenLabs UI](https://elevenlabs.io/app/conversational-ai).
+
+###### Public agents
+
+For public agents (i.e. agents that don't have authentication enabled), only the `agentId` is required. The Agent ID can be acquired through the [ElevenLabs UI](https://elevenlabs.io/app/conversational-ai).
 
 ```tsx
 const conversation = useConversation();
@@ -120,9 +123,13 @@ const startConversation = async () => {
 };
 ```
 
-For public agents (i.e. agents that don't have authentication enabled), only the `agentId` is required.
+###### Private agents
 
 For private agents, you must pass in a `conversationToken` obtained from the ElevenLabs API. Generating this token requires an ElevenLabs API key.
+
+<Tip>
+  The `conversationToken` is valid for 10 minutes.
+</Tip>
 
 ```ts maxLines={0}
 // Node.js server
@@ -148,6 +155,8 @@ app.get("/conversation-token", yourAuthMiddleware, async (req, res) => {
 );
 ```
 
+Then, pass the token to the `startSession` method. Note that only the `conversationToken` is required for private agents.
+
 ```tsx
 const conversation = useConversation();
 
@@ -162,7 +171,7 @@ const startConversation = async () => {
 };
 ```
 
-You can provide a `userId` to the `startSession` method to identify the user. This is useful for tracking user interactions and feedback.
+You can optionally pass a user ID to identify the user in the conversation. This can be your own customer identifier. This will be included in the conversation initiation data sent to the server.
 
 ```tsx
 const startConversation = async () => {
