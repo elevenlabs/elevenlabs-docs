@@ -85,6 +85,7 @@ The `fern/docs.yml` file controls how API endpoints are organized and displayed 
 When new API endpoints are added to the OpenAPI spec, you need to manually organize them in `docs.yml`. There are two ways to reference endpoints:
 
 1. **Endpoint Groups**: Reference entire groups of related endpoints using their OpenAPI tag name:
+
    ```yaml
    contents:
      - workspace
@@ -119,7 +120,7 @@ To add new Service Accounts endpoints under the Administration section:
        - models
        - section: Studio
          # ... existing studio endpoints
-       - section: Service Accounts  # Add this new section
+       - section: Service Accounts # Add this new section
          contents:
            - endpoint: GET /v1/workspace/service-accounts
              title: Get Workspace Service Accounts
