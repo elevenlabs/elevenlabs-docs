@@ -1,0 +1,611 @@
+---
+title: Salesforce
+subtitle: Learn how to integrate our Conversational AI platform with Salesforce for enhanced customer relationship management
+---
+
+## Overview
+
+Your conversational AI agents can access customer data, manage leads, and create opportunities directly within Salesforce. You can streamline CRM processes by automatically retrieving customer information, checking for existing records, and securely creating new records like leads and opportunities. Benefits include faster customer qualification, reduced manual data entry, and enhanced customer experience through personalized interactions.
+
+## Demo Video
+
+Watch the demonstration of the Salesforce & Conversational AI integration.
+
+<Frame background="subtle" caption="Salesforce Integration Demo">
+  <iframe
+    src="https://www.loom.com/embed/890054b55bc64c98b7de69905fc3e6b4?sid=a5cd24f5-fd1f-4c63-9794-9d0e3127cd26"
+    frameBorder="0"
+    webkitAllowFullScreen={true}
+    mozAllowFullScreen={true}
+    allowFullScreen={true}
+    style={{ width: '100%', height: '360px' }}
+  />
+</Frame>
+
+## How it works
+
+We lay out below how we have configured the Conversational AI agent to manage customer relationships by using tool calling to step through the CRM process.
+Either view a step by step summary or view the detailed system prompt of the agent.
+
+<Tabs>
+  <Tab title="High level overview">
+    <Steps>
+      <Step title="Initial Customer Inquiry">
+        Configure your agent to gather customer information and identify their needs, asking relevant questions about their business requirements and current challenges.
+      </Step>
+
+      <Step title="Customer Data Lookup">
+        Configure the agent to check for existing customer records by:
+        - Using the `salesforce_search_records` tool to find existing contacts, accounts, or leads
+        - Retrieving customer history and previous interactions
+        - Extracting relevant details via the `salesforce_get_record` tool
+        - Using this information to personalize the conversation
+      </Step>
+
+      <Step title="Lead Qualification">
+        If the customer is new or requires follow-up:
+        - Collect comprehensive contact information
+        - Assess business needs and qualification criteria
+        - Determine the appropriate sales process or routing
+      </Step>
+
+      <Step title="Record Creation">
+        - Use the `salesforce_create_record` tool after information verification
+        - Create leads, contacts, or opportunities as appropriate
+        - Confirm record creation with the customer
+        - Inform them about next steps in the sales process
+      </Step>
+    </Steps>
+
+  </Tab>
+
+  <Tab title="Detailed system prompt">
+    ```
+      # Personality
+      
+      You are a helpful sales assistant responsible for managing customer relationships and creating records in Salesforce using the available tools. Be friendly, professional, and consultative in your approach.
+      
+      # Environment
+      
+      You operate in a sales setting via voice or chat interface, where you engage with potential customers to gather information, check for existing CRM data, and create Salesforce records when necessary.
+      
+      # Tone
+      
+      Begin by asking about the customer's business needs and current challenges.
+      
+      Then, ask relevant qualification questions to understand their requirements, one question at a time, and wait for their response before proceeding.
+      
+      Once you have basic information about the customer, say you will check for any existing records in the system.
+      
+      Use any existing information to personalize the conversation and avoid asking for data you already have.
+      
+      When discussing opportunities, always reference them by name (e.g., "Q1 Enterprise Deal") rather than by ID.
+      
+      # Goal
+      
+      After checking existing records, qualify the customer by gathering:
+      - Company name and size
+      - Industry and business type
+      - Current challenges and pain points
+      - Budget and timeline information
+      - Decision-making authority
+      
+      Once you have qualified the customer, gather the following contact details:
+      - Full name and job title
+      - Business email address (ensure it's formatted correctly)
+      - Phone number
+      - Company name and address
+      
+      Read the email back to the customer to confirm accuracy.
+      
+      Once all information is confirmed, explain that you will create a record in our system.
+      
+      Create the appropriate record (Lead, Contact, or Opportunity) using the `salesforce_create_record` tool.
+      
+      Thank the customer and explain the next steps in the sales process.
+      
+      # Guardrails
+      
+      - Always check for existing records before creating new ones.
+      - If the customer asks to proceed, do so with the existing information.
+      - Qualify leads appropriately based on their responses.
+      - Do not discuss topics outside of business solutions and sales.
+      - Always maintain professional communication.
+      - Protect customer privacy and handle data securely.
+      
+      # Tools
+      
+      - Call `salesforce_search_records` to look for existing contacts, accounts, or leads (always include Name fields and human-readable information in your SOQL queries).
+      - If found, call `salesforce_get_record` to get detailed information about the existing record.
+      - Use `salesforce_create_record` to generate Leads, Contacts, or Opportunities after qualification.
+```
+  </Tab>
+</Tabs>
+
+<Tip>
+  This integration enhances sales efficiency by leveraging existing customer data and automating
+  lead qualification. Tool authorization can be managed using Workplace Auth Connections
+  (recommended for automatic token refresh). The tools are configured to return human-readable names
+  and descriptions rather than technical IDs to improve conversation quality.
+</Tip>
+
+## Authentication Setup
+
+Before configuring the tools, you must set up OAuth 2.0 authentication with Salesforce using an External Client App.
+
+### Step 1: Create an External Client App in Salesforce
+
+1. Log into your Salesforce org as an administrator
+2. Go to **Setup** → **App Manager** (or search "App Manager" in Quick Find)
+3. Click **New External Client App**
+4. Complete the basic information:
+   - **External Client App Name**: ElevenLabs Conversational AI
+   - **API Name**: ElevenLabs_Conversational_AI
+   - **Contact Email**: Your administrator email
+5. In the **API (Enable OAuth Settings)** section:
+   - Check **Enable OAuth Settings**
+   - **Callback URL**: `https://api.elevenlabs.io/oauth/callback` (or your specific callback URL)
+   - **OAuth Start URL**: `https://api.elevenlabs.io/oauth/start` (required field)
+   - **Selected OAuth Scopes**: Add these scopes:
+     - **Full access (full)**
+     - **Perform requests on your behalf at any time (refresh_token, offline_access)**
+     - **Manage user data via api**
+6. Click **Save**
+7. Copy the **Consumer Key** and **Consumer Secret** - you'll need these for authentication
+
+### Step 2: Configure OAuth Client Credentials Flow
+
+<Warning>
+  The Client Credentials Flow is recommended for server-to-server integrations where no user
+  interaction is required. Ensure your Salesforce admin has enabled this flow.
+</Warning>
+
+1. **Enable Client Credentials Flow**:
+
+   - In your External Client App, go to **Manage** → **Edit Policies**
+   - In **OAuth Policies**, select **Client Credentials Flow**
+   - **Run As**: Select your admin user (or a dedicated service account user)
+   - Set **Permitted Users** to **Admin approved users are pre-authorized**
+   - Click **Save**
+
+   **Important**: The "Run As" user determines the permissions for all API calls. Choose a user with:
+
+   - System Administrator profile, OR
+   - A custom profile with the necessary permissions for your use case
+   - Access to the objects you want to query/create (Contact, Lead, Account, etc.)
+   - **API Enabled** permission must be checked
+
+2. **Find Your Salesforce Domain**:
+   Your Salesforce domain is required for API calls. Here's how to find it:
+
+   **Method 1: Check Your Current URL (Easiest)**
+   When logged into Salesforce, look at your browser's address bar:
+
+   - **Lightning Experience**: `https://yourcompany.lightning.force.com/`
+   - **My Domain**: `https://yourcompany.my.salesforce.com/`
+
+   **Method 2: Setup → Company Information**
+
+   - Go to **Setup** → **Company Information**
+   - Look for your **My Domain** URL or Organization information
+
+   **Method 3: Setup → Domain Management**
+
+   - Go to **Setup** → **Domain Management** → **My Domain**
+   - Your domain will be shown at the top of the page
+
+   **Common Domain Formats:**
+
+   - `https://yourcompany.my.salesforce.com` (My Domain)
+   - `https://yourcompany.lightning.force.com` (Lightning)
+   - `https://yourcompany.develop.my.salesforce.com` (Sandbox)
+
+   **Note**: Use the full domain without trailing slash for API calls.
+
+3. **Setup Complete**: You have now created the External Client App and configured Client Credentials Flow. The Consumer Key and Consumer Secret will be used for token generation in the tool authorization step.
+
+## Tool Configurations
+
+The integration with Salesforce employs three primary webhook tools to manage customer relationships. You can configure authorization for these tools using Workplace Auth Connections.
+
+## Authorization - Workplace OAuth2 Connection
+
+    <Steps>
+      <Step title="Navigate to Workplace Auth Connections">
+        In your ElevenLabs dashboard, go to **Agents** → **Workplace Auth Connections** and click **Add Auth**.
+      </Step>
+
+      <Step title="Configure Salesforce Connection">
+        Fill in the following fields for your Salesforce integration:
+
+        **Connection Name**: `Salesforce CRM`
+
+        **Client ID**
+        - Your Consumer Key from the External Client App
+        - Example: `3MVG9JJlvRU3L4pRiOu8pQt5xXB4xGZGm0yW...`
+
+        **Client Secret**
+        - Your Consumer Secret from the External Client App
+        - Example: `1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF...`
+
+        **Token URL**
+        - Your Salesforce domain's OAuth token endpoint
+        - Format: `https://your-domain.my.salesforce.com/services/oauth2/token`
+        - Example: `https://mycompany.my.salesforce.com/services/oauth2/token`
+
+        **Scopes (optional)**
+        - OAuth scopes for Salesforce API access
+        - Recommended: `full, api, refresh_token`
+        - Leave blank to use default scopes from your External Client App
+
+        **Extra Parameters (JSON)**
+        - Additional OAuth parameters specific to your setup
+        - Example for Client Credentials flow:
+        ```json
+        {
+          "grant_type": "client_credentials"
+        }
+        ```
+      </Step>
+
+      <Step title="Create auth connection">
+        Click **Create auth connection** to add your configuration.
+      </Step>
+
+      <Step title="Use in Tool Configurations">
+        Once the connection is successful, save it and reference it in your webhook tool configurations in the **Authentication** section.
+      </Step>
+    </Steps>
+
+    <Tip>
+      Workplace Auth Connections automatically handles token refresh, eliminating the need for manual token management and improving reliability of your Salesforce integration.
+    </Tip>
+
+### Tool Configurations
+
+Use the tabs below to review each tool's configuration. Remember to add Workplace Auth Connection to the tool (OAuth2).
+
+<Tabs>
+  <Tab title="salesforce_search_records">
+    **Name:** salesforce_search_records  
+    **Description:** Searches for existing records in Salesforce using SOQL queries. Always returns human-readable information including Names, not just IDs.  
+    **Method:** GET  
+    **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/query/?q={soql_query}`
+    
+    **Headers:**
+    - **Content-Type:** `application/json`
+
+    **Query Parameters:**
+    - **q:** SOQL query string (e.g., "SELECT Id, Name, Email FROM Contact WHERE Email = 'example@email.com'")
+
+    **Tool JSON:**
+
+    ```json
+    {
+      "type": "webhook",
+      "name": "salesforce_search_records",
+      "description": "Searches for existing records in Salesforce using SOQL queries. Always returns human-readable names and details, not just IDs.",
+      "api_schema": {
+        "url": "https://your-domain.my.salesforce.com/services/data/v58.0/query/",
+        "method": "GET",
+        "path_params_schema": [],
+        "query_params_schema": [
+          {
+            "id": "q",
+            "type": "string",
+            "description": "SOQL query string to search for records. Always include Name fields and other human-readable information. Example: SELECT Id, Name, Email, Phone, Company FROM Contact WHERE Email = 'customer@example.com'. For Opportunities, include: SELECT Id, Name, StageName, Amount, CloseDate, Account.Name FROM Opportunity",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": true,
+            "value_type": "llm_prompt"
+          }
+        ],
+        "request_body_schema": null,
+        "request_headers": [
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 30,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+
+  <Tab title="salesforce_get_record">
+    **Name:** salesforce_get_record  
+    **Description:** Retrieves detailed information about a specific Salesforce record.  
+    **Method:** GET  
+    **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/{record_id}`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+
+    **Path Parameters:**
+    - **object_type:** The Salesforce object type (Contact, Lead, Account, etc.)
+    - **record_id:** The unique Salesforce record ID
+
+    **Tool JSON:**
+
+    ```json
+    {
+      "type": "webhook",
+      "name": "salesforce_get_record",
+      "description": "Retrieves detailed information about a specific Salesforce record.",
+      "api_schema": {
+        "url": "https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/{record_id}",
+        "method": "GET",
+        "path_params_schema": [
+          {
+            "id": "object_type",
+            "type": "string",
+            "description": "The Salesforce object type (Contact, Lead, Account, Opportunity, etc.)",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": true,
+            "value_type": "llm_prompt"
+          },
+          {
+            "id": "record_id",
+            "type": "string",
+            "description": "The unique Salesforce record ID obtained from search results",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": true,
+            "value_type": "llm_prompt"
+          }
+        ],
+        "query_params_schema": [],
+        "request_body_schema": null,
+        "request_headers": [
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 30,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+
+  <Tab title="salesforce_create_record">
+    **Name:** salesforce_create_record  
+    **Description:** Creates a new record in Salesforce.  
+    **Method:** POST  
+    **URL:** `https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/`
+
+    **Headers:**
+    - **Content-Type:** `application/json`
+
+    **Path Parameters:**
+    - **object_type:** The Salesforce object type to create (Lead, Contact, Account, etc.)
+
+    **Body Parameters:**
+    - **Dynamic JSON object** containing the record fields and values
+
+    **Tool JSON:**
+
+    ```json
+    {
+      "type": "webhook",
+      "name": "salesforce_create_record",
+      "description": "Creates a new record in Salesforce (Lead, Contact, Account, Opportunity, etc.)",
+      "api_schema": {
+        "url": "https://your-domain.my.salesforce.com/services/data/v58.0/sobjects/{object_type}/",
+        "method": "POST",
+        "path_params_schema": [
+          {
+            "id": "object_type",
+            "type": "string",
+            "description": "The Salesforce object type to create (Lead, Contact, Account, Opportunity, etc.)",
+            "dynamic_variable": "",
+            "constant_value": "",
+            "required": true,
+            "value_type": "llm_prompt"
+          }
+        ],
+        "query_params_schema": [],
+        "request_body_schema": {
+          "id": "record_data",
+          "type": "object",
+          "description": "Record data for the new Salesforce record",
+          "required": true,
+          "properties": [
+            {
+              "id": "FirstName",
+              "type": "string",
+              "description": "First name of the contact or lead",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": false,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "LastName",
+              "type": "string",
+              "description": "Last name of the contact or lead",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": true,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "Email",
+              "type": "string",
+              "description": "Email address. Must be properly formatted: user@domain.com",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": true,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "Phone",
+              "type": "string",
+              "description": "Phone number of the contact or lead",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": false,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "Company",
+              "type": "string",
+              "description": "Company name (required for Lead object)",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": false,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "Title",
+              "type": "string",
+              "description": "Job title of the contact or lead",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": false,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "Industry",
+              "type": "string",
+              "description": "Industry of the lead's company",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": false,
+              "value_type": "llm_prompt"
+            },
+            {
+              "id": "Description",
+              "type": "string",
+              "description": "Additional notes or description about the lead/contact",
+              "dynamic_variable": "",
+              "constant_value": "",
+              "required": false,
+              "value_type": "llm_prompt"
+            }
+          ]
+        },
+        "request_headers": [
+          {
+            "type": "value",
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "response_timeout_secs": 30,
+      "dynamic_variables": {
+        "dynamic_variable_placeholders": {}
+      }
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
+## Common SOQL Queries
+
+Here are some commonly used SOQL queries for the `salesforce_search_records` tool. It can be useful to consider this structure when customizing system/tool prompt. All queries prioritize human-readable information over technical IDs:
+
+### Search for Contacts by Email
+
+```sql
+SELECT Id, Name, Email, Phone, Title, Account.Name, Account.Type FROM Contact WHERE Email = 'customer@example.com'
+```
+
+### Search for Leads by Email or Phone
+
+```sql
+SELECT Id, Name, Email, Phone, Company, Industry, Status, LeadSource, Title FROM Lead WHERE Email = 'customer@example.com' OR Phone = '+1234567890'
+```
+
+### Search for Accounts by Name
+
+```sql
+SELECT Id, Name, Type, Industry, Phone, BillingCity, BillingState, Website FROM Account WHERE Name LIKE '%Company Name%'
+```
+
+### Search for Recent Opportunities
+
+```sql
+SELECT Id, Name, StageName, Amount, CloseDate, Account.Name, Account.Type, Owner.Name, Description FROM Opportunity WHERE CreatedDate = THIS_MONTH
+```
+
+### Search for Opportunities by Account
+
+```sql
+SELECT Id, Name, StageName, Amount, CloseDate, Probability, NextStep, Owner.Name FROM Opportunity WHERE Account.Name LIKE '%Company Name%'
+```
+
+## Integration Testing
+
+<Tip>
+  Test your Salesforce integration thoroughly before deploying to production. The following steps
+  will help you validate that all components are working correctly.
+</Tip>
+
+### Testing Your Integration
+
+After setting up your External Client App and configuring the webhook tools, test your integration to ensure everything works correctly:
+
+### Agent Testing
+
+Test your integration with your conversational AI agent:
+
+1. **Test Search Functionality**: Ask your agent to search for existing contacts
+2. **Test Record Creation**: Have your agent create a new lead or contact
+3. **Test Data Retrieval**: Verify your agent can get detailed customer information
+
+## Impact
+
+With this integration in place, you can:
+
+- **Accelerate Lead Qualification**: Automatically qualify leads and gather essential information
+- **Improve Data Quality**: Ensure consistent and accurate customer data entry
+- **Enhance Customer Experience**: Provide personalized interactions based on existing customer data
+- **Increase Sales Efficiency**: Reduce manual data entry and focus on high-value activities
+- **Track Performance**: Monitor conversion rates and lead quality metrics
+
+## Security Considerations
+
+- Use HTTPS endpoints for all API calls
+- Store sensitive values as secrets using the ElevenLabs Secrets Manager
+- Implement proper OAuth 2.0 token management and refresh logic
+- Follow Salesforce security best practices for External Client Apps
+- Ensure proper field-level security is configured in Salesforce
+- Regularly audit API access and usage
+
+## Common Salesforce Objects
+
+| Object          | Purpose                                        | Common Fields                                                |
+| --------------- | ---------------------------------------------- | ------------------------------------------------------------ |
+| **Lead**        | Potential customers not yet qualified          | FirstName, LastName, Email, Phone, Company, Industry, Status |
+| **Contact**     | Qualified individuals associated with accounts | FirstName, LastName, Email, Phone, AccountId, Title          |
+| **Account**     | Organizations or companies                     | Name, Type, Industry, Phone, BillingAddress                  |
+| **Opportunity** | Sales deals in progress                        | Name, StageName, Amount, CloseDate, AccountId                |
+| **Case**        | Customer service requests                      | Subject, Description, Status, Priority, ContactId            |
+
+## Conclusion
+
+This guide details how to integrate Salesforce into our conversational AI platform for comprehensive customer relationship management. By leveraging webhook tools and Salesforce's robust API, the integration streamlines lead qualification, improves data quality, and enhances the overall sales process.
+
+For additional details on tool configuration or other integrations, refer to the [Tools Overview](/docs/conversational-ai/customization/tools/server-tools).
+
+## Additional Resources
+
+- [Salesforce REST API Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/)
+- [SOQL Query Language Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/)
+- [External Client Apps and OAuth 2.0](https://help.salesforce.com/s/articleView?id=sf.connected_app_overview.htm)
+- [Salesforce Security Best Practices](https://help.salesforce.com/s/articleView?id=sf.security_overview.htm)
