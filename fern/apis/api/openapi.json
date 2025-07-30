@@ -2751,6 +2751,27 @@
             }
           },
           {
+            "name": "voice_ids",
+            "in": "query",
+            "description": "Voice IDs to lookup by. Maximum 100 voice IDs.",
+            "required": false,
+            "schema": {
+              "description": "Voice IDs to lookup by. Maximum 100 voice IDs.",
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Voice Ids"
+            }
+          },
+          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -11036,6 +11057,22 @@
             }
           },
           {
+            "name": "summary_mode",
+            "in": "query",
+            "description": "Whether to include transcript summaries in the response.",
+            "required": false,
+            "schema": {
+              "description": "Whether to include transcript summaries in the response.",
+              "type": "string",
+              "default": "exclude",
+              "enum": [
+                "exclude",
+                "include"
+              ],
+              "title": "Summary Mode"
+            }
+          },
+          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -16179,7 +16216,8 @@
       "ASRProvider": {
         "type": "string",
         "enum": [
-          "elevenlabs"
+          "elevenlabs",
+          "realtime_scribe_v1"
         ],
         "title": "ASRProvider"
       },
@@ -23771,6 +23809,17 @@
           "transcript_summary": {
             "type": "string",
             "title": "Transcript Summary"
+          },
+          "call_summary_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Summary Title"
           }
         },
         "required": [
@@ -25199,6 +25248,28 @@
           },
           "call_successful": {
             "$ref": "#/components/schemas/EvaluationSuccessResult"
+          },
+          "transcript_summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transcript Summary"
+          },
+          "call_summary_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Summary Title"
           }
         },
         "required": [
@@ -29474,6 +29545,10 @@
           "claude-3-haiku",
           "grok-beta",
           "custom-llm",
+          "qwen3-4b",
+          "watt-tool-8b",
+          "gemini-2.5-flash-preview-05-20",
+          "gemini-2.5-flash-preview-04-17",
           "gemini-2.5-flash-lite-preview-06-17",
           "gemini-2.0-flash-lite-001",
           "gemini-2.0-flash-001",
@@ -33243,7 +33318,8 @@
               "type": "string"
             },
             "maxItems": 10,
-            "title": "Native Mcp Server Ids"
+            "title": "Native Mcp Server Ids",
+            "x-convai-client-override": true
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -33392,7 +33468,8 @@
               "type": "string"
             },
             "maxItems": 10,
-            "title": "Native Mcp Server Ids"
+            "title": "Native Mcp Server Ids",
+            "x-convai-client-override": true
           },
           "knowledge_base": {
             "description": "A list of knowledge bases to be used by the agent",
@@ -33501,6 +33578,22 @@
             ],
             "title": "Prompt",
             "x-convai-client-override": true
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Native Mcp Server Ids",
+            "x-convai-client-override": true
           }
         },
         "example": {
@@ -33516,6 +33609,12 @@
             "type": "boolean",
             "default": false,
             "title": "Prompt"
+          },
+          "native_mcp_server_ids": {
+            "description": "Whether to allow overriding the native_mcp_server_ids field.",
+            "type": "boolean",
+            "default": false,
+            "title": "Native Mcp Server Ids"
           }
         },
         "title": "PromptAgentAPIModelOverrideConfig"
