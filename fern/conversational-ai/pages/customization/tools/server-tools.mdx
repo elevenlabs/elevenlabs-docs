@@ -47,13 +47,39 @@ Define a high-level `Name` and `Description` to describe the tool's purpose. Thi
 
 </Tab>
 
-<Tab title="Secrets">
+<Tab title="Authentication">
 
-Assistant secrets can be used to add authentication headers to requests.
+Configure authentication by adding custom headers or using out-of-the-box authentication methods through auth connections.
 
 <Frame background="subtle">
-  ![Tool secrets](/assets/images/conversational-ai/tool-secrets.jpg)
+  ![Tool authentication](/assets/images/conversational-ai/tool-secrets.jpg)
 </Frame>
+
+</Tab>
+
+<Tab title="Supported Authentication Methods">
+
+Conversational AI supports multiple authentication methods to securely connect your tools with external APIs:
+
+<h4>OAuth2 Client Credentials</h4>
+
+Automatically handles the OAuth2 client credentials flow. Configure with your client ID, client secret, and token URL (e.g., `https://api.example.com/oauth/token`). Optionally specify scopes as comma-separated values and additional JSON parameters. Set up by clicking **Add Auth** on **Workspace Auth Connections** on the **Agent** section of your agent settings page.
+
+<h4>OAuth2 JWT</h4>
+
+Uses JSON Web Token authentication for OAuth 2.0 JWT Bearer flow. Requires your JWT signing secret, token URL, and algorithm (default: HS256). Configure JWT claims including issuer, audience, and subject. Optionally set key ID, expiration (default: 3600 seconds), scopes, and extra parameters. Set up by clicking **Add Auth** on **Workspace Auth Connections** on the **Agent** section of your agent settings page.
+
+<h4>Basic Authentication</h4>
+
+Simple username and password authentication for APIs that support HTTP Basic Auth. Set up by clicking **Add Auth** on **Workspace Auth Connections** in the **agent page**.
+
+<h4>Bearer Tokens</h4>
+
+Token-based authentication that adds your bearer token value to the request header. Configure by adding a header to the tool configuration, selecting **Secret** as the header type, and clicking **Create New Secret**.
+
+<h4>Custom Headers</h4>
+
+Add custom authentication headers with any name and value for proprietary authentication methods. Configure by adding a header to the tool configuration and specifying its **name** and **value**.
 
 </Tab>
 
