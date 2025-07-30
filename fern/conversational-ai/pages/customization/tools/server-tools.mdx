@@ -57,32 +57,6 @@ Configure authentication by adding custom headers or using out-of-the-box authen
 
 </Tab>
 
-<Tab title="Supported Authentication Methods">
-
-Conversational AI supports multiple authentication methods to securely connect your tools with external APIs:
-
-<h4>OAuth2 Client Credentials</h4>
-
-Automatically handles the OAuth2 client credentials flow. Configure with your client ID, client secret, and token URL (e.g., `https://api.example.com/oauth/token`). Optionally specify scopes as comma-separated values and additional JSON parameters. Set up by clicking **Add Auth** on **Workspace Auth Connections** on the **Agent** section of your agent settings page.
-
-<h4>OAuth2 JWT</h4>
-
-Uses JSON Web Token authentication for OAuth 2.0 JWT Bearer flow. Requires your JWT signing secret, token URL, and algorithm (default: HS256). Configure JWT claims including issuer, audience, and subject. Optionally set key ID, expiration (default: 3600 seconds), scopes, and extra parameters. Set up by clicking **Add Auth** on **Workspace Auth Connections** on the **Agent** section of your agent settings page.
-
-<h4>Basic Authentication</h4>
-
-Simple username and password authentication for APIs that support HTTP Basic Auth. Set up by clicking **Add Auth** on **Workspace Auth Connections** in the **Agent** section of your agent settings page.
-
-<h4>Bearer Tokens</h4>
-
-Token-based authentication that adds your bearer token value to the request header. Configure by adding a header to the tool configuration, selecting **Secret** as the header type, and clicking **Create New Secret**.
-
-<h4>Custom Headers</h4>
-
-Add custom authentication headers with any name and value for proprietary authentication methods. Configure by adding a header to the tool configuration and specifying its **name** and **value**.
-
-</Tab>
-
 <Tab title="Headers">
 
 Specify any headers that need to be included in the request.
@@ -134,6 +108,40 @@ Specify dynamic variables to update from the tool response for later use in the 
 </Tab>
 
 </Tabs>
+
+## Supported Authentication Methods
+
+Conversational AI supports multiple authentication methods to securely connect your tools with external APIs. Authentication methods are configured in your agent settings and then connected to individual tools as needed.
+
+<Frame background="subtle">
+  ![Workspace Auth Connection](/assets/images/conversational-ai/workspace-auth-connection.png)
+</Frame>
+
+Once configured, you can connect these authentication methods to your tools and manage custom headers in the tool configuration:
+
+<Frame background="subtle">
+  ![Tool Auth Connection](/assets/images/conversational-ai/tool-auth-config.png)
+</Frame>
+
+#### OAuth2 Client Credentials
+
+Automatically handles the OAuth2 client credentials flow. Configure with your client ID, client secret, and token URL (e.g., `https://api.example.com/oauth/token`). Optionally specify scopes as comma-separated values and additional JSON parameters. Set up by clicking **Add Auth** on **Workspace Auth Connections** on the **Agent** section of your agent settings page.
+
+#### OAuth2 JWT
+
+Uses JSON Web Token authentication for OAuth 2.0 JWT Bearer flow. Requires your JWT signing secret, token URL, and algorithm (default: HS256). Configure JWT claims including issuer, audience, and subject. Optionally set key ID, expiration (default: 3600 seconds), scopes, and extra parameters. Set up by clicking **Add Auth** on **Workspace Auth Connections** on the **Agent** section of your agent settings page.
+
+#### Basic Authentication
+
+Simple username and password authentication for APIs that support HTTP Basic Auth. Set up by clicking **Add Auth** on **Workspace Auth Connections** in the **Agent** section of your agent settings page.
+
+#### Bearer Tokens
+
+Token-based authentication that adds your bearer token value to the request header. Configure by adding a header to the tool configuration, selecting **Secret** as the header type, and clicking **Create New Secret**.
+
+#### Custom Headers
+
+Add custom authentication headers with any name and value for proprietary authentication methods. Configure by adding a header to the tool configuration and specifying its **name** and **value**.
 
 ## Guide
 
