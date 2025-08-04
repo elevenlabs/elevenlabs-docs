@@ -169,16 +169,16 @@ app.post('/webhook/speech-to-text', (req, res) => {
     }
 
     if (event.type === 'speech_to_text.completed') {
-      const { request_id, status, text, language_code } = event.data;
+      const { requestId, status, text, language_code } = event.data;
 
-      console.log(`Transcription ${request_id} completed`);
+      console.log(`Transcription ${requestId} completed`);
       console.log(`Language: ${language_code}`);
       console.log(`Text: ${text}`);
 
-      processTranscription(request_id, text, language_code);
+      processTranscription(requestId, text, language_code);
     } else if (status === 'failed') {
-      console.error(`Transcription ${request_id} failed`);
-      handleTranscriptionError(request_id);
+      console.error(`Transcription ${requestId} failed`);
+      handleTranscriptionError(requestId);
     }
 
     res.status(200).json({ received: true });
@@ -188,11 +188,11 @@ app.post('/webhook/speech-to-text', (req, res) => {
   }
 });
 
-async function processTranscription(request_id, text, language) {
+async function processTranscription(requestId, text, language) {
   console.log('Processing completed transcription...');
 }
 
-async function handleTranscriptionError(request_id) {
+async function handleTranscriptionError(requestId) {
   console.log('Handling transcription error...');
 }
 
