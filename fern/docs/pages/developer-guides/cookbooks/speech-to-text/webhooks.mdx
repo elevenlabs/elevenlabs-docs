@@ -89,7 +89,7 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
             webhook: true,
           });
 
-          console.log('Transcription started:', result.taskId);
+          console.log('Transcription started:', result.task_id);
           return result;
         } catch (error) {
           console.error('Error starting transcription:', error);
@@ -188,11 +188,11 @@ app.post('/webhook/speech-to-text', (req, res) => {
   }
 });
 
-async function processTranscription(taskId, text, language) {
+async function processTranscription(task_id, text, language) {
   console.log('Processing completed transcription...');
 }
 
-async function handleTranscriptionError(taskId) {
+async function handleTranscriptionError(task_id) {
   console.log('Handling transcription error...');
 }
 
