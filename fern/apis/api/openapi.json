@@ -8134,7 +8134,7 @@
     },
     "/v1/service-accounts/{service_account_user_id}/api-keys": {
       "get": {
-        "operationId": "get_service_account_api_keys_route_v1_service_accounts__service_account_user_id__api_keys_get",
+        "operationId": "get_service_account_api_keys_route",
         "summary": "Get Service Account Api Keys Route",
         "description": "Get all API keys for a service account",
         "parameters": [
@@ -8198,7 +8198,7 @@
         "x-fern-sdk-method-name": "list"
       },
       "post": {
-        "operationId": "create_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys_post",
+        "operationId": "create_service_account_api_key",
         "summary": "Create Service Account Api Key",
         "description": "Create a new API key for a service account",
         "parameters": [
@@ -8274,7 +8274,7 @@
     },
     "/v1/service-accounts/{service_account_user_id}/api-keys/{api_key_id}": {
       "patch": {
-        "operationId": "edit_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__patch",
+        "operationId": "edit_service_account_api_key",
         "summary": "Edit Service Account Api Key",
         "description": "Update an existing API key for a service account",
         "parameters": [
@@ -8355,7 +8355,7 @@
         "x-fern-sdk-method-name": "update"
       },
       "delete": {
-        "operationId": "delete_service_account_api_key_v1_service_accounts__service_account_user_id__api_keys__api_key_id__delete",
+        "operationId": "delete_service_account_api_key",
         "summary": "Delete Service Account Api Key",
         "description": "Delete an existing API key for a service account",
         "parameters": [
@@ -8417,7 +8417,6 @@
           }
         },
         "tags": [
-          "workspace",
           "workspace"
         ],
         "x-fern-sdk-group-name": [
@@ -8429,7 +8428,7 @@
     },
     "/v1/service-accounts": {
       "get": {
-        "operationId": "get_workspace_service_accounts_v1_service_accounts_get",
+        "operationId": "get_workspace_service_accounts",
         "summary": "Get Workspace Service Accounts",
         "description": "List all service accounts in the workspace",
         "parameters": [
@@ -8485,7 +8484,7 @@
     },
     "/v1/workspace/groups/search": {
       "get": {
-        "operationId": "Search_user_groups_v1_workspace_groups_search_get",
+        "operationId": "search_groups",
         "summary": "Search User Groups",
         "description": "Searches for user groups in the workspace. Multiple or no groups may be returned.",
         "parameters": [
@@ -8557,7 +8556,7 @@
     },
     "/v1/workspace/groups/{group_id}/members/remove": {
       "post": {
-        "operationId": "Delete_member_from_user_group_v1_workspace_groups__group_id__members_remove_post",
+        "operationId": "remove_member",
         "summary": "Delete Member From User Group",
         "description": "Removes a member from the specified group. This endpoint may only be called by workspace administrators.",
         "parameters": [
@@ -8636,7 +8635,7 @@
     },
     "/v1/workspace/groups/{group_id}/members": {
       "post": {
-        "operationId": "Add_member_to_user_group_v1_workspace_groups__group_id__members_post",
+        "operationId": "add_member",
         "summary": "Add Member To User Group",
         "description": "Adds a member of your workspace to the specified group. This endpoint may only be called by workspace administrators.",
         "parameters": [
@@ -8715,7 +8714,7 @@
     },
     "/v1/workspace/invites/add": {
       "post": {
-        "operationId": "Invite_user_v1_workspace_invites_add_post",
+        "operationId": "invite_user",
         "summary": "Invite User",
         "description": "Sends an email invitation to join your workspace to the provided email. If the user doesn't have an account they will be prompted to create one. If the user accepts this invite they will be added as a user to your workspace and your subscription using one of your seats. This endpoint may only be called by workspace administrators. If the user is already in the workspace a 400 error will be returned.",
         "parameters": [
@@ -8782,7 +8781,7 @@
     },
     "/v1/workspace/invites/add-bulk": {
       "post": {
-        "operationId": "Invite_multiple_users_v1_workspace_invites_add_bulk_post",
+        "operationId": "invite_users_bulk",
         "summary": "Invite Multiple Users",
         "description": "Sends email invitations to join your workspace to the provided emails. Requires all email addresses to be part of a verified domain. If the users don't have an account they will be prompted to create one. If the users accept these invites they will be added as users to your workspace and your subscription using one of your seats. This endpoint may only be called by workspace administrators.",
         "parameters": [
@@ -8849,7 +8848,7 @@
     },
     "/v1/workspace/invites": {
       "delete": {
-        "operationId": "Delete_existing_invitation_v1_workspace_invites_delete",
+        "operationId": "delete_invite",
         "summary": "Delete Existing Invitation",
         "description": "Invalidates an existing email invitation. The invitation will still show up in the inbox it has been delivered to, but activating it to join the workspace won't work. This endpoint may only be called by workspace administrators.",
         "parameters": [
@@ -8916,7 +8915,7 @@
     },
     "/v1/workspace/members": {
       "post": {
-        "operationId": "Update_member_v1_workspace_members_post",
+        "operationId": "update_workspace_member",
         "summary": "Update Member",
         "description": "Updates attributes of a workspace member. Apart from the email identifier, all parameters will remain unchanged unless specified. This endpoint may only be called by workspace administrators.",
         "parameters": [
@@ -8981,7 +8980,7 @@
         "x-fern-sdk-method-name": "update"
       },
       "delete": {
-        "operationId": "Delete_member_v1_workspace_members_delete",
+        "operationId": "delete_workspace_member",
         "summary": "Delete Member",
         "description": "Deletes a workspace member. This endpoint may only be called by workspace administrators.",
         "requestBody": {
@@ -9028,7 +9027,7 @@
     },
     "/v1/workspace/resources/{resource_id}": {
       "get": {
-        "operationId": "Get_resource_v1_workspace_resources__resource_id__get",
+        "operationId": "get_resource_metadata",
         "summary": "Get Resource",
         "description": "Gets the metadata of a resource by ID.",
         "parameters": [
@@ -9106,7 +9105,7 @@
     },
     "/v1/workspace/resources/{resource_id}/share": {
       "post": {
-        "operationId": "Share_workspace_resource_v1_workspace_resources__resource_id__share_post",
+        "operationId": "share_resource_endpoint",
         "summary": "Share Workspace Resource",
         "description": "Grants a role on a workspace resource to a user or a group. It overrides any existing role this user/service account/group/workspace api key has on the resource. To target a user or service account, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. The resource will be shared with the service account associated with the api key. You must have admin access to the resource to share it.",
         "parameters": [
@@ -9182,7 +9181,7 @@
     },
     "/v1/workspace/resources/{resource_id}/unshare": {
       "post": {
-        "operationId": "Unshare_workspace_resource_v1_workspace_resources__resource_id__unshare_post",
+        "operationId": "unshare_resource_endpoint",
         "summary": "Unshare Workspace Resource",
         "description": "Removes any existing role on a workspace resource from a user, service account, group or workspace api key. To target a user or service account, pass only the user email. The user must be in your workspace. To target a group, pass only the group id. To target a workspace api key, pass the api key id. The resource will be unshared from the service account associated with the api key. You must have admin access to the resource to unshare it. You cannot remove permissions from the user who created the resource.",
         "parameters": [
@@ -9258,7 +9257,7 @@
     },
     "/v1/workspace/webhooks": {
       "get": {
-        "operationId": "List_workspace_webhooks_v1_workspace_webhooks_get",
+        "operationId": "get_workspace_webhooks_route",
         "summary": "List Workspace Webhooks",
         "description": "List all webhooks for a workspace",
         "parameters": [
@@ -16829,6 +16828,18 @@
           "access_info": {
             "description": "The access information of the agent",
             "$ref": "#/components/schemas/ResourceAccessInfo"
+          },
+          "last_call_time_unix_secs": {
+            "description": "The time of the most recent call in unix seconds, null if no calls have been made",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Call Time Unix Secs"
           }
         },
         "example": {
@@ -16840,6 +16851,7 @@
           },
           "agent_id": "J3Pbu5gP6NNKBscdCdwB",
           "created_at_unix_secs": 1716153600,
+          "last_call_time_unix_secs": 1716240000,
           "name": "My Agent",
           "tags": [
             "Customer Support",
@@ -18110,7 +18122,14 @@
           },
           "default_title_voice_id": {
             "description": "The voice_id that corresponds to the default voice used for new titles.",
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "examples": [
               "21m00Tcm4TlvDq8ikWAM"
             ],
@@ -18118,7 +18137,14 @@
           },
           "default_paragraph_voice_id": {
             "description": "The voice_id that corresponds to the default voice used for new paragraphs.",
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "examples": [
               "21m00Tcm4TlvDq8ikWAM"
             ],
@@ -18126,7 +18152,14 @@
           },
           "default_model_id": {
             "description": "The ID of the model to be used for this Studio project, you can query GET /v1/models to list all available models.",
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "examples": [
               "eleven_multilingual_v2"
             ],
@@ -18464,10 +18497,7 @@
           }
         },
         "required": [
-          "name",
-          "default_title_voice_id",
-          "default_paragraph_voice_id",
-          "default_model_id"
+          "name"
         ],
         "title": "Body_Create_Studio_project_v1_studio_projects_post"
       },
@@ -22315,6 +22345,32 @@
         },
         "title": "BuiltInTools"
       },
+      "CaptionStyleCharacterAnimationModel": {
+        "type": "object",
+        "properties": {
+          "enter_type": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade"
+            ],
+            "title": "Enter Type"
+          },
+          "exit_type": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade"
+            ],
+            "title": "Exit Type"
+          }
+        },
+        "required": [
+          "enter_type",
+          "exit_type"
+        ],
+        "title": "CaptionStyleCharacterAnimationModel"
+      },
       "CaptionStyleHorizontalPlacementModel": {
         "type": "object",
         "properties": {
@@ -22341,36 +22397,26 @@
       "CaptionStyleModel": {
         "type": "object",
         "properties": {
-          "horizontal_placement": {
+          "template": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/CaptionStyleHorizontalPlacementModel"
+                "$ref": "#/components/schemas/CaptionStyleTemplateModel"
               },
               {
                 "type": "null"
               }
             ]
           },
-          "vertical_placement": {
+          "text_font": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/CaptionStyleVerticalPlacementModel"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "width_pct": {
-            "anyOf": [
-              {
-                "type": "number"
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Width Pct"
+            "title": "Text Font"
           },
           "text_scale": {
             "anyOf": [
@@ -22409,6 +22455,36 @@
               }
             ],
             "title": "Text Align"
+          },
+          "text_style": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "italic"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Style"
+          },
+          "text_weight": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "bold"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Weight"
           },
           "background_enabled": {
             "anyOf": [
@@ -22454,6 +22530,17 @@
             ],
             "title": "Word Highlights Enabled"
           },
+          "word_highlights_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Word Highlights Color"
+          },
           "word_highlights_background_color": {
             "anyOf": [
               {
@@ -22475,9 +22562,149 @@
               }
             ],
             "title": "Word Highlights Opacity"
+          },
+          "section_animation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleSectionAnimationModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "word_animation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleWordAnimationModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "character_animation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleCharacterAnimationModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "width_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width Pct"
+          },
+          "horizontal_placement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleHorizontalPlacementModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vertical_placement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionStyleVerticalPlacementModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "auto_break_enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Auto Break Enabled"
+          },
+          "max_lines_per_section": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Lines Per Section"
+          },
+          "max_words_per_line": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Words Per Line"
           }
         },
         "title": "CaptionStyleModel"
+      },
+      "CaptionStyleSectionAnimationModel": {
+        "type": "object",
+        "properties": {
+          "enter_type": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade",
+              "scale"
+            ],
+            "title": "Enter Type"
+          },
+          "exit_type": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade",
+              "scale"
+            ],
+            "title": "Exit Type"
+          }
+        },
+        "required": [
+          "enter_type",
+          "exit_type"
+        ],
+        "title": "CaptionStyleSectionAnimationModel"
+      },
+      "CaptionStyleTemplateModel": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "CaptionStyleTemplateModel"
       },
       "CaptionStyleVerticalPlacementModel": {
         "type": "object",
@@ -22501,6 +22728,34 @@
           "translate_pct"
         ],
         "title": "CaptionStyleVerticalPlacementModel"
+      },
+      "CaptionStyleWordAnimationModel": {
+        "type": "object",
+        "properties": {
+          "enter_type": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade",
+              "scale"
+            ],
+            "title": "Enter Type"
+          },
+          "exit_type": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade",
+              "scale"
+            ],
+            "title": "Exit Type"
+          }
+        },
+        "required": [
+          "enter_type",
+          "exit_type"
+        ],
+        "title": "CaptionStyleWordAnimationModel"
       },
       "ChapterContentBlockExtendableNodeResponseModel": {
         "description": "Not used. Make sure you anticipate new types in the future.",
@@ -26265,6 +26520,13 @@
             ],
             "title": "Text"
           },
+          "subtitles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentSubtitleFrame"
+            },
+            "title": "Subtitles"
+          },
           "audio_stale": {
             "type": "boolean",
             "title": "Audio Stale"
@@ -26284,6 +26546,7 @@
           "start_time",
           "end_time",
           "text",
+          "subtitles",
           "audio_stale",
           "media_ref"
         ],
@@ -27104,6 +27367,12 @@
           "multivoice": {
             "$ref": "#/components/schemas/FeatureStatusCommonModel"
           },
+          "dtmf_tones": {
+            "$ref": "#/components/schemas/FeatureStatusCommonModel"
+          },
+          "external_mcp_servers": {
+            "$ref": "#/components/schemas/FeatureStatusCommonModel"
+          },
           "pii_zrm_workspace": {
             "type": "boolean",
             "default": false,
@@ -27113,6 +27382,14 @@
             "type": "boolean",
             "default": false,
             "title": "Pii Zrm Agent"
+          },
+          "tool_dynamic_variable_updates": {
+            "$ref": "#/components/schemas/FeatureStatusCommonModel"
+          },
+          "is_livekit": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Livekit"
           }
         },
         "title": "FeaturesUsageCommonModel"
@@ -34929,6 +35206,32 @@
         ],
         "title": "SegmentDubResponse"
       },
+      "SegmentSubtitleFrame": {
+        "type": "object",
+        "properties": {
+          "start_time": {
+            "type": "number",
+            "title": "Start Time"
+          },
+          "end_time": {
+            "type": "number",
+            "title": "End Time"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Lines"
+          }
+        },
+        "required": [
+          "start_time",
+          "end_time",
+          "lines"
+        ],
+        "title": "SegmentSubtitleFrame"
+      },
       "SegmentTranscriptionResponse": {
         "type": "object",
         "properties": {
@@ -35294,6 +35597,13 @@
             "type": "string",
             "title": "Text"
           },
+          "subtitles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentSubtitleFrame"
+            },
+            "title": "Subtitles"
+          },
           "dubs": {
             "type": "object",
             "additionalProperties": {
@@ -35307,6 +35617,7 @@
           "start_time",
           "end_time",
           "text",
+          "subtitles",
           "dubs"
         ],
         "title": "SpeakerSegment"
