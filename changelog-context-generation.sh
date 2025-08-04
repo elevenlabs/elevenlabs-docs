@@ -123,9 +123,18 @@ generate_openapi_diff() {
 
     echo "   ✅ Successfully fetched latest OpenAPI spec from API"
 
+    # Normalize operation IDs in both specs before comparison
+    echo "   🔄 Normalizing operation IDs..."
+    local old_spec_normalized="$TEMP_DIR/openapi_old_normalized.json"
+    local new_spec_normalized="$TEMP_DIR/openapi_new_normalized.json"
+    
+    # Remove operation IDs from both specs using jq
+    jq 'walk(if type == "object" and has("operationId") then del(.operationId) else . end)' "$old_spec" > "$old_spec_normalized"
+    jq 'walk(if type == "object" and has("operationId") then del(.operationId) else . end)' "$new_spec" > "$new_spec_normalized"
+
     # Generate diff
-    echo "   🔀 Generating OpenAPI diff..."
-    if openapi-diff "$old_spec" "$new_spec" --markdown "$OPENAPI_DIFF_FILE" 2>/dev/null; then
+    echo "   🔀 Generating OpenAPI diff (ignoring operation ID changes)..."
+    if openapi-diff "$old_spec_normalized" "$new_spec_normalized" --markdown "$OPENAPI_DIFF_FILE" 2>/dev/null; then
         echo "   ✅ OpenAPI diff generated successfully"
 
         # Check if there are actually any changes
