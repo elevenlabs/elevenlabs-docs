@@ -68,7 +68,7 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
             model_id="scribe_v1",
             webhook=True,
           )
-          print(f"Transcription started: {result.task_id}")
+          print(f"Transcription started: {result.request_id}")
           return result
         except Exception as e:
           print(f"Error starting transcription: {e}")
@@ -89,7 +89,7 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
             webhook: true,
           });
 
-          console.log('Transcription started:', result.task_id);
+          console.log('Transcription started:', result.requestId);
           return result;
         } catch (error) {
           console.error('Error starting transcription:', error);
@@ -169,16 +169,16 @@ app.post('/webhook/speech-to-text', (req, res) => {
     }
 
     if (event.type === 'speech_to_text.completed') {
-      const { task_id, status, text, language_code } = event.data;
+      const { request_id, status, text, language_code } = event.data;
 
-      console.log(`Transcription ${task_id} completed`);
+      console.log(`Transcription ${request_id} completed`);
       console.log(`Language: ${language_code}`);
       console.log(`Text: ${text}`);
 
-      processTranscription(task_id, text, language_code);
+      processTranscription(request_id, text, language_code);
     } else if (status === 'failed') {
-      console.error(`Transcription ${task_id} failed`);
-      handleTranscriptionError(task_id);
+      console.error(`Transcription ${request_id} failed`);
+      handleTranscriptionError(request_id);
     }
 
     res.status(200).json({ received: true });
@@ -188,11 +188,11 @@ app.post('/webhook/speech-to-text', (req, res) => {
   }
 });
 
-async function processTranscription(task_id, text, language) {
+async function processTranscription(request_id, text, language) {
   console.log('Processing completed transcription...');
 }
 
-async function handleTranscriptionError(task_id) {
+async function handleTranscriptionError(request_id) {
   console.log('Handling transcription error...');
 }
 
@@ -261,6 +261,6 @@ async function testWebhook() {
     webhook: true,
   });
 
-  console.log('Test transcription started:', result.task_id);
+  console.log('Test transcription started:', result.requestId);
 }
 ```
