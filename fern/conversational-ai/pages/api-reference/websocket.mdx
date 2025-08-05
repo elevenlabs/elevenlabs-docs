@@ -147,6 +147,14 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
       };
     };
 
+    type AgentResponseCorrectionEvent = BaseEvent & {
+      type: "agent_response_correction";
+      agent_response_correction_event: {
+        original_agent_response: string;
+        corrected_agent_response: string;
+      };
+    };
+
     type AudioResponseEvent = BaseEvent & {
       type: "audio";
       audio_event: {
@@ -173,6 +181,7 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
     export type ElevenLabsWebSocketEvent =
       | UserTranscriptEvent
       | AgentResponseEvent
+      | AgentResponseCorrectionEvent
       | AudioResponseEvent
       | InterruptionEvent
       | PingEvent;
@@ -244,6 +253,11 @@ This example demonstrates how to implement a WebSocket-based conversational AI c
           if (data.type === "agent_response") {
             const { agent_response_event } = data;
             console.log("Agent response", agent_response_event.agent_response);
+          }
+
+          if (data.type === "agent_response_correction") {
+            const { agent_response_correction_event } = data;
+            console.log("Agent response correction", agent_response_correction_event.corrected_agent_response);
           }
 
           if (data.type === "interruption") {

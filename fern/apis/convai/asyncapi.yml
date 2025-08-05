@@ -517,15 +517,19 @@ components:
       properties:
         type:
           x-fern-type: literal<"agent_response_correction">
-        correction_event:
+        agent_response_correction_event:
           type: object
-          description: Correction event data
+          description: Agent response correction event data
           required:
-            - corrected_response
+            - original_agent_response
+            - corrected_agent_response
           properties:
-            corrected_response:
+            original_agent_response:
               type: string
-              description: The corrected text content replacing the previous response
+              description: The original agent response before correction
+            corrected_agent_response:
+              type: string
+              description: The corrected agent response after truncation or interruption
     VadScore:
       type: object
       description: Schema for Voice Activity Detection scoring data
