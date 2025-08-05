@@ -1162,16 +1162,32 @@ components:
       x-fern-type-name: GetPronunciationDictionaryResponse
     AgentConfigAPIModel-Input:
       x-fern-type-name: AgentConfig
+      type: object
+      properties:
+        first_message:
+          type: string
+          description: If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.
+        language:
+          type: string
+          description: Language of the agent - used for ASR and TTS
+        dynamic_variables:
+          $ref: '#/components/schemas/DynamicVariablesConfig'
+        prompt:
+          $ref: '#/components/schemas/PromptAgentAPIModel-Input'
     AgentConfigAPIModel-Output:
       x-fern-type-name: AgentConfig
-    AgentConfigAPIModel:
-      x-fern-type-name: AgentConfig
-    AgentConfigDBModel:
-      x-fern-type-name: AgentConfig
-    AgentConfigDBModel-Input:
-      x-fern-type-name: AgentConfig
-    AgentConfigDBModel-Output:
-      x-fern-type-name: AgentConfig
+      type: object
+      properties:
+        first_message:
+          type: string
+          description: If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.
+        language:
+          type: string
+          description: Language of the agent - used for ASR and TTS
+        dynamic_variables:
+          $ref: '#/components/schemas/DynamicVariablesConfig'
+        prompt:
+          $ref: '#/components/schemas/PromptAgentAPIModel-Output'
     CreateSIPTrunkPhoneNumberRequestV2:
       x-fern-type-name: CreateSIPTrunkPhoneNumberRequest
     ConversationalConfigAPIModel-Input:
