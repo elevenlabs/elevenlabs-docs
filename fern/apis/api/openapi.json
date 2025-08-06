@@ -9731,58 +9731,6 @@
             }
           },
           {
-            "name": "source",
-            "in": "query",
-            "description": "The source of the conversation initiation.",
-            "required": false,
-            "schema": {
-              "description": "The source of the conversation initiation.",
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/ConversationInitiationSource"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "examples": [
-                "unknown",
-                "android_sdk",
-                "node_js_sdk",
-                "react_native_sdk",
-                "react_sdk",
-                "js_sdk",
-                "python_sdk",
-                "widget",
-                "sip_trunk",
-                "twilio",
-                "genesys",
-                "swift_sdk"
-              ],
-              "title": "Source"
-            }
-          },
-          {
-            "name": "version",
-            "in": "query",
-            "description": "The SDK version number",
-            "required": false,
-            "schema": {
-              "description": "The SDK version number",
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 50,
-                  "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Version"
-            }
-          },
-          {
             "name": "xi-api-key",
             "in": "header",
             "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
@@ -16500,7 +16448,8 @@
           "at_unix",
           "reason_type"
         ],
-        "title": "AgentBan"
+        "title": "AgentBan",
+        "x-fern-ignore": "True"
       },
       "AgentCallLimits": {
         "type": "object",
@@ -16725,7 +16674,8 @@
           },
           "testing": {
             "description": "Testing configuration for the agent",
-            "$ref": "#/components/schemas/AgentTestingSettings"
+            "$ref": "#/components/schemas/AgentTestingSettings",
+            "x-fern-ignore": "True"
           }
         },
         "title": "AgentPlatformSettingsRequestModel"
@@ -16771,7 +16721,8 @@
           },
           "testing": {
             "description": "Testing configuration for the agent",
-            "$ref": "#/components/schemas/AgentTestingSettings"
+            "$ref": "#/components/schemas/AgentTestingSettings",
+            "x-fern-ignore": "True"
           },
           "safety": {
             "$ref": "#/components/schemas/SafetyResponseModel"
@@ -17970,6 +17921,11 @@
                 "type": "null"
               }
             ]
+          },
+          "workflow": {
+            "description": "Workflow for the agent. This is used to define the flow of the conversation and how the agent interacts with tools.",
+            "title": "Workflow",
+            "x-fern-ignore": "True"
           },
           "name": {
             "description": "A name to make the agent easier to find",
@@ -19875,6 +19831,11 @@
             ],
             "title": "Platform Settings"
           },
+          "workflow": {
+            "description": "Workflow for the agent. This is used to define the flow of the conversation and how the agent interacts with tools.",
+            "title": "Workflow",
+            "x-fern-ignore": "True"
+          },
           "name": {
             "description": "A name to make the agent easier to find",
             "anyOf": [
@@ -20962,7 +20923,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -21153,7 +21114,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -21344,7 +21305,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -21514,7 +21475,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -27382,6 +27343,9 @@
             "type": "boolean",
             "default": false,
             "title": "Is Livekit"
+          },
+          "voicemail_detection": {
+            "$ref": "#/components/schemas/FeatureStatusCommonModel"
           }
         },
         "title": "FeaturesUsageCommonModel"
@@ -27840,6 +27804,10 @@
               }
             },
             "title": "Phone Numbers"
+          },
+          "workflow": {
+            "description": "The workflow of the agent",
+            "title": "Workflow"
           },
           "access_info": {
             "description": "The access information of the agent for the user",
@@ -31121,7 +31089,8 @@
           "mcp_server_id",
           "mcp_server_name"
         ],
-        "title": "MCPToolConfig"
+        "title": "MCPToolConfig",
+        "x-fern-ignore": true
       },
       "MCPToolConfig-Output": {
         "description": "An MCP tool configuration that can be used to call MCP servers",
@@ -31232,7 +31201,8 @@
           "mcp_server_id",
           "mcp_server_name"
         ],
-        "title": "MCPToolConfig"
+        "title": "MCPToolConfig",
+        "x-fern-ignore": true
       },
       "ManualVerificationFileResponseModel": {
         "type": "object",
@@ -37990,7 +37960,8 @@
           "mode": {
             "description": "The mode of turn detection",
             "default": "turn",
-            "$ref": "#/components/schemas/TurnMode"
+            "$ref": "#/components/schemas/TurnMode",
+            "x-fern-ignore": "True"
           }
         },
         "example": {
