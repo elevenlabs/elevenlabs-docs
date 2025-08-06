@@ -29,7 +29,20 @@ Using `create-expo-app`, create a new blank Expo project:
 npx create-expo-app@latest --template blank-typescript
 ```
 
-### Enable microphone permissions
+### Install dependencies
+
+Install the ElevenLabs React Native SDK and its dependencies:
+
+```bash
+npx expo install @elevenlabs/react-native @livekit/react-native @livekit/react-native-webrtc @config-plugins/react-native-webrtc @livekit/react-native-expo-plugin @livekit/react-native-expo-plugin livekit-client
+```
+
+<Note>
+  If you're running into an issue with peer dependencies, please add a `.npmrc` file in the root of
+  the project with the following content: `legacy-peer-deps=true`.
+</Note>
+
+### Enable microphone permissions and add Expo plugins
 
 In the `app.json` file, add the following permissions:
 
@@ -61,7 +74,8 @@ In the `app.json` file, add the following permissions:
         "backgroundColor": "#ffffff"
       },
       "package": "YOUR.PACKAGE.ID"
-    }
+    },
+    "plugins": ["@livekit/react-native-expo-plugin", "@config-plugins/react-native-webrtc"]
     // ...
   }
 }
@@ -73,27 +87,6 @@ This will allow the React Native to prompt for microphone permissions when the c
   For Android emulator you will need to enable "Virtual microphone uses host audio input" in the
   emulator microphone settings.
 </Tip>
-
-### Install dependencies
-
-Install the ElevenLabs React Native SDK and its dependencies:
-
-```bash
-npx expo install @elevenlabs/react-native @livekit/react-native @livekit/react-native-webrtc @config-plugins/react-native-webrtc @livekit/react-native-expo-plugin @livekit/react-native-expo-plugin livekit-client
-```
-
-### Configure the Expo plugins
-
-Add the following plugins to your `app.json` file:
-
-```json app.json
-{
-  "expo": {
-    // ...
-    "plugins": ["@livekit/react-native-expo-plugin", "@config-plugins/react-native-webrtc"]
-  }
-}
-```
 
 ## Add ElevenLabs Conversational AI to your app
 
@@ -114,14 +107,14 @@ import {
 } from 'react-native';
 import { TextInput } from 'react-native';
 
-import { get_battery_level, change_brightness, flash_screen } from './utils/tools';
+import { getBatteryLevel, changeBrightness, flashScreen } from './utils/tools';
 
 const ConversationScreen = () => {
   const conversation = useConversation({
     clientTools: {
-      get_battery_level,
-      change_brightness,
-      flash_screen,
+      getBatteryLevel,
+      changeBrightness,
+      flashScreen,
     },
     onConnect: ({ conversationId }: { conversationId: string }) => {
       console.log('✅ Connected to conversation', conversationId);
@@ -515,7 +508,7 @@ Create a new file to hold your client tools: `./utils/tools.ts` and add the foll
 import * as Battery from 'expo-battery';
 import * as Brightness from 'expo-brightness';
 
-const get_battery_level = async () => {
+const getBatteryLevel = async () => {
   const batteryLevel = await Battery.getBatteryLevelAsync();
   console.log('batteryLevel', batteryLevel);
   if (batteryLevel === -1) {
@@ -524,13 +517,13 @@ const get_battery_level = async () => {
   return batteryLevel;
 };
 
-const change_brightness = ({ brightness }: { brightness: number }) => {
-  console.log('change_brightness', brightness);
+const changeBrightness = ({ brightness }: { brightness: number }) => {
+  console.log('changeBrightness', brightness);
   Brightness.setSystemBrightnessAsync(brightness);
   return brightness;
 };
 
-const flash_screen = () => {
+const flashScreen = () => {
   Brightness.setSystemBrightnessAsync(1);
   setTimeout(() => {
     Brightness.setSystemBrightnessAsync(0);
@@ -538,7 +531,7 @@ const flash_screen = () => {
   return 'Successfully flashed the screen.';
 };
 
-export { get_battery_level, change_brightness, flash_screen };
+export { getBatteryLevel, changeBrightness, flashScreen };
 ```
 
 ### Dynamic variables
@@ -596,11 +589,11 @@ const startConversation = async () => {
   <Step title="Set up the client tools">
     Set up the following client tools:
 
-    - Name: `get_battery_level`
+    - Name: `getBatteryLevel`
         - Description: Gets the device battery level as decimal point percentage.
         - Wait for response: `true`
         - Response timeout (seconds): 3
-    - Name: `change_brightness`
+    - Name: `changeBrightness`
         - Description: Changes the brightness of the device screen.
         - Wait for response: `true`
         - Response timeout (seconds): 3
@@ -610,7 +603,7 @@ const startConversation = async () => {
             - Required: `true`
             - Value Type: `LLM Prompt`
             - Description: A number between 0 and 1, inclusive, representing the desired screen brightness.
-    - Name: `flash_screen`
+    - Name: `flashScreen`
         - Description: Quickly flashes the screen on and off.
         - Wait for response: `true`
         - Response timeout (seconds): 3
