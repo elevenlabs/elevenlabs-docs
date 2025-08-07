@@ -183,18 +183,12 @@ paths:
             encoding:
               additional_formats:
                 contentType: application/json
-      responses: 
-        "200": 
-          content: 
-            application/json: 
-              schema: 
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
                 "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
-                    },
-                    {
-                      "$ref": "#/components/schemas/MultichannelSpeechToTextResponseModel"
-                    },
                     {
                       "$ref": "#/components/schemas/SpeechToTextChunkResponseModel"
                     },
@@ -205,6 +199,7 @@ paths:
                       "$ref": "#/components/schemas/SpeechToTextWebhookResponseModel"
                     }
                   ]
+                "anyOf": null
   # /v1/speech-to-text/stream:
   #   post:
   #     summary: Stream transcript
