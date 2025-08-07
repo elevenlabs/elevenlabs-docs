@@ -9385,7 +9385,7 @@
                       "$ref": "#/components/schemas/MultichannelSpeechToTextResponseModel"
                     },
                     {
-                      "type": "null"
+                      "$ref": "#/components/schemas/SpeechToTextWebhookResponseModel"
                     }
                   ],
                   "oneOf": [
@@ -29803,7 +29803,9 @@
           "grok-beta",
           "custom-llm",
           "qwen3-4b",
+          "qwen3-30b-a3b",
           "watt-tool-8b",
+          "watt-tool-70b",
           "gemini-2.5-flash-preview-05-20",
           "gemini-2.5-flash-preview-04-17",
           "gemini-2.5-flash-lite-preview-06-17",
@@ -36072,6 +36074,30 @@
           "words"
         ],
         "title": "SpeechToTextChunkResponseModel"
+      },
+      "SpeechToTextWebhookResponseModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "description": "The message of the webhook response.",
+            "type": "string",
+            "title": "Message"
+          },
+          "request_id": {
+            "description": "The request ID of the webhook response.",
+            "type": "string",
+            "title": "Request Id"
+          }
+        },
+        "example": {
+          "message": "Request accepted. Transcription result will be sent to the webhook endpoint.",
+          "request_id": "1234567890"
+        },
+        "required": [
+          "message",
+          "request_id"
+        ],
+        "title": "SpeechToTextWebhookResponseModel"
       },
       "SpeechToTextWordResponseModel": {
         "description": "Word-level detail of the transcription with timing information.",
