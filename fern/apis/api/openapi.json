@@ -14903,6 +14903,89 @@
         "x-fern-sdk-method-name": "delete"
       }
     },
+    "/v1/productions/producer-applicants": {
+      "get": {
+        "operationId": "list_producer_applicants_get",
+        "summary": "List Producer Applicants Get",
+        "description": "List producer applicants for review.",
+        "parameters": [
+          {
+            "name": "task_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Task Type"
+            }
+          },
+          {
+            "name": "primary_language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Primary Language"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "pending_review",
+              "title": "Status"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProducerApplicantListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/voices/pvc": {
       "post": {
         "operationId": "Create_PVC_voice_v1_voices_pvc_post",
@@ -16934,6 +17017,23 @@
           "hostname"
         ],
         "title": "AllowlistItem"
+      },
+      "ApplicantLanguage": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "fluency": {
+            "$ref": "#/components/schemas/Fluency"
+          }
+        },
+        "required": [
+          "language",
+          "fluency"
+        ],
+        "title": "ApplicantLanguage"
       },
       "ArrayJsonSchemaProperty-Input": {
         "type": "object",
@@ -24796,6 +24896,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/PlayDTMFResultErrorModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/VoiceMailDetectionResultSuccessModel"
                   }
                 ],
                 "discriminator": {
@@ -24810,7 +24913,8 @@
                     "transfer_to_agent_success": "#/components/schemas/TransferToAgentToolResultSuccessModel",
                     "transfer_to_number_error": "#/components/schemas/TransferToNumberResultErrorModel",
                     "transfer_to_number_sip_success": "#/components/schemas/TransferToNumberResultSipSuccessModel",
-                    "transfer_to_number_twilio_success": "#/components/schemas/TransferToNumberResultTwilioSuccessModel"
+                    "transfer_to_number_twilio_success": "#/components/schemas/TransferToNumberResultTwilioSuccessModel",
+                    "voicemail_detection_success": "#/components/schemas/VoiceMailDetectionResultSuccessModel"
                   }
                 }
               },
@@ -27610,6 +27714,16 @@
           "manual_verification_requested"
         ],
         "title": "FineTuningResponseModel"
+      },
+      "Fluency": {
+        "type": "string",
+        "enum": [
+          "native",
+          "fluent",
+          "conversational",
+          "basic"
+        ],
+        "title": "Fluency"
       },
       "ForcedAlignmentCharacterResponseModel": {
         "description": "Model representing a single character with its timing information from the aligner.",
@@ -32560,6 +32674,148 @@
         },
         "title": "PrivacyConfig"
       },
+      "ProducerApplicantListResponse": {
+        "type": "object",
+        "properties": {
+          "applicants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProducerApplicantResponse"
+            },
+            "title": "Applicants"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "required": [
+          "applicants",
+          "count"
+        ],
+        "title": "ProducerApplicantListResponse"
+      },
+      "ProducerApplicantResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "creator_email": {
+            "type": "string",
+            "title": "Creator Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProducerApplicantStatus"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicantLanguage"
+            },
+            "title": "Languages"
+          },
+          "task_types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskKindApplicants"
+            },
+            "title": "Task Types"
+          },
+          "videos": {
+            "$ref": "#/components/schemas/ProducerApplicantVideosResponse"
+          },
+          "cv_file_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cv File Url"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "required": [
+          "id",
+          "creator_email",
+          "status",
+          "languages",
+          "task_types",
+          "videos",
+          "created_at"
+        ],
+        "title": "ProducerApplicantResponse"
+      },
+      "ProducerApplicantStatus": {
+        "type": "string",
+        "enum": [
+          "pending_application",
+          "pending_producer_upload",
+          "pending_review",
+          "approved",
+          "rejected"
+        ],
+        "title": "ProducerApplicantStatus"
+      },
+      "ProducerApplicantVideosResponse": {
+        "type": "object",
+        "properties": {
+          "background_and_motivation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background And Motivation"
+          },
+          "project_example": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Example"
+          }
+        },
+        "title": "ProducerApplicantVideosResponse"
+      },
       "ProjectCreationMetaResponseModel": {
         "type": "object",
         "properties": {
@@ -37360,6 +37616,17 @@
         ],
         "title": "TTSOutputFormat"
       },
+      "TaskKindApplicants": {
+        "description": "Task types for producer applicants - matches frontend values",
+        "type": "string",
+        "enum": [
+          "transcription",
+          "subtitles",
+          "dubbing",
+          "translation"
+        ],
+        "title": "TaskKindApplicants"
+      },
       "TelephonyProvider": {
         "type": "string",
         "enum": [
@@ -38893,6 +39160,46 @@
           "maximum_accent_strength"
         ],
         "title": "VoiceGenerationParameterResponseModel"
+      },
+      "VoiceMailDetectionResultSuccessModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "voicemail_detection_success",
+            "const": "voicemail_detection_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "voicemail_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voicemail Message"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "title": "VoiceMailDetectionResultSuccessModel"
       },
       "VoicePreviewResponseModel": {
         "type": "object",
