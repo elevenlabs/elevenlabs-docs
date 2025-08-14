@@ -81,38 +81,39 @@ Using a plan is optional, but it can be used to generate more complex music by g
 A composition plan can be generated from a prompt by using the API.
 
 <CodeBlocks>
-```python
-from elevenlabs.client import ElevenLabs
-from elevenlabs import play
-import os
-from dotenv import load_dotenv
-load_dotenv()
+    ```python
+    from elevenlabs.client import ElevenLabs
+    from elevenlabs import play
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
 
-elevenlabs = ElevenLabs(
+    elevenlabs = ElevenLabs(
     api_key=os.getenv("ELEVENLABS_API_KEY"),
-)
+    )
 
-composition_plan = elevenlabs.music.composition_plan.create(
+    composition_plan = elevenlabs.music.composition_plan.create(
     prompt="Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
     music_length_ms=10000,
-)
+    )
 
-print(composition_plan)
-```
+    print(composition_plan)
 
-```typescript
-import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
-import "dotenv/config";
+    ```
 
-const elevenlabs = new ElevenLabsClient();
+    ```typescript
+    import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+    import "dotenv/config";
 
-const compositionPlan = await elevenlabs.music.compositionPlan.create({
-  prompt: "Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
-  musicLengthMs: 10000,
-});
+    const elevenlabs = new ElevenLabsClient();
 
-console.log(JSON.stringify(compositionPlan, null, 2));
-```
+    const compositionPlan = await elevenlabs.music.compositionPlan.create({
+    prompt: "Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
+    musicLengthMs: 10000,
+    });
+
+    console.log(JSON.stringify(compositionPlan, null, 2));
+    ```
 
 </CodeBlocks>
 
@@ -177,23 +178,23 @@ The above will generate a composition plan similar to the following:
 A composition plan can be used to generate music by passing it to the `compose` method.
 
 <CodeBlocks>
-```python
-# You can pass in composition_plan or prompt, but not both.
-composition = elevenlabs.music.compose(
-    composition_plan=composition_plan,
-)
+    ```python
+    # You can pass in composition_plan or prompt, but not both.
+    composition = elevenlabs.music.compose(
+        composition_plan=composition_plan,
+    )
 
-play(composition)
-```
+    play(composition)
+    ```
 
-```typescript
-// You can pass in compositionPlan or prompt, but not both.
-const composition = await elevenlabs.music.compose({
-  compositionPlan,
-});
+    ```typescript
+    // You can pass in compositionPlan or prompt, but not both.
+    const composition = await elevenlabs.music.compose({
+    compositionPlan,
+    });
 
-await play(composition);
-```
+    await play(composition);
+    ```
 
 </CodeBlocks>
 
@@ -202,28 +203,28 @@ await play(composition);
 For each music generation a composition plan is created from the prompt. You can opt to retrieve this plan by using the detailed response endpoint.
 
 <CodeBlocks>
-```python
-track_details = elevenlabs.music.compose_detailed(
-    prompt="Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
-    music_length_ms=10000,
-)
+    ```python
+    track_details = elevenlabs.music.compose_detailed(
+        prompt="Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
+        music_length_ms=10000,
+    )
 
-print(track_details.composition_plan)
+    print(track_details.composition_plan)
 
-# track_details.audio_base64 contains the audio as a base64 string
-```
+    # track_details.audio_base64 contains the audio as a base64 string
+    ```
 
-```typescript
-const trackDetails = await elevenlabs.music.composeDetailed({
-  prompt:
-    'Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.',
-  musicLengthMs: 10000,
-});
+    ```typescript
+    const trackDetails = await elevenlabs.music.composeDetailed({
+    prompt:
+        'Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.',
+    musicLengthMs: 10000,
+    });
 
-console.log(JSON.stringify(trackDetails.compositionPlan, null, 2));
+    console.log(JSON.stringify(trackDetails.compositionPlan, null, 2));
 
-// trackDetails.audioBase64 contains the audio as a base64 string
-```
+    // trackDetails.audioBase64 contains the audio as a base64 string
+    ```
 
 </CodeBlocks>
 
