@@ -7491,6 +7491,24 @@
             }
           },
           {
+            "name": "aggregation_bucket_size",
+            "in": "query",
+            "description": "Aggregation bucket size in seconds. Overrides the aggregation interval.",
+            "required": false,
+            "schema": {
+              "description": "Aggregation bucket size in seconds. Overrides the aggregation interval.",
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Aggregation Bucket Size"
+            }
+          },
+          {
             "name": "metric",
             "in": "query",
             "description": "Which metric to aggregate.",
@@ -20328,7 +20346,7 @@
             "title": "Model Id"
           },
           "file": {
-            "description": "The file to transcribe. All major audio and video formats are supported. Exactly one of the file or cloud_storage_url parameters must be provided. The file size must be less than 3GB.",
+            "description": "The file to transcribe. All major audio and video formats are supported. Exactly one of the file or cloud_storage_url parameters must be provided. The file size must be less than 3.0GB.",
             "anyOf": [
               {
                 "type": "string",
@@ -20923,7 +20941,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -21114,7 +21132,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -21305,7 +21323,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -21475,7 +21493,7 @@
             "title": "Use Pvc As Ivc"
           },
           "apply_text_normalization": {
-            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. Cannot be turned on for 'eleven_turbo_v2_5' or 'eleven_flash_v2_5' models.",
+            "description": "This parameter controls text normalization with three modes: 'auto', 'on', and 'off'. When set to 'auto', the system will automatically decide whether to apply text normalization (e.g., spelling out numbers). With 'on', text normalization will always be applied, while with 'off', it will be skipped. For 'eleven_turbo_v2_5' and 'eleven_flash_v2_5' models, text normalization can only be enabled with Enterprise plans.",
             "type": "string",
             "default": "auto",
             "enum": [
@@ -22128,7 +22146,8 @@
           "request_queue",
           "region",
           "subresource_id",
-          "reporting_workspace_id"
+          "reporting_workspace_id",
+          "has_api_key"
         ],
         "title": "BreakdownTypes"
       },
@@ -24796,6 +24815,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/PlayDTMFResultErrorModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/VoiceMailDetectionResultSuccessModel"
                   }
                 ],
                 "discriminator": {
@@ -24810,7 +24832,8 @@
                     "transfer_to_agent_success": "#/components/schemas/TransferToAgentToolResultSuccessModel",
                     "transfer_to_number_error": "#/components/schemas/TransferToNumberResultErrorModel",
                     "transfer_to_number_sip_success": "#/components/schemas/TransferToNumberResultSipSuccessModel",
-                    "transfer_to_number_twilio_success": "#/components/schemas/TransferToNumberResultTwilioSuccessModel"
+                    "transfer_to_number_twilio_success": "#/components/schemas/TransferToNumberResultTwilioSuccessModel",
+                    "voicemail_detection_success": "#/components/schemas/VoiceMailDetectionResultSuccessModel"
                   }
                 }
               },
@@ -31336,7 +31359,8 @@
           "ttfb_avg",
           "ttfb_p95",
           "fiat_units_spent",
-          "concurrency"
+          "concurrency",
+          "concurrency_average"
         ],
         "title": "MetricType"
       },
@@ -38893,6 +38917,46 @@
           "maximum_accent_strength"
         ],
         "title": "VoiceGenerationParameterResponseModel"
+      },
+      "VoiceMailDetectionResultSuccessModel": {
+        "type": "object",
+        "properties": {
+          "result_type": {
+            "type": "string",
+            "default": "voicemail_detection_success",
+            "const": "voicemail_detection_success",
+            "title": "Result Type"
+          },
+          "status": {
+            "type": "string",
+            "default": "success",
+            "const": "success",
+            "title": "Status"
+          },
+          "voicemail_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voicemail Message"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "title": "VoiceMailDetectionResultSuccessModel"
       },
       "VoicePreviewResponseModel": {
         "type": "object",
