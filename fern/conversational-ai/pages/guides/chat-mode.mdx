@@ -34,19 +34,6 @@ This configuration ensures that:
 - All communication happens through text messages
 - The conversation operates in a chat-like interface mode
 
-### With Signed URL
-
-When using authentication with a signed URL, include the same override:
-
-```javascript
-const conversation = await Conversation.startSession({
-  signedUrl: signedUrl,
-  conversation: {
-    textOnly: true,
-  },
-});
-```
-
 ## Python SDK
 
 ### Text-Only Configuration
@@ -94,41 +81,43 @@ conversation.start_session()
 ### Example: Handling Agent Responses
 
 <Tabs>
-<Tab title="JavaScript">
-```javascript
-const conversation = await Conversation.startSession({
-  agentId: '<your-agent-id>',
-  conversation: {
-    textOnly: true,
-  },
-  // Critical: Handle agent responses
-  onMessage: (message) => {
-    if (message.type === 'agent_response') {
-      console.log('Agent:', message.text);
-      // Display in your UI
-      displayAgentMessage(message.text);
-    }
-  },
-});
+  <Tab title="JavaScript">
+  ```javascript
+  const conversation = await Conversation.startSession({
+    agentId: '<your-agent-id>',
+    overrides: {
+      conversation: {
+        textOnly: true,
+      },
+    },
+    // Critical: Handle agent responses
+    onMessage: (message) => {
+      if (message.type === 'agent_response') {
+        console.log('Agent:', message.text);
+        // Display in your UI
+        displayAgentMessage(message.text);
+      }
+    },
+  });
+  ```
+  </Tab>
+  <Tab title="Python">
+  ```python
+  def handle_agent_response(response):
+      """Critical handler for displaying agent messages"""
+      print(f"Agent: {response}")  # Update your UI with the response
+      update_chat_ui(response)
+
+  conversation = Conversation(
+    elevenlabs,
+    agent_id,
+    conversation_overrides={"conversation": {"textOnly": True}},
+    callback_agent_response=handle_agent_response,
+  )
+
+  conversation.start_session()
+
 ```
-</Tab>
-
-<Tab title="Python">
-```python
-def handle_agent_response(response):
-    """Critical handler for displaying agent messages"""
-    print(f"Agent: {response}")
-    # Update your UI with the response
-    update_chat_ui(response)
-
-conversation = Conversation(
-elevenlabs,
-agent_id,
-conversation_overrides={"textOnly": True}, # This callback is essential for chat mode
-callback_agent_response=handle_agent_response,
-)
-
-````
 </Tab>
 </Tabs>
 
@@ -137,23 +126,23 @@ callback_agent_response=handle_agent_response,
 In chat mode, you'll need to send user messages programmatically instead of through audio:
 
 <Tabs>
-<Tab title="JavaScript">
-```javascript
-// Send a text message to the agent
-conversation.sendMessage({
-  type: 'user_text',
-  text: 'Hello, how can you help me today?'
-});
-````
 
-</Tab>
+  <Tab title="JavaScript">
+  ```javascript
+  // Send a text message to the agent
+  conversation.sendUserMessage({
+    text: 'Hello, how can you help me today?',
+  });
+  ```
+  </Tab>
 
-<Tab title="Python">
-```python
-# Send a text message to the agent
-conversation.send_text_input("Hello, how can you help me today?")
-```
-</Tab>
+  <Tab title="Python">
+  ```python
+  # Send a text message to the agent
+  conversation.send_user_message("Hello, how can you help me today?")
+  ```
+  </Tab>
+
 </Tabs>
 
 ## Use Cases
@@ -175,14 +164,6 @@ If the agent's responses are not appearing:
 1. Verify the `agent_response` callback is properly configured
 2. Check that the agent is configured for chat mode or the `textOnly` override is set
 3. Ensure the WebSocket connection is established successfully
-
-### Message Flow Issues
-
-For proper message flow:
-
-1. Wait for agent responses before sending the next user message
-2. Handle connection status changes appropriately
-3. Implement proper error handling for failed messages
 
 ## Next Steps
 
