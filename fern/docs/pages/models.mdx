@@ -245,6 +245,20 @@ In practice this typically only adds ~50ms of latency.
 
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
 
+### API requests per minute vs concurrent requests
+
+It's important to understand that **API requests per minute** and **concurrent requests** are different metrics that depend on your usage patterns.
+
+API requests per minute can be different from concurrent requests since it depends on the length of time for each request and how the requests are batched.
+
+**Example 1: Spaced requests**
+If you had 180 requests per minute that each took 1 second to complete and you sent them each 0.33 seconds apart, the max concurrent requests would be 3 and the average would be 3 since there would always be 3 in flight.
+
+**Example 2: Batched requests**
+However, if you had a different usage pattern such as 180 requests per minute that each took 3 seconds to complete but all fired at once, the max concurrent requests would be 180 and the average would be 9 (first 3 seconds of the minute saw 180 requests at once, final 57 seconds saw 0 requests).
+
+Since our system cares about concurrency, requests per minute matter less than how long each of the requests take and the pattern of when they are sent.
+
 How endpoint requests are made impacts concurrency limits:
 
 - With HTTP, each request counts individually toward your concurrency limit.
