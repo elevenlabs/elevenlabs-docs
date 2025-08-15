@@ -190,6 +190,65 @@ speak with a human agent, use the end_call tool to end the conversation.
 4. **Data collection**: Data collection field is populated
 5. **Genesys flow**: Checks output variable and routes to billing queue
 
+## Setting participant data using output variables
+
+You can pass conversation context and summaries from your ElevenLabs agent to human agents in Genesys using participant data attributes. This enables human agents to see relevant conversation information when they receive transferred calls.
+
+### Configuration process
+
+<Steps>
+
+<Step title="Configure summary variable in data collection">
+  In your ElevenLabs agent, configure a data collection item to capture conversation summaries or relevant context. For example:
+  
+  - **Variable name**: `call_summary`
+  - **Type**: String
+  - **Description**: "Summary of the conversation including key points and customer needs"
+</Step>
+
+<Step title="Set as session variable output">
+  In your Genesys Architect flow, the data collection output will automatically be available as an output session variable after the ElevenLabs conversation ends.
+</Step>
+
+<Step title="Pass as participant data attribute">
+  In your Genesys flow, after the Audio Connector action, use the "Set Participant Data" action to pass the conversation context:
+  
+  1. Add a "Set Participant Data" action
+  2. Configure the attribute mapping:
+     - **Attribute name**: `summaryText`
+     - **Value**: `Flow.call_summary.summaryText` (or your configured variable name)
+</Step>
+
+<Step title="Update agent script">
+  Create or update your agent-facing script in Genesys to display the participant data attribute:
+  
+  1. Access your agent script configuration
+  2. Add a display element that references the `summaryText` attribute
+  3. Position it prominently so agents can see the context immediately
+</Step>
+
+</Steps>
+
+### Example implementation
+
+```
+Data Collection Configuration:
+- Variable: call_summary
+- Type: String
+- Description: "Conversation summary for human agent handoff"
+
+Genesys Flow Configuration:
+Set Participant Data:
+- summaryText = Flow.call_summary.summaryText
+
+Agent Script Display:
+- Shows summaryText when call is routed and accepted by agent
+```
+
+### Result
+
+When a call is transferred to a human agent, they will see the conversation summary in their agent interface, providing immediate context about the customer's needs and previous interaction with the AI agent.
+
 ## Limitations and unsupported features
 
 The following tools and features are not supported in the Genesys integration:
