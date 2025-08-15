@@ -9346,7 +9346,7 @@
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
         "summary": "Speech To Text",
-        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks. When use_multi_channel is true and the provided audio has multiple channels, a 'transcripts' object with separate transcripts for each channel is returned. Otherwise, returns a single transcript.",
+        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks. When use_multi_channel is true and the provided audio has multiple channels, a 'transcripts' object with separate transcripts for each channel is returned. Otherwise, returns a single transcript. The optional webhook_metadata parameter allows you to attach custom data that will be included in webhook responses for request correlation and tracking.",
         "parameters": [
           {
             "name": "enable_logging",
@@ -20523,6 +20523,25 @@
             "type": "boolean",
             "default": false,
             "title": "Use Multi Channel"
+          },
+          "webhook_metadata": {
+            "description": "Optional metadata to be included in the webhook response. This should be a JSON string representing an object with a maximum depth of 2 levels and maximum size of 16KB. Useful for tracking internal IDs, job references, or other contextual information.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "{\"user_id\": \"123\", \"session_id\": \"abc-def-ghi\"}",
+              "{\"request_type\": \"interview\", \"participant_name\": \"John Doe\"}"
+            ],
+            "title": "Webhook Metadata"
           }
         },
         "required": [
