@@ -118,6 +118,32 @@ Client events are essential for maintaining the real-time nature of conversation
 
   </Accordion>
 
+  <Accordion title="internal_tentative_agent_response">
+    - Contains partial agent message
+    - Sent before first audio chunk
+    - Useful for streaming text alongside audio
+
+    ```javascript
+    // Example internal tentative agent response event structure
+    {
+      "type": "internal_tentative_agent_response",
+      "tentative_agent_response_internal_event": {
+        "tentative_agent_response": "I'd be happy to help with your voice cloning project..."
+      }
+    }
+    ```
+
+    ```javascript
+    // Example tentative response handler
+    websocket.on('internal_tentative_agent_response', (event) => {
+      const { tentative_agent_response_internal_event } = event;
+      const { tentative_agent_response } = tentative_agent_response_internal_event;
+      displayTentativeMessage(tentative_agent_response);
+    });
+    ```
+
+  </Accordion>
+
   <Accordion title="agent_response">
     - Contains complete agent message
     - Sent with first audio chunk
