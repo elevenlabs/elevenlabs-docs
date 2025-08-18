@@ -1,11 +1,13 @@
 'use server';
 
+import { CompositionPlan } from '@/app/actions/create-composition-plan';
 import { getElevenLabsClient, handleError, streamToBase64 } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';
 
 export interface CreateMusicRequest {
-  prompt: string;
+  prompt?: string;
   musicLengthMs: number;
+  compositionPlan?: CompositionPlan;
 }
 
 export async function createMusic(
@@ -17,10 +19,13 @@ export async function createMusic(
 
   try {
     const client = clientResult.value;
-    const stream = await client.music.compose({
-      prompt: request.prompt,
-      musicLengthMs: request.musicLengthMs,
-    });
+
+    // Use composition plan if provided, otherwise use prompt
+    const composeParams = request.compositionPlan
+      ? { compositionPlan: request.compositionPlan }
+      : { prompt: request.prompt!, musicLengthMs: request.musicLengthMs };
+
+    const stream = await client.music.compose(composeParams);
 
     const audioBase64 = await streamToBase64(stream);
 
