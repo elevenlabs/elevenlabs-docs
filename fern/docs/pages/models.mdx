@@ -5,8 +5,18 @@ description: Learn about the models that power the ElevenLabs API.
 
 ## Flagship models
 
+### Text to Speech
+
 <Markdown src="/snippets/tts-models.mdx" />
+
+### Speech to Text
+
 <Markdown src="/snippets/stt-models.mdx" />
+
+### Music
+
+<Markdown src="/snippets/music-models.mdx" />
+
 <div className="text-center">
   <div>[Pricing](https://elevenlabs.io/pricing/api)</div>
 </div>
@@ -226,6 +236,25 @@ Key features:
 
 Read more about Scribe v1 [here](/docs/capabilities/speech-to-text).
 
+## Eleven Music
+
+Eleven Music is our studio-grade music generation model. It allows you to generate music with natural language prompts in any style.
+
+This model is excellent for the following scenarios:
+
+- **Game Soundtracks**: Create immersive soundtracks for games
+- **Podcast Backgrounds**: Enhance podcasts with professional music
+- **Marketing**: Add background music to ad reels
+
+Key features:
+
+- Complete control over genre, style, and structure
+- Vocals or just instrumental
+- Multilingual, including English, Spanish, German, Japanese and more
+- Edit the sound and lyrics of individual sections or the whole song
+
+Read more about Eleven Music [here](/docs/capabilities/music).
+
 ## Concurrency and priority
 
 Your subscription plan determines how many requests can be processed simultaneously and the priority level of your requests in the queue.
@@ -233,15 +262,15 @@ Speech to Text has an elevated concurrency limit.
 Once the concurrency limit is met, subsequent requests are processed in a queue alongside lower-priority requests.
 In practice this typically only adds ~50ms of latency.
 
-| Plan       | Concurrency Limit<br /> (Multilingual v2) | Concurrency Limit<br /> (Turbo & Flash) | STT Concurrency Limit | Priority level |
-| ---------- | ----------------------------------------- | --------------------------------------- | --------------------- | -------------- |
-| Free       | 2                                         | 4                                       | 10                    | 3              |
-| Starter    | 3                                         | 6                                       | 15                    | 4              |
-| Creator    | 5                                         | 10                                      | 25                    | 5              |
-| Pro        | 10                                        | 20                                      | 50                    | 5              |
-| Scale      | 15                                        | 30                                      | 75                    | 5              |
-| Business   | 15                                        | 30                                      | 75                    | 5              |
-| Enterprise | Elevated                                  | Elevated                                | Elevated              | Highest        |
+| Plan       | Concurrency Limit<br /> (Multilingual v2) | Concurrency Limit<br /> (Turbo & Flash) | STT Concurrency Limit | Music Concurrency limit | Priority level |
+| ---------- | ----------------------------------------- | --------------------------------------- | --------------------- | ----------------------- | -------------- |
+| Free       | 2                                         | 4                                       | 10                    | N/A                     | 3              |
+| Starter    | 3                                         | 6                                       | 15                    | 2                       | 4              |
+| Creator    | 5                                         | 10                                      | 25                    | 2                       | 5              |
+| Pro        | 10                                        | 20                                      | 50                    | 2                       | 5              |
+| Scale      | 15                                        | 30                                      | 75                    | 3                       | 5              |
+| Business   | 15                                        | 30                                      | 75                    | 3                       | 5              |
+| Enterprise | Elevated                                  | Elevated                                | Elevated              | Highest                 | Highest        |
 
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
 
