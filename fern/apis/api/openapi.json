@@ -14921,6 +14921,66 @@
         "x-fern-sdk-method-name": "delete"
       }
     },
+    "/v1/music/songs/{song_id}/claim": {
+      "get": {
+        "operationId": "claim_song",
+        "summary": "Claim Song",
+        "description": "Claims an anonymously generated song for a user",
+        "parameters": [
+          {
+            "name": "song_id",
+            "in": "path",
+            "description": "The song_id of the song to get, delete, or get status updates for.",
+            "required": true,
+            "schema": {
+              "description": "The song_id of the song to get, delete, or get status updates for.",
+              "type": "string",
+              "title": "Song Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimSongResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/voices/pvc": {
       "post": {
         "operationId": "Create_PVC_voice_v1_voices_pvc_post",
@@ -23370,6 +23430,20 @@
         ],
         "title": "CharacterAlignmentResponseModel"
       },
+      "ClaimSongResponseModel": {
+        "description": "Response model for claiming a song.",
+        "type": "object",
+        "properties": {
+          "chat_id": {
+            "type": "string",
+            "title": "Chat Id"
+          }
+        },
+        "required": [
+          "chat_id"
+        ],
+        "title": "ClaimSongResponseModel"
+      },
       "ClientEvent": {
         "type": "string",
         "enum": [
@@ -23395,6 +23469,13 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -23433,13 +23514,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "client",
-            "const": "client",
-            "title": "Type"
           },
           "parameters": {
             "description": "Schema for any parameters to pass to the client",
@@ -23477,6 +23551,13 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -23515,13 +23596,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "client",
-            "const": "client",
-            "title": "Type"
           },
           "parameters": {
             "description": "Schema for any parameters to pass to the client",
@@ -24472,6 +24546,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Input"
                 }
               ]
             },
@@ -24608,6 +24685,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Output"
                 }
               ]
             },
@@ -25070,6 +25150,128 @@
           "url"
         ],
         "title": "ConversationHistoryTranscriptToolCallWebhookDetails"
+      },
+      "ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Input": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result_value": {
+            "type": "string",
+            "title": "Result Value"
+          },
+          "is_error": {
+            "type": "boolean",
+            "title": "Is Error"
+          },
+          "tool_has_been_called": {
+            "type": "boolean",
+            "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
+          },
+          "type": {
+            "type": "string",
+            "const": "workflow",
+            "title": "Type"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkflowToolResponseModel-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "result_value",
+          "is_error",
+          "tool_has_been_called",
+          "type"
+        ],
+        "title": "ConversationHistoryTranscriptWorkflowToolsResultCommonModel"
+      },
+      "ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Output": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result_value": {
+            "type": "string",
+            "title": "Result Value"
+          },
+          "is_error": {
+            "type": "boolean",
+            "title": "Is Error"
+          },
+          "tool_has_been_called": {
+            "type": "boolean",
+            "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
+          },
+          "type": {
+            "type": "string",
+            "const": "workflow",
+            "title": "Type"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkflowToolResponseModel-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "result_value",
+          "is_error",
+          "tool_has_been_called",
+          "type"
+        ],
+        "title": "ConversationHistoryTranscriptWorkflowToolsResultCommonModel"
       },
       "ConversationHistoryTwilioPhoneCallModel": {
         "type": "object",
@@ -31049,6 +31251,12 @@
         "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -31085,12 +31293,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "type": "string",
-            "default": "mcp",
-            "const": "mcp",
-            "title": "Type"
           },
           "integration_type": {
             "description": "The type of MCP tool",
@@ -31161,6 +31363,12 @@
         "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -31197,12 +31405,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "type": "string",
-            "default": "mcp",
-            "const": "mcp",
-            "title": "Type"
           },
           "integration_type": {
             "description": "The type of MCP tool",
@@ -36965,6 +37167,13 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -37001,13 +37210,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "system",
-            "const": "system",
-            "title": "Type"
           },
           "params": {
             "discriminator": {
@@ -37067,6 +37269,13 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -37103,13 +37312,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "system",
-            "const": "system",
-            "title": "Type"
           },
           "params": {
             "discriminator": {
@@ -37668,7 +37870,8 @@
           "system",
           "webhook",
           "client",
-          "mcp"
+          "mcp",
+          "workflow"
         ],
         "title": "ToolType"
       },
@@ -40517,6 +40720,13 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -40555,13 +40765,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "webhook",
-            "const": "webhook",
-            "title": "Type"
           },
           "api_schema": {
             "description": "The schema for the outgoing webhoook, including parameters and URL specification",
@@ -40587,6 +40790,13 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -40625,13 +40835,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "webhook",
-            "const": "webhook",
-            "title": "Type"
           },
           "api_schema": {
             "description": "The schema for the outgoing webhoook, including parameters and URL specification",
@@ -42313,6 +42516,253 @@
           }
         },
         "title": "WidgetTextContents"
+      },
+      "WorkflowToolEdgeStepModel": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "edge",
+            "const": "edge",
+            "title": "Type"
+          },
+          "edge_id": {
+            "type": "string",
+            "title": "Edge Id"
+          },
+          "target_node_id": {
+            "type": "string",
+            "title": "Target Node Id"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "edge_id",
+          "target_node_id"
+        ],
+        "title": "WorkflowToolEdgeStepModel"
+      },
+      "WorkflowToolMaxIterationsExceededStepModel": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "max_iterations_exceeded",
+            "const": "max_iterations_exceeded",
+            "title": "Type"
+          },
+          "max_iterations": {
+            "type": "integer",
+            "title": "Max Iterations"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "max_iterations"
+        ],
+        "title": "WorkflowToolMaxIterationsExceededStepModel"
+      },
+      "WorkflowToolNestedToolsStepModel-Input": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "nested_tools",
+            "const": "nested_tools",
+            "title": "Type"
+          },
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallCommonModel"
+            },
+            "title": "Requests"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptOtherToolsResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Input"
+                }
+              ]
+            },
+            "title": "Results"
+          },
+          "is_successful": {
+            "type": "boolean",
+            "title": "Is Successful"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "node_id",
+          "requests",
+          "results",
+          "is_successful"
+        ],
+        "title": "WorkflowToolNestedToolsStepModel"
+      },
+      "WorkflowToolNestedToolsStepModel-Output": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "nested_tools",
+            "const": "nested_tools",
+            "title": "Type"
+          },
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallCommonModel"
+            },
+            "title": "Requests"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptOtherToolsResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Output"
+                }
+              ]
+            },
+            "title": "Results"
+          },
+          "is_successful": {
+            "type": "boolean",
+            "title": "Is Successful"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "node_id",
+          "requests",
+          "results",
+          "is_successful"
+        ],
+        "title": "WorkflowToolNestedToolsStepModel"
+      },
+      "WorkflowToolResponseModel-Input": {
+        "description": "A common model for workflow tool responses.",
+        "type": "object",
+        "properties": {
+          "final_transfer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolResultSuccessModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowToolEdgeStepModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolNestedToolsStepModel-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "edge": "#/components/schemas/WorkflowToolEdgeStepModel",
+                  "max_iterations_exceeded": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel",
+                  "nested_tools": "#/components/schemas/WorkflowToolNestedToolsStepModel-Input"
+                }
+              }
+            },
+            "title": "Steps"
+          }
+        },
+        "title": "WorkflowToolResponseModel"
+      },
+      "WorkflowToolResponseModel-Output": {
+        "description": "A common model for workflow tool responses.",
+        "type": "object",
+        "properties": {
+          "final_transfer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolResultSuccessModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowToolEdgeStepModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolNestedToolsStepModel-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "edge": "#/components/schemas/WorkflowToolEdgeStepModel",
+                  "max_iterations_exceeded": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel",
+                  "nested_tools": "#/components/schemas/WorkflowToolNestedToolsStepModel-Output"
+                }
+              }
+            },
+            "title": "Steps"
+          }
+        },
+        "title": "WorkflowToolResponseModel"
       },
       "WorkspaceApiKeyListResponseModel": {
         "type": "object",
