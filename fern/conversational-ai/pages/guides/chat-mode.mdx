@@ -68,64 +68,61 @@ You can configure an agent for text-only mode when creating it via the API. This
   For complete API reference and all available configuration options, see the [text only field in Create Agent API documentation](/docs/api-reference/agents/create#request.body.conversation_config.conversation.text_only).
 </Info>
 
-## JavaScript SDK
+## Runtime Overrides for Text-Only Mode
 
-### Text-Only Configuration
+To enable chat mode at runtime using SDK overrides (rather than configuring the agent), you can use the `textOnly` override in your conversation configuration:
 
-To use the JavaScript SDK in chat mode with text-only conversations, add the `textOnly` override to your conversation configuration:
-
-```javascript
-const conversation = await Conversation.startSession({
-  agentId: '<your-agent-id>',
-  overrides: {
-    conversation: {
-      textOnly: true,
+<Tabs>
+  <Tab title="JavaScript">
+  ```javascript
+  const conversation = await Conversation.startSession({
+    agentId: '<your-agent-id>',
+    overrides: {
+      conversation: {
+        textOnly: true,
+      },
     },
-  },
-});
-```
+  });
+  ```
+  </Tab>
+  <Tab title="Python">
+  ```python
+  from elevenlabs.client import ElevenLabs
+  from elevenlabs.conversational_ai.conversation import Conversation, ConversationInitiationData
+
+  elevenlabs = ElevenLabs(api_key=api_key)
+
+  # Configure for text-only mode with proper structure
+  conversation_override = {
+      "conversation": {
+          "text_only": True
+      }
+  }
+
+  config = ConversationInitiationData(
+      conversation_config_override=conversation_override
+  )
+
+  conversation = Conversation(
+      elevenlabs,
+      agent_id,
+      requires_auth=bool(api_key),
+      config=config,
+      # Important: Ensure agent_response callback is set
+      callback_agent_response=lambda response: print(f"Agent: {response}"),
+      callback_user_transcript=lambda transcript: print(f"User: {transcript}"),
+  )
+
+  conversation.start_session()
+  ```
+  </Tab>
+</Tabs>
 
 This configuration ensures that:
 
 - No audio input/output is used
 - All communication happens through text messages
 - The conversation operates in a chat-like interface mode
-
-## Python SDK
-
-### Text-Only Configuration
-
-For the Python SDK, configure the conversation for text-only mode:
-
-```python
-from elevenlabs.client import ElevenLabs
-from elevenlabs.conversational_ai.conversation import Conversation, ConversationInitiationData
-
-elevenlabs = ElevenLabs(api_key=api_key)
-
-# Configure for text-only mode with proper structure
-conversation_override = {
-    "conversation": {
-        "text_only": True
-    }
-}
-
-config = ConversationInitiationData(
-    conversation_config_override=conversation_override
-)
-
-conversation = Conversation(
-    elevenlabs,
-    agent_id,
-    requires_auth=bool(api_key),
-    config=config,
-    # Important: Ensure agent_response callback is set
-    callback_agent_response=lambda response: print(f"Agent: {response}"),
-    callback_user_transcript=lambda transcript: print(f"User: {transcript}"),
-)
-
-conversation.start_session()
-```
 
 ## Important Notes
 
