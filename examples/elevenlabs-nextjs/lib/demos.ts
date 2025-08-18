@@ -1,4 +1,4 @@
-import { AudioLines, MessageSquareQuote, MessagesSquare, Sparkles } from 'lucide-react';
+import { AudioLines, MessageSquareQuote, MessagesSquare, Music, Sparkles } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 type Demo = {
@@ -30,6 +30,12 @@ export const demos: { name: string; items: Demo[] }[] = [
         icon: Sparkles,
         slug: 'sound-effects',
         description: 'Turn text into cinematic sound effects.',
+      },
+      {
+        name: 'Music',
+        icon: Music,
+        slug: 'music',
+        description: 'Generate music compositions from text prompts.',
       },
       {
         name: 'Conversational AI',

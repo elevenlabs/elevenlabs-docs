@@ -33,3 +33,10 @@ export const ttsSchema = z.object({
 });
 
 export type TtsInput = z.infer<typeof ttsSchema>;
+
+export const musicSchema = z.object({
+  prompt: z.string().min(1, 'Prompt is required').max(500, 'Prompt must be 500 characters or less'),
+  musicLength: z.number().min(5000).max(300000).default(30000), // 5 seconds to 5 minutes in milliseconds
+});
+
+export type MusicInput = z.infer<typeof musicSchema>;
