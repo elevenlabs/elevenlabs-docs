@@ -68,9 +68,64 @@ You can configure an agent for text-only mode when creating it via the API. This
   For complete API reference and all available configuration options, see the [text only field in Create Agent API documentation](/docs/api-reference/agents/create#request.body.conversation_config.conversation.text_only).
 </Info>
 
+1. **Agent Configuration**: Configure your agent for text-only mode when creating it via the API
+2. **Runtime Overrides**: Use SDK overrides to enforce text-only conversations programmatically
+
+This guide covers both approaches and how to implement chat mode across different SDKs.
+
+## Creating Text-Only Agents
+
+You can configure an agent for text-only mode when creating it via the API. This sets the default behavior for all conversations with that agent.
+
+<Tabs>
+  <Tab title="Python">
+  ```python
+  from elevenlabs import ConversationalConfig, ConversationConfig, ElevenLabs
+
+  client = ElevenLabs(
+      api_key="YOUR_API_KEY",
+  )
+
+  # Create agent with text-only configuration
+  agent = client.conversational_ai.agents.create(
+      name="My Chat Agent",
+      conversation_config=ConversationalConfig(
+          conversation=ConversationConfig(
+              text_only=True
+          )
+      ),
+  )
+  print(agent)
+  ```
+  </Tab>
+  <Tab title="JavaScript">
+  ```javascript
+  import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+
+  const client = new ElevenLabsClient({ apiKey: "YOUR_API_KEY" });
+
+  // Create agent with text-only configuration
+  const agent = await client.conversationalAi.agents.create({
+      name: "My Chat Agent",
+      conversationConfig: {
+          conversation: {
+              textOnly: true
+          }
+      }
+  });
+  
+  console.log(agent);
+  ```
+  </Tab>
+</Tabs>
+
+<Info>
+  For complete API reference and all available configuration options, see the [text only field in Create Agent API documentation](/docs/api-reference/agents/create#request.body.conversation_config.conversation.text_only).
+</Info>
+
 ## Runtime Overrides for Text-Only Mode
 
-To enable chat mode at runtime using SDK overrides (rather than configuring the agent), you can use the `textOnly` override in your conversation configuration:
+To enable chat mode at runtime using overrides (rather than configuring at the agent level), you can use the `textOnly` override in your conversation configuration:
 
 <Tabs>
   <Tab title="JavaScript">
@@ -89,8 +144,6 @@ To enable chat mode at runtime using SDK overrides (rather than configuring the 
   ```python
   from elevenlabs.client import ElevenLabs
   from elevenlabs.conversational_ai.conversation import Conversation, ConversationInitiationData
-
-  elevenlabs = ElevenLabs(api_key=api_key)
 
   # Configure for text-only mode with proper structure
   conversation_override = {
