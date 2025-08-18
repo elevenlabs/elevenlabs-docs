@@ -864,13 +864,15 @@ paths:
   /v1/shared-sound-generations/{sound_effect_generation_id}/purchase:
     post:
       x-fern-ignore: true
+  /v1/music/plan:
+    post:
+      description: Create a composition plan for music generation. Usage of this endpoint does not cost any credits.
   /v1/music/detailed:
     post:
       x-fern-examples:
         - request:
-            body:
-              prompt: 'My Song'
-              music_length_ms: 10000
+            prompt: 'A prompt for music generation'
+            music_length_ms: 10000
           response:
             body:
               composition_plan:
