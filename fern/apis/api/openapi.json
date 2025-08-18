@@ -14921,66 +14921,6 @@
         "x-fern-sdk-method-name": "delete"
       }
     },
-    "/v1/music/songs/{song_id}/claim": {
-      "get": {
-        "summary": "Claim Song",
-        "description": "Claims an anonymously generated song for a user",
-        "operationId": "claim_song",
-        "parameters": [
-          {
-            "name": "song_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The song_id of the song to get, delete, or get status updates for.",
-              "title": "Song Id"
-            },
-            "description": "The song_id of the song to get, delete, or get status updates for."
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "title": "Xi-Api-Key"
-            },
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClaimSongResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/music/plan": {
       "post": {
         "tags": [
@@ -16529,6 +16469,22 @@
           "verification"
         ],
         "x-fern-sdk-method-name": "request"
+      }
+    },
+    "/docs": {
+      "get": {
+        "summary": "Redirect To Mintlify",
+        "operationId": "redirect_to_mintlify",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -24023,20 +23979,6 @@
           "character_end_times_seconds"
         ],
         "title": "CharacterAlignmentResponseModel"
-      },
-      "ClaimSongResponseModel": {
-        "properties": {
-          "chat_id": {
-            "type": "string",
-            "title": "Chat Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "chat_id"
-        ],
-        "title": "ClaimSongResponseModel",
-        "description": "Response model for claiming a song."
       },
       "ClientEvent": {
         "type": "string",
@@ -42587,6 +42529,18 @@
               }
             ],
             "title": "First Message"
+          },
+          "use_rtc": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Rtc",
+            "description": "Whether to use WebRTC for conversation connections"
           }
         },
         "type": "object",
@@ -42603,7 +42557,8 @@
             "fr"
           ],
           "supports_text_only": true,
-          "text_only": false
+          "text_only": false,
+          "use_rtc": false
         }
       },
       "WidgetExpandable": {

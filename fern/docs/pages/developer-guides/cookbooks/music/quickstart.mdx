@@ -192,7 +192,7 @@ A composition plan can be used to generate music by passing it to the `compose` 
     ```typescript
     // You can pass in compositionPlan or prompt, but not both.
     const composition = await elevenlabs.music.compose({
-    compositionPlan,
+        compositionPlan,
     });
 
     await play(composition);
@@ -212,8 +212,9 @@ For each music generation a composition plan is created from the prompt. You can
     )
 
     print(track_details.composition_plan)
+    print(track_details.song_metadata)
 
-    # track_details.audio_base64 contains the audio as a base64 string
+    # track_details.audio contains the audio bytes
     ```
 
     ```typescript
@@ -224,8 +225,9 @@ For each music generation a composition plan is created from the prompt. You can
     });
 
     console.log(JSON.stringify(trackDetails.compositionPlan, null, 2));
+    console.log(JSON.stringify(trackDetails.songMetadata, null, 2));
 
-    // trackDetails.audioBase64 contains the audio as a base64 string
+    // trackDetails.audio contains the audio bytes
     ```
 
 </CodeBlocks>
