@@ -10,7 +10,7 @@ import { Err, Ok, Result } from '@/types';
 
 export async function createTranscription(
   request: BodySpeechToTextV1SpeechToTextPost
-): Promise<Result<SpeechToTextChunkResponseModel & { processingTimeMs: number }>> {
+): Promise<Result<any>> {
   const startTime = performance.now();
   const clientResult = await getElevenLabsClient();
   if (!clientResult.ok) return Err(clientResult.error);

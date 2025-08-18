@@ -1,6 +1,6 @@
 'use server';
 
-import { getElevenLabsClient, handleError } from '@/app/actions/utils';
+import { getElevenLabsClient, handleError, streamToBase64 } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';
 
 export interface CreateMusicRequest {
@@ -33,29 +33,4 @@ export async function createMusic(
   } catch (error) {
     return handleError(error, 'music generation');
   }
-}
-
-async function streamToBase64(audioStream: ReadableStream<Uint8Array>): Promise<string> {
-  const chunks: Uint8Array[] = [];
-  const reader = audioStream.getReader();
-
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
-    }
-  } finally {
-    reader.releaseLock();
-  }
-
-  const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
-  const combined = new Uint8Array(totalLength);
-  let offset = 0;
-  for (const chunk of chunks) {
-    combined.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  return Buffer.from(combined).toString('base64');
 }

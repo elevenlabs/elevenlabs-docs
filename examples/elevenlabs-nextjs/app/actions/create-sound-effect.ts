@@ -2,7 +2,7 @@
 
 import type { CreateSoundEffectRequest } from '@elevenlabs/elevenlabs-js/api';
 
-import { getElevenLabsClient, handleError } from '@/app/actions/utils';
+import { getElevenLabsClient, handleError, streamToBase64 } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';
 
 export async function createSoundEffect(
@@ -27,12 +27,4 @@ export async function createSoundEffect(
   } catch (error) {
     return handleError(error, 'sound effect generation');
   }
-}
-
-async function streamToBase64(audioStream: NodeJS.ReadableStream): Promise<string> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of audioStream) {
-    chunks.push(Buffer.from(chunk));
-  }
-  return Buffer.concat(chunks).toString('base64');
 }

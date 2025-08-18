@@ -21,9 +21,11 @@ export async function streamSpeech(
 
     (async () => {
       try {
-        for await (const chunk of nodeStream) {
-          const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
-          passThrough.write(buffer);
+        const reader = nodeStream.getReader();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          passThrough.write(Buffer.from(value));
         }
         passThrough.end();
       } catch (err) {
