@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Imagery Creative — Tropical Food Media Library</title>
+    <meta name="description" content="Browse tropical food photos & videos. Free downloads after sign-in. Premium originals, shop printables, and courses." />
+    <meta name="theme-color" content="#0b1f14" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <meta property="og:title" content="Imagery Creative — Tropical Food Media Library" />
+    <meta property="og:description" content="Tropical food photos & videos. Free downloads. Premium originals, printables, and courses." />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#browse" data-route>Imagery Creative</a>
+        <nav class="main-nav">
+          <a href="#browse" data-route>Browse</a>
+          <a href="#videos" data-route>Videos</a>
+          <a href="#collections" data-route>Collections</a>
+          <a href="#shop" data-route>Shop</a>
+          <a href="#courses" data-route>Courses</a>
+          <a href="#contribute" data-route>Contribute</a>
+        </nav>
+        <div class="header-actions">
+          <button id="themeToggle" class="btn btn-ghost" aria-label="Toggle theme">🌓</button>
+          <button id="btnSignIn" class="btn btn-ghost">Sign In</button>
+          <button id="btnJoin" class="btn btn-primary">Join Free</button>
+        </div>
+      </div>
+    </header>
+
+    <div id="verifyBanner" class="banner hidden" role="region" aria-live="polite">
+      <div class="container banner-inner">
+        <span>Email not verified. Verify to access contributor and commenting features.</span>
+        <div class="banner-actions">
+          <button id="btnResendVerification" class="btn btn-ghost">Resend verification</button>
+          <button id="btnDismissBanner" class="btn btn-ghost">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <section id="view-browse" class="view active" aria-labelledby="browse-heading">
+        <div class="hero">
+          <h1 id="browse-heading">Tropical Food Photos & Videos</h1>
+          <p>Warm, vibrant, and free to use. One-click downloads after free sign in.</p>
+          <div class="search-bar">
+            <input id="searchInput" type="search" placeholder="Search mango, street food, grill…" aria-label="Search assets" />
+            <button id="searchBtn" class="btn btn-primary">Search</button>
+          </div>
+          <div class="filters" role="region" aria-label="Filters">
+            <div class="filter-group">
+              <label for="filterType">Type</label>
+              <select id="filterType">
+                <option value="all">Photos & Videos</option>
+                <option value="photo">Photos</option>
+                <option value="video">Videos</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filterCategory">Category</label>
+              <select id="filterCategory">
+                <option value="all">All</option>
+                <option>African</option>
+                <option>Latin</option>
+                <option>Caribbean</option>
+                <option>Drinks</option>
+                <option>Desserts</option>
+                <option>Street Food</option>
+                <option>Grill/BBQ</option>
+                <option>Seafood</option>
+                <option>Ingredients</option>
+                <option>Kitchen Scenes</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filterOrientation">Orientation</label>
+              <select id="filterOrientation">
+                <option value="all">Any</option>
+                <option>landscape</option>
+                <option>portrait</option>
+                <option>square</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filterSort">Sort</label>
+              <select id="filterSort">
+                <option value="popular">Popular</option>
+                <option value="new">New</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="assetGrid" class="masonry" aria-live="polite"></div>
+      </section>
+
+      <section id="view-videos" class="view" aria-labelledby="videos-heading">
+        <h2 id="videos-heading">Videos</h2>
+        <p>Browse tropical food videos. Use the filters above to narrow results.</p>
+        <div id="videoGrid" class="masonry"></div>
+      </section>
+
+      <section id="view-collections" class="view" aria-labelledby="collections-heading">
+        <h2 id="collections-heading">Your Collections</h2>
+        <p>Create boards to save your favorite assets. Private by default, toggle public when you are ready to share.</p>
+        <div class="collections-actions">
+          <input id="newCollectionName" placeholder="New collection name" />
+          <button id="createCollectionBtn" class="btn btn-primary">Create</button>
+        </div>
+        <div id="collectionsList" class="grid"></div>
+      </section>
+
+      <section id="view-shop" class="view" aria-labelledby="shop-heading">
+        <h2 id="shop-heading">Shop</h2>
+        <p class="subtle">Level up your visuals: Printables, Premium, and Courses built for tropical creators.</p>
+        <div class="tabs">
+          <button class="tab active" data-tab="printables">Printables</button>
+          <button class="tab" data-tab="subscription">Subscription</button>
+          <button class="tab" data-tab="courses">Courses</button>
+        </div>
+        <div id="tab-printables" class="tab-panel active">
+          <div id="printablesGrid" class="grid"></div>
+        </div>
+        <div id="tab-subscription" class="tab-panel">
+          <div class="pricing">
+            <div class="plan">
+              <h3>Free</h3>
+              <p class="price">$0</p>
+              <ul>
+                <li>50/day downloads</li>
+                <li>Watermark-free</li>
+                <li>Attribution appreciated</li>
+              </ul>
+            </div>
+            <div class="plan featured">
+              <h3>Premium</h3>
+              <div class="toggle">
+                <label><input type="radio" name="billing" value="monthly" checked /> Monthly</label>
+                <label><input type="radio" name="billing" value="annual" /> Annual</label>
+              </div>
+              <p class="price"><span id="premiumPrice">$15</span></p>
+              <ul>
+                <li>Original-size images & videos</li>
+                <li>500/day downloads</li>
+                <li>Bulk download on collections</li>
+                <li>25% off all printables</li>
+                <li>Early access & priority requests</li>
+              </ul>
+              <button id="goPremiumBtn" class="btn btn-primary">Go Premium</button>
+            </div>
+          </div>
+          <div class="sample-wall">
+            <h4>Premium sample</h4>
+            <div id="premiumSamples" class="masonry"></div>
+          </div>
+        </div>
+        <div id="tab-courses" class="tab-panel">
+          <div id="coursesGrid" class="grid"></div>
+        </div>
+      </section>
+
+      <section id="view-contribute" class="view" aria-labelledby="contribute-heading">
+        <h2 id="contribute-heading">Contribute</h2>
+        <p>Become a contributor to share your tropical food visuals. Upload and submit for moderation.</p>
+        <div class="card padded">
+          <div class="stack">
+            <label>Display Name <input id="contribName" placeholder="Your name" /></label>
+            <label>Upload File <input id="contribFile" type="file" accept="image/*,video/*" /></label>
+            <label>Title <input id="contribTitle" placeholder="E.g., Spicy jerk chicken" /></label>
+            <label>Category
+              <select id="contribCategory">
+                <option>Caribbean</option>
+                <option>Latin</option>
+                <option>African</option>
+                <option>Drinks</option>
+                <option>Desserts</option>
+                <option>Street Food</option>
+                <option>Grill/BBQ</option>
+                <option>Seafood</option>
+                <option>Ingredients</option>
+                <option>Kitchen Scenes</option>
+              </select>
+            </label>
+            <button id="submitContribution" class="btn btn-primary">Submit</button>
+            <p class="subtle">Sensitive action: requires verified email if admin settings demand it.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <strong>Licensing</strong>
+          <p>Free license like Unsplash — personal & commercial OK. No resale/redistribution as stock. Attribution appreciated, not required.
+          Premium license includes original sizes and fewer restrictions.</p>
+        </div>
+        <div>
+          <strong>Legal</strong>
+          <p><a href="#" id="openCookie">Cookie & Consent</a> · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <dialog id="authModal" class="modal">
+      <form method="dialog" class="card padded">
+        <h3>Join Free</h3>
+        <p class="subtle">Create an account to start one-click downloads.</p>
+        <label>Email <input id="authEmail" type="email" required placeholder="you@example.com" /></label>
+        <label>Password <input id="authPassword" type="password" required placeholder="••••••••" /></label>
+        <div class="stack small">
+          <button id="authSubmit" class="btn btn-primary" value="default">Continue</button>
+          <button id="authMagic" class="btn btn-ghost" value="magic">Send magic link</button>
+          <button id="authCode" class="btn btn-ghost" value="code">Use a verification code</button>
+        </div>
+        <p class="subtle">By continuing you agree to our terms and privacy.</p>
+      </form>
+    </dialog>
+
+    <dialog id="assetModal" class="modal">
+      <div class="card padded">
+        <div class="modal-header">
+          <h3 id="assetTitle">Asset</h3>
+          <button class="btn btn-ghost" id="closeAsset">✕</button>
+        </div>
+        <div id="assetPreview" class="media-preview"></div>
+        <div class="meta-grid">
+          <div>
+            <strong>Author</strong>
+            <p id="assetAuthor"></p>
+          </div>
+          <div>
+            <strong>Category</strong>
+            <p id="assetCategory"></p>
+          </div>
+          <div>
+            <strong>Tags</strong>
+            <p id="assetTags"></p>
+          </div>
+          <div>
+            <strong>License</strong>
+            <p>Free for personal & commercial; no resale as stock.</p>
+          </div>
+        </div>
+        <div class="row gap">
+          <button id="btnDownloadSmall" class="btn">Small</button>
+          <button id="btnDownloadMedium" class="btn">Medium</button>
+          <button id="btnDownloadLarge" class="btn">Large</button>
+          <button id="btnDownloadOriginal" class="btn btn-primary">Original</button>
+          <button id="btnCopyCredit" class="btn btn-ghost">Copy Credit</button>
+          <button id="btnAddToCollection" class="btn btn-ghost">Add to Collection</button>
+          <button id="btnReport" class="btn btn-ghost">Report</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="paywallModal" class="modal">
+      <div class="card padded">
+        <div class="modal-header">
+          <h3>Premium Required</h3>
+          <button class="btn btn-ghost" id="closePaywall">✕</button>
+        </div>
+        <p>Original-size downloads are for Premium members. Upgrade to unlock originals and higher limits.</p>
+        <button id="upgradeNow" class="btn btn-primary">Go Premium</button>
+      </div>
+    </dialog>
+
+    <dialog id="courseModal" class="modal">
+      <div class="card padded">
+        <div class="modal-header">
+          <h3 id="courseTitle">Course</h3>
+          <button class="btn btn-ghost" id="closeCourse">✕</button>
+        </div>
+        <div id="courseBody"></div>
+      </div>
+    </dialog>
+
+    <dialog id="cookieModal" class="modal">
+      <div class="card padded">
+        <h3>Cookies & Consent</h3>
+        <p>We use local storage for preferences and rate limits; no tracking. Consent to continue.</p>
+        <div class="row gap">
+          <button id="cookieAccept" class="btn btn-primary">Accept</button>
+          <button id="cookieDecline" class="btn btn-ghost">Decline</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="application/ld+json" id="structuredData"></script>
+    <script src="./app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+      }
+    </script>
+  </body>
+</html>

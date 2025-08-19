@@ -1,0 +1,328 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum Role {
+  USER
+  CONTRIBUTOR
+  ADMIN
+}
+
+enum AssetType {
+  PHOTO
+  VIDEO
+}
+
+enum Orientation {
+  LANDSCAPE
+  PORTRAIT
+  SQUARE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum AssetStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EmailVerificationMode {
+  REQUIRED
+  OPTIONAL
+  OFF
+}
+
+// NextAuth required models (Prisma Adapter)
+model User {
+  id                     String   @id @default(cuid())
+  name                   String?
+  email                  String?  @unique
+  emailVerified          DateTime?
+  image                  String?
+
+  // Platform-specific fields
+  role                   Role     @default(USER)
+  bio                    String?
+  avatar                 String?
+  social                 Json?
+  subscriptionStatus     String   @default("none") // none | active | past_due | canceled
+  stripeCustomerId       String?
+  stripeSubscriptionId   String?
+  downloadCountToday     Int      @default(0)
+
+  // Relations
+  accounts               Account[]
+  sessions               Session[]
+  assets                 Asset[]   @relation("UserAssets")
+  downloads              Download[]
+  collections            Collection[]
+  orders                 Order[]
+  coursesTaught          Course[]  @relation("InstructorCourses")
+  enrollments            Enrollment[]
+  likes                  Like[]
+  comments               Comment[]
+
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @map("refreshToken")
+  access_token      String?  @map("accessToken")
+  expires_at        Int?     @map("expiresAt")
+  token_type        String?  @map("tokenType")
+  scope             String?
+  id_token          String?  @map("idToken")
+  session_state     String?
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Domain models
+model Asset {
+  id           String      @id @default(cuid())
+  type         AssetType
+  premium      Boolean     @default(false)
+  title        String
+  slug         String      @unique
+  description  String?
+  authorId     String
+  author       User        @relation("UserAssets", fields: [authorId], references: [id])
+  category     String
+  tags         String[]
+  colors       String[]
+  orientation  Orientation?
+  exif         Json?
+  sizes        Json // { original: url, large: url, medium: url, small: url }
+  poster       String?
+  license      String       @default("unsplash-like")
+  location     String?
+  views        Int          @default(0)
+  likesCount   Int          @default(0)
+  downloads    Int          @default(0)
+  status       AssetStatus  @default(APPROVED)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  downloadsRel Download[]
+  comments     Comment[]
+  likes        Like[]
+}
+
+model Download {
+  id        String   @id @default(cuid())
+  userId    String
+  assetId   String
+  size      String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model Collection {
+  id          String          @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  isPublic    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       CollectionItem[]
+}
+
+model CollectionItem {
+  id           String   @id @default(cuid())
+  collectionId String
+  assetId      String
+  addedAt      DateTime @default(now())
+
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  asset        Asset      @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, assetId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  assetId   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, assetId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  assetId   String
+  content   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id                         String   @id @default(cuid())
+  type                       String   // printable | subscription | course
+  title                      String
+  slug                       String   @unique
+  priceCents                 Int
+  comparePriceCents          Int?
+  subscriberDiscountPercent  Int?     // e.g., 25
+  media                      Json?
+  description                String?
+  includes                   Json?
+  files                      Json?
+  license                    String?
+  tags                       String[]
+  version                    String?  // for changelog
+  inventory                  Int?     // N/A for digital
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+}
+
+model Order {
+  id            String         @id @default(cuid())
+  userId        String
+  currency      String         @default("USD")
+  subtotalCents Int
+  taxCents      Int            @default(0)
+  totalCents    Int
+  paymentStatus PaymentStatus  @default(PENDING)
+  stripePaymentIntentId String?
+  createdAt     DateTime       @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  productId  String
+  quantity   Int     @default(1)
+  unitPriceCents Int
+
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [productId], references: [id])
+}
+
+model Course {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  durationMin   Int?
+  level         String?  // Beginner, Intermediate, Advanced
+  cover         String?
+  instructorId  String
+  resources     Json?
+  enrolledCount Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  instructor    User     @relation("InstructorCourses", fields: [instructorId], references: [id])
+  lessons       Lesson[]
+  enrollments   Enrollment[]
+}
+
+model Lesson {
+  id         String   @id @default(cuid())
+  courseId   String
+  title      String
+  durationMin Int?
+  videoUrl   String?
+  attachments Json?
+  orderIndex Int      @default(0)
+
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  progress  Json?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model SubscriptionPlan {
+  id               String   @id @default(cuid())
+  name             String   // Premium
+  monthlyPriceCents Int
+  annualPriceCents  Int
+  features         Json?
+  dailyDownloads   Int      @default(50)
+  bulkDownload     Boolean  @default(false)
+  premiumAccess    Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model AdminSettings {
+  id                          Int      @id @default(1)
+  emailVerificationMode       EmailVerificationMode @default(OPTIONAL)
+  requireVerificationFor      String[] // ["contributorUpload","profileEditSensitive","commenting"]
+  freeDailyDownloadLimit      Int      @default(50)
+  premiumDailyDownloadLimit   Int      @default(500)
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+}
