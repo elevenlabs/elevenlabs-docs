@@ -105,6 +105,13 @@ The options passed to `startSession` can also be used to register optional callb
 - **onStatusChange** - handler called whenever connection status changes. Can be `connected`, `connecting` and `disconnected` (initial).
 - **onModeChange** - handler called when a status changes, eg. agent switches from `speaking` to `listening`, or the other way around.
 
+<Warning>
+  Not all client events are enabled by default for an agent. If you have enabled a callback but
+  aren't seeing events come through, ensure that your Conversational AI agent has the corresponding
+  event enabled. You can do this in the "Advanced" tab of the agent settings in the ElevenLabs
+  dashboard.
+</Warning>
+
 #### Return value
 
 `startSession` returns a `Conversation` instance that can be used to control the session. The method will throw an error if the session cannot be established. This can happen if the user denies microphone access, or if the websocket connection
