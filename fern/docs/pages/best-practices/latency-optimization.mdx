@@ -63,6 +63,17 @@ For instance, if you set a chunk schedule of 125 characters but only 50 arrive, 
 
 For implementation details, see the [text-to-speech websocket guide](/docs/api-reference#text-to-speech-websocket).
 
+## Choose appropriate voices
+
+We have observed that in some cases, voice selection can impact latency. Here's the order from fastest to slowest:
+
+1. Default voices (formerly premade), Synthetic voices, and Instant Voice Clones (IVC)
+2. Professional Voice Clones (PVC)
+
+Higher audio quality output formats can increase latency. Be sure to balance your latency requirements with audio fidelity needs.
+
+<Info>We are actively working on optimizing PVC latency for Flash v2.5.</Info>
+
 ## Consider geographic proximity
 
 We serve our models from multiple regions to optimize latency based on your geographic location.
@@ -104,21 +115,29 @@ ElevenLabs is launching inference servers in additional geographical regions to 
 
 Simply replace `api.elevenlabs.io` with `api-global-preview.elevenlabs.io` in your TTS API calls. When using the SDK you need to override the base URL.
 
-**Python SDK:**
+<CodeBlocks>
+  ```python
+  import os
+  from elevenlabs.client import ElevenLabs
 
-```python
-import os
-from elevenlabs.client import ElevenLabs
-
-client = ElevenLabs(
-    api_key=os.getenv("ELEVENLABS_API_KEY"),
-    base_url="https://api-global-preview.elevenlabs.io"
+elevenlabs = ElevenLabs(
+api_key=os.getenv("ELEVENLABS_API_KEY"),
+base_url="https://api-global-preview.elevenlabs.io"
 )
-```
 
-**Direct API calls:**
+````
 
-```bash
+```typescript
+import { ElevenLabs } from "@elevenlabs/elevenlabs-js";
+import "dotenv/config";
+
+const elevenlabs = new ElevenLabs({
+  apiKey: process.env.ELEVENLABS_API_KEY,
+  baseUrl: "https://api-global-preview.elevenlabs.io"
+});
+````
+
+```bash cURL
 curl -X POST -v "https://api-global-preview.elevenlabs.io/v1/text-to-speech/{voice_id}" \
   -H "Accept: audio/mpeg" \
   -H "Content-Type: application/json" \
@@ -128,6 +147,8 @@ curl -X POST -v "https://api-global-preview.elevenlabs.io/v1/text-to-speech/{voi
     "model_id": "eleven_flash_v2_5"
   }'
 ```
+
+</CodeBlocks>
 
 The geographically closest region will handle your request to minimize latency. You can check which region is serving your request by inspecting the `x-region` header:
 
@@ -163,14 +184,3 @@ Based on our benchmarking, for the Turbo and Flash models we expect the followin
   For requests which are slow or failing, please provide the value of the `x-trace-id` header if
   possible (we recommend logging it for all requests you do).
 </Tip>
-
-## Choose appropriate voices
-
-We have observed that in some cases, voice selection can impact latency. Here's the order from fastest to slowest:
-
-1. Default voices (formerly premade), Synthetic voices, and Instant Voice Clones (IVC)
-2. Professional Voice Clones (PVC)
-
-Higher audio quality output formats can increase latency. Be sure to balance your latency requirements with audio fidelity needs.
-
-<Info>We are actively working on optimizing PVC latency for Flash v2.5.</Info>
