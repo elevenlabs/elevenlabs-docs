@@ -116,26 +116,27 @@ ElevenLabs is launching inference servers in additional geographical regions to 
 Simply replace `api.elevenlabs.io` with `api-global-preview.elevenlabs.io` in your TTS API calls. When using the SDK you need to override the base URL.
 
 <CodeBlocks>
-  ```python
-  import os
-  from elevenlabs.client import ElevenLabs
+
+```python
+import os
+from elevenlabs.client import ElevenLabs
 
 elevenlabs = ElevenLabs(
-api_key=os.getenv("ELEVENLABS_API_KEY"),
-base_url="https://api-global-preview.elevenlabs.io"
+    api_key=os.getenv("ELEVENLABS_API_KEY"),
+    base_url="https://api-global-preview.elevenlabs.io"
 )
 
-````
+```
 
 ```typescript
-import { ElevenLabs } from "@elevenlabs/elevenlabs-js";
-import "dotenv/config";
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
+import 'dotenv/config';
 
 const elevenlabs = new ElevenLabs({
   apiKey: process.env.ELEVENLABS_API_KEY,
-  baseUrl: "https://api-global-preview.elevenlabs.io"
+  baseUrl: 'https://api-global-preview.elevenlabs.io',
 });
-````
+```
 
 ```bash cURL
 curl -X POST -v "https://api-global-preview.elevenlabs.io/v1/text-to-speech/{voice_id}" \
