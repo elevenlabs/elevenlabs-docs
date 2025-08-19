@@ -82,10 +82,64 @@ For example, using Flash models with Websockets, you can expect the following TT
   Contact your sales representative to get onboarded to our European infrastructure.
 </Info>
 
-<Note>
-  We are actively working on deploying our models in Asia. These deployments will bring speeds
-  closer to those experienced by US and EU customers.
-</Note>
+### Global TTS API preview
+
+For users in Asia and other regions, we offer a global TTS API preview that provides improved latency by routing requests to the closest available region.
+
+To use the global TTS API preview, you can override the base URL in your requests:
+
+**Direct API calls:**
+
+```bash
+curl -X POST \
+  "https://api.asia.elevenlabs.io/v1/text-to-speech/{voice_id}" \
+  -H "Accept: audio/mpeg" \
+  -H "Content-Type: application/json" \
+  -H "xi-api-key: YOUR_API_KEY" \
+  -d '{
+    "text": "Hello World!",
+    "model_id": "eleven_flash_v2_5"
+  }'
+```
+
+**Python SDK:**
+
+```python
+from elevenlabs import ElevenLabs
+
+client = ElevenLabs(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.asia.elevenlabs.io"
+)
+
+audio = client.generate(
+    text="Hello World!",
+    voice="Brian",
+    model="eleven_flash_v2_5"
+)
+```
+
+**TypeScript SDK:**
+
+```typescript
+import { ElevenLabs } from 'elevenlabs';
+
+const elevenlabs = new ElevenLabs({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.asia.elevenlabs.io',
+});
+
+const audio = await elevenlabs.generate({
+  text: 'Hello World!',
+  voice: 'Brian',
+  model_id: 'eleven_flash_v2_5',
+});
+```
+
+<Info>
+  The global TTS API preview is currently available for testing. Contact your sales representative
+  for production usage and availability in your region.
+</Info>
 
 ## Choose appropriate voices
 
