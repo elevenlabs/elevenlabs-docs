@@ -9346,7 +9346,7 @@
       "post": {
         "operationId": "Speech_to_Text_v1_speech_to_text_post",
         "summary": "Speech To Text",
-        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks. When use_multi_channel is true and the provided audio has multiple channels, a 'transcripts' object with separate transcripts for each channel is returned. Otherwise, returns a single transcript.",
+        "description": "Transcribe an audio or video file. If webhook is set to true, the request will be processed asynchronously and results sent to configured webhooks. When use_multi_channel is true and the provided audio has multiple channels, a 'transcripts' object with separate transcripts for each channel is returned. Otherwise, returns a single transcript. The optional webhook_metadata parameter allows you to attach custom data that will be included in webhook responses for request correlation and tracking.",
         "parameters": [
           {
             "name": "enable_logging",
@@ -14921,6 +14921,369 @@
         "x-fern-sdk-method-name": "delete"
       }
     },
+    "/v1/music/plan": {
+      "post": {
+        "operationId": "Generate_composition_plan_v1_music_plan_post",
+        "summary": "Generate Composition Plan",
+        "description": "Generate a composition plan from a prompt.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Generate_composition_plan_v1_music_plan_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MusicPrompt"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "music-generation"
+        ],
+        "x-fern-sdk-group-name": [
+          "music",
+          "composition_plan"
+        ],
+        "x-fern-sdk-method-name": "create"
+      }
+    },
+    "/v1/music": {
+      "post": {
+        "operationId": "Compose_music_v1_music_post",
+        "summary": "Compose Music",
+        "description": "Compose a song from a prompt or a composition plan.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Compose_music_v1_music_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The generated audio file in the format specified",
+            "content": {
+              "audio/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "music-generation"
+        ],
+        "x-fern-sdk-group-name": "music",
+        "x-fern-sdk-method-name": "compose"
+      }
+    },
+    "/v1/music/detailed": {
+      "post": {
+        "operationId": "Compose_Music_with_a_detailed_response_v1_music_detailed_post",
+        "summary": "Compose Music With A Detailed Response",
+        "description": "Compose a song from a prompt or a composition plan.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Compose_Music_with_a_detailed_response_v1_music_detailed_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "multipart/mixed": {
+                "schema": {
+                  "description": "Raw multipart/mixed response data that clients must parse. Contains two parts separated by boundary: 1) application/json part with composition_plan and song_metadata 2) audio/* part with binary audio data and Content-Disposition header",
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "music-generation"
+        ],
+        "x-fern-sdk-group-name": "music",
+        "x-fern-sdk-method-name": "compose_detailed"
+      }
+    },
+    "/v1/music/stream": {
+      "post": {
+        "operationId": "Stream_composed_music_v1_music_stream_post",
+        "summary": "Stream Composed Music",
+        "description": "Stream a composed song from a prompt or a composition plan.",
+        "parameters": [
+          {
+            "name": "output_format",
+            "in": "query",
+            "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+            "required": false,
+            "schema": {
+              "description": "Output format of the generated audio. Formatted as codec_sample_rate_bitrate. So an mp3 with 22.05kHz sample rate at 32kbs is represented as mp3_22050_32. MP3 with 192kbps bitrate requires you to be subscribed to Creator tier or above. PCM with 44.1kHz sample rate requires you to be subscribed to Pro tier or above. Note that the μ-law format (sometimes written mu-law, often approximated as u-law) is commonly used for Twilio audio inputs.",
+              "type": "string",
+              "default": "mp3_44100_128",
+              "enum": [
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192",
+                "pcm_8000",
+                "pcm_16000",
+                "pcm_22050",
+                "pcm_24000",
+                "pcm_44100",
+                "pcm_48000",
+                "ulaw_8000",
+                "alaw_8000",
+                "opus_48000_32",
+                "opus_48000_64",
+                "opus_48000_96",
+                "opus_48000_128",
+                "opus_48000_192"
+              ],
+              "title": "Output format of the generated audio."
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Stream_composed_music_v1_music_stream_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Streaming audio data in the format specified",
+            "content": {
+              "audio/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "music-generation"
+        ],
+        "x-fern-sdk-group-name": "music",
+        "x-fern-sdk-method-name": "stream",
+        "x-fern-streaming": true
+      }
+    },
     "/v1/voices/pvc": {
       "post": {
         "operationId": "Create_PVC_voice_v1_voices_pvc_post",
@@ -17922,6 +18285,138 @@
         ],
         "title": "Body_Audio_Isolation_v1_audio_isolation_post"
       },
+      "Body_Compose_Music_with_a_detailed_response_v1_music_detailed_post": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "A simple text prompt to generate a song from. Cannot be used in conjunction with `composition_plan`.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt"
+          },
+          "music_prompt": {
+            "description": "A music prompt. Deprecated. Use `composition_plan` instead.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "deprecated": true,
+            "x-fern-ignore": true
+          },
+          "composition_plan": {
+            "description": "A detailed composition plan to guide music generation. Cannot be used in conjunction with `prompt`.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "music_length_ms": {
+            "description": "The length of the song to generate in milliseconds. Used only in conjunction with `prompt`. Must be between 10000ms and 300000ms. Optional - if not provided, the model will choose a length based on the prompt.",
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 300000,
+                "minimum": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Music Length Ms"
+          },
+          "model_id": {
+            "description": "The model to use for the generation.",
+            "type": "string",
+            "default": "music_v1",
+            "enum": [
+              "music_v1"
+            ],
+            "title": "Model Id"
+          }
+        },
+        "title": "Body_Compose_Music_with_a_detailed_response_v1_music_detailed_post"
+      },
+      "Body_Compose_music_v1_music_post": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "A simple text prompt to generate a song from. Cannot be used in conjunction with `composition_plan`.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt"
+          },
+          "music_prompt": {
+            "description": "A music prompt. Deprecated. Use `composition_plan` instead.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "deprecated": true,
+            "x-fern-ignore": true
+          },
+          "composition_plan": {
+            "description": "A detailed composition plan to guide music generation. Cannot be used in conjunction with `prompt`.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "music_length_ms": {
+            "description": "The length of the song to generate in milliseconds. Used only in conjunction with `prompt`. Must be between 10000ms and 300000ms. Optional - if not provided, the model will choose a length based on the prompt.",
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 300000,
+                "minimum": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Music Length Ms"
+          },
+          "model_id": {
+            "description": "The model to use for the generation.",
+            "type": "string",
+            "default": "music_v1",
+            "enum": [
+              "music_v1"
+            ],
+            "title": "Model Id"
+          }
+        },
+        "title": "Body_Compose_music_v1_music_post"
+      },
       "Body_Create_Agent_v1_convai_agents_create_post": {
         "type": "object",
         "properties": {
@@ -19601,6 +20096,55 @@
         ],
         "title": "Body_Generate_a_random_voice_v1_voice_generation_generate_voice_post"
       },
+      "Body_Generate_composition_plan_v1_music_plan_post": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "A simple text prompt to compose a plan from.",
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Prompt"
+          },
+          "music_length_ms": {
+            "description": "The length of the composition plan to generate in milliseconds. Must be between 10000ms and 300000ms. Optional - if not provided, the model will choose a length based on the prompt.",
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 300000,
+                "minimum": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Music Length Ms"
+          },
+          "source_composition_plan": {
+            "description": "An optional composition plan to use as a source for the new composition plan.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "model_id": {
+            "description": "The model to use for the generation.",
+            "type": "string",
+            "default": "music_v1",
+            "enum": [
+              "music_v1"
+            ],
+            "title": "Model Id"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "title": "Body_Generate_composition_plan_v1_music_plan_post"
+      },
       "Body_Get_similar_library_voices_v1_similar_voices_post": {
         "type": "object",
         "properties": {
@@ -20523,6 +21067,25 @@
             "type": "boolean",
             "default": false,
             "title": "Use Multi Channel"
+          },
+          "webhook_metadata": {
+            "description": "Optional metadata to be included in the webhook response. This should be a JSON string representing an object with a maximum depth of 2 levels and maximum size of 16KB. Useful for tracking internal IDs, job references, or other contextual information.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "{\"user_id\": \"123\", \"session_id\": \"abc-def-ghi\"}",
+              "{\"request_type\": \"interview\", \"participant_name\": \"John Doe\"}"
+            ],
+            "title": "Webhook Metadata"
           }
         },
         "required": [
@@ -20553,6 +21116,72 @@
           }
         },
         "title": "Body_Stream_chapter_audio_v1_studio_projects__project_id__chapters__chapter_id__snapshots__chapter_snapshot_id__stream_post"
+      },
+      "Body_Stream_composed_music_v1_music_stream_post": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "A simple text prompt to generate a song from. Cannot be used in conjunction with `composition_plan`.",
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt"
+          },
+          "music_prompt": {
+            "description": "A music prompt. Deprecated. Use `composition_plan` instead.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "deprecated": true,
+            "x-fern-ignore": true
+          },
+          "composition_plan": {
+            "description": "A detailed composition plan to guide music generation. Cannot be used in conjunction with `prompt`.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MusicPrompt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "music_length_ms": {
+            "description": "The length of the song to generate in milliseconds. Used only in conjunction with `prompt`. Must be between 10000ms and 300000ms. Optional - if not provided, the model will choose a length based on the prompt.",
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 300000,
+                "minimum": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Music Length Ms"
+          },
+          "model_id": {
+            "description": "The model to use for the generation.",
+            "type": "string",
+            "default": "music_v1",
+            "enum": [
+              "music_v1"
+            ],
+            "title": "Model Id"
+          }
+        },
+        "title": "Body_Stream_composed_music_v1_music_stream_post"
       },
       "Body_Submit_a_batch_call_request__v1_convai_batch_calling_submit_post": {
         "type": "object",
@@ -23376,6 +24005,13 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -23414,13 +24050,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "client",
-            "const": "client",
-            "title": "Type"
           },
           "parameters": {
             "description": "Schema for any parameters to pass to the client",
@@ -23458,6 +24087,13 @@
         "description": "A client tool is one that sends an event to the user's client to trigger something client side",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "client",
+            "const": "client",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -23496,13 +24132,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "client",
-            "const": "client",
-            "title": "Type"
           },
           "parameters": {
             "description": "Schema for any parameters to pass to the client",
@@ -24453,6 +25082,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Input"
                 }
               ]
             },
@@ -24589,6 +25221,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Output"
                 }
               ]
             },
@@ -25051,6 +25686,128 @@
           "url"
         ],
         "title": "ConversationHistoryTranscriptToolCallWebhookDetails"
+      },
+      "ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Input": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result_value": {
+            "type": "string",
+            "title": "Result Value"
+          },
+          "is_error": {
+            "type": "boolean",
+            "title": "Is Error"
+          },
+          "tool_has_been_called": {
+            "type": "boolean",
+            "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
+          },
+          "type": {
+            "type": "string",
+            "const": "workflow",
+            "title": "Type"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkflowToolResponseModel-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "result_value",
+          "is_error",
+          "tool_has_been_called",
+          "type"
+        ],
+        "title": "ConversationHistoryTranscriptWorkflowToolsResultCommonModel"
+      },
+      "ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Output": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "tool_name": {
+            "type": "string",
+            "title": "Tool Name"
+          },
+          "result_value": {
+            "type": "string",
+            "title": "Result Value"
+          },
+          "is_error": {
+            "type": "boolean",
+            "title": "Is Error"
+          },
+          "tool_has_been_called": {
+            "type": "boolean",
+            "title": "Tool Has Been Called"
+          },
+          "tool_latency_secs": {
+            "type": "number",
+            "default": 0,
+            "title": "Tool Latency Secs"
+          },
+          "dynamic_variable_updates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicVariableUpdateCommonModel"
+            },
+            "title": "Dynamic Variable Updates"
+          },
+          "type": {
+            "type": "string",
+            "const": "workflow",
+            "title": "Type"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkflowToolResponseModel-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "result_value",
+          "is_error",
+          "tool_has_been_called",
+          "type"
+        ],
+        "title": "ConversationHistoryTranscriptWorkflowToolsResultCommonModel"
       },
       "ConversationHistoryTwilioPhoneCallModel": {
         "type": "object",
@@ -31030,6 +31787,12 @@
         "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -31066,12 +31829,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "type": "string",
-            "default": "mcp",
-            "const": "mcp",
-            "title": "Type"
           },
           "integration_type": {
             "description": "The type of MCP tool",
@@ -31142,6 +31899,12 @@
         "description": "An MCP tool configuration that can be used to call MCP servers",
         "type": "object",
         "properties": {
+          "type": {
+            "type": "string",
+            "default": "mcp",
+            "const": "mcp",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -31178,12 +31941,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "type": "string",
-            "default": "mcp",
-            "const": "mcp",
-            "title": "Type"
           },
           "integration_type": {
             "description": "The type of MCP tool",
@@ -31732,6 +32489,75 @@
           "transcripts"
         ],
         "title": "MultichannelSpeechToTextResponseModel"
+      },
+      "MusicPrompt": {
+        "type": "object",
+        "properties": {
+          "positive_global_styles": {
+            "description": "The styles that should be present in the entire song.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Positive Global Styles"
+          },
+          "negative_global_styles": {
+            "description": "The styles that should not be present in the entire song.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Negative Global Styles"
+          },
+          "sections": {
+            "description": "The sections of the song.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SongSection"
+            },
+            "maxItems": 30,
+            "title": "Sections"
+          }
+        },
+        "example": {
+          "negative_global_styles": [
+            "metal",
+            "hip-hop",
+            "country"
+          ],
+          "positive_global_styles": [
+            "pop",
+            "rock",
+            "jazz"
+          ],
+          "sections": [
+            {
+              "duration_ms": 10000,
+              "lines": [
+                "Verse 1 lyrics"
+              ],
+              "negative_local_styles": [
+                "metal",
+                "hip-hop",
+                "country"
+              ],
+              "positive_local_styles": [
+                "pop",
+                "rock",
+                "jazz"
+              ],
+              "section_name": "Verse 1"
+            }
+          ]
+        },
+        "required": [
+          "positive_global_styles",
+          "negative_global_styles",
+          "sections"
+        ],
+        "title": "MusicPrompt"
       },
       "ObjectJsonSchemaProperty-Input": {
         "type": "object",
@@ -35513,6 +36339,60 @@
         },
         "title": "SkipTurnToolResponseModel"
       },
+      "SongSection": {
+        "type": "object",
+        "properties": {
+          "section_name": {
+            "description": "The name of the section. Must be between 1 and 100 characters.",
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Section Name"
+          },
+          "positive_local_styles": {
+            "description": "The styles that should be present in this section.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Positive Local Styles"
+          },
+          "negative_local_styles": {
+            "description": "The styles that should not be present in this section.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Negative Local Styles"
+          },
+          "duration_ms": {
+            "description": "The duration of the section in milliseconds. Must be between 3000ms and 120000ms.",
+            "type": "integer",
+            "maximum": 120000,
+            "minimum": 3000,
+            "title": "Duration Ms"
+          },
+          "lines": {
+            "description": "The lyrics of the section.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Lines"
+          }
+        },
+        "required": [
+          "section_name",
+          "positive_local_styles",
+          "negative_local_styles",
+          "duration_ms",
+          "lines"
+        ],
+        "title": "SongSection"
+      },
       "SpeakerAudioResponseModel": {
         "type": "object",
         "properties": {
@@ -36946,6 +37826,13 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -36982,13 +37869,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "system",
-            "const": "system",
-            "title": "Type"
           },
           "params": {
             "discriminator": {
@@ -37048,6 +37928,13 @@
         "description": "A system tool is a tool that is used to call a system method in the server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "system",
+            "const": "system",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -37084,13 +37971,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "system",
-            "const": "system",
-            "title": "Type"
           },
           "params": {
             "discriminator": {
@@ -37649,7 +38529,8 @@
           "system",
           "webhook",
           "client",
-          "mcp"
+          "mcp",
+          "workflow"
         ],
         "title": "ToolType"
       },
@@ -40498,6 +41379,13 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -40536,13 +41424,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "webhook",
-            "const": "webhook",
-            "title": "Type"
           },
           "api_schema": {
             "description": "The schema for the outgoing webhoook, including parameters and URL specification",
@@ -40568,6 +41449,13 @@
         "description": "A webhook tool is a tool that calls an external webhook from our server",
         "type": "object",
         "properties": {
+          "type": {
+            "description": "The type of tool",
+            "type": "string",
+            "default": "webhook",
+            "const": "webhook",
+            "title": "Type"
+          },
           "name": {
             "type": "string",
             "minLength": 0,
@@ -40606,13 +41494,6 @@
               "$ref": "#/components/schemas/DynamicVariableAssignment"
             },
             "title": "Assignments"
-          },
-          "type": {
-            "description": "The type of tool",
-            "type": "string",
-            "default": "webhook",
-            "const": "webhook",
-            "title": "Type"
           },
           "api_schema": {
             "description": "The schema for the outgoing webhoook, including parameters and URL specification",
@@ -41649,6 +42530,18 @@
               }
             ],
             "title": "First Message"
+          },
+          "use_rtc": {
+            "description": "Whether to use WebRTC for conversation connections",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Rtc"
           }
         },
         "example": {
@@ -41660,7 +42553,8 @@
             "fr"
           ],
           "supports_text_only": true,
-          "text_only": false
+          "text_only": false,
+          "use_rtc": false
         },
         "required": [
           "language"
@@ -42294,6 +43188,253 @@
           }
         },
         "title": "WidgetTextContents"
+      },
+      "WorkflowToolEdgeStepModel": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "edge",
+            "const": "edge",
+            "title": "Type"
+          },
+          "edge_id": {
+            "type": "string",
+            "title": "Edge Id"
+          },
+          "target_node_id": {
+            "type": "string",
+            "title": "Target Node Id"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "edge_id",
+          "target_node_id"
+        ],
+        "title": "WorkflowToolEdgeStepModel"
+      },
+      "WorkflowToolMaxIterationsExceededStepModel": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "max_iterations_exceeded",
+            "const": "max_iterations_exceeded",
+            "title": "Type"
+          },
+          "max_iterations": {
+            "type": "integer",
+            "title": "Max Iterations"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "max_iterations"
+        ],
+        "title": "WorkflowToolMaxIterationsExceededStepModel"
+      },
+      "WorkflowToolNestedToolsStepModel-Input": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "nested_tools",
+            "const": "nested_tools",
+            "title": "Type"
+          },
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallCommonModel"
+            },
+            "title": "Requests"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptOtherToolsResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Input"
+                }
+              ]
+            },
+            "title": "Results"
+          },
+          "is_successful": {
+            "type": "boolean",
+            "title": "Is Successful"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "node_id",
+          "requests",
+          "results",
+          "is_successful"
+        ],
+        "title": "WorkflowToolNestedToolsStepModel"
+      },
+      "WorkflowToolNestedToolsStepModel-Output": {
+        "type": "object",
+        "properties": {
+          "step_latency_secs": {
+            "type": "number",
+            "title": "Step Latency Secs"
+          },
+          "type": {
+            "type": "string",
+            "default": "nested_tools",
+            "const": "nested_tools",
+            "title": "Type"
+          },
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptToolCallCommonModel"
+            },
+            "title": "Requests"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptOtherToolsResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptSystemToolResultCommonModel"
+                },
+                {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptWorkflowToolsResultCommonModel-Output"
+                }
+              ]
+            },
+            "title": "Results"
+          },
+          "is_successful": {
+            "type": "boolean",
+            "title": "Is Successful"
+          }
+        },
+        "required": [
+          "step_latency_secs",
+          "node_id",
+          "requests",
+          "results",
+          "is_successful"
+        ],
+        "title": "WorkflowToolNestedToolsStepModel"
+      },
+      "WorkflowToolResponseModel-Input": {
+        "description": "A common model for workflow tool responses.",
+        "type": "object",
+        "properties": {
+          "final_transfer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolResultSuccessModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowToolEdgeStepModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolNestedToolsStepModel-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "edge": "#/components/schemas/WorkflowToolEdgeStepModel",
+                  "max_iterations_exceeded": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel",
+                  "nested_tools": "#/components/schemas/WorkflowToolNestedToolsStepModel-Input"
+                }
+              }
+            },
+            "title": "Steps"
+          }
+        },
+        "title": "WorkflowToolResponseModel"
+      },
+      "WorkflowToolResponseModel-Output": {
+        "description": "A common model for workflow tool responses.",
+        "type": "object",
+        "properties": {
+          "final_transfer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransferToAgentToolResultSuccessModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowToolEdgeStepModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolNestedToolsStepModel-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "edge": "#/components/schemas/WorkflowToolEdgeStepModel",
+                  "max_iterations_exceeded": "#/components/schemas/WorkflowToolMaxIterationsExceededStepModel",
+                  "nested_tools": "#/components/schemas/WorkflowToolNestedToolsStepModel-Output"
+                }
+              }
+            },
+            "title": "Steps"
+          }
+        },
+        "title": "WorkflowToolResponseModel"
       },
       "WorkspaceApiKeyListResponseModel": {
         "type": "object",

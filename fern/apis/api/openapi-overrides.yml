@@ -862,6 +862,51 @@ paths:
   /v1/shared-sound-generations/{sound_effect_generation_id}/purchase:
     post:
       x-fern-ignore: true
+  /v1/music/plan:
+    post:
+      description: Create a composition plan for music generation. Usage of this endpoint does not cost any credits but is subject to rate limiting depending on your tier.
+  /v1/music/detailed:
+    post:
+      x-fern-ignore: true
+  # /v1/music/detailed:
+  #   post:
+  #     responses:
+  #       200:
+  #         content:
+  #           application/json: null
+  #           multipart/mixed:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 composition_plan:
+  #                   type: object
+  #                 song_metadata:
+  #                   type: object
+  #                 audio:
+  #                   type: string
+  #                   format: binary
+  #     x-fern-examples:
+  #       - request:
+  #           prompt: 'A prompt for music generation'
+  #           music_length_ms: 10000
+  #         response:
+  #           body:
+  #             composition_plan:
+  #               positive_global_styles: ['pop', 'rock', 'jazz']
+  #               negative_global_styles: ['metal', 'hip-hop', 'country']
+  #               sections:
+  #                 - section_name: 'Verse 1'
+  #                   positive_local_styles: ['pop', 'rock', 'jazz']
+  #                   negative_local_styles: ['metal', 'hip-hop', 'country']
+  #                   duration_ms: 10000
+  #                   lines: ['Verse 1 lyrics']
+  #             song_metadata:
+  #               title: 'My Song'
+  #               description: 'My Song Description'
+  #               genres: ['pop', 'rock', 'jazz']
+  #               languages: ['en', 'fr']
+  #               is_explicit: false
+  #             audio: '[binary audio data]'
 
 components:
   schemas:

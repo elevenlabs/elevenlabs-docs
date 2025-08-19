@@ -1,0 +1,205 @@
+---
+title: Music quickstart
+subtitle: Learn how to generate music with Eleven Music.
+---
+
+This guide will show you how to generate music with Eleven Music.
+
+<Info>The Eleven Music API is only available to paid users.</Info>
+
+## Using the Eleven Music API
+
+<Steps>
+    <Step title="Create an API key">
+        <Markdown src="/snippets/quickstart-api-key.mdx" />
+    </Step>
+    <Step title="Install the SDK">
+        <Markdown src="/snippets/quickstart-install-sdk.mdx" />
+    </Step>
+    <Step title="Make the API request">
+        Create a new file named `example.py` or `example.mts`, depending on your language of choice and add the following code:
+
+        <CodeBlocks>
+        ```python
+        # example.py
+        from elevenlabs.client import ElevenLabs
+        from elevenlabs import play
+        import os
+        from dotenv import load_dotenv
+        load_dotenv()
+
+        elevenlabs = ElevenLabs(
+            api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
+
+        track = elevenlabs.music.compose(
+            prompt="Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
+            music_length_ms=10000,
+        )
+
+        play(track)
+        ```
+
+        ```typescript
+        // example.mts
+        import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+        import "dotenv/config";
+
+        const elevenlabs = new ElevenLabsClient();
+
+        const track = await elevenlabs.music.compose({
+          prompt: "Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
+          musicLengthMs: 10000,
+        });
+
+        await play(track);
+        ```
+        </CodeBlocks>
+    </Step>
+     <Step title="Execute the code">
+        <CodeBlocks>
+            ```python
+            python example.py
+            ```
+
+            ```typescript
+            npx tsx example.mts
+            ```
+        </CodeBlocks>
+
+        You should hear the generated music playing.
+    </Step>
+
+</Steps>
+
+## Composition plans
+
+A composition plan is a JSON object that describes the music you want to generate in finer detail. It can then be used to generate music with Eleven Music.
+
+Using a plan is optional, but it can be used to generate more complex music by giving you more granular control over each section of the generation.
+
+### Generating a composition plan
+
+A composition plan can be generated from a prompt by using the API.
+
+<CodeBlocks>
+    ```python
+    from elevenlabs.client import ElevenLabs
+    from elevenlabs import play
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    elevenlabs = ElevenLabs(
+    api_key=os.getenv("ELEVENLABS_API_KEY"),
+    )
+
+    composition_plan = elevenlabs.music.composition_plan.create(
+    prompt="Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
+    music_length_ms=10000,
+    )
+
+    print(composition_plan)
+
+    ```
+
+    ```typescript
+    import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+    import "dotenv/config";
+
+    const elevenlabs = new ElevenLabsClient();
+
+    const compositionPlan = await elevenlabs.music.compositionPlan.create({
+    prompt: "Create an intense, fast-paced electronic track for a high-adrenaline video game scene. Use driving synth arpeggios, punchy drums, distorted bass, glitch effects, and aggressive rhythmic textures. The tempo should be fast, 130–150 bpm, with rising tension, quick transitions, and dynamic energy bursts.",
+    musicLengthMs: 10000,
+    });
+
+    console.log(JSON.stringify(compositionPlan, null, 2));
+    ```
+
+</CodeBlocks>
+
+The above will generate a composition plan similar to the following:
+
+```json
+{
+  "positiveGlobalStyles": [
+    "electronic",
+    "fast-paced",
+    "driving synth arpeggios",
+    "punchy drums",
+    "distorted bass",
+    "glitch effects",
+    "aggressive rhythmic textures",
+    "high adrenaline"
+  ],
+  "negativeGlobalStyles": ["acoustic", "slow", "minimalist", "ambient", "lo-fi"],
+  "sections": [
+    {
+      "sectionName": "Intro",
+      "positiveLocalStyles": [
+        "rising synth arpeggio",
+        "glitch fx",
+        "filtered noise sweep",
+        "soft punchy kick building tension"
+      ],
+      "negativeLocalStyles": ["soft pads", "melodic vocals", "ambient textures"],
+      "durationMs": 3000,
+      "lines": []
+    },
+    {
+      "sectionName": "Peak Drop",
+      "positiveLocalStyles": [
+        "full punchy drums",
+        "distorted bass stab",
+        "aggressive rhythmic hits",
+        "rapid arpeggio sequences"
+      ],
+      "negativeLocalStyles": ["smooth transitions", "clean bass", "slow buildup"],
+      "durationMs": 4000,
+      "lines": []
+    },
+    {
+      "sectionName": "Final Burst",
+      "positiveLocalStyles": [
+        "glitch stutter",
+        "energy burst vox chopped sample",
+        "quick transitions",
+        "snare rolls"
+      ],
+      "negativeLocalStyles": ["long reverb tails", "fadeout", "gentle melodies"],
+      "durationMs": 3000,
+      "lines": []
+    }
+  ]
+}
+```
+
+### Using a composition plan
+
+A composition plan can be used to generate music by passing it to the `compose` method.
+
+<CodeBlocks>
+    ```python
+    # You can pass in composition_plan or prompt, but not both.
+    composition = elevenlabs.music.compose(
+        composition_plan=composition_plan,
+    )
+
+    play(composition)
+    ```
+
+    ```typescript
+    // You can pass in compositionPlan or prompt, but not both.
+    const composition = await elevenlabs.music.compose({
+        compositionPlan,
+    });
+
+    await play(composition);
+    ```
+
+</CodeBlocks>
+
+## Next steps
+
+Explore the [API reference](/docs/api-reference/music/compose) for more information on the Music API and its options.
