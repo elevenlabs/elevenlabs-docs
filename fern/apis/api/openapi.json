@@ -39195,8 +39195,9 @@
             ]
           },
           "is_new_user": {
-            "description": "Whether the user is new.",
+            "description": "Whether the user is new. This field is deprecated and will be removed in the future. Use 'created_at' instead.",
             "type": "boolean",
+            "deprecated": true,
             "title": "Is New User"
           },
           "xi_api_key": {
@@ -39280,10 +39281,16 @@
               }
             ],
             "title": "Partnerstack Partner Default Link"
+          },
+          "created_at": {
+            "description": "The unix timestamp of the user's creation. 0 if the user was created before the unix timestamp was added.",
+            "type": "integer",
+            "title": "Created At"
           }
         },
         "example": {
           "can_use_delayed_payment_methods": false,
+          "created_at": 1753999199,
           "first_name": "John",
           "is_api_key_hashed": false,
           "is_new_user": false,
@@ -39348,7 +39355,8 @@
           "is_new_user",
           "can_use_delayed_payment_methods",
           "is_onboarding_completed",
-          "is_onboarding_checklist_completed"
+          "is_onboarding_checklist_completed",
+          "created_at"
         ],
         "title": "UserResponseModel"
       },
