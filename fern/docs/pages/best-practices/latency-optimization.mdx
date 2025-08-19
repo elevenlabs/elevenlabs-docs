@@ -84,15 +84,42 @@ For example, using Flash models with Websockets, you can expect the following TT
 
 ### Global TTS API preview
 
-For users in Asia and other regions, we offer a global TTS API preview that provides improved latency by routing requests to the closest available region.
+ElevenLabs is launching inference servers in additional geographical regions to reduce latency for clients outside of the US. This section describes how to use the early preview of this feature.
 
-To use the global TTS API preview, you can override the base URL in your requests:
+<Warning>
+  This feature is still under development and is being provided solely on an "AS IS" and "AS
+  AVAILABLE" basis, without warranties of any kind. It may be modified or discontinued at our sole
+  discretion.
+</Warning>
+
+<Info>
+  Use of this feature may result in request processing outside of the USA, specifically in the
+  Netherlands and Singapore, to reduce latency where possible. This feature does not provide data
+  residency guarantees, and all data will continue to be stored and backed up in our USA-based
+  servers. If data residency is required, please refer to our [data residency
+  documentation](/docs/conversational-ai/legal/gdpr#getting-access).
+</Info>
+
+#### How to use
+
+Simply replace `api.elevenlabs.io` with `api-global-preview.elevenlabs.io` in your TTS API calls. When using the SDK you need to override the base URL.
+
+**Python SDK:**
+
+```python
+import os
+from elevenlabs.client import ElevenLabs
+
+client = ElevenLabs(
+    api_key=os.getenv("ELEVENLABS_API_KEY"),
+    base_url="https://api-global-preview.elevenlabs.io"
+)
+```
 
 **Direct API calls:**
 
 ```bash
-curl -X POST \
-  "https://api.asia.elevenlabs.io/v1/text-to-speech/{voice_id}" \
+curl -X POST -v "https://api-global-preview.elevenlabs.io/v1/text-to-speech/{voice_id}" \
   -H "Accept: audio/mpeg" \
   -H "Content-Type: application/json" \
   -H "xi-api-key: YOUR_API_KEY" \
@@ -102,44 +129,40 @@ curl -X POST \
   }'
 ```
 
-**Python SDK:**
+The geographically closest region will handle your request to minimize latency. You can check which region is serving your request by inspecting the `x-region` header:
 
-```python
-from elevenlabs import ElevenLabs
-
-client = ElevenLabs(
-    api_key="YOUR_API_KEY",
-    base_url="https://api.asia.elevenlabs.io"
-)
-
-audio = client.generate(
-    text="Hello World!",
-    voice="Brian",
-    model="eleven_flash_v2_5"
-)
+```bash
+curl -X POST -v https://api-global-preview.elevenlabs.io/v1/text-to-speech/...
+[...]
+< x-region: europe-west4
 ```
 
-**TypeScript SDK:**
+#### Expected latency improvements
 
-```typescript
-import { ElevenLabs } from 'elevenlabs';
+Based on our benchmarking, for the Turbo and Flash models we expect the following improvements to TTFB (time to first byte), depending on your location:
 
-const elevenlabs = new ElevenLabs({
-  apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.asia.elevenlabs.io',
-});
+- **Europe**: 80-100 ms
+- **Japan**: 80-100 ms
+- **India**: 150-200 ms
+- **Singapore**: 150-200 ms
 
-const audio = await elevenlabs.generate({
-  text: 'Hello World!',
-  voice: 'Brian',
-  model_id: 'eleven_flash_v2_5',
-});
-```
+#### Limitations and known issues
 
-<Info>
-  The global TTS API preview is currently available for testing. Contact your sales representative
-  for production usage and availability in your region.
-</Info>
+- **Limited product support**: Only TTS requests (`/v1/text-to-speech`) are supported at this time.
+
+  - Requests to other API products will seamlessly fall back to the US servers, but we don't recommend using the `api-global-preview` for those.
+  - Additional product support will be added in the future.
+
+- **Cache misses**: Some initial requests might be slower than expected due to cache misses. We recommend running each request several times if you are benchmarking. During normal operations with smooth traffic the latency improves.
+
+- **Limited capacity**: During this preview phase the capacity is limited. If you see an increased amount of 429 errors please retry later. We will add more capacity as we move out of preview.
+
+- **Model compatibility**: Latency improves for the low-latency models (Turbo and Flash). For some of the slower models like Multilingual you might see worse latency. We only recommend using `api-global-preview` for Turbo and Flash at this time.
+
+<Tip>
+  For requests which are slow or failing, please provide the value of the `x-trace-id` header if
+  possible (we recommend logging it for all requests you do).
+</Tip>
 
 ## Choose appropriate voices
 
