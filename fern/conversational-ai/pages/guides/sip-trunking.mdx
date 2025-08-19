@@ -176,68 +176,26 @@ Once the relevant metadata is received through any of the supported headers, the
 
 ## Call Transfer Configuration
 
-SIP trunking supports transferring calls to human operators using two different methods. The choice of transfer method depends on your transport protocol and SIP provider requirements.
+SIP trunking supports two transfer methods: Conference Transfer and SIP REFER Transfer.
 
-### Transfer Methods
+<Warning>
+  **SIP REFER + TLS Limitation**: SIP REFER transfer does not work with TLS transport due to a
+  Livekit bug. Use either TCP with SIP REFER or Conference transfer with TLS.
+</Warning>
 
-<AccordionGroup>
-  <Accordion title="Conference Transfer">
-    **Recommended for most configurations** Conference transfer creates a three-way conference call,
-    then removes the AI agent, leaving only the caller and the human operator connected. -
-    **Compatible with**: All transport protocols (TCP, TLS) - **Compatible with**: All media
-    encryption settings - **Works with**: All SIP providers - **Use when**: You want maximum
-    compatibility across different configurations
-  </Accordion>
+### Transfer Method Options
 
-  <Accordion title="SIP REFER Transfer">
-    **Direct transfer using SIP protocol** SIP REFER uses the SIP protocol to directly transfer the
-    call to the destination without creating a conference. - **Compatible with**: TCP transport only
-    - **Media encryption**: Must be disabled for Twilio - **Provider requirements**: Your SIP trunk
-    must support SIP REFER protocol - **Use when**: You need direct transfer without conference
-    bridging
-    <Warning>
-      **Known Limitation**: SIP REFER transfer does not work with TLS transport due to a platform
-      limitation. Use TCP transport or switch to Conference transfer when using TLS.
-    </Warning>
-  </Accordion>
-</AccordionGroup>
+- **Conference Transfer**: Works with all transport protocols (TCP, TLS) and media encryption
+  settings
+- **SIP REFER Transfer**: Only works with TCP transport. For Twilio, requires TCP and disabled
+  media encryption
 
-### Provider-Specific Requirements
+### Twilio-Specific Requirements
 
-<AccordionGroup>
-  <Accordion title="Twilio SIP Trunking">
-    When using Twilio as your SIP provider with transfer functionality: - **Transport**: Use TCP
-    (not TLS) for SIP REFER transfers - **Media Encryption**: Must be disabled for SIP REFER
-    transfers - **Alternative**: Use Conference transfer with any transport protocol and encryption
-    settings
-    <Note>
-      For Twilio users requiring encrypted connections, use Conference transfer with TLS transport
-      and enabled media encryption.
-    </Note>
-  </Accordion>
+When using SIP REFER transfers with Twilio:
 
-  <Accordion title="Other SIP Providers">
-    For providers other than Twilio: - **SIP REFER**: Verify your provider supports the SIP REFER
-    protocol - **Transport**: Use TCP transport for SIP REFER transfers - **Conference Transfer**:
-    Works with all providers regardless of transport protocol
-  </Accordion>
-</AccordionGroup>
-
-### Configuration Recommendations
-
-Choose your transfer configuration based on your requirements:
-
-<CardGroup cols={2}>
-  <Card title="Maximum Security" icon="shield-check">
-    **Conference Transfer + TLS + Required Media Encryption** - Transport: TLS - Media Encryption:
-    Required - Transfer Method: Conference - Compatible with all providers
-  </Card>
-
-  <Card title="Direct Transfer" icon="phone-arrow-down-left">
-    **SIP REFER + TCP + Disabled Media Encryption** - Transport: TCP - Media Encryption: Disabled
-    (required for Twilio) - Transfer Method: SIP REFER - Verify provider supports SIP REFER
-  </Card>
-</CardGroup>
+- **Transport**: Must use TCP (not TLS)
+- **Media Encryption**: Must be disabled
 
 ## Assigning Agents to Phone Numbers
 
@@ -255,25 +213,14 @@ Learn more about configuring transfer functionality in the [Transfer to Human](/
 <AccordionGroup>
 
 {' '}
+
 <Accordion title="Transfer Issues">
-  If call transfers are not working properly: **For SIP REFER Transfer Issues:** 1. **Verify
-  transport protocol**: SIP REFER only works with TCP transport, not TLS 2. **Check media
-  encryption**: For Twilio, media encryption must be disabled when using SIP REFER 3. **Confirm
-  provider support**: Verify your SIP trunk provider supports the SIP REFER protocol 4. **Test
-  direct outbound calls**: Ensure you can make direct calls to the transfer destination number **For
-  Conference Transfer Issues:** 1. **Check network connectivity**: Ensure both endpoints can
-  establish media connections 2. **Verify codec compatibility**: Confirm both endpoints support the
-  same audio codecs 3. **Test basic calling**: Verify standard inbound/outbound calls work before
-  testing transfers **General Transfer Troubleshooting:** 1. **Switch transfer methods**: If SIP
-  REFER fails, try Conference transfer 2. **Check firewall rules**: Ensure RTP media ports
-  (10000-60000) are open for conference calls 3. **Review conversation logs**: Check conversation
-  IDs for specific error messages 4. **Provider-specific settings**: Contact your SIP provider to
-  confirm transfer protocol support
-  <Warning>
-    **Twilio + TLS + SIP REFER = Not Supported**: This combination will fail. Use either Conference
-    transfer with TLS, or SIP REFER with TCP and disabled media encryption.
-  </Warning>
-</Accordion>
+  If call transfers are not working properly:
+
+- **SIP REFER + TLS**: Does not work due to Livekit bug. Use TCP with SIP REFER or Conference transfer with TLS
+- **SIP REFER + Twilio**: Requires TCP transport and disabled media encryption
+- **Test basic connectivity**: Verify direct outbound calls work before testing transfers
+  </Accordion>
 
   <Accordion title="Connection Issues">
     If you're experiencing connection problems: 
@@ -377,21 +324,13 @@ Learn more about configuring transfer functionality in the [Transfer to Human](/
 </Accordion>
 
 <Accordion title="What's the difference between transport types?">
-  - **TCP**: Reliable but unencrypted signaling, compatible with all transfer methods - **TLS**:
-  Encrypted and reliable signaling (recommended for production), but has limitations with SIP REFER
-  transfers
+  - **TCP**: Reliable but unencrypted signaling, compatible with all transfer methods
+  - **TLS**: Encrypted and reliable signaling (recommended), but SIP REFER transfers require TCP
+  
   <Note>
-    UDP transport is not currently available. For security-critical applications, use TLS transport
-    with Conference transfer method.
+    For security-critical applications with transfers, use TLS transport with Conference transfer method.
   </Note>
-  <Warning>
-    **Transfer Compatibility**: SIP REFER transfers only work with TCP transport. If you need TLS
-    encryption and transfers, use Conference transfer method.
-  </Warning>
 </Accordion>
-
-<Accordion title="What are custom headers used for?">
-  Custom SIP headers allow you to include provider-specific information with outbound calls. Common
   uses include call routing, billing codes, caller identification, and meeting specific provider
   requirements.
 </Accordion>
@@ -402,29 +341,16 @@ Learn more about configuring transfer functionality in the [Transfer to Human](/
 </Accordion>
 
 {' '}
+
 <Accordion title="Can I route calls conditionally to different agents?">
   Yes, you can use your existing PBX system's routing rules to direct calls to different phone
   numbers, each connected to different ElevenLabs agents.
 </Accordion>
 
-  <Accordion title="Why are my call transfers failing?">
-    Transfer failures are often due to transport protocol and encryption compatibility issues:
-    
-    **Common Causes:**
-    - Using SIP REFER with TLS transport (not supported)
-    - Using SIP REFER with Twilio while media encryption is enabled
-    - SIP provider doesn't support SIP REFER protocol
-    - Firewall blocking RTP media ports for conference transfers
-    
-    **Solutions:**
-    - Switch to Conference transfer for maximum compatibility
-    - Use TCP transport if you need SIP REFER transfers
-    - For Twilio: disable media encryption when using SIP REFER
-    - Verify your provider supports your chosen transfer method
-    
-    See the [Transfer Issues troubleshooting section](#troubleshooting) for detailed steps.
-  </Accordion>
-</AccordionGroup>
+<Accordion title="Why are my call transfers failing?">
+  **SIP REFER + TLS**: Does not work due to Livekit bug. Use TCP with SIP REFER or Conference
+  transfer with TLS. **SIP REFER + Twilio**: Requires TCP transport and disabled media encryption.
+</Accordion>
 
 ## Next steps
 
