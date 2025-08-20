@@ -7695,6 +7695,149 @@
         "x-fern-sdk-method-name": "create_from_rules"
       }
     },
+    "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}": {
+      "patch": {
+        "operationId": "Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch",
+        "summary": "Update Pronunciation Dictionary",
+        "description": "Partially update the pronunciation dictionary without changing the version",
+        "parameters": [
+          {
+            "name": "pronunciation_dictionary_id",
+            "in": "path",
+            "description": "The id of the pronunciation dictionary",
+            "required": true,
+            "schema": {
+              "description": "The id of the pronunciation dictionary",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Pronunciation Dictionary Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPronunciationDictionaryMetadataResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pronunciation Dictionary"
+        ],
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "update"
+      },
+      "get": {
+        "operationId": "Get_metadata_for_a_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__get",
+        "summary": "Get Metadata For A Pronunciation Dictionary",
+        "description": "Get metadata for a pronunciation dictionary",
+        "parameters": [
+          {
+            "name": "pronunciation_dictionary_id",
+            "in": "path",
+            "description": "The id of the pronunciation dictionary",
+            "required": true,
+            "schema": {
+              "description": "The id of the pronunciation dictionary",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Pronunciation Dictionary Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPronunciationDictionaryMetadataResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pronunciation Dictionary"
+        ],
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "get"
+      }
+    },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
       "post": {
         "operationId": "Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post",
@@ -7946,74 +8089,6 @@
         ],
         "x-fern-sdk-group-name": "pronunciation_dictionaries",
         "x-fern-sdk-method-name": "download"
-      }
-    },
-    "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}": {
-      "get": {
-        "operationId": "Get_metadata_for_a_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__get",
-        "summary": "Get Metadata For A Pronunciation Dictionary",
-        "description": "Get metadata for a pronunciation dictionary",
-        "parameters": [
-          {
-            "name": "pronunciation_dictionary_id",
-            "in": "path",
-            "description": "The id of the pronunciation dictionary",
-            "required": true,
-            "schema": {
-              "description": "The id of the pronunciation dictionary",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Pronunciation Dictionary Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetPronunciationDictionaryMetadataResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Pronunciation Dictionary"
-        ],
-        "x-fern-sdk-group-name": "pronunciation_dictionaries",
-        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/pronunciation-dictionaries": {
@@ -10728,6 +10803,78 @@
           "agents"
         ],
         "x-fern-sdk-method-name": "duplicate"
+      }
+    },
+    "/v1/convai/agents/{agent_id}/generated-workflow": {
+      "get": {
+        "operationId": "generated_workflow_route",
+        "summary": "Get Generated Workflow",
+        "description": "Get a workflow generated automatically based on transfer tools",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "The id of an agent. This is returned on agent creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of an agent. This is returned on agent creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentWorkflowResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Conversational AI"
+        ],
+        "x-fern-sdk-group-name": [
+          "conversational_ai",
+          "agents"
+        ],
+        "x-fern-sdk-method-name": "transform_to_workflow"
       }
     },
     "/v1/convai/agents/{agent_id}/simulate-conversation": {
@@ -15058,6 +15205,14 @@
         "responses": {
           "200": {
             "description": "The generated audio file in the format specified",
+            "headers": {
+              "song-id": {
+                "description": "Unique identifier for the generated song",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "audio/*": {
                 "schema": {
@@ -15154,11 +15309,16 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Multipart/mixed response with JSON metadata and binary audio file",
+            "headers": {
+              "song-id": {
+                "description": "Unique identifier for the generated song",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
-              "application/json": {
-                "schema": {}
-              },
               "multipart/mixed": {
                 "schema": {
                   "description": "Raw multipart/mixed response data that clients must parse. Contains two parts separated by boundary: 1) application/json part with composition_plan and song_metadata 2) audio/* part with binary audio data and Content-Disposition header",
@@ -15256,6 +15416,14 @@
         "responses": {
           "200": {
             "description": "Streaming audio data in the format specified",
+            "headers": {
+              "song-id": {
+                "description": "Unique identifier for the generated song",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "audio/*": {
                 "schema": {
@@ -16528,6 +16696,69 @@
         },
         "title": "ASRConversationalConfig"
       },
+      "ASRConversationalConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "quality": {
+            "description": "The quality of the transcription",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRQuality"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider": {
+            "description": "The provider of the transcription service",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRProvider"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "user_input_audio_format": {
+            "description": "The format of the audio to be transcribed",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRInputFormat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "keywords": {
+            "description": "Keywords to boost prediction probability for",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keywords"
+          }
+        },
+        "example": {
+          "keywords": [
+            "hello",
+            "world"
+          ],
+          "provider": "elevenlabs",
+          "quality": "high",
+          "user_input_audio_format": "pcm_16000"
+        },
+        "title": "ASRConversationalConfigWorkflowOverride"
+      },
       "ASRInputFormat": {
         "type": "string",
         "enum": [
@@ -16927,6 +17158,79 @@
         },
         "title": "AgentConfigAPIModel"
       },
+      "AgentConfigAPIModelWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "first_message": {
+            "description": "If non-empty, the first message the agent will say. If empty, the agent waits for the user to start the discussion.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Message",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "language": {
+            "description": "Language of the agent - used for ASR and TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language",
+            "x-convai-client-override": true
+          },
+          "dynamic_variables": {
+            "description": "Configuration for dynamic variables",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DynamicVariablesConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PromptAgentAPIModelWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "dynamic_variables": {
+            "dynamic_variable_placeholders": {
+              "user_name": "John Doe"
+            }
+          },
+          "first_message": "Hello, how can I help you today?",
+          "language": "en",
+          "prompt": {
+            "knowledge_base": [],
+            "llm": "gemini-2.0-flash-001",
+            "max_tokens": -1,
+            "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+            "temperature": 0,
+            "tool_ids": [],
+            "tools": []
+          }
+        },
+        "title": "AgentConfigAPIModelWorkflowOverride"
+      },
       "AgentConfigOverride": {
         "type": "object",
         "properties": {
@@ -17261,6 +17565,61 @@
           "condition"
         ],
         "title": "AgentTransfer"
+      },
+      "AgentWorkflowResponseModel": {
+        "type": "object",
+        "properties": {
+          "edges": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WorkflowEdgeModel"
+            },
+            "title": "Edges"
+          },
+          "nodes": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/WorkflowStartNodeModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowEndNodeModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowPhoneNumberNodeModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowOverrideAgentNodeModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowStandaloneAgentNodeModel"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkflowToolNodeModel"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "end": "#/components/schemas/WorkflowEndNodeModel",
+                  "override_agent": "#/components/schemas/WorkflowOverrideAgentNodeModel",
+                  "phone_number": "#/components/schemas/WorkflowPhoneNumberNodeModel",
+                  "standalone_agent": "#/components/schemas/WorkflowStandaloneAgentNodeModel",
+                  "start": "#/components/schemas/WorkflowStartNodeModel",
+                  "tool": "#/components/schemas/WorkflowToolNodeModel"
+                }
+              }
+            },
+            "minProperties": 1,
+            "title": "Nodes"
+          }
+        },
+        "required": [
+          "edges",
+          "nodes"
+        ],
+        "title": "AgentWorkflowResponseModel"
       },
       "AgentWorkspaceOverrides-Input": {
         "type": "object",
@@ -20997,7 +21356,7 @@
             "title": "File Format"
           },
           "cloud_storage_url": {
-            "description": "The valid AWS S3, Cloudflare R2 or Google Cloud Storage URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be a valid publicly accessible cloud storage URL. The file size must be less than 2GB. URL can be pre-signed.",
+            "description": "The HTTPS URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be accessible via HTTPS and the file size must be less than 2GB. Any valid HTTPS URL is accepted, including URLs from cloud storage providers (AWS S3, Google Cloud Storage, Cloudflare R2, etc.), CDNs, or any other HTTPS source. URLs can be pre-signed or include authentication tokens in query parameters.",
             "anyOf": [
               {
                 "type": "string"
@@ -21009,7 +21368,8 @@
             "examples": [
               "https://storage.googleapis.com/my-bucket/folder/audio.mp3",
               "https://my-bucket.s3.us-west-2.amazonaws.com/folder/audio.mp3",
-              "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3"
+              "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3",
+              "https://cdn.example.com/media/audio.wav"
             ],
             "title": "Cloud Storage Url"
           },
@@ -22595,6 +22955,28 @@
         },
         "title": "Body_Update_metadata_for_a_speaker_v1_dubbing_resource__dubbing_id__speaker__speaker_id__patch"
       },
+      "Body_Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch": {
+        "type": "object",
+        "properties": {
+          "archived": {
+            "description": "The name of the pronunciation dictionary, used for identification only.",
+            "type": "boolean",
+            "examples": [
+              "My Dictionary"
+            ],
+            "title": "Archived"
+          },
+          "name": {
+            "description": "The name of the pronunciation dictionary, used for identification only.",
+            "type": "string",
+            "examples": [
+              "My Dictionary"
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "Body_Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch"
+      },
       "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post": {
         "type": "object",
         "properties": {
@@ -22648,7 +23030,10 @@
                     "audio_native_write",
                     "workspace_read",
                     "workspace_write",
-                    "forced_alignment"
+                    "forced_alignment",
+                    "convai_read",
+                    "convai_write",
+                    "music_generation"
                   ]
                 },
                 "type": "array"
@@ -22726,7 +23111,10 @@
                     "audio_native_write",
                     "workspace_read",
                     "workspace_write",
-                    "forced_alignment"
+                    "forced_alignment",
+                    "convai_read",
+                    "convai_write",
+                    "music_generation"
                   ]
                 },
                 "type": "array"
@@ -22945,6 +23333,89 @@
           }
         },
         "title": "BuiltInTools"
+      },
+      "BuiltInToolsWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "end_call": {
+            "description": "The end call tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_detection": {
+            "description": "The language detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_agent": {
+            "description": "The transfer to agent tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transfer_to_number": {
+            "description": "The transfer to number tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "skip_turn": {
+            "description": "The skip turn tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "play_keypad_touch_tone": {
+            "description": "The play DTMF tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "voicemail_detection": {
+            "description": "The voicemail detection tool",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemToolConfig-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "BuiltInToolsWorkflowOverride"
       },
       "CaptionStyleCharacterAnimationModel": {
         "type": "object",
@@ -24605,6 +25076,59 @@
           }
         },
         "title": "ConversationConfigOverrideConfig"
+      },
+      "ConversationConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "text_only": {
+            "description": "If enabled audio will not be processed and only text will be used, use to avoid audio pricing.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Only",
+            "x-convai-client-override": true
+          },
+          "max_duration_seconds": {
+            "description": "The maximum duration of a conversation in seconds",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Duration Seconds"
+          },
+          "client_events": {
+            "description": "The events that will be sent to the client",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ClientEvent"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Events"
+          }
+        },
+        "example": {
+          "client_events": [
+            "audio",
+            "interruption"
+          ],
+          "max_duration_seconds": 600
+        },
+        "title": "ConversationConfigWorkflowOverride"
       },
       "ConversationDeletionSettings": {
         "type": "object",
@@ -26455,6 +26979,133 @@
         },
         "title": "ConversationalConfigAPIModel"
       },
+      "ConversationalConfigAPIModelWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "asr": {
+            "description": "Configuration for conversational transcription",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ASRConversationalConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "turn": {
+            "description": "Configuration for turn detection",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TurnConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tts": {
+            "description": "Configuration for conversational text to speech",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSConversationalConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conversation": {
+            "description": "Configuration for conversational events",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConversationConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "language_presets": {
+            "description": "Language presets for conversations",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/LanguagePreset-Output"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language Presets"
+          },
+          "agent": {
+            "description": "Agent specific configuration",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AgentConfigAPIModelWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "example": {
+          "agent": {
+            "dynamic_variables": {
+              "dynamic_variable_placeholders": {
+                "user_name": "John Doe"
+              }
+            },
+            "first_message": "Hello, how can I help you today?",
+            "language": "en",
+            "prompt": {
+              "knowledge_base": [],
+              "llm": "gemini-2.0-flash-001",
+              "max_tokens": -1,
+              "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+              "temperature": 0,
+              "tool_ids": [],
+              "tools": []
+            }
+          },
+          "asr": {
+            "keywords": [
+              "hello",
+              "world"
+            ],
+            "provider": "elevenlabs",
+            "quality": "high",
+            "user_input_audio_format": "pcm_16000"
+          },
+          "conversation": {
+            "client_events": [
+              "audio",
+              "interruption"
+            ],
+            "max_duration_seconds": 600
+          },
+          "tts": {
+            "agent_output_audio_format": "pcm_16000",
+            "model_id": "eleven_turbo_v2",
+            "optimize_streaming_latency": 3,
+            "pronunciation_dictionary_locators": [],
+            "similarity_boost": 0.8,
+            "speed": 1,
+            "stability": 0.5,
+            "voice_id": "cjVigY5qzO86Huf0OWal"
+          },
+          "turn": {
+            "mode": "turn",
+            "silence_end_call_timeout": -1,
+            "turn_timeout": 7
+          }
+        },
+        "title": "ConversationalConfigAPIModelWorkflowOverride"
+      },
       "ConvertChapterResponseModel": {
         "type": "object",
         "properties": {
@@ -27111,6 +27762,72 @@
         },
         "title": "DependentUnknownToolIdentifier"
       },
+      "DetailedMusicResponse": {
+        "description": "Response model for structured music generation endpoint",
+        "type": "object",
+        "properties": {
+          "composition_plan": {
+            "description": "The composition plan used to generate the song",
+            "$ref": "#/components/schemas/MusicPrompt"
+          },
+          "song_metadata": {
+            "description": "The metadata of the generated song",
+            "$ref": "#/components/schemas/SongMetadata"
+          }
+        },
+        "example": {
+          "composition_plan": {
+            "negative_global_styles": [
+              "metal",
+              "hip-hop",
+              "country"
+            ],
+            "positive_global_styles": [
+              "pop",
+              "rock",
+              "jazz"
+            ],
+            "sections": [
+              {
+                "duration_ms": 10000,
+                "lines": [
+                  "Verse 1 lyrics"
+                ],
+                "negative_local_styles": [
+                  "metal",
+                  "hip-hop",
+                  "country"
+                ],
+                "positive_local_styles": [
+                  "pop",
+                  "rock",
+                  "jazz"
+                ],
+                "section_name": "Verse 1"
+              }
+            ]
+          },
+          "song_metadata": {
+            "description": "My Song Description",
+            "genres": [
+              "pop",
+              "rock",
+              "jazz"
+            ],
+            "is_explicit": false,
+            "languages": [
+              "en",
+              "fr"
+            ],
+            "title": "My Song"
+          }
+        },
+        "required": [
+          "composition_plan",
+          "song_metadata"
+        ],
+        "title": "DetailedMusicResponse"
+      },
       "DialogueInput": {
         "type": "object",
         "properties": {
@@ -27679,6 +28396,45 @@
         },
         "title": "DynamicVariablesConfig"
       },
+      "DynamicVariablesConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "dynamic_variable_placeholders": {
+            "description": "A dictionary of dynamic variable placeholders and their values",
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dynamic Variable Placeholders"
+          }
+        },
+        "example": {
+          "dynamic_variable_placeholders": {
+            "user_name": "John Doe"
+          }
+        },
+        "title": "DynamicVariablesConfigWorkflowOverride"
+      },
       "EditChapterResponseModel": {
         "type": "object",
         "properties": {
@@ -28036,6 +28792,21 @@
             "description": "Whether the user has open invoices.",
             "type": "boolean",
             "title": "Has Open Invoices"
+          },
+          "pending_change": {
+            "description": "The pending change for the user.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PendingSubscriptionSwitchResponseModel"
+              },
+              {
+                "$ref": "#/components/schemas/PendingCancellationResponseModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pending Change"
           }
         },
         "example": {
@@ -32490,6 +33261,66 @@
         ],
         "title": "MultichannelSpeechToTextResponseModel"
       },
+      "MultipartMusicResponse": {
+        "description": "Multipart response structure with JSON metadata and binary audio",
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "description": "JSON metadata containing composition plan and song metadata",
+            "$ref": "#/components/schemas/DetailedMusicResponse"
+          },
+          "audio": {
+            "description": "Binary audio data in the requested format",
+            "type": "string",
+            "format": "binary",
+            "title": "Audio"
+          }
+        },
+        "example": {
+          "audio": "[binary audio data]",
+          "metadata": {
+            "composition_plan": {
+              "negative_global_styles": [
+                "calm",
+                "acoustic"
+              ],
+              "positive_global_styles": [
+                "electronic",
+                "intense"
+              ],
+              "sections": [
+                {
+                  "duration_ms": 10000,
+                  "lines": [],
+                  "negative_local_styles": [
+                    "full drums"
+                  ],
+                  "positive_local_styles": [
+                    "filtered synth"
+                  ],
+                  "section_name": "Intro"
+                }
+              ]
+            },
+            "song_metadata": {
+              "description": "AI-generated music",
+              "genres": [
+                "electronic"
+              ],
+              "is_explicit": false,
+              "languages": [
+                "Instrumental"
+              ],
+              "title": "Generated Song"
+            }
+          }
+        },
+        "required": [
+          "metadata",
+          "audio"
+        ],
+        "title": "MultipartMusicResponse"
+      },
       "MusicPrompt": {
         "type": "object",
         "properties": {
@@ -32949,6 +33780,64 @@
         ],
         "title": "PdfExportOptions"
       },
+      "PendingCancellationResponseModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "default": "cancellation",
+            "const": "cancellation",
+            "title": "Kind"
+          },
+          "timestamp_seconds": {
+            "description": "The timestamp of the cancellation.",
+            "type": "integer",
+            "title": "Timestamp Seconds"
+          }
+        },
+        "required": [
+          "timestamp_seconds"
+        ],
+        "title": "PendingCancellationResponseModel"
+      },
+      "PendingSubscriptionSwitchResponseModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "default": "change",
+            "const": "change",
+            "title": "Kind"
+          },
+          "next_tier": {
+            "description": "The tier to change to.",
+            "type": "string",
+            "enum": [
+              "free",
+              "starter",
+              "creator",
+              "pro",
+              "growing_business",
+              "scale_2024_08_10",
+              "grant_tier_1_2025_07_23",
+              "grant_tier_2_2025_07_23",
+              "trial",
+              "enterprise"
+            ],
+            "title": "Next Tier"
+          },
+          "timestamp_seconds": {
+            "description": "The timestamp of the change.",
+            "type": "integer",
+            "title": "Timestamp Seconds"
+          }
+        },
+        "required": [
+          "next_tier",
+          "timestamp_seconds"
+        ],
+        "title": "PendingSubscriptionSwitchResponseModel"
+      },
       "PhoneNumberAgentInfo": {
         "type": "object",
         "properties": {
@@ -33287,6 +34176,26 @@
           "url"
         ],
         "title": "PodcastURLSource"
+      },
+      "Position": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "default": 0,
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "default": 0,
+            "title": "Y"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "Position"
       },
       "PostAgentAvatarResponseModel": {
         "type": "object",
@@ -34775,6 +35684,225 @@
         },
         "title": "PromptAgentAPIModelOverrideConfig"
       },
+      "PromptAgentAPIModelWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "The prompt for the agent",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt",
+            "x-convai-client-override": true
+          },
+          "llm": {
+            "description": "The LLM to query with the prompt and the chat history. If using data residency, the LLM must be supported in the data residency environment",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "temperature": {
+            "description": "The temperature for the LLM",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature"
+          },
+          "max_tokens": {
+            "description": "If greater than 0, maximum number of tokens the LLM can predict",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Tokens"
+          },
+          "tool_ids": {
+            "description": "A list of IDs of tools used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Ids"
+          },
+          "built_in_tools": {
+            "description": "Built-in system tools to be used by the agent",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BuiltInToolsWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_server_ids": {
+            "description": "A list of MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mcp Server Ids"
+          },
+          "native_mcp_server_ids": {
+            "description": "A list of Native MCP server ids to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Native Mcp Server Ids",
+            "x-convai-client-override": true
+          },
+          "knowledge_base": {
+            "description": "A list of knowledge bases to be used by the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KnowledgeBaseLocator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knowledge Base"
+          },
+          "custom_llm": {
+            "description": "Definition for a custom LLM if LLM field is set to 'CUSTOM_LLM'",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CustomLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ignore_default_personality": {
+            "description": "Whether to ignore the default personality",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ignore Default Personality"
+          },
+          "rag": {
+            "description": "Configuration for RAG",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RagConfigWorkflowOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timezone": {
+            "description": "Timezone for displaying current time in system prompt. If set, the current time will be included in the system prompt using this timezone. Must be a valid timezone name (e.g., 'America/New_York', 'Europe/London', 'UTC').",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "tools": {
+            "description": "A list of tools that the agent can use over the course of the conversation, use tool_ids instead",
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/WebhookToolConfig-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClientToolConfig-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SystemToolConfig-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MCPToolConfig-Output"
+                    }
+                  ],
+                  "description": "The type of tool",
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "client": "#/components/schemas/ClientToolConfig-Output",
+                      "mcp": "#/components/schemas/MCPToolConfig-Output",
+                      "system": "#/components/schemas/SystemToolConfig-Output",
+                      "webhook": "#/components/schemas/WebhookToolConfig-Output"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tools"
+          }
+        },
+        "example": {
+          "knowledge_base": [],
+          "llm": "gemini-2.0-flash-001",
+          "max_tokens": -1,
+          "prompt": "You are a helpful assistant that can answer questions about the topic of the conversation.",
+          "temperature": 0,
+          "tool_ids": [],
+          "tools": []
+        },
+        "title": "PromptAgentAPIModelWorkflowOverride"
+      },
       "PromptEvaluationCriteria": {
         "description": "An evaluation using the transcript and a prompt for a yes/no achieved answer",
         "type": "object",
@@ -35319,6 +36447,78 @@
           }
         },
         "title": "RagConfig"
+      },
+      "RagConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "embedding_model": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddingModelEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "max_vector_distance": {
+            "description": "Maximum vector distance of retrieved chunks.",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              0.5
+            ],
+            "title": "Max Vector Distance"
+          },
+          "max_documents_length": {
+            "description": "Maximum total length of document chunks retrieved from RAG.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "50000"
+            ],
+            "title": "Max Documents Length"
+          },
+          "max_retrieved_rag_chunks_count": {
+            "description": "Maximum number of RAG document chunks to initially retrieve from the vector store. These are then further filtered by vector distance and total length.",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              5
+            ],
+            "title": "Max Retrieved Rag Chunks Count"
+          }
+        },
+        "title": "RagConfigWorkflowOverride"
       },
       "RagRetrievalInfo": {
         "type": "object",
@@ -36338,6 +37538,85 @@
           }
         },
         "title": "SkipTurnToolResponseModel"
+      },
+      "SongMetadata": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "The title of the song",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "description": "The description of the song",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "genres": {
+            "description": "The genres of the song",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Genres"
+          },
+          "languages": {
+            "description": "The languages of the song",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Languages"
+          },
+          "is_explicit": {
+            "description": "Whether the song is explicit",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Explicit"
+          }
+        },
+        "example": {
+          "description": "My Song Description",
+          "genres": [
+            "pop",
+            "rock",
+            "jazz"
+          ],
+          "is_explicit": false,
+          "languages": [
+            "en",
+            "fr"
+          ],
+          "title": "My Song"
+        },
+        "required": [
+          "title",
+          "description",
+          "genres",
+          "languages",
+          "is_explicit"
+        ],
+        "title": "SongMetadata"
       },
       "SongSection": {
         "type": "object",
@@ -38221,6 +39500,135 @@
         },
         "title": "TTSConversationalConfigOverrideConfig"
       },
+      "TTSConversationalConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "description": "The model to use for TTS",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSConversationalModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "voice_id": {
+            "description": "The voice ID to use for TTS",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Id",
+            "x-convai-client-override": true,
+            "x-convai-language-override": true
+          },
+          "supported_voices": {
+            "description": "Additional supported voices for the agent",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SupportedVoice"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supported Voices"
+          },
+          "agent_output_audio_format": {
+            "description": "The audio format to use for TTS",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOutputFormat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "optimize_streaming_latency": {
+            "description": "The optimization for streaming latency",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TTSOptimizeStreamingLatency"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stability": {
+            "description": "The stability of generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stability"
+          },
+          "speed": {
+            "description": "The speed of generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed"
+          },
+          "similarity_boost": {
+            "description": "The similarity boost for generated speech",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Similarity Boost"
+          },
+          "pronunciation_dictionary_locators": {
+            "description": "The pronunciation dictionary locators",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PydanticPronunciationDictionaryVersionLocator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pronunciation Dictionary Locators"
+          }
+        },
+        "example": {
+          "agent_output_audio_format": "pcm_16000",
+          "model_id": "eleven_turbo_v2",
+          "optimize_streaming_latency": 3,
+          "pronunciation_dictionary_locators": [],
+          "similarity_boost": 0.8,
+          "speed": 1,
+          "stability": 0.5,
+          "voice_id": "cjVigY5qzO86Huf0OWal"
+        },
+        "title": "TTSConversationalConfigWorkflowOverride"
+      },
       "TTSConversationalModel": {
         "type": "string",
         "enum": [
@@ -38920,6 +40328,53 @@
           "turn_timeout": 7
         },
         "title": "TurnConfig"
+      },
+      "TurnConfigWorkflowOverride": {
+        "type": "object",
+        "properties": {
+          "turn_timeout": {
+            "description": "Maximum wait time for the user's reply before re-engaging the user",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Turn Timeout"
+          },
+          "silence_end_call_timeout": {
+            "description": "Maximum wait time since the user last spoke before terminating the call",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Silence End Call Timeout"
+          },
+          "mode": {
+            "description": "The mode of turn detection",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TurnMode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-fern-ignore": "True"
+          }
+        },
+        "example": {
+          "mode": "turn",
+          "silence_end_call_timeout": -1,
+          "turn_timeout": 7
+        },
+        "title": "TurnConfigWorkflowOverride"
       },
       "TurnMode": {
         "type": "string",
@@ -43197,6 +44652,310 @@
         },
         "title": "WidgetTextContents"
       },
+      "WorkflowEdgeModel": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          },
+          "forward_condition": {
+            "description": "Condition that must be met for the edge to be traversed in the forward direction.",
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkflowUnconditionalModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowLLMConditionModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowResultConditionModel"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "llm": "#/components/schemas/WorkflowLLMConditionModel",
+                    "result": "#/components/schemas/WorkflowResultConditionModel",
+                    "unconditional": "#/components/schemas/WorkflowUnconditionalModel"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forward Condition"
+          },
+          "backward_condition": {
+            "description": "Condition that must be met for the edge to be traversed in the backward direction.",
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WorkflowUnconditionalModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowLLMConditionModel"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WorkflowResultConditionModel"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "llm": "#/components/schemas/WorkflowLLMConditionModel",
+                    "result": "#/components/schemas/WorkflowResultConditionModel",
+                    "unconditional": "#/components/schemas/WorkflowUnconditionalModel"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backward Condition"
+          }
+        },
+        "required": [
+          "source",
+          "target",
+          "forward_condition",
+          "backward_condition"
+        ],
+        "title": "WorkflowEdgeModel"
+      },
+      "WorkflowEndNodeModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "end",
+            "const": "end",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position"
+          }
+        },
+        "required": [
+          "type",
+          "position"
+        ],
+        "title": "WorkflowEndNodeModel"
+      },
+      "WorkflowLLMConditionModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "llm",
+            "const": "llm",
+            "title": "Type"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition"
+          }
+        },
+        "required": [
+          "type",
+          "condition"
+        ],
+        "title": "WorkflowLLMConditionModel"
+      },
+      "WorkflowOverrideAgentNodeModel": {
+        "type": "object",
+        "properties": {
+          "conversation_config": {
+            "$ref": "#/components/schemas/ConversationalConfigAPIModelWorkflowOverride"
+          },
+          "additional_prompt": {
+            "type": "string",
+            "default": "",
+            "title": "Additional Prompt"
+          },
+          "additional_knowledge_base": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KnowledgeBaseLocator"
+            },
+            "title": "Additional Knowledge Base"
+          },
+          "additional_tool_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Additional Tool Ids"
+          },
+          "type": {
+            "type": "string",
+            "default": "override_agent",
+            "const": "override_agent",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "required": [
+          "conversation_config",
+          "additional_prompt",
+          "additional_knowledge_base",
+          "additional_tool_ids",
+          "type",
+          "position",
+          "label"
+        ],
+        "title": "WorkflowOverrideAgentNodeModel"
+      },
+      "WorkflowPhoneNumberNodeModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "phone_number",
+            "const": "phone_number",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position"
+          },
+          "transfer_destination": {
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "phone": "#/components/schemas/PhoneNumberTransferDestination",
+                "sip_uri": "#/components/schemas/SIPUriTransferDestination"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PhoneNumberTransferDestination"
+              },
+              {
+                "$ref": "#/components/schemas/SIPUriTransferDestination"
+              }
+            ],
+            "title": "Transfer Destination"
+          },
+          "transfer_type": {
+            "default": "conference",
+            "$ref": "#/components/schemas/TransferTypeEnum"
+          }
+        },
+        "required": [
+          "type",
+          "position",
+          "transfer_destination",
+          "transfer_type"
+        ],
+        "title": "WorkflowPhoneNumberNodeModel"
+      },
+      "WorkflowResultConditionModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "result",
+            "const": "result",
+            "title": "Type"
+          },
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          }
+        },
+        "required": [
+          "type",
+          "successful"
+        ],
+        "title": "WorkflowResultConditionModel"
+      },
+      "WorkflowStandaloneAgentNodeModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "standalone_agent",
+            "const": "standalone_agent",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "delay_ms": {
+            "type": "integer",
+            "default": 0,
+            "title": "Delay Ms"
+          },
+          "transfer_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfer Message"
+          },
+          "enable_transferred_agent_first_message": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enable Transferred Agent First Message"
+          }
+        },
+        "required": [
+          "type",
+          "position",
+          "agent_id",
+          "delay_ms",
+          "transfer_message",
+          "enable_transferred_agent_first_message"
+        ],
+        "title": "WorkflowStandaloneAgentNodeModel"
+      },
+      "WorkflowStartNodeModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "start",
+            "const": "start",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position"
+          }
+        },
+        "required": [
+          "type",
+          "position"
+        ],
+        "title": "WorkflowStartNodeModel"
+      },
       "WorkflowToolEdgeStepModel": {
         "type": "object",
         "properties": {
@@ -43225,6 +44984,19 @@
           "target_node_id"
         ],
         "title": "WorkflowToolEdgeStepModel"
+      },
+      "WorkflowToolLocator": {
+        "type": "object",
+        "properties": {
+          "tool_id": {
+            "type": "string",
+            "title": "Tool Id"
+          }
+        },
+        "required": [
+          "tool_id"
+        ],
+        "title": "WorkflowToolLocator"
       },
       "WorkflowToolMaxIterationsExceededStepModel": {
         "type": "object",
@@ -43360,6 +45132,34 @@
         ],
         "title": "WorkflowToolNestedToolsStepModel"
       },
+      "WorkflowToolNodeModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "tool",
+            "const": "tool",
+            "title": "Type"
+          },
+          "position": {
+            "description": "Position of the node in the workflow.",
+            "$ref": "#/components/schemas/Position"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkflowToolLocator"
+            },
+            "title": "Tools"
+          }
+        },
+        "required": [
+          "type",
+          "position",
+          "tools"
+        ],
+        "title": "WorkflowToolNodeModel"
+      },
       "WorkflowToolResponseModel-Input": {
         "description": "A common model for workflow tool responses.",
         "type": "object",
@@ -43444,6 +45244,21 @@
         },
         "title": "WorkflowToolResponseModel"
       },
+      "WorkflowUnconditionalModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "unconditional",
+            "const": "unconditional",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "WorkflowUnconditionalModel"
+      },
       "WorkspaceApiKeyListResponseModel": {
         "type": "object",
         "properties": {
@@ -43525,7 +45340,10 @@
                     "audio_native_write",
                     "workspace_read",
                     "workspace_write",
-                    "forced_alignment"
+                    "forced_alignment",
+                    "convai_read",
+                    "convai_write",
+                    "music_generation"
                   ]
                 },
                 "type": "array"
