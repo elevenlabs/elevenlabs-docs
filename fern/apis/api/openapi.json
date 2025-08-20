@@ -15058,6 +15058,14 @@
         "responses": {
           "200": {
             "description": "The generated audio file in the format specified",
+            "headers": {
+              "song-id": {
+                "description": "Unique identifier for the generated song",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "audio/*": {
                 "schema": {
@@ -15154,11 +15162,16 @@
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Multipart/mixed response with JSON metadata and binary audio file",
+            "headers": {
+              "song-id": {
+                "description": "Unique identifier for the generated song",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
-              "application/json": {
-                "schema": {}
-              },
               "multipart/mixed": {
                 "schema": {
                   "description": "Raw multipart/mixed response data that clients must parse. Contains two parts separated by boundary: 1) application/json part with composition_plan and song_metadata 2) audio/* part with binary audio data and Content-Disposition header",
@@ -15256,6 +15269,14 @@
         "responses": {
           "200": {
             "description": "Streaming audio data in the format specified",
+            "headers": {
+              "song-id": {
+                "description": "Unique identifier for the generated song",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "audio/*": {
                 "schema": {
@@ -16469,22 +16490,6 @@
           "verification"
         ],
         "x-fern-sdk-method-name": "request"
-      }
-    },
-    "/docs": {
-      "get": {
-        "operationId": "redirect_to_mintlify",
-        "summary": "Redirect To Mintlify",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
       }
     }
   },
@@ -27111,6 +27116,72 @@
         },
         "title": "DependentUnknownToolIdentifier"
       },
+      "DetailedMusicResponse": {
+        "description": "Response model for structured music generation endpoint",
+        "type": "object",
+        "properties": {
+          "composition_plan": {
+            "description": "The composition plan used to generate the song",
+            "$ref": "#/components/schemas/MusicPrompt"
+          },
+          "song_metadata": {
+            "description": "The metadata of the generated song",
+            "$ref": "#/components/schemas/SongMetadata"
+          }
+        },
+        "example": {
+          "composition_plan": {
+            "negative_global_styles": [
+              "metal",
+              "hip-hop",
+              "country"
+            ],
+            "positive_global_styles": [
+              "pop",
+              "rock",
+              "jazz"
+            ],
+            "sections": [
+              {
+                "duration_ms": 10000,
+                "lines": [
+                  "Verse 1 lyrics"
+                ],
+                "negative_local_styles": [
+                  "metal",
+                  "hip-hop",
+                  "country"
+                ],
+                "positive_local_styles": [
+                  "pop",
+                  "rock",
+                  "jazz"
+                ],
+                "section_name": "Verse 1"
+              }
+            ]
+          },
+          "song_metadata": {
+            "description": "My Song Description",
+            "genres": [
+              "pop",
+              "rock",
+              "jazz"
+            ],
+            "is_explicit": false,
+            "languages": [
+              "en",
+              "fr"
+            ],
+            "title": "My Song"
+          }
+        },
+        "required": [
+          "composition_plan",
+          "song_metadata"
+        ],
+        "title": "DetailedMusicResponse"
+      },
       "DialogueInput": {
         "type": "object",
         "properties": {
@@ -32490,6 +32561,300 @@
         ],
         "title": "MultichannelSpeechToTextResponseModel"
       },
+      "MultipartMusicResponse": {
+        "description": "Multipart response structure with JSON metadata and binary audio",
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "description": "JSON metadata containing composition plan and song metadata",
+            "$ref": "#/components/schemas/DetailedMusicResponse"
+          },
+          "audio": {
+            "description": "Binary audio data in the requested format",
+            "type": "string",
+            "format": "binary",
+            "title": "Audio"
+          }
+        },
+        "example": {
+          "audio": "[binary audio data]",
+          "metadata": {
+            "$defs": {
+              "MusicPrompt": {
+                "example": {
+                  "negative_global_styles": [
+                    "metal",
+                    "hip-hop",
+                    "country"
+                  ],
+                  "positive_global_styles": [
+                    "pop",
+                    "rock",
+                    "jazz"
+                  ],
+                  "sections": [
+                    {
+                      "duration_ms": 10000,
+                      "lines": [
+                        "Verse 1 lyrics"
+                      ],
+                      "negative_local_styles": [
+                        "metal",
+                        "hip-hop",
+                        "country"
+                      ],
+                      "positive_local_styles": [
+                        "pop",
+                        "rock",
+                        "jazz"
+                      ],
+                      "section_name": "Verse 1"
+                    }
+                  ]
+                },
+                "properties": {
+                  "positive_global_styles": {
+                    "description": "The styles that should be present in the entire song.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 50,
+                    "title": "Positive Global Styles"
+                  },
+                  "negative_global_styles": {
+                    "description": "The styles that should not be present in the entire song.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 50,
+                    "title": "Negative Global Styles"
+                  },
+                  "sections": {
+                    "description": "The sections of the song.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/SongSection"
+                    },
+                    "maxItems": 30,
+                    "title": "Sections"
+                  }
+                },
+                "required": [
+                  "positive_global_styles",
+                  "negative_global_styles",
+                  "sections"
+                ],
+                "title": "MusicPrompt",
+                "type": "object"
+              },
+              "SongMetadata": {
+                "example": {
+                  "description": "My Song Description",
+                  "genres": [
+                    "pop",
+                    "rock",
+                    "jazz"
+                  ],
+                  "is_explicit": false,
+                  "languages": [
+                    "en",
+                    "fr"
+                  ],
+                  "title": "My Song"
+                },
+                "properties": {
+                  "title": {
+                    "description": "The title of the song",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Title"
+                  },
+                  "description": {
+                    "description": "The description of the song",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Description"
+                  },
+                  "genres": {
+                    "description": "The genres of the song",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Genres"
+                  },
+                  "languages": {
+                    "description": "The languages of the song",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Languages"
+                  },
+                  "is_explicit": {
+                    "description": "Whether the song is explicit",
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Is Explicit"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description",
+                  "genres",
+                  "languages",
+                  "is_explicit"
+                ],
+                "title": "SongMetadata",
+                "type": "object"
+              },
+              "SongSection": {
+                "properties": {
+                  "section_name": {
+                    "description": "The name of the section. Must be between 1 and 100 characters.",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "title": "Section Name"
+                  },
+                  "positive_local_styles": {
+                    "description": "The styles that should be present in this section.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 50,
+                    "title": "Positive Local Styles"
+                  },
+                  "negative_local_styles": {
+                    "description": "The styles that should not be present in this section.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 50,
+                    "title": "Negative Local Styles"
+                  },
+                  "duration_ms": {
+                    "description": "The duration of the section in milliseconds. Must be between 3000ms and 120000ms.",
+                    "type": "integer",
+                    "maximum": 120000,
+                    "minimum": 3000,
+                    "title": "Duration Ms"
+                  },
+                  "lines": {
+                    "description": "The lyrics of the section.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 30,
+                    "title": "Lines"
+                  }
+                },
+                "required": [
+                  "section_name",
+                  "positive_local_styles",
+                  "negative_local_styles",
+                  "duration_ms",
+                  "lines"
+                ],
+                "title": "SongSection",
+                "type": "object"
+              }
+            },
+            "description": "Response model for structured music generation endpoint",
+            "example": {
+              "composition_plan": {
+                "negative_global_styles": [
+                  "metal",
+                  "hip-hop",
+                  "country"
+                ],
+                "positive_global_styles": [
+                  "pop",
+                  "rock",
+                  "jazz"
+                ],
+                "sections": [
+                  {
+                    "duration_ms": 10000,
+                    "lines": [
+                      "Verse 1 lyrics"
+                    ],
+                    "negative_local_styles": [
+                      "metal",
+                      "hip-hop",
+                      "country"
+                    ],
+                    "positive_local_styles": [
+                      "pop",
+                      "rock",
+                      "jazz"
+                    ],
+                    "section_name": "Verse 1"
+                  }
+                ]
+              },
+              "song_metadata": {
+                "description": "My Song Description",
+                "genres": [
+                  "pop",
+                  "rock",
+                  "jazz"
+                ],
+                "is_explicit": false,
+                "languages": [
+                  "en",
+                  "fr"
+                ],
+                "title": "My Song"
+              }
+            },
+            "properties": {
+              "composition_plan": {
+                "description": "The composition plan used to generate the song",
+                "$ref": "#/$defs/MusicPrompt"
+              },
+              "song_metadata": {
+                "description": "The metadata of the generated song",
+                "$ref": "#/$defs/SongMetadata"
+              }
+            },
+            "required": [
+              "composition_plan",
+              "song_metadata"
+            ],
+            "title": "DetailedMusicResponse",
+            "type": "object"
+          }
+        },
+        "required": [
+          "metadata",
+          "audio"
+        ],
+        "title": "MultipartMusicResponse"
+      },
       "MusicPrompt": {
         "type": "object",
         "properties": {
@@ -36339,6 +36704,85 @@
         },
         "title": "SkipTurnToolResponseModel"
       },
+      "SongMetadata": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "The title of the song",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "description": "The description of the song",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "genres": {
+            "description": "The genres of the song",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Genres"
+          },
+          "languages": {
+            "description": "The languages of the song",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Languages"
+          },
+          "is_explicit": {
+            "description": "Whether the song is explicit",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Explicit"
+          }
+        },
+        "example": {
+          "description": "My Song Description",
+          "genres": [
+            "pop",
+            "rock",
+            "jazz"
+          ],
+          "is_explicit": false,
+          "languages": [
+            "en",
+            "fr"
+          ],
+          "title": "My Song"
+        },
+        "required": [
+          "title",
+          "description",
+          "genres",
+          "languages",
+          "is_explicit"
+        ],
+        "title": "SongMetadata"
+      },
       "SongSection": {
         "type": "object",
         "properties": {
@@ -39195,9 +39639,8 @@
             ]
           },
           "is_new_user": {
-            "description": "Whether the user is new. This field is deprecated and will be removed in the future. Use 'created_at' instead.",
+            "description": "Whether the user is new.",
             "type": "boolean",
-            "deprecated": true,
             "title": "Is New User"
           },
           "xi_api_key": {
@@ -39281,16 +39724,10 @@
               }
             ],
             "title": "Partnerstack Partner Default Link"
-          },
-          "created_at": {
-            "description": "The unix timestamp of the user's creation. 0 if the user was created before the unix timestamp was added.",
-            "type": "integer",
-            "title": "Created At"
           }
         },
         "example": {
           "can_use_delayed_payment_methods": false,
-          "created_at": 1753999199,
           "first_name": "John",
           "is_api_key_hashed": false,
           "is_new_user": false,
@@ -39355,8 +39792,7 @@
           "is_new_user",
           "can_use_delayed_payment_methods",
           "is_onboarding_completed",
-          "is_onboarding_checklist_completed",
-          "created_at"
+          "is_onboarding_checklist_completed"
         ],
         "title": "UserResponseModel"
       },
