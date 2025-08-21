@@ -3,7 +3,7 @@
 import type { TextToSpeechRequest } from '@elevenlabs/elevenlabs-js/api';
 import { useState, useCallback } from 'react';
 
-import { streamSpeech } from '@/app/actions/stream-speech';
+import { generateSpeech } from '@/app/actions/create-speech';
 
 type UseSpeechOptions = {
   onError?: (error: string) => void;
@@ -27,18 +27,13 @@ export function useSpeech(options: UseSpeechOptions = {}) {
       setError(null);
 
       try {
-        const result = await streamSpeech(voiceId, request);
+        const result = await generateSpeech(voiceId, request);
 
         if (!result.ok) {
           throw new Error(result.error);
         }
 
-        const stream = result.value;
-        const response = new Response(stream);
-        const blob = await response.blob();
-        const audioUrl = URL.createObjectURL(blob);
-
-        return audioUrl;
+        return result.value.audioBase64;
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         setError(errorMessage);

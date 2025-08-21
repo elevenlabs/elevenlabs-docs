@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const TTS_MODELS = {
+  V3: 'eleven_v3',
   MULTILINGUAL: 'eleven_multilingual_v2',
   FLASH: 'eleven_flash_v2_5',
 } as const;
@@ -24,7 +25,9 @@ export type SoundEffectInput = z.infer<typeof soundEffectSchema>;
 export const ttsSchema = z.object({
   text: z.string().min(1, 'Text is required').max(5000, 'Text must be 5000 characters or less'),
   voiceId: z.string().min(1, 'Voice ID is required'),
-  modelId: z.enum([TTS_MODELS.MULTILINGUAL, TTS_MODELS.FLASH]).default(TTS_MODELS.MULTILINGUAL),
+  modelId: z
+    .enum([TTS_MODELS.V3, TTS_MODELS.MULTILINGUAL, TTS_MODELS.FLASH])
+    .default(TTS_MODELS.V3),
   stability: z.number().min(0).max(1).default(0.5),
   similarityBoost: z.number().min(0).max(1).default(0.75),
   style: z.number().min(0).max(1).optional().default(0.35),
