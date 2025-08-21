@@ -3384,6 +3384,34 @@
         "x-fern-sdk-method-name": "share"
       }
     },
+    "/v1/voices-homepage-config": {
+      "get": {
+        "operationId": "get_voices_homepage_config",
+        "summary": "Get Voices Homepage Config",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoicesHomepageConfigResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/studio/podcasts": {
       "post": {
         "operationId": "create_podcast",
@@ -7695,6 +7723,149 @@
         "x-fern-sdk-method-name": "create_from_rules"
       }
     },
+    "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}": {
+      "patch": {
+        "operationId": "Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch",
+        "summary": "Update Pronunciation Dictionary",
+        "description": "Partially update the pronunciation dictionary without changing the version",
+        "parameters": [
+          {
+            "name": "pronunciation_dictionary_id",
+            "in": "path",
+            "description": "The id of the pronunciation dictionary",
+            "required": true,
+            "schema": {
+              "description": "The id of the pronunciation dictionary",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Pronunciation Dictionary Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPronunciationDictionaryMetadataResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pronunciation Dictionary"
+        ],
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "update"
+      },
+      "get": {
+        "operationId": "Get_metadata_for_a_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__get",
+        "summary": "Get Metadata For A Pronunciation Dictionary",
+        "description": "Get metadata for a pronunciation dictionary",
+        "parameters": [
+          {
+            "name": "pronunciation_dictionary_id",
+            "in": "path",
+            "description": "The id of the pronunciation dictionary",
+            "required": true,
+            "schema": {
+              "description": "The id of the pronunciation dictionary",
+              "type": "string",
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Pronunciation Dictionary Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPronunciationDictionaryMetadataResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pronunciation Dictionary"
+        ],
+        "x-fern-sdk-group-name": "pronunciation_dictionaries",
+        "x-fern-sdk-method-name": "get"
+      }
+    },
     "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}/add-rules": {
       "post": {
         "operationId": "Add_rules_to_the_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__add_rules_post",
@@ -7946,74 +8117,6 @@
         ],
         "x-fern-sdk-group-name": "pronunciation_dictionaries",
         "x-fern-sdk-method-name": "download"
-      }
-    },
-    "/v1/pronunciation-dictionaries/{pronunciation_dictionary_id}": {
-      "get": {
-        "operationId": "Get_metadata_for_a_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__get",
-        "summary": "Get Metadata For A Pronunciation Dictionary",
-        "description": "Get metadata for a pronunciation dictionary",
-        "parameters": [
-          {
-            "name": "pronunciation_dictionary_id",
-            "in": "path",
-            "description": "The id of the pronunciation dictionary",
-            "required": true,
-            "schema": {
-              "description": "The id of the pronunciation dictionary",
-              "type": "string",
-              "examples": [
-                "21m00Tcm4TlvDq8ikWAM"
-              ],
-              "title": "Pronunciation Dictionary Id"
-            }
-          },
-          {
-            "name": "xi-api-key",
-            "in": "header",
-            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-            "required": false,
-            "schema": {
-              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Xi-Api-Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetPronunciationDictionaryMetadataResponseModel"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Pronunciation Dictionary"
-        ],
-        "x-fern-sdk-group-name": "pronunciation_dictionaries",
-        "x-fern-sdk-method-name": "get"
       }
     },
     "/v1/pronunciation-dictionaries": {
@@ -16491,6 +16594,22 @@
         ],
         "x-fern-sdk-method-name": "request"
       }
+    },
+    "/docs": {
+      "get": {
+        "operationId": "redirect_to_mintlify",
+        "summary": "Redirect To Mintlify",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -21002,7 +21121,7 @@
             "title": "File Format"
           },
           "cloud_storage_url": {
-            "description": "The valid AWS S3, Cloudflare R2 or Google Cloud Storage URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be a valid publicly accessible cloud storage URL. The file size must be less than 2GB. URL can be pre-signed.",
+            "description": "The HTTPS URL of the file to transcribe. Exactly one of the file or cloud_storage_url parameters must be provided. The file must be accessible via HTTPS and the file size must be less than 2GB. Any valid HTTPS URL is accepted, including URLs from cloud storage providers (AWS S3, Google Cloud Storage, Cloudflare R2, etc.), CDNs, or any other HTTPS source. URLs can be pre-signed or include authentication tokens in query parameters.",
             "anyOf": [
               {
                 "type": "string"
@@ -21014,7 +21133,8 @@
             "examples": [
               "https://storage.googleapis.com/my-bucket/folder/audio.mp3",
               "https://my-bucket.s3.us-west-2.amazonaws.com/folder/audio.mp3",
-              "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3"
+              "https://account123.r2.cloudflarestorage.com/my-bucket/audio.mp3",
+              "https://cdn.example.com/media/audio.wav"
             ],
             "title": "Cloud Storage Url"
           },
@@ -22600,6 +22720,28 @@
         },
         "title": "Body_Update_metadata_for_a_speaker_v1_dubbing_resource__dubbing_id__speaker__speaker_id__patch"
       },
+      "Body_Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch": {
+        "type": "object",
+        "properties": {
+          "archived": {
+            "description": "The name of the pronunciation dictionary, used for identification only.",
+            "type": "boolean",
+            "examples": [
+              "My Dictionary"
+            ],
+            "title": "Archived"
+          },
+          "name": {
+            "description": "The name of the pronunciation dictionary, used for identification only.",
+            "type": "string",
+            "examples": [
+              "My Dictionary"
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "Body_Update_pronunciation_dictionary_v1_pronunciation_dictionaries__pronunciation_dictionary_id__patch"
+      },
       "Body_Verify_PVC_voice_captcha_v1_voices_pvc__voice_id__captcha_post": {
         "type": "object",
         "properties": {
@@ -22653,7 +22795,10 @@
                     "audio_native_write",
                     "workspace_read",
                     "workspace_write",
-                    "forced_alignment"
+                    "forced_alignment",
+                    "convai_read",
+                    "convai_write",
+                    "music_generation"
                   ]
                 },
                 "type": "array"
@@ -22731,7 +22876,10 @@
                     "audio_native_write",
                     "workspace_read",
                     "workspace_write",
-                    "forced_alignment"
+                    "forced_alignment",
+                    "convai_read",
+                    "convai_write",
+                    "music_generation"
                   ]
                 },
                 "type": "array"
@@ -28107,6 +28255,21 @@
             "description": "Whether the user has open invoices.",
             "type": "boolean",
             "title": "Has Open Invoices"
+          },
+          "pending_change": {
+            "description": "The pending change for the user.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PendingSubscriptionSwitchResponseModel"
+              },
+              {
+                "$ref": "#/components/schemas/PendingCancellationResponseModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pending Change"
           }
         },
         "example": {
@@ -32579,274 +32742,40 @@
         "example": {
           "audio": "[binary audio data]",
           "metadata": {
-            "$defs": {
-              "MusicPrompt": {
-                "example": {
-                  "negative_global_styles": [
-                    "metal",
-                    "hip-hop",
-                    "country"
+            "composition_plan": {
+              "negative_global_styles": [
+                "calm",
+                "acoustic"
+              ],
+              "positive_global_styles": [
+                "electronic",
+                "intense"
+              ],
+              "sections": [
+                {
+                  "duration_ms": 10000,
+                  "lines": [],
+                  "negative_local_styles": [
+                    "full drums"
                   ],
-                  "positive_global_styles": [
-                    "pop",
-                    "rock",
-                    "jazz"
+                  "positive_local_styles": [
+                    "filtered synth"
                   ],
-                  "sections": [
-                    {
-                      "duration_ms": 10000,
-                      "lines": [
-                        "Verse 1 lyrics"
-                      ],
-                      "negative_local_styles": [
-                        "metal",
-                        "hip-hop",
-                        "country"
-                      ],
-                      "positive_local_styles": [
-                        "pop",
-                        "rock",
-                        "jazz"
-                      ],
-                      "section_name": "Verse 1"
-                    }
-                  ]
-                },
-                "properties": {
-                  "positive_global_styles": {
-                    "description": "The styles that should be present in the entire song.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "maxItems": 50,
-                    "title": "Positive Global Styles"
-                  },
-                  "negative_global_styles": {
-                    "description": "The styles that should not be present in the entire song.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "maxItems": 50,
-                    "title": "Negative Global Styles"
-                  },
-                  "sections": {
-                    "description": "The sections of the song.",
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/$defs/SongSection"
-                    },
-                    "maxItems": 30,
-                    "title": "Sections"
-                  }
-                },
-                "required": [
-                  "positive_global_styles",
-                  "negative_global_styles",
-                  "sections"
-                ],
-                "title": "MusicPrompt",
-                "type": "object"
-              },
-              "SongMetadata": {
-                "example": {
-                  "description": "My Song Description",
-                  "genres": [
-                    "pop",
-                    "rock",
-                    "jazz"
-                  ],
-                  "is_explicit": false,
-                  "languages": [
-                    "en",
-                    "fr"
-                  ],
-                  "title": "My Song"
-                },
-                "properties": {
-                  "title": {
-                    "description": "The title of the song",
-                    "anyOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ],
-                    "title": "Title"
-                  },
-                  "description": {
-                    "description": "The description of the song",
-                    "anyOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ],
-                    "title": "Description"
-                  },
-                  "genres": {
-                    "description": "The genres of the song",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "title": "Genres"
-                  },
-                  "languages": {
-                    "description": "The languages of the song",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "title": "Languages"
-                  },
-                  "is_explicit": {
-                    "description": "Whether the song is explicit",
-                    "anyOf": [
-                      {
-                        "type": "boolean"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ],
-                    "title": "Is Explicit"
-                  }
-                },
-                "required": [
-                  "title",
-                  "description",
-                  "genres",
-                  "languages",
-                  "is_explicit"
-                ],
-                "title": "SongMetadata",
-                "type": "object"
-              },
-              "SongSection": {
-                "properties": {
-                  "section_name": {
-                    "description": "The name of the section. Must be between 1 and 100 characters.",
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 1,
-                    "title": "Section Name"
-                  },
-                  "positive_local_styles": {
-                    "description": "The styles that should be present in this section.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "maxItems": 50,
-                    "title": "Positive Local Styles"
-                  },
-                  "negative_local_styles": {
-                    "description": "The styles that should not be present in this section.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "maxItems": 50,
-                    "title": "Negative Local Styles"
-                  },
-                  "duration_ms": {
-                    "description": "The duration of the section in milliseconds. Must be between 3000ms and 120000ms.",
-                    "type": "integer",
-                    "maximum": 120000,
-                    "minimum": 3000,
-                    "title": "Duration Ms"
-                  },
-                  "lines": {
-                    "description": "The lyrics of the section.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "maxItems": 30,
-                    "title": "Lines"
-                  }
-                },
-                "required": [
-                  "section_name",
-                  "positive_local_styles",
-                  "negative_local_styles",
-                  "duration_ms",
-                  "lines"
-                ],
-                "title": "SongSection",
-                "type": "object"
-              }
+                  "section_name": "Intro"
+                }
+              ]
             },
-            "description": "Response model for structured music generation endpoint",
-            "example": {
-              "composition_plan": {
-                "negative_global_styles": [
-                  "metal",
-                  "hip-hop",
-                  "country"
-                ],
-                "positive_global_styles": [
-                  "pop",
-                  "rock",
-                  "jazz"
-                ],
-                "sections": [
-                  {
-                    "duration_ms": 10000,
-                    "lines": [
-                      "Verse 1 lyrics"
-                    ],
-                    "negative_local_styles": [
-                      "metal",
-                      "hip-hop",
-                      "country"
-                    ],
-                    "positive_local_styles": [
-                      "pop",
-                      "rock",
-                      "jazz"
-                    ],
-                    "section_name": "Verse 1"
-                  }
-                ]
-              },
-              "song_metadata": {
-                "description": "My Song Description",
-                "genres": [
-                  "pop",
-                  "rock",
-                  "jazz"
-                ],
-                "is_explicit": false,
-                "languages": [
-                  "en",
-                  "fr"
-                ],
-                "title": "My Song"
-              }
-            },
-            "properties": {
-              "composition_plan": {
-                "description": "The composition plan used to generate the song",
-                "$ref": "#/$defs/MusicPrompt"
-              },
-              "song_metadata": {
-                "description": "The metadata of the generated song",
-                "$ref": "#/$defs/SongMetadata"
-              }
-            },
-            "required": [
-              "composition_plan",
-              "song_metadata"
-            ],
-            "title": "DetailedMusicResponse",
-            "type": "object"
+            "song_metadata": {
+              "description": "AI-generated music",
+              "genres": [
+                "electronic"
+              ],
+              "is_explicit": false,
+              "languages": [
+                "Instrumental"
+              ],
+              "title": "Generated Song"
+            }
           }
         },
         "required": [
@@ -33313,6 +33242,64 @@
           "format"
         ],
         "title": "PdfExportOptions"
+      },
+      "PendingCancellationResponseModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "default": "cancellation",
+            "const": "cancellation",
+            "title": "Kind"
+          },
+          "timestamp_seconds": {
+            "description": "The timestamp of the cancellation.",
+            "type": "integer",
+            "title": "Timestamp Seconds"
+          }
+        },
+        "required": [
+          "timestamp_seconds"
+        ],
+        "title": "PendingCancellationResponseModel"
+      },
+      "PendingSubscriptionSwitchResponseModel": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "default": "change",
+            "const": "change",
+            "title": "Kind"
+          },
+          "next_tier": {
+            "description": "The tier to change to.",
+            "type": "string",
+            "enum": [
+              "free",
+              "starter",
+              "creator",
+              "pro",
+              "growing_business",
+              "scale_2024_08_10",
+              "grant_tier_1_2025_07_23",
+              "grant_tier_2_2025_07_23",
+              "trial",
+              "enterprise"
+            ],
+            "title": "Next Tier"
+          },
+          "timestamp_seconds": {
+            "description": "The timestamp of the change.",
+            "type": "integer",
+            "title": "Timestamp Seconds"
+          }
+        },
+        "required": [
+          "next_tier",
+          "timestamp_seconds"
+        ],
+        "title": "PendingSubscriptionSwitchResponseModel"
       },
       "PhoneNumberAgentInfo": {
         "type": "object",
@@ -37590,7 +37577,7 @@
         "type": "object",
         "properties": {
           "max_characters_per_line": {
-            "default": 50,
+            "default": 42,
             "anyOf": [
               {
                 "type": "integer"
@@ -37617,7 +37604,7 @@
             "title": "Format"
           },
           "segment_on_silence_longer_than_s": {
-            "default": 0.6,
+            "default": 0.8,
             "anyOf": [
               {
                 "type": "number"
@@ -37629,7 +37616,7 @@
             "title": "Segment On Silence Longer Than S"
           },
           "max_segment_duration_s": {
-            "default": 5,
+            "default": 4,
             "anyOf": [
               {
                 "type": "number"
@@ -37641,7 +37628,7 @@
             "title": "Max Segment Duration S"
           },
           "max_segment_chars": {
-            "default": 90,
+            "default": 84,
             "anyOf": [
               {
                 "type": "integer"
@@ -39639,8 +39626,9 @@
             ]
           },
           "is_new_user": {
-            "description": "Whether the user is new.",
+            "description": "Whether the user is new. This field is deprecated and will be removed in the future. Use 'created_at' instead.",
             "type": "boolean",
+            "deprecated": true,
             "title": "Is New User"
           },
           "xi_api_key": {
@@ -39724,10 +39712,16 @@
               }
             ],
             "title": "Partnerstack Partner Default Link"
+          },
+          "created_at": {
+            "description": "The unix timestamp of the user's creation. 0 if the user was created before the unix timestamp was added.",
+            "type": "integer",
+            "title": "Created At"
           }
         },
         "example": {
           "can_use_delayed_payment_methods": false,
+          "created_at": 1753999199,
           "first_name": "John",
           "is_api_key_hashed": false,
           "is_new_user": false,
@@ -39792,7 +39786,8 @@
           "is_new_user",
           "can_use_delayed_payment_methods",
           "is_onboarding_completed",
-          "is_onboarding_checklist_completed"
+          "is_onboarding_checklist_completed",
+          "created_at"
         ],
         "title": "UserResponseModel"
       },
@@ -41593,11 +41588,50 @@
         },
         "title": "VoicemailDetectionToolConfig"
       },
+      "VoicesHomepageConfigResponseModel": {
+        "type": "object",
+        "properties": {
+          "featured_voices_section_name": {
+            "description": "The name of the featured voices section.",
+            "type": "string",
+            "title": "Featured Voices Section Name"
+          },
+          "featured_voices_section_link": {
+            "description": "The link of the featured voices section.",
+            "type": "string",
+            "title": "Featured Voices Section Link"
+          },
+          "featured_voices_shown_count": {
+            "description": "The number of voices to show in the featured voices section.",
+            "type": "integer",
+            "title": "Featured Voices Shown Count"
+          },
+          "featured_voices_pool_size": {
+            "description": "The number of last featured voices to sample from to show in the featured voices section.",
+            "type": "integer",
+            "title": "Featured Voices Pool Size"
+          },
+          "special_collection_voices_shown_count": {
+            "description": "The number of voices to show in the special collection voices section.",
+            "type": "integer",
+            "title": "Special Collection Voices Shown Count"
+          }
+        },
+        "required": [
+          "featured_voices_section_name",
+          "featured_voices_section_link",
+          "featured_voices_shown_count",
+          "featured_voices_pool_size",
+          "special_collection_voices_shown_count"
+        ],
+        "title": "VoicesHomepageConfigResponseModel"
+      },
       "WebhookAuthMethodType": {
         "type": "string",
         "enum": [
           "hmac",
-          "oauth2"
+          "oauth2",
+          "mtls"
         ],
         "title": "WebhookAuthMethodType"
       },
@@ -43961,7 +43995,10 @@
                     "audio_native_write",
                     "workspace_read",
                     "workspace_write",
-                    "forced_alignment"
+                    "forced_alignment",
+                    "convai_read",
+                    "convai_write",
+                    "music_generation"
                   ]
                 },
                 "type": "array"
@@ -44102,7 +44139,6 @@
           "convai_settings",
           "convai_secrets",
           "workspace_auth_connections",
-          "music_latent",
           "convai_phone_numbers",
           "convai_mcp_servers",
           "convai_batch_calls",
