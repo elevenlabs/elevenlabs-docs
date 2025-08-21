@@ -44,3 +44,22 @@ export const musicSchema = z.object({
 });
 
 export type MusicInput = z.infer<typeof musicSchema>;
+
+export const dialogueInputSchema = z.object({
+  text: z.string().min(1, 'Text is required').max(1000, 'Text must be 1000 characters or less'),
+  voiceId: z.string().min(1, 'Voice ID is required'),
+});
+
+export const dialogueSchema = z.object({
+  inputs: z
+    .array(dialogueInputSchema)
+    .min(1, 'At least one dialogue input is required')
+    .max(10, 'Maximum 10 dialogue inputs allowed'),
+  modelId: z
+    .enum([TTS_MODELS.V3, TTS_MODELS.MULTILINGUAL, TTS_MODELS.FLASH])
+    .default(TTS_MODELS.V3),
+  seed: z.number().min(0).max(4294967295).optional(),
+});
+
+export type DialogueInput = z.infer<typeof dialogueInputSchema>;
+export type DialogueFormInput = z.infer<typeof dialogueSchema>;
