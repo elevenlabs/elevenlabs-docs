@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { PlusIcon, TrashIcon, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { PlusIcon, TrashIcon, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { createDialogue } from '@/app/actions/create-dialogue';
-import { getVoices } from '@/app/actions/manage-voices';
-import { PromptBar, PromptControlsProps } from '@/components/prompt-bar/base';
-import { Button } from '@/components/ui/button';
+import { createDialogue } from "@/app/actions/create-dialogue";
+import { getVoices } from "@/app/actions/manage-voices";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,10 +17,10 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { DialogueFormInput, dialogueSchema, TTS_MODELS } from '@/lib/schemas';
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DialogueFormInput, TTS_MODELS } from "@/lib/schemas";
 
 export type TextToDialoguePromptProps = {
   onGenerateStart: () => void;
@@ -31,12 +31,17 @@ export function TextToDialoguePromptBar({
   onGenerateStart,
   onGenerateComplete,
 }: TextToDialoguePromptProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [voices, setVoices] = useState<Array<{ voiceId: string; name: string }>>([]);
+  const [voices, setVoices] = useState<
+    Array<{ voiceId: string; name: string }>
+  >([]);
   const [generationTime, setGenerationTime] = useState<number | null>(null);
   const [settings, setSettings] = useState<{
-    modelId: typeof TTS_MODELS.V3 | typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH;
+    modelId:
+      | typeof TTS_MODELS.V3
+      | typeof TTS_MODELS.MULTILINGUAL
+      | typeof TTS_MODELS.FLASH;
   }>({
     modelId: TTS_MODELS.V3,
   });
@@ -48,15 +53,19 @@ export function TextToDialoguePromptBar({
         if (result.ok) {
           const voiceList = result.value.voices.map((v) => ({
             voiceId: v.voiceId,
-            name: v.name ?? 'Unknown Voice',
+            name: v.name ?? "Unknown Voice",
           }));
           setVoices(voiceList);
         } else {
-          setVoices(FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name })));
+          setVoices(
+            FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name }))
+          );
         }
       } catch (error) {
-        console.error('Error loading voices:', error);
-        setVoices(FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name })));
+        console.error("Error loading voices:", error);
+        setVoices(
+          FEATURED_VOICES.map((v) => ({ voiceId: v.id, name: v.name }))
+        );
       } finally {
         setIsLoading(false);
       }
@@ -72,10 +81,13 @@ export function TextToDialoguePromptBar({
     const featuredVoice = FEATURED_VOICES.find((v) => v.id === voiceId);
     if (featuredVoice) return featuredVoice.name;
 
-    return 'Select Voice';
+    return "Select Voice";
   };
 
-  const updateSetting = <K extends keyof typeof settings>(key: K, value: (typeof settings)[K]) => {
+  const updateSetting = <K extends keyof typeof settings>(
+    key: K,
+    value: (typeof settings)[K]
+  ) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -104,7 +116,8 @@ export function TextToDialoguePromptBar({
 
       toast.success(`Dialogue generated in ${Math.round(processingTimeMs)}ms`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       toast.error(errorMessage);
     } finally {
       setIsGenerating(false);
@@ -112,22 +125,29 @@ export function TextToDialoguePromptBar({
   };
 
   const [dialogueInputs, setDialogueInputs] = useState([
-    { text: '', voiceId: FEATURED_VOICES[0].id },
-    { text: '', voiceId: FEATURED_VOICES[1].id },
+    { text: "", voiceId: FEATURED_VOICES[0].id },
+    { text: "", voiceId: FEATURED_VOICES[1].id },
   ]);
 
   const renderControls = () => {
     const inputs = dialogueInputs;
 
     const addDialogueInput = () => {
-      setDialogueInputs((prev) => [...prev, { text: '', voiceId: FEATURED_VOICES[0].id }]);
+      setDialogueInputs((prev) => [
+        ...prev,
+        { text: "", voiceId: FEATURED_VOICES[0].id },
+      ]);
     };
 
     const removeDialogueInput = (index: number) => {
       setDialogueInputs((prev) => prev.filter((_, i) => i !== index));
     };
 
-    const updateDialogueInput = (index: number, field: 'text' | 'voiceId', value: string) => {
+    const updateDialogueInput = (
+      index: number,
+      field: "text" | "voiceId",
+      value: string
+    ) => {
       setDialogueInputs((prev) => {
         const updated = [...prev];
         updated[index] = { ...updated[index], [field]: value };
@@ -150,13 +170,15 @@ export function TextToDialoguePromptBar({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 border-white/20 bg-black/90 text-white backdrop-blur-sm">
-              <DropdownMenuLabel className="text-white/70">Model</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-white/70">
+                Model
+              </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-white/10" />
               <DropdownMenuRadioGroup
                 value={settings.modelId}
                 onValueChange={(value) =>
                   updateSetting(
-                    'modelId',
+                    "modelId",
                     value as
                       | typeof TTS_MODELS.V3
                       | typeof TTS_MODELS.MULTILINGUAL
@@ -172,7 +194,9 @@ export function TextToDialoguePromptBar({
                   >
                     <div className="flex flex-col">
                       <span>{info.name}</span>
-                      <span className="text-muted-foreground text-xs">{info.description}</span>
+                      <span className="text-muted-foreground text-xs">
+                        {info.description}
+                      </span>
                     </div>
                   </DropdownMenuRadioItem>
                 ))}
@@ -210,7 +234,9 @@ export function TextToDialoguePromptBar({
             >
               <div className="flex-1 space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-sm text-white/70">Speaker {index + 1}</Label>
+                  <Label className="text-sm text-white/70">
+                    Speaker {index + 1}
+                  </Label>
                   {inputs.length > 1 && (
                     <Button
                       type="button"
@@ -235,7 +261,9 @@ export function TextToDialoguePromptBar({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-64 border-white/20 bg-black/90 text-white backdrop-blur-sm">
-                      <DropdownMenuLabel className="text-white/70">Voice</DropdownMenuLabel>
+                      <DropdownMenuLabel className="text-white/70">
+                        Voice
+                      </DropdownMenuLabel>
                       <DropdownMenuSeparator className="bg-white/10" />
                       <DropdownMenuGroup>
                         {voices.map((voice) => (
@@ -243,7 +271,13 @@ export function TextToDialoguePromptBar({
                             key={voice.voiceId}
                             value={voice.voiceId}
                             className="focus:bg-white/10"
-                            onClick={() => updateDialogueInput(index, 'voiceId', voice.voiceId)}
+                            onClick={() =>
+                              updateDialogueInput(
+                                index,
+                                "voiceId",
+                                voice.voiceId
+                              )
+                            }
                           >
                             {voice.name}
                           </DropdownMenuRadioItem>
@@ -254,8 +288,10 @@ export function TextToDialoguePromptBar({
 
                   <Input
                     placeholder="Enter dialogue text..."
-                    value={input.text || ''}
-                    onChange={(e) => updateDialogueInput(index, 'text', e.target.value)}
+                    value={input.text || ""}
+                    onChange={(e) =>
+                      updateDialogueInput(index, "text", e.target.value)
+                    }
                     className="border-white/20 bg-white/10 text-white placeholder:text-white/50"
                   />
                 </div>
@@ -272,7 +308,9 @@ export function TextToDialoguePromptBar({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          const inputs = dialogueInputs.filter((input) => input.text.trim() && input.voiceId);
+          const inputs = dialogueInputs.filter(
+            (input) => input.text.trim() && input.voiceId
+          );
           if (inputs.length > 0) {
             handleGenerate({ inputs, modelId: settings.modelId });
           }
@@ -283,10 +321,13 @@ export function TextToDialoguePromptBar({
         <div className="mt-4 flex justify-end">
           <Button
             type="submit"
-            disabled={isGenerating || dialogueInputs.every((input) => !input.text.trim())}
+            disabled={
+              isGenerating ||
+              dialogueInputs.every((input) => !input.text.trim())
+            }
             className="bg-white text-black hover:bg-white/80"
           >
-            {isGenerating ? 'Generating...' : 'Generate Dialogue'}
+            {isGenerating ? "Generating..." : "Generate Dialogue"}
           </Button>
         </div>
       </form>
@@ -295,29 +336,29 @@ export function TextToDialoguePromptBar({
 }
 
 const FEATURED_VOICES = [
-  { id: 'EkK5I93UQWFDigLMpZcX', name: 'James', accent: 'American' },
-  { id: 'RILOU7YmBhvwJGDGjNmP', name: 'Jane', accent: 'American' },
-  { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', accent: 'American' },
-  { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', accent: 'American' },
-  { id: 'IKne3meq5aSn9XLyUdCD', name: 'Adam', accent: 'American' },
-  { id: 'pNInz6obpgDQGcFmaJgB', name: 'Nicole', accent: 'American' },
-  { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni', accent: 'American' },
-  { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli', accent: 'American' },
-  { id: 'jBpfuIE2acCO8z3wKNLl', name: 'Callum', accent: 'British' },
-  { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Charlotte', accent: 'British' },
+  { id: "EkK5I93UQWFDigLMpZcX", name: "James", accent: "American" },
+  { id: "RILOU7YmBhvwJGDGjNmP", name: "Jane", accent: "American" },
+  { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel", accent: "American" },
+  { id: "AZnzlk1XvdvUeBnXmlld", name: "Domi", accent: "American" },
+  { id: "IKne3meq5aSn9XLyUdCD", name: "Adam", accent: "American" },
+  { id: "pNInz6obpgDQGcFmaJgB", name: "Nicole", accent: "American" },
+  { id: "ErXwobaYiN019PkySvjV", name: "Antoni", accent: "American" },
+  { id: "MF3mGyEYCl7XYWbV9V6O", name: "Elli", accent: "American" },
+  { id: "jBpfuIE2acCO8z3wKNLl", name: "Callum", accent: "British" },
+  { id: "onwK4e9ZLuTAKqWW03F9", name: "Charlotte", accent: "British" },
 ];
 
 const TTS_MODEL_INFO = {
   [TTS_MODELS.V3]: {
-    name: 'Eleven V3',
-    description: 'Latest model with improved quality and performance',
+    name: "Eleven V3",
+    description: "Latest model with improved quality and performance",
   },
   [TTS_MODELS.MULTILINGUAL]: {
-    name: 'High Quality',
-    description: 'Superior quality, slower generation',
+    name: "High Quality",
+    description: "Superior quality, slower generation",
   },
   [TTS_MODELS.FLASH]: {
-    name: 'Flash',
-    description: 'Faster generation at 50% off, good quality',
+    name: "Flash",
+    description: "Faster generation at 50% off, good quality",
   },
 };

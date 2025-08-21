@@ -1,16 +1,14 @@
-'use client';
+"use client";
 
-import { PlusIcon, TrashIcon } from 'lucide-react';
-import { useState } from 'react';
+import { PlusIcon, TrashIcon } from "lucide-react";
+import { useState } from "react";
 
-import { CompositionPlan } from '@/app/actions/create-composition-plan';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
+import { CompositionPlan } from "@/app/actions/create-composition-plan";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CompositionPlanEditorProps {
   plan: CompositionPlan;
@@ -32,19 +30,19 @@ export function CompositionPlanEditor({
     onPlanUpdate(newPlan);
   };
 
-  const addGlobalStyle = (type: 'positive' | 'negative') => {
+  const addGlobalStyle = (type: "positive" | "negative") => {
     const newPlan = { ...editedPlan };
-    if (type === 'positive') {
-      newPlan.positiveGlobalStyles.push('');
+    if (type === "positive") {
+      newPlan.positiveGlobalStyles.push("");
     } else {
-      newPlan.negativeGlobalStyles.push('');
+      newPlan.negativeGlobalStyles.push("");
     }
     updatePlan(newPlan);
   };
 
-  const removeGlobalStyle = (type: 'positive' | 'negative', index: number) => {
+  const removeGlobalStyle = (type: "positive" | "negative", index: number) => {
     const newPlan = { ...editedPlan };
-    if (type === 'positive') {
+    if (type === "positive") {
       newPlan.positiveGlobalStyles.splice(index, 1);
     } else {
       newPlan.negativeGlobalStyles.splice(index, 1);
@@ -52,9 +50,13 @@ export function CompositionPlanEditor({
     updatePlan(newPlan);
   };
 
-  const updateGlobalStyle = (type: 'positive' | 'negative', index: number, value: string) => {
+  const updateGlobalStyle = (
+    type: "positive" | "negative",
+    index: number,
+    value: string
+  ) => {
     const newPlan = { ...editedPlan };
-    if (type === 'positive') {
+    if (type === "positive") {
       newPlan.positiveGlobalStyles[index] = value;
     } else {
       newPlan.negativeGlobalStyles[index] = value;
@@ -62,7 +64,11 @@ export function CompositionPlanEditor({
     updatePlan(newPlan);
   };
 
-  const updateSection = (sectionIndex: number, field: string, value: any) => {
+  const updateSection = (
+    sectionIndex: number,
+    field: string,
+    value: string | number
+  ) => {
     const newPlan = { ...editedPlan };
     newPlan.sections[sectionIndex] = {
       ...newPlan.sections[sectionIndex],
@@ -71,25 +77,28 @@ export function CompositionPlanEditor({
     updatePlan(newPlan);
   };
 
-  const addLocalStyle = (sectionIndex: number, type: 'positive' | 'negative') => {
+  const addLocalStyle = (
+    sectionIndex: number,
+    type: "positive" | "negative"
+  ) => {
     const newPlan = { ...editedPlan };
     const section = newPlan.sections[sectionIndex];
-    if (type === 'positive') {
-      section.positiveLocalStyles.push('');
+    if (type === "positive") {
+      section.positiveLocalStyles.push("");
     } else {
-      section.negativeLocalStyles.push('');
+      section.negativeLocalStyles.push("");
     }
     updatePlan(newPlan);
   };
 
   const removeLocalStyle = (
     sectionIndex: number,
-    type: 'positive' | 'negative',
+    type: "positive" | "negative",
     styleIndex: number
   ) => {
     const newPlan = { ...editedPlan };
     const section = newPlan.sections[sectionIndex];
-    if (type === 'positive') {
+    if (type === "positive") {
       section.positiveLocalStyles.splice(styleIndex, 1);
     } else {
       section.negativeLocalStyles.splice(styleIndex, 1);
@@ -99,13 +108,13 @@ export function CompositionPlanEditor({
 
   const updateLocalStyle = (
     sectionIndex: number,
-    type: 'positive' | 'negative',
+    type: "positive" | "negative",
     styleIndex: number,
     value: string
   ) => {
     const newPlan = { ...editedPlan };
     const section = newPlan.sections[sectionIndex];
-    if (type === 'positive') {
+    if (type === "positive") {
       section.positiveLocalStyles[styleIndex] = value;
     } else {
       section.negativeLocalStyles[styleIndex] = value;
@@ -113,7 +122,10 @@ export function CompositionPlanEditor({
     updatePlan(newPlan);
   };
 
-  const totalDuration = editedPlan.sections.reduce((sum, section) => sum + section.durationMs, 0);
+  const totalDuration = editedPlan.sections.reduce(
+    (sum, section) => sum + section.durationMs,
+    0
+  );
 
   return (
     <div className="flex h-full max-h-full flex-col overflow-hidden">
@@ -135,11 +147,13 @@ export function CompositionPlanEditor({
             <CardContent className="space-y-4">
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <Label className="text-sm font-medium text-green-600">Positive Styles</Label>
+                  <Label className="text-sm font-medium text-green-600">
+                    Positive Styles
+                  </Label>
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => addGlobalStyle('positive')}
+                    onClick={() => addGlobalStyle("positive")}
                     className="h-6 w-6 p-0"
                   >
                     <PlusIcon className="h-3 w-3" />
@@ -150,14 +164,16 @@ export function CompositionPlanEditor({
                     <div key={index} className="flex items-center gap-2">
                       <Input
                         value={style}
-                        onChange={(e) => updateGlobalStyle('positive', index, e.target.value)}
+                        onChange={(e) =>
+                          updateGlobalStyle("positive", index, e.target.value)
+                        }
                         placeholder="Enter positive style..."
                         className="flex-1"
                       />
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => removeGlobalStyle('positive', index)}
+                        onClick={() => removeGlobalStyle("positive", index)}
                         className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
                       >
                         <TrashIcon className="h-3 w-3" />
@@ -169,11 +185,13 @@ export function CompositionPlanEditor({
 
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <Label className="text-sm font-medium text-red-600">Negative Styles</Label>
+                  <Label className="text-sm font-medium text-red-600">
+                    Negative Styles
+                  </Label>
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => addGlobalStyle('negative')}
+                    onClick={() => addGlobalStyle("negative")}
                     className="h-6 w-6 p-0"
                   >
                     <PlusIcon className="h-3 w-3" />
@@ -184,14 +202,16 @@ export function CompositionPlanEditor({
                     <div key={index} className="flex items-center gap-2">
                       <Input
                         value={style}
-                        onChange={(e) => updateGlobalStyle('negative', index, e.target.value)}
+                        onChange={(e) =>
+                          updateGlobalStyle("negative", index, e.target.value)
+                        }
                         placeholder="Enter negative style..."
                         className="flex-1"
                       />
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => removeGlobalStyle('negative', index)}
+                        onClick={() => removeGlobalStyle("negative", index)}
                         className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
                       >
                         <TrashIcon className="h-3 w-3" />
@@ -210,7 +230,9 @@ export function CompositionPlanEditor({
                 <div className="flex items-center justify-between">
                   <Input
                     value={section.sectionName}
-                    onChange={(e) => updateSection(sectionIndex, 'sectionName', e.target.value)}
+                    onChange={(e) =>
+                      updateSection(sectionIndex, "sectionName", e.target.value)
+                    }
                     className="h-auto border-none bg-transparent p-0 text-lg font-semibold"
                   />
                   <div className="flex items-center gap-2">
@@ -219,7 +241,11 @@ export function CompositionPlanEditor({
                       type="number"
                       value={section.durationMs}
                       onChange={(e) =>
-                        updateSection(sectionIndex, 'durationMs', parseInt(e.target.value) || 0)
+                        updateSection(
+                          sectionIndex,
+                          "durationMs",
+                          parseInt(e.target.value) || 0
+                        )
                       }
                       className="w-20"
                     />
@@ -235,7 +261,7 @@ export function CompositionPlanEditor({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => addLocalStyle(sectionIndex, 'positive')}
+                      onClick={() => addLocalStyle(sectionIndex, "positive")}
                       className="h-6 w-6 p-0"
                     >
                       <PlusIcon className="h-3 w-3" />
@@ -247,7 +273,12 @@ export function CompositionPlanEditor({
                         <Input
                           value={style}
                           onChange={(e) =>
-                            updateLocalStyle(sectionIndex, 'positive', styleIndex, e.target.value)
+                            updateLocalStyle(
+                              sectionIndex,
+                              "positive",
+                              styleIndex,
+                              e.target.value
+                            )
                           }
                           placeholder="Enter positive local style..."
                           className="flex-1"
@@ -255,7 +286,13 @@ export function CompositionPlanEditor({
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => removeLocalStyle(sectionIndex, 'positive', styleIndex)}
+                          onClick={() =>
+                            removeLocalStyle(
+                              sectionIndex,
+                              "positive",
+                              styleIndex
+                            )
+                          }
                           className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
                         >
                           <TrashIcon className="h-3 w-3" />
@@ -273,7 +310,7 @@ export function CompositionPlanEditor({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => addLocalStyle(sectionIndex, 'negative')}
+                      onClick={() => addLocalStyle(sectionIndex, "negative")}
                       className="h-6 w-6 p-0"
                     >
                       <PlusIcon className="h-3 w-3" />
@@ -285,7 +322,12 @@ export function CompositionPlanEditor({
                         <Input
                           value={style}
                           onChange={(e) =>
-                            updateLocalStyle(sectionIndex, 'negative', styleIndex, e.target.value)
+                            updateLocalStyle(
+                              sectionIndex,
+                              "negative",
+                              styleIndex,
+                              e.target.value
+                            )
                           }
                           placeholder="Enter negative local style..."
                           className="flex-1"
@@ -293,7 +335,13 @@ export function CompositionPlanEditor({
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => removeLocalStyle(sectionIndex, 'negative', styleIndex)}
+                          onClick={() =>
+                            removeLocalStyle(
+                              sectionIndex,
+                              "negative",
+                              styleIndex
+                            )
+                          }
                           className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
                         >
                           <TrashIcon className="h-3 w-3" />

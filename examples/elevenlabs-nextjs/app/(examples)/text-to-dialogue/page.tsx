@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import { AudioPlayer } from '@/app/(examples)/text-to-dialogue/components/audio-player';
-import { TextToDialoguePromptBar } from '@/components/prompt-bar/text-to-dialogue';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { AudioPlayer } from "@/app/(examples)/text-to-dialogue/components/audio-player";
+import { TextToDialoguePromptBar } from "@/components/prompt-bar/text-to-dialogue";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type DialogueItem = {
   id: string;
@@ -15,10 +15,9 @@ type DialogueItem = {
 
 export default function TextToDialoguePage() {
   const [dialogues, setDialogues] = useState<DialogueItem[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerateStart = () => {
-    setIsGenerating(true);
+    // Generation started
   };
 
   const handleGenerateComplete = (id: string, audioUrl: string) => {
@@ -29,7 +28,6 @@ export default function TextToDialoguePage() {
     };
 
     setDialogues((prev) => [newDialogue, ...prev]);
-    setIsGenerating(false);
   };
 
   return (
@@ -37,10 +35,12 @@ export default function TextToDialoguePage() {
       <div className="flex-1 overflow-hidden">
         <div className="mx-auto h-full max-w-4xl p-6">
           <div className="mb-6">
-            <h1 className="mb-2 text-3xl font-bold text-white">Text to Dialogue</h1>
+            <h1 className="mb-2 text-3xl font-bold text-white">
+              Text to Dialogue
+            </h1>
             <p className="text-muted-foreground">
-              Create conversations between multiple voices using the ElevenLabs text-to-dialogue
-              API.
+              Create conversations between multiple voices using the ElevenLabs
+              text-to-dialogue API.
             </p>
           </div>
 
@@ -48,7 +48,9 @@ export default function TextToDialoguePage() {
           {dialogues.length > 0 && (
             <Card className="mb-6 border-white/10 bg-white/5 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-white">Generated Dialogues</CardTitle>
+                <CardTitle className="text-white">
+                  Generated Dialogues
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-[300px]">
@@ -84,7 +86,9 @@ type DialogueCardProps = {
 function DialogueCard({ dialogue }: DialogueCardProps) {
   return (
     <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-      <div className="mb-2 text-xs text-white/50">{dialogue.timestamp.toLocaleTimeString()}</div>
+      <div className="mb-2 text-xs text-white/50">
+        {dialogue.timestamp.toLocaleTimeString()}
+      </div>
       <AudioPlayer src={dialogue.audioUrl} />
     </div>
   );

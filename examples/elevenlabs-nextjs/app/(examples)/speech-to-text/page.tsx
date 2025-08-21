@@ -1,29 +1,29 @@
-'use client';
+"use client";
 
-import { ChevronLeft, Mic } from 'lucide-react';
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { toast } from 'sonner';
+import { ChevronLeft, Mic } from "lucide-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { toast } from "sonner";
 
 import AdvancedSettings, {
   TranscriptionOptions,
-} from '@/app/(examples)/speech-to-text/components/advanced-settings';
-import { AudioPlayer } from '@/app/(examples)/speech-to-text/components/audio-player';
-import { FileUpload } from '@/app/(examples)/speech-to-text/components/file-upload';
+} from "@/app/(examples)/speech-to-text/components/advanced-settings";
+import { AudioPlayer } from "@/app/(examples)/speech-to-text/components/audio-player";
+import { FileUpload } from "@/app/(examples)/speech-to-text/components/file-upload";
 import {
   TranscriptionResults,
   TranscriptionResult,
   WordGroup,
-} from '@/app/(examples)/speech-to-text/components/transcription-results';
-import { createTranscription } from '@/app/actions/create-transcription';
-import { Button } from '@/components/ui/button';
-import { STT_MODELS } from '@/lib/schemas';
+} from "@/app/(examples)/speech-to-text/components/transcription-results";
+import { createTranscription } from "@/app/actions/create-transcription";
+import { Button } from "@/components/ui/button";
+import { STT_MODELS } from "@/lib/schemas";
 
-import { groupWordsBySpeaker } from './lib/transcription-utils';
+import { groupWordsBySpeaker } from "./lib/transcription-utils";
 
-type ViewState = 'upload' | 'result';
+type ViewState = "upload" | "result";
 
 export default function Page() {
-  const [viewState, setViewState] = useState<ViewState>('upload');
+  const [viewState, setViewState] = useState<ViewState>("upload");
   const [audio, setAudio] = useState<{
     file: File | null;
     url: string | null;
@@ -45,12 +45,13 @@ export default function Page() {
     isProcessing: false,
   });
 
-  const [transcriptionOptions, setTranscriptionOptions] = useState<TranscriptionOptions>({
-    modelId: STT_MODELS.SCRIBE_V1,
-    timestampsGranularity: 'character',
-    tagAudioEvents: true,
-    diarize: true,
-  });
+  const [transcriptionOptions, setTranscriptionOptions] =
+    useState<TranscriptionOptions>({
+      modelId: STT_MODELS.SCRIBE_V1,
+      timestampsGranularity: "character",
+      tagAudioEvents: true,
+      diarize: true,
+    });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -65,7 +66,9 @@ export default function Page() {
         }));
 
         if (!audio.isPlaying) {
-          audioRef.current.play().catch((err) => console.error('Error playing audio:', err));
+          audioRef.current
+            .play()
+            .catch((err) => console.error("Error playing audio:", err));
         }
       }
     },
@@ -90,7 +93,7 @@ export default function Page() {
 
   const handleTranscribe = useCallback(async () => {
     if (!audio.file) {
-      toast.error('Please upload an audio file');
+      toast.error("Please upload an audio file");
       return;
     }
 
@@ -108,7 +111,10 @@ export default function Page() {
         options.numSpeakers = transcriptionOptions.numSpeakers;
       }
 
-      if (transcriptionOptions.languageCode && transcriptionOptions.languageCode.trim() !== '') {
+      if (
+        transcriptionOptions.languageCode &&
+        transcriptionOptions.languageCode.trim() !== ""
+      ) {
         options.languageCode = transcriptionOptions.languageCode.trim();
       }
 
@@ -121,31 +127,34 @@ export default function Page() {
       const processingTimeMs = endTime - startTime;
 
       if (result.ok) {
+        const words = Array.isArray(result.value.words)
+          ? result.value.words
+          : [];
         const wordGroups = transcriptionOptions.diarize
-          ? groupWordsBySpeaker(result.value.words || [])
+          ? groupWordsBySpeaker(words)
           : [];
 
         setTranscription({
-          data: { ...result.value, processingTimeMs },
+          data: { ...result.value, processingTimeMs } as TranscriptionResult,
           wordGroups: wordGroups,
           isProcessing: false,
         });
 
-        toast.success('Audio transcribed successfully');
-        setViewState('result');
+        toast.success("Audio transcribed successfully");
+        setViewState("result");
       } else {
-        toast.error(result.error || 'Failed to transcribe audio');
+        toast.error(result.error || "Failed to transcribe audio");
         setTranscription((prev) => ({ ...prev, isProcessing: false }));
       }
     } catch (error) {
-      console.error('Transcription error:', error);
-      toast.error('An error occurred during transcription');
+      console.error("Transcription error:", error);
+      toast.error("An error occurred during transcription");
       setTranscription((prev) => ({ ...prev, isProcessing: false }));
     }
   }, [audio.file, transcriptionOptions]);
 
   const resetToUpload = useCallback(() => {
-    setViewState('upload');
+    setViewState("upload");
 
     if (audio.url) {
       URL.revokeObjectURL(audio.url);
@@ -189,7 +198,10 @@ export default function Page() {
           disabled={transcription.isProcessing}
         />
 
-        <AdvancedSettings options={transcriptionOptions} onChange={setTranscriptionOptions} />
+        <AdvancedSettings
+          options={transcriptionOptions}
+          onChange={setTranscriptionOptions}
+        />
 
         <div className="flex justify-end">
           <Button
@@ -251,8 +263,12 @@ export default function Page() {
       <div className="space-y-6">
         <AudioPlayer
           url={audio.url}
-          onPlayStateChange={(isPlaying) => setAudio((prev) => ({ ...prev, isPlaying }))}
-          onTimeUpdate={(currentTime) => setAudio((prev) => ({ ...prev, currentTime }))}
+          onPlayStateChange={(isPlaying) =>
+            setAudio((prev) => ({ ...prev, isPlaying }))
+          }
+          onTimeUpdate={(currentTime) =>
+            setAudio((prev) => ({ ...prev, currentTime }))
+          }
           onAudioRef={(ref) => (audioRef.current = ref)}
         />
 
@@ -269,7 +285,7 @@ export default function Page() {
 
   return (
     <div className="container mx-auto max-w-5xl py-4">
-      {viewState === 'upload' ? renderUploadView() : renderResultView()}
+      {viewState === "upload" ? renderUploadView() : renderResultView()}
     </div>
   );
 }
