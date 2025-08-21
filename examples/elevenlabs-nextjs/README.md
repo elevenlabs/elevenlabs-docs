@@ -33,9 +33,11 @@ Open http://localhost:3000
 
 ## Capabilities
 
-- Text to Speech
+- Text to Speech (Eleven V3 preview)
+- Text to Dialogue (Eleven V3 preview)
 - Speech to Text
 - Sound Effects
+- Text to Music (with Composition Plan)
 - Conversational AI
 
 ## Technology

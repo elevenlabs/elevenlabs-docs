@@ -39,7 +39,7 @@ export function TextToSpeechPromptBar({
   const [generationTime, setGenerationTime] = useState<number | null>(null);
   const [settings, setSettings] = useState<{
     voiceId: string;
-    modelId: typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH;
+    modelId: typeof TTS_MODELS.V3 | typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH;
     stability: number;
     similarityBoost: number;
     style: number;
@@ -262,10 +262,27 @@ export function TextToSpeechPromptBar({
                 onValueChange={(value) =>
                   updateSetting(
                     'modelId',
-                    value as typeof TTS_MODELS.MULTILINGUAL | typeof TTS_MODELS.FLASH
+                    value as
+                      | typeof TTS_MODELS.V3
+                      | typeof TTS_MODELS.MULTILINGUAL
+                      | typeof TTS_MODELS.FLASH
                   )
                 }
               >
+                <DropdownMenuRadioItem
+                  className="focus:bg-white/10 data-[state=checked]:bg-white/20"
+                  value={TTS_MODELS.V3}
+                >
+                  <div className="flex items-center gap-2">
+                    <SparklesIcon className="h-4 w-4 text-blue-400" />
+                    <div className="flex flex-col">
+                      <span>{TTS_MODEL_INFO[TTS_MODELS.V3].name}</span>
+                      <span className="text-muted-foreground text-xs">
+                        {TTS_MODEL_INFO[TTS_MODELS.V3].description}
+                      </span>
+                    </div>
+                  </div>
+                </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem
                   className="focus:bg-white/10 data-[state=checked]:bg-white/20"
                   value={TTS_MODELS.MULTILINGUAL}
@@ -440,6 +457,8 @@ export function TextToSpeechPromptBar({
 }
 
 const FEATURED_VOICES = [
+  { id: 'EkK5I93UQWFDigLMpZcX', name: 'James', accent: 'American' },
+  { id: 'RILOU7YmBhvwJGDGjNmP', name: 'Jane', accent: 'American' },
   { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', accent: 'American' },
   { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi', accent: 'American' },
   { id: 'IKne3meq5aSn9XLyUdCD', name: 'Adam', accent: 'American' },
@@ -451,6 +470,10 @@ const FEATURED_VOICES = [
 ];
 
 const TTS_MODEL_INFO = {
+  [TTS_MODELS.V3]: {
+    name: 'Eleven V3',
+    description: 'Latest model with improved quality and performance',
+  },
   [TTS_MODELS.MULTILINGUAL]: {
     name: 'High Quality',
     description: 'Superior quality, slower generation',
@@ -463,7 +486,7 @@ const TTS_MODEL_INFO = {
 
 const DEFAULT_SETTINGS = {
   voiceId: FEATURED_VOICES[0].id,
-  modelId: TTS_MODELS.MULTILINGUAL,
+  modelId: TTS_MODELS.V3,
   stability: 0.5,
   similarityBoost: 0.75,
   style: 0,

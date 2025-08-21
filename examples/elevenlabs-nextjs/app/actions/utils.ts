@@ -28,3 +28,28 @@ export function handleError(error: unknown, context: string): Result<never> {
   const errorMessage = error instanceof Error ? error.message : String(error);
   return Err(`Failed to ${context}: ${errorMessage}`);
 }
+
+export async function streamToBase64(audioStream: ReadableStream<Uint8Array>): Promise<string> {
+  const chunks: Uint8Array[] = [];
+  const reader = audioStream.getReader();
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+  const combined = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    combined.set(chunk, offset);
+    offset += chunk.length;
+  }
+
+  return Buffer.from(combined).toString('base64');
+}

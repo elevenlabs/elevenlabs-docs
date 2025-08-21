@@ -121,12 +121,11 @@ export default function Page() {
       const processingTimeMs = endTime - startTime;
 
       if (result.ok) {
-        const wordGroups = transcriptionOptions.diarize
-          ? groupWordsBySpeaker(result.value.words || [])
-          : [];
+        const words = Array.isArray(result.value.words) ? result.value.words : [];
+        const wordGroups = transcriptionOptions.diarize ? groupWordsBySpeaker(words) : [];
 
         setTranscription({
-          data: { ...result.value, processingTimeMs },
+          data: { ...result.value, processingTimeMs } as TranscriptionResult,
           wordGroups: wordGroups,
           isProcessing: false,
         });

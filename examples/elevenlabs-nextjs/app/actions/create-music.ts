@@ -1,12 +1,17 @@
 'use server';
 
-import type { CreateSoundEffectRequest } from '@elevenlabs/elevenlabs-js/api';
-
+import { CompositionPlan } from '@/app/actions/create-composition-plan';
 import { getElevenLabsClient, handleError, streamToBase64 } from '@/app/actions/utils';
 import { Err, Ok, Result } from '@/types';
 
-export async function createSoundEffect(
-  request: CreateSoundEffectRequest
+export interface CreateMusicRequest {
+  prompt?: string;
+  musicLengthMs: number;
+  compositionPlan?: CompositionPlan;
+}
+
+export async function createMusic(
+  request: CreateMusicRequest
 ): Promise<Result<{ audioBase64: string; processingTimeMs: number }>> {
   const startTime = performance.now();
   const clientResult = await getElevenLabsClient();
@@ -14,7 +19,13 @@ export async function createSoundEffect(
 
   try {
     const client = clientResult.value;
-    const stream = await client.textToSoundEffects.convert(request);
+
+    // Use composition plan if provided, otherwise use prompt
+    const composeParams = request.compositionPlan
+      ? { compositionPlan: request.compositionPlan }
+      : { prompt: request.prompt!, musicLengthMs: request.musicLengthMs };
+
+    const stream = await client.music.compose(composeParams);
 
     const audioBase64 = await streamToBase64(stream);
 
@@ -25,6 +36,6 @@ export async function createSoundEffect(
       processingTimeMs,
     });
   } catch (error) {
-    return handleError(error, 'sound effect generation');
+    return handleError(error, 'music generation');
   }
 }
