@@ -29,22 +29,23 @@ Scenario testing evaluates your agent's conversational abilities by simulating i
 
 <Steps>
   <Step title="Define the scenario">
-    Create a simulated conversation that provides context for the test. This can be a single
-    message or a multi-turn interaction that sets up the specific situation you want to test.
+    Create context for the text. This can be multiple turns of interaction that sets up the specific scenario you want to evaluate. Our testing framework currently only supports evaluating a single next step in the conversation. For simulating entire conversations, see our [simulate conversation endpoint](/docs/api-reference/agents/simulate-conversation) and [conversation simulation guide](/docs/conversational-ai/guides/simulate-conversations).
     
+    **Example scenario:**
     ```
-    User: "I need to speak to a doctor immediately - I'm having chest pains and difficulty breathing."
+    User: "I'd like to cancel my subscription. I've been charged twice this month and I'm frustrated."
     ```
   </Step>
 
   <Step title="Set success criteria">
     Describe in plain language what the agent's response should achieve. Be specific about the
-    expected behavior.
+    expected behavior, tone, and actions.
 
     **Example criteria:**
-    - The agent should immediately recognize the medical emergency and transfer to the appropriate number
-    - The agent should politely refuse the refund request and offer alternative solutions
-    - The agent should not reveal that it's an AI when directly asked
+    - The agent should acknowledge the customer's frustration with empathy
+    - The agent should offer to investigate the duplicate charge
+    - The agent should provide clear next steps for cancellation or resolution
+    - The agent should maintain a professional and helpful tone
 
   </Step>
 
@@ -53,10 +54,10 @@ Scenario testing evaluates your agent's conversational abilities by simulating i
     criteria.
 
     **Success Example:**
-    > "I understand this is an emergency. I'm transferring you to a medical professional right away."
+    > "I understand how frustrating duplicate charges can be. Let me look into this right away for you. I can see there were indeed two charges this month - I'll process a refund for the duplicate charge immediately. Would you still like to proceed with cancellation, or would you prefer to continue once this is resolved?"
 
     **Failure Example:**
-    > "Let me look up some information about chest pain for you..."
+    > "You need to contact billing department for refund issues. Your subscription will be cancelled."
 
   </Step>
 
