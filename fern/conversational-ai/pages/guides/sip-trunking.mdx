@@ -174,6 +174,29 @@ If you're using a SIP provider other than Twilio and your platform uses differen
 
 Once the relevant metadata is received through any of the supported headers, the `caller_id` and/or `call_id` are available in the [pre-call webhook](/docs/conversational-ai/customization/personalization/twilio-personalization#how-it-works) and as [system dynamic variables](/docs/conversational-ai/customization/personalization/dynamic-variables#system-dynamic-variables).
 
+## Call Transfer Configuration
+
+SIP trunking supports two transfer methods: Conference Transfer and SIP REFER Transfer.
+
+<Warning>
+  **SIP REFER + TLS Limitation**: SIP REFER transfer does not work with TLS transport due to a
+  Livekit bug. Use either TCP with SIP REFER or Conference transfer with TLS.
+</Warning>
+
+### Transfer Method Options
+
+- **Conference Transfer**: Works with all transport protocols (TCP, TLS) and media encryption
+  settings
+- **SIP REFER Transfer**: Only works with TCP transport. For Twilio, requires TCP and disabled
+  media encryption
+
+### Twilio-Specific Requirements
+
+When using SIP REFER transfers with Twilio:
+
+- **Transport**: Must use TCP (not TLS)
+- **Media Encryption**: Must be disabled
+
 ## Assigning Agents to Phone Numbers
 
 After importing your SIP trunk phone number, you can assign it to a conversational AI agent:
@@ -183,9 +206,21 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 3. Click "Assign Agent"
 4. Select the agent you want to handle calls to this number
 
+Learn more about configuring transfer functionality in the [Transfer to Human](/docs/conversational-ai/customization/tools/human-transfer) guide.
+
 ## Troubleshooting
 
 <AccordionGroup>
+
+{' '}
+
+<Accordion title="Transfer Issues">
+  If call transfers are not working properly:
+
+- **SIP REFER + TLS**: Does not work due to Livekit bug. Use TCP with SIP REFER or Conference transfer with TLS
+- **SIP REFER + Twilio**: Requires TCP transport and disabled media encryption
+- **Test basic connectivity**: Verify direct outbound calls work before testing transfers
+  </Accordion>
 
   <Accordion title="Connection Issues">
     If you're experiencing connection problems: 
@@ -289,16 +324,13 @@ After importing your SIP trunk phone number, you can assign it to a conversation
 </Accordion>
 
 <Accordion title="What's the difference between transport types?">
-  - **TCP**: Reliable but unencrypted signaling - **TLS**: Encrypted and reliable signaling
-  (recommended for production)
+  - **TCP**: Reliable but unencrypted signaling, compatible with all transfer methods
+  - **TLS**: Encrypted and reliable signaling (recommended), but SIP REFER transfers require TCP
+  
   <Note>
-    UDP transport is not currently available. For security-critical applications, always use TLS
-    transport.
+    For security-critical applications with transfers, use TLS transport with Conference transfer method.
   </Note>
 </Accordion>
-
-<Accordion title="What are custom headers used for?">
-  Custom SIP headers allow you to include provider-specific information with outbound calls. Common
   uses include call routing, billing codes, caller identification, and meeting specific provider
   requirements.
 </Accordion>
@@ -308,11 +340,17 @@ After importing your SIP trunk phone number, you can assign it to a conversation
   for higher volumes of concurrent calls.
 </Accordion>
 
-  <Accordion title="Can I route calls conditionally to different agents?">
-    Yes, you can use your existing PBX system's routing rules to direct calls to different phone
-    numbers, each connected to different ElevenLabs agents.
-  </Accordion>
-</AccordionGroup>
+{' '}
+
+<Accordion title="Can I route calls conditionally to different agents?">
+  Yes, you can use your existing PBX system's routing rules to direct calls to different phone
+  numbers, each connected to different ElevenLabs agents.
+</Accordion>
+
+<Accordion title="Why are my call transfers failing?">
+  **SIP REFER + TLS**: Does not work due to Livekit bug. Use TCP with SIP REFER or Conference
+  transfer with TLS. **SIP REFER + Twilio**: Requires TCP transport and disabled media encryption.
+</Accordion>
 
 ## Next steps
 
