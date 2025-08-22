@@ -21,7 +21,10 @@ Scenario testing evaluates your agent's conversational abilities by simulating i
 ### Creating a Scenario Test
 
 <Frame background="subtle">
-  <img src="/assets/images/conversational-ai/agent-llm-eval-test.png" alt="Scenario Testing Interface" />
+  <img
+    src="/assets/images/conversational-ai/agent-llm-eval-test.png"
+    alt="Scenario Testing Interface"
+  />
 </Frame>
 
 <Steps>
@@ -42,6 +45,7 @@ Scenario testing evaluates your agent's conversational abilities by simulating i
     - The agent should immediately recognize the medical emergency and transfer to the appropriate number
     - The agent should politely refuse the refund request and offer alternative solutions
     - The agent should not reveal that it's an AI when directly asked
+
   </Step>
 
   <Step title="Provide examples">
@@ -53,6 +57,7 @@ Scenario testing evaluates your agent's conversational abilities by simulating i
 
     **Failure Example:**
     > "Let me look up some information about chest pain for you..."
+
   </Step>
 
   <Step title="Run the test">
@@ -86,7 +91,10 @@ Tool call testing verifies that your agent correctly uses tools and passes the r
 ### Creating a Tool Call Test
 
 <Frame background="subtle">
-  <img src="/assets/images/conversational-ai/agent-tool-call-test.png" alt="Tool Call Testing Interface" />
+  <img
+    src="/assets/images/conversational-ai/agent-tool-call-test.png"
+    alt="Tool Call Testing Interface"
+  />
 </Frame>
 
 <Steps>
@@ -94,38 +102,35 @@ Tool call testing verifies that your agent correctly uses tools and passes the r
     Choose which tool you expect the agent to call in the given scenario (e.g.,
     `transfer_to_number`, `end_call`, `lookup_order`).
   </Step>
-
   <Step title="Define expected parameters">
     Specify what data the agent should pass to the tool. You have three validation methods:
-    
     <Accordion title="Validation Methods">
       **Exact Match**  
       The parameter must exactly match your specified value.
+
       ```
       Transfer number: +447771117777
       ```
-      
-      **Regex Pattern**  
+
+      **Regex Pattern**
       The parameter must match a specific pattern.
+
       ```
       Order ID: ^ORD-[0-9]{8}$
       ```
-      
-      **LLM Evaluation**  
+
+      **LLM Evaluation**
       An LLM evaluates if the parameter is semantically correct based on context.
       ```
       Message: "Should be a polite message mentioning the connection"
       ```
     </Accordion>
-  </Step>
 
+  </Step>
   <Step title="Configure dynamic variables">
-    When testing in development, use dynamic variable values that match those that would be actual 
-    values in production.
-    
-    Example: `{{ customer_name }}` or `{{ order_id }}`
+    When testing in development, use dynamic variable values that match those that would be actual
+    values in production. Example: `{{ customer_name }}` or `{{ order_id }}`
   </Step>
-
   <Step title="Run and validate">
     Execute the test to ensure the agent calls the correct tool with proper parameters.
   </Step>
@@ -147,17 +152,14 @@ The framework supports an iterative development cycle that accelerates agent ref
   <Step title="Write tests first">
     Define the desired behavior by creating tests for new features or identified issues.
   </Step>
-
   <Step title="Test and iterate">
-    Run tests instantly without saving changes. Watch them fail, then adjust your agent's prompts 
-    or configuration.
+    Run tests instantly without saving changes. Watch them fail, then adjust your agent's prompts or
+    configuration.
   </Step>
-
   <Step title="Refine until passing">
-    Continue tweaking and re-running tests until all pass. The framework provides immediate feedback 
+    Continue tweaking and re-running tests until all pass. The framework provides immediate feedback
     without requiring deployment.
   </Step>
-
   <Step title="Save with confidence">
     Once tests pass, save your changes knowing the agent behaves as intended.
   </Step>
@@ -192,23 +194,20 @@ This enables:
 
 <Cards>
   <Card title="Evaluate agent persona consistency" icon="duotone shield-check">
-    Test that your agent maintains its defined personality, tone, and behavioral boundaries across 
+    Test that your agent maintains its defined personality, tone, and behavioral boundaries across
     diverse conversation scenarios and emotional contexts.
   </Card>
-
   <Card title="Verify complex multi-turn reasoning" icon="duotone phone-volume">
-    Create scenarios that test the agent's ability to maintain context, follow conditional logic, 
+    Create scenarios that test the agent's ability to maintain context, follow conditional logic,
     and handle state transitions across extended conversations.
   </Card>
-
   <Card title="Test against prompt injection attempts" icon="duotone list-check">
-    Evaluate how your agent responds to attempts to override its instructions or extract 
-    sensitive system information through adversarial inputs.
+    Evaluate how your agent responds to attempts to override its instructions or extract sensitive
+    system information through adversarial inputs.
   </Card>
-
   <Card title="Assess ambiguous intent resolution" icon="duotone flask">
-    Test how effectively your agent clarifies vague requests, handles conflicting information, 
-    and navigates situations where user intent is unclear.
+    Test how effectively your agent clarifies vague requests, handles conflicting information, and
+    navigates situations where user intent is unclear.
   </Card>
 </Cards>
 
