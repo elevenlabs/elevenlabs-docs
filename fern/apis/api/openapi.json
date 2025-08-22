@@ -10962,6 +10962,625 @@
         "x-fern-sdk-method-name": "simulate_conversation_stream"
       }
     },
+    "/v1/convai/agent-testing/create": {
+      "post": {
+        "operationId": "create_agent_response_test_route",
+        "summary": "Create Agent Response Test",
+        "description": "Creates a new agent response test.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Create Chat Response Test Request Information",
+                "$ref": "#/components/schemas/CreateUnitTestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUnitTestResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convai/agent-testing/{test_id}": {
+      "get": {
+        "operationId": "get_agent_response_test_route",
+        "summary": "Get Agent Response Test By Id",
+        "description": "Gets an agent response test by ID.",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "description": "The id of a chat response test. This is returned on test creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of a chat response test. This is returned on test creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "TeaqRRdTcIfIu2i7BYfT"
+              ],
+              "title": "Test Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUnitTestResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "update_agent_response_test_route",
+        "summary": "Update Agent Response Test",
+        "description": "Updates an agent response test by ID.",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "description": "The id of a chat response test. This is returned on test creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of a chat response test. This is returned on test creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "TeaqRRdTcIfIu2i7BYfT"
+              ],
+              "title": "Test Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Agent test to update",
+                "$ref": "#/components/schemas/UpdateUnitTestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUnitTestResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "delete_chat_response_test_route",
+        "summary": "Delete Agent Response Test",
+        "description": "Deletes an agent response test by ID.",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "description": "The id of a chat response test. This is returned on test creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of a chat response test. This is returned on test creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "TeaqRRdTcIfIu2i7BYfT"
+              ],
+              "title": "Test Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convai/agent-testing/summaries": {
+      "post": {
+        "operationId": "get_agent_response_tests_summaries_route",
+        "summary": "Get Agent Response Test Summaries By Ids",
+        "description": "Gets multiple agent response tests by their IDs. Returns a dictionary mapping test IDs to test summaries.",
+        "parameters": [
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListTestsByIdsRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestsSummariesByIdsResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convai/agent-testing": {
+      "get": {
+        "operationId": "list_chat_response_tests_route",
+        "summary": "List Agent Response Tests",
+        "description": "Lists all agent response tests with pagination support and optional search filtering.",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Used for fetching next page. Cursor is returned in the response.",
+            "required": false,
+            "schema": {
+              "description": "Used for fetching next page. Cursor is returned in the response.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "How many Tests to return at maximum. Can not exceed 100, defaults to 30.",
+            "required": false,
+            "schema": {
+              "description": "How many Tests to return at maximum. Can not exceed 100, defaults to 30.",
+              "type": "integer",
+              "default": 30,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search query to filter tests by name.",
+            "required": false,
+            "schema": {
+              "description": "Search query to filter tests by name.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestsPageResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convai/agents/{agent_id}/run-tests": {
+      "post": {
+        "operationId": "run_agent_test_suite_route",
+        "summary": "Run Tests On The Agent",
+        "description": "Run selected tests on the agent with provided configuration. If the agent configuration is provided, it will be used to override default agent configuration.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "The id of an agent. This is returned on agent creation.",
+            "required": true,
+            "schema": {
+              "description": "The id of an agent. This is returned on agent creation.",
+              "type": "string",
+              "embed": true,
+              "examples": [
+                "21m00Tcm4TlvDq8ikWAM"
+              ],
+              "title": "Agent Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunAgentTestsRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestSuiteInvocationResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convai/test-invocations/{test_invocation_id}": {
+      "get": {
+        "operationId": "get_test_invocation_route",
+        "summary": "Get Test Invocation",
+        "description": "Gets a test invocation by ID.",
+        "parameters": [
+          {
+            "name": "test_invocation_id",
+            "in": "path",
+            "description": "The id of a test invocation. This is returned when tests are run.",
+            "required": true,
+            "schema": {
+              "description": "The id of a test invocation. This is returned when tests are run.",
+              "type": "string",
+              "embed": true,
+              "title": "Test Invocation Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTestSuiteInvocationResponseModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/convai/test-invocations/{test_invocation_id}/resubmit": {
+      "post": {
+        "operationId": "resubmit_tests_route",
+        "summary": "Resubmit Tests",
+        "description": "Resubmits specific test runs from a test invocation.",
+        "parameters": [
+          {
+            "name": "test_invocation_id",
+            "in": "path",
+            "description": "The id of a test invocation. This is returned when tests are run.",
+            "required": true,
+            "schema": {
+              "description": "The id of a test invocation. This is returned when tests are run.",
+              "type": "string",
+              "embed": true,
+              "title": "Test Invocation Id"
+            }
+          },
+          {
+            "name": "xi-api-key",
+            "in": "header",
+            "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+            "required": false,
+            "schema": {
+              "description": "Your API key. This is required by most endpoints to access our API programatically. You can view your xi-api-key using the 'Profile' tab on the website.",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Xi-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResubmitTestsRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/convai/conversations": {
       "get": {
         "operationId": "get_conversation_histories_route",
@@ -16566,22 +17185,6 @@
         ],
         "x-fern-sdk-method-name": "request"
       }
-    },
-    "/docs": {
-      "get": {
-        "operationId": "redirect_to_mintlify",
-        "summary": "Redirect To Mintlify",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -16899,6 +17502,22 @@
         "maxItems": 10,
         "title": "AdditionalFormats"
       },
+      "AdhocAgentConfigOverrideForTestRequestModel": {
+        "type": "object",
+        "properties": {
+          "conversation_config": {
+            "$ref": "#/components/schemas/ConversationalConfigAPIModel-Input"
+          },
+          "platform_settings": {
+            "$ref": "#/components/schemas/AgentPlatformSettingsRequestModel"
+          }
+        },
+        "required": [
+          "conversation_config",
+          "platform_settings"
+        ],
+        "title": "AdhocAgentConfigOverrideForTestRequestModel"
+      },
       "AgentBan": {
         "type": "object",
         "properties": {
@@ -17096,6 +17715,25 @@
         },
         "title": "AgentConfigOverrideConfig"
       },
+      "AgentFailureResponseExample": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "string",
+            "title": "Response"
+          },
+          "type": {
+            "type": "string",
+            "const": "failure",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "response",
+          "type"
+        ],
+        "title": "AgentFailureResponseExample"
+      },
       "AgentMetadataResponseModel": {
         "type": "object",
         "properties": {
@@ -17226,6 +17864,25 @@
           "analysis"
         ],
         "title": "AgentSimulatedChatTestResponseModel"
+      },
+      "AgentSuccessfulResponseExample": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "string",
+            "title": "Response"
+          },
+          "type": {
+            "type": "string",
+            "const": "success",
+            "title": "Type"
+          }
+        },
+        "required": [
+          "response",
+          "type"
+        ],
+        "title": "AgentSuccessfulResponseExample"
       },
       "AgentSummaryResponseModel": {
         "type": "object",
@@ -26795,6 +27452,105 @@
         ],
         "title": "CreateTwilioPhoneNumberRequest"
       },
+      "CreateUnitTestRequest": {
+        "type": "object",
+        "properties": {
+          "chat_history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Input"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Chat History"
+          },
+          "success_condition": {
+            "description": "A prompt that evaluates whether the agent's response is successful. Should return True or False.",
+            "type": "string",
+            "title": "Success Condition"
+          },
+          "success_examples": {
+            "description": "Non-empty list of example responses that should be considered successful",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentSuccessfulResponseExample"
+            },
+            "maxItems": 5,
+            "minItems": 0,
+            "title": "Success Examples"
+          },
+          "failure_examples": {
+            "description": "Non-empty list of example responses that should be considered failures",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentFailureResponseExample"
+            },
+            "maxItems": 5,
+            "minItems": 0,
+            "title": "Failure Examples"
+          },
+          "tool_call_parameters": {
+            "description": "How to evaluate the agent's tool call (if any). If empty, the tool call is not evaluated.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UnitTestToolCallEvaluationModel-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dynamic_variables": {
+            "description": "Dynamic variables to replace in the agent config during testing",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "chat_history",
+          "success_condition",
+          "success_examples",
+          "failure_examples",
+          "name"
+        ],
+        "title": "CreateUnitTestRequest"
+      },
+      "CreateUnitTestResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "CreateUnitTestResponseModel"
+      },
       "CustomLLM": {
         "type": "object",
         "properties": {
@@ -28046,6 +28802,26 @@
           "unknown"
         ],
         "title": "EvaluationSuccessResult"
+      },
+      "ExactParameterEvaluationStrategy": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "exact",
+            "title": "Type"
+          },
+          "expected_value": {
+            "description": "The exact string value that the parameter must match.",
+            "type": "string",
+            "title": "Expected Value"
+          }
+        },
+        "required": [
+          "type",
+          "expected_value"
+        ],
+        "title": "ExactParameterEvaluationStrategy"
       },
       "ExportOptions": {
         "discriminator": {
@@ -30209,6 +30985,80 @@
         ],
         "title": "GetSpeechHistoryResponseModel"
       },
+      "GetTestSuiteInvocationResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "integer",
+            "title": "Created At"
+          },
+          "test_runs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnitTestRunResponseModel"
+            },
+            "title": "Test Runs"
+          }
+        },
+        "required": [
+          "id",
+          "test_runs"
+        ],
+        "title": "GetTestSuiteInvocationResponseModel"
+      },
+      "GetTestsPageResponseModel": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnitTestSummaryResponseModel"
+            },
+            "title": "Tests"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "required": [
+          "tests",
+          "has_more"
+        ],
+        "title": "GetTestsPageResponseModel"
+      },
+      "GetTestsSummariesByIdsResponseModel": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "description": "Dictionary mapping test IDs to their summary information",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/UnitTestSummaryResponseModel"
+            },
+            "title": "Tests"
+          }
+        },
+        "required": [
+          "tests"
+        ],
+        "title": "GetTestsSummariesByIdsResponseModel"
+      },
       "GetToolDependentAgentsResponseModel": {
         "type": "object",
         "properties": {
@@ -30254,6 +31104,97 @@
           "has_more"
         ],
         "title": "GetToolDependentAgentsResponseModel"
+      },
+      "GetUnitTestResponseModel": {
+        "type": "object",
+        "properties": {
+          "chat_history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Output"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Chat History"
+          },
+          "success_condition": {
+            "description": "A prompt that evaluates whether the agent's response is successful. Should return True or False.",
+            "type": "string",
+            "title": "Success Condition"
+          },
+          "success_examples": {
+            "description": "Non-empty list of example responses that should be considered successful",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentSuccessfulResponseExample"
+            },
+            "maxItems": 5,
+            "minItems": 0,
+            "title": "Success Examples"
+          },
+          "failure_examples": {
+            "description": "Non-empty list of example responses that should be considered failures",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentFailureResponseExample"
+            },
+            "maxItems": 5,
+            "minItems": 0,
+            "title": "Failure Examples"
+          },
+          "tool_call_parameters": {
+            "description": "How to evaluate the agent's tool call (if any). If empty, the tool call is not evaluated.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UnitTestToolCallEvaluationModel-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dynamic_variables": {
+            "description": "Dynamic variables to replace in the agent config during testing",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "chat_history",
+          "success_condition",
+          "success_examples",
+          "failure_examples",
+          "id",
+          "name"
+        ],
+        "title": "GetUnitTestResponseModel"
       },
       "GetVoicesResponseModel": {
         "type": "object",
@@ -30899,6 +31840,26 @@
           }
         },
         "title": "LLMInputOutputTokensUsage"
+      },
+      "LLMParameterEvaluationStrategy": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "llm",
+            "title": "Type"
+          },
+          "description": {
+            "description": "A description of the evaluation strategy to use for the test.",
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "required": [
+          "type",
+          "description"
+        ],
+        "title": "LLMParameterEvaluationStrategy"
       },
       "LLMTokensCategoryUsage": {
         "type": "object",
@@ -31594,6 +32555,29 @@
           "tools"
         ],
         "title": "ListMCPToolsResponseModel"
+      },
+      "ListTestsByIdsRequestModel": {
+        "type": "object",
+        "properties": {
+          "test_ids": {
+            "description": "List of test IDs to fetch. No duplicates allowed.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "test_id_1",
+                "test_id_2"
+              ]
+            ],
+            "title": "Test Ids"
+          }
+        },
+        "required": [
+          "test_ids"
+        ],
+        "title": "ListTestsByIdsRequestModel"
       },
       "LiteralJsonSchemaProperty": {
         "type": "object",
@@ -35775,6 +36759,46 @@
         ],
         "title": "RecordingResponseModel"
       },
+      "ReferencedToolCommonModel": {
+        "description": "Reference to a tool for unit test evaluation.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The ID of the tool",
+            "type": "string",
+            "title": "Id"
+          },
+          "type": {
+            "description": "The type of the tool",
+            "$ref": "#/components/schemas/ToolType"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "title": "ReferencedToolCommonModel"
+      },
+      "RegexParameterEvaluationStrategy": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "regex",
+            "title": "Type"
+          },
+          "pattern": {
+            "description": "A regex pattern to match the agent's response against.",
+            "type": "string",
+            "title": "Pattern"
+          }
+        },
+        "required": [
+          "type",
+          "pattern"
+        ],
+        "title": "RegexParameterEvaluationStrategy"
+      },
       "Render": {
         "type": "object",
         "properties": {
@@ -35995,6 +37019,72 @@
           "share_options"
         ],
         "title": "ResourceMetadataResponseModel"
+      },
+      "ResubmitTestsRequestModel": {
+        "type": "object",
+        "properties": {
+          "test_run_ids": {
+            "description": "List of test run IDs to resubmit",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Test Run Ids"
+          },
+          "agent_config_override": {
+            "description": "Configuration overrides to use for testing. If not provided, the agent's default configuration will be used.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdhocAgentConfigOverrideForTestRequestModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "agent_id": {
+            "description": "Agent ID to resubmit tests for",
+            "type": "string",
+            "title": "Agent Id"
+          }
+        },
+        "required": [
+          "test_run_ids",
+          "agent_id"
+        ],
+        "title": "ResubmitTestsRequestModel"
+      },
+      "RunAgentTestsRequestModel": {
+        "type": "object",
+        "properties": {
+          "tests": {
+            "description": "List of tests to run on the agent",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SingleTestRunRequestModel"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Tests"
+          },
+          "agent_config_override": {
+            "description": "Configuration overrides to use for testing. If not provided, the agent's default configuration will be used.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdhocAgentConfigOverrideForTestRequestModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "tests"
+        ],
+        "title": "RunAgentTestsRequestModel"
       },
       "SIPMediaEncryptionEnum": {
         "type": "string",
@@ -36648,6 +37738,20 @@
           "voices"
         ],
         "title": "SimilarVoicesForSpeakerResponse"
+      },
+      "SingleTestRunRequestModel": {
+        "type": "object",
+        "properties": {
+          "test_id": {
+            "description": "ID of the test to run",
+            "type": "string",
+            "title": "Test Id"
+          }
+        },
+        "required": [
+          "test_id"
+        ],
+        "title": "SingleTestRunRequestModel"
       },
       "SkipTurnToolConfig": {
         "description": "Allows the agent to explicitly skip its turn.\n\nThis tool should be invoked by the LLM when the user indicates they would like\nto think or take a short pause before continuing the conversation—e.g. when\nthey say: \"Give me a second\", \"Let me think\", or \"One moment please\".  After\ncalling this tool, the assistant should not speak until the user speaks\nagain, or another normal turn-taking condition is met.  The tool itself has\nno parameters and performs no side-effects other than informing the backend\nthat the current turn generation is complete.",
@@ -38703,6 +39807,58 @@
         ],
         "title": "TelephonyProvider"
       },
+      "TestConditionRationaleCommonModel": {
+        "description": "Structured rationale for test condition results containing individual failure/success reasons.",
+        "type": "object",
+        "properties": {
+          "messages": {
+            "description": "List of individual parameter evaluation messages or reasons",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Messages"
+          },
+          "summary": {
+            "description": "High-level summary of the evaluation result",
+            "type": "string",
+            "default": "",
+            "title": "Summary"
+          }
+        },
+        "title": "TestConditionRationaleCommonModel"
+      },
+      "TestConditionResultCommonModel": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "$ref": "#/components/schemas/EvaluationSuccessResult"
+          },
+          "rationale": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TestConditionRationaleCommonModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "TestConditionResultCommonModel"
+      },
+      "TestRunStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "passed",
+          "failed"
+        ],
+        "title": "TestRunStatus"
+      },
       "TestToolResultModel": {
         "type": "object",
         "properties": {
@@ -39513,6 +40669,183 @@
         },
         "title": "URLAvatar"
       },
+      "UnitTestRunResponseModel": {
+        "type": "object",
+        "properties": {
+          "test_run_id": {
+            "type": "string",
+            "title": "Test Run Id"
+          },
+          "test_invocation_id": {
+            "type": "string",
+            "title": "Test Invocation Id"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TestRunStatus"
+          },
+          "agent_responses": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Output"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Responses"
+          },
+          "test_id": {
+            "type": "string",
+            "title": "Test Id"
+          },
+          "condition_result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TestConditionResultCommonModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "test_run_id",
+          "test_invocation_id",
+          "agent_id",
+          "status",
+          "test_id"
+        ],
+        "title": "UnitTestRunResponseModel"
+      },
+      "UnitTestSummaryResponseModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The ID of the test",
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "description": "Name of the test",
+            "type": "string",
+            "title": "Name"
+          },
+          "access_info": {
+            "description": "The access information of the test",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResourceAccessInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at_unix_secs": {
+            "description": "Creation time of the test in unix seconds",
+            "type": "integer",
+            "title": "Created At Unix Secs"
+          },
+          "last_updated_at_unix_secs": {
+            "description": "Last update time of the test in unix seconds",
+            "type": "integer",
+            "title": "Last Updated At Unix Secs"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "created_at_unix_secs",
+          "last_updated_at_unix_secs"
+        ],
+        "title": "UnitTestSummaryResponseModel"
+      },
+      "UnitTestToolCallEvaluationModel-Input": {
+        "type": "object",
+        "properties": {
+          "parameters": {
+            "description": "Parameters to evaluate for the agent's tool call. If empty, the tool call parameters are not evaluated.",
+            "items": {
+              "$ref": "#/components/schemas/UnitTestToolCallParameter"
+            },
+            "title": "Parameters",
+            "type": "array"
+          },
+          "referenced_tool": {
+            "description": "The tool to evaluate a call against.",
+            "$ref": "#/components/schemas/ReferencedToolCommonModel"
+          }
+        },
+        "required": [
+          "referenced_tool"
+        ],
+        "title": "UnitTestToolCallEvaluationModel"
+      },
+      "UnitTestToolCallEvaluationModel-Output": {
+        "type": "object",
+        "properties": {
+          "parameters": {
+            "description": "Parameters to evaluate for the agent's tool call. If empty, the tool call parameters are not evaluated.",
+            "items": {
+              "$ref": "#/components/schemas/UnitTestToolCallParameter"
+            },
+            "title": "Parameters",
+            "type": "array"
+          },
+          "referenced_tool": {
+            "description": "The tool to evaluate a call against.",
+            "$ref": "#/components/schemas/ReferencedToolCommonModel"
+          }
+        },
+        "required": [
+          "referenced_tool"
+        ],
+        "title": "UnitTestToolCallEvaluationModel"
+      },
+      "UnitTestToolCallParameter": {
+        "type": "object",
+        "properties": {
+          "eval": {
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "exact": "#/components/schemas/ExactParameterEvaluationStrategy",
+                "llm": "#/components/schemas/LLMParameterEvaluationStrategy",
+                "regex": "#/components/schemas/RegexParameterEvaluationStrategy"
+              }
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LLMParameterEvaluationStrategy"
+              },
+              {
+                "$ref": "#/components/schemas/RegexParameterEvaluationStrategy"
+              },
+              {
+                "$ref": "#/components/schemas/ExactParameterEvaluationStrategy"
+              }
+            ],
+            "title": "Eval"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          }
+        },
+        "required": [
+          "eval",
+          "path"
+        ],
+        "title": "UnitTestToolCallParameter"
+      },
       "UpdatePhoneNumberRequest": {
         "type": "object",
         "properties": {
@@ -39529,6 +40862,92 @@
           }
         },
         "title": "UpdatePhoneNumberRequest"
+      },
+      "UpdateUnitTestRequest": {
+        "type": "object",
+        "properties": {
+          "chat_history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationHistoryTranscriptCommonModel-Input"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Chat History"
+          },
+          "success_condition": {
+            "description": "A prompt that evaluates whether the agent's response is successful. Should return True or False.",
+            "type": "string",
+            "title": "Success Condition"
+          },
+          "success_examples": {
+            "description": "Non-empty list of example responses that should be considered successful",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentSuccessfulResponseExample"
+            },
+            "maxItems": 5,
+            "minItems": 0,
+            "title": "Success Examples"
+          },
+          "failure_examples": {
+            "description": "Non-empty list of example responses that should be considered failures",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentFailureResponseExample"
+            },
+            "maxItems": 5,
+            "minItems": 0,
+            "title": "Failure Examples"
+          },
+          "tool_call_parameters": {
+            "description": "How to evaluate the agent's tool call (if any). If empty, the tool call is not evaluated.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UnitTestToolCallEvaluationModel-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dynamic_variables": {
+            "description": "Dynamic variables to replace in the agent config during testing",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Dynamic Variables"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "chat_history",
+          "success_condition",
+          "success_examples",
+          "failure_examples",
+          "name"
+        ],
+        "title": "UpdateUnitTestRequest"
       },
       "UpdateWorkspaceMemberResponseModel": {
         "type": "object",

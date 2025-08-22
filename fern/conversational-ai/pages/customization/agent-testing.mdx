@@ -1,0 +1,219 @@
+---
+title: Agent Testing
+subtitle: Build confidence in your agent's behavior with automated testing
+---
+
+The agent testing framework enables you to move from slow, manual phone calls to a fast, automated, and repeatable testing process. Create comprehensive test suites that verify both conversational responses and tool usage, ensuring your agents behave exactly as intended before deploying to production.
+
+## Overview
+
+The framework consists of two complementary testing approaches:
+
+- **Scenario Testing (LLM Evaluation)** - Validates conversational abilities and response quality
+- **Tool Call Testing** - Ensures proper tool usage and parameter validation
+
+Both test types can be created from scratch or directly from existing conversations, allowing you to quickly turn real-world interactions into repeatable test cases.
+
+## Scenario Testing (LLM Evaluation)
+
+Scenario testing evaluates your agent's conversational abilities by simulating interactions and assessing responses against defined success criteria.
+
+### Creating a Scenario Test
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/agent-llm-eval-test.png"
+    alt="Scenario Testing Interface"
+  />
+</Frame>
+
+<Steps>
+  <Step title="Define the scenario">
+    Create context for the text. This can be multiple turns of interaction that sets up the specific scenario you want to evaluate. Our testing framework currently only supports evaluating a single next step in the conversation. For simulating entire conversations, see our [simulate conversation endpoint](/docs/api-reference/agents/simulate-conversation) and [conversation simulation guide](/docs/conversational-ai/guides/simulate-conversations).
+    
+    **Example scenario:**
+    ```
+    User: "I'd like to cancel my subscription. I've been charged twice this month and I'm frustrated."
+    ```
+  </Step>
+
+  <Step title="Set success criteria">
+    Describe in plain language what the agent's response should achieve. Be specific about the
+    expected behavior, tone, and actions.
+
+    **Example criteria:**
+    - The agent should acknowledge the customer's frustration with empathy
+    - The agent should offer to investigate the duplicate charge
+    - The agent should provide clear next steps for cancellation or resolution
+    - The agent should maintain a professional and helpful tone
+
+  </Step>
+
+  <Step title="Provide examples">
+    Supply both success and failure examples to help the evaluator understand the nuances of your
+    criteria.
+
+    **Success Example:**
+    > "I understand how frustrating duplicate charges can be. Let me look into this right away for you. I can see there were indeed two charges this month - I'll process a refund for the duplicate charge immediately. Would you still like to proceed with cancellation, or would you prefer to continue once this is resolved?"
+
+    **Failure Example:**
+    > "You need to contact billing department for refund issues. Your subscription will be cancelled."
+
+  </Step>
+
+  <Step title="Run the test">
+    Execute the test to simulate the conversation with your agent. An LLM evaluator compares the
+    actual response against your success criteria and examples to determine pass/fail status.
+  </Step>
+</Steps>
+
+### Creating Tests from Conversations
+
+Transform real conversations into test cases with a single click. This powerful feature creates a feedback loop for continuous improvement based on actual performance.
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/agent-test-from-conv.gif"
+    alt="Creating test from conversation"
+  />
+</Frame>
+
+When reviewing call history, if you identify a conversation where the agent didn't perform well:
+
+1. Click "Create test from this conversation"
+2. The framework automatically populates the scenario with the actual conversation context
+3. Define what the correct behavior should have been
+4. Add the test to your suite to prevent similar issues in the future
+
+## Tool Call Testing
+
+Tool call testing verifies that your agent correctly uses tools and passes the right parameters in specific situations. This is critical for actions like call transfers, data lookups, or external integrations.
+
+### Creating a Tool Call Test
+
+<Frame background="subtle">
+  <img
+    src="/assets/images/conversational-ai/agent-tool-call-test.png"
+    alt="Tool Call Testing Interface"
+  />
+</Frame>
+
+<Steps>
+  <Step title="Select the tool">
+    Choose which tool you expect the agent to call in the given scenario (e.g.,
+    `transfer_to_number`, `end_call`, `lookup_order`).
+  </Step>
+  <Step title="Define expected parameters">
+    Specify what data the agent should pass to the tool. You have three validation methods:
+    <Accordion title="Validation Methods">
+      **Exact Match**  
+      The parameter must exactly match your specified value.
+
+      ```
+      Transfer number: +447771117777
+      ```
+
+      **Regex Pattern**
+      The parameter must match a specific pattern.
+
+      ```
+      Order ID: ^ORD-[0-9]{8}$
+      ```
+
+      **LLM Evaluation**
+      An LLM evaluates if the parameter is semantically correct based on context.
+      ```
+      Message: "Should be a polite message mentioning the connection"
+      ```
+    </Accordion>
+
+  </Step>
+  <Step title="Configure dynamic variables">
+    When testing in development, use dynamic variable values that match those that would be actual
+    values in production. Example: `{{ customer_name }}` or `{{ order_id }}`
+  </Step>
+  <Step title="Run and validate">
+    Execute the test to ensure the agent calls the correct tool with proper parameters.
+  </Step>
+</Steps>
+
+### Critical Use Cases
+
+Tool call testing is essential for high-stakes scenarios:
+
+- **Emergency Transfers**: Ensure medical emergencies always route to the correct number
+- **Data Security**: Verify sensitive information is never passed to unauthorized tools
+- **Business Logic**: Confirm order lookups use valid formats and authentication
+
+## Development Workflow
+
+The framework supports an iterative development cycle that accelerates agent refinement:
+
+<Steps>
+  <Step title="Write tests first">
+    Define the desired behavior by creating tests for new features or identified issues.
+  </Step>
+  <Step title="Test and iterate">
+    Run tests instantly without saving changes. Watch them fail, then adjust your agent's prompts or
+    configuration.
+  </Step>
+  <Step title="Refine until passing">
+    Continue tweaking and re-running tests until all pass. The framework provides immediate feedback
+    without requiring deployment.
+  </Step>
+  <Step title="Save with confidence">
+    Once tests pass, save your changes knowing the agent behaves as intended.
+  </Step>
+</Steps>
+
+## Batch Testing and CI/CD Integration
+
+### Running Test Suites
+
+Execute all tests at once to ensure comprehensive coverage:
+
+1. Select multiple tests from your test library
+2. Run as a batch to identify any regressions
+3. Review consolidated results showing pass/fail status for each test
+
+### CLI Integration
+
+Integrate testing into your development pipeline using the ElevenLabs CLI:
+
+```bash
+# Run all tests for an agent
+convai test --agent-id YOUR_AGENT_ID
+```
+
+This enables:
+
+- Automated testing on every code change
+- Prevention of regressions before deployment
+- Consistent agent behavior across environments
+
+## Best Practices
+
+<Cards>
+  <Card title="Evaluate agent persona consistency" icon="duotone shield-check">
+    Test that your agent maintains its defined personality, tone, and behavioral boundaries across
+    diverse conversation scenarios and emotional contexts.
+  </Card>
+  <Card title="Verify complex multi-turn reasoning" icon="duotone phone-volume">
+    Create scenarios that test the agent's ability to maintain context, follow conditional logic,
+    and handle state transitions across extended conversations.
+  </Card>
+  <Card title="Test against prompt injection attempts" icon="duotone list-check">
+    Evaluate how your agent responds to attempts to override its instructions or extract sensitive
+    system information through adversarial inputs.
+  </Card>
+  <Card title="Assess ambiguous intent resolution" icon="duotone flask">
+    Test how effectively your agent clarifies vague requests, handles conflicting information, and
+    navigates situations where user intent is unclear.
+  </Card>
+</Cards>
+
+## Next Steps
+
+- [View CLI Documentation](/docs/conversational-ai/libraries/agents-cli) for automated testing setup
+- [Explore Tool Configuration](/docs/conversational-ai/customization/tools) to understand available tools
+- [Read the Prompting Guide](/docs/conversational-ai/best-practices/prompting-guide) for writing testable prompts
