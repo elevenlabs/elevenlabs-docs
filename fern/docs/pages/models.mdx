@@ -7,15 +7,78 @@ description: Learn about the models that power the ElevenLabs API.
 
 ### Text to Speech
 
-<Markdown src="/snippets/tts-models.mdx" />
+<CardGroup cols={2} rows={2}>
+  <Card title={<div className="flex items-start gap-2"><div>Eleven v3</div><div><img src="file:ec82e971-5e7d-476d-b06e-8cc760a86413" alt="Alpha" /></div></div>} href="/docs/models#eleven-v3-alpha">
+    Our most emotionally rich, expressive speech synthesis model
+    <div className="mt-4 space-y-2">
+      <div className="text-sm">Dramatic delivery and performance</div>
+      <div className="text-sm">70+ languages supported</div>
+      <div className="text-sm">3,000 character limit</div>
+      <div className="text-sm">Support for natural multi-speaker dialogue</div>
+    </div>
+  </Card>
+  <Card title="Eleven Multilingual v2" href="/docs/models#multilingual-v2">
+    Lifelike, consistent quality speech synthesis model
+    <div className="mt-4 space-y-2">
+      <div className="text-sm">Natural-sounding output</div>
+      <div className="text-sm">29 languages supported</div>
+      <div className="text-sm">10,000 character limit</div>
+      <div className="text-sm">Most stable on long-form generations</div>
+    </div>
+  </Card>
+  <Card title="Eleven Flash v2.5" href="/docs/models#flash-v25">
+    Our fast, affordable speech synthesis model
+    <div className="mt-4 space-y-2">
+      <div className="text-sm">Ultra-low latency (~75ms&dagger;)</div>
+      <div className="text-sm">32 languages supported</div>
+      <div className="text-sm">40,000 character limit</div>
+      <div className="text-sm">Faster model, 50% lower price per character</div>
+    </div>
+  </Card>
+  <Card title="Eleven Turbo v2.5" href="/docs/models#turbo-v25">
+    High quality, low-latency model with a good balance of quality and speed
+    <div className="mt-4 space-y-2">
+      <div className="text-sm">High quality voice generation</div>
+      <div className="text-sm">32 languages supported</div>
+      <div className="text-sm">40,000 character limit</div>
+      <div className="text-sm">Low latency (~250ms-300ms&dagger;), 50% lower price per character</div>
+
+    </div>
+
+  </Card>
+</CardGroup>
 
 ### Speech to Text
 
-<Markdown src="/snippets/stt-models.mdx" />
+<CardGroup cols={1} rows={1}>
+  <Card title="Scribe v1" href="/docs/models#scribe-v1">
+    State-of-the-art speech recognition model
+    <div className="mt-4 space-y-2">
+      <div className="text-sm">Accurate transcription in 99 languages</div>
+      <div className="text-sm">Precise word-level timestamps</div>
+      <div className="text-sm">Speaker diarization</div>
+      <div className="text-sm">Dynamic audio tagging</div>
+    </div>
+  </Card>
+</CardGroup>
 
 ### Music
 
-<Markdown src="/snippets/music-models.mdx" />
+<CardGroup cols={1} rows={1}>
+  <Card title="Eleven Music" href="/docs/models#eleven-music">
+    Studio-grade music with natural language prompts in any style
+    <div className="mt-4 space-y-2">
+      <div className="text-sm">Complete control over genre, style, and structure</div>
+      <div className="text-sm">Vocals or just instrumental</div>
+      <div className="text-sm">
+        Multilingual, including English, Spanish, German, Japanese and more
+      </div>
+      <div className="text-sm">
+        Edit the sound and lyrics of individual sections or the whole song
+      </div>
+    </div>
+  </Card>
+</CardGroup>
 
 <div className="text-center">
   <div>[Pricing](https://elevenlabs.io/pricing/api)</div>
@@ -25,20 +88,20 @@ description: Learn about the models that power the ElevenLabs API.
 
 The ElevenLabs API offers a range of audio models optimized for different use cases, quality levels, and performance requirements.
 
-| Model ID                     | Description                                                                                                                                                                                                           | Languages                                                                                                                                                                                       |
+| Model ID | Description | Languages |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `eleven_v3`                  | Human-like and expressive speech generation                                                                                                                                                                           | [70+ languages](/docs/models#supported-languages)                                                                                                                                               |
-| `eleven_ttv_v3`              | Human-like and expressive voice design model (Text to Voice)                                                                                                                                                          | [70+ languages](/docs/models#supported-languages)                                                                                                                                               |
-| `eleven_multilingual_v2`     | Our most lifelike model with rich emotional expression                                                                                                                                                                | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru`                   |
-| `eleven_flash_v2_5`          | Ultra-fast model optimized for real-time use (~75ms&dagger;)                                                                                                                                                          | All `eleven_multilingual_v2` languages plus: `hu`, `no`, `vi`                                                                                                                                   |
-| `eleven_flash_v2`            | Ultra-fast model optimized for real-time use (~75ms&dagger;)                                                                                                                                                          | `en`                                                                                                                                                                                            |
-| `eleven_turbo_v2_5`          | High quality, low-latency model with a good balance of quality and speed (~250ms-300ms)                                                                                                                               | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru`, `hu`, `no`, `vi` |
-| `eleven_turbo_v2`            | High quality, low-latency model with a good balance of quality and speed (~250ms-300ms)                                                                                                                               | `en`                                                                                                                                                                                            |
-| `eleven_multilingual_sts_v2` | State-of-the-art multilingual voice changer model (Speech to Speech)                                                                                                                                                  | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru`                   |
-| `eleven_multilingual_ttv_v2` | State-of-the-art multilingual voice designer model (Text to Voice)                                                                                                                                                    | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru`                   |
-| `eleven_english_sts_v2`      | English-only voice changer model (Speech to Speech)                                                                                                                                                                   | `en`                                                                                                                                                                                            |
-| `scribe_v1`                  | State-of-the-art speech recognition model                                                                                                                                                                             | [99 languages](/docs/capabilities/speech-to-text#supported-languages)                                                                                                                           |
-| `scribe_v1_experimental`     | State-of-the-art speech recognition model with experimental features: improved multilingual performance, reduced hallucinations during silence, fewer audio tags, and better handling of early transcript termination | [99 languages](/docs/capabilities/speech-to-text#supported-languages)                                                                                                                           |
+| `eleven_v3` | Human-like and expressive speech generation | [70+ languages](/docs/models#supported-languages) |
+| `eleven_ttv_v3` | Human-like and expressive voice design model (Text to Voice) | [70+ languages](/docs/models#supported-languages) |
+| `eleven_multilingual_v2` | Our most lifelike model with rich emotional expression | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru` |
+| `eleven_flash_v2_5` | Ultra-fast model optimized for real-time use (~75ms†) | All `eleven_multilingual_v2` languages plus: `hu`, `no`, `vi` |
+| `eleven_flash_v2` | Ultra-fast model optimized for real-time use (~75ms†) | `en` |
+| `eleven_turbo_v2_5` | High quality, low-latency model with a good balance of quality and speed (~250ms-300ms) | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru`, `hu`, `no`, `vi` |
+| `eleven_turbo_v2` | High quality, low-latency model with a good balance of quality and speed (~250ms-300ms) | `en` |
+| `eleven_multilingual_sts_v2` | State-of-the-art multilingual voice changer model (Speech to Speech) | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru` |
+| `eleven_multilingual_ttv_v2` | State-of-the-art multilingual voice designer model (Text to Voice) | `en`, `ja`, `zh`, `de`, `hi`, `fr`, `ko`, `pt`, `it`, `es`, `id`, `nl`, `tr`, `fil`, `pl`, `sv`, `bg`, `ro`, `ar`, `cs`, `el`, `fi`, `hr`, `ms`, `sk`, `da`, `ta`, `uk`, `ru` |
+| `eleven_english_sts_v2` | English-only voice changer model (Speech to Speech) | `en` |
+| `scribe_v1` | State-of-the-art speech recognition model | [99 languages](/docs/capabilities/speech-to-text#supported-languages) |
+| `scribe_v1_experimental` | State-of-the-art speech recognition model with experimental features: improved multilingual performance, reduced hallucinations during silence, fewer audio tags, and better handling of early transcript termination | [99 languages](/docs/capabilities/speech-to-text#supported-languages) |
 
 <small>† Excluding application & network latency</small>
 
@@ -79,7 +142,9 @@ Read more about the Text to Dialogue API [here](/docs/capabilities/text-to-dialo
 
 ### Supported languages
 
-<Markdown src="/snippets/v3-model-languages.mdx" />
+The Eleven v3 model supports 70+ languages, including:
+
+*Afrikaans (afr), Arabic (ara), Armenian (hye), Assamese (asm), Azerbaijani (aze), Belarusian (bel), Bengali (ben), Bosnian (bos), Bulgarian (bul), Catalan (cat), Cebuano (ceb), Chichewa (nya), Croatian (hrv), Czech (ces), Danish (dan), Dutch (nld), English (eng), Estonian (est), Filipino (fil), Finnish (fin), French (fra), Galician (glg), Georgian (kat), German (deu), Greek (ell), Gujarati (guj), Hausa (hau), Hebrew (heb), Hindi (hin), Hungarian (hun), Icelandic (isl), Indonesian (ind), Irish (gle), Italian (ita), Japanese (jpn), Javanese (jav), Kannada (kan), Kazakh (kaz), Kirghiz (kir), Korean (kor), Latvian (lav), Lingala (lin), Lithuanian (lit), Luxembourgish (ltz), Macedonian (mkd), Malay (msa), Malayalam (mal), Mandarin Chinese (cmn), Marathi (mar), Nepali (nep), Norwegian (nor), Pashto (pus), Persian (fas), Polish (pol), Portuguese (por), Punjabi (pan), Romanian (ron), Russian (rus), Serbian (srp), Sindhi (snd), Slovak (slk), Slovenian (slv), Somali (som), Spanish (spa), Swahili (swa), Swedish (swe), Tamil (tam), Telugu (tel), Thai (tha), Turkish (tur), Ukrainian (ukr), Urdu (urd), Vietnamese (vie), Welsh (cym).*
 
 ## Multilingual v2
 
@@ -96,11 +161,13 @@ This model excels in scenarios requiring high-quality, emotionally nuanced speec
 
 While it has a higher latency & cost per character than Flash models, it delivers superior quality for projects where lifelike speech is important.
 
-<Markdown src="/snippets/v2-model-languages.mdx" />
+Our multilingual v2 models support 29 languages:
+
+*English (USA, UK, Australia, Canada), Japanese, Chinese, German, Hindi, French (France, Canada), Korean, Portuguese (Brazil, Portugal), Italian, Spanish (Spain, Mexico), Indonesian, Dutch, Turkish, Filipino, Polish, Swedish, Bulgarian, Romanian, Arabic (Saudi Arabia, UAE), Czech, Greek, Finnish, Croatian, Malay, Slovak, Danish, Tamil, Ukrainian & Russian.*
 
 ## Flash v2.5
 
-Eleven Flash v2.5 is our fastest speech synthesis model, designed for real-time applications and conversational AI. It delivers high-quality speech with ultra-low latency (~75ms&dagger;) across 32 languages.
+Eleven Flash v2.5 is our fastest speech synthesis model, designed for real-time applications and conversational AI. It delivers high-quality speech with ultra-low latency (~75ms†) across 32 languages.
 
 The model balances speed and quality, making it ideal for interactive applications while maintaining natural-sounding output and consistent voice characteristics across languages.
 
@@ -112,7 +179,9 @@ This model is particularly well-suited for:
 
 With its lower price point and 75ms latency, Flash v2.5 is the cost-effective option for anyone needing fast, reliable speech synthesis across multiple languages.
 
-<Markdown src="/snippets/v2-5-model-languages.mdx" />
+Flash v2.5 supports 32 languages - all languages from v2 models plus:
+
+*Hungarian, Norwegian & Vietnamese*
 
 <small>† Excluding application & network latency</small>
 
@@ -194,16 +263,17 @@ This model is an ideal choice for all scenarios where you'd use Flash v2.5, but 
 
 The maximum number of characters supported in a single text-to-speech request varies by model.
 
-| Model ID                 | Character limit | Approximate audio duration |
+| Model ID | Character limit | Approximate audio duration |
 | ------------------------ | --------------- | -------------------------- |
-| `eleven_flash_v2_5`      | 40,000          | ~40 minutes                |
-| `eleven_flash_v2`        | 30,000          | ~30 minutes                |
-| `eleven_turbo_v2_5`      | 40,000          | ~40 minutes                |
-| `eleven_turbo_v2`        | 30,000          | ~30 minutes                |
-| `eleven_multilingual_v2` | 10,000          | ~10 minutes                |
-| `eleven_multilingual_v1` | 10,000          | ~10 minutes                |
-| `eleven_english_sts_v2`  | 10,000          | ~10 minutes                |
-| `eleven_english_sts_v1`  | 10,000          | ~10 minutes                |
+| `eleven_v3` | 3,000 | ~3 minutes |
+| `eleven_flash_v2_5` | 40,000 | ~40 minutes |
+| `eleven_flash_v2` | 30,000 | ~30 minutes |
+| `eleven_turbo_v2_5` | 40,000 | ~40 minutes |
+| `eleven_turbo_v2` | 30,000 | ~30 minutes |
+| `eleven_multilingual_v2` | 10,000 | ~10 minutes |
+| `eleven_multilingual_v1` | 10,000 | ~10 minutes |
+| `eleven_english_sts_v2` | 10,000 | ~10 minutes |
+| `eleven_english_sts_v1` | 10,000 | ~10 minutes |
 
 <Note>For longer content, consider splitting the input into multiple requests.</Note>
 
@@ -253,15 +323,15 @@ Speech to Text has an elevated concurrency limit.
 Once the concurrency limit is met, subsequent requests are processed in a queue alongside lower-priority requests.
 In practice this typically only adds ~50ms of latency.
 
-| Plan       | Concurrency Limit<br /> (Multilingual v2) | Concurrency Limit<br /> (Turbo & Flash) | STT Concurrency Limit | Music Concurrency limit | Priority level |
+| Plan | Concurrency Limit<br /> (Multilingual v2) | Concurrency Limit<br /> (Turbo & Flash) | STT Concurrency Limit | Music Concurrency limit | Priority level |
 | ---------- | ----------------------------------------- | --------------------------------------- | --------------------- | ----------------------- | -------------- |
-| Free       | 2                                         | 4                                       | 10                    | N/A                     | 3              |
-| Starter    | 3                                         | 6                                       | 15                    | 2                       | 4              |
-| Creator    | 5                                         | 10                                      | 25                    | 2                       | 5              |
-| Pro        | 10                                        | 20                                      | 50                    | 2                       | 5              |
-| Scale      | 15                                        | 30                                      | 75                    | 3                       | 5              |
-| Business   | 15                                        | 30                                      | 75                    | 3                       | 5              |
-| Enterprise | Elevated                                  | Elevated                                | Elevated              | Highest                 | Highest        |
+| Free | 2 | 4 | 10 | N/A | 3 |
+| Starter | 3 | 6 | 15 | 2 | 4 |
+| Creator | 5 | 10 | 25 | 2 | 5 |
+| Pro | 10 | 20 | 50 | 2 | 5 |
+| Scale | 15 | 30 | 75 | 3 | 5 |
+| Business | 15 | 30 | 75 | 3 | 5 |
+| Enterprise | Elevated | Elevated | Elevated | Highest | Highest |
 
 The response headers include `current-concurrent-requests` and `maximum-concurrent-requests` which you can use to monitor your concurrency.
 
@@ -296,7 +366,7 @@ The diagram below is an example of how 4 concurrent calls with different users c
 
 <Frame background="subtle">
   <img
-    src="/assets/images/product-guides/speech-to-text/tts-concurrency.png"
+    src="file:e8bce584-fe21-4223-b4fe-33504bf4147b"
     alt="Concurrency limits"
   />
 </Frame>
