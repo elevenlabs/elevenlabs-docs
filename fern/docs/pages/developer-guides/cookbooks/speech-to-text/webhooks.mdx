@@ -104,36 +104,43 @@ When a transcription is completed, ElevenLabs will send a POST request to your s
 
 ## Webhook payload
 
-When a transcription is completed, your webhook endpoint will receive a POST request with the identical payload as the non-webhook API:
+When a transcription is completed, your webhook endpoint will receive a POST request with the transcription and webhook data:
 
 ```json
 {
-  "language_code": "en",
-  "language_probability": 0.98,
-  "text": "Hello world!",
-  "words": [
-    {
-      "text": "Hello",
-      "start": 0.0,
-      "end": 0.5,
-      "type": "word",
-      "speaker_id": "speaker_1"
-    },
-    {
-      "text": " ",
-      "start": 0.5,
-      "end": 0.5,
-      "type": "spacing",
-      "speaker_id": "speaker_1"
-    },
-    {
-      "text": "world!",
-      "start": 0.5,
-      "end": 1.2,
-      "type": "word",
-      "speaker_id": "speaker_1"
+  type: 'speech_to_text_transcription',
+  data: {
+    request_id: 'some-request-id-123',
+    webhook_metadata: { ... }, // if provided in the convert request
+    transcription: {
+      "language_code": "en",
+      "language_probability": 0.98,
+      "text": "Hello world!",
+      "words": [
+        {
+          "text": "Hello",
+          "start": 0.0,
+          "end": 0.5,
+          "type": "word",
+          "speaker_id": "speaker_1"
+        },
+        {
+          "text": " ",
+          "start": 0.5,
+          "end": 0.5,
+          "type": "spacing",
+          "speaker_id": "speaker_1"
+        },
+        {
+          "text": "world!",
+          "start": 0.5,
+          "end": 1.2,
+          "type": "word",
+          "speaker_id": "speaker_1"
+        }
+      ]
     }
-  ]
+  }
 }
 ```
 
@@ -157,13 +164,13 @@ const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
 app.post('/webhook/speech-to-text', (req, res) => {
   try {
-    const signature = req.headers['x-elevenlabs-signature'];
+    const signature = req.headers['elevenlabs-signature'];
     const payload = JSON.stringify(req.body);
     let event;
 
     try {
       // Verify the webhook signature.
-      event = elevenlabs.webhooks.constructEvent(payload, signature, WEBHOOK_SECRET);
+      event = await elevenlabs.webhooks.constructEvent(payload, signature, WEBHOOK_SECRET);
     } catch (error) {
       return res.status(401).json({ error: 'Invalid signature' });
     }
