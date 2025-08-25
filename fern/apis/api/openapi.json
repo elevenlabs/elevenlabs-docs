@@ -17185,6 +17185,22 @@
         ],
         "x-fern-sdk-method-name": "request"
       }
+    },
+    "/docs": {
+      "get": {
+        "operationId": "redirect_to_mintlify",
+        "summary": "Redirect To Mintlify",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -24792,6 +24808,7 @@
           "audio",
           "interruption",
           "user_transcript",
+          "tentative_user_transcript",
           "agent_response",
           "agent_response_correction",
           "client_tool_call",
@@ -29151,6 +29168,9 @@
           },
           "workflow": {
             "$ref": "#/components/schemas/WorkflowFeaturesUsageCommonModel"
+          },
+          "agent_testing": {
+            "$ref": "#/components/schemas/TestsFeatureUsageCommonModel"
           }
         },
         "title": "FeaturesUsageCommonModel"
@@ -39882,6 +39902,27 @@
         },
         "title": "TestToolResultModel"
       },
+      "TestsFeatureUsageCommonModel": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enabled"
+          },
+          "tests_ran_after_last_modification": {
+            "type": "boolean",
+            "default": false,
+            "title": "Tests Ran After Last Modification"
+          },
+          "tests_ran_in_last_7_days": {
+            "type": "boolean",
+            "default": false,
+            "title": "Tests Ran In Last 7 Days"
+          }
+        },
+        "title": "TestsFeatureUsageCommonModel"
+      },
       "TokenResponseModel": {
         "type": "object",
         "properties": {
@@ -40714,6 +40755,10 @@
                 "type": "null"
               }
             ]
+          },
+          "last_updated_at_unix": {
+            "type": "integer",
+            "title": "Last Updated At Unix"
           }
         },
         "required": [
